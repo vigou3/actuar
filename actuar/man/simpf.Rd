@@ -4,8 +4,8 @@
 \description{
   \code{simpf} simulates a portfolio of data for insurance
   applications. Both frequency and severity distributions can have an
-  unknown risk parameter --- that is, they can each be compounded (or
-  mixtures of) models.
+  unknown risk parameter --- that is, they can each be mixtures of
+  models.
 }
 \usage{
 simpf(contracts, years, model.freq, model.sev, weights)
@@ -21,10 +21,10 @@ simpf(contracts, years, model.freq, model.sev, weights)
     be used in the simulation of frequencies}
 }
 \details{
-  The function allows for compound models for both frequency and
-  severity of losses. The compounding (or risk) parameter is called
-  \code{Lambda} in the frequency model and \code{Theta} in the severity
-  model.
+  The function allows for continuous mixtures of models for both
+  frequency and severity of losses. The mixing (or risk) parameter
+  is called \code{Lambda} in the frequency model and \code{Theta} in the
+  severity model.
   
   Distribution assumptions are specified using the base name of random
   number generation functions, e.g. \code{"pois"} for the Poisson distribution
@@ -34,13 +34,13 @@ simpf(contracts, years, model.freq, model.sev, weights)
   composed of:
   \describe{
     \item{\code{dist1}}{base name of the distribution for a simple model,
-      or of the conditional distribution for a compound model.}
+      or of the conditional distribution for a mixed model.}
     \item{\code{par1}}{named list of the parameters of \code{dist1} as
-      they are defined in \code{rdist1}. If needed, the compounding parameter
+      they are defined in \code{rdist1}. If needed, the mixing parameter
       is identified by an unevaluated expression in \code{Lambda} and
       \code{weights} for \code{model.freq}, or \code{Theta} for
       \code{model.sev}.}
-    \item{\code{dist2}}{base name of the compounding distribution, if
+    \item{\code{dist2}}{base name of the mixing distribution, if
       any.}
     \item{\code{par2}}{named list of the parameters of \code{dist2} as
       they are defined in \code{rdist2}.}
@@ -61,7 +61,7 @@ simpf(contracts, years, model.freq, model.sev, weights)
 }
 \seealso{\code{\link{rearrangepf}}}
 \examples{
-## Portfolio where both frequency and severity models are compound.
+## Portfolio where both frequency and severity models are mixed.
 modelfreq <- list(dist1 = "pois",
                   par1 = list(lambda = quote(Lambda * weights)),
                   dist2 = "gamma",
@@ -74,15 +74,14 @@ data(hachemeister)
 weights <- hachemeister$weights/mean(hachemeister$weights)
 simpf(5, 12, modelfreq, modelsev, weights)
 
-## Portfolio where the frequency model is compound, but not the
+## Portfolio where the frequency model is mixed, but not the
 ## severity model.
 modelsev <- list(dist1 = "lnorm", par1 = list(meanlog = 7, sd = 1))  
 simpf(5, 12, modelfreq, modelsev)
 
 ## Portofolio with a severity model only and a user function for the
-## simulation of observations.
-rpareto <- function(n, alpha, lambda)
-    lambda * (runif(n)^(-1/alpha) - 1)
+## simulation of claim amounts.
+rpareto <- function(n, alpha, lambda) lambda * (runif(n)^(-1/alpha) - 1)
 modelsev <- list(dist1 = "pareto", par1 = list(alpha = 3, lambda = 8000))
 simpf(5, 12, model.freq = NULL, modelsev)
 }
