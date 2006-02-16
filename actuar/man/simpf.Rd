@@ -51,7 +51,8 @@ simpf(contracts, years, model.freq, model.sev, weights)
   \item{data}{a two dimension (\code{contracts} rows and
     \code{years} columns) list where each element is a vector of
     losses, or a matrix if each element has length 1}
-  \item{weights}{the matrix of weights given in argument}
+  \item{weights}{the matrix of weights given in argument, or a matrix of
+    1 otherwise.}
 }
 \references{Goulet, V. (2006), \emph{Credibility for severity
     revisited}, North American Actuarial Journal, to appear.}
