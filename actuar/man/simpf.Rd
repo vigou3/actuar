@@ -4,8 +4,8 @@
 \description{
   \code{simpf} simulates a portfolio of data for insurance
   applications. Both frequency and severity distributions can have an
-  unknown risk parameter --- that is, they can each be mixtures of
-  models.
+  unknown risk parameter --- that is, they can each be compounded (or
+  mixtures of) models.
 }
 \usage{
 simpf(contracts, years, model.freq, model.sev, weights)
@@ -14,9 +14,9 @@ simpf(contracts, years, model.freq, model.sev, weights)
   \item{contracts}{the number of contracts in the porfolio}
   \item{years}{the number of years of experience for each contract}
   \item{model.freq}{named list containing the frequency model (see details
-    below); if NULL, only claim amounts are simulated}
+    below); if \code{NULL}, only claim amounts are simulated}
   \item{model.sev}{named list containing the severity model (see details
-    below); if NULL, only claim numbers are simulated}
+    below); if \code{NULL}, only claim numbers are simulated}
   \item{weights}{a matrix of weights (one per contract and per year) to
     be used in the simulation of frequencies}
 }
@@ -27,10 +27,10 @@ simpf(contracts, years, model.freq, model.sev, weights)
   model.
   
   Distribution assumptions are specified using the base name of random
-  number generation functions, e.g. "pois" for the Poisson distribution
-  or "lnorm" for the lognormal.
+  number generation functions, e.g. \code{"pois"} for the Poisson distribution
+  or \code{"lnorm"} for the lognormal.
   
-  \code{model.freq} and \code{model.sev} are NULL or named lists
+  \code{model.freq} and \code{model.sev} are \code{NULL} or named lists
   composed of:
   \describe{
     \item{\code{dist1}}{base name of the distribution for a simple model,
@@ -43,25 +43,25 @@ simpf(contracts, years, model.freq, model.sev, weights)
     \item{\code{dist2}}{base name of the compounding distribution, if
       any.}
     \item{\code{par2}}{named list of the parameters of \code{dist2} as
-      they are defined in "rdist2".}
+      they are defined in \code{rdist2}.}
   }
 }
 \value{
   A list with two components:
-    \item{\code{data}}{a two dimension (\code{contracts} rows and
-      \code{years} columns) list where each element is a vector of
-      losses, or a matrix if each element has length 1}
-    \item{\code{weights}}{the matrix of weights given in argument}
+  \item{data}{a two dimension (\code{contracts} rows and
+    \code{years} columns) list where each element is a vector of
+    losses, or a matrix if each element has length 1}
+  \item{weights}{the matrix of weights given in argument}
 }
 \references{Goulet, V. (2006), \emph{Credibility for severity
-    revisited}, North American Actuarial Journal}
+    revisited}, North American Actuarial Journal, to appear.}
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
-  Sebastien Auclair
+  Sébastien Auclair
 }
 \seealso{\code{\link{rearrangepf}}}
 \examples{
-## Portfolio where both frequency and severity models are compounded.
+## Portfolio where both frequency and severity models are compound.
 modelfreq <- list(dist1 = "pois",
                   par1 = list(lambda = quote(Lambda * weights)),
                   dist2 = "gamma",
@@ -74,7 +74,7 @@ data(hachemeister)
 weights <- hachemeister$weights/mean(hachemeister$weights)
 simpf(5, 12, modelfreq, modelsev, weights)
 
-## Portfolio where the frequency model is compounded, but not the
+## Portfolio where the frequency model is compound, but not the
 ## severity model.
 modelsev <- list(dist1 = "lnorm", par1 = list(meanlog = 7, sd = 1))  
 simpf(5, 12, modelfreq, modelsev)

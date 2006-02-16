@@ -9,8 +9,12 @@
 }
 \usage{data(hachemeister)}
 \format{A list with two components:
-  \item{claims}{a \eqn{5 \times 12} matrix of average claim amounts}
-  \item{weights}{a \eqn{5 \times 12} matrix of corresponding weights}
+  \describe{
+    \item{\code{claims}}{a \eqn{5 \times 12} matrix of average claim
+      amounts}
+    \item{\code{weights}}{a \eqn{5 \times 12} matrix of corresponding
+      weights}
+  }
 }
 \source{Hachemeister, C. A. (1975), Credibility for regression
   models with application to trend, \emph{Proceedings of the Berkeley

@@ -11,6 +11,12 @@ rearrangepf(pf)
 \arguments{
   \item{pf}{a two dimension list containing individual claim amounts}
 }
+\details{
+  This function takes individual claim amounts of a portfolio of
+  contracts stored in a two dimension list (where each element of the
+  list is a vector of claim amounts) and returns matrices of total claim
+  amounts, number of claims and individual claim amounts.
+}
 \value{
   A list made of:
   \item{aggregate}{matrix of aggregate losses for each contract and
@@ -19,9 +25,9 @@ rearrangepf(pf)
     per year}
   \item{severities}{a list of two elements:
     \describe{
-      \item{claims}{matrix of the individual claim amounts for the first
+      \item{\code{claims}}{matrix of the individual claim amounts for the first
 	n - 1 years of observations}
-      \item{claims.last}{matrix of the individual claim amounts for the
+      \item{\code{claims.last}}{matrix of the individual claim amounts for the
 	last year of observations}}
   }
 }
