@@ -43,7 +43,7 @@ bstraub(ratios, weights,
   \deqn{%
     \hat{a} = c \left( \sum_{i = 1}^I w_{i\cdot} (X_{iw} - X_{ww})^2 -
     (I - 1)\hat{s}^2 \right),}{%
-    a = c sum(w[i.]*(X[iw]-X[ww])^2-(N-1)*s'^2),}
+    a = c sum(w[i.] * (X[iw] - X[ww])^2 - (I - 1) * s^2),}
   where \eqn{c = w_{\cdot\cdot}/(w_{\cdot\cdot}^2 - \sum_{i = 1}^I
     w_{i\cdot}^2)}{c = w[..]/(w[..]^2 - sum(w[i.]^2))} and \eqn{I} is the
   number of contracts.
