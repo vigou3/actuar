@@ -2,7 +2,7 @@
 function(ratios, weights, heterogeneity=c("iterative","unbiased"),TOL=1E-6, echo=FALSE )
 {
     ## If weights are not specified, use equal weights as in
-    ## Bühlmann's model.
+    ## B�hlmann's model.
     if (missing(weights))
     {
         if (!identical(0, sum(is.na(ratios))))
@@ -43,16 +43,16 @@ function(ratios, weights, heterogeneity=c("iterative","unbiased"),TOL=1E-6, echo
     ac <- weights.ss * (sum(weights.s * (ratios.w - ratios.ww)^2) - (ncontracts - 1) * s2) / (weights.ss^2 - sum(weights.s^2))
 
     ## Iterative estimation of a. Compute only if
-    ## 1. asked to in argument
-    ## 2. the unbiased estimator is > 0
-    ## 3. weights are not all equal (Bühlmann model).
+    ## 1. asked to in argument;
+    ## 2. the unbiased estimator is > 0;
+    ## 3. weights are not all equal (B�hlmann model).
     heterogeneity <- match.arg(heterogeneity)
 
     if (identical(heterogeneity, "iterative"))
     {
         if (ac > 0)
         {
-            if (diff(range(weights)) > .Machine$double.eps^0.5)
+            if (diff(range(weights, na.rm = TRUE)) > .Machine$double.eps^0.5)
             {
                 if (echo)
                     exp <- expression(print(at1 <-  at))
@@ -108,4 +108,3 @@ function(ratios, weights, heterogeneity=c("iterative","unbiased"),TOL=1E-6, echo
          unbiased=ac,
          iterative=at)
 }
-
