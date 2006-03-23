@@ -1,7 +1,7 @@
 Package: actuar
 Type: Package
 Title: Actuarial functions
-Version: 0.1-2
+Version: 0.1-3
 Date: 2006-02-16
 Author: Vincent Goulet, Sébastien Auclair
 Maintainer: Vincent Goulet <vincent.goulet@act.ulaval.ca>
