@@ -1,13 +1,16 @@
 "bstraub" <-
 function(ratios, weights, heterogeneity=c("iterative","unbiased"),TOL=1E-6, echo=FALSE )
 {
+    cl <- match.call()
     ## If weights are not specified, use equal weights as in
     ## Bühlmann's model.
+    unspec.weights <- logical(1)	
     if (missing(weights))
     {
-        if (!identical(0, sum(is.na(ratios))))
+        if (any(is.na(ratios)))
             stop("missing values are not allowed in the matrix of ratios when the matrix of weights is not specified")
         weights <- array(1, dim(ratios))
+	  unspec.weights <- TRUE
     }
 
     ## Check other bad arguments.
@@ -100,11 +103,17 @@ function(ratios, weights, heterogeneity=c("iterative","unbiased"),TOL=1E-6, echo
     ## Credibility premiums.
     P <- ratios.zw + cred * (ratios.w - ratios.zw)
 
-    list(premiums=P,
-         individual=ratios.w,
-         collective=ratios.zw,
-         weights=weights.s,
-         s2=s2,
-         unbiased=ac,
-         iterative=at)
+    res <- list(premiums=P,
+                individual=ratios.w,
+                collective=ratios.zw,
+                weights=weights.s,
+                ncontracts=ncontracts,
+                s2=s2,
+                cred=cred,
+		    unspec.weights=unspec.weights,	
+                call=cl,
+                unbiased=ac,
+                iterative=at)
+    class(res) <- "bstraub"
+    res
 }
