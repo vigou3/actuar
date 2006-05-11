@@ -1,14 +1,16 @@
 \name{bstraub}
 \alias{bstraub}
+\alias{print.bstraub}
 \title{Buhlmann-Straub Credibility Model}
 \description{
   \code{bstraub} calculates credibility premiums in the Bühlmann-Straub
-  credibility model.
+  credibility model, creating an object of class \code{bstraub}.
 }
 \usage{
 bstraub(ratios, weights,
         heterogeneity = c("iterative", "unbiased"),
         TOL = 1e-06, echo = FALSE)
+\method{print}{bstraub}(x,\dots)
 }
 \arguments{
   \item{ratios}{matrix of ratios (contracts in lines, years in columns)}
@@ -19,6 +21,9 @@ bstraub(ratios, weights,
     Bühlmann-Straub estimator (see below)}
   \item{TOL}{maximum relative error in the iterative procedure}
   \item{echo}{boolean, whether to echo iterative procedure or not}
+  \item{x}{a \code{bstraub} object.} 
+  \item{\dots}{potential further arguments required by generic.}
+
 }
 \details{
   The credibility premium of contract \eqn{i} is given by
@@ -57,17 +62,10 @@ bstraub(ratios, weights,
   \code{TOL} stopping criteria.
 }
 \value{
-  A list with the following components:
-  \item{premiums}{vector of credibility premiums}
-  \item{individual}{vector of contract weighted averages}
-  \item{collective}{collective premium estimator}
-  \item{weights}{vector of contracts total weights, as used in
-    credibility factors}
-  \item{s2}{estimator of the within contract heterogeneity parameter}
-  \item{unbiased}{unbiased estimator of the between contract
-    heterogeneity parameter}
-  \item{iterative}{iterative estimator of the between contract
-    heterogeneity parameter}
+  Returns an object of class \code{bstraub}. \code{"summary"} and \code{"print"}  methods
+  are defined to display such objects. The latter displays the call to
+  the function, the model used depending if weights have been specified,
+  and the credibility premiums computed for each contract. 
 }
 \references{
   Goulet, V. (1998), \emph{Principles and Application of Credibility
@@ -88,7 +86,8 @@ data(hachemeister)
 bstraub(hachemeister$claims, hachemeister$weights)
 
 ## Credibility premiums calculated with the unbiased estimator
-bstraub(hachemeister$claims, hachemeister$weights, heterogeneity = "unbiased")
+(x <- bstraub(hachemeister$claims, hachemeister$weights, heterogeneity = "unbiased"))
+summary(x)
 }
 \keyword{file}
 
