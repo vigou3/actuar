@@ -1,0 +1,23 @@
+"print.summary.bstraub" <-
+function(x,...)
+{    
+    cat("\nStructure Parameters Estimators\n") 
+    cat("-------------------------------\n")
+    cat
+    cat("    Collective premium:        ", x$collective, "\n")
+    cat("    Average contract variance: ", x$s2,"\n")
+    cat("    Portfolio heterogeneity:   ", x$unbiased, " (unbiased)\n")
+    cat("                               ",
+        ifelse(is.null(x$iterative), "NULL     ", x$iterative),
+        " (iterative)\n")
+    cat("    Credibility constant:      ",
+        x$s2 / ifelse(is.null(x$iterative),x$unbiased, x$iterative),
+        "\n")
+    cat("\n")
+    cred <- cbind(1:x$ncontracts,x$individual,x$weights,x$cred,x$premium)
+    colnames(cred) <- c("Contract","Ind. premium","Weight","Cred. factor","Cred. premium")
+    rownames(cred) <- rep("",x$ncontracts)
+    print(cred)
+    invisible(x)
+}
+
