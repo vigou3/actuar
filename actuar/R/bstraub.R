@@ -121,12 +121,8 @@ bstraub <- function(ratios, weights, heterogeneity = c("iterative","unbiased"),T
 
 print.bstraub <- function(x, ...)
 {
-    #underline <- "-----------------------------------------"
-    #underline <- "------------------------------------------------"
     cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
     cat("Credibility premiums using the", x$model, "model: \n\n")
-    #cat(underline,"\n")
-
     sapply(paste("  Contract ",
                  format(1:x$ncontracts, justify = "right"),
                  ": ",
