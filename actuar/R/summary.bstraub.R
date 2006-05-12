@@ -1,4 +1,4 @@
-summary.bstraub <- function(object,...)
+summary.bstraub <- function(object, ...)
     structure(object, class = c("summary.bstraub", class(object)))
 
 print.summary.bstraub <- function(x, ...)
