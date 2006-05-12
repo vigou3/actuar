@@ -1,0 +1,4 @@
+export(bstraub, panjer, rearrangepf, simpf)
+S3method(print, bstraub)
+S3method(summary, bstraub)
+S3method(print, summary.bstraub)
