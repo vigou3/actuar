@@ -21,4 +21,3 @@
     Actuarial Research Conference on Credibility}, Academic Press.
 }
 \keyword{datasets}
-  
