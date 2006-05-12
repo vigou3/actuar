@@ -67,16 +67,16 @@ bstraub(ratios, weights,
   further information on the premiums, such as the values of the
   structure parameters.
 
-  An object of class \code{bstraub} is a list with the following
+  An object of class \code{"bstraub"} is a list with the following
   components:
-  \item{model}{the name of the model used ("Bühlmann" or
-    "Bühlmann-Straub")}
+  \item{model}{the name of the model used (\code{"Bühlmann"} or
+    \code{"Bühlmann-Straub"})}
   \item{premiums}{vector of credibility premiums}
   \item{individual}{vector of contract weighted averages}
   \item{collective}{collective premium estimator}
   \item{weights}{vector of contracts total weights, as used in
     credibility factors}
-  \item{s2}{estimator of the within contract heterogeneity parameter}
+  \item{s2}{estimator of the within contract heterogeneity parameter}
   \item{unbiased}{unbiased estimator of the between contract
     heterogeneity parameter}
   \item{iterative}{iterative estimator of the between contract
