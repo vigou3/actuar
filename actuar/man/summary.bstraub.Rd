@@ -57,6 +57,5 @@ data(hachemeister)
               heterogeneity ="unbiased"))
 summary(x)
 }
-
-\keyword{file}
+\keyword{internal}
 

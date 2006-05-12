@@ -86,4 +86,4 @@ rpareto <- function(n, alpha, lambda) lambda * (runif(n)^(-1/alpha) - 1)
 modelsev <- list(dist1 = "pareto", par1 = list(alpha = 3, lambda = 8000))
 simpf(5, 12, model.freq = NULL, modelsev)
 }
-\keyword{file}
+\keyword{datagen}

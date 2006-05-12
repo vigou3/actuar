@@ -48,4 +48,4 @@ modelsev<-list(dist1 = "lnorm",
 ( x <- simpf(25, 4, modelfreq, modelsev) )
 rearrangepf(x$data)
 }
-\keyword{file}
+\keyword{manip}

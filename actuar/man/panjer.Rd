@@ -60,8 +60,6 @@ sum(a)
 (a <-
 panjer(fx=c(0.3, 0.5, 0.2), "negative bin", par=list(size=0.2, prob=0.25), p0=0, TOL=1E-5, echo=TRUE))
 plot(a)
-
 }
-
-
-\keyword{ file }
+\keyword{distribution}
+\keyword{models}

@@ -104,5 +104,4 @@ bstraub(hachemeister$claims, hachemeister$weights)
 (x <- bstraub(hachemeister$claims, hachemeister$weights, heterogeneity = "unbiased"))
 summary(x)
 }
-\keyword{file}
-
+\keyword{models}
