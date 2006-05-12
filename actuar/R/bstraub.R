@@ -1,16 +1,18 @@
-bstraub <- function(ratios, weights, heterogeneity=c("iterative","unbiased"),TOL=1E-6, echo=FALSE )
+bstraub <- function(ratios, weights, heterogeneity = c("iterative","unbiased"),TOL = 1E-6, echo = FALSE )
 {
     cl <- match.call()
+
     ## If weights are not specified, use equal weights as in
     ## Bühlmann's model.
-    unspec.weights <- logical(1)
     if (missing(weights))
     {
         if (any(is.na(ratios)))
             stop("missing values are not allowed in the matrix of ratios when the matrix of weights is not specified")
         weights <- array(1, dim(ratios))
-	  unspec.weights <- TRUE
+        model <- "Bühlmann"
     }
+    else
+        model <- "Bühlmann-Straub"
 
     ## Check other bad arguments.
     if (ncol(ratios) < 2)
@@ -27,8 +29,8 @@ bstraub <- function(ratios, weights, heterogeneity=c("iterative","unbiased"),TOL
     ## zero. That way, the premium will be equal to the credibility
     ## weighted average, as it should, but the contract will have no
     ## contribution in the calculations.
-    weights.s <- rowSums(weights, na.rm=TRUE)
-    ratios.w <- ifelse(weights.s > 0, rowSums(weights * ratios, na.rm=TRUE) / weights.s, 0)
+    weights.s <- rowSums(weights, na.rm = TRUE)
+    ratios.w <- ifelse(weights.s > 0, rowSums(weights * ratios, na.rm = TRUE) / weights.s, 0)
 
     ## Size of the portfolio.
     ncontracts <- sum(weights.s > 0)
@@ -39,7 +41,7 @@ bstraub <- function(ratios, weights, heterogeneity=c("iterative","unbiased"),TOL
     ratios.ww <- sum(weights.s * ratios.w) / weights.ss
 
     ## Estimation of s^2.
-    s2 <-  sum(weights * (ratios - ratios.w)^2, na.rm=TRUE) / (ntotal - ncontracts)
+    s2 <-  sum(weights * (ratios - ratios.w)^2, na.rm = TRUE) / (ntotal - ncontracts)
 
     ## First estimation of a. Always compute the unbiased estimator.
     ac <- weights.ss * (sum(weights.s * (ratios.w - ratios.ww)^2) - (ncontracts - 1) * s2) / (weights.ss^2 - sum(weights.s^2))
@@ -102,39 +104,31 @@ bstraub <- function(ratios, weights, heterogeneity=c("iterative","unbiased"),TOL
     ## Credibility premiums.
     P <- ratios.zw + cred * (ratios.w - ratios.zw)
 
-    res <- list(premiums=P,
-                individual=ratios.w,
-                collective=ratios.zw,
-                weights=weights.s,
-                ncontracts=ncontracts,
-                s2=s2,
-                cred=cred,
-		    unspec.weights=unspec.weights,
-                call=cl,
-                unbiased=ac,
-                iterative=at)
+    res <- list(model = model,
+                premiums = P,
+                individual = ratios.w,
+                collective = ratios.zw,
+                weights = weights.s,
+                ncontracts = ncontracts,
+                s2 = s2,
+                cred = cred,
+                call = cl,
+                unbiased = ac,
+                iterative = at)
     class(res) <- "bstraub"
     res
 }
 
 print.bstraub <- function(x, ...)
 {
-    if (x$unspec.weights)
-    {
-        model <- "Bühlmann"
-        underline <- "-----------------------------------------"
-    }
-    else
-    {
-        model <- "Bühlmann-Straub"
-        underline <- "------------------------------------------------"
-    }
+    #underline <- "-----------------------------------------"
+    #underline <- "------------------------------------------------"
     cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
-    cat("Credibility Premiums using", model, "model \n")
-    cat(underline,"\n")
+    cat("Credibility premiums using the", x$model, "model: \n\n")
+    #cat(underline,"\n")
 
-    sapply(paste("Contract ",
-                 format(1:x$ncontracts, justify="right"),
+    sapply(paste("  Contract ",
+                 format(1:x$ncontracts, justify = "right"),
                  ": ",
                  format(x$premiums),
                  sep = ""),

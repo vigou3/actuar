@@ -62,10 +62,25 @@ bstraub(ratios, weights,
   \code{TOL} stopping criteria.
 }
 \value{
-  Returns an object of class \code{bstraub}. \code{"summary"} and \code{"print"}  methods
-  are defined to display such objects. The latter displays the call to
-  the function, the model used depending if weights have been specified,
-  and the credibility premiums computed for each contract. 
+  Returns an object of \code{\link[base]{class}}
+  \code{"bstraub"}. Function \code{summary} can be used to display
+  further information on the premiums, such as the values of the
+  structure parameters.
+
+  An object of class \code{bstraub} is a list with the following
+  components:
+  \item{model}{the name of the model used ("Bühlmann" or
+    "Bühlmann-Straub")}
+  \item{premiums}{vector of credibility premiums}
+  \item{individual}{vector of contract weighted averages}
+  \item{collective}{collective premium estimator}
+  \item{weights}{vector of contracts total weights, as used in
+    credibility factors}
+  \item{s2}{estimator of the within contract heterogeneity parameter}
+  \item{unbiased}{unbiased estimator of the between contract
+    heterogeneity parameter}
+  \item{iterative}{iterative estimator of the between contract
+    heterogeneity parameter}
 }
 \references{
   Goulet, V. (1998), \emph{Principles and Application of Credibility
