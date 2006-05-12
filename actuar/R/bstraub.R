@@ -1,10 +1,9 @@
-"bstraub" <-
-function(ratios, weights, heterogeneity=c("iterative","unbiased"),TOL=1E-6, echo=FALSE )
+bstraub <- function(ratios, weights, heterogeneity=c("iterative","unbiased"),TOL=1E-6, echo=FALSE )
 {
     cl <- match.call()
     ## If weights are not specified, use equal weights as in
     ## Bühlmann's model.
-    unspec.weights <- logical(1)	
+    unspec.weights <- logical(1)
     if (missing(weights))
     {
         if (any(is.na(ratios)))
@@ -110,10 +109,35 @@ function(ratios, weights, heterogeneity=c("iterative","unbiased"),TOL=1E-6, echo
                 ncontracts=ncontracts,
                 s2=s2,
                 cred=cred,
-		    unspec.weights=unspec.weights,	
+		    unspec.weights=unspec.weights,
                 call=cl,
                 unbiased=ac,
                 iterative=at)
     class(res) <- "bstraub"
     res
+}
+
+print.bstraub <- function(x, ...)
+{
+    if (x$unspec.weights)
+    {
+        model <- "Bühlmann"
+        underline <- "-----------------------------------------"
+    }
+    else
+    {
+        model <- "Bühlmann-Straub"
+        underline <- "------------------------------------------------"
+    }
+    cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
+    cat("Credibility Premiums using", model, "model \n")
+    cat(underline,"\n")
+
+    sapply(paste("Contract ",
+                 format(1:x$ncontracts, justify="right"),
+                 ": ",
+                 format(x$premiums),
+                 sep = ""),
+           cat, fill = TRUE)
+    invisible(x)
 }
