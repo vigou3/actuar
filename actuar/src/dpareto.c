@@ -1,6 +1,5 @@
-#include "R.h"
-#include "Rmath.h"
-#include "dpq.h"
+#include <R.h>
+#include <Rmath.h>
 
 void dpareto(double *x, double *alpha, double *lambda, double *y, int *length)
 {

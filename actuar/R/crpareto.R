@@ -1,7 +1,5 @@
-"crpareto" <-
-function (x,alpha,lambda) 
+crpareto <- function (n, alpha, lambda)
 {
-y<-.C("rpareto",as.double(alpha),as.double(lambda),y = double(x),as.integer(x),package="pareto")
-return(y[[3]])
+    .C("rpareto", as.integer(n), as.double(alpha), as.double(lambda),
+            y = double(n), PACKAGE = "actuar")
 }
-

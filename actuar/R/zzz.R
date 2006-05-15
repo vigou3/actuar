@@ -1,3 +1,2 @@
-.First.lib<-function(lib,pkg)	{
-	library.dynam("pareto",pkg,lib)
-}
+.onLoad <- function(lib, pkg)
+    library.dynam("actuar", pkg, lib)
