@@ -1,6 +1,6 @@
 \name{panjer}
 \alias{panjer}
-\title{Panjer's recurison formula}
+\title{Panjer's recursion formula}
 \description{
   Panjer recursion formula to compute the total amount of claims
   probability function of a portfolio.
