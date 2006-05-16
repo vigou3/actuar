@@ -6,6 +6,8 @@
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
+###
+### AUTHORS: Vincent Goulet and Mathieu Pigeon
 
 ## dpareto <- function (x, alpha, lambda)
 ##     .C("R_dpareto", as.double(x), as.double(alpha), as.double(lambda),
@@ -20,5 +22,7 @@
 ##        y = double(length(x)), as.integer(length(x)))$y
 
 rpareto <- function(n, shape, scale)
-    .C("rpareto_sym", as.integer(n), as.double(shape), as.double(scale),
-       y = double(n))$y
+    .C("rpareto_sym", as.integer(ifelse(length(n) > 1, length(n), n)),
+       as.double(shape), as.integer(length(shape)),
+       as.double(scale), as.integer(length(scale)),
+       x = double(n))$x

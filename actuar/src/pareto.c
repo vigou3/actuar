@@ -46,18 +46,38 @@ void qpareto(double *p, double *alpha, double *lambda, double *y, int *length)
 }
 
 
-void rpareto(int *n, double *alpha, double *lambda, double *y)
+void rpareto(int *n, double *a, int *na, double *b, int *nb, double *x)
 {
-    int i;
-
-    if (R_IsNaN(*alpha) || R_IsNaN(*lambda)) Rf_error ("alpha et lambda doivent être des nombres");
-    if (*alpha <= 0)  Rf_error ("alpha et lambda doivent être positifs");
-    if (*lambda <= 0) Rf_error ("alpha et lambda doivent être positifs");
+    int i, naflag;
+    double ai, bi;
     
-    GetRNGstate();
+    if (*n == NA_INTEGER || *n < 0)
+	error("invalid arguments");
     
-    for (i = 0; i <= *n; i++)
-	y[i] = *lambda * pow(unif_rand(), -1.0 / *alpha) - *lambda;
-
-    PutRNGstate();
+    if (*na < 1 || *nb < 1) 
+    {
+	for (i = 0; i < *n; i++)
+	    x[i] = NA_REAL;
+    }
+    else
+    {
+	naflag = 0;
+	GetRNGstate();
+	for (i = 0; i < *n; i++) 
+	{
+	    ai = a[i % *na];
+	    bi = b[i % *nb];
+	    if (!R_FINITE(ai) || !R_FINITE(bi) || ai <= 0.0 || bi <= 0.0)
+		x[i] = R_NaN;
+	    else
+	    {
+		x[i] = bi * (R_pow(unif_rand(), -1.0 / ai) - 1.0);
+		if (!R_FINITE(x[i])) 
+		    naflag = 1;
+	    }
+	}
+	if (naflag)
+	    warning("NAs produced");
+	PutRNGstate();
+    }
 }
