@@ -1,5 +1,4 @@
-"panjer" <-
-function(fx, freq.dist=c("poisson", "negative binomial", "binomial","geometric","logarithmic"), par, p0, TOL=1E-8, echo=FALSE)
+panjer <- function(fx, freq.dist = c("poisson", "negative binomial", "binomial","geometric","logarithmic"), par, p0, TOL=1E-8, echo=FALSE)
 {
     ## Express TOL as a value close to 1.
     TOL <- 1 - TOL
@@ -132,4 +131,3 @@ function(fx, freq.dist=c("poisson", "negative binomial", "binomial","geometric",
     }
     fs
 }
-

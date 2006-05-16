@@ -1,5 +1,4 @@
-"rearrangepf" <-
-function(pf)
+rearrangepf <- function(pf)
 {
     ## Number of years of observations.
     years <- ncol(pf)
@@ -43,4 +42,3 @@ function(pf)
          frequencies=frequencies,
          severities=list(claims=claims, claims.last=claims.last))
 }
-

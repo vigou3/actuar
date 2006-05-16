@@ -1,5 +1,4 @@
-"simpf" <-
-function(contracts, years, model.freq, model.sev, weights)
+simpf <- function(contracts, years, model.freq, model.sev, weights)
 {
     ## Assign a matrix of weights if none are given in argument.
     if (missing(weights))
@@ -137,4 +136,3 @@ function(contracts, years, model.freq, model.sev, weights)
     dim(X) <- c(contracts, years)
     list(data=X, weights=weights)
 }
-
