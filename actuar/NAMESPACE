@@ -1,8 +1,10 @@
 ## C code
 useDynLib(actuar, .registration = TRUE, .fixes = "R_")
 
-## Function
+## Functions
 export(bstraub, panjer, rearrangepf, simpf)
+
+## Methods
 S3method(print, bstraub)
 S3method(summary, bstraub)
 S3method(print, summary.bstraub)

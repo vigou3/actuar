@@ -13,6 +13,3 @@ void R_init_actuar(DllInfo *dll)
 {
     R_registerRoutines(dll, CEntries, NULL, NULL, NULL);
 }
-
-     
-	
