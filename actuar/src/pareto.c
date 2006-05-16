@@ -9,7 +9,7 @@ void dpareto(double *x, double *alpha, double *lambda, double *y, int *length)
     if (*alpha <= 0)  Rf_error ("alpha et lambda doivent être positifs");
     if (*lambda <= 0) Rf_error ("alpha et lambda doivent être positifs");
 
-    if (*x < 0) return *y = 0;
+/*     if (*x < 0) return *y = 0; */
 
     for(i = 0; i <= *length; i++)
 	y[i] = exp(log(*alpha) + *alpha*log(*lambda) - (*alpha + 1.0)*log(x[i] + *lambda));
@@ -24,7 +24,7 @@ void ppareto(double *x, double *alpha, double *lambda, double *y, int *length)
     if (*alpha <= 0)  Rf_error ("alpha et lambda doivent être positifs");
     if (*lambda <= 0) Rf_error ("alpha et lambda doivent être positifs");
     
-    if (*x < 0) return *y = 0;
+/*     if (*x < 0) return *y = 0; */
     
     for (i = 0; i <= *length; i++)
 	y[i] = 1.0 - exp(*alpha * (log(*lambda) - log(x[i] + *lambda)));
