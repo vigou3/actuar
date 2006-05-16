@@ -11,5 +11,5 @@
 ##        y = double(length(x)), as.integer(length(x)))$y
 
 rpareto <- function(n, alpha, lambda)
-    .C("R_rpareto", as.integer(n), as.double(alpha), as.double(lambda),
+    .C("rpareto_sym", as.integer(n), as.double(alpha), as.double(lambda),
        y = double(n))$y

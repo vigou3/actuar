@@ -2,7 +2,7 @@
 useDynLib(actuar, .registration = TRUE, .fixes = "R_")
 
 ## Functions
-export(bstraub, panjer, rearrangepf, simpf)
+export(bstraub, panjer, rearrangepf, simpf, rpareto)
 
 ## Methods
 S3method(print, bstraub)

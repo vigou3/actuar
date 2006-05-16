@@ -5,7 +5,7 @@
 static R_NativePrimitiveArgType rpareto_t[4] = {INTSXP, REALSXP, REALSXP, REALSXP};
 
 static const R_CMethodDef CEntries[] = {
-    {"rpareto", (DL_FUNC) &rpareto, 4, rpareto_t},
+    {"rpareto_sym", (DL_FUNC) &rpareto, 4, rpareto_t},
     {NULL, NULL, 0}
 };
 
