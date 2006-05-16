@@ -60,10 +60,10 @@ void rpareto(int *n, double *alpha, double *lambda, double *y)
     if (*alpha <= 0)  Rf_error ("alpha et lambda doivent être positifs");
     if (*lambda <= 0) Rf_error ("alpha et lambda doivent être positifs");
     
+    GetRNGstate();
+    
     for (i = 0; i <= *n; i++)
-    {
-	GetRNGstate();
 	y[i] = *lambda * pow(unif_rand(), -1.0 / *alpha) - *lambda;
-	PutRNGstate();
-    }
+
+    PutRNGstate();
 }
