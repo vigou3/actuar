@@ -22,7 +22,14 @@
 ##        y = double(length(x)), as.integer(length(x)))$y
 
 rpareto <- function(n, shape, scale)
-    .C("rpareto_sym", as.integer(ifelse(length(n) > 1, length(n), n)),
+{
+    if (length(n) > 1)
+        n <- length(n)
+    if (!is.finite(n) || n < 0)
+	stop("invalid arguments")
+
+    .C("rpareto_sym", as.integer(n),
        as.double(shape), as.integer(length(shape)),
        as.double(scale), as.integer(length(scale)),
        x = double(n))$x
+}

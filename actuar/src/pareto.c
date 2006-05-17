@@ -51,9 +51,6 @@ void rpareto(int *n, double *a, int *na, double *b, int *nb, double *x)
     int i, naflag;
     double ai, bi;
     
-    if (*n == NA_INTEGER || *n < 0)
-	error("invalid arguments");
-    
     if (*na < 1 || *nb < 1) 
     {
 	for (i = 0; i < *n; i++)
