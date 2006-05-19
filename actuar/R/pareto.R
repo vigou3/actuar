@@ -1,3 +1,5 @@
+### ===== actuar: an R package for Actuarial Science =====
+###
 ### Definition of the {d,p,q,r}pareto functions. The Pareto
 ### distribution used in these functions has cumulative distribution
 ### function
@@ -7,7 +9,7 @@
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
 ###
-### AUTHORS: Vincent Goulet and Mathieu Pigeon
+### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 ## dpareto <- function (x, alpha, lambda)
 ##     .C("R_dpareto", as.double(x), as.double(alpha), as.double(lambda),
@@ -22,14 +24,4 @@
 ##        y = double(length(x)), as.integer(length(x)))$y
 
 rpareto <- function(n, shape, scale)
-{
-    if (length(n) > 1)
-        n <- length(n)
-    if (!is.finite(n) || n < 0)
-	stop("invalid arguments")
-
-    .C("rpareto_sym", as.integer(n),
-       as.double(shape), as.integer(length(shape)),
-       as.double(scale), as.integer(length(scale)),
-       x = double(n))$x
-}
+    .External("do_random", "rpareto", n, shape, scale)
