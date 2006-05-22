@@ -369,8 +369,7 @@ SEXP do_random4(int code, SEXP args)
 /* Main function, the only one used by .External(). */
 SEXP do_random(SEXP args)
 {
-    SEXP x, a, b;
-    int i, n, na, nb;
+    int i;
     char *name;
 
     /* Extract distribution name */
