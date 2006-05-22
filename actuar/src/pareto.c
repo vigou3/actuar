@@ -7,6 +7,7 @@
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
 
+#include <math.h>
 #include <R.h>
 #include <Rmath.h>
 

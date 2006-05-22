@@ -24,6 +24,7 @@
  *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
 
+#include <math.h>
 #include <R.h>
 #include <Rinternals.h>
 #include "actuar.h"
@@ -91,6 +92,7 @@ SEXP do_random1(int code, SEXP args)
 	GetRNGstate();
 	switch (code) 
 	{
+	    RAND1(0, rinverseexp);
 	default:
 	    error("internal error in do_random1");
 	}
@@ -173,7 +175,13 @@ SEXP do_random2(int code, SEXP args)
 	GetRNGstate();
 	switch (code) 
 	{
-	    RAND2(0, rpareto);
+	    RAND2(0, rloglogistic);
+	    RAND2(1, rparalogistic);
+	    RAND2(2, rpareto);
+	    RAND2(3, rinverseparalogistic);
+	    RAND2(4, rinversepareto);
+	    RAND2(5, rinverseweibull);
+	    RAND2(6, rspareto);
 	default:
 	    error("internal error in do_random2");
 	}
@@ -261,6 +269,9 @@ SEXP do_random3(int code, SEXP args)
 	GetRNGstate();
 	switch (code) 
 	{
+	    RAND3(0, rparetogen);
+	    RAND3(1, rburr);
+	    RAND3(2, rinverseburr);
 	default:
 	    error("internal error in do_random3");
 	}
@@ -352,6 +363,7 @@ SEXP do_random4(int code, SEXP args)
 	GetRNGstate();
 	switch (code) 
 	{
+	    RAND4(0, rbetatrans);
 	default:
 	    error("internal error in do_random4");
 	}
