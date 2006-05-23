@@ -9,6 +9,7 @@
 
 #include <R.h>
 #include <Rmath.h>
+#include "locale.h"
 
 double rbetatrans(double shape, double scale, double gamma, double tau)
 {

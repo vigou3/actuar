@@ -9,6 +9,7 @@
 
 #include <R.h>
 #include <Rmath.h>
+#include "locale.h"
 
 double rinverseexp(double scale)
 {
