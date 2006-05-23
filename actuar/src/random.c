@@ -384,7 +384,9 @@ SEXP do_random(SEXP args)
     int i;
     char *name;
     SEXP x;
-    
+
+    PROTECT(x = allocSExp(REALSXP));
+
     /* Extract distribution name */
     args = CDR(args);
     name = CHAR(STRING_ELT(CAR(args), 0));
@@ -394,13 +396,13 @@ SEXP do_random(SEXP args)
     { 
 	if (!strcmp(fun_tab[i].name, name))
 	{
-	    return fun_tab[i].cfun(fun_tab[i].code, CDR(args)); 
+	    x = fun_tab[i].cfun(fun_tab[i].code, CDR(args)); 
 	}
     }
 
-    /* If dispatch did not work, return NULL... */
-    error("internal error in do_random");
-    PROTECT(x = allocVector(NILSXP, 1));
+    if (!LENGTH(x))
+	error("internal error in do_random");
+
     UNPROTECT(1);
     return(x);
 }
