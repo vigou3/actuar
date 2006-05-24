@@ -14,17 +14,24 @@
 #include "actuar.h"
 
 FUNTAB fun_tab[] = { 
-    {"rbetatrans", do_random4, 0},
-    {"rparetogen", do_random3, 0},
-    {"rburr", do_random3, 1},
-    {"rinverseburr", do_random3, 2},
-    {"rloglogistic", do_random2, 0},
-    {"rparalogistic", do_random2, 1},
-    {"rpareto", do_random2, 2},
-    {"rinverseparalogistic", do_random2, 3},
-    {"rinversepareto", do_random2, 4},
-    {"rinverseweibull", do_random2, 5},
-    {"rspareto", do_random2, 6},
-    {"rinverseexp", do_random1, 0},
+    {"dpareto",			do_dpq2,	1},
+    {"qpareto",			do_dpq2,	2},
+    {"rpareto",			do_dpq2,	3},
+	
+    {"rinverseexp", 		do_random1,	0},
+
+    {"rloglogistic", 		do_random2,	0},
+    {"rparalogistic", 		do_random2,	1},
+    {"rpareto", 		do_random2,	2},
+    {"rinverseparalogistic", 	do_random2,	3},
+    {"rinversepareto", 		do_random2,	4},
+    {"rinverseweibull", 	do_random2,	5},
+    {"rspareto", 		do_random2,	6},
+
+    {"rparetogen", 		do_random3,	0},
+    {"rburr", 			do_random3,	1},
+    {"rinverseburr", 		do_random3,	2},
+
+    {"rbetatrans", 		do_random4,	0},
     {0, 0, 0}
 };
