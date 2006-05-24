@@ -8,6 +8,7 @@
 
 static const R_ExternalMethodDef ExternalEntries[] = {
     {"do_random", (DL_FUNC) &do_random, -1},
+    {"do_dpq", (DL_FUNC) &do_dpq, -1},
     {NULL, NULL, 0}
 };
 
