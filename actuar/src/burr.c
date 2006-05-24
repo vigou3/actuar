@@ -13,7 +13,7 @@
 
 double rburr(double shape, double scale, double gamma)
 {
-	double a;
+    double a;
 	
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -23,7 +23,7 @@ double rburr(double shape, double scale, double gamma)
 	gamma <= 0.0)
 	error("invalid arguments");
 
-	a = unif_rand();
+    a = unif_rand();
 	
     return scale * R_pow((1.0 - R_pow(a, (1.0 / shape))) / (R_pow(a, (1.0 / shape)) ), 1.0 / gamma);
 }

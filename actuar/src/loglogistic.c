@@ -13,7 +13,7 @@
 
 double rloglogistic(double gamma, double scale)
 {	
-	double a;
+    double a;
 	
     if (!R_FINITE(gamma) ||
 	!R_FINITE(scale) ||
@@ -21,7 +21,7 @@ double rloglogistic(double gamma, double scale)
 	scale <= 0.0)
 	error("invalid arguments");
 
-	a = unif_rand();
+    a = unif_rand();
 
     return scale * R_pow(a / (1.0 - a), 1.0 / gamma);
 }

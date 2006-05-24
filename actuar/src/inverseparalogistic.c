@@ -13,7 +13,7 @@
 
 double rinverseparalogistic(double tau, double scale)
 {
-	double a;
+    double a;
 	
     if (!R_FINITE(tau) ||
 	!R_FINITE(scale) ||
@@ -21,7 +21,7 @@ double rinverseparalogistic(double tau, double scale)
 	scale <= 0.0)
 	error("invalid arguments");
 
-	a = unif_rand();
+    a = unif_rand();
 
     return scale * R_pow((R_pow(a, 1.0 / tau)) / (1.0 - R_pow(a, 1.0 / tau)), 1.0 / tau);
 }

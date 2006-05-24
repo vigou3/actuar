@@ -13,7 +13,7 @@
 
 double rbetatrans(double shape, double scale, double gamma, double tau)
 {
-	double a;	
+    double a;	
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -25,7 +25,7 @@ double rbetatrans(double shape, double scale, double gamma, double tau)
 	tau <= 0.0)
 	error("invalid arguments");
 	
-	a = unif_rand();
+    a = unif_rand();
 
     return scale * R_pow((qbeta(a, tau, shape, 1, 0) / (1.0 - qbeta(a, tau, shape, 1, 0))), (1.0 / gamma));
 }

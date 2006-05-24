@@ -13,7 +13,7 @@
 
 double rparetogen(double shape, double scale, double tau)
 {	
-	double a;
+    double a;
 	
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -23,7 +23,7 @@ double rparetogen(double shape, double scale, double tau)
 	tau <= 0.0)
 	error("invalid arguments");
 
-	a = unif_rand();
+    a = unif_rand();
 
     return scale * ((qbeta(a, tau, shape, 1, 0)) / (1.0 - qbeta(a, tau, shape, 1, 0)));
 }
