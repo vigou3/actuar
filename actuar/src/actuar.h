@@ -17,7 +17,12 @@ double rparetogen(double shape, double scale, double tau);
 double rburr(double shape, double scale, double gamma);
 double rloglogistic(double shape, double scale);
 double rparalogistic(double shape, double scale);
+
+double dpareto(double x, double shape, double scale, int give_log);
+double ppareto(double x, double shape, double scale, int lower_tail, int log_p);
+double qpareto(double p, double shape, double scale, int lower_tail, int log_p);
 double rpareto(double shape, double scale);
+
 double rspareto(double shape, double scale);
 
 double rinverseburr(double tau, double scale, double gamma);
