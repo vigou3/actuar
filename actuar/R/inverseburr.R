@@ -11,8 +11,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-## dinverseburr <- function (x, tau, scale, gamma)
-##    
+dinverseburr <- function (x, tau, scale, gamma, log)
+  .External("do_dpq", "dinverseburr", x, tau, scale, gamma, log)    
 
 ## pinverseburr <- function(x, tau, scale, gamma)
 ##     

@@ -1,3 +1,4 @@
+
 ### ===== actuar: an R package for Actuarial Science =====
 ###
 ### Definition of the {d,p,q,r}inverse pareto functions. The inverse Pareto
@@ -11,8 +12,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-## dinversepareto <- function (x, tau, scale)
-##     
+dinversepareto <- function (x, tau, scale, log)
+  .External("do_dpq", "dinversepareto", x, tau, scale, log)     
 
 ## pinversepareto <- function(x, tau, scale)
 ##     

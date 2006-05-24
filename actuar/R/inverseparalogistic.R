@@ -11,8 +11,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-## dinverseparalogistic <- function (x, tau, scale)
-##    
+dinverseparalogistic <- function (x, tau, scale, log)
+   .External("do_dpq", "dinverseparalogistic", x, tau, scale, log)
 
 ## pinverseparalogistic <- function(x, tau, scale)
 ##     

@@ -11,8 +11,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-## dburr <- function (x, shape, scale, gamma)
-##     
+dburr <- function (x, shape, scale, gamma, log)
+    .External("do_dpq", "dburr", x, shape, scale, gamma, log)
 
 ## pburr <- function(x, shape, scale, gamma)
 ##     

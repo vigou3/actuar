@@ -11,8 +11,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-## dinverseexp <- function (x, scale)
-##    
+dinverseexp <- function (x, scale, log)
+  .External("do_dpq", "dinverseexp", x, scale, log)    
 
 ## pinverseexp <- function(x, scale)
 ##    

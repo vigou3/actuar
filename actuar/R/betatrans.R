@@ -7,8 +7,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-## dbetatrans <- function (x, alpha, scale, gamma, tau)
-##     
+dbetatrans <- function (x, alpha, scale, gamma, tau, log)
+     .External("dp_dpq", "dbetatrans", x, alpha, scale, gamma, tau, log)
 
 ## pbetatrans <- function (x, alpha, scale, gamma, tau)
 ##     

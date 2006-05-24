@@ -11,8 +11,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-## dinverseweibull <- function (x, scale, tau)
-##     
+dinverseweibull <- function (x, scale, tau, log)
+  .External("do_dpq", "dinverseweibull", n, scale, tau, log)     
 
 ## pinverseweibull <- function(x, scale, tau)
 ##     

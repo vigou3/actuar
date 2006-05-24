@@ -12,13 +12,13 @@
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dpareto <- function (x, shape, scale, log)
-	.External("do_dpq", "dpareto", x, shape, scale, log)
+    .External("do_dpq", "dpareto", x, shape, scale, log)
      
 ppareto <- function (x, shape, scale, tail, log)
-	.External("do_dpq", "ppareto", x, shape, scale, tail, log)
+    .External("do_dpq", "ppareto", x, shape, scale, tail, log)
 
 qpareto <- function (q, shape, scale, tail, log)
-	.External("do_dpq", "qpareto", q, shape, scale, tail, log)
+    .External("do_dpq", "qpareto", q, shape, scale, tail, log)
 
 rpareto <- function(n, shape, scale)
     .External("do_random", "rpareto", n, shape, scale)

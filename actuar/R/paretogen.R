@@ -7,8 +7,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-## dparetogen <- function (x, shape, scale, tau)
-##     
+dparetogen <- function (x, shape, scale, tau, log)
+  .External("do_dpq", "dparetogen", x, shape, scale, tau, log)
 
 ## pparetogen <- function(x, shape, scale, tau)
 ##     
@@ -17,4 +17,4 @@
 ##     
 
 rparetogen <- function(n, shape, scale, tau)
-    .External("do_random", "rpareto", n, shape, scale, tau)
+    .External("do_random", "rparetogen", n, shape, scale, tau)

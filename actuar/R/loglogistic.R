@@ -11,8 +11,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-## dloglogistic <- function (x, gamma, scale)
-##     
+dloglogistic <- function (x, gamma, scale, log)
+  .External("do_dpq", "dloglogistic", x, gamma, scale, log)
 
 ## ploglogistic <- function(x, gamma, scale)
 ##     

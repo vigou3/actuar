@@ -10,8 +10,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-## dspareto <- function (x, shape, scale)
-##    
+dspareto <- function (x, shape, scale, log)
+    .External("do_dpq", "dspareto", x, shape, scale, log)
 
 ## pspareto <- function(x, shape, scale)
 ##    

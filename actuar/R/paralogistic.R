@@ -11,8 +11,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-## dparalogistic <- function (x, alpha, scale)
-##   
+dparalogistic <- function (x, alpha, scale, log)
+  .External("do_dpq", "dparalogistic", x, alpha, scale, log)
 
 ## pparalogistic <- function(x, alpha, scale)
 ##    
