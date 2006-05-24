@@ -1,4 +1,10 @@
 /* Functions accessed from .External() */
+SEXP do_dpq(SEXP args);
+SEXP do_dpq1(int code, SEXP args);
+SEXP do_dpq2(int code, SEXP args);
+SEXP do_dpq3(int code, SEXP args);
+SEXP do_dpq4(int code, SEXP args);
+
 SEXP do_random(SEXP args);
 SEXP do_random1(int code, SEXP args);
 SEXP do_random2(int code, SEXP args);
