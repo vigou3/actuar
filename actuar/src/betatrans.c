@@ -10,6 +10,7 @@
 #include <R.h>
 #include <Rmath.h>
 #include "locale.h"
+#include <dpq.h>
 
 double dbetatrans(double x, double shape, double scale, double gamma, double tau, int give_log)
 { 
@@ -26,7 +27,7 @@ double dbetatrans(double x, double shape, double scale, double gamma, double tau
     
     return  (give_log ?
 	     dbeta(x, tau, shape, 1) + log(gamma) - log(scale) + (gamma - 1.0)*(log(x) - log(scale)) + 2.0 * (-log(1.0 + exp(gamma * (log(x) - log(scale))))) :
-	     dbeta(x, tau, shape, 0) * (gamma / scale) * R_pow(x / scale, gamma - 1.0) * R_pow(1.0 / (1.0 + R_pow(x / scale), gamma), 2.0));
+	     dbeta(x, tau, shape, 0) * (gamma / scale) * R_pow(x / scale, gamma - 1.0) * R_pow(1.0 / (1.0 + R_pow(x / scale, gamma)), 2.0));
 }
 
 double pbetatrans(double q, double shape, double scale, double gamma, double tau, int lower_tail, int log_p)
@@ -43,9 +44,9 @@ double pbetatrans(double q, double shape, double scale, double gamma, double tau
 	tau <= 0.0) 
 	error(_("invalid arguments"));
 
-    u = R_pow(x / scale, gamma) / (1.0 + R_pow(x / scale, gamma));
+    u = R_pow(q / scale, gamma) / (1.0 + R_pow(q / scale, gamma));
 
-    if (x <= 0)
+    if (q <= 0)
 	return R_DT_0;
     
     return (lower_tail ? R_D_exp(pbeta(u, tau, shape, 1, 0)):
@@ -68,7 +69,7 @@ double qbetatrans(double p, double shape, double scale, double gamma, double tau
     R_Q_P01_boundaries(p, 0, 1);
 
     return (lower_tail ? R_D_exp(log(scale) + gamma * (qbeta(p, tau, shape, 1, 1)) - gamma * log(1.0 - qbeta(p, tau, shape, 1, 0))) :
-	    R_D_exp(log(scale) + gamma * (1beta(p, tau, shape, 0, 1)) - gamma * log(1.0 - qbeta(p, tau, shape, 0, 0))));
+	    R_D_exp(log(scale) + gamma * (qbeta(p, tau, shape, 0, 1)) - gamma * log(1.0 - qbeta(p, tau, shape, 0, 0))));
 }
 
 double rbetatrans(double shape, double scale, double gamma, double tau)
