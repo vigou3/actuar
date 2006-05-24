@@ -31,7 +31,9 @@ export(bstraub,
        dspareto,
        dinverseexp,
        ppareto,
-       qpareto)
+	 pbetatrans,
+       qpareto,
+	 qbetatrans)
 
 ## Methods
 S3method(print, bstraub)
