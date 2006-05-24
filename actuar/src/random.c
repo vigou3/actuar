@@ -24,10 +24,10 @@
  *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
 
-#include <math.h>
 #include <R.h>
 #include <Rinternals.h>
 #include "actuar.h"
+#include "locale.h"
 
 /* Functions for one parameter distributions */
 static Rboolean random1(double (*f)(), double *a, int na, double *x, int n)
