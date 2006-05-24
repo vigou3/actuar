@@ -17,7 +17,7 @@ double rinverseweibull(double scale, double tau)
 	!R_FINITE(tau) ||
 	scale <= 0.0 ||
 	tau <= 0.0)
-	error("invalid arguments");
+	error(_("invalid arguments"));
 
     return tau * scale / log(1.0 / unif_rand());
 }

@@ -19,7 +19,7 @@ double rinverseparalogistic(double tau, double scale)
 	!R_FINITE(scale) ||
 	tau <= 0.0 ||
 	scale <= 0.0)
-	error("invalid arguments");
+	error(_("invalid arguments"));
 
     a = unif_rand();
 

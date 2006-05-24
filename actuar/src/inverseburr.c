@@ -21,7 +21,7 @@ double rinverseburr(double tau, double scale, double gamma)
 	tau <= 0.0 ||
 	scale <= 0.0 ||
 	gamma <= 0.0)
-	error("invalid arguments");
+	error(_("invalid arguments"));
 
     a = unif_rand();
 

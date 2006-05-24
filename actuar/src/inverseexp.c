@@ -15,7 +15,7 @@ double rinverseexp(double scale)
 {
     if (!R_FINITE(scale) ||
 	scale <= 0.0)
-	error("invalid arguments");
+	error(_("invalid arguments"));
 
     return scale / log(1.0 / unif_rand());
 }

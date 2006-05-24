@@ -21,7 +21,7 @@ double rparetogen(double shape, double scale, double tau)
 	shape <= 0.0 ||
 	scale <= 0.0 ||
 	tau <= 0.0)
-	error("invalid arguments");
+	error(_("invalid arguments"));
 
     a = unif_rand();
 

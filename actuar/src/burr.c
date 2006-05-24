@@ -21,7 +21,7 @@ double rburr(double shape, double scale, double gamma)
 	shape <= 0.0 ||
 	scale <= 0.0 ||
 	gamma <= 0.0)
-	error("invalid arguments");
+	error(_("invalid arguments"));
 
     a = unif_rand();
 	

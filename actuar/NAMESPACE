@@ -2,7 +2,7 @@
 useDynLib(actuar, .registration = TRUE, .fixes = "R_")
 
 ## Functions
-export(bstraub, panjer, rearrangepf, simpf, rpareto, rbetatrans, rparetogen, rburr, rinverseburr, rloglogistic, rparalogistic, rinverseparalogistic, rinversepareto, rinverseweibull, rspareto, rinverseexp)
+export(bstraub, panjer, rearrangepf, simpf, rpareto, rbetatrans, rparetogen, rburr, rinverseburr, rloglogistic, rparalogistic, rinverseparalogistic, rinversepareto, rinverseweibull, rspareto, rinverseexp, dpareto)
 
 ## Methods
 S3method(print, bstraub)

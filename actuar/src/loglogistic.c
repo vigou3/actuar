@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+</*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
  *  fonctions of the Pareto distribution, and to simulate random
@@ -19,7 +19,7 @@ double rloglogistic(double gamma, double scale)
 	!R_FINITE(scale) ||
 	gamma <= 0.0 ||
 	scale <= 0.0)
-	error("invalid arguments");
+	error(_("invalid arguments"));
 
     a = unif_rand();
 

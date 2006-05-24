@@ -58,14 +58,14 @@ SEXP do_random1(int code, SEXP args)
 
     /* Check validity of arguments */
     if (!isVector(CAR(args)) || !isNumeric(CADR(args)))
-	error("invalid arguments");
+	error(_("invalid arguments"));
     
     /* Number of variates to generate */
     if (LENGTH(CAR(args)) == 1) 
     {
 	n = asInteger(CAR(args));
 	if (n == NA_INTEGER || n < 0)
-	    error("invalid arguments");
+	    error(_("invalid arguments"));
     }
     else 
 	n = LENGTH(CAR(args));
@@ -95,10 +95,10 @@ SEXP do_random1(int code, SEXP args)
 	{
 	    RAND1(0, rinverseexp);
 	default:
-	    error("internal error in do_random1");
+	    error(_("internal error in do_random1"));
 	}
 	if (naflag)
-	    warning("NAs produced");
+	    warning(_("NAs produced"));
 	PutRNGstate();
 	UNPROTECT(1);
     }
@@ -139,14 +139,14 @@ SEXP do_random2(int code, SEXP args)
     if (!isVector(CAR(args)) ||
 	!isNumeric(CADR(args)) ||
 	!isNumeric(CADDR(args)))
-	error("invalid arguments");
+	error(_("invalid arguments"));
     
     /* Number of variates to generate */
     if (LENGTH(CAR(args)) == 1) 
     {
 	n = asInteger(CAR(args));
 	if (n == NA_INTEGER || n < 0)
-	    error("invalid arguments");
+	    error(_("invalid arguments"));
     }
     else 
 	n = LENGTH(CAR(args));
@@ -184,10 +184,10 @@ SEXP do_random2(int code, SEXP args)
 	    RAND2(5, rinverseweibull);
 	    RAND2(6, rspareto);
 	default:
-	    error("internal error in do_random2");
+	    error(_("internal error in do_random2"));
 	}
 	if (naflag)
-	    warning("NAs produced");
+	    warning(_("NAs produced"));
 	PutRNGstate();
 	UNPROTECT(2);
     }
@@ -231,14 +231,14 @@ SEXP do_random3(int code, SEXP args)
 	!isNumeric(CADR(args)) ||
 	!isNumeric(CADDR(args)) ||
 	!isNumeric(CADDDR(args)))
-	error("invalid arguments");
+	error(_("invalid arguments"));
     
     /* Number of variates to generate */
     if (LENGTH(CAR(args)) == 1) 
     {
 	n = asInteger(CAR(args));
 	if (n == NA_INTEGER || n < 0)
-	    error("invalid arguments");
+	    error(_("invalid arguments"));
     }
     else 
 	n = LENGTH(CAR(args));
@@ -274,10 +274,10 @@ SEXP do_random3(int code, SEXP args)
 	    RAND3(1, rburr);
 	    RAND3(2, rinverseburr);
 	default:
-	    error("internal error in do_random3");
+	    error(_("internal error in do_random3"));
 	}
 	if (naflag)
-	    warning("NAs produced");
+	    warning(_("NAs produced"));
 	PutRNGstate();
 	UNPROTECT(3);
     }
@@ -323,14 +323,14 @@ SEXP do_random4(int code, SEXP args)
 	!isNumeric(CADDR(args)) ||
 	!isNumeric(CADDDR(args)) ||
 	!isNumeric(CAD4R(args)))
-	error("invalid arguments");
+	error(_("invalid arguments"));
     
     /* Number of variates to generate */
     if (LENGTH(CAR(args)) == 1) 
     {
 	n = asInteger(CAR(args));
 	if (n == NA_INTEGER || n < 0)
-	    error("invalid arguments");
+	    error(_("invalid arguments"));
     }
     else 
 	n = LENGTH(CAR(args));
@@ -366,10 +366,10 @@ SEXP do_random4(int code, SEXP args)
 	{
 	    RAND4(0, rbetatrans);
 	default:
-	    error("internal error in do_random4");
+	    error(_("internal error in do_random4"));
 	}
 	if (naflag)
-	    warning("NAs produced");
+	    warning(_("NAs produced"));
 	PutRNGstate();
 	UNPROTECT(4);
     }
@@ -397,7 +397,7 @@ SEXP do_random(SEXP args)
     }
 
     /* No dispatch is an error */
-    error("internal error in do_random");
+    error(_("internal error in do_random"));
 
     return args;		/* never used; to keep -Wall happy */
 }

@@ -11,10 +11,9 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-## dpareto <- function (x, alpha, lambda)
-##     .C("R_dpareto", as.double(x), as.double(alpha), as.double(lambda),
-##        y = double(length(x)), as.integer(length(x)))$y
-
+dpareto <- function (x, alpha, lambda)
+	.External("do_dpq", "dpareto", x, shape, scale)
+     
 ## ppareto <- function(x, alpha, lambda)
 ##     .C("R_ppareto", as.double(x), as.double(alpha), as.double(lambda),
 ##        y = double(length(x)), as.integer(length(x)))$y

@@ -23,7 +23,7 @@ double rbetatrans(double shape, double scale, double gamma, double tau)
 	scale <= 0.0 ||
 	gamma <= 0.0 ||
 	tau <= 0.0)
-	error("invalid arguments");
+	error(_("invalid arguments"));
 	
     a = unif_rand();
 

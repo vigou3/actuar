@@ -19,7 +19,7 @@ double rinversepareto(double shape, double scale)
 	!R_FINITE(scale) ||
 	shape <= 0.0 ||
 	scale <= 0.0)
-	error("invalid arguments");
+	error(_("invalid arguments"));
 
     a = unif_rand();
 
