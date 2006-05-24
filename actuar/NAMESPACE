@@ -1,5 +1,5 @@
 ## C code
-useDynLib(actuar, .registration = TRUE, .fixes = "R_")
+useDynLib(actuar, .registration = TRUE)
 
 ## Functions
 export(bstraub,
