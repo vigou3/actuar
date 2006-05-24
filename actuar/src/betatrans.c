@@ -52,7 +52,7 @@ double pbetatrans(double q, double shape, double scale, double gamma, double tau
 	    R_D_exp(pbeta(u, tau, shape, 0, 0)));
 }
 
-double qbetatrans(double p, double shape, double scale, double gamma, double tau,  int lower_tail, int log_p)
+double qbetatrans(double p, double shape, double scale, double gamma, double tau, int lower_tail, int log_p)
 {
 
   if (!R_FINITE(shape) ||
