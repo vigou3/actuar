@@ -11,6 +11,20 @@
 #include <Rmath.h>
 #include "locale.h"
 
+double dinverseweibull(double x, double scale, double tau, int give_log)
+{
+    if (R_FINITE(scale) ||
+	R_FINITE(tau)  ||
+	scale <= 0.0 || 
+	tau <= 0.0 ||
+	x < 0.0) 
+	error(_("invalid arguments"));
+    
+    return  give_log ?
+      log(tau) + tau * (log(scale) - log(x)) - R_pow(scale / x, tau) - log(x) :
+      tau * R_pow(scale / x, tau) * exp(-R_pow(scale / x, tau)) / x;
+}
+
 double rinverseweibull(double scale, double tau)
 {
     if (!R_FINITE(scale) ||

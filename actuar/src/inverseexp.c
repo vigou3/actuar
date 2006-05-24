@@ -11,6 +11,19 @@
 #include <Rmath.h>
 #include "locale.h"
 
+double dinverseexp(double x, double scale, int give_log)
+{
+    if (!R_FINITE(scale) ||
+	scale <= 0.0 || 
+	x < 0.0) 
+	error(_("invalid arguments"));
+    
+    return  give_log ?
+	log(scale) - scale / x - 2.0 * log (x) :
+	scale * exp(-scale / x) / R_pow(x, 2.0);
+    
+}
+
 double rinverseexp(double scale)
 {
     if (!R_FINITE(scale) ||

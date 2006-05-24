@@ -11,6 +11,25 @@
 #include <Rmath.h>
 #include "locale.h"
 
+double dbetatrans(double x, double shape, double scale, double gamma, double tau, int give_log)
+{
+    if (!R_FINITE(shape) ||
+	!R_FINITE(scale) ||
+	!R_FINITE(gamma) ||
+	!R_FINITE(tau) ||
+	shape <= 0.0 || 
+	scale <= 0.0 || 
+	gamma <= 0.0 || 
+	tau <= 0.0 || 
+	x < 0.0) 
+	error(_("invalid arguments"));
+    
+    return  give_log ?
+	log(scale) + (1.0 / gamma) * (dbeta(x, tau, shape, 1) - log(1.0 - dbeta(x, tau, alpha, 0))) :
+	scale * R_pow(dbeta(x, tau, shape, 0)/(1.0 - dbeta(x, tau, shape, 0)), 1.0 / gamma);
+}
+
+
 double rbetatrans(double shape, double scale, double gamma, double tau)
 {
     double a;	

@@ -11,16 +11,14 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dpareto <- function (x, alpha, lambda)
+dpareto <- function (x, shape, scale)
 	.External("do_dpq", "dpareto", x, shape, scale)
      
-## ppareto <- function(x, alpha, lambda)
-##     .C("R_ppareto", as.double(x), as.double(alpha), as.double(lambda),
-##        y = double(length(x)), as.integer(length(x)))$y
+ppareto <- <- function (x, shape, scale)
+	.External("do_dpq", "ppareto", x, shape, scale)
 
-## qpareto <- function(q, alpha, lambda)
-##     .C("R_qpareto", as.double(q), as.double(alpha), as.double(lambda),
-##        y = double(length(x)), as.integer(length(x)))$y
+qpareto <- function (q, shape, scale)
+	.External("do_dpq", "qpareto", q, shape, scale)
 
 rpareto <- function(n, shape, scale)
     .External("do_random", "rpareto", n, shape, scale)
