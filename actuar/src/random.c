@@ -22,6 +22,7 @@
  *  declare the function in actuar.h.
  *
  *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
+ *          with much help from the R Core Team
  */
 
 #include <R.h>
@@ -396,8 +397,7 @@ SEXP do_random(SEXP args)
     }
 
     /* No dispatch is an error */
-    if (!LENGTH(x))
-	error("internal error in do_random");
+    error("internal error in do_random");
 
     return args;		/* never used; to keep -Wall happy */
 }
