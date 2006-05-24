@@ -56,7 +56,7 @@ static SEXP dpq2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
 	sxo = OBJECT(sx), sao = OBJECT(sa), sbo = OBJECT(sb);
     double xi, ai, bi, *x, *a, *b, *y;
     int i_1;
-    R_boolean naflag = FALSE;
+    Rboolean naflag = FALSE;
 
 #define SETUP_DPQ2						\
     if (!isNumeric(sx) || !isNumeric(sa) || !isNumeric(sb))	\
@@ -126,7 +126,7 @@ static SEXP dpq2_2(SEXP sx, SEXP sa, SEXP sb, SEXP sI, SEXP sJ, double (*f)())
 	sxo = OBJECT(sx), sao = OBJECT(sa), sbo = OBJECT(sb);
     double xi, ai, bi, *x, *a, *b, *y;
     int i_1, i_2;
-    R_boolean naflag = FALSE;
+    Rboolean naflag = FALSE;
 
     SETUP_DPQ2;
 
@@ -154,7 +154,7 @@ static SEXP dpq2_2(SEXP sx, SEXP sa, SEXP sb, SEXP sI, SEXP sJ, double (*f)())
 #define DPQ2_1(A, FUN) dpq2_1(CAR(A), CADR(A), CADDR(A), CADDDR(A), FUN);
 #define DPQ2_2(A, FUN) dpq2_2(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), FUN)
 
-SEXP attribute_hidden do_dpq2(int op, SEXP args)
+SEXP do_dpq2(int code, SEXP args)
 {
     switch (code)
     {
