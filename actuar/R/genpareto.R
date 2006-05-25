@@ -10,11 +10,11 @@
 dgenpareto <- function(x, shape1, scale, shape2, log = FALSE)
      .External("do_dpq", "dgenpareto", x, shape1, scale, shape2, log)
 
-##pgenpareto <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
-##     .External("do_dpq", "pgenpareto", q, shape1, scale, shape2, tail, log) 
+pgenpareto <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
+     .External("do_dpq", "pgenpareto", q, shape1, scale, shape2, tail, log) 
 
-##qgenpareto <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
-##     .External("do_dpq", "qgenpareto", p, shape1, scale, shape2, tail, log) 
+qgenpareto <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
+     .External("do_dpq", "qgenpareto", p, shape1, scale, shape2, tail, log) 
 
 rgenpareto <- function(n, shape1, scale, shape2)
      .External("do_random", "rgenpareto", n, shape1, scale, shape2)

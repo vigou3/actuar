@@ -157,12 +157,12 @@ SEXP do_dpq2(int code, SEXP args)
 {
     switch (code)
     {
-    case  1:  return DPQ2_1(args, dpareto);
-    case  2:  return DPQ2_2(args, ppareto);
-    case  3:  return DPQ2_2(args, qpareto);
-    case  4:  return DPQ2_1(args, dpareto1);
-    case  5:  return DPQ2_2(args, ppareto1);
-    case  6:  return DPQ2_2(args, qpareto1);
+    case  0:  return DPQ2_1(args, dpareto);
+    case  1:  return DPQ2_2(args, ppareto);
+    case  2:  return DPQ2_2(args, qpareto);
+    case  3:  return DPQ2_1(args, dpareto1);
+    case  4:  return DPQ2_2(args, ppareto1);
+    case  5:  return DPQ2_2(args, qpareto1);
     default:
 	error(_("internal error in do_dpq2"));
     }

@@ -14,16 +14,19 @@
 #include "actuar.h"
 
 FUNTAB fun_tab[] = { 
-    {"dpareto",			do_dpq2,	1},
-    {"ppareto",			do_dpq2,	2},
-    {"qpareto",			do_dpq2,	3},
-    {"dpareto1",		do_dpq2,	4},
-    {"ppareto1",		do_dpq2,	5},
-    {"qpareto1",		do_dpq2,	6},
+    {"dpareto",			do_dpq2,	0},
+    {"ppareto",			do_dpq2,	1},
+    {"qpareto",			do_dpq2,	2},
+    {"dpareto1",		do_dpq2,	3},
+    {"ppareto1",		do_dpq2,	4},
+    {"qpareto1",		do_dpq2,	5},
 
     {"dburr",	        	do_dpq3,	0},
     {"pburr",		        do_dpq3,	1},
     {"qburr",		        do_dpq3,	2},
+    {"dgenpareto",	        do_dpq3,	3},
+    {"pgenpareto",		do_dpq3,	4},
+    {"qgenpareto",		do_dpq3,	5},
 	
     {"dtrbeta",	        	do_dpq4,	0},
     {"ptrbeta",		        do_dpq4,	1},
