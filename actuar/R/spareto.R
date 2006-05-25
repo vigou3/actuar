@@ -10,14 +10,14 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dspareto <- function (x, shape, scale, log)
-    .External("do_dpq", "dspareto", x, shape, scale, log)
+dpareto1 <- function (x, shape, min, log = FALSE)
+     .External("do_dpq", "dpareto1", x, shape, min, log)
 
-## pspareto <- function(x, shape, scale)
-##    
+##ppareto1 <- function(q, shape, min, tail = TRUE, log = FALSE)
+##     .External("do_dpq", "ppareto1", q, shape, min, tail, log)
 
-## qspareto <- function(q, shape, scale)
-##   
+##qpareto1 <- function(p, shape, min, tail = TRUE, log = FALSE)
+##     .External("do_dpq", "qpareto1", p, shape, min, tail, log)
 
-rspareto <- function(n, shape, scale)
-    .External("do_random", "rspareto", n, shape, scale)
+rpareto1 <- function(n, shape, min)
+     .External("do_random", "rpareto1", n, shape, min)

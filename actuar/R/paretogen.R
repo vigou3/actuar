@@ -7,14 +7,14 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dparetogen <- function (x, shape, scale, tau, log)
-  .External("do_dpq", "dparetogen", x, shape, scale, tau, log)
+dgenpareto <- function(x, shape1, scale, shape2, log = FALSE)
+     .External("do_dpq", "dgenpareto", x, shape1, scale, shape2, log)
 
-## pparetogen <- function(x, shape, scale, tau)
-##     
+##pgenpareto <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
+##     .External("do_dpq", "pgenpareto", q, shape1, scale, shape2, tail, log) 
 
-## qparetogen <- function(q, shape, scale, tau)
-##     
+##qgenpareto <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
+##     .External("do_dpq", "qgenpareto", p, shape1, scale, shape2, tail, log) 
 
-rparetogen <- function(n, shape, scale, tau)
-    .External("do_random", "rparetogen", n, shape, scale, tau)
+rgenpareto <- function(n, shape1, scale, shape2)
+     .External("do_random", "rgenpareto", n, shape1, scale, shape2)
