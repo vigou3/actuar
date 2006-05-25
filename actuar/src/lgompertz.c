@@ -10,6 +10,7 @@
 #include <R.h>
 #include <Rmath.h>
 #include "locale.h"
+#include "dpq.h"
 
 double dlgompertz(double x, double scale, double shape, int give_log)
 {

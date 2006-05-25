@@ -21,7 +21,7 @@ double dinverseparalogistic(double x, double tau, double scale, int give_log)
 	error(_("invalid arguments"));
     
     return  give_log ?
-	2.0 * log(tau) + R_pow(tau, 2.0) * (log(x) - log(scale)) - log(x) - (tau + 1.0) * log(1.0 + R_pow(x / scale, tau))) :
+	2.0 * log(tau) + R_pow(tau, 2.0) * (log(x) - log(scale)) - log(x) - (tau + 1.0) * log(1.0 + R_pow(x / scale, tau)) :
     R_pow(tau, 2.0) * R_pow(x / scale, R_pow(tau, 2.0)) / (x * R_pow(1.0 + R_pow(x / scale, tau), tau + 1.0));
 
     

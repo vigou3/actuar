@@ -10,6 +10,7 @@
 #include <R.h>
 #include <Rmath.h>
 #include "locale.h"
+#include "dpq.h"
 
 double diparalogis(double x, double shape, double scale, int give_log)
 {
@@ -21,7 +22,7 @@ double diparalogis(double x, double shape, double scale, int give_log)
 	error(_("invalid arguments"));
     
     return  give_log ?
-	2.0 * log(shape) + R_pow(shape, 2.0) * (log(x) - log(scale)) - log(x) - (shape + 1.0) * log(1.0 + R_pow(x / scale, shape))) :
+	2.0 * log(shape) + R_pow(shape, 2.0) * (log(x) - log(scale)) - log(x) - (shape + 1.0) * log(1.0 + R_pow(x / scale, shape)) :
     R_pow(shape, 2.0) * R_pow(x / scale, R_pow(shape, 2.0)) / (x * R_pow(1.0 + R_pow(x / scale, shape), shape + 1.0));
 
     

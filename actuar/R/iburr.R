@@ -20,5 +20,5 @@ diburr <- function (x, shape1, scale, shape2, log = FALSE)
 ##qiburr <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
 ##    .External("do_dpq", "qiburr", p, shape1, scale, shape2, tail = TRUE, log = FALSE)
 
-rinverseburr <- function(n, shape1, scale, shape2)
+riburr <- function(n, shape1, scale, shape2)
     .External("do_random", "riburr", n, shape1, scale, shape2)

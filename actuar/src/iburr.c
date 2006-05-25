@@ -10,6 +10,7 @@
 #include <R.h>
 #include <Rmath.h>
 #include "locale.h"
+#include "dpq.h"
 
 double diburr(double x, double shape1, double scale, double shape2, int give_log)
 {
@@ -23,7 +24,7 @@ double diburr(double x, double shape1, double scale, double shape2, int give_log
 	error(_("invalid arguments"));
     
     return  give_log ?
-	log(shape1) + log(shape2) + shape2 * shape1 * (log(x) - log(scale)) - log(X) - (shape1 + 1.0)*log(1.0 + R_pow(1.0 + x / scale, shape2)) :
+	log(shape1) + log(shape2) + shape2 * shape1 * (log(x) - log(scale)) - log(x) - (shape1 + 1.0)*log(1.0 + R_pow(1.0 + x / scale, shape2)) :
 	shape1 * shape2 * R_pow(x / scale, shape2 * shape1) / (x * R_pow(1 + R_pow(x / scale, shape2), shape1 + 1.0));
     
 }

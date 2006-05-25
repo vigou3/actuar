@@ -10,6 +10,7 @@
 #include <R.h>
 #include <Rmath.h>
 #include "locale.h"
+#include "dpq.h"
 
 double dpareto(double x, double shape, double scale, int give_log)
 {

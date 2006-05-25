@@ -10,7 +10,7 @@
 #include <R.h>
 #include <Rmath.h>
 #include "locale.h"
-#include <dpq.h>
+#include "dpq.h"
 
 double dbetatrans(double x, double shape, double scale, double gamma, double tau, int give_log)
 { 

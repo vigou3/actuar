@@ -10,6 +10,7 @@
 #include <R.h>
 #include <Rmath.h>
 #include "locale.h"
+#include "dpq.h"
 
 double dparetogen(double x, double shape, double scale, double tau, int give_log)
 {

@@ -12,24 +12,24 @@ SEXP do_random3(int code, SEXP args);
 SEXP do_random4(int code, SEXP args);
 
 /* Utility functions */
-double rbetatrans(double shape, double scale, double gamma, double tau);
-double rparetogen(double shape, double scale, double tau);
-double rburr(double shape, double scale, double gamma);
-double rloglogistic(double shape, double scale);
-double rparalogistic(double shape, double scale);
+double rtrbeta(double shape1, double scale, double shape2, double shape3);
+double rgenpareto(double shape1, double scale, double shape2);
+double rburr(double shape1, double scale, double shape2);
+double rllogis(double shape, double scale);
+double rparalogis(double shape, double scale);
 
 double dpareto(double x, double shape, double scale, int give_log);
 double ppareto(double x, double shape, double scale, int lower_tail, int log_p);
 double qpareto(double p, double shape, double scale, int lower_tail, int log_p);
 double rpareto(double shape, double scale);
 
-double rspareto(double shape, double scale);
+double rpareto1(double shape, double scale);
 
-double rinverseburr(double tau, double scale, double gamma);
-double rinverseparalogistic(double tau, double scale);
-double rinversepareto(double tau, double scale);
-double rinverseweibull(double scale, double tau);
-double rinverseexp(double scale);
+double riburr(double shape, double scale, double gamma);
+double riparalogis(double shape, double scale);
+double ripareto(double shape, double min);
+double rlgompertz(double scale, double shape);
+double riexp(double scale);
 
 /* Definitions for the table linking the first group of functions to
  * the second one. Table found in names.c */

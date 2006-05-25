@@ -10,7 +10,7 @@
 #include <R.h>
 #include <Rmath.h>
 #include "locale.h"
-#include <dpq.h>
+#include "dpq.h"
 
 double dtrbeta(double x, double shape1, double scale, double shape2, double shape3, int give_log)
 { 
@@ -26,11 +26,11 @@ double dtrbeta(double x, double shape1, double scale, double shape2, double shap
 	error(_("invalid arguments"));
     
     return  (give_log ?
-	     dbeta(x, shape3, shape, 1) + log(shape2) - log(scale) + (shape2 - 1.0)*(log(x) - log(scale)) + 2.0 * (-log(1.0 + exp(shape2 * (log(x) - log(scale))))) :
-	     dbeta(x, shape3, shape, 0) * (shape2 / scale) * R_pow(x / scale, shape2 - 1.0) * R_pow(1.0 / (1.0 + R_pow(x / scale, shape2)), 2.0));
+	     dbeta(x, shape3, shape1, 1) + log(shape2) - log(scale) + (shape2 - 1.0)*(log(x) - log(scale)) + 2.0 * (-log(1.0 + exp(shape2 * (log(x) - log(scale))))) :
+	     dbeta(x, shape3, shape1, 0) * (shape2 / scale) * R_pow(x / scale, shape2 - 1.0) * R_pow(1.0 / (1.0 + R_pow(x / scale, shape2)), 2.0));
 }
 
-double ptrbeta(double q, double shape, double scale, double shape2, double shape3, int lower_tail, int log_p)
+double ptrbeta(double q, double shape1, double scale, double shape2, double shape3, int lower_tail, int log_p)
 {
     double u;
 

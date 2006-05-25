@@ -23,7 +23,7 @@ double dinverseburr(double x, double tau, double scale, double gamma, int give_l
 	error(_("invalid arguments"));
     
     return  give_log ?
-	log(tau) + log(gamma) + gamma * tau * (log(x) - log(scale)) - log(X) - (tau + 1.0)*log(1.0 + R_pow(1.0 + x / scale, gamma)) :
+	log(tau) + log(gamma) + gamma * tau * (log(x) - log(scale)) - log(x) - (tau + 1.0)*log(1.0 + R_pow(1.0 + x / scale, gamma)) :
 	tau * gamma * R_pow(x / scale, gamma * tau) / (x * R_pow(1 + R_pow(x / scale, gamma), tau + 1.0));
     
 }

@@ -1,4 +1,4 @@
-</*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
  *  fonctions of the Pareto distribution, and to simulate random
@@ -10,6 +10,7 @@
 #include <R.h>
 #include <Rmath.h>
 #include "locale.h"
+#include "dpq.h"
 
 double dllogis(double x, double shape, double scale, int give_log)
 {

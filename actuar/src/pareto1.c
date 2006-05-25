@@ -10,11 +10,12 @@
 #include <R.h>
 #include <Rmath.h>
 #include "locale.h"
+#include "dpq.h"
 
 double dpareto1(double x, double shape, double min, int give_log)
 {
     if (!R_FINITE(shape) ||
-	(!R_FINITE(min) ||
+	!R_FINITE(min) ||
 	shape <= 0.0 || 
 	min <= 0.0 ||
 	x < 0.0) 
@@ -22,7 +23,8 @@ double dpareto1(double x, double shape, double min, int give_log)
     
     return  give_log ?
 	log(shape) + shape * log(min) - (shape + 1.0) * log(x):
-	shape * R_pow(min, shape) / R_pow(x, shape + 1.0)
+      shape * R_pow(min, shape) / R_pow(x, shape + 1.0);
+}
 
 double rpareto1(double shape, double min)
 {	
