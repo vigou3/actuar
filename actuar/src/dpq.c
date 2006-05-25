@@ -83,11 +83,10 @@ static SEXP dpq2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
 
     i_1 = asInteger(sI);
 
-    for (i = 0; i < n; i++) 
-    {
-	xi = x[i % nx];
-	ai = a[i % na];
-	bi = b[i % nb];
+    mod_iterate2(nx, na, nb, ix, ia, ib) {
+	xi = x[ix];
+	ai = a[ia];
+	bi = b[ib];
 	if_NA_dpq2_set(y[i], xi, ai, bi)
 	else 
 	{
@@ -170,7 +169,6 @@ SEXP do_dpq2(int code, SEXP args)
 
     return args;		/* never used; to keep -Wall happy */
 }
-
 
 
 /* Main function, the only one used by .External(). */
