@@ -12,14 +12,14 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dinversepareto <- function (x, tau, scale, log)
-  .External("do_dpq", "dinversepareto", x, tau, scale, log)     
+dipareto <- function (x, shape, scale, log = FALSE)
+     .External("do_dpq", "dipareto", x, shape, scale, log)     
 
-## pinversepareto <- function(x, tau, scale)
-##     
+##pipareto <- function(q, shape, scale, tail = TRUE, log = FALSE)
+##    .External("do_dpq", "pipareto", q, shape, scale, tail, log) 
 
-## qinversepareto <- function(q, tau, scale)
-##    
+##qipareto <- function(p, shape, scale, tail = TRUE, log = FALSE)
+##     .External("do_dpq", "qipareto", p, shape, scale, tail, log) 
 
-rinversepareto <- function(n, tau, scale)
-    .External("do_random", "rinversepareto", n, tau, scale)
+ripareto <- function(n, shape, scale)
+     .External("do_random", "ripareto", n, shape, scale)

@@ -11,14 +11,14 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dinverseweibull <- function (x, scale, tau, log)
-  .External("do_dpq", "dinverseweibull", n, scale, tau, log)     
+dlgompertz <- function (x, scale, shape, log = FALSE)
+     .External("do_dpq", "dlgompertz", x, scale, shape, log)     
 
-## pinverseweibull <- function(x, scale, tau)
-##     
+##plgompertz <- function(q, scale, shape, tail = TRUE, log = FALSE)
+##     .External("do_dpq", "plgompertz", q, scale, shape, tail, log) 
 
-## qinverseweibull <- function(q, scale, tau)
-##    
+##qlgompertz <- function(p, scale, shape, tail = TRUE, log = FALSE)
+##     .External("do_dpq", "qlgompertz", p, scale, shape, tail, log) 
 
-rinverseweibull <- function(n, scale, tau)
-    .External("do_random", "rinverseweibull", n, scale, tau)
+rlgompertz <- function(n, scale, shape)
+     .External("do_random", "rlgompertz", n, scale, shape)

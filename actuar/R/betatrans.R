@@ -7,14 +7,14 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dbetatrans <- function (x, alpha, scale, gamma, tau, log)
-     .External("dp_dpq", "dbetatrans", x, alpha, scale, gamma, tau, log)
+dtrbeta <- function (x, shape1, scale, shape2, shape3, log = FALSE)
+     .External("do_dpq", "dtrbeta", x, shape1, scale, shape2, shape3, log)
 
-## pbetatrans <- function (x, alpha, scale, gamma, tau)
-##     
+ptrbeta <- function (q, shape1, scale, shape2, shape3, tail = TRUE, log = FALSE)
+     .External("do_dpq", "ptrbeta", q, shape1, scale, shape2, shape3, tail, log)
 
-## qbetatrans <- function (q, alpha, scale, gamma, tau)
-##     
+qtrbeta <- function (p, shape1, scale, shape2, shape3, tail, log)
+     .External("do_dpq", "qtrbeta", p, shape1, scale, shape2, shape3, tail = TRUE, log = FALSE)
 
-rbetatrans <- function (n, alpha, scale, gamma, tau)
-    .External("do_random", "rbetatrans", n, alpha, scale, gamma, tau)
+rtrbeta <- function (n, shape1, scale, shape2, shape3)
+     .External("do_random", "rtrbeta", n, shape1, scale, shape2, shape3)

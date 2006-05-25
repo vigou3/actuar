@@ -11,14 +11,14 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dinverseparalogistic <- function (x, tau, scale, log)
-   .External("do_dpq", "dinverseparalogistic", x, tau, scale, log)
+diparalogis <- function (x, shape, scale, log = FALSE)
+    .External("do_dpq", "diparalogis", x, shape, scale, log)
 
-## pinverseparalogistic <- function(x, tau, scale)
-##     
+##piparalogis <- function(q, shape, scale, tail = TRUE, log = FALSE)
+##    .External("do_dpq", "piparalogis", q, shape, scale, tail, log)
 
-## qinverseparalogistic <- function(q, tau, scale)
-##     
+##qiparalogis <- function(p, shape, scale, tail = TRUE, log = FALSE)
+##    .External("do_dpq", "qiparalogis", p, shape, scale, tail, log)
 
-rinverseparalogistic <- function(n, tau, scale)
-    .External("do_random", "rinverseparalogistic", n, tau, scale)
+riparalogis <- function(n, shape, scale)
+    .External("do_random", "riparalogis", n, shape, scale)

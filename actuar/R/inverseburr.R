@@ -11,14 +11,14 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dinverseburr <- function (x, tau, scale, gamma, log)
-  .External("do_dpq", "dinverseburr", x, tau, scale, gamma, log)    
+diburr <- function (x, shape1, scale, shape2, log = FALSE)
+    .External("do_dpq", "diburr", x, shape1, scale, shape2, log = FALSE)    
 
-## pinverseburr <- function(x, tau, scale, gamma)
-##     
+##piburr <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
+##    .External("do_dpq", "piburr", q, shape1, scale, shape2, tail = TRUE, log = FALSE)    
 
-## qinverseburr <- function(q, tau, scale, gamma)
-##     
+##qiburr <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
+##    .External("do_dpq", "qiburr", p, shape1, scale, shape2, tail = TRUE, log = FALSE)
 
-rinverseburr <- function(n, tau, scale, gamma)
-    .External("do_random", "rinverseburr", n, tau, scale, gamma)
+rinverseburr <- function(n, shape1, scale, shape2)
+    .External("do_random", "riburr", n, shape1, scale, shape2)

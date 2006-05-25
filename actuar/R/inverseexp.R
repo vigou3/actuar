@@ -11,14 +11,14 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dinverseexp <- function (x, scale, log)
-  .External("do_dpq", "dinverseexp", x, scale, log)    
+diexp <- function (x, scale, log = FALSE)
+    .External("do_dpq", "diexp", x, scale, log)    
 
-## pinverseexp <- function(x, scale)
-##    
+##piexp <- function(q, scale, tail = TRUE, log = FALSE)
+##    .External("do_dpq", "piexp", q, scale, tail, log)  
 
-## qinverseexp <- function(q, scale)
-##  
+##qiexp <- function(p, scale, tail = TRUE, log = FALSE)
+##    .External("do_dpq", "qiexp", p, scale, tail, log)
 
-rinverseexp <- function(n, scale)
-    .External("do_random", "rinverseexp", n, scale)
+riexp <- function(n, scale)
+    .External("do_random", "riexp", n, scale)

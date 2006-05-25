@@ -1,3 +1,4 @@
+
 ### ===== actuar: an R package for Actuarial Science =====
 ###
 ### Definition of the {d,p,q,r}loglogistic functions. The loglogistic
@@ -11,14 +12,14 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dloglogistic <- function (x, gamma, scale, log)
-  .External("do_dpq", "dloglogistic", x, gamma, scale, log)
+dllogis <- function (x, shape, scale, log = FALSE)
+     .External("do_dpq", "dllogis", x, shape, scale, log)
 
-## ploglogistic <- function(x, gamma, scale)
-##     
+##pllogis <- function(q, shape, scale, tail = TRUE, log = FALSE)
+##     .External("do_dpq", "pllogis", q, shape, scale, tail, log)
 
-## qloglogistic <- function(q, gamma, scale)
-##    
+##qllogis <- function(p, shape, scale, tail = TRUE, log = FALSE)
+##     .External("do_dpq", "qllogis", p, shape, scale, tail, log)
 
-rloglogistic <- function(n, gamma, scale)
-    .External("do_random", "rloglogistic", n, gamma, scale)
+rllogis <- function(n, shape, scale)
+     .External("do_random", "rllogis", n, shape, scale)
