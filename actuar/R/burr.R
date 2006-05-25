@@ -14,11 +14,11 @@
 dburr <- function (x, shape1, scale, shape2, log = FALSE)
     .External("do_dpq", "dburr", x, shape1, scale, shape2, log)
 
-##pburr <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
-##    .External("do_dpq", "pburr", q, shape1, scale, shape2, tail, log)     
+pburr <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
+    .External("do_dpq", "pburr", q, shape1, scale, shape2, tail, log)     
 
-##qburr <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
-##    .External("do_dpq", "qburr", p, shape1, scale, shape2, tail, log)   
+qburr <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
+    .External("do_dpq", "qburr", p, shape1, scale, shape2, tail, log)   
 
 rburr <- function(n, shape1, scale, shape2)
     .External("do_random", "rburr", n, shape1, scale, shape2)

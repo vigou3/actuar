@@ -20,7 +20,15 @@ FUNTAB fun_tab[] = {
     {"dpareto1",		do_dpq2,	4},
     {"ppareto1",		do_dpq2,	5},
     {"qpareto1",		do_dpq2,	6},
+
+    {"dburr",	        	do_dpq3,	0},
+    {"pburr",		        do_dpq3,	1},
+    {"qburr",		        do_dpq3,	2},
 	
+    {"dtrbeta",	        	do_dpq4,	0},
+    {"ptrbeta",		        do_dpq4,	1},
+    {"qtrbeta",		        do_dpq4,	2},
+
     {"rexp", 		        do_random1,	0},
 
     {"rllogis", 		do_random2,	0},

@@ -12,11 +12,19 @@ SEXP do_random3(int code, SEXP args);
 SEXP do_random4(int code, SEXP args);
 
 /* Utility functions */
-double rtrbeta(double shape1, double scale, double shape2, double shape3);
 double rgenpareto(double shape1, double scale, double shape2);
-double rburr(double shape1, double scale, double shape2);
 double rllogis(double shape, double scale);
 double rparalogis(double shape, double scale);
+
+double dtrbeta(double x, double shape1, double scale, double shape2, double shape3, int give_log);
+double ptrbeta(double q, double shape1, double scale, double shape2, double shape3, int lower_tail, int log_p);
+double qtrbeta(double p, double shape1, double scale, double shape2, double shape3, int lower_tail, int log_p);
+double rtrbeta(double shape1, double scale, double shape2, double shape3);
+
+double dburr(double x, double shape1, double scale, double shape2, int give_log);
+double pburr(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
+double qburr(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
+double rburr(double shape1, double scale, double shape2);
 
 double dpareto(double x, double shape, double scale, int give_log);
 double ppareto(double q, double shape, double scale, int lower_tail, int log_p);

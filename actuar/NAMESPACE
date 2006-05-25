@@ -32,8 +32,12 @@ export(bstraub,
        diexp,
        ppareto,
        ppareto1,
+       pburr,
+       ptrbeta,
        qpareto,
-       qpareto1)
+       qpareto1,
+       qburr,
+       qtrbeta)
 
 ## Methods
 S3method(print, bstraub)
