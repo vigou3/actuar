@@ -30,8 +30,10 @@ export(bstraub,
        dlgompertz,
        dpareto1,
        diexp,
-       ppareto,	
-       qpareto)
+       ppareto,
+       ppareto1,
+       qpareto,
+       qpareto1)
 
 ## Methods
 S3method(print, bstraub)

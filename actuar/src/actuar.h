@@ -19,10 +19,13 @@ double rllogis(double shape, double scale);
 double rparalogis(double shape, double scale);
 
 double dpareto(double x, double shape, double scale, int give_log);
-double ppareto(double x, double shape, double scale, int lower_tail, int log_p);
+double ppareto(double q, double shape, double scale, int lower_tail, int log_p);
 double qpareto(double p, double shape, double scale, int lower_tail, int log_p);
 double rpareto(double shape, double scale);
 
+double dpareto1(double x, double shape, double scale, int give_log);
+double ppareto1(double q, double shape, double scale, int lower_tail, int log_p);
+double qpareto1(double p, double shape, double scale, int lower_tail, int log_p);
 double rpareto1(double shape, double scale);
 
 double riburr(double shape, double scale, double gamma);

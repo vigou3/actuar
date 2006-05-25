@@ -15,8 +15,11 @@
 
 FUNTAB fun_tab[] = { 
     {"dpareto",			do_dpq2,	1},
-    {"qpareto",			do_dpq2,	2},
-    {"rpareto",			do_dpq2,	3},
+    {"ppareto",			do_dpq2,	2},
+    {"qpareto",			do_dpq2,	3},
+    {"dpareto1",		do_dpq2,	4},
+    {"ppareto1",		do_dpq2,	5},
+    {"qpareto1",		do_dpq2,	6},
 	
     {"rexp", 		        do_random1,	0},
 
@@ -25,7 +28,7 @@ FUNTAB fun_tab[] = {
     {"rpareto", 		do_random2,	2},
     {"riparalogis",     	do_random2,	3},
     {"ripareto", 		do_random2,	4},
-    {"rlgompertz",      	do_random2,	5},
+    {"rlgompertz",      	do_random2,	5},               
     {"rpareto1", 		do_random2,	6},
 
     {"rgenpareto", 		do_random3,	0},
