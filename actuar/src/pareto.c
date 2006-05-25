@@ -60,8 +60,6 @@ double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
     return (log_p ?
       log(scale) + log(1.0 - R_pow(1.0 - p, 1.0 / shape)) - (1.0 / shape) * log(1.0 - p):
       scale * (1.0 - R_pow(1.0 - p, 1.0 / shape)) / R_pow(1.0 - p, 1.0 / shape));
-
-   
 }
 
 double rpareto(double shape, double scale)
