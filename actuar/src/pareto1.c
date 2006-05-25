@@ -36,7 +36,7 @@ double ppareto1(double q, double shape, double min, int lower_tail, int log_p)
 	min <= 0.0)
 	error(_("invalid arguments"));
 
-    if (q <= 0.0)
+    if (q <= min)
 	return R_DT_0;
     
     return (lower_tail ? R_D_exp(log(1 - exp(shape * (log(min) - log(q))))):
