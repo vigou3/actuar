@@ -53,7 +53,7 @@ static SEXP dpq1_1(SEXP sx, SEXP sa, SEXP sI, double (*f)())
 {
     SEXP sy;
     int i, ix, ia, n, nx, na, sxo = OBJECT(sx), sao = OBJECT(sa);
-    double xi, ai, *x, *a, *b, *y;
+    double xi, ai, *x, *a, *y;
     int i_1;
     Rboolean naflag = FALSE;
 
