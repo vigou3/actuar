@@ -12,7 +12,7 @@
 #include "locale.h"
 #include "dpq.h"
 
-double diburr(double x, double shape1, double scale, double shape2, int give_log)
+double dinvburr(double x, double shape1, double scale, double shape2, int give_log)
 {
     if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
@@ -29,7 +29,7 @@ double diburr(double x, double shape1, double scale, double shape2, int give_log
     
 }
 
-double riburr(double shape1, double scale, double shape2)
+double rinvburr(double shape1, double scale, double shape2)
 {	
     double a;
 

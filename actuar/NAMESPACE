@@ -1,45 +1,29 @@
-## C code
+### C code
 useDynLib(actuar, .registration = TRUE)
 
-## Functions
-export(bstraub,
+### Functions
+export(## Credibility theory
+       bstraub, rearrangepf, simpf,
+       ## Risk theory
        panjer,
-       rearrangepf,
-       simpf,
-       rpareto,
-       rtrbeta,
-       rgenpareto,
-       rburr,
-       riburr,
-       rllogis,
-       rparalogis,
-       riparalogis,
-       ripareto,
-       rlgompertz,
-       rpareto1,
-       riexp,
-       dpareto,
-       dtrbeta,
-       dgenpareto,
-       dburr,
-       diburr,
-       dllogis,
-       dparalogis,
-       diparalogis,
-       dipareto,
-       dlgompertz,
-       dpareto1,
-       diexp,
-       ppareto,
-       ppareto1,
-       pburr,
-       ptrbeta,
-       qpareto,
-       qpareto1,
-       qburr,
-       qtrbeta)
+       ## One parameter distributions
+       dinvexp, rinvexp,
+       ## Two parameter distributions
+       dllogis, rllogis,
+       dparalogis, rparalogis,
+       dinvparalogis, rinvparalogis,
+       dpareto, ppareto, qpareto, rpareto,
+       dinvpareto, rinvpareto,
+       dpareto1, ppareto1, qpareto1, rpareto1,
+       dinvweibull, rinvweibull,
+       ## Three parameter distributions
+       dburr, pburr, qburr, rburr,
+       dinvburr, rinvburr,
+       dgenpareto, rgenpareto,
+       ## Four parameter distributions
+       dtrbeta, ptrbeta, qtrbeta, rtrbeta)
 
-## Methods
+### Methods
 S3method(print, bstraub)
 S3method(summary, bstraub)
 S3method(print, summary.bstraub)

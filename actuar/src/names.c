@@ -14,38 +14,47 @@
 #include "actuar.h"
 
 FUNTAB fun_tab[] = { 
-    {"dpareto",			do_dpq2,	0},
-    {"ppareto",			do_dpq2,	1},
-    {"qpareto",			do_dpq2,	2},
-    {"dpareto1",		do_dpq2,	3},
-    {"ppareto1",		do_dpq2,	4},
-    {"qpareto1",		do_dpq2,	5},
-
-    {"dburr",	        	do_dpq3,	0},
-    {"pburr",		        do_dpq3,	1},
-    {"qburr",		        do_dpq3,	2},
-    {"dgenpareto",	        do_dpq3,	3},
-    {"pgenpareto",		do_dpq3,	4},
-    {"qgenpareto",		do_dpq3,	5},
+    /* DENSITY, CUMULATIVE PROBABILITY AND QUANTILE FUNCTIONS */
+    /* One parameter distributions */
+    {"dinvexp",		do_dpq1,	1},
+    {"pinvexp",		do_dpq1,	2},
+    {"qinvexp",		do_dpq1,	3},
+    /* Two parameter distributions */
+    {"dinvparalogis",	do_dpq2,	1},
+    {"dpareto",		do_dpq2,	1},
+    {"ppareto",		do_dpq2,	2},
+    {"qpareto",		do_dpq2,	3},
+    {"dinvpareto",	do_dpq2,	4},
+    {"dpareto1",	do_dpq2,	7},
+    {"ppareto1",	do_dpq2,	8},
+    {"qpareto1",	do_dpq2,	9},
+    {"dinvweibull",	do_dpq2,	9},
+    /* Three parameter distributions */
+    {"dburr",	        do_dpq3,	0},
+    {"pburr",	        do_dpq3,	1},
+    {"qburr",	        do_dpq3,	2},
+    {"dgenpareto",	do_dpq3,	3},
+    {"pgenpareto",	do_dpq3,	4},
+    {"qgenpareto",	do_dpq3,	5},
+    /* Four parameter distributions */
+    {"dtrbeta",		do_dpq4,	1},
+    {"ptrbeta",		do_dpq4,	2},
+    {"qtrbeta",		do_dpq4,	3},
 	
-    {"dtrbeta",	        	do_dpq4,	0},
-    {"ptrbeta",		        do_dpq4,	1},
-    {"qtrbeta",		        do_dpq4,	2},
-
-    {"rexp", 		        do_random1,	0},
-
-    {"rllogis", 		do_random2,	0},
-    {"rparalogis", 		do_random2,	1},
-    {"rpareto", 		do_random2,	2},
-    {"riparalogis",     	do_random2,	3},
-    {"ripareto", 		do_random2,	4},
-    {"rlgompertz",      	do_random2,	5},               
-    {"rpareto1", 		do_random2,	6},
-
-    {"rgenpareto", 		do_random3,	0},
-    {"rburr", 			do_random3,	1},
-    {"riburr", 	        	do_random3,	2},
-
-    {"rtrbeta", 		do_random4,	0},
+    /* RANDOM NUMBERS FUNCTIONS */
+    /* Two parameter distributions */
+    {"rllogis", 	do_random2,	0},
+    {"rparalogis", 	do_random2,	1},
+    {"rinvparalogis", 	do_random2,	1},
+    {"rpareto", 	do_random2,	2},
+    {"rinvpareto", 	do_random2,	2},
+    {"rpareto1", 	do_random2,	6},
+    {"rinvweibull",	do_random2,	5},               
+    /* Three parameter distributions */
+    {"rgenpareto", 	do_random3,	0},
+    {"rburr", 		do_random3,	1},
+    {"rinvburr", 	do_random3,	2},
+    /* Four parameter distributions */
+    {"rtrbeta", 	do_random4,	0},
     {0, 0, 0}
 };

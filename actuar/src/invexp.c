@@ -12,27 +12,24 @@
 #include "locale.h"
 #include "dpq.h"
 
-double dlgompertz(double x, double scale, double shape, int give_log)
+double dinvexp(double x, double scale, int give_log)
 {
-    if (R_FINITE(scale) ||
-	R_FINITE(shape)  ||
+    if (!R_FINITE(scale) ||
 	scale <= 0.0 || 
-	shape <= 0.0 ||
 	x < 0.0) 
 	error(_("invalid arguments"));
     
     return  give_log ?
-      log(shape) + shape * (log(scale) - log(x)) - R_pow(scale / x, shape) - log(x) :
-      shape * R_pow(scale / x, shape) * exp(-R_pow(scale / x, shape)) / x;
+	log(scale) - scale / x - 2.0 * log (x) :
+	scale * exp(-scale / x) / R_pow(x, 2.0);
+    
 }
 
-double rlgompertz(double scale, double shape)
+double rinvexp(double scale)
 {
     if (!R_FINITE(scale) ||
-	!R_FINITE(shape) ||
-	scale <= 0.0 ||
-	shape <= 0.0)
+	scale <= 0.0)
 	error(_("invalid arguments"));
 
-    return shape * scale / log(1.0 / unif_rand());
+    return scale / log(1.0 / unif_rand());
 }

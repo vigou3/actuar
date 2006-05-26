@@ -12,8 +12,7 @@
 #include "locale.h"
 #include "dpq.h"
 
-
-double dipareto(double x, double shape, double scale, int give_log)
+double dinvparalogis(double x, double shape, double scale, int give_log)
 {
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -23,12 +22,13 @@ double dipareto(double x, double shape, double scale, int give_log)
 	error(_("invalid arguments"));
     
     return  give_log ?
-	log(shape) + log (scale) + (shape - 1.0) * log(x) - (shape + 1.0) * log(x + scale) :
-	shape * scale * R_pow(x, shape - 1.0) / R_pow(x + scale, shape + 1.0);
+	2.0 * log(shape) + R_pow(shape, 2.0) * (log(x) - log(scale)) - log(x) - (shape + 1.0) * log(1.0 + R_pow(x / scale, shape)) :
+    R_pow(shape, 2.0) * R_pow(x / scale, R_pow(shape, 2.0)) / (x * R_pow(1.0 + R_pow(x / scale, shape), shape + 1.0));
+
     
 }
 
-double ripareto(double shape, double scale)
+double rinvparalogis(double shape, double scale)
 {
     double a;
 	
@@ -40,5 +40,5 @@ double ripareto(double shape, double scale)
 
     a = unif_rand();
 
-    return scale * R_pow(a, 1.0 / shape) / (1.0 - R_pow(a, 1.0 / shape));
+    return scale * R_pow((R_pow(a, 1.0 / shape)) / (1.0 - R_pow(a, 1.0 / shape)), 1.0 / shape);
 }
