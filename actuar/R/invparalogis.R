@@ -4,7 +4,7 @@
 ### distribution used in these functions has cumulative distribution
 ### function
 ###
-###   Pr[X <= x] = ((x/scale)^tau/(1 + (x/scale)^tau))^tau, x > 0.
+###   Pr[X <= x] = ((x/scale)^shape/(1 + (x/scale)^shape))^shape, x > 0.
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.

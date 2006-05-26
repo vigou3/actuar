@@ -3,7 +3,7 @@
 ### Definition of the {d,p,q,r}single-parameter pareto functions. The single-parameter ### Pareto distribution used in these functions has cumulative distribution
 ### function
 ###
-###   Pr[X <= x] = 1 - (scale/x)^shape, x > 0.
+###   Pr[X <= x] = 1 - (min/x)^shape, x > 0.
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.

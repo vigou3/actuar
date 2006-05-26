@@ -4,7 +4,7 @@
 ### distribution used in these functions has cumulative distribution
 ### function
 ###
-###   Pr[X <= x] = 1 - (1/(1 + (x/scale)^alpha))^alpha, x > 0.
+###   Pr[X <= x] = 1 - (1/(1 + (x/scale)^shape))^shape, x > 0.
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
