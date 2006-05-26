@@ -13,15 +13,19 @@ export(## Credibility theory
        dparalogis, rparalogis,
        dinvparalogis, rinvparalogis,
        dpareto, ppareto, qpareto, rpareto,
+       dpareto2, ppareto2, qpareto2, rpareto2, # aliases
        dinvpareto, rinvpareto,
        dpareto1, ppareto1, qpareto1, rpareto1,
        dinvweibull, rinvweibull,
+       dlgompertz, rlgompertz,          # aliases
        ## Three parameter distributions
        dburr, pburr, qburr, rburr,
        dinvburr, rinvburr,
        dgenpareto, rgenpareto,
        ## Four parameter distributions
-       dtrbeta, ptrbeta, qtrbeta, rtrbeta)
+       dtrbeta, ptrbeta, qtrbeta, rtrbeta,
+       dpearson4, ppearson4, qpearson4, rpearson4 #aliases
+       )
 
 ### Methods
 S3method(print, bstraub)

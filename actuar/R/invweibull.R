@@ -14,11 +14,17 @@
 dinvweibull <- function (x, scale, shape, log = FALSE)
     .External("do_dpq", "dinvweibull", x, scale, shape, log)
 
-##pinvweibull <- function(q, scale, shape, tail = TRUE, log = FALSE)
-##     .External("do_dpq", "pinvweibull", q, scale, shape, tail, log)
+#pinvweibull <- function(q, scale, shape, tail = TRUE, log = FALSE)
+#     .External("do_dpq", "pinvweibull", q, scale, shape, tail, log)
 
-##qinvweibull <- function(p, scale, shape, tail = TRUE, log = FALSE)
-##     .External("do_dpq", "qinvweibull", p, scale, shape, tail, log)
+#qinvweibull <- function(p, scale, shape, tail = TRUE, log = FALSE)
+#     .External("do_dpq", "qinvweibull", p, scale, shape, tail, log)
 
 rinvweibull <- function(n, scale, shape)
     .External("do_random", "rinvweibull", n, scale, shape)
+
+## Aliases
+dlgompertz <- dinvweibull
+#plgompertz <- pinvweibull
+#qlgompertz <- qinvweibull
+rlgompertz <- rinvweibull
