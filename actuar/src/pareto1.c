@@ -1,8 +1,8 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the Pareto distribution, and to simulate random
- *  variates. See ../R/pareto.R for details.
+ *  fonctions of the single-parameter Pareto distribution, and to simulate random
+ *  variates. See ../R/pareto1.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
