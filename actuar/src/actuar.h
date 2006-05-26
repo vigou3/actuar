@@ -26,7 +26,10 @@ double rinvpareto(double shape, double scale);
 double dinvweibull(double x, double scale, double shape, int give_log);
 double rinvweibull(double scale, double shape);
 
+double dllogis(double x, double shape, double scale, int give_log);
 double rllogis(double shape, double scale);
+
+double dparalogis(double x, double shape, double scale, int give_log);
 double rparalogis(double shape, double scale);
 
 double dpareto(double x, double shape, double scale, int give_log);
@@ -50,7 +53,7 @@ double pgenpareto(double q, double shape1, double scale, double shape2, int lowe
 double qgenpareto(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double rgenpareto(double shape1, double scale, double shape2);
 
-double dinvburr(double x, double shape1, double scale, double shape2, int give_log)
+double dinvburr(double x, double shape1, double scale, double shape2, int give_log);
 double rinvburr(double shape, double scale, double gamma);
 
 /*   Four parameter distributions */
