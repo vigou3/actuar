@@ -12,13 +12,13 @@
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dparalogis <- function (x, shape, scale, log = FALSE)
-     .External("do_dpq", "dparalogis", x, shape, scale, log)
+    .External("do_dpq", "dparalogis", x, shape, scale, log)
 
-##pparalogis <- function(q, shape, scale, tail = TRUE, log = FALSE)
-##     .External("do_dpq", "pparalogis", q, shape, scale, tail, log)
+#pparalogis <- function(q, shape, scale, tail = TRUE, log = FALSE)
+#     .External("do_dpq", "pparalogis", q, shape, scale, tail, log)
 
-##qparalogis <- function(p, shape, scale, tail = TRUE, log = FALSE)
-##     .External("do_dpq", "qparalogis", p, shape, scale, tail, log)
+#qparalogis <- function(p, shape, scale, tail = TRUE, log = FALSE)
+#     .External("do_dpq", "qparalogis", p, shape, scale, tail, log)
 
 rparalogis <- function(n, shape, scale)
-     .External("do_random", "rparalogis", n, shape, scale)
+    .External("do_random", "rparalogis", n, shape, scale)

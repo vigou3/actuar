@@ -14,11 +14,11 @@
 dinvburr <- function (x, shape1, scale, shape2, log = FALSE)
     .External("do_dpq", "dinvburr", x, shape1, scale, shape2, log = FALSE)
 
-##pinvburr <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
-##    .External("do_dpq", "pinvburr", q, shape1, scale, shape2, tail = TRUE, log = FALSE)
+#pinvburr <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
+#    .External("do_dpq", "pinvburr", q, shape1, scale, shape2, tail = TRUE, log = FALSE)
 
-##qinvburr <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
-##    .External("do_dpq", "qinvburr", p, shape1, scale, shape2, tail = TRUE, log = FALSE)
+#qinvburr <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
+#    .External("do_dpq", "qinvburr", p, shape1, scale, shape2, tail = TRUE, log = FALSE)
 
 rinvburr <- function(n, shape1, scale, shape2)
     .External("do_random", "rinvburr", n, shape1, scale, shape2)
