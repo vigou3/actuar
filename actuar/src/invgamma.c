@@ -43,7 +43,7 @@ double pinvgamma(double q, double scale, double shape, int lower_tail, int log_p
     if (q <= 0)
 	return R_DT_0;
 
-    tmp = scale / q;
+    tmp = 1.0 / q;
     
     return (lower_tail ? R_D_exp(pgamma(tmp, shape, scale, 0,1)):
 	    R_D_exp(pgamma(tmp, shape, scale, 1,1)));
