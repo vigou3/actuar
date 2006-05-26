@@ -20,7 +20,11 @@ FUNTAB fun_tab[] = {
     /* Two parameter distributions */
     {"dinvparalogis",	do_dpq2,	1},
     {"dinvpareto",	do_dpq2,	4},
+    {"pinvpareto",	do_dpq2,	5},
+    {"qinvpareto",	do_dpq2,	6},
     {"dinvweibull",	do_dpq2,	7},
+    {"pinvweibull",	do_dpq2,	8},
+    {"qinvweibull",	do_dpq2,	9},
     {"dllogis",		do_dpq2,	10},
     {"pllogis",		do_dpq2,	11},
     {"qllogis",		do_dpq2,	12},

@@ -27,6 +27,43 @@ double dinvpareto(double x, double shape, double scale, int give_log)
     
 }
 
+double pinvpareto(double q, double shape, double scale, int lower_tail, int log_p)
+{
+  double tmp;
+  
+    if (!R_FINITE(shape) || 
+	!R_FINITE(scale) ||
+	shape <= 0.0 || 
+	scale <= 0.0)
+	error(_("invalid arguments"));
+
+    if (q <= 0)
+	return R_DT_0;
+
+    tmp = shape * (log(q) - log(q + scale));
+    
+    return (lower_tail ? R_D_exp(tmp):
+	    R_D_exp(log(1.0 - exp(tmp))));
+}
+
+double qinvpareto(double p, double shape, double scale, int lower_tail, int log_p)
+{
+  double tmp;
+
+  if (!R_FINITE(shape) || 
+	!R_FINITE(scale) ||
+	shape <= 0.0 || 
+	scale <= 0.0)
+	error(_("invalid arguments"));
+
+  R_Q_P01_boundaries(p, 0, 1);
+
+  tmp = (1.0 / shape);
+
+    return (lower_tail ? R_D_exp(log(scale) + tmp * log(p) - log(1.0 - exp(tmp * log(p)))):
+	    R_D_exp(log(scale) + tmp * log(1.0 - p) - log(1.0 - exp(tmp * log(1.0 - p)))));
+}
+
 double rinvpareto(double shape, double scale)
 {
     double a;
