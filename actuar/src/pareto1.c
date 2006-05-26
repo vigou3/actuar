@@ -29,6 +29,7 @@ double dpareto1(double x, double shape, double min, int give_log)
 
 double ppareto1(double q, double shape, double min, int lower_tail, int log_p)
 {
+  double tmp;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(min) ||
@@ -38,13 +39,17 @@ double ppareto1(double q, double shape, double min, int lower_tail, int log_p)
 
     if (q <= min)
 	return R_DT_0;
+
+    tmp = log(min) - log(q);
     
-    return (lower_tail ? R_D_exp(log(1 - exp(shape * (log(min) - log(q))))):
-	    R_D_exp(shape * (log(min) - log(q))));
+    return (lower_tail ? R_D_exp(log(1 - exp(shape * (tmp)))):
+	    R_D_exp(shape * (tmp)));
 }
 
 double qpareto1(double p, double shape, double min, int lower_tail, int log_p)
 {
+
+  double tmp;
 
     R_Q_P01_boundaries(p, 0, 1);
 
@@ -54,8 +59,10 @@ double qpareto1(double p, double shape, double min, int lower_tail, int log_p)
 	min <= 0.0)
 	error(_("invalid arguments"));
 
-    return (lower_tail ? R_D_exp(log(min) - (1.0 / shape) * log(1.0 - p)) :
-	    R_D_exp(log(min) - (1.0 / shape) * log(p)));
+	  tmp = (1.0 / shape);
+
+    return (lower_tail ? R_D_exp(log(min) - tmp * log(1.0 - p)) :
+	    R_D_exp(log(min) - tmp * log(p)));
 }
 
 
