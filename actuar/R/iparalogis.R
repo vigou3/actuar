@@ -11,14 +11,14 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-diparalogis <- function (x, shape, scale, log = FALSE)
-    .External("do_dpq", "diparalogis", x, shape, scale, log)
+dinvparalogis <- function (x, shape, scale, log = FALSE)
+    .External("do_dpq", "dinvparalogis", x, shape, scale, log)
 
-##piparalogis <- function(q, shape, scale, tail = TRUE, log = FALSE)
-##    .External("do_dpq", "piparalogis", q, shape, scale, tail, log)
+##pinvparalogis <- function(q, shape, scale, tail = TRUE, log = FALSE)
+##    .External("do_dpq", "pinvparalogis", q, shape, scale, tail, log)
 
-##qiparalogis <- function(p, shape, scale, tail = TRUE, log = FALSE)
-##    .External("do_dpq", "qiparalogis", p, shape, scale, tail, log)
+##qinvparalogis <- function(p, shape, scale, tail = TRUE, log = FALSE)
+##    .External("do_dpq", "qinvparalogis", p, shape, scale, tail, log)
 
-riparalogis <- function(n, shape, scale)
-    .External("do_random", "riparalogis", n, shape, scale)
+rinvparalogis <- function(n, shape, scale)
+    .External("do_random", "rinvparalogis", n, shape, scale)
