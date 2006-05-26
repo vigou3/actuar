@@ -27,9 +27,13 @@ double dinvweibull(double x, double scale, double shape, int give_log);
 double rinvweibull(double scale, double shape);
 
 double dllogis(double x, double shape, double scale, int give_log);
+double pllogis(double q, double shape, double scale, int lower_tail, int log_p);
+double qllogis(double p, double shape, double scale, int lower_tail, int log_p);
 double rllogis(double shape, double scale);
 
 double dparalogis(double x, double shape, double scale, int give_log);
+double pparalogis(double q, double shape, double scale, int lower_tail, int log_p);
+double qparalogis(double p, double shape, double scale, int lower_tail, int log_p);
 double rparalogis(double shape, double scale);
 
 double dpareto(double x, double shape, double scale, int give_log);

@@ -9,8 +9,8 @@ export(## Credibility theory
        ## One parameter distributions
        dinvexp, rinvexp,
        ## Two parameter distributions
-       dllogis, rllogis,
-       dparalogis, rparalogis,
+       dllogis, pllogis, qllogis, rllogis,
+       dparalogis, pparalogis, qparalogis, rparalogis,
        dinvparalogis, rinvparalogis,
        dpareto, ppareto, qpareto, rpareto,
        dpareto2, ppareto2, qpareto2, rpareto2, # aliases

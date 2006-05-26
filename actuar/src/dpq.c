@@ -280,7 +280,11 @@ SEXP do_dpq2(int code, SEXP args)
     case  4:  return DPQ2_1(args, dinvpareto);
     case  7:  return DPQ2_1(args, dinvweibull);
     case 10:  return DPQ2_1(args, dllogis);
+    case 11:  return DPQ2_1(args, pllogis);
+    case 12:  return DPQ2_1(args, qllogis);
     case 13:  return DPQ2_1(args, dparalogis);
+    case 14:  return DPQ2_1(args, pparalogis)
+    case 15:  return DPQ2_1(args, qparalogis)
     case 16:  return DPQ2_1(args, dpareto);
     case 17:  return DPQ2_2(args, ppareto);
     case 18:  return DPQ2_2(args, qpareto);
