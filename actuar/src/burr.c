@@ -42,7 +42,7 @@ double dburr(double x, double shape1, double scale, double shape2, int give_log)
 
 }
 
-double pburr(double x, double shape1, double scale, double shape2, int lower_tail, int log_p)
+double pburr(double q, double shape1, double scale, double shape2, int lower_tail, int log_p)
 {
 
   double tmp1;
@@ -56,11 +56,11 @@ double pburr(double x, double shape1, double scale, double shape2, int lower_tai
 	shape2 <= 0.0) 
 	error(_("invalid arguments"));
 
-    if (x <= 0)
+    if (q <= 0)
 	return R_DT_0;
 
     tmp1 = R_pow(scale, shape2);
-    tmp2 = R_pow(x, shape2);
+    tmp2 = R_pow(q, shape2);
 
     return (lower_tail ? R_D_exp(log(1.0 - exp(shape1 * (shape2 * log(scale) - log(tmp1 + tmp2))))):
 	    R_D_exp(shape1 * (shape2 * log(scale) - log(tmp1 + tmp2))));

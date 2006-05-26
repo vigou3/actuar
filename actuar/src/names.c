@@ -17,8 +17,12 @@ FUNTAB fun_tab[] = {
     /* DENSITY, CUMULATIVE PROBABILITY AND QUANTILE FUNCTIONS */
     /* One parameter distributions */
     {"dinvexp",		do_dpq1,	1},
+    {"pinvexp",		do_dpq1,	2},
+    {"qinvexp",		do_dpq1,	3},
     /* Two parameter distributions */
     {"dinvparalogis",	do_dpq2,	1},
+    {"pinvparalogis",	do_dpq2,	2},
+    {"qinvparalogis",	do_dpq2,	3},
     {"dinvpareto",	do_dpq2,	4},
     {"pinvpareto",	do_dpq2,	5},
     {"qinvpareto",	do_dpq2,	6},
@@ -45,6 +49,8 @@ FUNTAB fun_tab[] = {
     {"pgenpareto",	do_dpq3,	5},
     {"qgenpareto",	do_dpq3,	6},
     {"dinvburr",	do_dpq3,	7},
+    {"pinvburr",	do_dpq3,	8},
+    {"qinvburr",	do_dpq3,	9},
     /* Four parameter distributions */
     {"dtrbeta",		do_dpq4,	1},
     {"ptrbeta",		do_dpq4,	2},

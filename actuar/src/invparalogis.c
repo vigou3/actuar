@@ -14,19 +14,67 @@
 
 double dinvparalogis(double x, double shape, double scale, int give_log)
 {
+
+  double tmp1;
+  double tmp2;
+  double tmp3;
+
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	shape <= 0.0 || 
 	scale <= 0.0 || 
 	x < 0.0) 
 	error(_("invalid arguments"));
+
+    tmp1 = R_pow(shape, 2.0);
+    tmp2 = log(x) - log(scale);
+    tmp3 = x / scale;
     
     return  give_log ?
-	2.0 * log(shape) + R_pow(shape, 2.0) * (log(x) - log(scale)) - log(x) - (shape + 1.0) * log(1.0 + R_pow(x / scale, shape)) :
-    R_pow(shape, 2.0) * R_pow(x / scale, R_pow(shape, 2.0)) / (x * R_pow(1.0 + R_pow(x / scale, shape), shape + 1.0));
+	2.0 * log(shape) + tmp1 * tmp2 - log(x) - (shape + 1.0) * log(1.0 + exp(shape * tmp2)) :
+  tmp1 * R_pow(tmp3, tmp1) / (x * R_pow(1.0 + R_pow(tmp3, shape), shape + 1.0));
 
-    
 }
+
+double pinvparalogis(double q, double shape, double scale, int lower_tail, int log_p)
+{
+  double tmp1;
+  double tmp2;
+  
+    if (!R_FINITE(shape) || 
+	!R_FINITE(scale) ||
+	shape <= 0.0 || 
+	scale <= 0.0)
+	error(_("invalid arguments"));
+
+    if (q <= 0)
+	return R_DT_0;
+
+	tmp1 = R_pow(shape, 2.0);
+	tmp2 = log(q) - log(scale);
+    
+    return (lower_tail ? R_D_exp(tmp1 * tmp2 - shape * log(1.0 - exp(shape + tmp2))):
+	    R_D_exp(log(1.0 - exp(tmp1 * tmp2 - shape * log(1.0 - exp(shape + tmp2))))));
+}
+
+double qinvparalogis(double p, double shape, double scale, int lower_tail, int log_p)
+{
+  double tmp;
+
+  if (!R_FINITE(shape) || 
+	!R_FINITE(scale) ||
+	shape <= 0.0 || 
+	scale <= 0.0)
+	error(_("invalid arguments"));
+
+  R_Q_P01_boundaries(p, 0, 1);
+
+  tmp = 1 / shape;
+
+  return (lower_tail ? R_D_exp(log(scale) + tmp * (tmp * log(p) - log(1.0 - exp(tmp * log(p))))):
+	    R_D_exp(log(scale) + tmp * (tmp * log(1.0 - p) - log(1.0 - exp(tmp * log (1.0 - p))))));
+}
+
 
 double rinvparalogis(double shape, double scale)
 {

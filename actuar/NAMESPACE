@@ -7,11 +7,11 @@ export(## Credibility theory
        ## Risk theory
        panjer,
        ## One parameter distributions
-       dinvexp, rinvexp,
+       dinvexp, pinvexp, qinvexp, rinvexp,
        ## Two parameter distributions
        dllogis, pllogis, qllogis, rllogis,
        dparalogis, pparalogis, qparalogis, rparalogis,
-       dinvparalogis, rinvparalogis,
+       dinvparalogis, pinvparalogis, qinvparalogis, rinvparalogis,
        dpareto, ppareto, qpareto, rpareto,
        dpareto2, ppareto2, qpareto2, rpareto2, # aliases
        dinvpareto, pinvpareto, qinvpareto, rinvpareto,
@@ -20,7 +20,7 @@ export(## Credibility theory
        dlgompertz, plgompertz, qlgompertz, rlgompertz,          # aliases
        ## Three parameter distributions
        dburr, pburr, qburr, rburr,
-       dinvburr, rinvburr,
+       dinvburr, pinvburr, qinvburr, rinvburr,
        dgenpareto, pgenpareto, qgenpareto, rgenpareto,
        ## Four parameter distributions
        dtrbeta, ptrbeta, qtrbeta, rtrbeta,

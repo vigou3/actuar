@@ -14,10 +14,14 @@ SEXP do_random4(int code, SEXP args);
 /* Utility functions */
 /*   One parameter distributions */
 double dinvexp(double x, double scale, int give_log);
+double pinvexp(double q, double scale, int lower_tail, int log_p);
+double qinvexp(double p, double scale, int lower_tail, int log_p);
 double rinvexp(double scale);
 
 /*   Two parameter distributions */
 double dinvparalogis(double x, double shape, double scale, int give_log);
+double pinvparalogis(double q, double shape, double scale, int lower_tail, int log_p);
+double qinvparalogis(double p, double shape, double scale, int lower_tail, int log_p);
 double rinvparalogis(double shape, double scale);
 
 double dinvpareto(double x, double shape, double scale, int give_log);
@@ -62,6 +66,8 @@ double qgenpareto(double p, double shape1, double scale, double shape2, int lowe
 double rgenpareto(double shape1, double scale, double shape2);
 
 double dinvburr(double x, double shape1, double scale, double shape2, int give_log);
+double pinvburr(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
+double qinvburr(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double rinvburr(double shape, double scale, double gamma);
 
 /*   Four parameter distributions */
