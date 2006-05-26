@@ -93,7 +93,7 @@ SEXP do_random1(int code, SEXP args)
 	GetRNGstate();
 	switch (code) 
 	{
-	    RAND1(0, riexp);
+	    RAND1(1, rinvexp);
 	default:
 	    error(_("internal error in do_random1"));
 	}
@@ -176,13 +176,13 @@ SEXP do_random2(int code, SEXP args)
 	GetRNGstate();
 	switch (code) 
 	{
-	    RAND2(0, rllogis);
-	    RAND2(1, rparalogis);
-	    RAND2(2, rpareto);
-	    RAND2(3, riparalogis);
-	    RAND2(4, ripareto);
-	    RAND2(5, rlgompertz);
-	    RAND2(6, rpareto1);
+	    RAND2(1, rinvparalogis);
+	    RAND2(2, rinvpareto);
+	    RAND2(3, rinvweibull);
+	    RAND2(4, rllogis);
+	    RAND2(5, rparalogis);
+	    RAND2(6, rpareto);
+	    RAND2(7, rpareto1);
 	default:
 	    error(_("internal error in do_random2"));
 	}
@@ -270,9 +270,9 @@ SEXP do_random3(int code, SEXP args)
 	GetRNGstate();
 	switch (code) 
 	{
-	    RAND3(0, rgenpareto);
 	    RAND3(1, rburr);
-	    RAND3(2, riburr);
+	    RAND3(2, rgenpareto);
+	    RAND3(3, rinvburr);
 	default:
 	    error(_("internal error in do_random3"));
 	}
@@ -364,7 +364,7 @@ SEXP do_random4(int code, SEXP args)
 	GetRNGstate();
 	switch (code) 
 	{
-	    RAND4(0, rtrbeta);
+	    RAND4(1, rtrbeta);
 	default:
 	    error(_("internal error in do_random4"));
 	}
