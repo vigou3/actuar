@@ -41,6 +41,9 @@ FUNTAB fun_tab[] = {
     {"dpareto1",	do_dpq2,	19},
     {"ppareto1",	do_dpq2,	20},
     {"qpareto1",	do_dpq2,	21},
+    {"dinvgamma",	do_dpq2,	22},
+    {"pinvgamma",	do_dpq2,	23},
+    {"qinvgamma",	do_dpq2,	24},
     /* Three parameter distributions */
     {"dburr",	        do_dpq3,	1},
     {"pburr",	        do_dpq3,	2},
@@ -67,6 +70,7 @@ FUNTAB fun_tab[] = {
     {"rparalogis", 	do_random2,	5},
     {"rpareto", 	do_random2,	6},
     {"rpareto1", 	do_random2,	7},
+    {"rinvgamma", 	do_random2,	8},
     /* Three parameter distributions */
     {"rburr", 		do_random3,	1},
     {"rgenpareto", 	do_random3,	2},

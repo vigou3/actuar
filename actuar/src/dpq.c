@@ -277,24 +277,29 @@ SEXP do_dpq2(int code, SEXP args)
     switch (code)
     {
     case  1:  return DPQ2_1(args, dinvparalogis);
+    case  2:  return DPQ2_2(args, pinvparalogis);
+    case  3:  return DPQ2_2(args, qinvparalogis);
     case  4:  return DPQ2_1(args, dinvpareto);
-    case  5:  return DPQ2_1(args, pinvpareto);
-    case  6:  return DPQ2_1(args, qinvpareto);
+    case  5:  return DPQ2_2(args, pinvpareto);
+    case  6:  return DPQ2_2(args, qinvpareto);
     case  7:  return DPQ2_1(args, dinvweibull);
-    case  8:  return DPQ2_1(args, pinvweibull);
-    case  9:  return DPQ2_1(args, qinvweibull);
+    case  8:  return DPQ2_2(args, pinvweibull);
+    case  9:  return DPQ2_2(args, qinvweibull);
     case 10:  return DPQ2_1(args, dllogis);
-    case 11:  return DPQ2_1(args, pllogis);
-    case 12:  return DPQ2_1(args, qllogis);
+    case 11:  return DPQ2_2(args, pllogis);
+    case 12:  return DPQ2_2(args, qllogis);
     case 13:  return DPQ2_1(args, dparalogis);
-    case 14:  return DPQ2_1(args, pparalogis)
-    case 15:  return DPQ2_1(args, qparalogis)
+    case 14:  return DPQ2_2(args, pparalogis);
+    case 15:  return DPQ2_2(args, qparalogis);
     case 16:  return DPQ2_1(args, dpareto);
     case 17:  return DPQ2_2(args, ppareto);
     case 18:  return DPQ2_2(args, qpareto);
     case 19:  return DPQ2_1(args, dpareto1);
     case 20:  return DPQ2_2(args, ppareto1);
     case 21:  return DPQ2_2(args, qpareto1);
+    case 22:  return DPQ2_1(args, dinvgamma);
+    case 23:  return DPQ2_2(args, pinvgamma);
+    case 24:  return DPQ2_2(args, qinvgamma);
     default:
 	error(_("internal error in do_dpq2"));
     }
@@ -446,6 +451,8 @@ SEXP do_dpq3(int code, SEXP args)
     case  5:  return DPQ3_2(args, pgenpareto);
     case  6:  return DPQ3_2(args, qgenpareto);
     case  7:  return DPQ3_1(args, dinvburr);
+    case  8:  return DPQ3_2(args, pinvburr);
+    case  9:  return DPQ3_2(args, qinvburr);
     default:
 	error(_("internal error in do_dpq3"));
     }

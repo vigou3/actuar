@@ -183,6 +183,8 @@ SEXP do_random2(int code, SEXP args)
 	    RAND2(5, rparalogis);
 	    RAND2(6, rpareto);
 	    RAND2(7, rpareto1);
+	    RAND2(8, rinvgamma);
+
 	default:
 	    error(_("internal error in do_random2"));
 	}

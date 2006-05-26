@@ -11,6 +11,7 @@ export(## Credibility theory
        ## Two parameter distributions
        dllogis, pllogis, qllogis, rllogis,
        dparalogis, pparalogis, qparalogis, rparalogis,
+       dinvgamma, pinvgamma, qinvgamma, rinvgamma,
        dinvparalogis, pinvparalogis, qinvparalogis, rinvparalogis,
        dpareto, ppareto, qpareto, rpareto,
        dpareto2, ppareto2, qpareto2, rpareto2, # aliases
