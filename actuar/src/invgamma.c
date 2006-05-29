@@ -12,14 +12,14 @@
 #include "locale.h"
 #include "dpq.h"
 
-double dinvgamma(double x, double scale, double shape, int give_log)
+double dinvgamma(double x, double shape, double scale, int give_log)
 {
 	double tmp;
 
-    if (R_FINITE(scale) ||
-	R_FINITE(shape)  ||
-	scale <= 0.0 || 
-	shape <= 0.0 ||
+    if (R_FINITE(shape) ||
+	R_FINITE(scale)  ||
+	shape <= 0.0 || 
+	scale <= 0.0 ||
 	x < 0.0) 
 	error(_("invalid arguments"));
 
@@ -30,14 +30,14 @@ double dinvgamma(double x, double scale, double shape, int give_log)
       R_pow(x, -2.0) * dgamma(tmp, shape, scale, 0);
 }
 
-double pinvgamma(double q, double scale, double shape, int lower_tail, int log_p)
+double pinvgamma(double q, double shape, double scale, int lower_tail, int log_p)
 {
   double tmp;
   
-    if (!R_FINITE(scale) || 
-	!R_FINITE(shape) ||
-	scale <= 0.0 || 
-	shape <= 0.0)
+    if (!R_FINITE(shape) || 
+	!R_FINITE(scale) ||
+	shape <= 0.0 || 
+	scale <= 0.0)
 	error(_("invalid arguments"));
 
     if (q <= 0)
@@ -49,11 +49,11 @@ double pinvgamma(double q, double scale, double shape, int lower_tail, int log_p
 	    R_D_exp(pgamma(tmp, shape, scale, 1,1)));
 }
 
-double qinvgamma(double p, double scale, double shape, int lower_tail, int log_p)
+double qinvgamma(double p, double shape, double scale, int lower_tail, int log_p)
 {
 
-  if (!R_FINITE(scale) || 
-	!R_FINITE(shape) ||
+  if (!R_FINITE(shape) || 
+	!R_FINITE(scale) ||
 	scale <= 0.0 || 
 	shape <= 0.0)
 	error(_("invalid arguments"));
@@ -64,12 +64,12 @@ double qinvgamma(double p, double scale, double shape, int lower_tail, int log_p
 	    R_D_exp(-qgamma(1.0 - p, shape, scale, 0, 1)));
 }
 
-double rinvgamma(double scale, double shape)
+double rinvgamma(double shape, double scale)
 {
-    if (!R_FINITE(scale) ||
-	!R_FINITE(shape) ||
-	scale <= 0.0 ||
-	shape <= 0.0)
+    if (!R_FINITE(shape) ||
+	!R_FINITE(scale) ||
+	shape <= 0.0 ||
+	scale <= 0.0)
 	error(_("invalid arguments"));
 
     return qgamma(unif_rand(), shape, scale, 1, 0);
