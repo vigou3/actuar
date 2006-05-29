@@ -16,8 +16,8 @@ double dinvgamma(double x, double shape, double scale, int give_log)
 {
 	double tmp;
 
-    if (R_FINITE(shape) ||
-	R_FINITE(scale)  ||
+    if (!R_FINITE(shape) ||
+	!R_FINITE(scale)  ||
 	shape <= 0.0 || 
 	scale <= 0.0 ||
 	x < 0.0) 

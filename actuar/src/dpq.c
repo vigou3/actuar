@@ -456,6 +456,9 @@ SEXP do_dpq3(int code, SEXP args)
     case  10: return DPQ3_1(args, dtrgamma);
     case  11: return DPQ3_2(args, ptrgamma);
     case  12: return DPQ3_2(args, qtrgamma);
+    case  13: return DPQ3_1(args, dinvtrgamma);
+    case  14: return DPQ3_2(args, pinvtrgamma);
+    case  15: return DPQ3_2(args, qinvtrgamma);
     default:
 	error(_("internal error in do_dpq3"));
     }

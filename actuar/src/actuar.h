@@ -80,6 +80,11 @@ double ptrgamma(double q, double shape1, double scale, double shape2, int lower_
 double qtrgamma(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double rtrgamma(double shape1, double scale, double shape2);
 
+double dinvtrgamma(double x, double shape1, double scale, double shape2, int give_log);
+double pinvtrgamma(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
+double qinvtrgamma(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
+double rinvtrgamma(double shape1, double scale, double shape2);
+
 /*   Four parameter distributions */
 double dtrbeta(double x, double shape1, double scale, double shape2, double shape3, int give_log);
 double ptrbeta(double q, double shape1, double scale, double shape2, double shape3, int lower_tail, int log_p);

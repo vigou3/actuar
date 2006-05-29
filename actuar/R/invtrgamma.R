@@ -11,14 +11,14 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-#dinvtrgamma <- function (x, shape1, scale, shape2, log = FALSE)
-#    .External("do_dpq", "dinvtrgamma", x, shape1, scale, shape2, log)
+dinvtrgamma <- function (x, shape1, scale, shape2, log = FALSE)
+    .External("do_dpq", "dinvtrgamma", x, shape1, scale, shape2, log)
 
-#pinvtrgamma <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
-#    .External("do_dpq", "pinvtrgamma", q, shape1, scale, shape2, tail, log)     
+pinvtrgamma <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
+    .External("do_dpq", "pinvtrgamma", q, shape1, scale, shape2, tail, log)     
 
-#qinvtrgamma <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
-#    .External("do_dpq", "qinvtrgamma", p, shape1, scale, shape2, tail, log)   
+qinvtrgamma <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
+    .External("do_dpq", "qinvtrgamma", p, shape1, scale, shape2, tail, log)   
 
-#rinvtrgamma <- function(n, shape1, scale, shape2)
-#    .External("do_random", "rinvtrgamma", n, shape1, scale, shape2)
+rinvtrgamma <- function(n, shape1, scale, shape2)
+    .External("do_random", "rinvtrgamma", n, shape1, scale, shape2)
