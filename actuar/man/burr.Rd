@@ -1,4 +1,4 @@
-\name{burr}
+\name{Burr}
 \alias{burr}
 \alias{print.burr}
 \alias{dburr}
@@ -22,7 +22,7 @@ rburr(n, shape1, scale, shape2)
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If 'length(n) > 1', the length is
     taken to be the number required.}
-  \item{shape1, scale, shape2}{Parameters. Must be strictly positive.}
+  \item{shape1, scale, shape2}{parameters. Must be strictly positive.}
   \item{log, log.p}{logical; if 'TRUE', probabilities/densities p are
     returned as log(p).}
   \item{lower.tail}{logical; if 'TRUE' (default), probabilities are P[X
@@ -44,7 +44,7 @@ Invalid arguments will results in return warning.
 }
 \references{
   See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
+  Edition, Wiley, 2004.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
@@ -53,6 +53,6 @@ Invalid arguments will results in return warning.
 \examples{
 exp(dburr(2,3,4,5,log = TRUE))
 p <- (1:10)/10
-pburr(qgamma(p,2,3,1),2,3,1)
+pburr(qburr(p,2,3,1),2,3,1)
 }
-\keyword{burr}
+\keyword{distribution}

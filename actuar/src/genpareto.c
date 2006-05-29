@@ -25,7 +25,7 @@ double dgenpareto(double x, double shape1, double scale, double shape2, int give
     
     return  give_log ?
       dbeta(x, shape2, shape1, 1) + log(scale) - 2.0 * log(x + scale) :
-      dbeta(x, shape2, shape1, 0) * scale / R_pow(x + scale,2.0);
+      dbeta(x, shape2, shape1, 0) * scale / R_pow(x + scale, 2.0);
 }
 
 double pgenpareto(double q, double shape1, double scale, double shape2, int lower_tail, int log_p)
@@ -62,8 +62,8 @@ double qgenpareto(double p, double shape1, double scale, double shape2, int lowe
 
     R_Q_P01_boundaries(p, 0, 1);
 
-    return (lower_tail ? R_D_exp(log(scale) + qbeta(p, shape2, shape1, 1, 1) - log(1.0 - qbeta(p, shape2, shape1, 1, 0))) :
-	    R_D_exp(log(scale) + qbeta(p, shape2, shape1, 0, 1) - log(1.0 - qbeta(p, shape2, shape1, 0, 0))));
+    return (lower_tail ? R_D_exp(log(scale) + qbeta(p, shape2, shape1, 1, 1) - qbeta(p, shape2, shape1, 0, 1)) :
+	    R_D_exp(log(scale) + qbeta(p, shape2, shape1, 0, 1) - qbeta(p, shape2, shape1, 1, 1)));
 }
 
 double rgenpareto(double shape1, double scale, double shape2)

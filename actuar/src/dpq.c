@@ -146,6 +146,8 @@ SEXP do_dpq1(int code, SEXP args)
     switch (code)
     {
     case  1:  return DPQ1_1(args, dinvexp);
+    case  2:  return DPQ1_2(args, pinvexp);
+    case  3:  return DPQ1_2(args, qinvexp);
     default:
 	error(_("internal error in do_dpq1"));
     }
