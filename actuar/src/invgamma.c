@@ -23,11 +23,11 @@ double dinvgamma(double x, double scale, double shape, int give_log)
 	x < 0.0) 
 	error(_("invalid arguments"));
 
-	tmp = scale / x;
+	tmp = 1.0 / x;
     
     return  give_log ?
-      shape * (log(scale) - log(x)) - tmp - log(x) - lgamma(shape) :
-      R_pow(tmp, shape) * exp(-tmp) / (x * gammafn(shape));
+      -2.0 * log(x) + dgamma(tmp, shape, scale, 1) :
+      R_pow(x, -2.0) * dgamma(tmp, shape, scale, 0);
 }
 
 double pinvgamma(double q, double scale, double shape, int lower_tail, int log_p)
