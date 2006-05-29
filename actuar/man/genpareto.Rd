@@ -57,7 +57,7 @@ Invalid arguments will results in return warning.
   Mathieu Pigeon
 }
 \examples{
-exp(dgenpareto(0.3,3,4,4,log = TRUE))
+exp(dgenpareto(3,3,4,4,log = TRUE))
 p <- (1:10)/10
 pgenpareto(qgenpareto(p,3,3,1),3,3,1)
 qgenpareto(3,3,4,4,lower.tail = FALSE)
