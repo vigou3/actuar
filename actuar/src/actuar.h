@@ -73,7 +73,12 @@ double rgenpareto(double shape1, double scale, double shape2);
 double dinvburr(double x, double shape1, double scale, double shape2, int give_log);
 double pinvburr(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double qinvburr(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
-double rinvburr(double shape, double scale, double gamma);
+double rinvburr(double shape1, double scale, double shape2);
+
+double dtrgamma(double x, double shape1, double scale, double shape2, int give_log);
+double ptrgamma(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
+double qtrgamma(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
+double rtrgamma(double shape1, double scale, double shape2);
 
 /*   Four parameter distributions */
 double dtrbeta(double x, double shape1, double scale, double shape2, double shape3, int give_log);

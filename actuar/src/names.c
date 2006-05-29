@@ -54,6 +54,9 @@ FUNTAB fun_tab[] = {
     {"dinvburr",	do_dpq3,	7},
     {"pinvburr",	do_dpq3,	8},
     {"qinvburr",	do_dpq3,	9},
+    {"dtrgamma",	do_dpq3,	10},
+    {"ptrgamma",	do_dpq3,	11},
+    {"qtrgamma",	do_dpq3,	12},
     /* Four parameter distributions */
     {"dtrbeta",		do_dpq4,	1},
     {"ptrbeta",		do_dpq4,	2},
@@ -75,6 +78,7 @@ FUNTAB fun_tab[] = {
     {"rburr", 		do_random3,	1},
     {"rgenpareto", 	do_random3,	2},
     {"rinvburr", 	do_random3,	3},
+    {"rtrgamma",        do_random3,     4},
     /* Four parameter distributions */
     {"rtrbeta", 	do_random4,	1},
     {0, 0, 0}

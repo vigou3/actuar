@@ -23,6 +23,7 @@ export(## Credibility theory
        dburr, pburr, qburr, rburr,
        dinvburr, pinvburr, qinvburr, rinvburr,
        dgenpareto, pgenpareto, qgenpareto, rgenpareto,
+       dtrgamma, ptrgamma, qtrgamma, rtrgamma,
        ## Four parameter distributions
        dtrbeta, ptrbeta, qtrbeta, rtrbeta,
        dpearson4, ppearson4, qpearson4, rpearson4 #aliases

@@ -11,14 +11,14 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-#dtrgamma <- function (x, shape1, scale, shape2, log = FALSE)
-#    .External("do_dpq", "dtrgamma", x, shape1, scale, shape2, log)
+dtrgamma <- function (x, shape1, scale, shape2, log = FALSE)
+    .External("do_dpq", "dtrgamma", x, shape1, scale, shape2, log)
 
-#ptrgamma <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
-#    .External("do_dpq", "ptrgamma", q, shape1, scale, shape2, tail, log)     
+ptrgamma <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
+    .External("do_dpq", "ptrgamma", q, shape1, scale, shape2, tail, log)     
 
-#qtrgamma <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
-#    .External("do_dpq", "qtrgamma", p, shape1, scale, shape2, tail, log)   
+qtrgamma <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
+    .External("do_dpq", "qtrgamma", p, shape1, scale, shape2, tail, log)   
 
-#rtrgamma <- function(n, shape1, scale, shape2)
-#    .External("do_random", "rtrgamma", n, shape1, scale, shape2)
+rtrgamma <- function(n, shape1, scale, shape2)
+    .External("do_random", "rtrgamma", n, shape1, scale, shape2)

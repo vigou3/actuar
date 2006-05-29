@@ -275,6 +275,7 @@ SEXP do_random3(int code, SEXP args)
 	    RAND3(1, rburr);
 	    RAND3(2, rgenpareto);
 	    RAND3(3, rinvburr);
+	    RAND3(4, rtrgamma);
 	default:
 	    error(_("internal error in do_random3"));
 	}
