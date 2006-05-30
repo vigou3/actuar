@@ -53,7 +53,7 @@ double ptrbeta(double q, double shape1, double scale, double shape2, double shap
 
     tmp = R_pow(q / scale, shape2);
     u = tmp / (1.0 + tmp);
-
+    
     if (q <= 0)
 	return R_DT_0;
     
@@ -75,8 +75,8 @@ double qtrbeta(double p, double shape1, double scale, double shape2, double shap
 
     R_Q_P01_boundaries(p, 0, 1);
 
-    return (lower_tail ? R_D_exp(log(scale) + (qbeta(p, shape3, shape1, 1, 1) - qbeta(p, shape3, shape1, 0, 1))/ shape2) :
-	    R_D_exp(log(scale) + (qbeta(p, shape3, shape1, 0, 1) - qbeta(p, shape3, shape1, 1, 1)) / shape2));
+    return  (lower_tail ? R_D_exp(log(scale) + qbeta(p, shape3, shape1, 1, 1) - log(1.0 - qbeta(p, shape3, shape1, 1, 0))) :
+	    R_D_exp(log(scale) + qbeta(p, shape3, shape1, 0, 1) - log(1.0 - qbeta(p, shape3, shape1, 0, 1))));
 }
 
 double rtrbeta(double shape1, double scale, double shape2, double shape3)
