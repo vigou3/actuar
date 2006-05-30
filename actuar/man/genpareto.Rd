@@ -46,7 +46,7 @@ Invalid arguments will results in return warning.
  
 }
 \note{
-  It' a beta of the second kind.
+  It's a beta of the second kind.
 }
 \references{
   See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second

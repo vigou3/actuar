@@ -14,6 +14,8 @@
 
 double dgenpareto(double x, double shape1, double scale, double shape2, int give_log)
 {
+  double tmp;
+
     if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
 	!R_FINITE(shape2) ||
@@ -22,10 +24,12 @@ double dgenpareto(double x, double shape1, double scale, double shape2, int give
 	shape2 <= 0.0 || 
 	x < 0.0) 
 	error(_("invalid arguments"));
+
+    tmp = x / (x + scale);
     
     return  give_log ?
-      dbeta(x, shape2, shape1, 1) + log(scale) - 2.0 * log(x + scale) :
-      dbeta(x, shape2, shape1, 0) * scale / R_pow(x + scale, 2.0);
+      dbeta(tmp, shape2, shape1, 1) + log(scale) - 2.0 * log(x + scale) :
+      dbeta(tmp, shape2, shape1, 0) * scale / R_pow(x + scale, 2.0);
 }
 
 double pgenpareto(double q, double shape1, double scale, double shape2, int lower_tail, int log_p)
