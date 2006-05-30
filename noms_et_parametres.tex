@@ -35,10 +35,10 @@
     Burr & \texttt{burr} & 
       \texttt{shape1} ($\alpha$), \newline
       \texttt{shape2} ($\gamma$), \newline
-      \texttt{rate}   ($\lambda = 1/\theta)$, \newline
+      \texttt{rate}   ($\lambda = 1/\theta)$, 
       \texttt{scale}  ($\theta$) \\
       \midrule
-    Inverse Burr & \texttt{invburr} & 
+    Inverse Burr & \texttt{iburr} & 
       \texttt{shape1} ($\tau$), \newline
       \texttt{shape2} ($\gamma$), \newline
       \texttt{rate}   ($\lambda = 1/\theta)$, \newline
@@ -48,7 +48,7 @@
       \texttt{shape}  ($\alpha$), \newline
       \texttt{scale}  ($\theta$) \\
       \midrule
-    Inverse Pareto & \texttt{invpareto} & 
+    Inverse Pareto & \texttt{ipareto} & 
       \texttt{shape}  ($\tau$), \newline
       \texttt{scale}  ($\theta$) \\
       \midrule
@@ -59,6 +59,11 @@
       \midrule
     Paralogistic & \texttt{paralogis} & 
       \texttt{shape}  ($\alpha$), \newline
+      \texttt{rate}   ($\lambda = 1/\theta)$, \newline
+      \texttt{scale}  ($\theta$) \\
+      \midrule
+    Inverse paralogistic & \texttt{invparalogis} & 
+      \texttt{shape}  ($\tau$), \newline
       \texttt{rate}   ($\lambda = 1/\theta)$, \newline
       \texttt{scale}  ($\theta$) \\
     \bottomrule
@@ -78,23 +83,23 @@
       \texttt{scale}  ($\theta$), \newline
       \texttt{shape2} ($\tau$) \\
       \midrule
-    Inverse transformed gamma & \texttt{invtrgamma} (\texttt{igengamma}) & 
+    Inverse transformed gamma & \texttt{itrgamma} (\texttt{igengamma}) & 
       \texttt{shape1} ($\alpha$), \newline
       \texttt{rate}   ($\lambda = 1/\theta$), \newline
       \texttt{scale}  ($\theta$), \newline
       \texttt{shape2} ($\tau$) \\
       \midrule
-    Inverse gamma & \texttt{invgamma} & 
+    Inverse gamma & \texttt{igamma} & 
       \texttt{shape}  ($\alpha$), \newline
       \texttt{rate}   ($\lambda = 1/\theta$), \newline
       \texttt{scale}  ($\theta$) \\
       \midrule
-    Inverse Weibull & \texttt{invweibull} (\texttt{lgompertz}) & 
+    Inverse Weibull & \texttt{lgompertz} & 
       \texttt{shape}  ($\tau$), \newline
       \texttt{rate}   ($\lambda = 1/\theta$), \newline
       \texttt{scale}  ($\theta$) \\
       \midrule
-    Inverse exponential & \texttt{invexp} & 
+    Inverse exponential & \texttt{iexp} & 
       \texttt{rate}   ($\lambda = 1/\theta$), \newline
       \texttt{scale}  ($\theta$) \\
     \bottomrule
