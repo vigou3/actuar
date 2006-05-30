@@ -51,20 +51,19 @@ double ptrbeta(double q, double shape1, double scale, double shape2, double shap
 	shape3 <= 0.0) 
 	error(_("invalid arguments"));
 
-    tmp = q / scale;
-    u = R_pow(tmp, shape2) / (1.0 + R_pow(tmp, shape2));
+    tmp = R_pow(q / scale, shape2);
+    u = tmp / (1.0 + tmp);
 
     if (q <= 0)
 	return R_DT_0;
     
-    return (lower_tail ? R_D_exp(pbeta(u, shape3, shape1, 1, 0)):
-	    R_D_exp(pbeta(u, shape3, shape1, 0, 0)));
+    return (lower_tail ? R_D_exp(pbeta(u, shape3, shape1, 1, 1)):
+	    R_D_exp(pbeta(u, shape3, shape1, 0, 1)));
 }
 
 double qtrbeta(double p, double shape1, double scale, double shape2, double shape3, int lower_tail, int log_p)
 {
-
-  if (!R_FINITE(shape1) ||
+    if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
 	!R_FINITE(shape2) ||
 	!R_FINITE(shape3) ||
@@ -76,8 +75,8 @@ double qtrbeta(double p, double shape1, double scale, double shape2, double shap
 
     R_Q_P01_boundaries(p, 0, 1);
 
-    return (lower_tail ? R_D_exp(log(scale) + shape2 * (qbeta(p, shape3, shape1, 1, 1)) - shape2 * log(1.0 - qbeta(p, shape3, shape1, 1, 0))) :
-	    R_D_exp(log(scale) + shape2 * (qbeta(p, shape3, shape1, 0, 1)) - shape2 * log(1.0 - qbeta(p, shape3, shape1, 0, 0))));
+    return (lower_tail ? R_D_exp(log(scale) + (qbeta(p, shape3, shape1, 1, 1) - qbeta(p, shape3, shape1, 0, 1))/ shape2) :
+	    R_D_exp(log(scale) + (qbeta(p, shape3, shape1, 0, 1) - qbeta(p, shape3, shape1, 1, 1)) / shape2));
 }
 
 double rtrbeta(double shape1, double scale, double shape2, double shape3)
