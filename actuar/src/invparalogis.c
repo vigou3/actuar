@@ -53,13 +53,14 @@ double pinvparalogis(double q, double shape, double scale, int lower_tail, int l
 	tmp1 = R_pow(shape, 2.0);
 	tmp2 = log(q) - log(scale);
     
-    return (lower_tail ? R_D_exp(tmp1 * tmp2 - shape * log(1.0 - exp(shape + tmp2))):
-	    R_D_exp(log(1.0 - exp(tmp1 * tmp2 - shape * log(1.0 - exp(shape + tmp2))))));
+    return (lower_tail ? R_D_exp(tmp1 * tmp2 - shape * log(1.0 + exp(shape * tmp2))):
+	    R_D_exp(log(1.0 - exp(tmp1 * tmp2 - shape * log(1.0 + exp(shape * tmp2))))));
 }
 
 double qinvparalogis(double p, double shape, double scale, int lower_tail, int log_p)
 {
   double tmp;
+  double tmp1;
 
   if (!R_FINITE(shape) || 
 	!R_FINITE(scale) ||
@@ -68,11 +69,12 @@ double qinvparalogis(double p, double shape, double scale, int lower_tail, int l
 	error(_("invalid arguments"));
 
   R_Q_P01_boundaries(p, 0, 1);
+  tmp = R_D_qIv(p);
 
-  tmp = 1 / shape;
+  tmp1 = 1 / shape;
 
-  return (lower_tail ? R_D_exp(log(scale) + tmp * (tmp * log(p) - log(1.0 - exp(tmp * log(p))))):
-	    R_D_exp(log(scale) + tmp * (tmp * log(1.0 - p) - log(1.0 - exp(tmp * log (1.0 - p))))));
+  return (lower_tail ? scale * R_pow(R_pow(1.0 / (1.0 - tmp), tmp1) - 1.0, tmp1):
+	    scale * R_pow(R_pow(1.0 / tmp, tmp1) - 1.0, tmp1));
 }
 
 

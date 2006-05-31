@@ -49,15 +49,17 @@ double pinvexp(double q, double scale, int lower_tail, int log_p)
 
 double qinvexp(double p, double scale, int lower_tail, int log_p)
 {
+  double tmp;
 
   if (!R_FINITE(scale) || 
 	scale <= 0.0)
 	error(_("invalid arguments"));
 
   R_Q_P01_boundaries(p, 0, 1);
+  tmp = R_D_qIv(p);
 
-    return (lower_tail ? R_D_exp(log(scale) - log(log(1.0 / p))):
-	    R_D_exp(log(scale) - log(log(1.0 / (1.0 - p)))));
+    return (lower_tail ? -scale / log(tmp) :
+	   -scale / log(1.0 - tmp)) ;
 }
 
 
