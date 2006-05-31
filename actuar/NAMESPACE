@@ -34,3 +34,7 @@ export(## Credibility theory
 S3method(print, bstraub)
 S3method(summary, bstraub)
 S3method(print, summary.bstraub)
+S3method(print, simpf)
+S3method(summary, simpf)
+S3method(print, summary.simpf)
+
