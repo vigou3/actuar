@@ -1,14 +1,17 @@
 \name{simpf}
 \alias{simpf}
+\alias{print.simpf}
 \title{Simulation of a portfolio of data}
 \description{
   \code{simpf} simulates a portfolio of data for insurance
   applications. Both frequency and severity distributions can have an
   unknown risk parameter --- that is, they can each be mixtures of
-  models.
+  models. An object of class \code{simpf} is returned.
 }
 \usage{
 simpf(contracts, years, model.freq, model.sev, weights)
+
+\method{print}{simpf}{x, \dots}
 }
 \arguments{
   \item{contracts}{the number of contracts in the porfolio}
@@ -47,12 +50,21 @@ simpf(contracts, years, model.freq, model.sev, weights)
   }
 }
 \value{
-  A list with two components:
+  Returns an object of \code{\link[base]{class}}
+  \code{"simpf"}. Function \code{\link{summary.simpf}} can be used to display detailed
+  information on individual claim amounts.
+
+  An object of class \code{"simpf"} is a list containing the following
+  components:
   \item{data}{a two dimension (\code{contracts} rows and
     \code{years} columns) list where each element is a vector of
     losses, or a matrix if each element has length 1}
   \item{weights}{the matrix of weights given in argument, or a matrix of
     1 otherwise.}
+  \item{model.freq}{named list given in argument, describing the
+    frequency model.}
+  \item{model.sev}{named list given in argument, describing the severity
+    model.}
 }
 \references{Goulet, V. (2006), \emph{Credibility for severity
     revisited}, North American Actuarial Journal, to appear.}
@@ -84,6 +96,7 @@ simpf(5, 12, modelfreq, modelsev)
 ## simulation of claim amounts.
 rpareto <- function(n, alpha, lambda) lambda * (runif(n)^(-1/alpha) - 1)
 modelsev <- list(dist1 = "pareto", par1 = list(alpha = 3, lambda = 8000))
-simpf(5, 12, model.freq = NULL, modelsev)
+(x <- simpf(5, 12, model.freq = NULL, modelsev))
+summary(x, contracts = 1:2, years = 10:12)
 }
 \keyword{datagen}
