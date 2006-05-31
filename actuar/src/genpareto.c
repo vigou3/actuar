@@ -49,12 +49,14 @@ double pgenpareto(double q, double shape1, double scale, double shape2, int lowe
     if (q <= 0)
 	return R_DT_0;
     
-    return (lower_tail ? R_D_exp(pbeta(u, shape2, shape1, 1, 0)):
-	    R_D_exp(pbeta(u, shape2, shape1, 0, 0)));
+    return (lower_tail ? R_D_exp(pbeta(u, shape2, shape1, 1, 1)):
+	    R_D_exp(pbeta(u, shape2, shape1, 0, 1)));
 }
 
 double qgenpareto(double p, double shape1, double scale, double shape2, int lower_tail, int log_p)
 {
+
+  double tmp;
 
   if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
@@ -65,9 +67,10 @@ double qgenpareto(double p, double shape1, double scale, double shape2, int lowe
 	error(_("invalid arguments"));
 
     R_Q_P01_boundaries(p, 0, 1);
+    tmp = R_D_qIv(p);
 
-    return (lower_tail ? R_D_exp(log(scale) + qbeta(p, shape2, shape1, 1, 1) - qbeta(p, shape2, shape1, 0, 1)) :
-	    R_D_exp(log(scale) + qbeta(p, shape2, shape1, 0, 1) - qbeta(p, shape2, shape1, 1, 1)));
+    return (lower_tail ? scale * (qbeta(tmp, shape2, shape1, 1, 0) / qbeta(tmp, shape2, shape1, 0, 0)) :
+	    scale * qbeta(tmp, shape2, shape1, 0, 0) / qbeta(tmp, shape2, shape1, 1, 0));
 }
 
 double rgenpareto(double shape1, double scale, double shape2)
