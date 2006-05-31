@@ -51,6 +51,7 @@ double pinvgamma(double q, double shape, double scale, int lower_tail, int log_p
 
 double qinvgamma(double p, double shape, double scale, int lower_tail, int log_p)
 {
+  double tmp;
 
   if (!R_FINITE(shape) || 
 	!R_FINITE(scale) ||
@@ -59,9 +60,10 @@ double qinvgamma(double p, double shape, double scale, int lower_tail, int log_p
 	error(_("invalid arguments"));
 
   R_Q_P01_boundaries(p, 0, 1);
+  tmp = R_D_qIv(p);
 
-    return (lower_tail ? R_D_exp(-qgamma(1.0 - p, shape, scale, 1, 1)) :
-	    R_D_exp(-qgamma(1.0 - p, shape, scale, 0, 1)));
+    return (lower_tail ? 1.0 / qgamma(1.0 - p, shape, scale, 1, 0) :
+	    1.0 / qgamma(1.0 - p, shape, scale, 0, 1));
 }
 
 double rinvgamma(double shape, double scale)

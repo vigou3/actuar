@@ -8,18 +8,20 @@
 \alias{rgenpareto}
 \title{The Generalized Pareto Distribution}
 \description{
-  Density, distribution function, quantile function and random function
+  Density, distribution function, quantile function and random generation
   for the Generalized Pareto distribution with parameters 'shape1', 'scale' and 'shape2'.
   
 }
 \usage{
 dgenpareto(x, shape1, scale, shape2, log = FALSE)
-pgenpareto(q, shape1, scale, shape2, lower.tail = TRUE, log.p = FALSE)
-qgenpareto(p, shape1, scale, shape2, lower.tail = TRUE, log.p = FALSE)
+pgenpareto(q, shape1, scale, shape2, lower.tail = TRUE,
+           log.p = FALSE)
+qgenpareto(p, shape1, scale, shape2, lower.tail = TRUE,
+           log.p = FALSE)
 rgenpareto(n, shape1, scale, shape2)
 }
 \arguments{
-  \item{q}{vector of quantiles.}
+  \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If 'length(n) > 1', the length is
     taken to be the number required.}
@@ -33,9 +35,18 @@ rgenpareto(n, shape1, scale, shape2)
 \details{
   
   The Generalized Pareto distribution with parameters 'shape1' = a, 'scale' = c and
-  'shape2' = b has density: \deqn{p(x) = (gamma(a + b) /
-    gamma(a)*gamma(b))((c^a x^(c-1)) / (x + c)^(a + b))} for \eqn{x > 0, a > 0, b > 0} and
+  'shape2' = b has density: \deqn{p(x) = \frac{\Gamma(a +
+      b)}{\Gamma(a)\Gamma(b)}\frac{c^a x^{(b - 1)}}{(x + c)^(a +
+      b)}}{p(x) = (gamma(a + b) / gamma(a)*gamma(b))((c^a x^(c-1)) / (x + c)^(a + b))} for \eqn{x > 0, a > 0, b > 0} and
   \eqn{c > 0}. Here Gamma(a) is the function implemented by R's 'gamma()' and defined in its help.
+
+  Let Y has the Beta probability density function with parameters
+  'shape1' and 'shape2'.  \deqn{\text{scale}(\frac{Y}{1 - Y})}{
+    scale (Y / (1 - Y))} has the Generalized Pareto probability density function with parameters
+  'shape1', 'scale' and 'shape2'.
+
+  If 'shape2' = 1, it is a Pareto distribution. If 'shape2'
+  = 'shape1' = 1, it is an Inverse Pareto distribution.
 }
 \value{
 'dgenpareto' gives the density, 'pgenpareto' gives the distribution function,
@@ -46,10 +57,10 @@ Invalid arguments will results in return warning.
  
 }
 \note{
-  It's a beta of the second kind.
+  Also known as Beta of the second kind.
 }
 \references{
-  See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
+  Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
   Edition, Wiley, 2004.
 }
 \author{

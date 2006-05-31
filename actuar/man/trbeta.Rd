@@ -38,14 +38,14 @@ rtrbeta(n, shape1, scale, shape2, shape3)
   The Transformed Beta distribution with parameters 'shape1' = a,
   'scale' = c, 'shape2' = b and 'shape3' = d has density:
   \deqn{p(x) = \frac{\Gamma(a + d)}{\Gamma(a)\Gamma(d)}
-    \frac{b(frac{x}{c})^{(b d)}}{x(1 + (\frac{x}{c})^b)^{(a + d)}}}{%
-    (gamma(a + d) / gamma(a)*gamma(d))((b (x / c)^(a b)) / (x
+    \frac{b(frac{x}{c})^{(b d)}}{x(1 + (\frac{x}{c})^b)^{(a + d)}}}{p(x)
+    = (gamma(a + d) / gamma(a)*gamma(d))((b (x / c)^(a b)) / (x
     (1 + (x / c)^b)^(a + d)))} for \eqn{x > 0, a > 0, b > 0, c > 0} and
   \eqn{d > 0}. Here Gamma(a) is the function implemented by R's
   'gamma()' and defined in its help.
 
-  Let Y has the beta probability density function with parameters
-  'shape1' and shape3'.  \deqn{\text{scale}(\frac{Y}{1 - Y})^(\frac{1}{ text{shape2}})}{%
+  Let Y has the Beta probability density function with parameters
+  'shape1' and 'shape3'.  \deqn{\text{scale}(\frac{Y}{1 - Y})^(\frac{1}{ text{shape2}})}{
     scale (Y / (1 - Y))^(1 / shape2)} has the
   Transformed Beta probability density function with parameters
   'shape1', 'scale', 'shape2' and 'shape3'.
