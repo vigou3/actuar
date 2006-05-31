@@ -36,7 +36,6 @@ simpf <- function(contracts, years, model.freq, model.sev, weights)
             ## distribution is specified, issue a warning.
             if (exists("model.freq$dist2"))
                 warning("A compounding distribution for the frequency of claims is specified, but no compounding parameter")
-            f.model <- model.freq$dist1
         }
         else
         {
@@ -44,7 +43,6 @@ simpf <- function(contracts, years, model.freq, model.sev, weights)
             ## its parameters.
             rlambda <- match.fun(paste("r", model.freq$dist2, sep=""))
             formals(rlambda)[names(model.freq$par2)] <- model.freq$par2
-            f.model <- paste(model.freq$dist1, " / ", model.freq$dist2, sep="")
 
             ## Simulation of the compounding parameters (frequency risk levels).
             Lambda <- rlambda(contracts)
@@ -87,7 +85,6 @@ simpf <- function(contracts, years, model.freq, model.sev, weights)
 
             ## Set the parameters of the severity distribution.
             formals(rsev)[names(model.sev$par1)] <- model.sev$par1
-            s.model <- model.sev$dist1
 
             ## Since the parameters of the severity distribution do
             ## not change from one contract to another, we can
@@ -100,7 +97,6 @@ simpf <- function(contracts, years, model.freq, model.sev, weights)
             ## its parameters.
             rtheta <- match.fun(paste("r", model.sev$dist2, sep=""))
             formals(rtheta)[names(model.sev$par2)] <- model.sev$par2
-            s.model <- paste(model.sev$dist1, " / ", model.sev$dist2,sep = "")
 
             ## Simulation of the compounding parameters (severity risk levels).
             Theta <- rtheta(contracts)
@@ -140,8 +136,8 @@ simpf <- function(contracts, years, model.freq, model.sev, weights)
     dim(X) <- c(contracts, years)
     res <- list(data = X,
                 weights = weights,
-                f.model = f.model,
-                s.model = s.model)
+                model.freq = model.freq,
+                model.sev = model.sev)
     class(res) <- "simpf"
     res
 }
@@ -149,17 +145,25 @@ simpf <- function(contracts, years, model.freq, model.sev, weights)
 
 print.simpf <- function(x, ...)
 {
+    dist.freq <- ifelse(identical(length(x$model.freq), as.integer(2)),
+                        x$model.freq$dist1,
+                        paste(x$model.freq$dist1, " / ", x$model.freq$dist2, sep=""))
+    dist.sev <- ifelse(identical(length(x$model.sev), as.integer(2)),
+                        x$model.sev$dist1,
+                        paste(x$model.sev$dist1, " / ", x$model.sev$dist2, sep=""))
+                        
     contracts <- seq(length = dim(x$data)[1])
     years <- seq(length = dim(x$data)[2])
     names <- list(paste("   Contract", format(contracts)),
                   paste("Year", format(years)))
                   
     cat("\nPortfolio of claim amounts \n\n")
-    cat("  Frequency model: ", x$f.model, "\n")
-    cat("  Severity model: ", x$s.model, "\n")
+    cat("  Frequency model: ", dist.freq, "\n")
+    cat("  Severity model: ", dist.sev, "\n")
     cat("\n  Number of claims per contract and per year: \n\n")
     print(matrix(sapply(x$data, length),
                  length(contracts),
                  length(years),
-                 dimnames = names)) 
+                 dimnames = names))
+    invisible(x)
 }
