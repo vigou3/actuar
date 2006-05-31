@@ -78,8 +78,8 @@ double qtrbeta(double p, double shape1, double scale, double shape2, double shap
     R_Q_P01_boundaries(p, 0, 1);
     tmp = R_D_qIv(p);
 
-  return  (lower_tail ? scale * R_pow(qbeta(tmp, shape3, shape1, 1, 0) / (1.0 - qbeta(tmp, shape3, shape1, 1 ,0)), 1.0 / shape2)  :
-	    scale * R_pow((1.0 - qbeta(tmp, shape3, shape1, 0, 0)) / qbeta(tmp, shape3, shape1, 0, 1), 1.0 / shape2));
+  return  (lower_tail ? scale * R_pow(qbeta(tmp, shape3, shape1, 1, 0) / (qbeta(tmp, shape3, shape1, 0 ,0)), 1.0 / shape2)  :
+	    scale * R_pow((qbeta(tmp, shape3, shape1, 0, 0)) / qbeta(tmp, shape3, shape1, 1, 0), 1.0 / shape2));
 
 }
 
