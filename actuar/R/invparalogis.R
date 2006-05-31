@@ -14,11 +14,11 @@
 dinvparalogis <- function (x, shape, scale, log = FALSE)
     .External("do_dpq", "dinvparalogis", x, shape, scale, log)
 
-pinvparalogis <- function(q, shape, scale, tail = TRUE, log = FALSE)
-    .External("do_dpq", "pinvparalogis", q, shape, scale, tail, log)
+pinvparalogis <- function(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "pinvparalogis", q, shape, scale, lower.tail, log.p)
 
-qinvparalogis <- function(p, shape, scale, tail = TRUE, log = FALSE)
-    .External("do_dpq", "qinvparalogis", p, shape, scale, tail, log)
+qinvparalogis <- function(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "qinvparalogis", p, shape, scale, lower.tail, log.p)
 
 rinvparalogis <- function(n, shape, scale)
     .External("do_random", "rinvparalogis", n, shape, scale)

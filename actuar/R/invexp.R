@@ -14,11 +14,11 @@
 dinvexp <- function (x, scale, log = FALSE)
     .External("do_dpq", "dinvexp", x, scale, log)
 
-pinvexp <- function(q, scale, tail = TRUE, log = FALSE)
-    .External("do_dpq", "pinvexp", q, scale, tail, log)
+pinvexp <- function(q, scale, lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "pinvexp", q, scale, lower.tail, log.p)
 
-qinvexp <- function(p, scale, tail = TRUE, log = FALSE)
-    .External("do_dpq", "qinvexp", p, scale, tail, log)
+qinvexp <- function(p, scale, lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "qinvexp", p, scale, lower.tail, log.p)
 
 rinvexp <- function(n, scale)
     .External("do_random", "rinvexp", n, scale)

@@ -14,11 +14,11 @@
 dinvpareto <- function (x, shape, scale, log = FALSE)
      .External("do_dpq", "dinvpareto", x, shape, scale, log)
 
-pinvpareto <- function(q, shape, scale, tail = TRUE, log = FALSE)
-    .External("do_dpq", "pinvpareto", q, shape, scale, tail, log)
+pinvpareto <- function(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "pinvpareto", q, shape, scale, lower.tail, log.p)
 
-qinvpareto <- function(p, shape, scale, tail = TRUE, log = FALSE)
-     .External("do_dpq", "qinvpareto", p, shape, scale, tail, log)
+qinvpareto <- function(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
+     .External("do_dpq", "qinvpareto", p, shape, scale, lower.tail, log.p)
 
 rinvpareto <- function(n, shape, scale)
      .External("do_random", "rinvpareto", n, shape, scale)

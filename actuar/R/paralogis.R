@@ -14,11 +14,11 @@
 dparalogis <- function (x, shape, scale, log = FALSE)
     .External("do_dpq", "dparalogis", x, shape, scale, log)
 
-pparalogis <- function(q, shape, scale, tail = TRUE, log = FALSE)
-     .External("do_dpq", "pparalogis", q, shape, scale, tail, log)
+pparalogis <- function(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
+     .External("do_dpq", "pparalogis", q, shape, scale, lower.tail, log.p)
 
-qparalogis <- function(p, shape, scale, tail = TRUE, log = FALSE)
-     .External("do_dpq", "qparalogis", p, shape, scale, tail, log)
+qparalogis <- function(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
+     .External("do_dpq", "qparalogis", p, shape, scale, lower.tail, log.p)
 
 rparalogis <- function(n, shape, scale)
     .External("do_random", "rparalogis", n, shape, scale)

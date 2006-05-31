@@ -59,6 +59,7 @@ double qinvburr(double p, double shape1, double scale, double shape2, int lower_
 {
 
   double tmp;
+  double tmp1;
 
   if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
@@ -69,11 +70,12 @@ double qinvburr(double p, double shape1, double scale, double shape2, int lower_
 	error(_("invalid arguments"));
 
     R_Q_P01_boundaries(p, 0, 1);
+    tmp = R_D_qIv(p);
 
-    tmp = 1.0 / shape2;
+    tmp1 = R_pow(tmp, 1.0 / shape1);
 
-    return (lower_tail ? R_D_exp(log(scale) + tmp * (tmp * log(p) - log(1.0 - exp(tmp * log(p))))):
-	    R_D_exp(log(scale) + tmp * (tmp * log(1.0 - p) - log(1.0 - exp(tmp * log(1.0 - p))))));
+    return (lower_tail ? scale * R_pow(tmp1 / (1.0 - tmp1), 1.0 / shape2) :
+	    scale * R_pow((1.0 - tmp1) / tmp1, 1.0 / shape2));
 }
 
 

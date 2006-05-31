@@ -12,13 +12,13 @@
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dinvburr <- function (x, shape1, scale, shape2, log = FALSE)
-    .External("do_dpq", "dinvburr", x, shape1, scale, shape2, log = FALSE)
+    .External("do_dpq", "dinvburr", x, shape1, scale, shape2, log)
 
-pinvburr <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
-    .External("do_dpq", "pinvburr", q, shape1, scale, shape2, tail = TRUE, log = FALSE)
+pinvburr <- function(q, shape1, scale, shape2, lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "pinvburr", q, shape1, scale, shape2, lower.tail, log.p)
 
-qinvburr <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
-    .External("do_dpq", "qinvburr", p, shape1, scale, shape2, tail = TRUE, log = FALSE)
+qinvburr <- function(p, shape1, scale, shape2, lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "qinvburr", p, shape1, scale, shape2, lower.tail, log.p)
 
 rinvburr <- function(n, shape1, scale, shape2)
     .External("do_random", "rinvburr", n, shape1, scale, shape2)
