@@ -49,11 +49,13 @@ double ptrgamma(double q, double shape1, double scale, double shape2, int lower_
 	return R_DT_0;
     
     return (lower_tail ? R_D_exp(pgamma(tmp, shape1, scale, 1, 1)):
-	    R_D_exp(pbeta(tmp, shape1, scale, 0, 1)));
+	    R_D_exp(pgamma(tmp, shape1, scale, 0, 1)));
 }
 
 double qtrgamma(double p, double shape1, double scale, double shape2, int lower_tail, int log_p)
 {
+  double tmp1;
+  double tmp2;
 
   if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
@@ -64,9 +66,11 @@ double qtrgamma(double p, double shape1, double scale, double shape2, int lower_
 	error(_("invalid arguments"));
 
     R_Q_P01_boundaries(p, 0, 1);
+    tmp1 = R_D_qIv(p);
+    tmp2 = 1.0 / shape2;
 
-    return (lower_tail ? R_D_exp((1.0 / shape2) * qgamma(p, shape1, scale, 1, 1)) :
-	    R_D_exp((1.0 / shape2) * qgamma(p, shape1, scale, 0, 1)));
+    return (lower_tail ? R_pow(qgamma(tmp1, shape1, scale, 1, 0), tmp2) :
+	    R_pow(qgamma(tmp1, shape1, scale, 0, 0), tmp2));
 }
 
 double rtrgamma(double shape1, double scale, double shape2)

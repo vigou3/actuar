@@ -14,11 +14,11 @@
 dtrgamma <- function (x, shape1, scale, shape2, log = FALSE)
     .External("do_dpq", "dtrgamma", x, shape1, scale, shape2, log)
 
-ptrgamma <- function(q, shape1, scale, shape2, tail = TRUE, log = FALSE)
-    .External("do_dpq", "ptrgamma", q, shape1, scale, shape2, tail, log)     
+ptrgamma <- function(q, shape1, scale, shape2, lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "ptrgamma", q, shape1, scale, shape2, lower.tail, log.p)     
 
-qtrgamma <- function(p, shape1, scale, shape2, tail = TRUE, log = FALSE)
-    .External("do_dpq", "qtrgamma", p, shape1, scale, shape2, tail, log)   
+qtrgamma <- function(p, shape1, scale, shape2, lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "qtrgamma", p, shape1, scale, shape2, lower.tail, log.p)   
 
 rtrgamma <- function(n, shape1, scale, shape2)
     .External("do_random", "rtrgamma", n, shape1, scale, shape2)
