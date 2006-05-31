@@ -69,6 +69,7 @@ double pburr(double q, double shape1, double scale, double shape2, int lower_tai
 double qburr(double p, double shape1, double scale, double shape2, int lower_tail, int log_p)
 {
 
+  double tmp;
   double tmp1;
   double tmp2;
 
@@ -81,12 +82,13 @@ double qburr(double p, double shape1, double scale, double shape2, int lower_tai
 	error(_("invalid arguments"));
 
     R_Q_P01_boundaries(p, 0, 1);
+    tmp =  R_D_qIv(p);
 
     tmp1 = 1.0 / shape1;
     tmp2 = 1.0 / shape2;
 
-    return (lower_tail ? R_D_exp(log(scale) + tmp2 * log(R_pow(1.0 / (1.0 - p), tmp1) - 1.0)) :
-	    R_D_exp(log(scale) + tmp2 * log(R_pow(1.0 / p, tmp1) - 1.0)));
+    return (lower_tail ? scale * R_pow((1.0 - R_pow(1.0 - tmp, tmp1)) / R_pow(1.0 - tmp, tmp1), tmp2) :
+	    scale * R_pow((1.0 - R_pow(tmp, tmp1)) / R_pow(tmp, tmp1), tmp2));
 }
 
 double rburr(double shape1, double scale, double shape2)
