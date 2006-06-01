@@ -48,7 +48,7 @@ rinvgamma(n, shape, scale)
 deviates.
 
 Invalid arguments will results in return warning.
-
+}
 \note{
 Also known as Vinci distribution.
 }
