@@ -69,8 +69,8 @@ double qgenpareto(double p, double shape1, double scale, double shape2, int lowe
     R_Q_P01_boundaries(p, 0, 1);
     tmp = R_D_qIv(p);
 
-    return (lower_tail ? scale * (qbeta(tmp, shape2, shape1, 1, 0) / qbeta(tmp, shape2, shape1, 0, 0)) :
-	    scale * qbeta(tmp, shape2, shape1, 0, 0) / qbeta(tmp, shape2, shape1, 1, 0));
+    return (lower_tail ? scale * (qbeta(tmp, shape2, shape1, 1, 0) / (1.0 - qbeta(tmp, shape2, shape1, 1, 0))) :
+	    scale * qbeta(tmp, shape2, shape1, 0, 0) / (1.0 - qbeta(tmp, shape2, shape1, 0, 0)));
 }
 
 double rgenpareto(double shape1, double scale, double shape2)

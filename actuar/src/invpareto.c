@@ -57,11 +57,10 @@ double qinvpareto(double p, double shape, double scale, int lower_tail, int log_
 	error(_("invalid arguments"));
 
   R_Q_P01_boundaries(p, 0, 1);
+  tmp = R_D_qIv(p);
 
-  tmp = (1.0 / shape);
-
-    return (lower_tail ? R_D_exp(log(scale) + tmp * log(p) - log(1.0 - exp(tmp * log(p)))):
-	    R_D_exp(log(scale) + tmp * log(1.0 - p) - log(1.0 - exp(tmp * log(1.0 - p)))));
+    return (lower_tail ? scale * R_pow(tmp, 1.0 / shape) / (1.0 - R_pow(tmp, 1.0 / shape)) :
+	    scale * R_pow(1.0 - tmp, 1.0 / shape) / (1.0 - R_pow(1.0 - tmp, 1.0 / shape))) ;
 }
 
 double rinvpareto(double shape, double scale)

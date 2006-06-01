@@ -62,8 +62,8 @@ double qinvgamma(double p, double shape, double scale, int lower_tail, int log_p
   R_Q_P01_boundaries(p, 0, 1);
   tmp = R_D_qIv(p);
 
-    return (lower_tail ? 1.0 / qgamma(1.0 - tmp, shape, 1.0 / scale, 1, 0) :
-	    1.0 / qgamma(1.0 - tmp, shape, 1.0 / scale, 0, 1));
+    return (lower_tail ? 1.0 / qgamma(tmp, shape, 1.0 / scale, 0, 0) :
+	    1.0 / qgamma(tmp, shape, 1.0 / scale, 1, 1));
 }
 
 double rinvgamma(double shape, double scale)

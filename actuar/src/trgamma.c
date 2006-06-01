@@ -69,8 +69,8 @@ double qtrgamma(double p, double shape1, double scale, double shape2, int lower_
     tmp1 = R_D_qIv(p);
     tmp2 = 1.0 / shape2;
 
-    return (lower_tail ? R_pow(qgamma(tmp1, shape1, scale, 1, 0), tmp2) :
-	    R_pow(qgamma(tmp1, shape1, scale, 0, 0), tmp2));
+    return (lower_tail ? scale * R_pow(qgamma(tmp1, shape1, 1.0 / scale, 1, 0), tmp2) :
+	    scale * R_pow(qgamma(tmp1, shape1, 1.0 / scale, 0, 0), tmp2));
 }
 
 double rtrgamma(double shape1, double scale, double shape2)
