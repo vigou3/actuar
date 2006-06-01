@@ -26,8 +26,8 @@ double dinvgamma(double x, double shape, double scale, int give_log)
 	tmp = 1.0 / x;
     
     return  give_log ?
-      -2.0 * log(x) + dgamma(tmp, shape, scale, 1) :
-      R_pow(x, -2.0) * dgamma(tmp, shape, scale, 0);
+      -2.0 * log(x) + dgamma(tmp, shape, 1.0 / scale, 1) :
+      R_pow(x, -2.0) * dgamma(tmp, shape, 1.0 / scale, 0);
 }
 
 double pinvgamma(double q, double shape, double scale, int lower_tail, int log_p)
@@ -45,8 +45,8 @@ double pinvgamma(double q, double shape, double scale, int lower_tail, int log_p
 
     tmp = 1.0 / q;
     
-    return (lower_tail ? R_D_exp(pgamma(tmp, shape, scale, 0,1)):
-	    R_D_exp(pgamma(tmp, shape, scale, 1,1)));
+    return (lower_tail ? R_D_exp(pgamma(tmp, shape, 1.0 / scale, 0,1)):
+	    R_D_exp(pgamma(tmp, shape, 1.0 / scale, 1,1)));
 }
 
 double qinvgamma(double p, double shape, double scale, int lower_tail, int log_p)
@@ -62,8 +62,8 @@ double qinvgamma(double p, double shape, double scale, int lower_tail, int log_p
   R_Q_P01_boundaries(p, 0, 1);
   tmp = R_D_qIv(p);
 
-    return (lower_tail ? 1.0 / qgamma(1.0 - p, shape, scale, 1, 0) :
-	    1.0 / qgamma(1.0 - p, shape, scale, 0, 1));
+    return (lower_tail ? 1.0 / qgamma(1.0 - tmp, shape, 1.0 / scale, 1, 0) :
+	    1.0 / qgamma(1.0 - tmp, shape, 1.0 / scale, 0, 1));
 }
 
 double rinvgamma(double shape, double scale)
@@ -74,5 +74,5 @@ double rinvgamma(double shape, double scale)
 	scale <= 0.0)
 	error(_("invalid arguments"));
 
-    return qgamma(unif_rand(), shape, scale, 1, 0);
+    return qgamma(unif_rand(), shape, 1.0 / scale, 1, 0);
 }
