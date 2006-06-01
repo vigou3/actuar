@@ -35,13 +35,15 @@ rinvweibull(n, scale, shape)
   \item{log, log.p}{logical; if 'TRUE', probabilities/densities p are
     returned as log(p).}
   \item{lower.tail}{logical; if 'TRUE' (default), probabilities are P[X
-    <= x], otherwise, Pr[X > x].} 
+    <= x], otherwise, Pr[X > x].}
+
+  If 'shape' = 1, it is an Inverse Exponential distribution.
   
 }
 \details{
   The Inverse Weibull distribution with parameters 'scale' = a
   and 'shape' = b has density:
-  \deqn{p(x) = \frac{b (\frac{a}{x})^b e^{(\frac{a}{x})^b}}{x}}{p(x) = b
+  \deqn{p(x) = \frac{b (\frac{a}{x})^b e^{(\frac{-a}{x})^b}}{x}}{p(x) = b
   (a/x)^b exp((-a/x)^b) / x}
   for \eqn{x > 0, a > 0} and \eqn{b > 0}. 
 }
