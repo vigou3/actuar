@@ -184,6 +184,7 @@ SEXP do_random2(int code, SEXP args)
 	    RAND2(6, rpareto);
 	    RAND2(7, rpareto1);
 	    RAND2(8, rinvgamma);
+	    RAND2(9, rlgamma);
 
 	default:
 	    error(_("internal error in do_random2"));

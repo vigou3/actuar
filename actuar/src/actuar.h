@@ -24,6 +24,11 @@ double pinvgamma(double q, double scale, double shape, int lower_tail, int log_p
 double qinvgamma(double p, double scale, double shape, int lower_tail, int log_p);
 double rinvgamma(double scale, double shape);
 
+double dlgamma(double x, double shapelog, double ratelog, int give_log);
+double plgamma(double q, double shapelog, double ratelog, int lower_tail, int log_p);
+double qlgamma(double p, double shapelog, double ratelog, int lower_tail, int log_p);
+double rlgamma(double ratelog, double shapelog);
+
 double dinvparalogis(double x, double shape, double scale, int give_log);
 double pinvparalogis(double q, double shape, double scale, int lower_tail, int log_p);
 double qinvparalogis(double p, double shape, double scale, int lower_tail, int log_p);
