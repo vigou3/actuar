@@ -31,7 +31,7 @@ rinvexp(n, scale)
 }
 \details{
   The Inverse Exponential distribution with parameter 'scale' = a has
-  density: \deqn{p(x) = \frac{a e^{\frac{-a}{x}}}{x^2}}{a exp(-a / x) /
+  density: \deqn{p(x) = \frac{a e^{\frac{-a}{x}}}{x^2}}{p(x) = a exp(-a / x) /
     x^2} for \eqn{x > 0} and \eqn{a > 0}.
 }
 \value{

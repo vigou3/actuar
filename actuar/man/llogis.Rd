@@ -1,24 +1,22 @@
 
-\name{Invpareto}
-\alias{invpareto}
-\alias{print.invpareto}
-\alias{dinvpareto}
-\alias{pinvpareto}
-\alias{qinvpareto}
-\alias{rinvpareto}
-\title{The Inverse Pareto Distribution}
+\name{Llogis}
+\alias{llogis}
+\alias{print.llogis}
+\alias{dllogis}
+\alias{pllogis}
+\alias{qllogis}
+\alias{rllogis}
+\title{The Loglogistic Distribution}
 \description{
   Density, distribution function, quantile function and random generation
-  for the Inverse Pareto distribution with parameters 'shape' and 'scale'.
+  for the Loglogistic distribution with parameters 'shape' and 'scale'.
   
 }
 \usage{
-dinvpareto(x, shape, scale, log = FALSE)
-pinvpareto(q, shape, scale, lower.tail = TRUE,
-         log.p = FALSE)
-qinvpareto(p, shape, scale, lower.tail = TRUE,
-         log.p = FALSE)
-rinvpareto(n, shape, scale)
+dllogis(x, shape, scale, log = FALSE)
+pllogis(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
+qllogis(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
+rllogis(n, shape, scale)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
@@ -33,18 +31,22 @@ rinvpareto(n, shape, scale)
   
 }
 \details{
-  The Inverse Pareto distribution with parameters 'shape' = a
+  The Loglogistic distribution with parameters 'shape' = a
   and 'scale' = b has density:
-  \deqn{p(x) = \frac{a b x^{(a - 1)}}{(x + b)^(a + 1)}}{p(x) = a b x^(a - 1) /
-    (x + b)^(a + 1)}
-  for \eqn{x > 0, a > 0} and \eqn{b > 0}. 
+  \deqn{p(x) = \frac{a (\frac{x}{b})^a}{x(1 + (\frac{x}{b})^a)^2}}{p(x)
+    = a (x/b)^a /(x(1 + (x/b)^a)^2)}
+  for \eqn{x > 0, a > 0} and \eqn{b > 0}.
+  
 }
 \value{
-'dinvpareto' gives the density, 'pinvpareto' gives the distribution function,
-'qinvpareto' gives the quantile function, and 'rinvpareto' generates random
+'dllogis' gives the density, 'pllogis' gives the distribution function,
+'qllogis' gives the quantile function, and 'rllogis' generates random
 deviates.
 
 Invalid arguments will results in return warning.
+}
+\note{
+Also known as Fisk distribution.
 }
 \references{
   Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
@@ -55,8 +57,8 @@ Invalid arguments will results in return warning.
   Mathieu Pigeon
 }
 \examples{
-exp(dinvpareto(2,3,4,log = TRUE))
+exp(dllogis(2,3,4,log = TRUE))
 p <- (1:10)/10
-pinvpareto(qinvpareto(p,2,3),2,3)
+pllogis(qllogis(p,2,3),2,3)
 }
 \keyword{distribution}

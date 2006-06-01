@@ -36,7 +36,7 @@ rinvgamma(n, shape, scale)
   The Inverse Gamma distribution with parameters 'shape' = a
   and 'scale' = b has density:
   \deqn{p(x) = \frac{(\frac{b}{x})^a e^{\frac{-b}{x}}}{x
-      \Gamma(a)}}{(b/x)^a exp(-b/x) / (x gamma(a))}
+      \Gamma(a)}}{p(x) = (b/x)^a exp(-b/x) / (x gamma(a))}
   for \eqn{x > 0, a > 0} and \eqn{b > 0}. Here Gamma(a) is the function implemented by R's
   'gamma()' and defined in its help.
 

@@ -36,7 +36,7 @@ rinvparalogis(n, shape, scale)
   The Inverse Paralogistic distribution with parameters 'shape' = a
   and 'scale' = b has density:
   \deqn{p(x) = \frac{a^2 (\frac{x}{b})^{a^2}}{x(1 + (\frac{x}{b})^a)^{(a
-	+ 1)}}}{a^2 (x / b)^(a^2) / (x(1 + (x/b)^a)^(a + 1))}
+	+ 1)}}}{p(x) = a^2 (x / b)^(a^2) / (x(1 + (x/b)^a)^(a + 1))}
   for \eqn{x > 0, a > 0} and \eqn{b > 0}.
   
 }

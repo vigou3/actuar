@@ -6,6 +6,12 @@
 \alias{ptrbeta}
 \alias{qtrbeta}
 \alias{rtrbeta}
+\alias{pearson4}
+\alias{print.pearson4}
+\alias{dpearson4}
+\alias{ppearson4}
+\alias{qpearson4}
+\alias{rpearson4}
 \title{The Transformed Beta Distribution}
 \description{
   Density, distribution function, quantile function and random generation
