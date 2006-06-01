@@ -62,8 +62,8 @@ double qpareto1(double p, double shape, double min, int lower_tail, int log_p)
      tmp = R_D_qIv(p);
      tmp1 = (1.0 / shape);
 
-    return (lower_tail ? scale * R_pow(1.0 - tmp, -tmp1) :
-	    scale * R_pow(tmp, -tmp1));
+    return (lower_tail ? min * R_pow(1.0 - tmp, -tmp1) :
+	    min * R_pow(tmp, -tmp1));
 }
 
 
