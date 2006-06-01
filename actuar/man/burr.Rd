@@ -51,11 +51,11 @@ deviates.
 Invalid arguments will results in return warning.
  
 }
-\value{
+\note{
   Also known as Burr Type XII and Singh-Maddala.
 }
 \references{
-  See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
+  Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
   Edition, Wiley, 2004.
 }
 \author{
