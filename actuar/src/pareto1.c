@@ -50,8 +50,7 @@ double qpareto1(double p, double shape, double min, int lower_tail, int log_p)
 {
 
   double tmp;
-
-    R_Q_P01_boundaries(p, 0, 1);
+  double tmp1;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(min) ||
@@ -59,10 +58,12 @@ double qpareto1(double p, double shape, double min, int lower_tail, int log_p)
 	min <= 0.0)
 	error(_("invalid arguments"));
 
-	  tmp = (1.0 / shape);
+     R_Q_P01_boundaries(p, 0, 1);
+     tmp = R_D_qIv(p);
+     tmp1 = (1.0 / shape);
 
-    return (lower_tail ? R_D_exp(log(min) - tmp * log(1.0 - p)) :
-	    R_D_exp(log(min) - tmp * log(p)));
+    return (lower_tail ? scale * R_pow(1.0 - tmp, -tmp1) :
+	    scale * R_pow(tmp, -tmp1));
 }
 
 

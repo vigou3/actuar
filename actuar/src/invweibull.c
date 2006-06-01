@@ -53,6 +53,7 @@ double pinvweibull(double q, double scale, double shape, int lower_tail, int log
 double qinvweibull(double p, double scale, double shape, int lower_tail, int log_p)
 {
   double tmp;
+  double tmp1;
 
   if (!R_FINITE(scale) || 
 	!R_FINITE(shape) ||
@@ -61,11 +62,12 @@ double qinvweibull(double p, double scale, double shape, int lower_tail, int log
 	error(_("invalid arguments"));
 
   R_Q_P01_boundaries(p, 0, 1);
+  tmp = R_D_qIv(p);
 
-  tmp = 1 / shape;
+  tmp1 = 1 / shape;
 
-    return (lower_tail ? R_D_exp(log(scale) - tmp * log(log(1 / p))):
-	    R_D_exp(log(scale) - tmp  * log(log(1 / (1 - p)))));
+    return (lower_tail ? scale * R_pow(log(1.0 / tmp), -tmp1):
+	    scale * R_pow(log(1.0 / (1.0 - tmp)), -tmp1));
 }
 
 double rinvweibull(double scale, double shape)

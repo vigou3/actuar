@@ -38,7 +38,7 @@ double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
 
     if (q <= 0)
 	return R_DT_0;
-
+    
     tmp = log(scale) - log(q + scale);
     
     return (lower_tail ? R_D_exp(log(1.0 - exp(shape * (tmp)))):
@@ -48,6 +48,7 @@ double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
 double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
 {
   double tmp;
+  double tmp1;
 
   if (!R_FINITE(shape) || 
 	!R_FINITE(scale) ||
@@ -56,11 +57,11 @@ double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
 	error(_("invalid arguments"));
 
   R_Q_P01_boundaries(p, 0, 1);
+  tmp = R_D_qIv(p);
+  tmp1 = 1.0 / shape;
 
-  tmp = 1.0 / shape;
-
-    return (lower_tail ? R_D_exp(log(scale) + log(R_pow(1.0 - p, -tmp) - 1.0)):
-	    R_D_exp(log(scale) + log(R_pow(p, -tmp) - 1.0)));
+    return (lower_tail ? scale * (R_pow(1.0 - tmp, -tmp1) - 1.0) :
+	    scale * (R_pow(tmp, -tmp1) - 1.0));
 }
 
 double rpareto(double shape, double scale)

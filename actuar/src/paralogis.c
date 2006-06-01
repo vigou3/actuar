@@ -58,6 +58,7 @@ double qparalogis(double p, double shape, double scale, int lower_tail, int log_
 {
 
   double tmp;
+  double tmp1;
 
   if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -66,11 +67,11 @@ double qparalogis(double p, double shape, double scale, int lower_tail, int log_
 	error(_("invalid arguments"));
 
     R_Q_P01_boundaries(p, 0, 1);
+    tmp = R_D_qIv(p);
+    tmp1 = 1.0 / shape;
 
-    tmp = 1.0 / shape;
-
-    return (lower_tail ? R_D_exp(log(scale) + tmp * log(R_pow(1.0 / (1.0 - p), tmp) - 1.0)) :
-	    R_D_exp(log(scale) + tmp * log(R_pow(1.0 / p, tmp) - 1.0)));
+    return (lower_tail ? scale * R_pow(R_pow(1.0 - tmp, -tmp1) - 1.0, tmp1) :
+	    scale * R_pow(R_pow(tmp, -tmp1) - 1.0, tmp1));
 }
 
 double rparalogis(double shape, double scale)
