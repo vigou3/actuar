@@ -17,7 +17,7 @@ export(## Credibility theory
        dpareto2, ppareto2, qpareto2, rpareto2, # aliases
        dinvpareto, pinvpareto, qinvpareto, rinvpareto,
        dpareto1, ppareto1, qpareto1, rpareto1,
-       dinvweibull, pinvweibull, qinvpareto, rinvweibull,
+       dinvweibull, pinvweibull, qinvweibull, rinvweibull,
        dlgompertz, plgompertz, qlgompertz, rlgompertz,          # aliases
        ## Three parameter distributions
        dburr, pburr, qburr, rburr,

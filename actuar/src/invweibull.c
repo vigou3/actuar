@@ -17,8 +17,8 @@ double dinvweibull(double x, double scale, double shape, int give_log)
   
   double tmp;
 
-    if (R_FINITE(scale) ||
-	R_FINITE(shape)  ||
+    if (!R_FINITE(scale) ||
+	!R_FINITE(shape)  ||
 	scale <= 0.0 || 
 	shape <= 0.0 ||
 	x < 0.0) 

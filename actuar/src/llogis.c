@@ -50,8 +50,8 @@ double pllogis(double x, double shape, double scale, int lower_tail, int log_p)
     tmp1 = shape + (log(x) - log(scale));
     tmp2 = R_pow(x / scale, shape);
 
-    return (lower_tail ? R_D_exp(tmp1 - log(1.0 + exp(tmp1))):
-	    R_D_exp(log(1.0 - exp(tmp1 - log(1.0 + exp(tmp1))))));
+    return (lower_tail ? R_D_exp(shape * log(x) - log(R_pow(scale, shape) + R_pow(x, shape))):
+	    R_D_exp(log(1.0 - exp(shape * log(x) - log(R_pow(scale, shape) + R_pow(x, shape))))));
 }
 
 double qllogis(double p, double shape, double scale, int lower_tail, int log_p)
