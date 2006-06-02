@@ -54,8 +54,8 @@ Invalid arguments will results in return warning.
   Mathieu Pigeon
 }
 \examples{
-exp(dparalogis(2,3,4,log = TRUE))
+exp(dparalogis(2, 3, 4, log = TRUE))
 p <- (1:10)/10
-pparalogis(qparalogis(p,2,3),2,3)
+pparalogis(qparalogis(p, 2, 3), 2, 3)
 }
 \keyword{distribution}

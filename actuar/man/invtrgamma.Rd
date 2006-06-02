@@ -66,8 +66,8 @@ Also known as inverse generalized gamma distribution.
   Mathieu Pigeon
 }
 \examples{
-exp(dinvtrgamma(2,3,4,5,log = TRUE))
+exp(dinvtrgamma(2, 3, 4, 5, log = TRUE))
 p <- (1:10)/10
-pinvtrgamma(qinvtrgamma(p,2,3,4),2,3,4)
+pinvtrgamma(qinvtrgamma(p, 2, 3, 4), 2, 3, 4)
 }
 \keyword{distribution}

@@ -63,8 +63,8 @@ Invalid arguments will results in return warning.
   Mathieu Pigeon
 }
 \examples{
-exp(dinvburr(2,3,4,5,log = TRUE))
+exp(dinvburr(2, 3, 4, 5, log = TRUE))
 p <- (1:10)/10
-pburr(qinvburr(p,2,3,1),2,3,1)
+pinvburr(qinvburr(p, 2, 3, 1), 2, 3, 1)
 }
 \keyword{distribution}

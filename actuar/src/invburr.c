@@ -49,6 +49,9 @@ double pinvburr(double q, double shape1, double scale, double shape2, int lower_
     if (q <= 0)
 	return R_DT_0;
 
+    if (!R_FINITE(q))
+        return 1;
+
     tmp = log(q) - log(scale);
 
     return (lower_tail ? R_D_exp(shape1 * shape2 * tmp - shape1 * log(1.0 + exp(shape2 * tmp))):
@@ -69,7 +72,7 @@ double qinvburr(double p, double shape1, double scale, double shape2, int lower_
       shape2 <= 0.0)
 	error(_("invalid arguments"));
 
-    R_Q_P01_boundaries(p, 0, 1);
+    R_Q_P01_boundaries(p, 0, R_PosInf);
     tmp = R_D_qIv(p);
 
     tmp1 = R_pow(tmp, 1.0 / shape1);

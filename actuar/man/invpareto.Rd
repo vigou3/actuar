@@ -55,8 +55,8 @@ Invalid arguments will results in return warning.
   Mathieu Pigeon
 }
 \examples{
-exp(dinvpareto(2,3,4,log = TRUE))
+exp(dinvpareto(2, 3, 4, log = TRUE))
 p <- (1:10)/10
-pinvpareto(qinvpareto(p,2,3),2,3)
+pinvpareto(qinvpareto(p, 2, 3), 2, 3)
 }
 \keyword{distribution}

@@ -51,8 +51,8 @@ Invalid arguments will results in return warning.
   Mathieu Pigeon
 }
 \examples{
-exp(dinvexp(2,log = TRUE))
+exp(dinvexp(2, 2, log = TRUE))
 p <- (1:10)/10
-pinvexp(qinvexp(p,2),2)
+pinvexp(qinvexp(p, 2), 2)
 }
 \keyword{distribution}

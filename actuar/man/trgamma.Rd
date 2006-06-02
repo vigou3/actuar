@@ -71,8 +71,8 @@ Also known as generalized gamma distribution.
   Mathieu Pigeon
 }
 \examples{
-exp(dtrgamma(2,3,4,5,log = TRUE))
+exp(dtrgamma(2, 3, 4, 5, log = TRUE))
 p <- (1:10)/10
-ptrgamma(qtrgamma(p,2,3,4),2,3,4)
+ptrgamma(qtrgamma(p, 2, 3, 4), 2, 3, 4)
 }
 \keyword{distribution}

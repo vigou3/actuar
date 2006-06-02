@@ -52,7 +52,7 @@ double qlgamma(double p, double shapelog, double ratelog, int lower_tail, int lo
 	ratelog <= 0.0)
 	error(_("invalid arguments"));
 
-  R_Q_P01_boundaries(p, 0, 1);
+  R_Q_P01_boundaries(p, 1, R_PosInf);
   tmp = R_D_qIv(p);
 
     return (lower_tail ? exp(qgamma(tmp, shapelog, 1.0 / ratelog, 1, 0)) :

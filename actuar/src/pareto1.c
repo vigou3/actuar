@@ -58,7 +58,7 @@ double qpareto1(double p, double shape, double min, int lower_tail, int log_p)
 	min <= 0.0)
 	error(_("invalid arguments"));
 
-     R_Q_P01_boundaries(p, 0, 1);
+     R_Q_P01_boundaries(p, min, R_PosInf);
      tmp = R_D_qIv(p);
      tmp1 = (1.0 / shape);
 

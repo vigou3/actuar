@@ -61,7 +61,7 @@ double qinvweibull(double p, double scale, double shape, int lower_tail, int log
 	shape <= 0.0)
 	error(_("invalid arguments"));
 
-  R_Q_P01_boundaries(p, 0, 1);
+  R_Q_P01_boundaries(p, 0, R_PosInf);
   tmp = R_D_qIv(p);
 
   tmp1 = 1 / shape;

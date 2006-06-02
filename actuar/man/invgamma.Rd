@@ -61,8 +61,8 @@ Also known as Vinci distribution.
   Mathieu Pigeon
 }
 \examples{
-exp(dinvgamma(2,3,4,log = TRUE))
+exp(dinvgamma(2, 3, 4, log = TRUE))
 p <- (1:10)/10
-pinvgamma(qinvgamma(p,2,3),2,3)
+pinvgamma(qinvgamma(p, 2, 3), 2, 3)
 }
 \keyword{distribution}

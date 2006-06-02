@@ -32,7 +32,7 @@ double dllogis(double x, double shape, double scale, int give_log)
 	shape * tmp2 / (x * R_pow(1.0 + tmp2, 2.0));
 }
 
-double pllogis(double x, double shape, double scale, int lower_tail, int log_p)
+double pllogis(double q, double shape, double scale, int lower_tail, int log_p)
 {
 
   double tmp1;
@@ -44,14 +44,17 @@ double pllogis(double x, double shape, double scale, int lower_tail, int log_p)
 	scale <= 0.0) 
 	error(_("invalid arguments"));
 
-    if (x <= 0)
+    if (q <= 0)
 	return R_DT_0;
 
-    tmp1 = shape + (log(x) - log(scale));
-    tmp2 = R_pow(x / scale, shape);
+    if (!R_FINITE(q))
+        return 1;
 
-    return (lower_tail ? R_D_exp(shape * log(x) - log(R_pow(scale, shape) + R_pow(x, shape))):
-	    R_D_exp(log(1.0 - exp(shape * log(x) - log(R_pow(scale, shape) + R_pow(x, shape))))));
+    tmp1 = shape + (log(q) - log(scale));
+    tmp2 = R_pow(q / scale, shape);
+
+    return (lower_tail ? R_D_exp(shape * log(q) - log(R_pow(scale, shape) + R_pow(q, shape))):
+	    R_D_exp(log(1.0 - exp(shape * log(q) - log(R_pow(scale, shape) + R_pow(q, shape))))));
 }
 
 double qllogis(double p, double shape, double scale, int lower_tail, int log_p)
@@ -65,7 +68,7 @@ double qllogis(double p, double shape, double scale, int lower_tail, int log_p)
 	scale <= 0.0)
 	error(_("invalid arguments"));
 
-    R_Q_P01_boundaries(p, 0, 1);
+    R_Q_P01_boundaries(p, 0, R_PosInf);
     tmp = R_D_qIv(p);
     tmp1 = 1.0 / shape;
 

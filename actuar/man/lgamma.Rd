@@ -58,8 +58,8 @@ Invalid arguments will results in return warning.
   Mathieu Pigeon
 }
 \examples{
-exp(dlgamma(2,3,4,log = TRUE))
+exp(dlgamma(2, 3, 4, log = TRUE))
 p <- (1:10)/10
-plgamma(qlgamma(p,2,3),2,3)
+plgamma(qlgamma(p, 2, 3), 2, 3)
 }
 \keyword{distribution}

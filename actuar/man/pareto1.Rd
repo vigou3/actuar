@@ -54,8 +54,8 @@ Invalid arguments will results in return warning.
   Mathieu Pigeon
 }
 \examples{
-exp(dpareto1(2,3,4,log = TRUE))
+exp(dpareto1(5, 3, 4, log = TRUE))
 p <- (1:10)/10
-ppareto1(qpareto1(p,2,3),2,3)
+ppareto1(qpareto1(p, 2, 3), 2, 3)
 }
 \keyword{distribution}

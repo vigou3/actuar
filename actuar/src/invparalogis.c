@@ -50,6 +50,9 @@ double pinvparalogis(double q, double shape, double scale, int lower_tail, int l
     if (q <= 0)
 	return R_DT_0;
 
+    if (!R_FINITE(q))
+        return 1;
+
 	tmp1 = R_pow(shape, 2.0);
 	tmp2 = log(q) - log(scale);
     
@@ -68,7 +71,7 @@ double qinvparalogis(double p, double shape, double scale, int lower_tail, int l
 	scale <= 0.0)
 	error(_("invalid arguments"));
 
-  R_Q_P01_boundaries(p, 0, 1);
+  R_Q_P01_boundaries(p, 0, R_PosInf);
   tmp = R_D_qIv(p);
 
   tmp1 = 1 / shape;

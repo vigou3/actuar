@@ -57,8 +57,8 @@ Also known as Fisk distribution.
   Mathieu Pigeon
 }
 \examples{
-exp(dllogis(2,3,4,log = TRUE))
+exp(dllogis(2, 3, 4, log = TRUE))
 p <- (1:10)/10
-pllogis(qllogis(p,2,3),2,3)
+pllogis(qllogis(p, 2, 3), 2, 3)
 }
 \keyword{distribution}

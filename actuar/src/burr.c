@@ -81,7 +81,7 @@ double qburr(double p, double shape1, double scale, double shape2, int lower_tai
       shape2 <= 0.0)
 	error(_("invalid arguments"));
 
-    R_Q_P01_boundaries(p, 0, 1);
+    R_Q_P01_boundaries(p, 0, R_PosInf );
     tmp =  R_D_qIv(p);
 
     tmp1 = 1.0 / shape1;

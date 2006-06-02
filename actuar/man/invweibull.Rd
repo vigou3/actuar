@@ -66,8 +66,8 @@ Also knonw as log-Gompertz distribution.
   Mathieu Pigeon
 }
 \examples{
-exp(dinvweibull(2,3,4,log = TRUE))
+exp(dinvweibull(2, 3, 4, log = TRUE))
 p <- (1:10)/10
-pinvweibull(qinvweibull(p,2,3),2,3)
+pinvweibull(qinvweibull(p, 2, 3), 2, 3)
 }
 \keyword{distribution}

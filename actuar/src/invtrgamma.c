@@ -65,7 +65,7 @@ double qinvtrgamma(double p, double shape1, double scale, double shape2, int low
         shape2 <= 0.0)
 	error(_("invalid arguments"));
 
-  R_Q_P01_boundaries(p, 0, 1);
+  R_Q_P01_boundaries(p, 0, R_PosInf);
   tmp = R_D_qIv(p);
 
     return (lower_tail ? R_pow(qgamma(tmp, shape1, 1.0 / scale, 0, 0), -1.0 / shape2) :
