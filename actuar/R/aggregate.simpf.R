@@ -1,4 +1,4 @@
-aggregate.simpf <- function(x, by.contract = TRUE, by.year=TRUE, FUN = sum, ...)
+aggregate.simpf <- function(x, by.contract = TRUE, by.year = TRUE, FUN = sum, ...)
 {
     FUN <- match.fun(FUN)
     clabels <- paste("   Contract", format(seq(length = dim(x$data)[1])))
