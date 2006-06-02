@@ -30,6 +30,8 @@ export(## Credibility theory
        dtrbeta, ptrbeta, qtrbeta, rtrbeta,
        dpearson4, ppearson4, qpearson4, rpearson4 #aliases
        )
+### Imports
+importFrom(stats, aggregate, frequency) 
 
 ### Methods
 S3method(print, bstraub)
