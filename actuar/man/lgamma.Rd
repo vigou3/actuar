@@ -1,0 +1,65 @@
+
+\name{Lgamma}
+\alias{lgamma}
+\alias{print.lgamma}
+\alias{dlgamma}
+\alias{plgamma}
+\alias{qlgamma}
+\alias{rlgamma}
+\title{The Loggamma Distribution}
+\description{
+  Density, distribution function, quantile function and random generation
+  for the Loggamma distribution with parameters 'shapelog' and 'ratelog'.
+  
+}
+\usage{
+dlgamma(x, shapelog, ratelog, log = FALSE)
+plgamma(q, shapelog, ratelog, lower.tail = TRUE,
+         log.p = FALSE)
+qlgamma(p, shapelog, ratelog, lower.tail = TRUE,
+         log.p = FALSE)
+rlgamma(n, shapelog, ratelog)
+}
+\arguments{
+  \item{x, q}{vector of quantiles.}
+  \item{p}{vector of probabilities.}
+  \item{n}{number of observations. If 'length(n) > 1', the length is
+    taken to be the number required.}
+  \item{shapelog, ratelog}{parameters. Must be strictly positive.}
+  \item{log, log.p}{logical; if 'TRUE', probabilities/densities p are
+    returned as log(p).}
+  \item{lower.tail}{logical; if 'TRUE' (default), probabilities are P[X
+    <= x], otherwise, Pr[X > x].} 
+  
+}
+\details{
+  The Loggamma distribution with parameters 'shapelog' = a
+  and 'ratelog' = b has density:
+  \deqn{p(x) = \text{dgamma(log(x), shapelog,$\frac{1.0}{\text{ratelog}}$)}{dgamma(log(x),
+    shapelog, 1.0 / ratelog)}
+  for \eqn{x > 1, a > 0} and \eqn{b > 0}. 
+
+  Let x has the Gamma probability density function with parameters
+  'shapelog' and 'ratelog'. \deqn{Y = e^X}{Y = exp(X)} has the Loggamma
+  probability density function with parameters 'shapelog' and 'ratelog'. 
+}
+\value{
+'dlgamma' gives the density, 'plgamma' gives the distribution function,
+'qlgamma' gives the quantile function, and 'rlgamma' generates random
+deviates.
+
+Invalid arguments will results in return warning.
+}
+\references{
+  Loss distribution...
+}
+\author{
+  Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
+  Mathieu Pigeon
+}
+\examples{
+exp(dlgamma(2,3,4,log = TRUE))
+p <- (1:10)/10
+plgamma(qlgamma(p,2,3),2,3)
+}
+\keyword{distribution}

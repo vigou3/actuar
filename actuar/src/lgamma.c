@@ -2,7 +2,7 @@
  *
  *  Fonctions to compute density, cumulative distribution and quantile
  *  fonctions of the Pareto distribution, and to simulate random
- *  variates. See ../R/pareto.R for details.
+ *  variates. See ../R/lgamma.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
