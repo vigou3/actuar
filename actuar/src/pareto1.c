@@ -20,7 +20,9 @@ double dpareto1(double x, double shape, double min, int give_log)
 	min <= 0.0)
 	error(_("invalid arguments"));
 
-    if (x <= min) error(_("invalid x"));
+     if (!R_FINITE(x)  ||
+	x < min) 
+      return R_D_d0;
     
     return  give_log ?
 	log(shape) + shape * log(min) - (shape + 1.0) * log(x):

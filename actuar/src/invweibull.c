@@ -20,9 +20,12 @@ double dinvweibull(double x, double scale, double shape, int give_log)
     if (!R_FINITE(scale) ||
 	!R_FINITE(shape)  ||
 	scale <= 0.0 || 
-	shape <= 0.0 ||
-	x < 0.0) 
+	shape <= 0.0) 
 	error(_("invalid arguments"));
+
+      if (!R_FINITE(x)  ||
+	x < 0.0) 
+      return R_D_d0;
 
     tmp = R_pow(scale / x, shape);
     

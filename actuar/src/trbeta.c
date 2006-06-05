@@ -24,9 +24,12 @@ double dtrbeta(double x, double shape1, double scale, double shape2, double shap
 	shape1 <= 0.0 || 
 	scale <= 0.0 || 
 	shape2 <= 0.0 || 
-	shape3 <= 0.0 || 
-	x < 0.0) 
+	shape3 <= 0.0) 
 	error(_("invalid arguments"));
+
+     if (!R_FINITE(x)  ||
+	x < 0.0) 
+      return R_D_d0;
 
     tmp1 = R_pow(x / scale, shape2);
     tmp2 = tmp1 / (1 + tmp1);

@@ -17,9 +17,12 @@ double dlgamma(double x, double shapelog, double ratelog, int give_log)
     if (!R_FINITE(shapelog) || 
 	!R_FINITE(ratelog) ||
 	shapelog <= 0.0 || 
-	ratelog <= 0.0 || 
-	x < 0.0) 
+	ratelog <= 0.0) 
 	error(_("invalid arguments"));
+
+      if (!R_FINITE(x)  ||
+	x < 0.0) 
+      return R_D_d0;
     
     return (give_log ?
 	-log(x) + dgamma(log(x), shapelog, 1.0 / ratelog, 1)  :
