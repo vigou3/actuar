@@ -8,38 +8,39 @@
 }
 \usage{
 \method{aggregate}{simpf}(x, by.contract = TRUE, by.year = TRUE, FUN =
-sum, \dots)
+          sum, \dots)
 }
 \arguments{
   \item{x}{a \code{"simpf"} object, typically created by \code{\link{simpf}}}
   \item{by.contract}{boolean, whether to aggregate data by contract or not}
   \item{by.year}{boolean, whether to aggregate data by year or not}
-  \item{TOL}{maximum relative error in the iterative procedure}
   \item{FUN}{a function to apply to data subsets}
   \item{\dots}{potential further arguments required by generic.}
 
 }
 \details{
   This function is a method for the generic function aggregate() of
-  package \code{stats}. It computes summary statistics for of the
+  package \code{stats}. It computes summary statistics for the
   aggregate losses of a simulated portfolio, created by function
   simpf(). It is theoretically possible to use any scalar function as a
-  FUN argument, but only functions for summary statistics make sense in
+  FUN argument, but functions for summary statistics make more sense in
   the case of a \code{simpf} object. 
 }
 \value{
   The object returned depends on the way data is aggregated with respect
   to the call:
-  If both \code{by.contract} and \code{by.year} are TRUE, a matrix will
+
+  If both \code{by.contract} and \code{by.year} are \code{TRUE}, a matrix will
   be returned with FUN applied to all losses vectors in all years and in
   all contracts. Therefore, the dimensions of this resulting matrix will
   be the same as the dimensions of the data matrix listed in the
   \code{simpf} object.
-  If \code{by.contract} only is TRUE, the summary statistic is applied
-  to each contract, for all years. If \code{by.year} only is TRUE, the
+
+  If \code{by.contract} only is \code{TRUE}, the summary statistic is applied
+  to each contract, for all years. If \code{by.year} only is \code{TRUE}, the
   summary statistic is applied to each year, for all
   contracts. Therefore, if either \code{by.contract} emph{only} or
-  \code{by.year} emph{only} is TRUE, the object returned will be
+  \code{by.year} emph{only} is \code{TRUE}, the object returned will be
   respectively a column vector or a row vector, both of class \code{matrix}.   
 }
 \author{
