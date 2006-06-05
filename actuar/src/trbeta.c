@@ -14,8 +14,7 @@
 
 double dtrbeta(double x, double shape1, double scale, double shape2, double shape3, int give_log)
 { 
-  double tmp1;
-  double tmp2;
+    double tmp1, tmp2, tmp3;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
@@ -27,16 +26,17 @@ double dtrbeta(double x, double shape1, double scale, double shape2, double shap
 	shape3 <= 0.0) 
 	error(_("invalid arguments"));
 
-     if (!R_FINITE(x)  ||
-	x < 0.0) 
-      return R_D_d0;
+    if (!R_FINITE(x) || x < 0.0) 
+	return R_D_d0;
 
-    tmp1 = R_pow(x / scale, shape2);
-    tmp2 = tmp1 / (1 + tmp1);
+    tmp1 = x / scale;
+    tmp2 = R_pow(tmp1, shape2);
+    tmp3 = tmp2 / (1 + tmp2);
     
+    /* !!! Modifier version log !!! */
     return  (give_log ?
 	     dbeta(tmp2, shape3, shape1, 1) + log(shape2) - log(scale) + (shape2 - 1.0)*(log(x) - log(scale)) + 2.0 * (-log(1.0 + exp(shape2 * (log(x) - log(scale))))) :
-	     dbeta(tmp2, shape3, shape1, 0) * (shape2 / scale) * R_pow(x / scale, shape2 - 1.0) * R_pow(1.0 / (1.0 + tmp1), 2.0));
+	     dbeta(tmp3, shape3, shape1, 0) * shape2 * tmp2 / (scale * tmp1 * R_pow_di(1.0 + tmp2, 2)));
 }
 
 double ptrbeta(double q, double shape1, double scale, double shape2, double shape3, int lower_tail, int log_p)
