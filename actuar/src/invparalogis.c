@@ -67,6 +67,7 @@ double qinvparalogis(double p, double shape, double scale, int lower_tail, int l
 {
   double tmp;
   double tmp1;
+  double tmp2;
 
   if (!R_FINITE(shape) || 
 	!R_FINITE(scale) ||
@@ -77,10 +78,11 @@ double qinvparalogis(double p, double shape, double scale, int lower_tail, int l
   R_Q_P01_boundaries(p, 0, R_PosInf);
   tmp = R_D_qIv(p);
 
-  tmp1 = 1 / shape;
+  tmp1 = 1.0 / shape;
+  tmp2 = tmp1 * tmp1;
 
-  return (lower_tail ? scale * R_pow(R_pow(1.0 / (1.0 - tmp), tmp1) - 1.0, tmp1):
-	    scale * R_pow(R_pow(1.0 / tmp, tmp1) - 1.0, tmp1));
+  return (lower_tail ? scale * R_pow(tmp, tmp2) / R_pow(1.0 - R_pow(tmp, tmp1), tmp1) :
+	    scale * R_pow(1.0 - tmp, tmp2) / R_pow(1.0 - R_pow(1.0 - tmp, tmp1), tmp1));
 }
 
 
