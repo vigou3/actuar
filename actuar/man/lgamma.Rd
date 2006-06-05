@@ -51,7 +51,7 @@ deviates.
 Invalid arguments will results in return warning.
 }
 \references{
-  Loss distribution...
+  Appendix of Hogg & Klugman, Loss Distributions, Wiley, 1984.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
