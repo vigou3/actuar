@@ -45,7 +45,7 @@ rburr(n, shape1, scale, shape2)
 }
 \value{
 'dburr' gives the density, 'pburr' gives the distribution function,
-'qgamma' gives the quantile function, and 'rburr' generates random
+'qburr' gives the quantile function, and 'rburr' generates random
 deviates.
 
 Invalid arguments will results in return warning.
