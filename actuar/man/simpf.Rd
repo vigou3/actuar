@@ -11,7 +11,7 @@
 \usage{
 simpf(contracts, years, model.freq, model.sev, weights)
 
-\method{print}{simpf}{x, \dots}
+\method{print}{simpf}(x, \dots)
 }
 \arguments{
   \item{contracts}{the number of contracts in the porfolio}
@@ -22,6 +22,8 @@ simpf(contracts, years, model.freq, model.sev, weights)
     below); if \code{NULL}, only claim numbers are simulated}
   \item{weights}{a matrix of weights (one per contract and per year) to
     be used in the simulation of frequencies}
+  \item{x}{a \code{simpf} object}
+  \item{\dots}{potential further arguments required by generic.}
 }
 \details{
   The function allows for continuous mixtures of models for both
