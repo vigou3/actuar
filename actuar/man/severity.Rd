@@ -42,7 +42,7 @@ severity(x, byrow = TRUE, \dots)
   cause rows or columns to be of different lengths, so the matrix is
   filled with \code{NA}.
   
-  If y.exclude is greater than 0, a second matrix is returned. It 
+  If \code{y.exclude} is greater than 0, a second matrix is returned. It 
   displays the losses for the \dQuote{y.exclude} last years, with the same method as for
   the preceding years.  
   

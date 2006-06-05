@@ -7,8 +7,8 @@
   most commonly returned in a \code{matrix}. 
 }
 \usage{
-\method{aggregate}{simpf}(x, by.contract = TRUE, by.year = TRUE, FUN =
-          sum, \dots)
+\method{aggregate}{simpf}(x, by.contract = TRUE, by.year = TRUE,
+          FUN = sum, \dots)
 }
 \arguments{
   \item{x}{a \code{"simpf"} object, typically created by \code{\link{simpf}}}

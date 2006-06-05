@@ -35,7 +35,8 @@ severity.simpf <- function(x, byrow = TRUE, y.exclude = 0, ...)
 {
     x <- x$data
     y <- x
-    
+    if (y.exclude %% 1 != 0 | y.exclude < 0)
+        warning("y.exclude must be a positive integer")
     if (byrow) names.first <- list(paste("Contract", seq(length = nrow(y))), NULL)
     else names.first <- list(NULL, paste("Year", seq(length = ncol(x) - y.exclude)))
     
