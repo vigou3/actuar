@@ -43,6 +43,8 @@ S3method(print, summary.simpf)
 S3method(aggregate, simpf)
 S3method(severity, default)
 S3method(severity, simpf)
+S3method(frequency, simpf)
+
 
 
 

@@ -49,6 +49,7 @@ sum, \dots)
 \seealso{
   \code{\link{aggregate}} \code{\link{simpf}} \code{\link{severity}}
   \code{\link{frequency}} \code{\link{frequency.simpf}}
+  }
 \examples{
 modelfreq <- list(dist1 = "pois",
                   par1 = list(lambda = quote(Lambda * weights)),
