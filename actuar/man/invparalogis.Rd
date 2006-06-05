@@ -56,8 +56,8 @@ Invalid arguments will results in return warning.
   Mathieu Pigeon
 }
 \examples{
-exp(dinvparalogis(2,3,4,log = TRUE))
+exp(dinvparalogis(2, 3, 4, log = TRUE))
 p <- (1:10)/10
-pinvparalogis(qinvparalogis(p,2,3),2,3)
+pinvparalogis(qinvparalogis(p, 2, 3), 2, 3)
 }
 \keyword{distribution}
