@@ -53,7 +53,7 @@ rinvtrgamma(n, shape1, scale, shape2)
 deviates.
 
 Invalid arguments will results in return warning.
-
+}
 \note{
 Also known as inverse generalized gamma distribution.
 }

@@ -41,7 +41,7 @@ rgenpareto(n, shape1, scale, shape2)
   \eqn{c > 0}. Here Gamma(a) is the function implemented by R's 'gamma()' and defined in its help.
 
   Let Y has the Beta probability density function with parameters
-  'shape1' and 'shape2'.  \deqn{\text{scale}(\frac{Y}{1 - Y})}{
+  'shape1' and 'shape2'.  \deqn{scale(\frac{Y}{1 - Y})}{
     scale (Y / (1 - Y))} has the Generalized Pareto probability density function with parameters
   'shape1', 'scale' and 'shape2'.
 

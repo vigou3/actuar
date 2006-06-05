@@ -6,6 +6,12 @@
 \alias{ppareto}
 \alias{qpareto}
 \alias{rpareto}
+\alias{pareto2}
+\alias{print.pareto2}
+\alias{dpareto2}
+\alias{ppareto2}
+\alias{qpareto2}
+\alias{rpareto2}
 \title{The Pareto Distribution}
 \description{
   Density, distribution function, quantile function and random generation

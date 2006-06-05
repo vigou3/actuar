@@ -12,7 +12,7 @@
   
 }
 \usage{
-dinvexp(x, shape1, scale, shape2, log = FALSE)
+dinvexp(x, scale, log = FALSE)
 pinvexp(q, scale, lower.tail = TRUE, log.p = FALSE)
 qinvexp(p, scale, lower.tail = TRUE, log.p = FALSE)
 rinvexp(n, scale)

@@ -51,7 +51,7 @@ rtrbeta(n, shape1, scale, shape2, shape3)
   'gamma()' and defined in its help.
 
   Let Y has the Beta probability density function with parameters
-  'shape1' and 'shape3'.  \deqn{\text{scale}(\frac{Y}{1 - Y})^(\frac{1}{ text{shape2}})}{
+  'shape1' and 'shape3'.  \deqn{scale(\frac{Y}{1 - Y})^(\frac{1}{shape2})}{
     scale (Y / (1 - Y))^(1 / shape2)} has the
   Transformed Beta probability density function with parameters
   'shape1', 'scale', 'shape2' and 'shape3'.

@@ -43,7 +43,7 @@ rtrgamma(n, shape1, scale, shape2)
   'gamma()' and defined in its help.
 
   Let Y has the Gamma probability density function with parameters
-  'shape1' and 'scale'. \deqn{Y^{\frac{1}{\text{shape2}}}}{Y^(1/shape2)}
+  'shape1' and 'scale'. \deqn{Y^{\frac{1}{shape2}}}{Y^(1/shape2)}
   has the Transformed Gamma probability density function with parameters
   'shape1', 'scale' and 'shape2'.
 
@@ -58,7 +58,7 @@ rtrgamma(n, shape1, scale, shape2)
 deviates.
 
 Invalid arguments will results in return warning.
-
+}
 \note{
 Also known as generalized gamma distribution.
 }

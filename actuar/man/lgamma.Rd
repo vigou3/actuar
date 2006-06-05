@@ -35,7 +35,7 @@ rlgamma(n, shapelog, ratelog)
 \details{
   The Loggamma distribution with parameters 'shapelog' = a
   and 'ratelog' = b has density:
-  \deqn{p(x) = \text{dgamma(log(x), shapelog,$\frac{1.0}{\text{ratelog}}$)}{dgamma(log(x),
+  \deqn{p(x) = dgamma(log(x), shapelog,\frac{1.0}{ratelog})}{dgamma(log(x),
     shapelog, 1.0 / ratelog)}
   for \eqn{x > 1, a > 0} and \eqn{b > 0}. 
 

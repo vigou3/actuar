@@ -12,12 +12,12 @@
   
 }
 \usage{
-dburr(x, shape1, scale, shape2, log = FALSE)
-pburr(q, shape1, scale, shape2, lower.tail = TRUE,
+dinvburr(x, shape1, scale, shape2, log = FALSE)
+pinvburr(q, shape1, scale, shape2, lower.tail = TRUE,
       log.p = FALSE)
-qburr(p, shape1, scale, shape2, lower.tail = TRUE,
+qinvburr(p, shape1, scale, shape2, lower.tail = TRUE,
       log.p = FALSE)
-rburr(n, shape1, scale, shape2)
+rinvburr(n, shape1, scale, shape2)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
@@ -51,7 +51,7 @@ deviates.
 Invalid arguments will results in return warning.
  
 }
-\value{
+\note{
   Also known as Dagum distribution.
 }
 \references{
