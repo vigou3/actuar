@@ -29,7 +29,10 @@
      
 }
 \seealso{
-  \code{\link{simpf}} \code{\link{aggregate}} \code{\link[stats]{frequency}}
+  \code{\link{simpf}} \code{\link{aggregate}}
+  \code{\link[stats]{frequency}}
+}
+
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Louis-Philippe Pouliot
@@ -47,5 +50,6 @@ data(hachemeister)
 weights <- hachemeister$weights/mean(hachemeister$weights)
 x <- simpf(5, 12, modelfreq, modelsev, weights)
 frequency(x, by.contract = FALSE)
+}
 
 \keyword{models}

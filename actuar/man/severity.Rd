@@ -14,7 +14,7 @@ severity(x, byrow = TRUE, \dots)
 \method{severity}{simpf}(x, byrow = TRUE, y.exclude = 0, \dots)
 }
 \arguments{
-  \item{x}{matrix of vectors or a \code{\link{"simpf"}} object}
+  \item{x}{matrix of vectors or a \code{\link{simpf}} object}
   \item{byrow}{boolean, whether to \sQuote{unroll} horizontally or vertically}
   \item{y.exclude}{integer, a number of years of observations at the tail of the
     portfolio to be displayed seperately}
@@ -27,7 +27,7 @@ severity(x, byrow = TRUE, \dots)
   a matrix where each element can be a vector. The name \sQuote{severity}
   was chosen because of the actuarial context where the need of \sQuote{unrolling}
   a matrix appeared. The function was first designed to treat the matrix
-  of data returned in a \code{link{"simpf"}} object, where each element is
+  of data returned in a \code{link{simpf}} object, where each element is
   a vector of losses during a particular year for a particular
   contract. Because the \sQuote{unrolling} task is not specific to this
   context, a generic was created along with a method for class
@@ -55,6 +55,7 @@ severity(x, byrow = TRUE, \dots)
 }
 \seealso{
   \code{\link{aggregate}} \code{\link{simpf}} \code{\link{matrix}}
+}
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Louis-Philippe Pouliot
@@ -85,5 +86,6 @@ severity(x,                  ## A matrix of losses,
          y.exclude = 1)      ## with claims for the last year displayed separately.
                                           
 }
-\keyword{datagen, manip}
+\keyword{datagen}
+\keyword{manip}
 
