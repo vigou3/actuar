@@ -19,6 +19,9 @@ qtrbeta <- function (p, shape1, scale, shape2, shape3, lower.tail = TRUE, log.p 
 rtrbeta <- function (n, shape1, scale, shape2, shape3)
     .External("do_random", "rtrbeta", n, shape1, scale, shape2, shape3)
 
+rtrbeta2 <- function (n, shape1, scale, shape2, shape3)
+    .External("do_random", "rtrbeta2", n, shape1, scale, shape2, shape3)
+
 ## Aliases
 dpearson4 <- dtrbeta
 ppearson4 <- ptrbeta

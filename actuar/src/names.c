@@ -89,5 +89,6 @@ FUNTAB fun_tab[] = {
     {"rinvtrgamma",	do_random3,	5},
     /* Four parameter distributions */
     {"rtrbeta", 	do_random4,	1},
+    {"rtrbeta2", 	do_random4,	2},
     {0, 0, 0}
 };

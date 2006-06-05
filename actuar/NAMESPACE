@@ -3,7 +3,7 @@ useDynLib(actuar, .registration = TRUE)
 
 ### Functions
 export(## Credibility theory
-       bstraub, rearrangepf, simpf, severity, 
+       bstraub, rearrangepf, simpf, severity,
        ## Risk theory
        panjer,
        ## One parameter distributions
@@ -27,11 +27,11 @@ export(## Credibility theory
        dtrgamma, ptrgamma, qtrgamma, rtrgamma,
        dinvtrgamma, pinvtrgamma, qinvtrgamma, rinvtrgamma,
        ## Four parameter distributions
-       dtrbeta, ptrbeta, qtrbeta, rtrbeta,
+       dtrbeta, ptrbeta, qtrbeta, rtrbeta, rtrbeta2,
        dpearson4, ppearson4, qpearson4, rpearson4 #aliases
        )
 ### Imports
-importFrom(stats, aggregate, frequency) 
+importFrom(stats, aggregate, frequency)
 
 ### Methods
 S3method(print, bstraub)
@@ -44,7 +44,3 @@ S3method(aggregate, simpf)
 S3method(severity, default)
 S3method(severity, simpf)
 S3method(frequency, simpf)
-
-
-
-

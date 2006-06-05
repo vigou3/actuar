@@ -80,13 +80,12 @@ double qtrbeta(double p, double shape1, double scale, double shape2, double shap
 	shape2 <= 0.0 || 
 	shape3 <= 0.0) 
 	error(_("invalid arguments"));
-
+    
     R_Q_P01_boundaries(p, 0, R_PosInf);
     tmp = R_D_qIv(p);
-
-  return  (lower_tail ? scale * R_pow(qbeta(tmp, shape3, shape1, 1, 0) / (1.0 - qbeta(tmp, shape3, shape1, 1 ,0)), 1.0 / shape2)  :
-	    scale * R_pow((qbeta(tmp, shape3, shape1, 0, 0)) / (1.0 - qbeta(tmp, shape3, shape1, 0, 0)), 1.0 / shape2));
-
+    
+    return  (lower_tail ? scale * R_pow(qbeta(tmp, shape3, shape1, 1, 0) / (1.0 - qbeta(tmp, shape3, shape1, 1 ,0)), 1.0 / shape2)  :
+	     scale * R_pow((qbeta(tmp, shape3, shape1, 0, 0)) / (1.0 - qbeta(tmp, shape3, shape1, 0, 0)), 1.0 / shape2));
 }
 
 double rtrbeta(double shape1, double scale, double shape2, double shape3)
@@ -106,4 +105,23 @@ double rtrbeta(double shape1, double scale, double shape2, double shape3)
     a = unif_rand();
 
     return scale * R_pow((qbeta(a, shape3, shape1, 1, 0) / (1.0 - qbeta(a, shape3, shape1, 1, 0))), (1.0 / shape2));
+}
+
+double rtrbeta2(double shape1, double scale, double shape2, double shape3)
+{
+    double a;	
+
+    if (!R_FINITE(shape1) ||
+	!R_FINITE(scale) ||
+	!R_FINITE(shape2) ||
+	!R_FINITE(shape3) ||
+	shape1 <= 0.0 ||
+	scale <= 0.0 ||
+	shape2 <= 0.0 ||
+	shape3 <= 0.0)
+	error(_("invalid arguments"));
+	
+    a = rbeta(shape3, shape1);
+
+    return scale * R_pow(a / (1.0 - a), 1.0/shape2);
 }
