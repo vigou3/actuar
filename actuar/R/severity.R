@@ -1,4 +1,4 @@
-severity <- function(x, ...) UseMethod("severity")
+severity <- function(x, byrow = TRUE, ...) UseMethod("severity")
 
 
 severity.default <- function(x, byrow = TRUE, ...)

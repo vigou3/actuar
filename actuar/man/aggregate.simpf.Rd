@@ -11,7 +11,7 @@
 sum, \dots)
 }
 \arguments{
-  \item{x}{a \code{"simpf"} object, typically created by \link{\code{simpf}}}
+  \item{x}{a \code{"simpf"} object, typically created by \code{\link{simpf}}}
   \item{by.contract}{boolean, whether to aggregate data by contract or not}
   \item{by.year}{boolean, whether to aggregate data by year or not}
   \item{TOL}{maximum relative error in the iterative procedure}
