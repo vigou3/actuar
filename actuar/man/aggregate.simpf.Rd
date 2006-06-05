@@ -39,8 +39,8 @@
   If \code{by.contract} only is \code{TRUE}, the summary statistic is applied
   to each contract, for all years. If \code{by.year} only is \code{TRUE}, the
   summary statistic is applied to each year, for all
-  contracts. Therefore, if either \code{by.contract} emph{only} or
-  \code{by.year} emph{only} is \code{TRUE}, the object returned will be
+  contracts. Therefore, if either \code{by.contract} \emph{only} or
+  \code{by.year} \emph{only} is \code{TRUE}, the object returned will be
   respectively a column vector or a row vector, both of class \code{matrix}.   
 }
 \author{
