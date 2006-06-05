@@ -35,14 +35,13 @@ double dtrbeta(double x, double shape1, double scale, double shape2, double shap
     
     /* !!! Modifier version log !!! */
     return  (give_log ?
-	     dbeta(tmp2, shape3, shape1, 1) + log(shape2) - log(scale) + (shape2 - 1.0)*(log(x) - log(scale)) + 2.0 * (-log(1.0 + exp(shape2 * (log(x) - log(scale))))) :
+	     dbeta(tmp3, shape3, shape1, 1) + log(shape2) - log(scale) + (shape2 - 1.0) * (log(x) - log(scale)) + 2.0 * (-log(1.0 + exp(shape2 * (log(x) - log(scale))))) :
 	     dbeta(tmp3, shape3, shape1, 0) * shape2 * tmp2 / (scale * tmp1 * R_pow_di(1.0 + tmp2, 2)));
 }
 
 double ptrbeta(double q, double shape1, double scale, double shape2, double shape3, int lower_tail, int log_p)
 {
-    double u;
-    double tmp;
+    double u, tmp;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
@@ -102,26 +101,7 @@ double rtrbeta(double shape1, double scale, double shape2, double shape3)
 	shape3 <= 0.0)
 	error(_("invalid arguments"));
 	
-    a = unif_rand();
-
-    return scale * R_pow((qbeta(a, shape3, shape1, 1, 0) / (1.0 - qbeta(a, shape3, shape1, 1, 0))), (1.0 / shape2));
-}
-
-double rtrbeta2(double shape1, double scale, double shape2, double shape3)
-{
-    double a;	
-
-    if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(shape2) ||
-	!R_FINITE(shape3) ||
-	shape1 <= 0.0 ||
-	scale <= 0.0 ||
-	shape2 <= 0.0 ||
-	shape3 <= 0.0)
-	error(_("invalid arguments"));
-	
     a = rbeta(shape3, shape1);
 
-    return scale * R_pow(a / (1.0 - a), 1.0/shape2);
+    return scale * R_pow(a / (1.0 - a), 1.0 / shape2);
 }

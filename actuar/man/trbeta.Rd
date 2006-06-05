@@ -6,77 +6,80 @@
 \alias{ptrbeta}
 \alias{qtrbeta}
 \alias{rtrbeta}
-\alias{pearson4}
-\alias{print.pearson4}
-\alias{dpearson4}
-\alias{ppearson4}
-\alias{qpearson4}
-\alias{rpearson4}
+\alias{pearson6}
+\alias{print.pearson6}
+\alias{dpearson6}
+\alias{ppearson6}
+\alias{qpearson6}
+\alias{rpearson6}
 \title{The Transformed Beta Distribution}
 \description{
   Density, distribution function, quantile function and random generation
-  for the Transformed Beta distribution with parameters 'shape1',
-  'scale', 'shape2' and 'shape3'.
-  
+  for the Transformed Beta distribution with parameters \code{shape1},
+  \code{scale}, \code{shape2} and \code{shape3}.
 }
 \usage{
-dtrbeta(x, shape1, scale, shape2, shape3, log = FALSE)
-ptrbeta(q, shape1, scale, shape2, shape3, lower.tail = TRUE,
-        log.p = FALSE)
-qtrbeta(p, shape1, scale, shape2, shape3, lower.tail = TRUE,
-        log.p = FALSE)
-rtrbeta(n, shape1, scale, shape2, shape3)
+  dtrbeta(x, shape1, scale, shape2, shape3, log = FALSE)
+  ptrbeta(q, shape1, scale, shape2, shape3, lower.tail = TRUE,
+          log.p = FALSE)
+  qtrbeta(p, shape1, scale, shape2, shape3, lower.tail = TRUE,
+          log.p = FALSE)
+  rtrbeta(n, shape1, scale, shape2, shape3)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
-  \item{n}{number of observations. If 'length(n) > 1', the length is
+  \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
   \item{shape1, scale, shape2, shape3}{parameters. Must be strictly positive.}
-  \item{log, log.p}{logical; if 'TRUE', probabilities/densities p are
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
     returned as log(p).}
-  \item{lower.tail}{logical; if 'TRUE' (default), probabilities are P[X
+  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
     <= x], otherwise, Pr[X > x].} 
   
 }
-\details{
-  
-  The Transformed Beta distribution with parameters 'shape1' = a,
-  'scale' = c, 'shape2' = b and 'shape3' = d has density:
+\details{ 
+  The Transformed Beta distribution with parameters \code{shape1} = a,
+  \code{scale} = b, \code{shape2} = c and \code{shape3} = d has density:
   \deqn{p(x) = \frac{\Gamma(a + d)}{\Gamma(a)\Gamma(d)}
-    \frac{b(frac{x}{c})^{(b d)}}{x(1 + (\frac{x}{c})^b)^{(a + d)}}}{p(x)
-    = (gamma(a + d) / gamma(a)*gamma(d))((b (x / c)^(a b)) / (x
-    (1 + (x / c)^b)^(a + d)))} for \eqn{x > 0, a > 0, b > 0, c > 0} and
+    \frac{c(frac{x}{b})^{(c d)}}{x(1 + (\frac{x}{b})^c)^{(a + d)}}}{p(x)
+    = (gamma(a + d) / gamma(a)*gamma(d))((c (x / b)^(a c)) / (x
+    (1 + (x / b)^c)^(a + d)))} for \eqn{x > 0, a > 0, b > 0, c > 0} and
   \eqn{d > 0}. Here Gamma(a) is the function implemented by R's
-  'gamma()' and defined in its help.
+  \code{gamma()} and defined in its help.
 
-  Let Y has the Beta probability density function with parameters
-  'shape1' and 'shape3'.  \deqn{scale(\frac{Y}{1 - Y})^(\frac{1}{shape2})}{
+  Let Y be a Beta random variable with parameters
+  \code{shape1} and \code{shape3}. Then, \deqn{scale(\frac{Y}{1 - Y})^(\frac{1}{shape2})}{
     scale (Y / (1 - Y))^(1 / shape2)} has the
   Transformed Beta probability density function with parameters
-  'shape1', 'scale', 'shape2' and 'shape3'.
+  \code{shape1}, \code{scale}, \code{shape2} and \code{shape3}.
 
-  If 'shape3' = 1, it is a Burr distribution. If 'shape3' = 'shape2' =
-  1, it is a Pareto distribution. If 'shape3' = 'shape1' = 1, it is a
-  Loglogistic distribution. If 'shape3' = 1 and 'shape1' = 'shape2', it
-  is a Paralogistic distribution.
-
-  If 'shape2' = 1, it is a Generalized Pareto distribution. If 'shape2'
-  = 'shape1' = 1, it is an Inverse Pareto distribution.
-
-  If 'shape1' = 1, it is an Inverse Burr distribution. If 'shape1' = 1
-  and 'shape2' = 'shape3', it is an Inverse Paralogistic distribution.
+  The Transformed Beta distribution defines a family of distributions
+  with the following special cases:
+  \itemize{
+    \item \code{shape3} == 1 is a Burr distribution,
+    \item \code{shape3} == \code{shape2} == 1 is a Pareto distribution,
+    \item \code{shape3} == \code{shape1} == 1 is a Loglogistic
+    distribution,
+    \item \code{shape3} == 1 and \code{shape2} == \code{shape1} is a
+    Paralogistic distribution,
+    \item \code{shape2} == 1 is a Generalized Pareto distribution,
+    \item \code{shape2} == \code{shape1} == 1 is an Inverse Pareto
+    distribution,
+    \item \code{shape1} == 1 is an Inverse Burr distribution, and
+    \item \code{shape1} == 1 and \code{shape2} == \code{shape3} is an
+    Inverse Paralogistic distribution.
+  }
 }
 \value{
-'dtrbeta' gives the density, 'ptrbeta' gives the distribution function,
-'qtrbeta' gives the quantile function, and 'rtrbeta' generates random
+\code{dtrbeta} gives the density, \code{ptrbeta} gives the distribution function,
+\code{qtrbeta} gives the quantile function, and \code{rtrbeta} generates random
 deviates.
 
-Invalid arguments will results in return warning.
- 
+Invalid arguments will return warning.
 }
 \note{
-  Also known as generalized beta of the second kind and Pearson Type VI.
+  Also known as the generalized beta of the second kind and Pearson Type VI.
 }
 \references{
   Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
@@ -90,6 +93,6 @@ Invalid arguments will results in return warning.
 exp(dtrbeta(2, 2, 3, 4, 5, log = TRUE))
 p <- (1:10)/10
 ptrbeta(qtrbeta(p, 2, 3, 4, 5), 2, 3, 4, 5)
-qtrbeta(0.3, 2, 3, 4, 5, lower.tail = FALSE)
+qpearson6(0.3, 2, 3, 4, 5, lower.tail = FALSE)
 }
 \keyword{distribution}

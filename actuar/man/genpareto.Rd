@@ -9,55 +9,55 @@
 \title{The Generalized Pareto Distribution}
 \description{
   Density, distribution function, quantile function and random generation
-  for the Generalized Pareto distribution with parameters 'shape1', 'scale' and 'shape2'.
-  
+  for the Generalized Pareto distribution with parameters \code{shape1}, \code{scale} and \code{shape2}.
 }
 \usage{
-dgenpareto(x, shape1, scale, shape2, log = FALSE)
-pgenpareto(q, shape1, scale, shape2, lower.tail = TRUE,
-           log.p = FALSE)
-qgenpareto(p, shape1, scale, shape2, lower.tail = TRUE,
-           log.p = FALSE)
-rgenpareto(n, shape1, scale, shape2)
+  dgenpareto(x, shape1, scale, shape2, log = FALSE)
+  pgenpareto(q, shape1, scale, shape2, lower.tail = TRUE,
+             log.p = FALSE)
+  qgenpareto(p, shape1, scale, shape2, lower.tail = TRUE,
+             log.p = FALSE)
+  rgenpareto(n, shape1, scale, shape2)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
-  \item{n}{number of observations. If 'length(n) > 1', the length is
+  \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
   \item{shape1, scale, shape2}{parameters. Must be strictly positive.}
-  \item{log, log.p}{logical; if 'TRUE', probabilities/densities p are
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
     returned as log(p).}
-  \item{lower.tail}{logical; if 'TRUE' (default), probabilities are P[X
+  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
     <= x], otherwise, Pr[X > x].} 
-  
 }
 \details{
-  
-  The Generalized Pareto distribution with parameters 'shape1' = a, 'scale' = c and
-  'shape2' = b has density: \deqn{p(x) = \frac{\Gamma(a +
-      b)}{\Gamma(a)\Gamma(b)}\frac{c^a x^{(b - 1)}}{(x + c)^(a +
-      b)}}{p(x) = (gamma(a + b) / gamma(a)*gamma(b))((c^a x^(c-1)) / (x + c)^(a + b))} for \eqn{x > 0, a > 0, b > 0} and
-  \eqn{c > 0}. Here Gamma(a) is the function implemented by R's 'gamma()' and defined in its help.
+  The Generalized Pareto distribution with parameters \code{shape1} = a, \code{scale} = b and
+  \code{shape2} = c has density: \deqn{p(x) = \frac{\Gamma(a +
+      c)}{\Gamma(a)\Gamma(c)}\frac{b^a x^{(c - 1)}}{(x + b)^(a +
+      c)}}{p(x) = (gamma(a + c) / gamma(a)*gamma(c))((b^a x^(b-1)) / (x + b)^(a + c))} for \eqn{x > 0, a > 0, b > 0} and
+  \eqn{c > 0}. Here Gamma(a) is the function implemented by R's \code{gamma()} and defined in its help.
 
-  Let Y has the Beta probability density function with parameters
-  'shape1' and 'shape2'.  \deqn{scale(\frac{Y}{1 - Y})}{
+  Let Y be a Beta random variable with parameters
+  \code{shape1} and \code{shape2}. Then, \deqn{scale(\frac{Y}{1 - Y})}{
     scale (Y / (1 - Y))} has the Generalized Pareto probability density function with parameters
-  'shape1', 'scale' and 'shape2'.
+  \code{shape1}, \code{scale} and \code{shape2}.
 
-  If 'shape2' = 1, it is a Pareto distribution. If 'shape2'
-  = 'shape1' = 1, it is an Inverse Pareto distribution.
+  The Generalized Pareto distribution has the following special cases:
+  \itemize{
+    \item \code{shape2} == 1 is a Pareto distribution, and
+    \item \code{shape2} == \code{shape1} == 1 is an Inverse Pareto
+    distribution.
+  }
 }
 \value{
-'dgenpareto' gives the density, 'pgenpareto' gives the distribution function,
-'qgenpareto' gives the quantile function, and 'rgenpareto' generates random
+\code{dgenpareto} gives the density, \code{pgenpareto} gives the distribution function,
+\code{qgenpareto} gives the quantile function, and \code{rgenpareto} generates random
 deviates.
 
-Invalid arguments will results in return warning.
- 
+Invalid arguments will return warning.
 }
 \note{
-  Also known as Beta of the second kind.
+  Also known as the Beta of the second kind.
 }
 \references{
   Appendix A of Klugman, Panjer & Willmot, Loss Models, Second

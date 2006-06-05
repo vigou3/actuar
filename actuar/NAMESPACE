@@ -27,8 +27,8 @@ export(## Credibility theory
        dtrgamma, ptrgamma, qtrgamma, rtrgamma,
        dinvtrgamma, pinvtrgamma, qinvtrgamma, rinvtrgamma,
        ## Four parameter distributions
-       dtrbeta, ptrbeta, qtrbeta, rtrbeta, rtrbeta2,
-       dpearson4, ppearson4, qpearson4, rpearson4 #aliases
+       dtrbeta, ptrbeta, qtrbeta, rtrbeta,
+       dpearson6, ppearson6, qpearson6, rpearson6 #aliases
        )
 ### Imports
 importFrom(stats, aggregate, frequency)
