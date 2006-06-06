@@ -87,7 +87,8 @@ double rinvtrgamma(double shape1, double scale, double shape2)
       shape2 <= 0.0)
 	error(_("invalid arguments"));
 
-  a = qgamma(unif_rand(), shape1, 1.0 / scale, 1, 0);
+  /*  a = qgamma(unif_rand(), shape1, 1.0 / scale, 1, 0); */
+  a = rgamma(shape1, 1.0 / scale);
 
   return R_pow(a, -1.0 / shape2);
 }
