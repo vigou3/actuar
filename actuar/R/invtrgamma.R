@@ -1,10 +1,6 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r}inverse transformed gamma functions. The Burr
-### distribution used in these functions has cumulative distribution
-### function
-###
-###   Pr[X <= x] = 1 - (1/(1 + (x/scale)^gamma))^shape, x > 0.
+### Definition of the {d,p,q,r}inverse transformed gamma functions.
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.

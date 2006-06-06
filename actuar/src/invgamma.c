@@ -77,5 +77,5 @@ double rinvgamma(double shape, double scale)
 	scale <= 0.0)
 	error(_("invalid arguments"));
 
-    return qgamma(unif_rand(), shape, 1.0 / scale, 1, 0);
+    return 1.0 / qgamma(unif_rand(), shape, 1.0 / scale, 1, 0);
 }

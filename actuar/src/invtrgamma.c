@@ -77,6 +77,8 @@ double qinvtrgamma(double p, double shape1, double scale, double shape2, int low
 
 double rinvtrgamma(double shape1, double scale, double shape2)
 {
+  double a;
+
   if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
 	!R_FINITE(shape2) ||
@@ -85,5 +87,7 @@ double rinvtrgamma(double shape1, double scale, double shape2)
       shape2 <= 0.0)
 	error(_("invalid arguments"));
 
-    return qgamma(unif_rand(), shape1, 1.0 / scale, 1, 0);
+  a = qgamma(unif_rand(), shape1, 1.0 / scale, 1, 0);
+
+  return R_pow(a, -1.0 / shape2);
 }
