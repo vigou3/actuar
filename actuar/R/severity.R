@@ -1,9 +1,9 @@
-severity <- function(x, byrow = TRUE, ...) UseMethod("severity")
+severity <- function(x, bycol = FALSE, ...) UseMethod("severity")
 
 
-severity.default <- function(x, byrow = TRUE, ...)
+severity.default <- function(x, bycol = FALSE, ...)
 {
-    if (byrow)
+    if (!bycol)
     {
         ncolumns <- ncol(x)
         frequencies <- array(dim=dim(x), sapply(x, length))
@@ -31,30 +31,30 @@ severity.default <- function(x, byrow = TRUE, ...)
 }
 
 
-severity.simpf <- function(x, byrow = TRUE, y.exclude = 0, ...)
+severity.simpf <- function(x, bycol = FALSE, y.exclude = 0, ...)
 {
     x <- x$data
     y <- x
     if (y.exclude %% 1 != 0 | y.exclude < 0)
-        warning("y.exclude must be a positive integer")
-    if (byrow) names.first <- list(paste("Contract", seq(length = nrow(y))), NULL)
-    else names.first <- list(NULL, paste("Year", seq(length = ncol(x) - y.exclude)))
-    
+        stop("y.exclude must be a positive integer")
+    if (!bycol) names.first <- list(unlist(dimnames(x)[1]), NULL)
+    else names.first <- list(NULL, unlist(dimnames(x)[2])[1:(ncol(x) - y.exclude)])     
     x <- x[ , seq(length = ncol(x) - y.exclude)]
-    mat.first <- NextMethod()
-    dimnames(mat.first) <- names.first
-    res <- list(mat.first = mat.first)
+    res <- NextMethod()
+    dimnames(res) <- names.first
     
     if (y.exclude > 0)
     {
-        if (byrow) names.last <- names.first
-        else names.last <- list(NULL, paste("Year", seq(ncol(y) - y.exclude + 1, ncol(y))))
+        if (!bycol) names.last <- names.first
+        else names.last <- list(NULL, unlist(dimnames(y)[2])[(ncol(y) - y.exclude + 1):(ncol(y))])
         
         x <- y[ , seq(ncol(y) - y.exclude + 1, ncol(y))]
         if (!is.matrix(x)) x <- as.matrix(x)
         mat.last <- NextMethod()
         dimnames(mat.last) <- names.last
-        res$mat.last <- mat.last       
+        res <- list(mat.first = res, mat.last = mat.last)
     }
-    res
+    print(res)
+    
 }
+

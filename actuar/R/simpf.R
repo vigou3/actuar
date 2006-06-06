@@ -134,6 +134,7 @@ simpf <- function(contracts, years, model.freq, model.sev, weights)
     ## Return individual claim amounts as a two dimension list or
     ## simple matrix, if possible.
     dim(X) <- c(contracts, years)
+    dimnames(X) <- list(paste("Contract", 1:contracts, sep = "."), paste("Year", 1:years, sep = "."))
     res <- list(data = X,
                 weights = weights,
                 model.freq = model.freq,
@@ -150,20 +151,11 @@ print.simpf <- function(x, ...)
                         paste(x$model.freq$dist1, " / ", x$model.freq$dist2, sep=""))
     dist.sev <- ifelse(identical(length(x$model.sev), as.integer(2)),
                         x$model.sev$dist1,
-                        paste(x$model.sev$dist1, " / ", x$model.sev$dist2, sep=""))
-                        
-    contracts <- seq(length = dim(x$data)[1])
-    years <- seq(length = dim(x$data)[2])
-    names <- list(paste("   Contract", format(contracts)),
-                  paste("Year", format(years)))
-                  
+                        paste(x$model.sev$dist1, " / ", x$model.sev$dist2, sep=""))              
     cat("\nPortfolio of claim amounts \n\n")
     cat("  Frequency model: ", dist.freq, "\n")
     cat("  Severity model: ", dist.sev, "\n")
     cat("\n  Number of claims per contract and per year: \n\n")
-    print(matrix(sapply(x$data, length),
-                 length(contracts),
-                 length(years),
-                 dimnames = names))
+    print(array(sapply(x$data, length),dim(x$data), dimnames = dimnames(x$data)))
     invisible(x)
 }
