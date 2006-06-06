@@ -9,41 +9,38 @@
 \title{The Loglogistic Distribution}
 \description{
   Density, distribution function, quantile function and random generation
-  for the Loglogistic distribution with parameters 'shape' and 'scale'.
-  
+  for the Loglogistic distribution with parameters \code{shape} and \code{scale}.
 }
 \usage{
-dllogis(x, shape, scale, log = FALSE)
-pllogis(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
-qllogis(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
-rllogis(n, shape, scale)
+  dllogis(x, shape, scale, log = FALSE)
+  pllogis(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
+  qllogis(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
+  rllogis(n, shape, scale)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
-  \item{n}{number of observations. If 'length(n) > 1', the length is
+  \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
   \item{shape, scale}{parameters. Must be strictly positive.}
-  \item{log, log.p}{logical; if 'TRUE', probabilities/densities p are
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
     returned as log(p).}
-  \item{lower.tail}{logical; if 'TRUE' (default), probabilities are P[X
+  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
     <= x], otherwise, Pr[X > x].} 
-  
 }
 \details{
-  The Loglogistic distribution with parameters 'shape' = a
-  and 'scale' = b has density:
+  The Loglogistic distribution with parameters \code{shape} = a
+  and \code{scale} = b has density:
   \deqn{p(x) = \frac{a (\frac{x}{b})^a}{x(1 + (\frac{x}{b})^a)^2}}{p(x)
     = a (x/b)^a /(x(1 + (x/b)^a)^2)}
   for \eqn{x > 0, a > 0} and \eqn{b > 0}.
-  
 }
 \value{
-'dllogis' gives the density, 'pllogis' gives the distribution function,
-'qllogis' gives the quantile function, and 'rllogis' generates random
+\code{dllogis} gives the density, \code{pllogis} gives the distribution function,
+\code{qllogis} gives the quantile function, and \code{rllogis} generates random
 deviates.
 
-Invalid arguments will results in return warning.
+Invalid arguments will return warning.
 }
 \note{
 Also known as Fisk distribution.

@@ -43,6 +43,7 @@
     \item \code{shape2} == \code{shape1} is a Paralogistic distribution,
     and
     \item \code{shape1} == 1 is a Loglogistic distribution.
+  }    
 }
 \value{
 \code{dburr} gives the density, \code{pburr} gives the distribution function,

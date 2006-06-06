@@ -9,42 +9,40 @@
 \title{The Inverse Pareto Distribution}
 \description{
   Density, distribution function, quantile function and random generation
-  for the Inverse Pareto distribution with parameters 'shape' and 'scale'.
-  
+  for the Inverse Pareto distribution with parameters \code{shape} and \code{scale}.
 }
 \usage{
-dinvpareto(x, shape, scale, log = FALSE)
-pinvpareto(q, shape, scale, lower.tail = TRUE,
-         log.p = FALSE)
-qinvpareto(p, shape, scale, lower.tail = TRUE,
-         log.p = FALSE)
-rinvpareto(n, shape, scale)
+  dinvpareto(x, shape, scale, log = FALSE)
+  pinvpareto(q, shape, scale, lower.tail = TRUE,
+           log.p = FALSE)
+  qinvpareto(p, shape, scale, lower.tail = TRUE,
+           log.p = FALSE)
+  rinvpareto(n, shape, scale)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
-  \item{n}{number of observations. If 'length(n) > 1', the length is
+  \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
   \item{shape, scale}{parameters. Must be strictly positive.}
-  \item{log, log.p}{logical; if 'TRUE', probabilities/densities p are
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
     returned as log(p).}
-  \item{lower.tail}{logical; if 'TRUE' (default), probabilities are P[X
+  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
     <= x], otherwise, Pr[X > x].} 
-  
 }
 \details{
-  The Inverse Pareto distribution with parameters 'shape' = a
-  and 'scale' = b has density:
+  The Inverse Pareto distribution with parameters \code{shape} = a
+  and \code{scale} = b has density:
   \deqn{p(x) = \frac{a b x^{(a - 1)}}{(x + b)^(a + 1)}}{p(x) = a b x^(a - 1) /
     (x + b)^(a + 1)}
   for \eqn{x > 0, a > 0} and \eqn{b > 0}. 
 }
 \value{
-'dinvpareto' gives the density, 'pinvpareto' gives the distribution function,
-'qinvpareto' gives the quantile function, and 'rinvpareto' generates random
+\code{dinvpareto} gives the density, \code{pinvpareto} gives the distribution function,
+\code{qinvpareto} gives the quantile function, and \code{rinvpareto} generates random
 deviates.
 
-Invalid arguments will results in return warning.
+Invalid arguments will return warning.
 }
 \references{
   Appendix A of Klugman, Panjer & Willmot, Loss Models, Second

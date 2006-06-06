@@ -9,58 +9,60 @@
 \title{The Transformed Gamma Distribution}
 \description{
   Density, distribution function, quantile function and random generation
-  for the Transformed Gamma distribution with parameters 'shape1',
-  'scale' and 'shape2'.
-  
+  for the Transformed Gamma distribution with parameters \code{shape1},
+  \code{scale} and \code{shape2}.
 }
 \usage{
-dtrgamma(x, shape1, scale, shape2, log = FALSE)
-ptrgamma(q, shape1, scale, shape2, lower.tail = TRUE,
-         log.p = FALSE)
-qtrgamma(p, shape1, scale, shape2, lower.tail = TRUE,
-         log.p = FALSE)
-rtrgamma(n, shape1, scale, shape2)
+  dtrgamma(x, shape1, scale, shape2, log = FALSE)
+  ptrgamma(q, shape1, scale, shape2, lower.tail = TRUE,
+           log.p = FALSE)
+  qtrgamma(p, shape1, scale, shape2, lower.tail = TRUE,
+           log.p = FALSE)
+  rtrgamma(n, shape1, scale, shape2)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
-  \item{n}{number of observations. If 'length(n) > 1', the length is
+  \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
   \item{shape1, scale, shape2}{parameters. Must be strictly positive.}
-  \item{log, log.p}{logical; if 'TRUE', probabilities/densities p are
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
     returned as log(p).}
-  \item{lower.tail}{logical; if 'TRUE' (default), probabilities are P[X
+  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
     <= x], otherwise, Pr[X > x].} 
-  
 }
 \details{
-  The Transformed Gamma distribution with parameters 'shape1' = a,
-  'scale' = c and shape2 = b has density:
-  \deqn{p(x) = \frac{b (\frac{x}{c})^{(a b)} e^{-(\frac{x}{c})^b}}{x
-      \Gamma(a)}}{p(x) = b (x / c)^(a b) exp(-(x / c)^b) / (x gamma(a))}
+  The Transformed Gamma distribution with parameters \code{shape1} = a,
+  \code{scale} = b and \code{shape2} = c has density:
+  \deqn{p(x) = \frac{c (\frac{x}{b})^{(a c)} e^{-(\frac{x}{b})^c}}{x
+      \Gamma(a)}}{p(x) = c (x / b)^(a c) exp(-(x / b)^c) / (x gamma(a))}
   for \eqn{x > 0, a > 0, b > 0} and
   \eqn{c > 0}. Here Gamma(a) is the function implemented by R's
-  'gamma()' and defined in its help.
+  \code{gamma()} and defined in its help.
 
-  Let Y has the Gamma probability density function with parameters
-  'shape1' and 'scale'. \deqn{Y^{\frac{1}{shape2}}}{Y^(1/shape2)}
+  Let Y be a Gamma random variable with parameters
+  \code{shape1} and \code{scale}. \deqn{Y^{\frac{1}{shape2}}}{Y^(1/shape2)}
   has the Transformed Gamma probability density function with parameters
-  'shape1', 'scale' and 'shape2'.
+  \code{shape1}, \code{scale} and \code{shape2}.
 
-  If 'shape2' = 1, it is a Gamma distribution. If 'shape2' = 'shape1' =
-  1. it is an Exponential distribution.
-
-  If 'shape1' = 1, it is a Weibull distribution.
+  The Transformed Gamma probability distribution defines a family of
+  distributions with the following special cases:
+  \itemize{
+    \item \code{shape2} == 1 is a Gamma distribution,
+    \item \code{shape2} == \code{shape1} == 1 is an Exponential
+    distribution, and
+    \item \code{shape1} == 1 is a Weibull distribution.
+  }
 }
 \value{
-'dtrgamma' gives the density, 'ptrgamma' gives the distribution function,
-'qtrgamma' gives the quantile function, and 'rtrgamma' generates random
+\code{dtrgamma} gives the density, \code{ptrgamma} gives the distribution function,
+\code{qtrgamma} gives the quantile function, and \code{rtrgamma} generates random
 deviates.
 
-Invalid arguments will results in return warning.
+Invalid arguments will return warning.
 }
 \note{
-Also known as generalized gamma distribution.
+Also known as the generalized gamma distribution.
 }
 \references{
   Appendix A of Klugman, Panjer & Willmot, Loss Models, Second

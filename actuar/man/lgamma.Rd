@@ -9,46 +9,44 @@
 \title{The Loggamma Distribution}
 \description{
   Density, distribution function, quantile function and random generation
-  for the Loggamma distribution with parameters 'shapelog' and 'ratelog'.
-  
+  for the Loggamma distribution with parameters \code{shapelog} and \code{ratelog}.
 }
 \usage{
-dlgamma(x, shapelog, ratelog, log = FALSE)
-plgamma(q, shapelog, ratelog, lower.tail = TRUE,
-         log.p = FALSE)
-qlgamma(p, shapelog, ratelog, lower.tail = TRUE,
-         log.p = FALSE)
-rlgamma(n, shapelog, ratelog)
+  dlgamma(x, shapelog, ratelog, log = FALSE)
+  plgamma(q, shapelog, ratelog, lower.tail = TRUE,
+           log.p = FALSE)
+  qlgamma(p, shapelog, ratelog, lower.tail = TRUE,
+           log.p = FALSE)
+  rlgamma(n, shapelog, ratelog)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
-  \item{n}{number of observations. If 'length(n) > 1', the length is
+  \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
   \item{shapelog, ratelog}{parameters. Must be strictly positive.}
-  \item{log, log.p}{logical; if 'TRUE', probabilities/densities p are
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
     returned as log(p).}
-  \item{lower.tail}{logical; if 'TRUE' (default), probabilities are P[X
+  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
     <= x], otherwise, Pr[X > x].} 
-  
 }
 \details{
-  The Loggamma distribution with parameters 'shapelog' = a
-  and 'ratelog' = b has density:
+  The Loggamma distribution with parameters \code{shapelog} = a
+  and \code{ratelog} = b has density:
   \deqn{p(x) = dgamma(log(x), shapelog,\frac{1.0}{ratelog})}{dgamma(log(x),
     shapelog, 1.0 / ratelog)}
   for \eqn{x > 1, a > 0} and \eqn{b > 0}. 
 
-  Let x has the Gamma probability density function with parameters
-  'shapelog' and 'ratelog'. \deqn{Y = e^X}{Y = exp(X)} has the Loggamma
-  probability density function with parameters 'shapelog' and 'ratelog'. 
+  Let X be a Gamma random variable with parameters \code{shapelog} and
+  \code{ratelog}. Then, \deqn{Y = e^X}{Y = exp(X)} has the Loggamma
+  probability density function with parameters \code{shapelog} and \code{ratelog}. 
 }
 \value{
-'dlgamma' gives the density, 'plgamma' gives the distribution function,
-'qlgamma' gives the quantile function, and 'rlgamma' generates random
+\code{dlgamma} gives the density, \code{plgamma} gives the distribution function,
+\code{qlgamma} gives the quantile function, and \code{rlgamma} generates random
 deviates.
 
-Invalid arguments will results in return warning.
+Invalid arguments will return warning.
 }
 \references{
   Appendix of Hogg & Klugman, Loss Distributions, Wiley, 1984.

@@ -8,39 +8,36 @@
 \title{The Inverse Exponential Distribution}
 \description{
   Density, distribution function, quantile function and random generation
-  for the Inverse Exponential distribution with parameter 'scale'.
-  
+  for the Inverse Exponential distribution with parameter \code{scale}. 
 }
 \usage{
-dinvexp(x, scale, log = FALSE)
-pinvexp(q, scale, lower.tail = TRUE, log.p = FALSE)
-qinvexp(p, scale, lower.tail = TRUE, log.p = FALSE)
-rinvexp(n, scale)
+  dinvexp(x, scale, log = FALSE)
+  pinvexp(q, scale, lower.tail = TRUE, log.p = FALSE)
+  qinvexp(p, scale, lower.tail = TRUE, log.p = FALSE)
+  rinvexp(n, scale)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
-  \item{n}{number of observations. If 'length(n) > 1', the length is
+  \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
   \item{scale}{parameter. Must be strictly positive.}
-  \item{log, log.p}{logical; if 'TRUE', probabilities/densities p are
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
     returned as log(p).}
-  \item{lower.tail}{logical; if 'TRUE' (default), probabilities are P[X
+  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
     <= x], otherwise, Pr[X > x].} 
-  
 }
 \details{
-  The Inverse Exponential distribution with parameter 'scale' = a has
+  The Inverse Exponential distribution with parameter \code{scale} = a has
   density: \deqn{p(x) = \frac{a e^{\frac{-a}{x}}}{x^2}}{p(x) = a exp(-a / x) /
     x^2} for \eqn{x > 0} and \eqn{a > 0}.
 }
 \value{
-'dinvexp' gives the density, 'pinvexp' gives the distribution function,
-'qinvexp' gives the quantile function, and 'rinvexp' generates random
+\code{dinvexp} gives the density, \code{pinvexp} gives the distribution function,
+\code{qinvexp} gives the quantile function, and \code{rinvexp} generates random
 deviates.
 
-Invalid arguments will results in return warning.
- 
+Invalid arguments will return warning.
 }
 \references{
   Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
