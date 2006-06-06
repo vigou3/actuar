@@ -15,9 +15,7 @@
 double dinvparalogis(double x, double shape, double scale, int give_log)
 {
 
-  double tmp1;
-  double tmp2;
-  double tmp3;
+  double tmp1, tmp2, tmp3;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -25,8 +23,7 @@ double dinvparalogis(double x, double shape, double scale, int give_log)
 	scale <= 0.0) 
 	error(_("invalid arguments"));
 
-     if (!R_FINITE(x)  ||
-	x < 0.0) 
+     if (!R_FINITE(x) || x < 0.0) 
       return R_D_d0;
 
     tmp1 = R_pow(shape, 2.0);
@@ -35,14 +32,13 @@ double dinvparalogis(double x, double shape, double scale, int give_log)
     
     return  give_log ?
 	2.0 * log(shape) + tmp1 * tmp2 - log(x) - (shape + 1.0) * log(1.0 + exp(shape * tmp2)) :
-  tmp1 * R_pow(tmp3, tmp1) / (x * R_pow(1.0 + R_pow(tmp3, shape), shape + 1.0));
+      tmp1 * R_pow(tmp3, tmp1) / (x * R_pow(1.0 + R_pow(tmp3, shape), shape + 1.0));
 
 }
 
 double pinvparalogis(double q, double shape, double scale, int lower_tail, int log_p)
 {
-  double tmp1;
-  double tmp2;
+  double tmp1, tmp2;
   
     if (!R_FINITE(shape) || 
 	!R_FINITE(scale) ||
@@ -65,9 +61,7 @@ double pinvparalogis(double q, double shape, double scale, int lower_tail, int l
 
 double qinvparalogis(double p, double shape, double scale, int lower_tail, int log_p)
 {
-  double tmp;
-  double tmp1;
-  double tmp2;
+  double tmp, tmp1, tmp2;
 
   if (!R_FINITE(shape) || 
 	!R_FINITE(scale) ||
@@ -84,7 +78,6 @@ double qinvparalogis(double p, double shape, double scale, int lower_tail, int l
   return (lower_tail ? scale * R_pow(tmp, tmp2) / R_pow(1.0 - R_pow(tmp, tmp1), tmp1) :
 	    scale * R_pow(1.0 - tmp, tmp2) / R_pow(1.0 - R_pow(1.0 - tmp, tmp1), tmp1));
 }
-
 
 double rinvparalogis(double shape, double scale)
 {

@@ -14,8 +14,7 @@
 
 double dparalogis(double x, double shape, double scale, int give_log)
 {
-  double tmp1;
-  double tmp2;
+  double tmp1, tmp2;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -23,8 +22,7 @@ double dparalogis(double x, double shape, double scale, int give_log)
 	scale <= 0.0) 
 	error(_("invalid arguments"));
 
-     if (!R_FINITE(x)  ||
-	x < 0.0) 
+     if (!R_FINITE(x) || x < 0.0) 
       return R_D_d0;
 
     tmp1 = log(x) - log(scale);
@@ -38,8 +36,7 @@ double dparalogis(double x, double shape, double scale, int give_log)
 double pparalogis(double x, double shape, double scale, int lower_tail, int log_p)
 {
 
-  double tmp1;
-  double tmp2;
+  double tmp1, tmp2;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -60,8 +57,7 @@ double pparalogis(double x, double shape, double scale, int lower_tail, int log_
 double qparalogis(double p, double shape, double scale, int lower_tail, int log_p)
 {
 
-  double tmp;
-  double tmp1;
+  double tmp, tmp1;
 
   if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||

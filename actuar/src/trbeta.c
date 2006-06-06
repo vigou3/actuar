@@ -33,7 +33,6 @@ double dtrbeta(double x, double shape1, double scale, double shape2, double shap
     tmp2 = R_pow(tmp1, shape2);
     tmp3 = tmp2 / (1 + tmp2);
     
-    /* !!! Modifier version log !!! */
     return  (give_log ?
 	     dbeta(tmp3, shape3, shape1, 1) + log(shape2) - log(scale) + (shape2 - 1.0) * (log(x) - log(scale)) + 2.0 * (-log(1.0 + exp(shape2 * (log(x) - log(scale))))) :
 	     dbeta(tmp3, shape3, shape1, 0) * shape2 * tmp2 / (scale * tmp1 * R_pow_di(1.0 + tmp2, 2)));

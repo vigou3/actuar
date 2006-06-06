@@ -23,8 +23,7 @@ double dinvweibull(double x, double scale, double shape, int give_log)
 	shape <= 0.0) 
 	error(_("invalid arguments"));
 
-      if (!R_FINITE(x)  ||
-	x < 0.0) 
+    if (!R_FINITE(x) || x < 0.0) 
       return R_D_d0;
 
     tmp = R_pow(scale / x, shape);
@@ -55,8 +54,7 @@ double pinvweibull(double q, double scale, double shape, int lower_tail, int log
 
 double qinvweibull(double p, double scale, double shape, int lower_tail, int log_p)
 {
-  double tmp;
-  double tmp1;
+  double tmp, tmp1;
 
   if (!R_FINITE(scale) || 
 	!R_FINITE(shape) ||

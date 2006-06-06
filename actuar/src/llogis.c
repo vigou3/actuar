@@ -14,8 +14,7 @@
 
 double dllogis(double x, double shape, double scale, int give_log)
 {
-  double tmp1;
-  double tmp2;
+  double tmp1, tmp2;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -23,8 +22,7 @@ double dllogis(double x, double shape, double scale, int give_log)
 	scale <= 0.0) 
 	error(_("invalid arguments"));
 
-     if (!R_FINITE(x)  ||
-	x < 0.0) 
+     if (!R_FINITE(x) || x < 0.0) 
       return R_D_d0;
 
     tmp1 = shape * (log(x) - log(scale));
@@ -38,8 +36,7 @@ double dllogis(double x, double shape, double scale, int give_log)
 double pllogis(double q, double shape, double scale, int lower_tail, int log_p)
 {
 
-  double tmp1;
-  double tmp2;
+  double tmp1, tmp2;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -62,8 +59,7 @@ double pllogis(double q, double shape, double scale, int lower_tail, int log_p)
 
 double qllogis(double p, double shape, double scale, int lower_tail, int log_p)
 {
-  double tmp;
-  double tmp1;
+  double tmp, tmp1;
 
   if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -78,7 +74,6 @@ double qllogis(double p, double shape, double scale, int lower_tail, int log_p)
     return (lower_tail ? scale * R_pow(tmp / (1.0 - tmp), tmp1) :
 	    scale * R_pow((1.0 - tmp) / tmp, tmp1));
 }
-
 
 double rllogis(double shape, double scale)
 {	

@@ -22,8 +22,7 @@ double dinvgamma(double x, double shape, double scale, int give_log)
 	scale <= 0.0) 
 	error(_("invalid arguments"));
 
-     if (!R_FINITE(x)  ||
-	x < 0.0) 
+     if (!R_FINITE(x) || x < 0.0) 
       return R_D_d0;
 
 	tmp = 1.0 / x;

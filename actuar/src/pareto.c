@@ -20,8 +20,7 @@ double dpareto(double x, double shape, double scale, int give_log)
 	scale <= 0.0) 
 	error(_("invalid arguments"));
 
-    if (!R_FINITE(x)  ||
-	x < 0.0) 
+    if (!R_FINITE(x) || x < 0.0) 
       return R_D_d0;
     
     return (give_log ?
@@ -50,8 +49,7 @@ double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
 
 double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
 {
-  double tmp;
-  double tmp1;
+  double tmp, tmp1;
 
   if (!R_FINITE(shape) || 
 	!R_FINITE(scale) ||

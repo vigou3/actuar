@@ -24,8 +24,7 @@ double dinvtrgamma(double x, double shape1, double scale, double shape2, int giv
 	shape2 <= 0.0) 
 	error(_("invalid arguments"));
 
-      if (!R_FINITE(x)  ||
-	x < 0.0) 
+      if (!R_FINITE(x) || x < 0.0) 
       return R_D_d0;
 
 	tmp = R_pow(1.0 / x, shape2);
@@ -84,7 +83,7 @@ double rinvtrgamma(double shape1, double scale, double shape2)
 	!R_FINITE(shape2) ||
 	shape1 <= 0.0 || 
 	scale <= 0.0 ||
-      shape2 <= 0.0)
+        shape2 <= 0.0)
 	error(_("invalid arguments"));
 
   /*  a = qgamma(unif_rand(), shape1, 1.0 / scale, 1, 0); */

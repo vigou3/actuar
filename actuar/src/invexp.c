@@ -17,12 +17,10 @@ double dinvexp(double x, double scale, int give_log)
 
   double tmp;
 
-    if (!R_FINITE(scale) ||
-	scale <= 0.0) 
+    if (!R_FINITE(scale) || scale <= 0.0) 
 	error(_("invalid arguments"));
 
-     if (!R_FINITE(x)  ||
-	x < 0.0) 
+     if (!R_FINITE(x) || x < 0.0) 
       return R_D_d0;
 
     tmp = scale / x;
@@ -30,15 +28,13 @@ double dinvexp(double x, double scale, int give_log)
     return  give_log ?
 	log(scale) - tmp - 2.0 * log (x) :
 	scale * exp(-tmp) / R_pow(x, 2.0);
-    
 }
 
 double pinvexp(double q, double scale, int lower_tail, int log_p)
 {
   double tmp;
   
-    if (!R_FINITE(scale) ||
-	scale <= 0.0)
+    if (!R_FINITE(scale) || scale <= 0.0)
 	error(_("invalid arguments"));
 
     if (q <= 0)
@@ -54,8 +50,7 @@ double qinvexp(double p, double scale, int lower_tail, int log_p)
 {
   double tmp;
 
-  if (!R_FINITE(scale) || 
-	scale <= 0.0)
+  if (!R_FINITE(scale) || scale <= 0.0)
 	error(_("invalid arguments"));
 
   R_Q_P01_boundaries(p, 0, R_PosInf);
@@ -68,8 +63,7 @@ double qinvexp(double p, double scale, int lower_tail, int log_p)
 
 double rinvexp(double scale)
 {
-    if (!R_FINITE(scale) ||
-	scale <= 0.0)
+    if (!R_FINITE(scale) || scale <= 0.0)
 	error(_("invalid arguments"));
 
     return scale / log(1.0 / unif_rand());
