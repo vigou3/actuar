@@ -91,7 +91,7 @@ double rtrgamma(double shape1, double scale, double shape2)
 	shape2 <= 0.0)
 	error(_("invalid arguments"));
 	
-    a = unif_rand();
+    a = rgamma(shape1, 1.0 / scale);
 
-    return R_pow(qgamma(a, shape1, 1.0 / scale, 1, 0), 1.0 / shape2);
+    return R_pow(a, 1.0 / shape2);
 }

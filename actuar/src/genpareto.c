@@ -91,7 +91,7 @@ double rgenpareto(double shape1, double scale, double shape2)
 	shape2 <= 0.0)
 	error(_("invalid arguments"));
 
-    a = unif_rand();
+    a = rbeta(shape2, shape1);
 
-    return scale * ((qbeta(a, shape2, shape1, 1, 0)) / (1.0 - qbeta(a, shape2, shape1, 1, 0)));
+    return scale * a / (1.0 - a);
 }
