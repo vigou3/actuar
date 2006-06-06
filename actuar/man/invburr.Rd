@@ -46,7 +46,7 @@
 }
 \value{
 \code{dinvburr} gives the density, \code{invburr} gives the distribution function,
-\code{qinvgamma} gives the quantile function, and \code{rinvburr} generates random
+\code{qinvburr} gives the quantile function, and \code{rinvburr} generates random
 deviates.
 
 Invalid arguments will return warning.
