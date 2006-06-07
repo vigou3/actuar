@@ -1,47 +1,52 @@
 \name{aggregate.simpf}
 \alias{aggregate.simpf}
+\alias{frequency.simpf}
 \title{Compute Summary Statistics of a Portfolio}
 \description{
-  \code{'aggregate'} method for class \code{"simpf"}. Splits portfolio
-  data into subsets, computes summary statistics for each. Results are
-  most commonly returned in a \code{matrix}. 
+  \code{aggregate} method for class \code{"simpf"}. Splits portfolio
+  data into subsets, computes summary statistics for each.
+
+  \code{frequency} method for class \code{"simpf"}. Computes the
+  frequency of claims for subsets of portfolio data.
 }
 \usage{
-\method{aggregate}{simpf}(x, by.contract = TRUE, by.year = TRUE,
+\method{aggregate}{simpf}(x, by = c("contract", "year"),
           FUN = sum, \dots)
+
+\method{frequency}{simpf}(x, by = c("contract"' "year"), \dots)
 }
 \arguments{
-  \item{x}{a \code{"simpf"} object, typically created by \code{\link{simpf}}}
-  \item{by.contract}{boolean, whether to aggregate data by contract or not}
-  \item{by.year}{boolean, whether to aggregate data by year or not}
-  \item{FUN}{a function to apply to data subsets}
+  \item{x}{a \code{simpf} object, typically created by \code{\link{simpf}}}
+  \item{by}{vector, indicates how data should be aggregated}
+  \item{FUN}{the function to be applied to data subsets}
   \item{\dots}{potential further arguments required by generic.}
 
 }
 \details{
-  This function is a method for the generic function aggregate() of
-  package \code{stats}. It computes summary statistics for the
-  aggregate losses of a simulated portfolio, created by function
-  simpf(). It is theoretically possible to use any scalar function as a
-  FUN argument, but functions for summary statistics make more sense in
-  the case of a \code{simpf} object. 
+  \code{aggregate.simpf} and \code{frequency.simpf} are respectively
+  methods for functions \code{aggregate} and \code{frequency}, both from
+  package \code{stats}. Both methods offer the possibility to aggregate
+  the claims with respect to the contracts, the years, both or neither
+  through argument \code{by}.
+  Using \code{frequency.simpf} is equivalent to using
+  \code{aggregate.simpf} with argument \code{FUN} equal to
+  \code{length}.   
 }
 \value{
   The object returned depends on the way data is aggregated with respect
   to the call:
 
-  If both \code{by.contract} and \code{by.year} are \code{TRUE}, a matrix will
+  If data is aggregated by both contract and year, a matrix will
   be returned with FUN applied to all losses vectors in all years and in
   all contracts. Therefore, the dimensions of this resulting matrix will
   be the same as the dimensions of the data matrix listed in the
-  \code{simpf} object.
+  \code{simpf} object, as long as order is respected in the
+  \sQuote{by} vector. Otherwise, the resulting matrix will be transposed.   
 
-  If \code{by.contract} only is \code{TRUE}, the summary statistic is applied
-  to each contract, for all years. If \code{by.year} only is \code{TRUE}, the
-  summary statistic is applied to each year, for all
-  contracts. Therefore, if either \code{by.contract} \emph{only} or
-  \code{by.year} \emph{only} is \code{TRUE}, the object returned will be
-  respectively a column vector or a row vector, both of class \code{matrix}.   
+  If the argument to \code{by} is of length 1, function \code{FUN} will
+  be applied to either each contract for all years or to each year for
+  all contracts. Therefore, the resulting object will be a vector of
+  length equal to either the number of years or the number of contracts.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
@@ -63,6 +68,7 @@ modelsev<-list(dist1 = "lnorm",
 data(hachemeister)
 weights <- hachemeister$weights/mean(hachemeister$weights)
 x <- simpf(5, 12, modelfreq, modelsev, weights)
-aggregate(x, by.contract = FALSE, FUN = mean)
+aggregate(x, by = "contracts", FUN = mean)
+frequency(x)
 }
 \keyword{models}

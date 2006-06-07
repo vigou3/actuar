@@ -1,5 +1,7 @@
 simpf <- function(contracts, years, model.freq, model.sev, weights)
 {
+    freq <- model.freq
+    sev <- model.sev
     ## Assign a matrix of weights if none are given in argument.
     if (missing(weights))
         weights <- matrix(1, contracts, years)
@@ -137,25 +139,32 @@ simpf <- function(contracts, years, model.freq, model.sev, weights)
     dimnames(X) <- list(paste("Contract", 1:contracts, sep = "."), paste("Year", 1:years, sep = "."))
     res <- list(data = X,
                 weights = weights,
-                model.freq = model.freq,
-                model.sev = model.sev)
+                freq = freq,
+                sev = sev)
     class(res) <- "simpf"
     res
 }
 
-
 print.simpf <- function(x, ...)
 {
-    dist.freq <- ifelse(identical(length(x$model.freq), as.integer(2)),
-                        x$model.freq$dist1,
-                        paste(x$model.freq$dist1, " / ", x$model.freq$dist2, sep=""))
-    dist.sev <- ifelse(identical(length(x$model.sev), as.integer(2)),
-                        x$model.sev$dist1,
-                        paste(x$model.sev$dist1, " / ", x$model.sev$dist2, sep=""))              
+    freq1 <- paste(x$freq$dist1, "(",
+                   paste(as.character(x$freq$par1), collapse = ", "), ")", sep = "")
+    if (!is.null(x$freq$dist2))
+        freq2 <- paste("/ ",x$freq$dist2, "(",
+                       paste(as.character(x$freq$par2), collapse = ", "), ")", sep = "")
+    else freq2 <- NULL
+
+    
+    sev1 <- paste(x$sev$dist1, "(", paste(as.character(x$sev$par1), collapse = ", "), ")", sep = "")
+    if (!is.null(x$sev$dist2))
+        sev2 <- paste("/ ",x$sev$dist2, "(", paste(as.character(x$sev$par2), collapse = ", "), ")", sep = "")
+    else sev2 <- NULL
+
+    
     cat("\nPortfolio of claim amounts \n\n")
-    cat("  Frequency model: ", dist.freq, "\n")
-    cat("  Severity model: ", dist.sev, "\n")
+    cat("  Frequency Model: ", freq1, freq2, "\n")
+    cat("  Severity Model: ", sev1, sev2, "\n")
     cat("\n  Number of claims per contract and per year: \n\n")
     print(array(sapply(x$data, length),dim(x$data), dimnames = dimnames(x$data)))
-    invisible(x)
+    invisible(x)   
 }

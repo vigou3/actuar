@@ -53,7 +53,9 @@ simpf(contracts, years, model.freq, model.sev, weights)
 }
 \value{
   Returns an object of \code{\link[base]{class}}
-  \code{"simpf"}. Function \code{\link{summary.simpf}} can be used to display detailed
+  \code{"simpf"}. A \code{print} method for this class displays the models used in the
+  simulation as well as the frequency of claims for each year and
+  contract. Function \code{\link{summary.simpf}} can be used to display detailed
   information on individual claim amounts.
 
   An object of class \code{"simpf"} is a list containing the following
@@ -74,7 +76,10 @@ simpf(contracts, years, model.freq, model.sev, weights)
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Sébastien Auclair
 }
-\seealso{\code{\link{rearrangepf}}}
+\seealso{
+  \code{\link{rearrangepf}} \code{\link{severity}}
+  \code{\link{aggregate.simpf}} \code{\link{frequency.simpf}} 
+}
 \examples{
 ## Portfolio where both frequency and severity models are mixed.
 modelfreq <- list(dist1 = "pois",
