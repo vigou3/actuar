@@ -29,3 +29,9 @@
 	if(p == 1)					\
 	    return lower_tail ? _RIGHT_ : _LEFT_;	\
     }
+
+
+#ifndef M_PI
+#define M_PI		3.141592653589793238462643383280	/* pi */
+#endif
+

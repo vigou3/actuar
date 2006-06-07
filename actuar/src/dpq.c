@@ -305,6 +305,9 @@ SEXP do_dpq2(int code, SEXP args)
     case 25:  return DPQ2_1(args, dlgamma);
     case 26:  return DPQ2_2(args, plgamma);
     case 27:  return DPQ2_2(args, qlgamma);
+    case 28:  return DPQ2_1(args, dinvgauss);
+    case 29:  return DPQ2_2(args, pinvgauss);
+    case 30:  return DPQ2_2(args, qinvgauss);
     default:
 	error(_("internal error in do_dpq2"));
     }
