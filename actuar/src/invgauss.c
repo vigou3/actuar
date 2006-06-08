@@ -54,31 +54,41 @@ double pinvgauss(double q, double mean, double scale, int lower_tail, int log_p)
 	      1.0 - (pnorm(tmp * R_pow(tmp2, 0.5), 0, 1, 1, 0) + exp(2.0 * scale / mean) * pnorm(-tmp1 * R_pow(tmp2, 0.5), 0, 1, 1, 0)));
 }
 
-double qinvgauss(double p, double shape, double scale, int lower_tail, int log_p)
+double qinvgauss(double p, double mean, double scale, int lower_tail, int log_p)
 {
-  double tmp;
+  double tmp, Y, r1, test;
 
-  if (!R_FINITE(shape) || 
+  if (!R_FINITE(mean) || 
 	!R_FINITE(scale) ||
-	scale <= 0.0 || 
-	shape <= 0.0)
+	mean <= 0.0 || 
+	scale <= 0.0)
 	error(_("invalid arguments"));
 
   R_Q_P01_boundaries(p, 0, R_PosInf);
   tmp = R_D_qIv(p);
 
-    return (lower_tail ? 1.0 / qgamma(tmp, shape, 1.0 / scale, 0, 0) :
-	    1.0 / qgamma(tmp, shape, 1.0 / scale, 1, 1));
+  Y = qchisq(tmp,1, 1, 0); 
+  r1 = mean * (2.0 * scale + mean * Y - R_pow(4.0 * scale * mean * Y + mean * mean * Y * Y, 0.5) / (2.0 * scale));
+  test = mean / (mean + r1);
+
+    return (lower_tail ? r1 :
+	    1.0 - r1);
 }
 
-double rinvgauss(double shape, double scale)
+double rinvgauss(double mean, double scale)
 {
-    if (!R_FINITE(shape) ||
+
+  double a, r1, test;
+
+    if (!R_FINITE(mean) ||
 	!R_FINITE(scale) ||
-	shape <= 0.0 ||
+	mean <= 0.0 ||
 	scale <= 0.0)
 	error(_("invalid arguments"));
 
-    /*    return 1.0 / qgamma(unif_rand(), shape, 1.0 / scale, 1, 0); */
-    return 1.0 / rgamma(shape, 1.0 / scale);
+    a = rchisq(1);
+    r1 = mean + (mean / (2.0 * scale)) * (mean * a - R_pow(mean * a * (4.0 * scale + mean * a), 0.5));
+    test = rbinom(1, mean / (mean + r1));
+
+    return  test * r1 + (1.0 - test) * mean * (mean / r1);
 }
