@@ -13,7 +13,6 @@ export(## Credibility theory
        dparalogis, pparalogis, qparalogis, rparalogis,
        dinvgamma, pinvgamma, qinvgamma, rinvgamma,
        dlgamma, plgamma, qlgamma, rlgamma,
-       dinvgauss, pinvgauss, qinvgauss, rinvgauss,
        dinvparalogis, pinvparalogis, qinvparalogis, rinvparalogis,
        dpareto, ppareto, qpareto, rpareto,
        dpareto2, ppareto2, qpareto2, rpareto2, # aliases

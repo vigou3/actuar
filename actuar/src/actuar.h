@@ -64,11 +64,6 @@ double ppareto1(double q, double shape, double scale, int lower_tail, int log_p)
 double qpareto1(double p, double shape, double scale, int lower_tail, int log_p);
 double rpareto1(double shape, double scale);
 
-double dinvgauss(double x, double mean, double scale, int give_log);
-double pinvgauss(double q, double mean, double scale, int lower_tail, int log_p);
-double qinvgauss(double p, double mean, double scale, int lower_tail, int log_p);
-double rinvgauss(double mean, double scale);
-
 /*   Three parameter distributions */
 double dburr(double x, double shape1, double scale, double shape2, int give_log);
 double pburr(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
