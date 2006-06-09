@@ -63,11 +63,15 @@ double qlgamma(double p, double shapelog, double ratelog, int lower_tail, int lo
 
 double rlgamma(double shapelog, double ratelog)
 {
+  double a;
+
     if (!R_FINITE(shapelog) || 
 	!R_FINITE(ratelog) ||
 	shapelog <= 0.0 || 
 	ratelog <= 0.0)
 	error(_("invalid arguments"));
 
-    return exp(unif_rand());
+    a = rgamma(shapelog, 1.0 / ratelog);
+
+    return exp(a);
 }
