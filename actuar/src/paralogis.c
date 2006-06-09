@@ -83,7 +83,7 @@ double rparalogis(double shape, double scale)
 	scale <= 0.0)
 	error(_("invalid arguments"));
 
-    a =  unif_rand();
+    a =  R_pow(unif_rand(), 1.0 / shape);
 	
-    return scale * R_pow(a / (1.0 - a), 1.0 / shape);
+    return scale * R_pow((1.0 - a) / a, 1.0 / shape);
 }
