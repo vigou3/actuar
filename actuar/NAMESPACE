@@ -28,7 +28,9 @@ export(## Credibility theory
        dinvtrgamma, pinvtrgamma, qinvtrgamma, rinvtrgamma,
        ## Four parameter distributions
        dtrbeta, ptrbeta, qtrbeta, rtrbeta,
-       dpearson6, ppearson6, qpearson6, rpearson6 #aliases
+       dpearson6, ppearson6, qpearson6, rpearson6, #aliases
+       ## ACT-21412
+       histog, ogive
        )
 ### Imports
 importFrom(stats, aggregate, frequency)
@@ -44,3 +46,5 @@ S3method(aggregate, simpf)
 S3method(severity, default)
 S3method(severity, simpf)
 S3method(frequency, simpf)
+S3method(plot, ogive)
+S3method(plot, histog)
