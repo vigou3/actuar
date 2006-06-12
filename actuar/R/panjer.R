@@ -1,5 +1,6 @@
 panjer <- function(fx, freq.dist = c("poisson", "negative binomial", "binomial","geometric","logarithmic"), par, p0, TOL=1E-8, echo=FALSE)
 {
+    call <- match.call()
     ## Express TOL as a value close to 1.
     TOL <- 1 - TOL
 
@@ -129,5 +130,8 @@ panjer <- function(fx, freq.dist = c("poisson", "negative binomial", "binomial",
                 break
         }
     }
-    fs
+    res <- list(fs = fs, Fs = cumsum(fs), X = 1:length(fs), call = call, FUN = approxfun(cumsum(fs)))
+    class(res) <- "AggregateDist"
+    res
 }
+
