@@ -15,7 +15,7 @@ ogive <- function(data, lines = FALSE, xlim = NULL, ylim = NULL, xlab = "group b
 }
 
 
-plot.ogive <- function (data, xlim, ylim, xlab, ylab, col)
+plot.ogive <- function (data, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "F(x)", col = 1, ...)
 {
   cj <- data$cj
   nj <- data$nj
@@ -27,11 +27,11 @@ plot.ogive <- function (data, xlim, ylim, xlab, ylab, col)
   
   p<-sum(is.na(cj*0))
   if(p >= 1){
-	warning("Group boundaries contain Inf")
+	warning("Inf in group boundaries")
       }
 }
 
-lines.ogive <- function (data, xlim, ylim, col)
+lines.ogive <- function (data, xlim = NULL, ylim = NULL, col = 1, ...)
 {
   cj <- data$cj
   nj <- data$nj

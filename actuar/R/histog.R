@@ -9,7 +9,7 @@ histog <- function(data, xlim = NULL, ylim = NULL, xlab = "group boundaries", yl
 }
 
 
-plot.histog <- function (data, xlim, ylim, xlab, ylab)
+plot.histog <- function (data, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "f(x)", ...)
 {
   cj <- data$cj
   nj <- data$nj
@@ -23,7 +23,7 @@ plot.histog <- function (data, xlim, ylim, xlab, ylab)
   
   p<-sum(is.na(cj*0))
   if(p >= 1){
-	warning("Group boundaries contain Inf")
+	warning("Inf in group boundaries")
      } 
 }
   
