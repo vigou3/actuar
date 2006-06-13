@@ -12,6 +12,7 @@ panjer <- function(fx, freq.dist = c("poisson", "negative binomial", "binomial",
     ## b, 1) families of distributions. Assign parameters 'a' and 'b'
     ## depending of the chosen distribution and compute f_S(0) in
     ## every case, and p1 if p0 is specified in argument.
+    ## every case, and p1 if p0 is specified in argument.
     dist <- match.arg(freq.dist)
     if (dist == "geometric")
     {
