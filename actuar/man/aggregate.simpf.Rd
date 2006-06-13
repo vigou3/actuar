@@ -13,7 +13,7 @@
 \method{aggregate}{simpf}(x, by = c("contract", "year"),
           FUN = sum, \dots)
 
-\method{frequency}{simpf}(x, by = c("contract"' "year"), \dots)
+\method{frequency}{simpf}(x, by = c("contract", "year"), \dots)
 }
 \arguments{
   \item{x}{a \code{simpf} object, typically created by \code{\link{simpf}}}

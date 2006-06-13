@@ -5,7 +5,7 @@ useDynLib(actuar, .registration = TRUE)
 export(## Credibility theory
        bstraub, rearrangepf, simpf, severity,
        ## Risk theory
-       panjer,
+       panjer, exact, np2, 
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp,
        ## Two parameter distributions
@@ -33,7 +33,7 @@ export(## Credibility theory
        histog, ogive
        )
 ### Imports
-importFrom(stats, aggregate, frequency)
+importFrom(stats, aggregate, frequency, quantile)
 
 ### Methods
 S3method(print, bstraub)
@@ -49,3 +49,6 @@ S3method(frequency, simpf)
 S3method(plot, ogive)
 S3method(plot, histog)
 S3method(lines, ogive)
+S3method(quantile, AggregateDist)
+S3method(print, AggregateDist)
+S3method(mean, AggregateDist)
