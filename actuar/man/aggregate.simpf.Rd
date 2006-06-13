@@ -68,7 +68,7 @@ modelsev<-list(dist1 = "lnorm",
 data(hachemeister)
 weights <- hachemeister$weights/mean(hachemeister$weights)
 x <- simpf(5, 12, modelfreq, modelsev, weights)
-aggregate(x, by = "contracts", FUN = mean)
+aggregate(x, by = "contract", FUN = mean)
 frequency(x)
 }
 \keyword{models}
