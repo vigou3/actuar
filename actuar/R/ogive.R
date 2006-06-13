@@ -2,23 +2,23 @@
 ###
 ### Ogive pour données groupées
 
-ogive <- function(data, lines = FALSE, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "F(x)", col = 1)
+ogive <- function(x, lines = FALSE, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "F(x)", col = 1)
 {
-  class(data) <- "ogive"
+  class(x) <- "ogive"
   
   if (lines == FALSE){
-  plot(data, xlim, ylim, xlab, ylab, col)
+  plot(x, xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, col = col)
   }
   else{
-  lines(data, xlim = xlim, ylim = ylim, col = col)
+  lines(x, xlim = xlim, ylim = ylim, col = col)
   }
 }
 
 
-plot.ogive <- function (data, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "F(x)", col = 1, ...)
+plot.ogive <- function (x, y = NULL, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "F(x)", col = 1, ...)
 {
-  cj <- data$cj
-  nj <- data$nj
+  cj <- x$cj
+  nj <- x$nj
 
   Fnt <- approxfun(cj, cumsum(nj) / sum(nj),
                  yleft = 0, yright = 1, method = "linear")
@@ -31,10 +31,10 @@ plot.ogive <- function (data, xlim = NULL, ylim = NULL, xlab = "group boundaries
       }
 }
 
-lines.ogive <- function (data, xlim = NULL, ylim = NULL, col = 1, ...)
+lines.ogive <- function (x, xlim = NULL, ylim = NULL, col = 1, ...)
 {
-  cj <- data$cj
-  nj <- data$nj
+  cj <- x$cj
+  nj <- x$nj
   
   Fnt <- approxfun(cj, cumsum(nj) / sum(nj),
                  yleft = 0, yright = 1, method = "linear")

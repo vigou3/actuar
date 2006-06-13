@@ -1,4 +1,5 @@
 \name{ogive}
+\alias{ogive}
 \alias{Ogive}
 \alias{plot.ogive}
 \alias{lines.ogive}
@@ -9,13 +10,14 @@
   straight lines. 
 }
 \usage{
-ogive(data, lines = FALSE, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "F(x)", col = 1)
+ogive(x, lines = FALSE, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "F(x)", col = 1)
+
+\method{plot}{ogive}(x, y = NULL, xlim = NULL, ylim = NULL, xlab =
+"group boundaries", ylab = "F(x)", col = 1, ...)
+\method{lines}{ogive}(x, xlim = NULL, ylim = NULL, col = 1, ...)
 }
-\method{plot}{ogive}(data, xlim = NULL, ylim = NULL, xlab = "group
-boundaries", ylab = "F(x)", col = 1)
-\method{lines}{ogive}(data, xlim = NULL, ylim = NULL, col = 1)
 \arguments{
-  \item{data}{grouped data with finite group boundaries.}
+  \item{x, y}{grouped data with finite group boundaries.}
   \item{lines}{logical; if \code{FALSE}, generic function \code{plot} is
   called, if \code{TRUE}, generic function \code{lines} is called.}
   \item{xlim}{the x limits (x1,x2) of the plot.  Note that \code{x1 > x2} is
@@ -43,10 +45,6 @@ boundaries", ylab = "F(x)", col = 1)
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Mathieu Pigeon
-}
-\seealso{
-  \code{\link{histog}}
-} 
 }
 \examples{
 ogive(data1, lines = FALSE, xlim = c(0,1000000))

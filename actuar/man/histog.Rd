@@ -1,19 +1,21 @@
 \name{histog}
+\alias{histog}
 \alias{Histog}
 \alias{plot.histog}
 \title{Empirical density function for grouped data}
 \description{
   For grouped data, the histogram is obtained by differentiating the
-  ogive (see \link{ogive}). 
+  ogive (see ogive). 
 }
 \usage{
-histog(data, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab =
+histog(x, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab =
 "f(x)")
+
+\method{plot}{histog}(x, y = NULL, xlim = NULL, ylim = NULL, xlab =
+"group boundaries", ylab = "f(x)", ...)
 }
-\method{plot}{histog}(data, xlim = NULL, ylim = NULL, xlab = "group
-boundaries", ylab = "f(x)")
 \arguments{
-  \item{data}{grouped data with finite group boundaries.}
+  \item{x, y}{grouped data with finite group boundaries.}
   \item{xlim}{the x limits (x1,x2) of the plot.  Note that \code{x1 > x2} is
           allowed and leads to a "reversed axis".}
   \item{ylim}{the y limits of the plot.}
@@ -36,10 +38,6 @@ boundaries", ylab = "f(x)")
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Mathieu Pigeon
-}
-\seealso{
-  \code{\link{ogive}}
-} 
 }
 \examples{
 histog(data1, xlim = c(0,1000000))

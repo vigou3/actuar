@@ -2,17 +2,17 @@
 ###
 ### Histogramme pour données groupées
 
-histog <- function(data, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "f(x)")
+histog <- function(x, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "f(x)")
 {
-  class(data) <- "histog"
-  plot(data, xlim, ylim, xlab, ylab)
+  class(x) <- "histog"
+  plot(x, xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab)
 }
 
 
-plot.histog <- function (data, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "f(x)", ...)
+plot.histog <- function (x, y = NULL, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "f(x)", ...)
 {
-  cj <- data$cj
-  nj <- data$nj
+  cj <- x$cj
+  nj <- x$nj
 
   fnt <- approxfun(cj, c(0, nj[-1] / (sum(nj) * diff(cj))),
                  yleft = 0, yright = 0, f = 1, method = "constant")
