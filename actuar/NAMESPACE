@@ -30,7 +30,7 @@ export(## Credibility theory
        dtrbeta, ptrbeta, qtrbeta, rtrbeta,
        dpearson6, ppearson6, qpearson6, rpearson6, #aliases
        ## ACT-21412
-       histog, ogive
+       grouped
        )
 ### Imports
 importFrom(stats, aggregate, frequency, quantile)
@@ -46,9 +46,8 @@ S3method(aggregate, simpf)
 S3method(severity, default)
 S3method(severity, simpf)
 S3method(frequency, simpf)
-S3method(plot, ogive)
-S3method(plot, histog)
-S3method(lines, ogive)
+S3method(plot, groupedData)
+S3method(hist, groupedData)
 S3method(quantile, AggregateDist)
 S3method(print, AggregateDist)
 S3method(mean, AggregateDist)
