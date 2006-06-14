@@ -1,1 +1,0 @@
-PATH=C:\Docume~1\lppou\Perl\bin;C:\Docume~1\lppou\R\tools\bin;C:\Docume~1\lppou\MinGW\bin;C:\texmf\miktex\bin;C:\Documents and Settings\lppou\R\R-2.3.0\bin;C:\Program Files\SSH Communications Security\SSH Secure Shell;
