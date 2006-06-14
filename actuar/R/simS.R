@@ -6,11 +6,9 @@ simS <- function(x, model.freq, model.sev)
 
     rsev <- match.fun(paste("r", model.sev$dist, sep=""))
     formals(rsev)[names(model.sev$par)] <- model.sev$par
-    X <- sapply(sapply(N, rsev), sum)
+    X <- sapply(sapply(N, rsev),sum)
     X
 }
-
-
 
 
     

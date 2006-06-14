@@ -24,7 +24,7 @@ simAD <- function(method, model.freq, model.sev, moments, h, p0, TOL = 1e-06, ..
             formals(dsev)[names(model.sev$par)] <- model.sev$par
             fx <- dsev(seq(0, qsev(), by = h))
             
-            if (method = "recursive")
+            if (method == "recursive")
                 res <- panjer(fx, model.freq$dist, model.freq$par, p0, TOL)
             
             if (method == "exact")
@@ -37,6 +37,9 @@ simAD <- function(method, model.freq, model.sev, moments, h, p0, TOL = 1e-06, ..
                 pn <- dfreq(seq(0, qfreq()))
                 res <- exact(fx, pn)
             }
+        }
+    }
+}
             
                 
                 

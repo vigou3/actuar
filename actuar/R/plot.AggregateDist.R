@@ -1,4 +1,4 @@
-plot.AggregateDist <- function(x)
+plot.AggregateDist <- function(x, ...)
 {
     
     layout(matrix(c(1,2,3,3), 2, 2, byrow = TRUE))

@@ -5,7 +5,7 @@ useDynLib(actuar, .registration = TRUE)
 export(## Credibility theory
        bstraub, rearrangepf, simpf, severity,
        ## Risk theory
-       panjer, exact, np2, 
+       panjer, exact, np2, exact, normal, simS, simAD,
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp,
        ## Two parameter distributions
@@ -34,6 +34,7 @@ export(## Credibility theory
        )
 ### Imports
 importFrom(stats, aggregate, frequency, quantile)
+importFrom(graphics, plot)
 
 ### Methods
 S3method(print, bstraub)
@@ -51,3 +52,4 @@ S3method(hist, groupedData)
 S3method(quantile, AggregateDist)
 S3method(print, AggregateDist)
 S3method(mean, AggregateDist)
+S3method(plot, AggregateDist)

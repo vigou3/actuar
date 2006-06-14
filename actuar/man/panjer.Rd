@@ -6,8 +6,8 @@
   probability function of a portfolio.
 }
 \usage{
-panjer(fx, freq.dist = c("poisson", "negative binomial", "binomial",
-"geometric", "logarithmic"),par, p0, TOL = 1e-08, echo= FALSE)
+panjer(fx, freq.dist = c("pois", "nbinom", "binom",
+"geom", "logarithmic"),par, p0, TOL = 1e-08, echo= FALSE)
 }
 
 \arguments{
@@ -52,13 +52,13 @@ panjer(fx, freq.dist = c("poisson", "negative binomial", "binomial",
 
 \examples{
 ### (a,b,0) class with the binomial distribution
-(a <- panjer(fx=rep(0.5,2), freq.dist="bin",par=list(size=3, prob=0.5),echo=TRUE))
-sum(a)  
+(a <- panjer(fx=rep(0.5,2), freq.dist="binom",par=list(size=3, prob=0.5),echo=TRUE))
+ 
 
 ### Example 6.18 of "Loss Models" (Second Edition).
 ### (a,b,1) class with the Extended Truncated Negative Binomial distribution.  
 (a <-
-panjer(fx=c(0.3, 0.5, 0.2), "negative bin", par=list(size=0.2, prob=0.25), p0=0, TOL=1E-5, echo=TRUE))
+panjer(fx=c(0.3, 0.5, 0.2), "nbinom", par=list(size=0.2, prob=0.25), p0=0, TOL=1E-5, echo=TRUE))
 plot(a)
 }
 \keyword{distribution}
