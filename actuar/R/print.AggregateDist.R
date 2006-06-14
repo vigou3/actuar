@@ -1,6 +1,7 @@
 print.AggregateDist <- function(x, ...)
 {
-    cat("\nEmpirical CDF for the aggregate claims\n\n")
+    cat("\nEmpirical CDF for the aggregate claims\n")
+    cat("   Call 'object'$FUN() to compute CDF calculations\n\n")
     cat("Call:\n")
     cat("  ",deparse(x$call), "\n\n", fill = TRUE)
     cat("Data:  (", length(x$Fs), "obs. )\n\n")

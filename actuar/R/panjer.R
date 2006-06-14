@@ -1,4 +1,4 @@
-panjer <- function(fx, freq.dist = c("poisson", "negative binomial", "binomial","geometric","logarithmic"), par, p0, TOL=1E-8, echo=FALSE)
+panjer <- function(fx, freq.dist = c("pois", "nbinom", "binom","geom","logarithmic"), par, p0, TOL=1E-8, echo = FALSE)
 {
     call <- match.call()
     ## Express TOL as a value close to 1.
@@ -14,13 +14,13 @@ panjer <- function(fx, freq.dist = c("poisson", "negative binomial", "binomial",
     ## every case, and p1 if p0 is specified in argument.
     ## every case, and p1 if p0 is specified in argument.
     dist <- match.arg(freq.dist)
-    if (dist == "geometric")
+    if (dist == "geom")
     {
-        dist <- "negative binomial"
+        dist <- "nbinom"
         par$size <- 1
     }
 
-    if (dist == "poisson")
+    if (dist == "pois")
     {
         lambda <- par$lambda
         a <- 0
@@ -34,7 +34,7 @@ panjer <- function(fx, freq.dist = c("poisson", "negative binomial", "binomial",
             p1 <- (1 - p0) * lambda/(exp(lambda) - 1)
         }
     }
-    else if (dist == "negative binomial")
+    else if (dist == "nbinom")
     {
         beta <- 1/(par$prob) - 1
         r <- par$size
@@ -48,7 +48,7 @@ panjer <- function(fx, freq.dist = c("poisson", "negative binomial", "binomial",
             p1 <- (1 - p0) * r * beta/((1 + beta)^(r+1) - (1 + beta))
         }
     }
-    else if (dist == "binomial")
+    else if (dist == "binom")
     {
         m <- par$size
         q <- par$prob

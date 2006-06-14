@@ -21,3 +21,5 @@ np2 <- function(x, mean, var, skewness)
     class(res) <- "AggregateDist"
     res    
 }
+
+x
