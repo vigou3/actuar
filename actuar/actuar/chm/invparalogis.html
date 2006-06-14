@@ -1,0 +1,113 @@
+<html><head><title>The Inverse Paralogistic Distribution</title>
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>Invparalogis(actuar)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   invparalogis">
+<param name="keyword" value="R:   print.invparalogis">
+<param name="keyword" value="R:   dinvparalogis">
+<param name="keyword" value="R:   pinvparalogis">
+<param name="keyword" value="R:   qinvparalogis">
+<param name="keyword" value="R:   rinvparalogis">
+<param name="keyword" value=" The Inverse Paralogistic Distribution">
+</object>
+
+
+<h2>The Inverse Paralogistic Distribution</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Density, distribution function, quantile function and random generation
+for the Inverse Paralogistic distribution with parameters <code>shape</code> and <code>scale</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  dinvparalogis(x, shape, scale, log = FALSE)
+  pinvparalogis(q, shape, scale, lower.tail = TRUE,
+           log.p = FALSE)
+  qinvparalogis(p, shape, scale, lower.tail = TRUE,
+           log.p = FALSE)
+  rinvparalogis(n, shape, scale)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, q</code></td>
+<td>
+vector of quantiles.</td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities.</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required.</td></tr>
+<tr valign="top"><td><code>shape, scale</code></td>
+<td>
+parameters. Must be strictly positive.</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if <code>TRUE</code>, probabilities/densities p are
+returned as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if <code>TRUE</code> (default), probabilities are P[X
+&lt;= x], otherwise, Pr[X &gt; x].</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The Inverse Paralogistic distribution with parameters <code>shape</code> = a
+and <code>scale</code> = b has density:
+</p><p align="center"><i>p(x) = a^2 (x / b)^(a^2) / (x(1 + (x/b)^a)^(a + 1))</i></p><p>
+for <i>x &gt; 0, a &gt; 0</i> and <i>b &gt; 0</i>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>dinvparalogis</code> gives the density, <code>pinvparalogis</code> gives the distribution function,
+<code>qinvparalogis</code> gives the quantile function, and <code>rinvparalogis</code> generates random
+deviates.
+<br>
+Invalid arguments will return warning.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Vincent Goulet <a href="mailto:vincent.goulet@act.ulaval.ca">vincent.goulet@act.ulaval.ca</a> and
+Mathieu Pigeon
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Appendix A of Klugman, Panjer &amp; Willmot, Loss Models, Second
+Edition, Wiley, 2004.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+exp(dinvparalogis(2, 3, 4, log = TRUE))
+p &lt;- (1:10)/10
+pinvparalogis(qinvparalogis(p, 2, 3), 2, 3)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>actuar</em> version 0.1-5 <a href="00Index.html">Index]</a></div>
+
+</body></html>

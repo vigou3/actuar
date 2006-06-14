@@ -1,0 +1,116 @@
+<html><head><title>Panjer's recursion formula</title>
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>panjer(actuar)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   panjer">
+<param name="keyword" value=" Panjer's recursion formula">
+</object>
+
+
+<h2>Panjer's recursion formula</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Panjer recursion formula to compute the total amount of claims
+probability function of a portfolio.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+panjer(fx, freq.dist = c("poisson", "negative binomial", "binomial",
+"geometric", "logarithmic"),par, p0, TOL = 1e-08, echo= FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>fx</code></td>
+<td>
+a vector of the (discretized) claim amount distribution;
+first element *must* be <i>f_X(0)</i></td></tr>
+<tr valign="top"><td><code>freq.dist</code></td>
+<td>
+name of the counting distribution</td></tr>
+<tr valign="top"><td><code>par</code></td>
+<td>
+named list of the parameter(s) of the counting
+distribution as they are defined in "rdist".</td></tr>
+<tr valign="top"><td><code>p0</code></td>
+<td>
+arbitrary amount of probability at zero given to the
+frequency distribution. It creates zero-modified or zero-truncated distributions</td></tr>
+<tr valign="top"><td><code>TOL</code></td>
+<td>
+stop recursion when cumulative probability function is
+less than TOL away from 1 </td></tr>
+<tr valign="top"><td><code>echo</code></td>
+<td>
+print the cumulative distribution of the total amount of
+claims as it is computed. </td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The formula of the (a, b, 1) class is:
+</p><p align="center"><i>([p1-(a+b)*p0]*fx[x+1] + sum(y=1 to min(x,m);(a+b*y/x)fx[y+1]*fs(x-y)))/(1-a*fx[1])</i></p><p>
+For the (a, b, 0) class, the result reduces to
+</p><p align="center"><i>sum(y=1 to min(x,m);(a+b*y/x)fx[y+1]*fs(x-y))/(1-a*fx[1])</i></p>
+<p>
+The counting variable is a member of the (a, b, 0) family of
+discrete distributions if p0 is not specified and a member of the
+(a,b,1) family if p0 is specified. The logarithmic distribution is
+a limiting case of the negative binomial distribution where the size parameter
+is equal to 0.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A vector representing the probability density function of the total
+amount of claims.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Vincent Goulet <a href="mailto:vincent.goulet@act.ulaval.ca">vincent.goulet@act.ulaval.ca</a> and
+Sébastien Auclair
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Klugman, S.A and Panjer,H.H and Willmot, G.E (2004),
+<EM>Loss Models: from data to decision, Second Edition</EM>, Wiley, Sections
+4.6.5 - 4.6.7, 6.6 and Appendix B
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+### (a,b,0) class with the binomial distribution
+(a &lt;- panjer(fx=rep(0.5,2), freq.dist="bin",par=list(size=3, prob=0.5),echo=TRUE))
+sum(a)  
+
+### Example 6.18 of "Loss Models" (Second Edition).
+### (a,b,1) class with the Extended Truncated Negative Binomial distribution.  
+(a &lt;-
+panjer(fx=c(0.3, 0.5, 0.2), "negative bin", par=list(size=0.2, prob=0.25), p0=0, TOL=1E-5, echo=TRUE))
+plot(a)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>actuar</em> version 0.1-5 <a href="00Index.html">Index]</a></div>
+
+</body></html>

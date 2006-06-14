@@ -1,0 +1,115 @@
+<html><head><title>The Single-parameter Pareto Distribution</title>
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>Pareto1(actuar)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   pareto1">
+<param name="keyword" value="R:   print.pareto1">
+<param name="keyword" value="R:   dpareto1">
+<param name="keyword" value="R:   ppareto1">
+<param name="keyword" value="R:   qpareto1">
+<param name="keyword" value="R:   rpareto1">
+<param name="keyword" value=" The Single-parameter Pareto Distribution">
+</object>
+
+
+<h2>The Single-parameter Pareto Distribution</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Density, distribution function, quantile function and random generation
+for the Single-parameter Pareto distribution with parameters <code>shape</code> and <code>min</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  dpareto1(x, shape, min, log = FALSE)
+  ppareto1(q, shape, min, lower.tail = TRUE, log.p = FALSE)
+  qpareto1(p, shape, min, lower.tail = TRUE, log.p = FALSE)
+  rpareto1(n, shape, min)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, q</code></td>
+<td>
+vector of quantiles.</td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities.</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required.</td></tr>
+<tr valign="top"><td><code>shape, min</code></td>
+<td>
+parameters. Must be strictly positive.</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if <code>TRUE</code>, probabilities/densities p are
+returned as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if <code>TRUE</code> (default), probabilities are P[X
+&lt;= x], otherwise, Pr[X &gt; x].</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The Single-parameter Pareto distribution with parameters <code>shape</code> = a
+and <code>min</code> = b has density:
+</p><p align="center"><i>p(x) = a b^a / x^(a + 1)</i></p><p>
+for <i>x &gt; 0, a &gt; 0</i> and <i>b &gt; 0</i>.
+</p>
+<p>
+Although there appears to be two parameters, only <code>shape</code> is a true
+parameter. The value of <code>min</code> must be set in advance.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>dpareto1</code> gives the density, <code>ppareto1</code> gives the distribution function,
+<code>qpareto1</code> gives the quantile function, and <code>rpareto1</code> generates random
+deviates.
+<br>
+Invalid arguments will return warning.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Vincent Goulet <a href="mailto:vincent.goulet@act.ulaval.ca">vincent.goulet@act.ulaval.ca</a> and
+Mathieu Pigeon
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Appendix A of Klugman, Panjer &amp; Willmot, Loss Models, Second
+Edition, Wiley, 2004.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+exp(dpareto1(5, 3, 4, log = TRUE))
+p &lt;- (1:10)/10
+ppareto1(qpareto1(p, 2, 3), 2, 3)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>actuar</em> version 0.1-5 <a href="00Index.html">Index]</a></div>
+
+</body></html>

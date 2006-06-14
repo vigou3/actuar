@@ -1,0 +1,110 @@
+<html><head><title>The Inverse Exponential Distribution</title>
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>Invexp(actuar)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   invexp">
+<param name="keyword" value="R:   print.invexp">
+<param name="keyword" value="R:   dinvexp">
+<param name="keyword" value="R:   pinvexp">
+<param name="keyword" value="R:   qinvexp">
+<param name="keyword" value="R:   rinvexp">
+<param name="keyword" value=" The Inverse Exponential Distribution">
+</object>
+
+
+<h2>The Inverse Exponential Distribution</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Density, distribution function, quantile function and random generation
+for the Inverse Exponential distribution with parameter <code>scale</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  dinvexp(x, scale, log = FALSE)
+  pinvexp(q, scale, lower.tail = TRUE, log.p = FALSE)
+  qinvexp(p, scale, lower.tail = TRUE, log.p = FALSE)
+  rinvexp(n, scale)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, q</code></td>
+<td>
+vector of quantiles.</td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities.</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required.</td></tr>
+<tr valign="top"><td><code>scale</code></td>
+<td>
+parameter. Must be strictly positive.</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if <code>TRUE</code>, probabilities/densities p are
+returned as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if <code>TRUE</code> (default), probabilities are P[X
+&lt;= x], otherwise, Pr[X &gt; x].</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The Inverse Exponential distribution with parameter <code>scale</code> = a has
+density: </p><p align="center"><i>p(x) = a exp(-a / x) /
+x^2</i></p><p> for <i>x &gt; 0</i> and <i>a &gt; 0</i>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>dinvexp</code> gives the density, <code>pinvexp</code> gives the distribution function,
+<code>qinvexp</code> gives the quantile function, and <code>rinvexp</code> generates random
+deviates.
+<br>
+Invalid arguments will return warning.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Vincent Goulet <a href="mailto:vincent.goulet@act.ulaval.ca">vincent.goulet@act.ulaval.ca</a> and
+Mathieu Pigeon
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Appendix A of Klugman, Panjer &amp; Willmot, Loss Models, Second
+Edition, Wiley, 2004.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+exp(dinvexp(2, 2, log = TRUE))
+p &lt;- (1:10)/10
+pinvexp(qinvexp(p, 2), 2)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>actuar</em> version 0.1-5 <a href="00Index.html">Index]</a></div>
+
+</body></html>

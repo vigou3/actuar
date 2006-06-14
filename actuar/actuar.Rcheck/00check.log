@@ -1,0 +1,11 @@
+* using log directory 'C:/Documents and Settings/lppou/Mes documents/actuar.Rcheck'
+* using Version 2.3.0 (2006-04-24)
+* checking for file 'actuar/DESCRIPTION' ... OK
+* checking extension type ... Package
+* this is package 'actuar' version '0.1-5'
+* checking package dependencies ... OK
+* checking if this is a source package ... WARNING
+Subdirectory 'actuar/src' contains object files.
+* checking whether package 'actuar' can be installed ... ERROR
+Installation failed.
+See 'C:/Documents and Settings/lppou/Mes documents/actuar.Rcheck/00install.out' for details.

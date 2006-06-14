@@ -1,0 +1,104 @@
+<html><head><title>Summary Method for SIMPF Objects</title>
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>summary.simpf(actuar)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   summary.simpf">
+<param name="keyword" value="R:   print.summary.simpf">
+<param name="keyword" value=" Summary Method for SIMPF Objects">
+</object>
+
+
+<h2>Summary Method for SIMPF Objects</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Summarizes a <code><a href="simpf.html">simpf</a></code> object by displaying the individual
+claim amounts for the desired years and contracts. The function returns an object of
+class <code>summary.simpf</code>. There is a <code>print</code> method for the latter.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'simpf':
+summary(object, contracts = seq(length = dim(object$data)[1]),
+       years = seq(length = dim(object$data)[2]), ...)
+
+## S3 method for class 'summary.simpf':
+print(x, contracts = x$contracts,
+       years = x$years, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, object</code></td>
+<td>
+a <code><a href="simpf.html">simpf</a></code> object.</td></tr>
+<tr valign="top"><td><code>contracts</code></td>
+<td>
+a vector of contracts for which claim amounts should be
+displayed. All contracts are displayed by default.</td></tr>
+<tr valign="top"><td><code>years</code></td>
+<td>
+a vector of years for which claim amounts should be
+displayed. All years observed are displayed by default</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+arguments passed to or from other methods.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+This function is a method for the generic function summary() for class
+<code>simpf</code>.It can be invoked by calling summary(x) for an object x of the
+appropriate class, or directly by calling summary.simpf(x).
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+Returns an object of class <code>summary.simpf</code>. 
+A <code>print</code> method is defined to display such objects. The latter
+displays a list of the chosen contracts (passed on to the argument
+<code>contracts</code>), in which each element contains itself a list of
+claim amounts for each year passed on to the argument <code>years</code>.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Vincent Goulet <a href="mailto:vincent.goulet@act.ulaval.ca">vincent.goulet@act.ulaval.ca</a> and 
+Louis-Philippe Pouliot
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+modelfreq &lt;- list(dist1 = "pois",
+                  par1 = list(lambda = quote(Lambda * weights)),
+                  dist2 = "gamma",
+                  par2 = c(shape = 2, rate = 1))
+modelsev&lt;-list(dist1 = "lnorm",
+               par1 = list(meanlog = quote(Theta), sdlog = 1),
+               dist2 = "norm",
+               par2 = c(mean = 5, sd = 1))
+data(hachemeister)
+weights &lt;- hachemeister$weights/mean(hachemeister$weights)
+(x &lt;- simpf(5, 12, model.freq = modelfreq, modelsev))
+summary(x, contracts = 1:2, years = 10:12)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>actuar</em> version 0.1-5 <a href="00Index.html">Index]</a></div>
+
+</body></html>

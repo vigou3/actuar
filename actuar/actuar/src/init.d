@@ -1,0 +1,11 @@
+init.o: init.c c:/DOCUME~1/lppou/R/R-23~1.0/include/Rinternals.h \
+  c:/DOCUME~1/lppou/R/R-23~1.0/include/R_ext/Arith.h \
+  c:/DOCUME~1/lppou/R/R-23~1.0/include/R_ext/libextern.h \
+  c:/DOCUME~1/lppou/R/R-23~1.0/include/R_ext/Boolean.h \
+  c:/DOCUME~1/lppou/R/R-23~1.0/include/R_ext/Complex.h \
+  c:/DOCUME~1/lppou/R/R-23~1.0/include/R_ext/Error.h \
+  c:/DOCUME~1/lppou/R/R-23~1.0/include/R_ext/Memory.h \
+  c:/DOCUME~1/lppou/R/R-23~1.0/include/R_ext/PrtUtil.h \
+  c:/DOCUME~1/lppou/R/R-23~1.0/include/R_ext/Print.h \
+  c:/DOCUME~1/lppou/R/R-23~1.0/include/R_ext/Utils.h \
+  c:/DOCUME~1/lppou/R/R-23~1.0/include/R_ext/Rdynload.h actuar.h

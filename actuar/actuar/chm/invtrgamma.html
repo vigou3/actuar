@@ -1,0 +1,131 @@
+<html><head><title>The Inverse Transformed Gamma Distribution</title>
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>Invtrgamma(actuar)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   invtrgamma">
+<param name="keyword" value="R:   print.invtrgamma">
+<param name="keyword" value="R:   dinvtrgamma">
+<param name="keyword" value="R:   pinvtrgamma">
+<param name="keyword" value="R:   qinvtrgamma">
+<param name="keyword" value="R:   rinvtrgamma">
+<param name="keyword" value=" The Inverse Transformed Gamma Distribution">
+</object>
+
+
+<h2>The Inverse Transformed Gamma Distribution</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Density, distribution function, quantile function and random generation
+for the Inverse Transformed Gamma distribution with parameters <code>shape1</code>,
+<code>scale</code> and <code>shape2</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  dinvtrgamma(x, shape1, scale, shape2, log = FALSE)
+  pinvtrgamma(q, shape1, scale, shape2, lower.tail = TRUE,
+           log.p = FALSE)
+  qinvtrgamma(p, shape1, scale, shape2, lower.tail = TRUE,
+           log.p = FALSE)
+  rinvtrgamma(n, shape1, scale, shape2)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, q</code></td>
+<td>
+vector of quantiles.</td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities.</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required.</td></tr>
+<tr valign="top"><td><code>shape1, scale, shape2</code></td>
+<td>
+parameters. Must be strictly positive.</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if <code>TRUE</code>, probabilities/densities p are
+returned as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if <code>TRUE</code> (default), probabilities are P[X
+&lt;= x], otherwise, Pr[X &gt; x].</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The Inverse Transformed Gamma distribution with parameters <code>shape1</code> = a,
+<code>scale</code> = b and <code>shape2</code> = c has density:
+</p><p align="center"><i>p(x) = c (b/x)^c exp((-b/x)^c) / x Gamma(x)</i></p><p>
+for <i>x &gt; 0, a &gt; 0, b &gt; 0</i> and
+<i>c &gt; 0</i>. Here Gamma(a) is the function implemented by R's
+<code>gamma()</code> and defined in its help.
+</p>
+<p>
+The Inverse Transformed Gamma distribution defines a family of
+distributions with the following special cases:
+<ul>
+<li><code>shape2</code> == 1 is an Inverse Gamma distribution,
+<li><code>shape2</code> == <code>shape1</code> == 1 is an Inverse Exponential
+distribution, and
+<li><code>shape1</code> == 1 is an Inverse Weibull distribution.
+</ul>
+
+<h3>Value</h3>
+
+<p>
+<code>dinvtrgamma</code> gives the density, <code>pinvtrgamma</code> gives the distribution function,
+<code>qinvtrgamma</code> gives the quantile function, and <code>rinvtrgamma</code> generates random
+deviates.
+<br>
+Invalid arguments will return warning.</p>
+
+<h3>Note</h3>
+
+<p>
+Also known as the inverse generalized gamma distribution.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Vincent Goulet <a href="mailto:vincent.goulet@act.ulaval.ca">vincent.goulet@act.ulaval.ca</a> and
+Mathieu Pigeon
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Appendix A of Klugman, Panjer &amp; Willmot, Loss Models, Second
+Edition, Wiley, 2004.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+exp(dinvtrgamma(2, 3, 4, 5, log = TRUE))
+p &lt;- (1:10)/10
+pinvtrgamma(qinvtrgamma(p, 2, 3, 4), 2, 3, 4)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>actuar</em> version 0.1-5 <a href="00Index.html">Index]</a></div>
+
+</body></html>
