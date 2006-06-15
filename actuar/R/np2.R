@@ -22,4 +22,4 @@ np2 <- function(x, mean, var, skewness)
     res    
 }
 
-x
+
