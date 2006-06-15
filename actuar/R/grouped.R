@@ -3,7 +3,7 @@
 ###
 ### Ogive et histogramme pour données groupées
 
-grouped <- function(x = NULL, y = NULL)
+grouped <- function(x, y = NULL)
 {
   if(class(x) == "data.frame"){
     y <- x$nj
@@ -18,13 +18,19 @@ grouped <- function(x = NULL, y = NULL)
   result
   }
 
+ogive <- function(x, y = NULL, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "F(x)", col = 1)
+{
+  data <- grouped(x, y)
+  plot(data, xlim = xlim, ylim = ylim, xlab = "group boundaries", ylab = "F(x)", col = 1)
+}
+
 hist.groupedData <- function (x, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "f(x)", ...)
 {
   cj <- x$cj
   fnt <- x$fnt
 
   plot(cj, fnt, main = "Histogram", xlim = xlim, ylim = ylim, xlab = xlab, ylab =ylab, type = "S", frame = FALSE) 
-  segments(cj, 0, cj, Fnt)             
+  segments(cj, 0, cj, fnt)             
   segments(0, 0, max(cj), 0)
 }
 

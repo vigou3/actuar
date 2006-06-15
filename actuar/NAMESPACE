@@ -30,7 +30,7 @@ export(## Credibility theory
        dtrbeta, ptrbeta, qtrbeta, rtrbeta,
        dpearson6, ppearson6, qpearson6, rpearson6, #aliases
        ## ACT-21412
-       grouped
+       grouped, ogive
        )
 ### Imports
 importFrom(stats, aggregate, frequency, quantile)
