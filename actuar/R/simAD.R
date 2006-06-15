@@ -2,46 +2,50 @@ simAD <- function(method, model.freq, model.sev, moments, h, p0, TOL = 1e-06, ..
 {
     if (method == "normal" | method == "np2")
     {
-        lim = qnorm(1-TOL)
-        x <- seq(-lim, lim, by = h)
-        par <- c(x = 1/h, moments)
+        fmoments <- moments
+        fmoments["var"] <- c(sd = sqrt(moments["var"]))
+        formals(qnorm)[names(fmoments)] <- fmoments
+        
+        
+        x <- seq(0, qnorm(1-TOL), by = h)
         FUN <- match.fun(method)
-        formals(FUN) <- par
-        res <- FUN
+        formals(FUN)[names(moments)] <- moments
+        res <- FUN(x)
     }
     else
     {
         if (method == "sim")
         {
-           X <- simS(1/TOL, model.freq, model.sev) ### décider quoi faire avec la distribution
-       }                                          ### appeler density()???
+           res <- simS(1/TOL, model.freq, model.sev)            
+        }                                           
         else
         {
-            dsev <- match.fun(paste("d", model.sev$dist, sep = ""))
+            psev <- match.fun(paste("p", model.sev$dist, sep = ""))
             qsev <- match.fun(paste("q", model.sev$dist, sep = ""))
-            qsevpar <- c(p = 1 - TOL, model.sev$par)
+            qsevpar <- c(p = 1 - 1e-10, model.sev$par)
             formals(qsev)[names(qsevpar)]  <- qsevpar
-            formals(dsev)[names(model.sev$par)] <- model.sev$par
-            fx <- dsev(seq(0, qsev(), by = h))
-            
+            formals(psev)[names(model.sev$par)] <- model.sev$par
+            Fx <- psev(seq(0, qsev(), by = h))  
+            fx <- c(0, diff(Fx))
             if (method == "recursive")
-                res <- panjer(fx, model.freq$dist, model.freq$par, p0, TOL)
+                res <- panjer(fx, model.freq$dist, as.list(model.freq$par), TOL = TOL)
             
             if (method == "exact")
             {
-                dfreq <- match.fun(paste("d", model.freq$dist, sep = ""))
+                pfreq <- match.fun(paste("p", model.freq$dist, sep = ""))
                 qfreq <- match.fun(paste("q", model.freq$dist, sep = ""))
-                qfreqpar <- c(p = 1 - TOL, model.freq$par)
+                qfreqpar <- c(p = 1 - TOL, model.freq$par)                
                 formals(qfreq)[names(qfreqpar)] <- qfreqpar
-                formals(dfreq)[names(model.freq$par)] <- model.freq$par
-                pn <- dfreq(seq(0, qfreq()))
+                formals(pfreq)[names(model.freq$par)] <- model.freq$par                
+                Pn <- pfreq(seq(0, qfreq()))
+                pn <- c(0, diff(Pn))                
                 res <- exact(fx, pn)
             }
         }
     }
+    res
 }
-            
-                
+                     
                 
             
             

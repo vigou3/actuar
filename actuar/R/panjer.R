@@ -131,7 +131,7 @@ panjer <- function(fx, freq.dist = c("pois", "nbinom", "binom","geom","logarithm
                 break
         }
     }
-    res <- list(fs = fs, Fs = cumsum(fs), X = 1:length(fs), call = call, FUN = approxfun(cumsum(fs)))
+    res <- list(fs = fs, Fs = cumsum(fs), call = call, FUN = approxfun(cumsum(fs)))
     class(res) <- "AggregateDist"
     res
 }

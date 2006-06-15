@@ -17,7 +17,9 @@ np2 <- function(x, mean, var, skewness)
     call <- match.call()
     Fs <- ifelse(x <= mean, NA,
                  pnorm(sqrt(1 + 9/skewness^2 + 6 * (x - mean)/(sqrt(var) * skewness)) - 3/skewness))
-    res <- list(fs = c(NA, diff(Fs)), Fs = Fs, X = 1:length(Fs), call = call, FUN = approxfun(Fs))
+    res <- list(fs = c(NA, diff(Fs)), Fs = Fs, call = call, FUN = approxfun(Fs))
     class(res) <- "AggregateDist"
     res    
 }
+
+x

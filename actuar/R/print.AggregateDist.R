@@ -37,8 +37,6 @@ print.AggregateDist <- function(x, ...)
     summary <- c(0, q[1:2], expectation, q[3], n)
     names(summary) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
     print(summary)
-    res <- list(FUN = approxfun(x$Fs))
-    res
 }
 
 

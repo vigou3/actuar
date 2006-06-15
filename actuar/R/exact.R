@@ -31,7 +31,7 @@ exact <- function(fx, pn)
         fxc <- convolve(fx, rev(fxc), type="open")
         fs[pos] <- fs[pos] + fxc * pn[i + 1] 
     }
-    res <- list(fs = fs, Fs = cumsum(fs), X = 1:length(fs), call = call, FUN = approxfun(cumsum(fs)))
+    res <- list(fs = fs, Fs = cumsum(fs), call = call, FUN = approxfun(cumsum(fs)))
     class(res) <- "AggregateDist"
     res
 }
