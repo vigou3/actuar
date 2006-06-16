@@ -4,6 +4,8 @@ print.AggregateDist <- function(x, ...)
     cat("   Call 'object'$FUN() to compute CDF calculations\n\n")
     cat("Call:\n")
     cat("  ",deparse(x$call), "\n\n", fill = TRUE)
+
+    cat("Discretization step: h =", x$h, "\n\n")
     cat("Data:  (", length(x$Fs), "obs. )\n\n")
 
     digits <- 4

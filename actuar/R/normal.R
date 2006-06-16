@@ -6,3 +6,4 @@ normal <- function(x, mean, var)
     class(res) <- "AggregateDist"
     res
 }
+

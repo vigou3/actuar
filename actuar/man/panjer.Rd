@@ -2,12 +2,13 @@
 \alias{panjer}
 \title{Panjer's recursion formula}
 \description{
-  Panjer recursion formula to compute the total amount of claims
-  probability function of a portfolio.
+  Panjer recursion formula to compute the approximate distribution of the total amount of claims
+  of a portfolio. 
 }
 \usage{
 panjer(fx, freq.dist = c("pois", "nbinom", "binom",
 "geom", "logarithmic"),par, p0, TOL = 1e-08, echo= FALSE)
+
 }
 
 \arguments{
@@ -19,9 +20,9 @@ panjer(fx, freq.dist = c("pois", "nbinom", "binom",
   \item{p0}{arbitrary amount of probability at zero given to the
     frequency distribution. It creates zero-modified or zero-truncated distributions} 
   \item{TOL}{ stop recursion when cumulative probability function is
-    less than TOL away from 1 }
+    less than TOL away from 1}
   \item{echo}{ print the cumulative distribution of the total amount of
-    claims as it is computed. }
+    claims as it is computed.}
 }
 \details{
   The formula of the (a, b, 1) class is:
@@ -35,15 +36,19 @@ panjer(fx, freq.dist = c("pois", "nbinom", "binom",
   discrete distributions if p0 is not specified and a member of the
   (a,b,1) family if p0 is specified. The logarithmic distribution is
   a limiting case of the negative binomial distribution where the size parameter
-  is equal to 0.
+  is equal to 0. 
 }
 \value{
- A vector representing the probability density function of the total
- amount of claims.
+ An object of class \code{AggregateDist}. For details on the elements of
+ such objects, refer to the more general function \code{\link{simAD}}. 
 }
 \references{  Klugman, S.A and Panjer,H.H and Willmot, G.E (2004),
   \emph{Loss Models: from data to decision, Second Edition}, Wiley, Sections
   4.6.5 - 4.6.7, 6.6 and Appendix B}
+\seealso{
+  \code{\link{simAD}} \code{\link{exact}} \code{\link{normal}}
+  \code{\link{np2}} \code{\link{simS}}
+}
 
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and

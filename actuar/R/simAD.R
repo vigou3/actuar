@@ -34,7 +34,7 @@ simAD <- function(method, model.freq, model.sev, moments, h, p0, TOL = 1e-06, ..
             {
                 pfreq <- match.fun(paste("p", model.freq$dist, sep = ""))
                 qfreq <- match.fun(paste("q", model.freq$dist, sep = ""))
-                qfgreqpar <- c(p = 1 - TOL, model.freq$par)                
+                qfreqpar <- c(p = 1 - TOL, model.freq$par)                
                 formals(qfreq)[names(qfreqpar)] <- qfreqpar
                 formals(pfreq)[names(model.freq$par)] <- model.freq$par                
                 Pn <- pfreq(seq(0, qfreq()))
@@ -43,6 +43,7 @@ simAD <- function(method, model.freq, model.sev, moments, h, p0, TOL = 1e-06, ..
             }
         }
     }
+    res$h <- h
     res
 }
                      
