@@ -20,7 +20,7 @@ simS(x, model.freq, model.sev)
 
   \item{dist}{base name of the distribution model}
   \item{par}{named vector of the parameters of \code{dist} as they are
-    defined in \code{pdist}. 
+    defined in \code{pdist} 
 }
 \value{
  An object of class \code{AggregateDist}. For details on the elements of

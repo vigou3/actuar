@@ -13,7 +13,7 @@ exact(fx, pn)
   \item{fx}{ a vector of the (discretized) claim amount distribution;
     first element *must* be \eqn{f_X(0)}}
   \item{pn}{ a vector of the number of claims probabilities; first
-    element must be Pr[N = 0]
+    element must be Pr[N = 0]}
 }
 \details{
   The distribution function of the total amount of claims \code{S} has
