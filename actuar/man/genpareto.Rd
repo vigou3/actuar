@@ -33,12 +33,12 @@
 \details{
   The Generalized Pareto distribution with parameters \code{shape1} = a, \code{scale} = b and
   \code{shape2} = c has density: \deqn{p(x) = \frac{\Gamma(a +
-      c)}{\Gamma(a)\Gamma(c)}\frac{b^a x^{(c - 1)}}{(x + b)^(a +
-      c)}}{p(x) = (gamma(a + c) / gamma(a)*gamma(c))((b^a x^(b-1)) / (x + b)^(a + c))} for \eqn{x > 0, a > 0, b > 0} and
+      c)}{\Gamma(a)\Gamma(c)}\frac{b^a x^{(c - 1)}}{(x + b)^{(a +
+      c)}}}{p(x) = (gamma(a + c) / gamma(a)*gamma(c))((b^a x^(b-1)) / (x + b)^(a + c))} for \eqn{x > 0, a > 0, b > 0} and
   \eqn{c > 0}. Here Gamma(a) is the function implemented by R's \code{gamma()} and defined in its help.
 
   Let Y be a Beta random variable with parameters
-  \code{shape1} and \code{shape2}. Then, \deqn{scale(\frac{Y}{1 - Y})}{
+  \code{shape1} and \code{shape2}. Then, \deqn{\text{scale}(\frac{Y}{1 - Y})}{
     scale (Y / (1 - Y))} has the Generalized Pareto probability density function with parameters
   \code{shape1}, \code{scale} and \code{shape2}.
 

@@ -42,15 +42,15 @@
   The Transformed Beta distribution with parameters \code{shape1} = a,
   \code{scale} = b, \code{shape2} = c and \code{shape3} = d has density:
   \deqn{p(x) = \frac{\Gamma(a + d)}{\Gamma(a)\Gamma(d)}
-    \frac{c(frac{x}{b})^{(c d)}}{x(1 + (\frac{x}{b})^c)^{(a + d)}}}{p(x)
+    \frac{c(\frac{x}{b})^{(c d)}}{x(1 + (\frac{x}{b})^c)^{(a + d)}}}{p(x)
     = (gamma(a + d) / gamma(a)*gamma(d))((c (x / b)^(a c)) / (x
     (1 + (x / b)^c)^(a + d)))} for \eqn{x > 0, a > 0, b > 0, c > 0} and
   \eqn{d > 0}. Here Gamma(a) is the function implemented by R's
   \code{gamma()} and defined in its help.
 
   Let Y be a Beta random variable with parameters
-  \code{shape1} and \code{shape3}. Then, \deqn{scale(\frac{Y}{1 - Y})^(\frac{1}{shape2})}{
-    scale (Y / (1 - Y))^(1 / shape2)} has the
+  \code{shape1} and \code{shape3}. Then, \deqn{scale\left(\frac{Y}{1 - Y}\right)^{\left(\frac{1}{shape2}\right)}}{
+    scale(Y / (1 - Y))^(1 / shape2)} has the
   Transformed Beta probability density function with parameters
   \code{shape1}, \code{scale}, \code{shape2} and \code{shape3}.
 

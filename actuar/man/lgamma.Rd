@@ -33,8 +33,8 @@
 \details{
   The Loggamma distribution with parameters \code{shapelog} = a
   and \code{ratelog} = b has density:
-  \deqn{p(x) = dgamma(log(x), shapelog,\frac{1.0}{ratelog})}{dgamma(log(x),
-    shapelog, 1.0 / ratelog)}
+  \deqn{p(x) = dgamma(\log(x), a,\frac{1}{b})}{p(x) = dgamma(log(x),
+    shapelog, 1 / ratelog)}
   for \eqn{x > 1, a > 0} and \eqn{b > 0}. 
 
   Let X be a Gamma random variable with parameters \code{shapelog} and

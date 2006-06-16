@@ -33,7 +33,7 @@
 \details{
   The Burr distribution with parameters \code{shape1} = a, \code{scale} = b and
   \code{shape2} = c has density: \deqn{p(x) = \frac{a c (\frac{x}{b})^c}{x(1
-      + (\frac{x}{b})^c)^(a + 1)}}{p(x) = (a c (x / b)^c) / (x [1 + (x /
+      + (\frac{x}{b})^c)^{(a + 1)}}}{p(x) = (a c (x / b)^c) / (x [1 + (x /
     b)^c]^(a + 1))} for \eqn{x > 0, a > 0, b > 0} and
   \eqn{c > 0}.
 

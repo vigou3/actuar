@@ -33,10 +33,10 @@ grouped(x, y = NULL)
 	1}}F_n(c_{j-1}) + \frac{x - c_{j-1}}{c_j -
       c_{j-1}}F_n(c_j)}{(c_j - x)/(c_j)- c_(j-1) F_n(c_(j-1)) + (x -
     c_(j-1))/(c_j - c_(j-1)) F_n(c_j)}
-  for \eqn{c_{j-1} < x < c_j}.
+  for \eqn{c_{j-1} \leq x \leq c_j}.
   The formula for histogram is \deqn{f_n(x) = \frac{F_n(c_j) - F_n(c_{j-1})}{c_j - c_{j -
 	1}}}{(F_n(c_j) - F_n(c_(j-1)))/(c_j - c_(j-1))}
-  for \eqn{c_{j-1} <= x < c_j}.
+  for \eqn{c_{j-1} \leq x < c_j}.
 }
 \value{
   Returns an object of \code{class} \code{"groupedData"}. Function \code{plot} can

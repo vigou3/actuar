@@ -33,7 +33,7 @@
 \details{
   The Inverse Pareto distribution with parameters \code{shape} = a
   and \code{scale} = b has density:
-  \deqn{p(x) = \frac{a b x^{(a - 1)}}{(x + b)^(a + 1)}}{p(x) = a b x^(a - 1) /
+  \deqn{p(x) = \frac{a b x^{(a - 1)}}{(x + b)^{(a + 1)}}}{p(x) = a b x^(a - 1) /
     (x + b)^(a + 1)}
   for \eqn{x > 0, a > 0} and \eqn{b > 0}. 
 }
