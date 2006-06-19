@@ -36,11 +36,12 @@ exact(fx, pn)
 }
 \value{
  An object of class \code{AggregateDist}. For details on the elements of
- such objects, refer to the more general function \code{\link{simAD}}. 
+ such objects, refer to the more general function \code{\link{ADgen}}. 
 }
 \seealso{
-  \code{\link{simAD}} \code{\link{panjer}} \code{\link{normal}}
+  \code{\link{ADgen}} \code{\link{panjer}} \code{\link{normal}}
   \code{\link{np2}} \code{\link{simS}}
+}
 \references{  Klugman, S.A and Panjer,H.H and Willmot, G.E (2004),
   \emph{Loss Models: from data to decision, Second Edition}, Wiley, Sections
   4.6.5 - 4.6.7, 6.6 and Appendix B}
@@ -62,7 +63,6 @@ Pn <- ppois(seq(from=0, to=limfreq, by=0.04), 3) ### the frequency distribution
 pn <- c(0, diff(Pn))
 
 d <- exact(fx, pn) 
-
-
+}
 \keyword{distribution}
 \keyword{models}

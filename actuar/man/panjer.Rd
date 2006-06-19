@@ -40,13 +40,13 @@ panjer(fx, freq.dist = c("pois", "nbinom", "binom",
 }
 \value{
  An object of class \code{AggregateDist}. For details on the elements of
- such objects, refer to the more general function \code{\link{simAD}}. 
+ such objects, refer to the more general function \code{\link{ADgen}}. 
 }
 \references{  Klugman, S.A and Panjer,H.H and Willmot, G.E (2004),
   \emph{Loss Models: from data to decision, Second Edition}, Wiley, Sections
   4.6.5 - 4.6.7, 6.6 and Appendix B}
 \seealso{
-  \code{\link{simAD}} \code{\link{exact}} \code{\link{normal}}
+  \code{\link{ADgen}} \code{\link{exact}} \code{\link{normal}}
   \code{\link{np2}} \code{\link{simS}}
 }
 

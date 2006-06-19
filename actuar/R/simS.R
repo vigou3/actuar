@@ -9,7 +9,7 @@ simS <- function(x, model.freq, model.sev)
     formals(rsev)[names(model.sev$par)] <- model.sev$par
     X <- sapply(sapply(N, rsev),sum)
     X <- sort(X)
-    Fs <- ecdf(X)(seq(0, quantile(X, 0.999), by = h))
+    Fs <- ecdf(X)(seq(0, quantile(X, 0.999), length = x))
     fs <- c(0, diff(Fs))
     res <- list(fs = fs, Fs = Fs, call = call, FUN = approxfun(Fs))
     class(res) <- "AggregateDist"

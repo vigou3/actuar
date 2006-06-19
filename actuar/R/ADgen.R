@@ -1,4 +1,5 @@
-simAD <- function(method, model.freq, model.sev, moments, h, p0, TOL = 1e-06, ...) ###que faire avec p0
+ADgen <- function(method = c("normal", "np2", "simulation", "recursive", "exact"),
+                  model.freq, model.sev, moments, h, p0, TOL = 1e-06, ...) 
 {
     if (method == "normal" | method == "np2")
     {
@@ -14,7 +15,7 @@ simAD <- function(method, model.freq, model.sev, moments, h, p0, TOL = 1e-06, ..
     }
     else
     {
-        if (method == "sim")
+        if (method == "simulation")
         {
            res <- simS(1/TOL, model.freq, model.sev)            
         }                                           
@@ -28,7 +29,10 @@ simAD <- function(method, model.freq, model.sev, moments, h, p0, TOL = 1e-06, ..
             Fx <- psev(seq(0, qsev(), by = h))  
             fx <- c(0, diff(Fx))
             if (method == "recursive")
-                res <- panjer(fx, model.freq$dist, as.list(model.freq$par), TOL = TOL)
+                ifelse(missing(p0),
+                       res <- panjer(fx, model.freq$dist, as.list(model.freq$par), TOL = TOL),
+                       res <- panjer(fx, model.freq$dist, as.list(model.freq$par), p0 = p0, TOL = TOL))
+                
             
             if (method == "exact")
             {
