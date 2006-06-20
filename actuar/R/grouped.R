@@ -10,6 +10,10 @@ grouped <- function(x, y = NULL)
     x <- x$cj
   }
 
+  if(sum(is.infinite(x)) | sum(is.infinite(y)) >= 1){
+    warning("x and/or y contains Inf")
+  }
+
   Fnt <- approxfun(x, cumsum(y) / sum(y), yleft = 0, yright = 1, method = "linear")
   fnt <- approxfun(x, c(0, y[-1] / (sum(y) * diff(x))), yleft = 0, yright = 0, f = 1, method = "constant")
 
