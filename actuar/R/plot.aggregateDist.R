@@ -5,7 +5,7 @@ plot.aggregateDist <- function(x, h = NULL, ...)
     
     layout(matrix(c(1,2,3,3), 2, 2, byrow = TRUE))
     min <- ifelse(any(is.na(x$fs)), 0, 0.001)
-    xlim <- quantile.AggregateDist(x, p= max(x$Fs, na.rm = TRUE)*c(min, 0.999))
+    xlim <- quantile.aggregateDist(x, p= max(x$Fs, na.rm = TRUE)*c(min, 0.999))
     X <- seq(1, length(x$fs), length = 500)
     plot.default(X, x$fs[X], xlim = xlim,
                  type = "h", main = "Discretized Density Function", xlab = "S", ylab = "f_s(x)")
