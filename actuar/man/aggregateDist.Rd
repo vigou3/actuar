@@ -1,5 +1,6 @@
-\name{ADgen}
-\alias{ADgen}
+\name{aggregateDist}
+\alias{aggregateDist}
+\alias{print.aggregateDist}
 \title{Generate an Aggregate Distribution of Claim Amounts }
 \description{
   Uses one of five methods to generate the distribution of the
@@ -7,9 +8,9 @@
   severity model or the true moments of the distribution.  
 }
 \usage{
-ADgen(method = c("normal", "np2", "simulation", "recursive", "exact"),
+aggregateDist(method = c("normal", "np2", "simulation", "recursive", "exact"),
       model.freq, model.sev, moments, h, p0, TOL = 1e-06, ...)
-
+\method{print}{aggregateDist}(x,\dots)
 }
 
 \arguments{
@@ -31,10 +32,11 @@ ADgen(method = c("normal", "np2", "simulation", "recursive", "exact"),
     evaluation in the \code{normal} and \code{np2} methods, the inverse of
     the number of obsevations in the \code{simulation} method, and the level of
     precision in the \code{recursive} method.}
+  \item{x}{ an \code{aggregateDist} object} 
   \item{...}{ arguments potentially required by additionnal methods}   	  
 }
 \details{
-  \code{ADgen} essentiallly calls functions creating \code{AggregateDist}
+  \code{aggregateDist} essentiallly calls functions creating \code{aggregateDist}
   objects. \code{\link{normal}}, \code{\link{np2}}, and \code{\link{exact}} methods call
   functions of the same name.  \code{simulation} and \code{recursive}
   methods respectively call functions \code{simS} and \code{panjer}.
@@ -44,7 +46,7 @@ ADgen(method = c("normal", "np2", "simulation", "recursive", "exact"),
   vector that contains the moments required by the respective function,
   that is the true mean and the true variance in both cases, and an
   additionnal \code{skewness} element for \code{np2}. Other arguments
-  will be ignored. With respect to \code{h}, \code{ADgen} is intelligent enough to evaluate the called
+  will be ignored. With respect to \code{h}, \code{aggregateDist} is intelligent enough to evaluate the called
   function in an appropriate range of values. Argument \code{moments}
   will be read only if one of those two methods are called. 
 
@@ -60,10 +62,19 @@ ADgen(method = c("normal", "np2", "simulation", "recursive", "exact"),
   severity model and calls the much slower function exact().  
 }
 \value{
-  An list of class \code{AggregateDist}, containing the following
+  An list of class \code{aggregateDist}, containing the following
   objects:
 
-  \item{fs}{aaaa}
+  \item{fs}{ a vector of the discretized density of the total amount of
+    claims distribution}
+  \item{Fs}{ a vector of the discretized cumulative distribution of the
+    total amount of claims}
+  \item{call}{ the function call}
+  \item{FUN}{ an approximated function returned by \code{\link{approxfun}}
+    to evaluate the CDF at any point.}
+  \item{h}{ the discretization step given in argument. NULL if
+    \code{aggregateDist} object is not created by \code{aggregateDist()}.}
+  
 }
 \seealso{
   \code{\link{panjer}} \code{\link{exact}}
@@ -78,25 +89,25 @@ ADgen(method = c("normal", "np2", "simulation", "recursive", "exact"),
 ### 'normal' method
 moments <- c(mean = 5, var = 2.25)
 h <- 0.001
-(res <- ADgen("normal", moments = moments, h = h))
+(res <- aggregateDist("normal", moments = moments, h = h))
 
 ### 'np2' method
 moments <- c(mean = 5, var = 2.25, skewness = 0.25)
-(res <- ADgen("np2", moments = moments, h = h))
+(res <- aggregateDist("np2", moments = moments, h = h))
 
 ### 'sim' method
 h <- 0.025
 model.freq <- list(dist = "pois", par = c(lambda = 4))
 model.sev <- list(dist = "norm", par = c(mean = 10, sd = 1.5))
-(res <- ADgen("sim", model.freq = model.freq, model.sev = model.sev, h =
+(res <- aggregateDist("simulation", model.freq = model.freq, model.sev = model.sev, h =
 h, TOL = 1e-05))
 
 ### 'recursive' method
-(res <- ADgen("recursive", model.freq = model.freq, model.sev =
+(res <- aggregateDist("recursive", model.freq = model.freq, model.sev =
 model.sev, h = h, TOL = 1e-08 ))
 
 ### 'exact' method
-(res <- ADgen("exact", model.freq = model.freq, model.sev = model.sev, h = h, TOL = 1e-08 ))
+(res <- aggregateDist("exact", model.freq = model.freq, model.sev = model.sev, h = h, TOL = 1e-08 ))
 }
 \keyword{distribution}
 \keyword{models}

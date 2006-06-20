@@ -40,11 +40,11 @@ np2(x, mean, var, skewness)
   This formula is valid only for the right-hand tail of the distribution and skewness should not exceed unity.
 }
 \value{
- An object of class \code{AggregateDist}. For details on the elements of
- such objects, refer to the more general function \code{\link{ADgen}}. 
+ An object of class \code{aggregateDist}. For details on the elements of
+ such objects, refer to the more general function \code{\link{aggregateDist}}. 
 }
 \seealso{
-  \code{\link{ADgen}} \code{\link{panjer}} \code{\link{exact}}
+  \code{\link{aggregateDist}} \code{\link{panjer}} \code{\link{exact}}
   \code{\link{simS}}
   }
 \references{ Daykin, C.D. and Pentikäinen, T. and Pesonen, M. (1994), \emph{Practical

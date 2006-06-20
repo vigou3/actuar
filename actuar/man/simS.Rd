@@ -23,11 +23,11 @@ simS(x, model.freq, model.sev)
     defined in \code{pdist}} 
 }
 \value{
- An object of class \code{AggregateDist}. For details on the elements of
- such objects, refer to the more general function \code{\link{ADgen}}. 
+ An object of class \code{aggregateDist}. For details on the elements of
+ such objects, refer to the more general function \code{\link{aggregateDist}}. 
 }
 \seealso{
-  \code{\link{ADgen}} \code{\link{panjer}} \code{\link{exact}}
+  \code{\link{aggregateDist}} \code{\link{panjer}} \code{\link{exact}}
   \code{\link{normal}} \code{\link{np2}}
   }
 \author{

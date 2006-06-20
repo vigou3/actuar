@@ -1,4 +1,4 @@
-ADgen <- function(method = c("normal", "np2", "simulation", "recursive", "exact"),
+aggregateDist <- function(method = c("normal", "np2", "simulation", "recursive", "exact"),
                   model.freq, model.sev, moments, h, p0, TOL = 1e-06, ...) 
 {
     if (method == "normal" | method == "np2")

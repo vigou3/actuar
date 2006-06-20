@@ -39,14 +39,14 @@ panjer(fx, freq.dist = c("pois", "nbinom", "binom",
   is equal to 0. 
 }
 \value{
- An object of class \code{AggregateDist}. For details on the elements of
- such objects, refer to the more general function \code{\link{ADgen}}. 
+ An object of class \code{aggregateDist}. For details on the elements of
+ such objects, refer to the more general function \code{\link{aggregateDist}}. 
 }
 \references{  Klugman, S.A and Panjer,H.H and Willmot, G.E (2004),
   \emph{Loss Models: from data to decision, Second Edition}, Wiley, Sections
   4.6.5 - 4.6.7, 6.6 and Appendix B}
 \seealso{
-  \code{\link{ADgen}} \code{\link{exact}} \code{\link{normal}}
+  \code{\link{aggregateDist}} \code{\link{exact}} \code{\link{normal}}
   \code{\link{np2}} \code{\link{simS}}
 }
 
