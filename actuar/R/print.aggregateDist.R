@@ -19,18 +19,18 @@ print.aggregateDist <- function(x, ...)
 
 
     
-    cat("    S:  ", numform(xx[i1]), if (n > 3) 
+    cat("      S:  ", numform(xx[i1]), if (n > 3) 
         ", ", if (n > 5) 
         " ..., ", numform(xx[i2]), "\n", sep = "")
 
-    cat("  DDF: ", numform(x$fs[i1]), if (n > 3) 
+    cat("PMF/PDF: ", numform(x$fs[i1]), if (n > 3) 
         ", ", if (n > 5) 
         " ..., ", numform(x$fs[i2]), "\n", sep = "")
 
-    cat("  CDF: ", numform(x$Fs[i1]), if (n > 3) 
+    cat("    CDF: ", numform(x$Fs[i1]), if (n > 3) 
         ", ", if (n > 5) 
         " ..., ", numform(x$Fs[i2]), "\n", sep = "")
-    cat("\n\n")
+    cat("\n")
 
     
     cat("Summary\n")

@@ -32,6 +32,6 @@ exact <- function(fx, pn)
         fs[pos] <- fs[pos] + fxc * pn[i + 1] 
     }
     res <- list(fs = fs, Fs = cumsum(fs), call = call, FUN = approxfun(cumsum(fs)))
-    class(res) <- "AggregateDist"
+    class(res) <- "aggregateDist"
     res
 }

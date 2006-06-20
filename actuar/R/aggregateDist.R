@@ -3,6 +3,8 @@ aggregateDist <- function(method = c("normal", "np2", "simulation", "recursive",
 {
     if (method == "normal" | method == "np2")
     {
+        if (!missing(model.freq) | !missing(model.sev) | !missing(p0))
+            warning("only 'moments', 'TOL', and 'h' are required when using normal or np2 method. Other arguments are ignored")
         fmoments <- moments
         fmoments["var"] <- c(sd = sqrt(moments["var"]))
         formals(qnorm)[names(fmoments)] <- fmoments

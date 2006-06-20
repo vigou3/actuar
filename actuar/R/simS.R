@@ -12,7 +12,7 @@ simS <- function(x, model.freq, model.sev)
     Fs <- ecdf(X)(seq(0, quantile(X, 0.999), length = x))
     fs <- c(0, diff(Fs))
     res <- list(fs = fs, Fs = Fs, call = call, FUN = approxfun(Fs))
-    class(res) <- "AggregateDist"
+    class(res) <- "aggregateDist"
     res
 }
 

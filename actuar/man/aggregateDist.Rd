@@ -10,6 +10,7 @@
 \usage{
 aggregateDist(method = c("normal", "np2", "simulation", "recursive", "exact"),
       model.freq, model.sev, moments, h, p0, TOL = 1e-06, ...)
+
 \method{print}{aggregateDist}(x,\dots)
 }
 
@@ -41,8 +42,8 @@ aggregateDist(method = c("normal", "np2", "simulation", "recursive", "exact"),
   functions of the same name.  \code{simulation} and \code{recursive}
   methods respectively call functions \code{simS} and \code{panjer}.
 
-  \code{normal} and \code{np2} methods require only a discretization
-  step ( \code{h} ) and a \code{moments} argument, which is a named
+  \code{normal} and \code{np2} methods require only \code{TOL}, a discretization
+  step ( \code{h} ), and a \code{moments} argument, which is a named
   vector that contains the moments required by the respective function,
   that is the true mean and the true variance in both cases, and an
   additionnal \code{skewness} element for \code{np2}. Other arguments
