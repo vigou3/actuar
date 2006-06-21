@@ -19,6 +19,6 @@ plot.aggregateDist <- function(x, h = NULL, ...)
                  xlab = "S", ylab = "Fs(x) / fs(x) (blue)", type = "l", xlim = xlim)
     lines(X, 1/h*x$fs[X], col = "blue")
     abline(h=0, col = "grey")
-    layout(1)
+    layout(1) ##################################################################################mod
     
 }
