@@ -9,6 +9,13 @@ grouped <- function(x, y = NULL)
     y <- x[, 2]
     x <- x[, 1]
   }
+  nx <- length(x)
+  ny <- length(y)
+  if(nx - ny > 1 | nx - ny < 0)
+    stop("length(x) incorrect")
+  if(nx - ny == 1)
+      y = c(0, y)
+   
   res = list(cj = x, nj = y)
   class(res) <- c("data.grouped")
   attr(res, "call") <- sys.call()
@@ -51,7 +58,7 @@ hist.data.grouped <- function (x, y = NULL, freq = NULL, main = "Histogram", xli
 plot.groupedData <- function (x, y = NULL, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "F(x)", col = 1, ...)
 {
   xval <- eval(expression(x), env = environment(x))
-  plot(xval, x(xvl),  main = "Ogive", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, col = col, type = "o", pch = 20)
+  plot(xval, x(xval),  main = "Ogive", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, col = col, type = "o", pch = 20)
 }
 
 print.groupedData <- function (x, digits= getOption("digits") - 2, ...)
