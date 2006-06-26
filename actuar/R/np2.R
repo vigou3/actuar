@@ -1,4 +1,4 @@
-np2 <- function(x, mean, var, skewness)
+np2 <- function(mean, var, skewness)
 {
 
     ## Evaluate a distribution function using the Normal Power
@@ -14,12 +14,13 @@ np2 <- function(x, mean, var, skewness)
     ## RETURNS
     ##
     ## 'NA' if x <= mean, probability otherwise.
-    call <- match.call()
-    Fs <- ifelse(x <= mean, NA,
-                 pnorm(sqrt(1 + 9/skewness^2 + 6 * (x - mean)/(sqrt(var) * skewness)) - 3/skewness))
-    res <- list(fs = c(NA, diff(Fs)), Fs = Fs, call = call, FUN = approxfun(Fs))
-    class(res) <- "aggregateDist"
-    res    
+    FUN <- function(x)
+    {
+        ifelse(x <= mean, NA,
+               pnorm(sqrt(1 + 9/skewness^2 + 6 * (x - mean)/(sqrt(var) * skewness)) - 3/skewness))
+    }                  
+    class(FUN) <- c("aggregateDist", class(FUN))
+    FUN    
 }
 
 

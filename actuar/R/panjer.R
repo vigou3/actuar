@@ -1,9 +1,12 @@
-panjer <- function(fx, freq.dist = c("pois", "nbinom", "binom","geom","logarithmic"), par, p0, TOL=1E-8, echo = FALSE)
+
+panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
 {
+    env <- new.env()
     call <- match.call()
     ## Express TOL as a value close to 1.
     TOL <- 1 - TOL
 
+    
     ## f_X(0) is no longer needed after the calculation of f_S(0).
     fx0 <- fx[1]
     fx <- fx[-1]
@@ -13,7 +16,8 @@ panjer <- function(fx, freq.dist = c("pois", "nbinom", "binom","geom","logarithm
     ## depending of the chosen distribution and compute f_S(0) in
     ## every case, and p1 if p0 is specified in argument.
     ## every case, and p1 if p0 is specified in argument.
-    dist <- match.arg(freq.dist)
+    dist <- model.freq$dist
+    par <- model.freq$par
     if (dist == "geom")
     {
         dist <- "nbinom"
@@ -131,8 +135,12 @@ panjer <- function(fx, freq.dist = c("pois", "nbinom", "binom","geom","logarithm
                 break
         }
     }
-    res <- list(fs = fs, Fs = cumsum(fs), call = call, FUN = approxfun(cumsum(fs)))
-    class(res) <- "aggregateDist"
-    res
+    FUN <- stepfun((0:(length(fs)-1))*x.scale, c(0,cumsum(fs)))
+    #FUN <- approxfun((0:(length(fs)-1))*x.scale, cumsum(fs))
+    class(FUN) <- c("aggregateDist", "ecdf", class(FUN))
+    assign("fs", fs, env = environment(FUN))
+    assign("call", call, env = environment(FUN))
+    assign("x.scale", x.scale, env = environment(FUN))
+    FUN    
 }
 

@@ -1,57 +1,57 @@
 aggregateDist <- function(method = c("normal", "np2", "simulation", "recursive", "exact"),
-                  model.freq, model.sev, moments, h, p0, TOL = 1e-06, ...) 
+                  model.sev, model.freq, moments, x.scale = 1, n, p0, TOL = 1e-06, ...)
 {
-    if (method == "normal" | method == "np2")
-    {
-        if (!missing(model.freq) | !missing(model.sev) | !missing(p0))
-            warning("only 'moments', 'TOL', and 'h' are required when using normal or np2 method. Other arguments are ignored")
-        fmoments <- moments
-        fmoments["var"] <- c(sd = sqrt(moments["var"]))
-        formals(qnorm)[names(fmoments)] <- fmoments
+    method <- match.arg(method)
+    
+    if (method == "normal"){
+        if (length(moments) != 2) stop("'normal' method requires the first TWO moments of the distribution")
+        return(normal(moments[1], moments[2]))}
         
-        
-        x <- seq(0, qnorm(1-TOL), by = h)
-        FUN <- match.fun(method)
-        formals(FUN)[names(moments)] <- moments
-        res <- FUN(x)
-    }
+    if (method == "np2"){
+        if (length(moments) != 3) stop("'np2' method requires the first THREE moments of the distribution")
+        return(np2(moments[1], moments[2], moments[3]))}
+
+    
+    if (method == "simulation") return(simS(n, model.freq, model.sev, x.scale = x.scale))
+    
+    if (class(model.sev) == "numeric") fx <- model.sev
+       
     else
     {
-        if (method == "simulation")
-        {
-           res <- simS(1/TOL, model.freq, model.sev)            
-        }                                           
+        psev <- match.fun(paste("p", model.sev$dist, sep = ""))
+        qsev <- match.fun(paste("q", model.sev$dist, sep = ""))
+        qsevpar <- c(p = 1 - 1e-10, model.sev$par)
+        formals(qsev)[names(qsevpar)]  <- qsevpar
+        formals(psev)[names(model.sev$par)] <- model.sev$par
+        Fx <- psev(seq(0, qsev(), by = 1/x.scale))  
+        fx <- c(0, diff(Fx))
+    }
+    if (method == "recursive"){     
+        if (missing(p0))
+            return(panjer(fx = fx, x.scale = x.scale, model.freq = model.freq, TOL = TOL))
+        else 
+            return(panjer(fx, x.scale = x.scale, model.freq, p0 = p0, TOL = TOL))
+    }
+    
+    if (method == "exact")
+    {
+        if (class(model.freq) == "numeric")
+            pn <- model.freq
         else
         {
-            psev <- match.fun(paste("p", model.sev$dist, sep = ""))
-            qsev <- match.fun(paste("q", model.sev$dist, sep = ""))
-            qsevpar <- c(p = 1 - 1e-10, model.sev$par)
-            formals(qsev)[names(qsevpar)]  <- qsevpar
-            formals(psev)[names(model.sev$par)] <- model.sev$par
-            Fx <- psev(seq(0, qsev(), by = h))  
-            fx <- c(0, diff(Fx))
-            if (method == "recursive")
-                ifelse(missing(p0),
-                       res <- panjer(fx, model.freq$dist, as.list(model.freq$par), TOL = TOL),
-                       res <- panjer(fx, model.freq$dist, as.list(model.freq$par), p0 = p0, TOL = TOL))
-                
-            
-            if (method == "exact")
-            {
-                pfreq <- match.fun(paste("p", model.freq$dist, sep = ""))
-                qfreq <- match.fun(paste("q", model.freq$dist, sep = ""))
-                qfreqpar <- c(p = 1 - TOL, model.freq$par)                
-                formals(qfreq)[names(qfreqpar)] <- qfreqpar
-                formals(pfreq)[names(model.freq$par)] <- model.freq$par                
-                Pn <- pfreq(seq(0, qfreq()))
-                pn <- c(0, diff(Pn))                
-                res <- exact(fx, pn)
-            }
+            pfreq <- match.fun(paste("p", model.freq$dist, sep = ""))
+            qfreq <- match.fun(paste("q", model.freq$dist, sep = ""))
+            qfreqpar <- c(p = 1 - TOL, model.freq$par)                
+            formals(qfreq)[names(qfreqpar)] <- qfreqpar
+            formals(pfreq)[names(model.freq$par)] <- model.freq$par                
+            Pn <- pfreq(seq(0, qfreq()))
+            pn <- c(0, diff(Pn))
         }
+        return(exact(x.scale = x.scale, fx = model.sev, pn = model.sev))
     }
-    res$h <- h
-    res
 }
+    
+
                      
                 
             

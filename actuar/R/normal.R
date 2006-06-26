@@ -1,9 +1,7 @@
-normal <- function(x, mean, var)
+normal <- function(mean, var)
 {
-    call <- match.call()
-    Fs <- pnorm((x - mean)/sqrt(var))
-    res <- list(fs = c(0, diff(Fs)), Fs = Fs, call = call, FUN = approxfun(Fs))
-    class(res) <- "aggregateDist"
-    res
+    FUN <- function(x) pnorm((x - eval(mean))/sqrt(eval(var)))
+    class(FUN) <- c("aggregateDist", class(FUN))
+    FUN
 }
 

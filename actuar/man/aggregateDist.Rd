@@ -87,28 +87,7 @@ aggregateDist(method = c("normal", "np2", "simulation", "recursive", "exact"),
   Louis-Philippe Pouliot}
 
 \examples{
-### 'normal' method
-moments <- c(mean = 5, var = 2.25)
-h <- 0.001
-(res <- aggregateDist("normal", moments = moments, h = h))
-
-### 'np2' method
-moments <- c(mean = 5, var = 2.25, skewness = 0.25)
-(res <- aggregateDist("np2", moments = moments, h = h))
-
-### 'sim' method
-h <- 0.025
-model.freq <- list(dist = "pois", par = c(lambda = 4))
-model.sev <- list(dist = "norm", par = c(mean = 10, sd = 1.5))
-(res <- aggregateDist("simulation", model.freq = model.freq, model.sev = model.sev, h =
-h, TOL = 1e-05))
-
-### 'recursive' method
-(res <- aggregateDist("recursive", model.freq = model.freq, model.sev =
-model.sev, h = h, TOL = 1e-08 ))
-
-### 'exact' method
-(res <- aggregateDist("exact", model.freq = model.freq, model.sev = model.sev, h = h, TOL = 1e-08 ))
+2+2
 }
 \keyword{distribution}
 \keyword{models}

@@ -6,9 +6,9 @@
   Approximates the distribution of the total amount of claims. 
 }
 \usage{
-normal(x, mean, var)
+normal(mean, var)
 
-np2(x, mean, var, skewness)
+np2(mean, var, skewness)
 
 }
 
@@ -55,14 +55,8 @@ Risk Theory for Actuaries}, Chapman & Hall, Sections 4.2.2 - 4.2.4}
   Louis-Philippe Pouliot}
 
 \examples{
-x <- seq(0, qnorm(1-1E-5, mean = 200, sd = sqrt(500)), by = 0.001)
-
-distribution <- normal(x, mean = 200, var = 500)
-plot(distribution)
-
-
-distribution <- np2(x, mean = 200, var = 500, skewness = 0.25)
-plot(distribution)
+distribution <- normal(mean = 200, var = 500)
+distribution <- np2(mean = 200, var = 500, skewness = 0.25)
 }
 \keyword{distribution}
 \keyword{models}

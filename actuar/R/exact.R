@@ -1,4 +1,4 @@
-exact <- function(fx, pn)
+exact <- function(x.scale = 1, fx, pn)
 {
     ## Exact calculation of the total amount of claims probability
     ## function by convolution. Requires a discrete distribution for
@@ -16,6 +16,8 @@ exact <- function(fx, pn)
     ## A vector of probabilities.
 
     ## Some useful lengths.
+    env = new.env()
+    call <- match.call()
     m <- length(fx)      # 1 + maximum claim amount
     n <- length(pn) - 1  # maximum number of claims
     r <- n * m - n + 1   # maximum total amount of claims
@@ -31,7 +33,11 @@ exact <- function(fx, pn)
         fxc <- convolve(fx, rev(fxc), type="open")
         fs[pos] <- fs[pos] + fxc * pn[i + 1] 
     }
-    res <- list(fs = fs, Fs = cumsum(fs), call = call, FUN = approxfun(cumsum(fs)))
-    class(res) <- "aggregateDist"
-    res
+    FUN <- stepfun((0:(length(fs)-1))*x.scale, c(0,cumsum(fs)))
+    class(FUN) <- c("aggregateDist", "ecdf", class(FUN))
+    assign("call", call, env = environment(FUN))
+    assign("fs", fs, env = environment(FUN))
+    assign("x.scale", x.scale, env = environment(FUN))
+    FUN
 }
+

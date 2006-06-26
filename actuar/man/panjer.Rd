@@ -6,17 +6,17 @@
   of a portfolio. 
 }
 \usage{
-panjer(fx, freq.dist = c("pois", "nbinom", "binom",
-"geom", "logarithmic"),par, p0, TOL = 1e-08, echo= FALSE)
+panjer(fx, x.scale = 1, model.freq, p0, TOL = 1e-08, echo= FALSE)
 
 }
 
 \arguments{
   \item{fx}{ a vector of the (discretized) claim amount distribution;
     first element *must* be \eqn{f_X(0)}}
-  \item{freq.dist}{name of the counting distribution}
-  \item{par}{ named list of the parameter(s) of the counting
-    distribution as they are defined in "rdist".}
+  \item{x.scale}{ value in a monetary unit of an amount of 1 in the
+    severity model.}
+  \item{model.freq}{ named list containing the frequency model (see details
+    below)}
   \item{p0}{arbitrary amount of probability at zero given to the
     frequency distribution. It creates zero-modified or zero-truncated distributions} 
   \item{TOL}{ stop recursion when cumulative probability function is
@@ -57,14 +57,16 @@ panjer(fx, freq.dist = c("pois", "nbinom", "binom",
 
 \examples{
 ### (a,b,0) class with the binomial distribution
-(a <- panjer(fx=rep(0.5,2), freq.dist="binom",par=list(size=3, prob=0.5),echo=TRUE))
+model.freq <- list(dist="binom", par=list(size=3, prob=0.5))
+(a <- panjer(fx=rep(0.5,2), model.freq = model.freq,echo=TRUE))
  
 
 ### Example 6.18 of "Loss Models" (Second Edition).
-### (a,b,1) class with the Extended Truncated Negative Binomial distribution.  
+### (a,b,1) class with the Extended Truncated Negative Binomial
+### distribution.
+model.freq <- list(dist="nbinom", par = list(size=0.2, prob=0.25))  
 (a <-
-panjer(fx=c(0.3, 0.5, 0.2), "nbinom", par=list(size=0.2, prob=0.25), p0=0, TOL=1E-5, echo=TRUE))
-plot(a)
+panjer(fx=c(0.3, 0.5, 0.2), model.freq = model.freq, p0=0, TOL=1E-5, echo=TRUE))
 }
 \keyword{distribution}
 \keyword{models}

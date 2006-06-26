@@ -1,4 +1,4 @@
-simS <- function(x, model.freq, model.sev)
+simS <- function(x, model.freq, model.sev, x.scale = 1)
 {
     call <- match.call()
     rfreq <- match.fun(paste("r", model.freq$dist, sep = ""))
@@ -6,14 +6,15 @@ simS <- function(x, model.freq, model.sev)
     N <- rfreq(x)
 
     rsev <- match.fun(paste("r", model.sev$dist, sep=""))
-    formals(rsev)[names(model.sev$par)] <- model.sev$par
+    formals(rsev)[names(model.sev$par)] <- lapply(model.sev$par, eval.parent)
     X <- sapply(sapply(N, rsev),sum)
-    X <- sort(X)
-    Fs <- ecdf(X)(seq(0, quantile(X, 0.999), length = x))
-    fs <- c(0, diff(Fs))
-    res <- list(fs = fs, Fs = Fs, call = call, FUN = approxfun(Fs))
-    class(res) <- "aggregateDist"
-    res
+    X <- x.scale*sort(X)
+    FUN <- ecdf(X)
+    class(FUN) <- c("aggregateDist", class(FUN))
+    assign("call", call, env = environment(FUN))
+    assign("X", X, env = environment(FUN))
+    assign("x.scale", x.scale, env = environment(FUN))
+    FUN
 }
 
 

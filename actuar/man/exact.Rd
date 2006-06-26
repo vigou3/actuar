@@ -6,7 +6,7 @@
   by concolution.
 }
 \usage{
-exact(fx, pn)
+exact(x.scale = 1, fx, pn)
 }
 
 \arguments{
@@ -52,17 +52,17 @@ exact(fx, pn)
   }
 
   \examples{
+#x.scale <- 1/0.04
+#limsev <- qbeta(1 - 1E-5, 2, 5)                         ### Discretization of
+#Fx <- pbeta(seq(from=0, to=limsev, by=1/x.scale), 2, 5) ### the severity distribution
+#fx <- c(0, diff(Fx))
 
-limsev <- qbeta(1 - 1E-5, 2, 5)                    ### Discretization of
-Fx <- pbeta(seq(from=0, to=limsev, by=0.04), 2, 5) ### the severity distribution
-fx <- c(0, diff(Fx))
 
+#limfreq <- qpois(1-1E-5, 3)                      ### Discretization of
+#Pn <- ppois(seq(from=0, to=limfreq), 3) ### the frequency distribution
+#pn <- c(0, diff(Pn))
 
-limfreq <- qpois(1-1E-5, 3)                      ### Discretization of
-Pn <- ppois(seq(from=0, to=limfreq, by=0.04), 3) ### the frequency distribution
-pn <- c(0, diff(Pn))
-
-d <- exact(fx, pn) 
+#d <- exact(x.scale, fx, pn) 
 }
 \keyword{distribution}
 \keyword{models}
