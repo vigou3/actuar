@@ -11,7 +11,7 @@ grouped <- function(x, y = NULL)
   }
   nx <- length(x)
   ny <- length(y)
-  if(nx - ny > 1 | nx - ny < 0)
+  if(nx - ny > 1 || nx - ny < 0)
     stop("length(x) incorrect")
   if(nx - ny == 1)
       y = c(0, y)
