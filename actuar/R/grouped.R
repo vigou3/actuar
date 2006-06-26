@@ -3,7 +3,7 @@
 ###
 ### Ogive et histogramme pour données groupées
 
-grouped <- function(x, y = NULL)
+grouped <- function(x, y = NULL, digits = 2)
 {
   if(class(x) == "data.frame"){
     y <- x[, 2]
@@ -15,8 +15,10 @@ grouped <- function(x, y = NULL)
     stop("length(x) incorrect")
   if(nx - ny == 1)
       y = c(0, y)
+  if(nx == ny && y[1] != 0)
+    stop("length(y) incorrect")
    
-  res = list(cj = x, nj = y)
+  res = list(cj = x, nj = y, digits = digits)
   class(res) <- c("data.grouped")
   attr(res, "call") <- sys.call()
   res
@@ -79,6 +81,20 @@ print.groupedData <- function (x, digits= getOption("digits") - 2, ...)
 
 print.data.grouped <- function(x, ...)
 {
+  digits <- x$digits
+  numform <- function(x) formatC(x, digits = digits, format = "e")
+  numformy <- function(x) formatC(x)
+  y <- x$nj
+  x <- x$cj
+  x1 <- length(x)
+  
+  if(length(x$cj) == length(x$nj))
+    cat("          cj     ", "          nj       ", "\n",paste("[",numform(c(0, x[-x1])),", ",numform(x),")", "       ", numformy(y), "\n", sep = ""))
+  else
+    cat("          cj     ", "          nj       ", "\n",paste("[",numform(x[-x1]),", ",numform(x[-1]),")", "       ", numform(y), "\n", sep = ""))
+}
+
+  
   
 
-}
+
