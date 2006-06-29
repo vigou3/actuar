@@ -7,14 +7,13 @@
 }
 \usage{
 panjer(fx, x.scale = 1, model.freq, p0, TOL = 1e-08, echo= FALSE)
-
 }
 
 \arguments{
   \item{fx}{ a vector of the (discretized) claim amount distribution;
     first element *must* be \eqn{f_X(0)}}
-  \item{x.scale}{ value in a monetary unit of an amount of 1 in the
-    severity model.}
+  \item{x.scale}{ value of an amount of 1 in the
+    severity model given in \code{fx}.}
   \item{model.freq}{ named list containing the frequency model (see details
     below)}
   \item{p0}{arbitrary amount of probability at zero given to the
@@ -39,7 +38,7 @@ panjer(fx, x.scale = 1, model.freq, p0, TOL = 1e-08, echo= FALSE)
   is equal to 0. 
 }
 \value{
- An object of class \code{aggregateDist}. For details on the elements of
+  An empirical distribution function of class \code{aggregateDist}. For details on
  such objects, refer to the more general function \code{\link{aggregateDist}}. 
 }
 \references{  Klugman, S.A and Panjer,H.H and Willmot, G.E (2004),

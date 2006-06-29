@@ -16,12 +16,10 @@ exact <- function(x.scale = 1, fx, pn)
     ## A vector of probabilities.
 
     ## Some useful lengths.
-    env = new.env()
     call <- match.call()
     m <- length(fx)      # 1 + maximum claim amount
     n <- length(pn) - 1  # maximum number of claims
     r <- n * m - n + 1   # maximum total amount of claims
-    call <- match.call()
     ## Initialization of the output vector.
     fs <- rep(0, r)
     fs[1] <- pn[1]       # Pr[S = 0] = Pr[N = 0]
@@ -33,11 +31,13 @@ exact <- function(x.scale = 1, fx, pn)
         fxc <- convolve(fx, rev(fxc), type="open")
         fs[pos] <- fs[pos] + fxc * pn[i + 1] 
     }
-    FUN <- stepfun((0:(length(fs)-1))*x.scale, c(0,cumsum(fs)))
+    FUN <- stepfun((0:(length(fs) - 1)) * x.scale, c(0, cumsum(fs)))
     class(FUN) <- c("aggregateDist", "ecdf", class(FUN))
-    assign("call", call, env = environment(FUN))
-    assign("fs", fs, env = environment(FUN))
-    assign("x.scale", x.scale, env = environment(FUN))
+    assign("call", call, environment(FUN))
+    assign("fs", fs, environment(FUN))
+    assign("x.scale", x.scale, environment(FUN))
+    assign("label", "Direct calculation", environment(FUN))
+    #comment(FUN) <- "Direct calculation"
     FUN
 }
 

@@ -1,24 +1,55 @@
 quantile.aggregateDist <- function(x, approx.lin = FALSE,
-                                   p = c(0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99, 0.995),
+                                   probs = c(0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99, 0.995),
                                    names = TRUE, ...)
 {
-    n <- length(x)
-    upper <- sapply(p, function(q) min(which(x$Fs > q)))
+    label <- get("label", environment(x))
+    #label <- comment(x)
+
+    ## The Normal and Normal Power approximations are the only
+    ## continuous distributions of class 'aggregateDist'. They are
+    ## therefore treated differently, using the 'base' quantile
+    ## function qnorm().
     
-    ans <- upper
-    if (approx.lin)
+    if (label == "Normal approximation")
+        
+        ## A trivial call to qnorm() with given the moments of the distribution 
+        qnorm(probs, get("mean" ,environment(x)), sqrt(get("var", environment(x))))
+    if (label == "Normal Power approximation")
     {
-        lower <- sapply(p, function(q) max(which(x$Fs < q)))
-        h <- (x$Fs[upper] - p) / (x$Fs[upper] - x$Fs[lower])
-        ans <- (1 - h) * lower + h * upper
+        mean <- get("mean" ,environment(x))
+        var <- get("var", environment(x))
+        skewness <- get("skewness", environment(x))
+
+        ## Calling qnorm() and inverting the Normal Power 'standardization' 
+        ans <- ifelse(probs <= 0.5, NA, 
+                      ((qnorm(probs)+ 3/skewness )^2 - 9/(skewness^2) -1)*sqrt(var)*skewness/6 + mean)   
+    }
+    else
+    {
+        ## An empirical and discrete approach is used for 'aggregateDist'
+        ## objects issued of methods other than Normal or Normal Power.
+        
+        Fs <- get("y", environment(x))
+        x <- get("x", environment(x))
+        upper <- sapply(probs, function(q) x[min(which(Fs > q))])
+    
+        ans <- upper
+        if (approx.lin)
+        {
+            lower <- sapply(probs, function(q) max(which(Fs < q)))
+            h <- (Fs[upper] - probs) / (Fs[upper] - Fs[lower])
+            ans <- (1 - h) * lower + h * upper
+        }
     }
     if (names)
     {
         dig <- max(2, getOption("digits"))
-        names(ans) <- formatC(paste(100 * p, "%"), format = "fg", wid = 1, digits = dig)
+        names(ans) <- formatC(paste(100 * probs, "%"), format = "fg", wid = 1, digits = dig)
     }
     ans  
 }
+
+
 
 
 

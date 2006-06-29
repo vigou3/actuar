@@ -3,7 +3,8 @@
 \alias{np2}
 \title{Normal and Normal Power Approximation of the Total Amount of Claims Ditribution }
 \description{
-  Approximates the distribution of the total amount of claims. 
+  Approximate the total amount of claims distribution using the first
+  two or the first three moments. 
 }
 \usage{
 normal(mean, var)
@@ -13,7 +14,6 @@ np2(mean, var, skewness)
 }
 
 \arguments{
-  \item{x}{ value at which the function is evaluated}
   \item{mean}{ true mean of the distribution}
   \item{var}{ true variance of the distribution}
   \item{skewness}{true skewness of the distribution}
@@ -40,7 +40,7 @@ np2(mean, var, skewness)
   This formula is valid only for the right-hand tail of the distribution and skewness should not exceed unity.
 }
 \value{
- An object of class \code{aggregateDist}. For details on the elements of
+ An distribution function of class \code{aggregateDist}. For details on
  such objects, refer to the more general function \code{\link{aggregateDist}}. 
 }
 \seealso{

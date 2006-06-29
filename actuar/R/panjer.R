@@ -1,7 +1,6 @@
 
 panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
 {
-    env <- new.env()
     call <- match.call()
     ## Express TOL as a value close to 1.
     TOL <- 1 - TOL
@@ -141,6 +140,8 @@ panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
     assign("fs", fs, env = environment(FUN))
     assign("call", call, env = environment(FUN))
     assign("x.scale", x.scale, env = environment(FUN))
+    assign("label", "Recursive method approximation", environment(FUN))
+    #comment(FUN) <- "Recursive method approximation"
     FUN    
 }
 

@@ -14,13 +14,21 @@ np2 <- function(mean, var, skewness)
     ## RETURNS
     ##
     ## 'NA' if x <= mean, probability otherwise.
+    call <- match.call()
+    
     FUN <- function(x)
     {
         ifelse(x <= mean, NA,
-               pnorm(sqrt(1 + 9/skewness^2 + 6 * (x - mean)/(sqrt(var) * skewness)) - 3/skewness))
-    }                  
+               pnorm(sqrt(1 + 9/skewness^2 + 6 * (x - mean)/(sqrt(var) * skewness)) - 3/skewness))                 }
+    
     class(FUN) <- c("aggregateDist", class(FUN))
+    assign("label", "Normal Power approximation", environment(FUN))
+    #comment(FUN) <- "Normal Power approximation"
+    assign("call", call, environment(FUN))
+    attr(FUN, "source") <- "function(x) pnorm(sqrt(1 + 9/skewness^2 + 6 * (x - mean)/(sqrt(var) * skewness)) - 3/skewness))"
     FUN    
 }
+
+
 
 

@@ -2,14 +2,14 @@
 \alias{simS}
 \title{Simulation of a Total Amount of Claims Distribution}
 \description{
-  \code{simS} simulates a distribution of the total amount of claims.
+  Approximate the total amount of claims distribution by simulation.
 }
 \usage{
-simS(x, model.freq, model.sev)
+simS(n, model.freq, model.sev)
 }
 
 \arguments{
-  \item{x}{ number of observations to be simulated}
+  \item{n}{ number of observations to be simulated}
   \item{model.freq}{ named list containing the frequency model (see
     details below)}
   \item{model.sev}{ named list containing the frequency model (see
@@ -23,7 +23,7 @@ simS(x, model.freq, model.sev)
     defined in \code{pdist}} 
 }
 \value{
- An object of class \code{aggregateDist}. For details on the elements of
+ An empirical distribution function of class \code{aggregateDist}. For details on
  such objects, refer to the more general function \code{\link{aggregateDist}}. 
 }
 \seealso{
