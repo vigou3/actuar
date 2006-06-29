@@ -36,8 +36,8 @@ exact <- function(x.scale = 1, fx, pn)
     assign("call", call, environment(FUN))
     assign("fs", fs, environment(FUN))
     assign("x.scale", x.scale, environment(FUN))
-    assign("label", "Direct calculation", environment(FUN))
-    #comment(FUN) <- "Direct calculation"
+    #assign("label", "Direct calculation", environment(FUN))
+    comment(FUN) <- "Direct calculation"
     FUN
 }
 

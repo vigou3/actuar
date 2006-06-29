@@ -2,8 +2,8 @@ quantile.aggregateDist <- function(x, approx.lin = FALSE,
                                    probs = c(0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99, 0.995),
                                    names = TRUE, ...)
 {
-    label <- get("label", environment(x))
-    #label <- comment(x)
+    #label <- get("label", environment(x))
+    label <- comment(x)
 
     ## The Normal and Normal Power approximations are the only
     ## continuous distributions of class 'aggregateDist'. They are

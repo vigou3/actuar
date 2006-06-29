@@ -8,9 +8,9 @@ normal <- function(mean, var)
     FUN <- function(x) pnorm((x - mean)/sqrt(var))
     class(FUN) <- c("aggregateDist", class(FUN))
     assign("call", call, environment(FUN))
-    assign("label", "Normal approximation", environment(FUN))
+    #assign("label", "Normal approximation", environment(FUN))
     attr(FUN, "source") <- "function(x) pnorm((x - mean)/sqrt(var))"
-    #comment(FUN) <- "Normal approximation"
+    comment(FUN) <- "Normal approximation"
     FUN
 }
 

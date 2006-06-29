@@ -2,6 +2,7 @@
 \alias{aggregateDist}
 \alias{print.aggregateDist}
 \alias{plot.aggregateDist}
+\alias{summary.aggregateDist}
 \alias{mean.aggregateDist}
 \title{Compute the Distribution of Claim Amounts }
 \description{
@@ -17,6 +18,8 @@ aggregateDist(method = c("normal", "np2", "simulation", "recursive", "exact"),
 \method{print}{aggregateDist}(x, \dots)
 
 \method{plot}{aggregateDist}(x, xlim, \dots)
+
+\method{summary}{aggregateDist}(object, \dots)
 
 \method{mean}{aggregateDist}(x, \dots)
 }
@@ -45,6 +48,7 @@ aggregateDist(method = c("normal", "np2", "simulation", "recursive", "exact"),
   \item{echo}{print the cumulative distribution of the total amount of
     claims as it is computed when approximating by recursion.}
   \item{x}{ an \code{aggregateDist} object}
+  \item{object}{ an \code{aggregateDist} object}
   \item{xlim}{the x limits (x1,x2) of the plot.} 
   \item{...}{ arguments potentially required by additionnal methods and
     additionnal plotting options in the case of \code{plot.aggregateDist}}   	  

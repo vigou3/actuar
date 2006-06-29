@@ -8,8 +8,7 @@ aggregateDist <- function(method = c("normal", "np2", "simulation", "recursive",
     ## distribution.
   
     method <- match.arg(method)
-    
-    
+  
     if (method == "normal"){
        
         ## An error message is issued if the number of moments listed
@@ -34,7 +33,7 @@ aggregateDist <- function(method = c("normal", "np2", "simulation", "recursive",
     ## before being passed on.
 
     if (class(model.sev) == "numeric") fx <- model.sev
-       
+    
     else
     {
         psev <- match.fun(paste("p", model.sev$dist, sep = ""))
@@ -51,7 +50,6 @@ aggregateDist <- function(method = c("normal", "np2", "simulation", "recursive",
         else 
             return(panjer(fx, x.scale = x.scale, model.freq, p0 = p0, echo = echo, TOL = TOL))
     }
-    
     if (method == "exact")
     {
         if (class(model.freq) == "numeric")
@@ -68,6 +66,99 @@ aggregateDist <- function(method = c("normal", "np2", "simulation", "recursive",
         }
         return(exact(x.scale = x.scale, fx = fx, pn = pn))
     }
+}
+
+print.aggregateDist <- function(x, ...)
+{
+    cat("\nAggregate Claim Amounts Empirical CDF\n")
+    #cat("  ", label <- get("label", environment(x)), "\n\n")
+    cat("  ", label <- comment(x), "\n\n")
+    if (label %in% c("Direct calculation", "Recursive method approximation"))
+        cat("Discretization step :", get("x.scale", envir = environment(x)), "\n\n")
+    
+    cat("Call:\n")
+    print(get("call", envir = environment(x)))
+    cat("\n")
+
+    if (label %in% c("Direct calculation",
+                      "Recursive method approximation",
+                      "Approximation by simulation"))
+    {
+        n <- length(get("x", environment(x)))
+        cat("Data:  (", n, "obs. )\n")
+        numform <- function(x) paste(formatC(x, dig = 4, width = 5), collapse = ", ")
+        i1 <- 1:min(3, n)
+        i2 <- if (n >= 4)
+            max(4, n - 1):n
+        else integer(0)
+        xx <- eval(expression(x), env = environment(x))
+        cat(" x[1:", n, "] = ", numform(xx[i1]), if (n > 3) 
+        ", ", if (n > 5) 
+        " ..., ", numform(xx[i2]), "\n", sep = "")
+        cat("\n")
+    } 
+    if (label %in% c("Normal approximation",
+                      "Normal Power approximation"))
+    {
+        cat(attr(x, "source"), "\n")
+    }
+    print(environment(x))
+    cat("Class attribute:\n")
+    print(attr(x, "class"))   
+}
+
+plot.aggregateDist <- function(x, xlim, ...)
+{
+    ## Function plot() is used for the discretized
+    ## CDFs and function curve() in the continuous cases.
+    main <- "Aggregate Claims Distribution"
+    
+    if ("stepfun" %in% class(x)){
+
+        ## Method for class 'ecdf' will most
+        ## probably be used.
+        NextMethod(ylab = "", main = main) 
+    }
+    else
+    {
+        ## Limits for the x-axis are built if none are given
+        ## in argument.
+        
+        if (missing(xlim)){
+            mean <- get("mean", environment(x))
+            sd <- sqrt(get("var", environment(x)))
+            xlim <- c(mean - 3*sd, mean + 3*sd)
+        }
+        curve(x, main = main, ylab = "", xlim = xlim, ylim = c(0,1))
+    }
+    mtext(expression(F*scriptstyle(s)(x)), side = 2, line = 2)
+    #mtext(get("label", environment(x)), line = 0)
+    mtext(comment(x), line = 0)    
+}
+
+summary.aggregateDist <- function(object, ...)
+    {structure(object, class = c("summary.aggregateDist", class(object)))}
+
+print.summary.aggregateDist <- function(x, ...)
+{
+    cat(ifelse(comment(x) %in% c("Normal approximation","Normal Power approximation"),
+               "Aggregate Claim Amounts CDF:\n",
+               "Aggregate Claim Amounts Empirical CDF:\n"))
+    q <- quantile(x, p = c(0.25, 0.5, 0.75))
+    expectation <- mean(x)
+    
+    if (eval(expression(label), environment(x)) %in% c("Normal approximation","Normal Power approximation"))
+    {
+        min <- 0; max <- NA
+    }
+    else
+    {
+        max <- tail(eval(expression(x), environment(x)), 1)
+        min <- head(eval(expression(x), environment(x)), 1)
+    }
+    res <- c(min, q[1:2], expectation, q[3], max)
+    names(res) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
+    print(res)
 }
     
 
