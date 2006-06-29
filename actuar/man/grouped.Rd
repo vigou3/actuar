@@ -1,63 +1,66 @@
 \name{grouped}
 \alias{grouped}
 \alias{Grouped}
-\alias{groupedData}
-\alias{plot.groupedData}
-\alias{hist.groupedData}
+\alias{data.grouped}
+\alias{hist.data.grouped}
+\alias{print.data.grouped}
 \title{Grouped data}
-\description{ 
+\description{
+  Compute or plot a histogram for grouped data.
   For grouped data, the histogram is obtained by differentiating the
   ogive. 
 }
 \usage{
-grouped(x, y = NULL)
-\method{plot}{groupedData}(x, y = NULL, xlim = NULL, ylim = NULL, xlab =
-"group boundaries", ylab = "F(x)", col = 1, ...)
-\method{hist}{groupedData}(x, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "f(x)", ...)
+grouped(x, y = NULL, digits = 2)
+\method{hist}{data.grouped}(x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab =
+"boundaries", ylab = "f(x)", plot = TRUE, ...)
+\method{print}{data.grouped}(x, ...)
 }
 \arguments{
   \item{x, y}{the \code{x} and \code{y} arguments provide the x and y coordinates for
-          the plot.  Any reasonable way of defining the coordinates is
-          acceptable.  See the function \code{xy.coords} for
-	  details. Also, \code{x} may contains an object of class \code{data.frame}}
+    the plot. \code{Length(x)} must be equal to \code{length(y) + 1}. If
+    \code{length(x)} = \code{length(y)}, \code{y[1]} is ignored.
+    Also, \code{x} may contains an object of class \code{data.frame}}
+  \item{main}{title of the histogram}
   \item{xlim}{the x limits (x1,x2) of the plot.  Note that \code{x1 > x2} is
           allowed and leads to a "reversed axis".}
   \item{ylim}{the y limits of the plot.}
   \item{xlab}{a label for the x axis}
   \item{ylab}{a label for y axis.}
-  \item{col}{the colors for lines and points.}
+  \item{plot}{logical.  If \code{TRUE} (default), a histogram is plotted,
+          otherwise a list of \code{cj}, \code{nj} and \code{density} is returned.}
+  \item{digits}{the desired number of digits after the decimal point.}
   \item{\dots}{potential further arguments required by generic.}
 }
 \details{
-  The formula for ogive is \deqn{F_n(x) = \frac{c_j - x}{c_j - c_{j -
-	1}}F_n(c_{j-1}) + \frac{x - c_{j-1}}{c_j -
-      c_{j-1}}F_n(c_j)}{(c_j - x)/(c_j)- c_(j-1) F_n(c_(j-1)) + (x -
-    c_(j-1))/(c_j - c_(j-1)) F_n(c_j)}
-  for \eqn{c_{j-1} \leq x \leq c_j}.
-  The formula for histogram is \deqn{f_n(x) = \frac{F_n(c_j) - F_n(c_{j-1})}{c_j - c_{j -
+  The theorical formula for histogram is \deqn{f_n(x) = \frac{F_n(c_j) - F_n(c_{j-1})}{c_j - c_{j -
 	1}}}{(F_n(c_j) - F_n(c_(j-1)))/(c_j - c_(j-1))}
   for \eqn{c_{j-1} \leq x < c_j}.
 }
 \value{
-  Returns an object of \code{class} \code{"groupedData"}. Function \code{plot} can
-     be used to draw the ogive and function \code{hist} can be used to
-     construct histogram.
-  An object of class \code{"groupedData"} is a list with the following
+  Returns an object of \code{class} \code{"data.grouped"}. Function \code{hist} can be used to
+  construct histogram and function \code{ogive} can be used to calculate the ogive.
+  An object of class \code{"data.grouped"} is a list with the following
   components:
-    \item{cj}{group boundaries.}
-    \item{Fnt}{empirical distribution function evaluated at group boundaries.}
-    \item{fnt}{ density function evaluated at group boundaries.}
+    \item{cj}{boundaries.}
+    \item{nj}{}
 }
 \references{Klugman, Panjer & Willmot, Loss Models, Second
   Edition, Wiley, 2004.
+}
+\note{
+  See also \code{\link{ogive}}. 
+
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Mathieu Pigeon
 }
 \examples{
-t<-grouped(data1)
-plot(t)
-hist(grouped(data1))
+cj <- c(0, 10, 20, 30, 40)
+nj <- c(4, 12, 11, 2)
+data <- grouped(cj, nj)
+hist(data, plot = FALSE)
+plot(ogive(data))
 }
 \keyword{hplot}

@@ -1,7 +1,13 @@
 
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Ogive et histogramme pour données groupées
+### Ogive and histogram for grouped data
+###
+### See Klugman, Panjer & Willmot, Loss Models, Second
+### Edition, Wiley, 2004.
+###
+### AUTHORS: Vincent Goulet <vincent.gouletaact.ulaval.ca> Mathieu Pigeon
+
 
 grouped <- function(x, y = NULL, digits = 2)
 {
@@ -33,21 +39,21 @@ ogive <- function(x, y = NULL)
     if (length(x) < 1) 
         stop("'x' must have 1 or more non-missing values")
     Fnt <- approxfun(x, cumsum(y) / sum(y), yleft = 0, yright = 1, method = "linear", ties = "ordered")
-    class(Fnt) <- c("groupedData", class(Fnt))
+    class(Fnt) <- c("ogive", class(Fnt))
     attr(Fnt, "call") <- sys.call()
     Fnt
 }
 
-hist.data.grouped <- function (x, y = NULL, freq = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab = "grouped boundaries", ylab = "f(x)", plot = TRUE, ...)
+hist.data.grouped <- function (x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab = "boundaries", ylab = "f(x)", plot = TRUE, ...)
 {
   if(class(x) == "data.grouped"){
      y <- x$nj
      x <- x$cj
    }
-  fnt <- approxfun(x, y / (sum(y) * diff(c(0, x))), yleft = 0, yright = 0, f = 1, method = "constant")
+  fnt <- approxfun(x, c(0, y[-1] / (sum(y) * diff(x))), yleft = 0, yright = 0, f = 1, method = "constant")
   r <- structure(list(cj = x, nj = y, density = fnt(x)), class = "histogram")
   if(plot){
-    plot(c(0, x) , fnt(c(0, x)), main = main, xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, type = "S", frame = FALSE)
+    plot(x , fnt(x), main = main, xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, type = "S", frame = FALSE)
     segments(x, 0, x, fnt(x))
     segments(0, 0, max(x), 0)
     invisible(r)
@@ -57,13 +63,13 @@ hist.data.grouped <- function (x, y = NULL, freq = NULL, main = "Histogram", xli
   }
 }
 
-plot.groupedData <- function (x, y = NULL, xlim = NULL, ylim = NULL, xlab = "group boundaries", ylab = "F(x)", col = 1, ...)
+plot.ogive <- function (x, y = NULL, xlim = NULL, ylim = NULL, xlab = "boundaries", ylab = "F(x)", col = 1, ...)
 {
   xval <- eval(expression(x), env = environment(x))
   plot(xval, x(xval),  main = "Ogive", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, col = col, type = "o", pch = 20)
 }
 
-print.groupedData <- function (x, digits= getOption("digits") - 2, ...)
+print.ogive <- function (x, digits= getOption("digits") - 2, ...)
 {
   numform <- function(x) paste(formatC(x, dig=digits), collapse=", ")
   cat("Empirical CDF for grouped data \nCall: ")
@@ -87,11 +93,8 @@ print.data.grouped <- function(x, ...)
   y <- x$nj
   x <- x$cj
   x1 <- length(x)
-  
-  if(length(x$cj) == length(x$nj))
-    cat("          cj     ", "          nj       ", "\n",paste("[",numform(c(0, x[-x1])),", ",numform(x),")", "       ", numformy(y), "\n", sep = ""))
-  else
-    cat("          cj     ", "          nj       ", "\n",paste("[",numform(x[-x1]),", ",numform(x[-1]),")", "       ", numform(y), "\n", sep = ""))
+ 
+    cat("          cj     ", "          nj       ", "\n",paste("[",numform(x[-x1]),", ",numform(x[-1]),")", "       ", numformy(y[-1]), "\n", sep = ""))
 }
 
   

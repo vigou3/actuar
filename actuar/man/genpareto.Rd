@@ -38,7 +38,7 @@
   \eqn{c > 0}. Here Gamma(a) is the function implemented by R's \code{gamma()} and defined in its help.
 
   Let Y be a Beta random variable with parameters
-  \code{shape1} and \code{shape2}. Then, \deqn{\text{scale}(\frac{Y}{1 - Y})}{
+  \code{shape1} and \code{shape2}. Then, \deqn{scale(\frac{Y}{1 - Y})}{
     scale (Y / (1 - Y))} has the Generalized Pareto probability density function with parameters
   \code{shape1}, \code{scale} and \code{shape2}.
 
