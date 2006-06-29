@@ -1,6 +1,7 @@
 mean.aggregateDist <- function(x, ...)
 {
-    label <- get("label", environment(x))
+    #label <- get("label", environment(x))
+    label <- comment(x)	
 
     ## Simply return the value of the true mean
     ## given in argument in the case of the Normal
