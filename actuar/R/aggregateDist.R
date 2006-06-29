@@ -147,7 +147,7 @@ print.summary.aggregateDist <- function(x, ...)
     q <- quantile(x, p = c(0.25, 0.5, 0.75))
     expectation <- mean(x)
     
-    if (eval(expression(label), environment(x)) %in% c("Normal approximation","Normal Power approximation"))
+    if (comment(x) %in% c("Normal approximation","Normal Power approximation"))
     {
         min <- 0; max <- NA
     }
