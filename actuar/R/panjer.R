@@ -1,3 +1,10 @@
+### ===== actuar: an R package for Actuarial Science =====
+###
+### Panjer recursion formula to compute the approximate distribution
+### of the total amount of claims of a portfolio.  
+###
+### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>,
+### Sébastien Auclair, and Louis-Philippe Pouliot
 
 panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
 {
@@ -135,12 +142,10 @@ panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
         }
     }
     FUN <- stepfun((0:(length(fs)-1))*x.scale, c(0,cumsum(fs)))
-    #FUN <- approxfun((0:(length(fs)-1))*x.scale, cumsum(fs))
     class(FUN) <- c("aggregateDist", "ecdf", class(FUN))
     assign("fs", fs, env = environment(FUN))
     assign("call", call, env = environment(FUN))
     assign("x.scale", x.scale, env = environment(FUN))
-    #assign("label", "Recursive method approximation", environment(FUN))
     comment(FUN) <- "Recursive method approximation"
     FUN    
 }

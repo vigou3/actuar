@@ -91,8 +91,8 @@ bstraub(ratios, weights,
   North-Holland.
 }
 \author{
-  Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
-  Sébastien Auclair
+  Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
+  Sébastien Auclair, and Louis-Philippe Pouliot
 }
 \examples{
 data(hachemeister)

@@ -50,8 +50,8 @@ panjer(fx, x.scale = 1, model.freq, p0, TOL = 1e-08, echo= FALSE)
 }
 
 \author{
-  Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
-  Sébastien Auclair
+  Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
+  Sébastien Auclair, and Louis-Philippe Pouliot
   }
 
 \examples{

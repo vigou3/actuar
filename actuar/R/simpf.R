@@ -1,3 +1,14 @@
+### ===== actuar: an R package for Actuarial Science =====
+### 
+### Simulate a portfolio of data for insurance applications. 
+### Both frequency and severity distributions can have an unknown
+### risk parameter --- that is, they can each be mixtures of
+### models.
+### 
+### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>, Sébastien Auclair,
+### and Louis-Philippe Pouliot
+
+
 simpf <- function(contracts, years, model.freq, model.sev, weights)
 {
     freq <- model.freq

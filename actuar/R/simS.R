@@ -1,3 +1,11 @@
+### ===== actuar: an R package for Actuarial Science =====
+###
+### Simulation of a Total Amount of Claims Distribution
+### 
+###
+### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>
+### and Louis-Philippe Pouliot
+
 simS <- function(n, model.freq, model.sev)
 { 
     call <- match.call()
@@ -21,7 +29,6 @@ simS <- function(n, model.freq, model.sev)
     FUN <- ecdf(x)  ## Computing the empirical CDF
     class(FUN) <- c("aggregateDist", class(FUN))
     assign("call", call, env = environment(FUN))
-    #assign("label", "Approximation by simulation", environment(FUN))
     comment(FUN) <- "Approximation by simulation"
     FUN
 }

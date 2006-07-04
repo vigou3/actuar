@@ -1,20 +1,21 @@
+### ===== actuar: an R package for Actuarial Science =====
+###
+### Exact calculation of the total amount of claims distribution
+### function by convolution. Requires a discrete distribution for
+### the amount of claims.
+###
+### ARGUMENTS
+###
+### fx: a vector of probabilities of the (discritized) claim amount
+###     distribution.
+### pn: a vector of the number of claims probabilities; first element
+###     must be Pr[N = 0].
+###
+### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>,
+### and Louis-Philippe Pouliot
+
 exact <- function(x.scale = 1, fx, pn)
 {
-    ## Exact calculation of the total amount of claims probability
-    ## function by convolution. Requires a discrete distribution for
-    ## the amount of claims.
-    ##
-    ## ARGUMENTS
-    ##
-    ## fx: a vector of probabilities of the (discritized) claim amount
-    ##     distribution.
-    ## pn: a vector of the number of claims probabilities; first element
-    ##     must be Pr[N = 0].
-    ##
-    ## RETURNS
-    ##
-    ## A vector of probabilities.
-
     ## Some useful lengths.
     call <- match.call()
     m <- length(fx)      # 1 + maximum claim amount
@@ -36,7 +37,6 @@ exact <- function(x.scale = 1, fx, pn)
     assign("call", call, environment(FUN))
     assign("fs", fs, environment(FUN))
     assign("x.scale", x.scale, environment(FUN))
-    #assign("label", "Direct calculation", environment(FUN))
     comment(FUN) <- "Direct calculation"
     FUN
 }

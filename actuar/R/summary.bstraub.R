@@ -1,3 +1,9 @@
+### ===== actuar: an R package for Actuarial Science =====
+### 
+### A summary method for class 'bstraub'
+###
+### AUTHORS:  Louis-Philippe Pouliot, Vincent Goulet <vincent.goulet@act.ulaval.ca>
+
 summary.bstraub <- function(object, ...)
     structure(object, class = c("summary.bstraub", class(object)))
 

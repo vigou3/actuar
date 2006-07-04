@@ -1,5 +1,17 @@
+### ===== actuar: an R package for Actuarial Science =====
+###
+### Display all values of a matrix of vectors by 'unrolling' the
+### object vertically or horizontally.  The method for class 'simpf'
+### specifically handles the matrices of data returned by function
+### simpf(), where each element is a vector of losses during a
+### particular year.
+###
+### AUTHORS:  Louis-Philippe Pouliot, Vincent Goulet <vincent.goulet@act.ulaval.ca>
+
 severity <- function(x, bycol = FALSE, ...) UseMethod("severity")
 
+## A new matrix is created where all the data is displayed and empty
+## spaces are filled with NA.
 
 severity.default <- function(x, bycol = FALSE, ...)
 {
@@ -30,6 +42,10 @@ severity.default <- function(x, bycol = FALSE, ...)
     mat
 }
 
+## 'simpf' objects are treated more specifically, being displayed more
+## appropriately with respect to the actuarial context. The
+## possibility of treating separetly the last years of experience is
+## also given.
 
 severity.simpf <- function(x, bycol = FALSE, y.exclude = 0, ...)
 {

@@ -1,3 +1,13 @@
+### ===== actuar: an R package for Actuarial Science =====
+###
+### Buhlmann-Straub Credibility Model:
+###
+### Calculate credibility premiums in the Bühlmann-Straub
+### credibility model.
+###
+### AUTHORS: Vincent Goulet <vincent.gouletaact.ulaval.ca>,
+### Sébastien Auclair, and Louis-Philippe Pouliot
+
 bstraub <- function(ratios, weights, heterogeneity = c("iterative","unbiased"),TOL = 1E-6, echo = FALSE )
 {
     cl <- match.call()

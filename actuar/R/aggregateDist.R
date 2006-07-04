@@ -1,3 +1,12 @@
+### ===== actuar: an R package for Actuarial Science =====
+###
+### Use one of five methods to compute the aggregate claims
+### distribution of a portfolio over one year given a frequency and a
+### severity model or the true moments of the distribution.
+###
+### AUTHORS:  Louis-Philippe Pouliot, Vincent Goulet <vincent.goulet@act.ulaval.ca>,
+
+
 aggregateDist <- function(method = c("normal", "np2", "simulation", "recursive", "exact"),
                           model.sev, model.freq, moments = c(mean = 0, var= 1, skewness = NULL),
                           x.scale = 1, n, p0, TOL = 1e-06, echo = FALSE, ...)
@@ -121,7 +130,7 @@ plot.aggregateDist <- function(x, xlim, ...)
     }
     else
     {
-        ## Limits for the x-axis are built if none are given
+        ## Limits for the x-axis are supplied if none are given
         ## in argument.
         
         if (missing(xlim)){
@@ -132,7 +141,6 @@ plot.aggregateDist <- function(x, xlim, ...)
         curve(x, main = main, ylab = "", xlim = xlim, ylim = c(0,1))
     }
     mtext(expression(F*scriptstyle(s)(x)), side = 2, line = 2)
-    #mtext(get("label", environment(x)), line = 0)
     mtext(comment(x), line = 0)    
 }
 
@@ -163,7 +171,6 @@ print.summary.aggregateDist <- function(x, ...)
 
 mean.aggregateDist <- function(x, ...)
 {
-    #label <- get("label", environment(x))
     label <- comment(x)	
 
     ## Simply return the value of the true mean

@@ -73,8 +73,8 @@ simpf(contracts, years, model.freq, model.sev, weights)
 \references{Goulet, V. (2006), \emph{Credibility for severity
     revisited}, North American Actuarial Journal, to appear.}
 \author{
-  Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
-  Sébastien Auclair
+  Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
+  Sébastien Auclair, and Louis-Philippe Pouliot
 }
 \seealso{
   \code{\link{rearrangepf}} \code{\link{severity}}

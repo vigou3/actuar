@@ -1,3 +1,8 @@
+### ===== actuar: an R package for Actuarial Science =====
+### 
+### A summary method for class 'bstraub'
+###
+### AUTHORS:  Louis-Philippe Pouliot, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 summary.simpf <- function(object,
                           contracts = seq(length = dim(object$data)[1]),
@@ -9,8 +14,6 @@ summary.simpf <- function(object,
     class(object) <- "summary.simpf"
     object    
 }
-
-
 
 print.summary.simpf <- function(x, contracts = x$contracts, years = x$years, ...)
 {

@@ -1,8 +1,13 @@
+### ===== actuar: an R package for Actuarial Science =====
+### 
+### Quantiles for objects of class 'aggregateDist'
+###
+### AUTHORS:  Louis-Philippe Pouliot, Vincent Goulet <vincent.goulet@act.ulaval.ca>
+
 quantile.aggregateDist <- function(x, approx.lin = FALSE,
                                    probs = c(0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99, 0.995),
                                    names = TRUE, ...)
 {
-    #label <- get("label", environment(x))
     label <- comment(x)
 
     ## The Normal and Normal Power approximations are the only
@@ -12,7 +17,7 @@ quantile.aggregateDist <- function(x, approx.lin = FALSE,
     
     if (label == "Normal approximation")
         
-        ## A trivial call to qnorm() with given the moments of the distribution 
+        ## A call to qnorm() with the given the moments of the distribution 
         qnorm(probs, get("mean" ,environment(x)), sqrt(get("var", environment(x))))
     if (label == "Normal Power approximation")
     {
