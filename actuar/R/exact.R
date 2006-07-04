@@ -11,7 +11,7 @@
 ### pn: a vector of the number of claims probabilities; first element
 ###     must be Pr[N = 0].
 ###
-### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>,
+### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>
 ### and Louis-Philippe Pouliot
 
 exact <- function(x.scale = 1, fx, pn)

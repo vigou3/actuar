@@ -4,7 +4,7 @@
 ### distribution of a portfolio over one year given a frequency and a
 ### severity model or the true moments of the distribution.
 ###
-### AUTHORS:  Louis-Philippe Pouliot, Vincent Goulet <vincent.goulet@act.ulaval.ca>,
+### AUTHORS:  Louis-Philippe Pouliot, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 
 aggregateDist <- function(method = c("normal", "np2", "simulation", "recursive", "exact"),
