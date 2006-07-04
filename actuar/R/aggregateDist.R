@@ -160,6 +160,26 @@ print.summary.aggregateDist <- function(x, ...)
     names(res) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
     print(res)
 }
+
+mean.aggregateDist <- function(x, ...)
+{
+    #label <- get("label", environment(x))
+    label <- comment(x)	
+
+    ## Simply return the value of the true mean
+    ## given in argument in the case of the Normal
+    ## and Normal Power approximations.
+    
+    if (label %in% c("Normal approximation",
+                      "Normal Power approximation"))
+        return(eval(expression(mean), environment(x)))
+    
+    else
+        return(crossprod(get("x", environment(x)),
+                         c(0, diff(eval(expression(y), environment(x))))))
+}
+        
+
     
 
                      
