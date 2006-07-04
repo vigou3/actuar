@@ -26,7 +26,7 @@ exact(x.scale = 1, fx, pn)
   
   where
 
-  \deqn{p_n = Pr(X <= x)}{pn = Pr(X <= x)}
+  \deqn{p_n = Pr(X \le x)}{pn = Pr(X <= x)}
 
   and
 
@@ -43,7 +43,7 @@ exact(x.scale = 1, fx, pn)
   precision without demanding considerable computer time. It is well
   known that the n-fold convolutions are computer intensive, thereupon
   the \code{actuar} package proposes a series of approximation methods
-  (enumerated below) to compute CDFs.
+  (see below) to compute CDFs.
 }
 \value{
  An empirical distribution function of class \code{aggregateDist}. For details on

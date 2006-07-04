@@ -34,12 +34,13 @@ aggregateDist(method = c("normal", "np2", "simulation", "recursive", "exact"),
     below). Ignored when using \code{normal} and \code{np2} methods.}
   \item{moments}{ vector containing the moments required by the
     method chosen. Ignored unless \code{normal} or \code{np2} method is called.}
-  \item{x.scale}{ value of an amount of 1 in the severity model.}
-  \item{n}{ number simulations when using the simulation method} 
+  \item{x.scale}{ value of an amount of 1 in the severity model. Ignored
+  unless \code{recursive} or \code{exact} method is used.}
+  \item{n}{ number simulations when using the simulation method.} 
   \item{p0}{ arbitrary amount of probability at zero given to the
     frequency distribution. It creates zero-modified or
     zero-truncated distributions. Ignored unless \code{recursive}
-    method is called.}
+    method is called (see \code{panjer}).}
   \item{TOL}{ used to stop recursion when cumulative probability function is
     less than TOL away from 1 in the \code{recursive} method and passed
     on to a quantile function to limit the discretization of
@@ -47,8 +48,7 @@ aggregateDist(method = c("normal", "np2", "simulation", "recursive", "exact"),
     the \code{recursive} and \code{exact} methods.}
   \item{echo}{print the cumulative distribution of the total amount of
     claims as it is computed when approximating by recursion.}
-  \item{x}{ an \code{aggregateDist} object}
-  \item{object}{ an \code{aggregateDist} object}
+  \item{x, object}{ an \code{aggregateDist} object}
   \item{xlim}{the x limits (x1,x2) of the plot.} 
   \item{...}{ arguments potentially required by additionnal methods and
     additionnal plotting options in the case of \code{plot.aggregateDist}}   	  

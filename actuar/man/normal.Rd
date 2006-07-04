@@ -32,15 +32,12 @@ np2(mean, var, skewness)
 
   \code{np2} approximation has formula:
 
-  \deqn{F(x) \approx N(v(X)) =
-    N\left(-\frac{3}{\gamma_X}+\sqrt{\frac{9}{\gamma_X^2}+1+\frac{6}{\gamma_X}*\frac{X-\mu_X}{\sigma_X}}\right)}{
-      F(X) ~= N(v(X)) = N(-3/gamma_x + sqrt(9/gamma_x^2 + 1 + 6/gamma_x
-      *(X-mu_x)/sigma_x))}
+  \deqn{F(x) \approx N(v(X)) = N \left(-\frac{3}{\gamma_X}+\sqrt{\frac{9}{\gamma_X^2}+1+\frac{6}{\gamma_X}*\frac{X-\mu_X}{\sigma_X}}\right)}{F(X) ~= N(v(X)) = N(-3/gamma_x + sqrt(9/gamma_x^2 + 1 + 6/gamma_x*(X-mu_x)/sigma_x))}
 
   This formula is valid only for the right-hand tail of the distribution and skewness should not exceed unity.
 }
 \value{
- An distribution function of class \code{aggregateDist}. For details on
+ A distribution function of class \code{aggregateDist}. For details on
  such objects, refer to the more general function \code{\link{aggregateDist}}. 
 }
 \seealso{
@@ -55,8 +52,8 @@ Risk Theory for Actuaries}, Chapman & Hall, Sections 4.2.2 - 4.2.4}
   Louis-Philippe Pouliot}
 
 \examples{
-distribution <- normal(mean = 200, var = 500)
-distribution <- np2(mean = 200, var = 500, skewness = 0.25)
+(distribution <- normal(mean = 200, var = 500))
+(distribution <- np2(mean = 200, var = 500, skewness = 0.25))
 }
 \keyword{distribution}
 \keyword{models}

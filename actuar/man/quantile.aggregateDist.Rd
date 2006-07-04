@@ -32,9 +32,13 @@
   a step function.
 
   If the \code{aggregateDist} object was created with the \code{normal}
-  \code{np2} (Normal Power) method, the object is consenquently a continuous
-  distribution issued of a normal standardization. Therefore a call to
-  qnorm() will be made and no approximation is required. 
+  or the \code{np2} (Normal Power) method, the object is consenquently a continuous
+  distribution, the result of a normal standardization. Therefore a call to
+  qnorm() will be made and no approximation is required.
+
+  \deqn{v(X) = \frac{(X - \mu_x)}{\sigma_X}}{
+    v(X) = (X - mu_x)/sigma_x}
+  
 }
 \value{
   A numeric vector, named if \code{names} is \code{TRUE}.}
