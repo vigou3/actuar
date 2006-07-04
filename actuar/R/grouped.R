@@ -51,7 +51,7 @@ hist.grouped.data <- function (x, y = NULL, main = "Histogram", xlim = NULL, yli
      x <- x$cj
    }
   fnt <- approxfun(x, c(0, y[-1] / (sum(y) * diff(x))), yleft = 0, yright = 0, f = 1, method = "constant")
-  r <- structure(list(cj = x, nj = y, density = fnt(x)), class = "histogram")
+  r <- structure(list(cj = x, nj = y[-1], density = fnt(x)), class = "histogram")
   if(plot){
     plot(x , fnt(x), main = main, xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, type = "S", frame = FALSE)
     segments(x, 0, x, fnt(x))
