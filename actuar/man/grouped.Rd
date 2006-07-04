@@ -1,9 +1,9 @@
 \name{grouped}
 \alias{grouped}
 \alias{Grouped}
-\alias{data.grouped}
-\alias{hist.data.grouped}
-\alias{print.data.grouped}
+\alias{grouped.data}
+\alias{hist.grouped.data}
+\alias{print.grouped.data}
 \title{Grouped data}
 \description{
   Compute or plot a histogram for grouped data.
@@ -12,9 +12,9 @@
 }
 \usage{
 grouped(x, y = NULL, digits = 2)
-\method{hist}{data.grouped}(x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab =
+\method{hist}{grouped.data}(x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab =
 "boundaries", ylab = "f(x)", plot = TRUE, ...)
-\method{print}{data.grouped}(x, ...)
+\method{print}{grouped.data}(x, ...)
 }
 \arguments{
   \item{x, y}{the \code{x} and \code{y} arguments provide the x and y coordinates for
@@ -38,9 +38,9 @@ grouped(x, y = NULL, digits = 2)
   for \eqn{c_{j-1} \leq x < c_j}.
 }
 \value{
-  Returns an object of \code{class} \code{"data.grouped"}. Function \code{hist} can be used to
+  Returns an object of \code{class} \code{"grouped.data"}. Function \code{hist} can be used to
   construct histogram and function \code{ogive} can be used to calculate the ogive.
-  An object of class \code{"data.grouped"} is a list with the following
+  An object of class \code{"grouped.data"} is a list with the following
   components:
     \item{cj}{boundaries.}
     \item{nj}{}

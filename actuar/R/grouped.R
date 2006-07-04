@@ -7,7 +7,7 @@
 ### Edition, Wiley, 2004.
 ###
 ### AUTHORS: Vincent Goulet <vincent.gouletaact.ulaval.ca> Mathieu Pigeon
-
+ 
 
 grouped <- function(x, y = NULL, digits = 2)
 {
@@ -25,14 +25,14 @@ grouped <- function(x, y = NULL, digits = 2)
     stop("length(y) incorrect")
    
   res = list(cj = x, nj = y, digits = digits)
-  class(res) <- c("data.grouped")
+  class(res) <- c("grouped.data")
   attr(res, "call") <- sys.call()
   res
   }
 
 ogive <- function(x, y = NULL)
 {
-    if(class(x) == "data.grouped"){
+    if(class(x) == "grouped.data"){
       y <- x$nj
       x <- x$cj
       }
@@ -44,9 +44,9 @@ ogive <- function(x, y = NULL)
     Fnt
 }
 
-hist.data.grouped <- function (x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab = "boundaries", ylab = "f(x)", plot = TRUE, ...)
+hist.grouped.data <- function (x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab = "boundaries", ylab = "f(x)", plot = TRUE, ...)
 {
-  if(class(x) == "data.grouped"){
+  if(class(x) == "grouped.data"){
      y <- x$nj
      x <- x$cj
    }
@@ -69,13 +69,13 @@ plot.ogive <- function (x, y = NULL, xlim = NULL, ylim = NULL, xlab = "boundarie
   plot(xval, x(xval),  main = "Ogive", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, col = col, type = "o", pch = 20)
 }
 
-print.ogive <- function (x, digits= getOption("digits") - 2, ...)
+print.ogive <- function (x, digits = getOption("digits") - 2, ...)
 {
-  numform <- function(x) paste(formatC(x, dig=digits), collapse=", ")
+  numform <- function(x) paste(formatC(x, dig = digits), collapse = ", ")
   cat("Empirical CDF for grouped data \nCall: ")
   print(attr(x, "call"), ...)
-  nc <- length(xxc <- eval(expression(x),env = environment(x)))
-  nn <- length(xxn <- eval(expression(y),env = environment(x)))
+  nc <- length(xxc <- eval(expression(x), env = environment(x)))
+  nn <- length(xxn <- eval(expression(y), env = environment(x)))
   i1 <- 1:min(3, nc)
   i2 <- if(nc >= 4) max(4, nc - 1):nc else integer(0)
   i3 <- 1:min(3, nn)
@@ -85,7 +85,7 @@ print.ogive <- function (x, digits= getOption("digits") - 2, ...)
   invisible(x)
 }
 
-print.data.grouped <- function(x, ...)
+print.grouped.data <- function(x, ...)
 {
   digits <- x$digits
   numform <- function(x) formatC(x, digits = digits, format = "e")
@@ -96,6 +96,26 @@ print.data.grouped <- function(x, ...)
  
     cat("          cj     ", "          nj       ", "\n",paste("[",numform(x[-x1]),", ",numform(x[-1]),")", "       ", numformy(y[-1]), "\n", sep = ""))
 }
+
+"[.grouped.data" <- function(x, is = 1, ie = NULL)
+{
+  if(is.null(ie)){
+    ie <- length(x$cj) - 1
+  }
+  is <- is + 1
+  ie <- ie + 1
+  nj <- x$nj
+  nj <- nj[(is:ie)]
+  cj <- x$cj
+  is <- is - 1
+  cj <- cj[(is:ie)]
+  digits <- x$digits
+  res = list(cj = cj, nj =  c(0, nj), digits = digits)
+  class(res) <- c("grouped.data")
+  attr(res, "call") <- sys.call()
+  res   
+}
+  
 
   
   
