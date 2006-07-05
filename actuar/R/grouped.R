@@ -115,19 +115,25 @@ print.grouped.data <- function(x, ...)
   numformy <- function(x) formatC(x)
 
   ## Use object created by 'grouped' function
-  y <- x$nj
   j <- x$j
   digits <- x$digits
-  x <- x$cj
-  x1 <- length(x)
 
   ## Choose which column(s) is(are) presented.
-  if(j == 1)
+  if(j == 1){
+    x <- x$cj
+    x1 <- length(x)
     cat("          cj     ", "\n", paste("[",numform(x[-x1]),", ",numform(x[-1]),")", "\n", sep = ""))
-  if(j == 2)
-    cat(" nj ", "\n", paste(numformy(y[-1]), "\n", sep = ""))
-  if(j != 1 && j != 2)
+  }
+  if(j == 2){
+    y <- unclass(x$nj)
+    
+  }
+  if(j != 1 && j != 2){
+    y <- x$nj
+    x <- x$cj
+    x1 <- length(x)
     cat("          cj     ", "          nj       ", "\n",paste("[",numform(x[-x1]),", ",numform(x[-1]),")", "       ", numformy(y[-1]), "\n", sep = ""))
+  }
 }
 
 "[.grouped.data" <- function(x, i, j)
@@ -142,14 +148,28 @@ print.grouped.data <- function(x, ...)
   }
 
   ## Create an object of class 'grouped.data'.
+  if(j == 1){
+    cj <- x$cj
+    cj <- cj[c((i), max(i) + 1)]
+    res = list(cj = cj, digits = x$digits, j = j)
+    class(res) <- c("grouped.data")
+    attr(res, "call") <- sys.call()
+  }
+  if(j == 2){
+    nj <- x$nj[-1]
+    nj <- nj[(i)]
+    res = nj
+    class(res) <- c("numeric")
+  }
+  if(j != 1 && j != 2){
   nj <- x$nj[-1]
-  nj <- nj[(i)]
+  nj <- c(0, nj[(i)])
   cj <- x$cj
   cj <- cj[c((i), max(i) + 1)]
-  digits <- x$digits
-  res = list(cj = cj, nj =  c(0, nj), digits = digits, j = j)
+  res = list(cj = cj, nj =  nj, digits = x$digits, j = j)
   class(res) <- c("grouped.data")
   attr(res, "call") <- sys.call()
+  }
   res   
 }
   
