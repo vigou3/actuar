@@ -80,7 +80,6 @@ aggregateDist <- function(method = c("normal", "np2", "simulation", "recursive",
 print.aggregateDist <- function(x, ...)
 {
     cat("\nAggregate Claim Amounts Empirical CDF\n")
-    #cat("  ", label <- get("label", environment(x)), "\n\n")
     cat("  ", label <- comment(x), "\n\n")
     if (label %in% c("Direct calculation", "Recursive method approximation"))
         cat("Discretization step :", get("x.scale", envir = environment(x)), "\n\n")

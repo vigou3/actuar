@@ -1,6 +1,6 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ### 
-### A summary method for class 'bstraub'
+### A summary method for class 'simpf'
 ###
 ### AUTHORS:  Louis-Philippe Pouliot, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
