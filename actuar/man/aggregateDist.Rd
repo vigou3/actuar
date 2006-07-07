@@ -4,7 +4,7 @@
 \alias{plot.aggregateDist}
 \alias{summary.aggregateDist}
 \alias{mean.aggregateDist}
-\title{Compute the Distribution of Claim Amounts }
+\title{Compute the Distribution of Claim Amounts}
 \description{
   Use one of five methods to generate the
   aggregate claims distribution of a portfolio over one year given a frequency and a
@@ -23,7 +23,6 @@ aggregateDist(method = c("normal", "np2", "simulation", "recursive", "exact"),
 
 \method{mean}{aggregateDist}(x, \dots)
 }
-
 \arguments{
   \item{method}{ method to be used}
   \item{model.freq}{ vector of the (discretized) claim amount
@@ -86,18 +85,15 @@ A function of class \code{"aggregateDist"}, inheriting from the
 \code{"function"} class when using Normal and Normal Power
 approximations and additionally inheriting from the \code{"ecdf"} and
 \code{"stepfun"} classes when other methods are used.  
-  
-  
 }
 \seealso{
   \code{\link{panjer}} \code{\link{exact}}
   \code{\link{simS}} \code{\link{np2}} \code{\link{normal}}
   }
-
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
-  Louis-Philippe Pouliot}
-
+  Louis-Philippe Pouliot
+}
 \examples{
 ## Normal Power approximation
   res <- aggregateDist("np2", moments = c(200, 200, 0.5))
@@ -131,7 +127,6 @@ approximations and additionally inheriting from the \code{"ecdf"} and
   (res <- aggregateDist("exact", model.sev = model.sev, model.freq = model.freq, x.scale = 100))
   plot(res)
   res(1000)
-
 }
 \keyword{distribution}
 \keyword{models}

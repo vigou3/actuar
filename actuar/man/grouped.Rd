@@ -16,7 +16,7 @@ grouped(x, y = NULL, digits = 2)
 \method{hist}{grouped.data}(x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab =
 "boundaries", ylab = "f(x)", plot = TRUE, ...)
 \method{print}{grouped.data}(x, ...)
-\method{[}{grouped.data}(x, is, ie)
+\method{[}{grouped.data}(x, i, j)
 }
 \arguments{
   \item{x, y}{the \code{x} and \code{y} arguments provide the x and y coordinates for
@@ -33,7 +33,7 @@ grouped(x, y = NULL, digits = 2)
           otherwise a list of \code{cj}, \code{nj} and \code{density} is returned.}
   \item{digits}{the desired number of digits after the decimal
 	  point.}
-  \item{is, ie}{elements to extract or replace. \code{is, ie} are \code{numeric} or empty.}
+  \item{i, j}{elements to extract or replace. \code{is, ie} are \code{numeric} or empty.}
   \item{\dots}{potential further arguments required by generic.}
 }
 \details{
