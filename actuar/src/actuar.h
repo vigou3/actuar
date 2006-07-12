@@ -4,6 +4,7 @@ SEXP do_dpq1(int code, SEXP args);
 SEXP do_dpq2(int code, SEXP args);
 SEXP do_dpq3(int code, SEXP args);
 SEXP do_dpq4(int code, SEXP args);
+SEXP do_dpq5(int code, SEXP args);
 
 SEXP do_random(SEXP args);
 SEXP do_random1(int code, SEXP args);
@@ -95,6 +96,8 @@ double dtrbeta(double x, double shape1, double scale, double shape2, double shap
 double ptrbeta(double q, double shape1, double scale, double shape2, double shape3, int lower_tail, int log_p);
 double qtrbeta(double p, double shape1, double scale, double shape2, double shape3, int lower_tail, int log_p);
 double rtrbeta(double shape1, double scale, double shape2, double shape3);
+double mtrbeta(double k, double shape1, double scale, double shape2, double shape3, int give_log);
+double levtrbeta(double x, double shape1, double scale, double shape2, double shape3, double order, int give_log);
 
 
 /* Definitions for the table linking the first group of functions to

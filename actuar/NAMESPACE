@@ -27,8 +27,8 @@ export(## Credibility theory
        dtrgamma, ptrgamma, qtrgamma, rtrgamma,
        dinvtrgamma, pinvtrgamma, qinvtrgamma, rinvtrgamma,
        ## Four parameter distributions
-       dtrbeta, ptrbeta, qtrbeta, rtrbeta,
-       dpearson6, ppearson6, qpearson6, rpearson6, #aliases
+       dtrbeta, ptrbeta, qtrbeta, rtrbeta, mtrbeta, levtrbeta,
+       dpearson6, ppearson6, qpearson6, rpearson6, mpearson6, levpearson6,  #aliases
        ## ACT-21412
        grouped, ogive
        )

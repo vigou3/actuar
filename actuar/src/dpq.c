@@ -626,13 +626,145 @@ SEXP do_dpq4(int code, SEXP args)
     case  1:  return DPQ4_1(args, dtrbeta);
     case  2:  return DPQ4_2(args, ptrbeta);
     case  3:  return DPQ4_2(args, qtrbeta);
+    case  4:  return DPQ4_1(args, mtrbeta);
     default:
-	error(_("internal error in do_dpq3"));
+	error(_("internal error in do_dpq4"));
     }
 
     return args;		/* never used; to keep -Wall happy */
 }
 
+/* Functions for five parameter distributions */
+#define if_NA_dpq5_set(y, x, a, b, c, d, e)				   \
+	if      (ISNA (x) || ISNA (a) || ISNA (b) || ISNA (c) || ISNA (d) || ISNA (e)) \
+            y = NA_REAL; 						   \
+	else if (ISNAN(x) || ISNAN(a) || ISNAN(b) || ISNAN(c) || ISNAN(d) || ISNAN (e)) \
+	    y = R_NaN;
+
+#define mod_iterate5(n1, n2, n3, n4, n5, n6, i1, i2, i3, i4, i5, i6)	\
+        for (i = i1 = i2 = i3 = i4 = i5 = i6 = 0; i < n;		\
+     	     i1 = (++i1 == n1) ? 0 : i1,			\
+	     i2 = (++i2 == n2) ? 0 : i2,			\
+	     i3 = (++i3 == n3) ? 0 : i3,			\
+	     i4 = (++i4 == n4) ? 0 : i4,			\
+	     i5 = (++i5 == n5) ? 0 : i5,			\
+             i6 = (++i6 == n6) ? 0 : i6,                        \
+	     ++i)
+
+static SEXP dpq5_1(SEXP sx, SEXP sa, SEXP sb, SEXP sc, SEXP sd, SEXP se, SEXP sI, double (*f)())
+{
+    SEXP sy;
+    int i, ix, ia, ib, ic, id, ie, n, nx, na, nb, nc, nd, ne,
+	sxo = OBJECT(sx), sao = OBJECT(sa), sbo = OBJECT(sb),
+        sco = OBJECT(sc), sdo = OBJECT(sd), seo = OBJECT(se);
+    double xi, ai, bi, ci, di, ei, *x, *a, *b, *c, *d, *e, *y;
+    int i_1;
+    Rboolean naflag = FALSE;
+
+#define SETUP_DPQ5						\
+    if (!isNumeric(sx) || !isNumeric(sa) || !isNumeric(sb) ||	\
+	!isNumeric(sc) || !isNumeric(sd) || !isNumeric(se))	\
+	error(_("invalid arguments"));  			\
+								\
+    nx = LENGTH(sx);						\
+    na = LENGTH(sa);						\
+    nb = LENGTH(sb);						\
+    nc = LENGTH(sc);						\
+    nd = LENGTH(sd);                                            \
+    ne = LENGTH(se);                                            \
+    if ((nx == 0) || (na == 0) || (nb == 0) || 			\
+	(nc == 0) || (nd == 0) || (ne == 0))			\
+	return(allocVector(REALSXP, 0));			\
+    n = nx;							\
+    if (n < na) n = na;						\
+    if (n < nb) n = nb;						\
+    if (n < nc) n = nc;						\
+    if (n < nd) n = nd;						\
+    if (n < ne) n = ne;                                         \
+    PROTECT(sx = coerceVector(sx, REALSXP));			\
+    PROTECT(sa = coerceVector(sa, REALSXP));			\
+    PROTECT(sb = coerceVector(sb, REALSXP));			\
+    PROTECT(sc = coerceVector(sc, REALSXP));			\
+    PROTECT(sd = coerceVector(sd, REALSXP));			\
+    PROTECT(se = coerceVector(se, REALSXP));                    \
+    PROTECT(sy = allocVector(REALSXP, n));			\
+    x = REAL(sx);						\
+    a = REAL(sa);						\
+    b = REAL(sb);						\
+    c = REAL(sc);						\
+    d = REAL(sd);						\
+    e = REAL(se);                                               \
+    y = REAL(sy)
+
+    SETUP_DPQ5;
+
+    i_1 = asInteger(sI);
+
+    mod_iterate5(nx, na, nb, nc, nd, ne, ix, ia, ib, ic, id, ie)
+    {
+	xi = x[ix];
+	ai = a[ia];
+	bi = b[ib];
+	ci = c[ic];
+	di = d[id];
+	ei = e[ie];
+	if_NA_dpq5_set(y[i], xi, ai, bi, ci, di, ei)
+	else
+	{
+	    y[i] = f(xi, ai, bi, ci, di, ei, i_1);
+	    if (ISNAN(y[i])) naflag = TRUE;
+	}
+    }
+
+#define FINISH_DPQ5				\
+    if(naflag)					\
+	warning(_("NAs produced"));		\
+						\
+    if (n == nx) {				\
+	SET_ATTRIB(sy, duplicate(ATTRIB(sx)));	\
+	SET_OBJECT(sy, sxo);			\
+    }						\
+    else if (n == na) {				\
+	SET_ATTRIB(sy, duplicate(ATTRIB(sa)));	\
+	SET_OBJECT(sy, sao);			\
+    }						\
+    else if (n == nb) {				\
+	SET_ATTRIB(sy, duplicate(ATTRIB(sb)));	\
+	SET_OBJECT(sy, sbo);			\
+    }						\
+    else if (n == nc) {				\
+	SET_ATTRIB(sy, duplicate(ATTRIB(sc)));	\
+	SET_OBJECT(sy, sco);			\
+    }						\
+    else if (n == nd) {				\
+	SET_ATTRIB(sy, duplicate(ATTRIB(sd)));	\
+	SET_OBJECT(sy, sdo);			\
+    }                                           \
+    else if (n == ne) {				\
+	SET_ATTRIB(sy, duplicate(ATTRIB(se)));	\
+	SET_OBJECT(sy, seo);			\
+    }						\
+    UNPROTECT(7)
+
+    FINISH_DPQ5;
+
+    return sy;
+}
+
+#define CAD7R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(e))))))))
+#define DPQ5_1(A, FUN) dpq5_1(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), CAD5R(A), CAD6R(A), FUN);
+
+SEXP do_dpq5(int code, SEXP args)
+{
+    switch (code)
+    {
+    case  1:  return DPQ5_1(args, levtrbeta);
+    default:
+	error(_("internal error in do_dpq5"));
+    }
+
+    return args;		/* never used; to keep -Wall happy */
+}
 
 
 /* Main function, the only one used by .External(). */
@@ -645,7 +777,7 @@ SEXP do_dpq(SEXP args)
     args = CDR(args);
     name = CHAR(STRING_ELT(CAR(args), 0));
 
-    /* Dispatch to do_random{1,2,3,4} */
+    /* Dispatch to do_random{1,2,3,4,5} */
     for (i = 0; fun_tab[i].name; i++)
     {
 	if (!strcmp(fun_tab[i].name, name))

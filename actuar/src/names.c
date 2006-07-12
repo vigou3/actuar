@@ -67,6 +67,9 @@ FUNTAB fun_tab[] = {
     {"dtrbeta",		do_dpq4,	1},
     {"ptrbeta",		do_dpq4,	2},
     {"qtrbeta",		do_dpq4,	3},
+    {"mtrbeta",		do_dpq4,	4},
+    /* Five parameter distributions */
+    {"levtrbeta",	do_dpq5,	1},
 	
     /* RANDOM NUMBERS FUNCTIONS */
     /* One parameter distributions */
