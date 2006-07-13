@@ -18,8 +18,8 @@
   ppareto1(q, shape, min, lower.tail = TRUE, log.p = FALSE)
   qpareto1(p, shape, min, lower.tail = TRUE, log.p = FALSE)
   rpareto1(n, shape, min)
-  rpareto1(k, shape, min, log = FALSE)
-  rpareto1(d, shape, min, order = 1, log = FALSE)
+  mpareto1(k, shape, min, log = FALSE)
+  levpareto1(d, shape, min, order = 1, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}

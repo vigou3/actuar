@@ -64,7 +64,7 @@ Also known as Fisk distribution.
 exp(dllogis(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 pllogis(qllogis(p, 2, 3), 2, 3)
-mllogis(2, 2, 3) - mllogis(1, 2, 3) ^ 2
+mllogis(1, 2, 3)
 levllogis(10, 2, 3, 2)
 }
 \keyword{distribution}

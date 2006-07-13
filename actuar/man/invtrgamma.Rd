@@ -1,4 +1,3 @@
-<
 \name{Invtrgamma}
 \alias{invtrgamma}
 \alias{print.invtrgamma}

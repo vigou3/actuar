@@ -1,4 +1,3 @@
-
 \name{Trbeta}
 \alias{trbeta}
 \alias{print.trbeta}
@@ -83,7 +82,7 @@
 \code{qtrbeta} gives the quantile function, \code{rtrbeta} generates random
 deviates, \code{mtrbeta} gives the kth raw moment, and \code{levtrbeta} gives
 the kth moment of the limited loss variable.
-}
+
 Invalid arguments will return warning.
 }
 \note{

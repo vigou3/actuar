@@ -79,7 +79,7 @@ exp(dgenpareto(3, 3, 4, 4, log = TRUE))
 p <- (1:10)/10
 pgenpareto(qgenpareto(p, 3, 3, 1), 3, 3, 1)
 qgenpareto(.3, 3, 4, 4, lower.tail = FALSE)
-mgenpareto(2, 1, 2, 3) - mgenpareto(1, 1, 2, 3) ^ 2
+mgenpareto(1, 3, 2, 1) ^ 2
 levgenpareto(10, 1, 2, 3, 2)
 }
 \keyword{distribution}

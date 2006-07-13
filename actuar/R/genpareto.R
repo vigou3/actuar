@@ -22,5 +22,5 @@ rgenpareto <- function(n, shape1, scale, shape2)
 mgenpareto <- function(k, shape1, scale, shape2, log = FALSE)
      .External("do_dpq", "mgenpareto", k, shape1, scale, shape2, log)
 
-levgenpareto <- function(d, shape1, scale, shape2, order, log = FALSE)
+levgenpareto <- function(d, shape1, scale, shape2, order = 1, log = FALSE)
      .External("do_dpq", "levgenpareto", d, shape1, scale, shape2, order, log)

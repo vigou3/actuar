@@ -58,7 +58,6 @@ Invalid arguments will return warning.
 exp(dinvexp(2, 2, log = TRUE))
 p <- (1:10)/10
 pinvexp(qinvexp(p, 2), 2)
-minvexp(2, 3) - minvexp(1, 3) ^ 2
-levinvexp(10, 3, 2)
+minvexp(-2, 3)
 }
 \keyword{distribution}

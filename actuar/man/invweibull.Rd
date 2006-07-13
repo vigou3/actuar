@@ -61,7 +61,6 @@
 \code{qinvweibull} gives the quantile function, \code{rinvweibull} generates random
 deviates, \code{minvweibull} gives the kth raw moment, and \code{levinvweibull} gives
 the kth moment of the limited loss variable.
-}
 
 Invalid arguments will return warning.
 }
@@ -80,7 +79,7 @@ Also knonw as log-Gompertz distribution.
 exp(dinvweibull(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 pinvweibull(qinvweibull(p, 2, 3), 2, 3)
-mlgompertz(2, 2, 3) - mlgompertz(1, 2, 3) ^ 2
+mlgompertz(-1, 3, 3)
 levinvweibull(10, 2, 3, 2)
 }
 \keyword{distribution}

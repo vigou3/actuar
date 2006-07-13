@@ -6,10 +6,12 @@
 \alias{pinvgamma}
 \alias{qinvgamma}
 \alias{rinvgamma}
+\alias{minvgamma}
+\alias{levinvgamma}
 \title{The Inverse Gamma Distribution}
 \description{
-  Density, distribution function, quantile function and random generation
-  for the Inverse Gamma distribution with parameters \code{shape} and \code{scale}.
+  Density, distribution function, quantile function, random generation,
+  raw moments, and limited moments for the Inverse Gamma distribution with parameters \code{shape} and \code{scale}.
 }
 \usage{
   dinvgamma(x, shape, scale, log = FALSE)
@@ -70,7 +72,7 @@ Also known as Vinci distribution.
 exp(dinvgamma(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 pinvgamma(qinvgamma(p, 2, 3), 2, 3)
-minvgamma(2, 1, 2) - minvgamma(1, 1, 2) ^ 2
-levinvgamma(10, 1, 2, 2)
+minvgamma(-1, 2, 2) ^ 2
+levinvgamma(10, 2, 2, 1)
 }
 \keyword{distribution}

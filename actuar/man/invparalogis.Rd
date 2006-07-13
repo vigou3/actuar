@@ -63,7 +63,7 @@ Invalid arguments will return warning.
 exp(dinvparalogis(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 pinvparalogis(qinvparalogis(p, 2, 3), 2, 3)
-minvparalogis(2, 1, 2) - minvparalogis(1, 1, 2) ^ 2
+minvparalogis(-1, 2, 2)
 levinvparalogis(10, 1, 2, 2)
 }
 \keyword{distribution}
