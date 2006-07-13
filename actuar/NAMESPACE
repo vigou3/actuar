@@ -9,17 +9,17 @@ export(## Credibility theory
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp,
        ## Two parameter distributions
-       dllogis, pllogis, qllogis, rllogis,
-       dparalogis, pparalogis, qparalogis, rparalogis,
-       dinvgamma, pinvgamma, qinvgamma, rinvgamma,
+       dllogis, pllogis, qllogis, rllogis, mllogis, levllogis,
+       dparalogis, pparalogis, qparalogis, rparalogis, mparalogis, levparalogis,
+       dinvgamma, pinvgamma, qinvgamma, rinvgamma, minvgamma, levinvgamma,
        dlgamma, plgamma, qlgamma, rlgamma,
-       dinvparalogis, pinvparalogis, qinvparalogis, rinvparalogis,
-       dpareto, ppareto, qpareto, rpareto,
-       dpareto2, ppareto2, qpareto2, rpareto2, # aliases
-       dinvpareto, pinvpareto, qinvpareto, rinvpareto,
-       dpareto1, ppareto1, qpareto1, rpareto1,
-       dinvweibull, pinvweibull, qinvweibull, rinvweibull,
-       dlgompertz, plgompertz, qlgompertz, rlgompertz,          # aliases
+       dinvparalogis, pinvparalogis, qinvparalogis, rinvparalogis, minvparalogis, levinvparalogis,
+       dpareto, ppareto, qpareto, rpareto, mpareto, levpareto,
+       dpareto2, ppareto2, qpareto2, rpareto2, mpareto2, levpareto2, # aliases
+       dinvpareto, pinvpareto, qinvpareto, rinvpareto, minvpareto,
+       dpareto1, ppareto1, qpareto1, rpareto1, mpareto1, levpareto2,
+       dinvweibull, pinvweibull, qinvweibull, rinvweibull, minvweibull, levinvweibull,
+       dlgompertz, plgompertz, qlgompertz, rlgompertz, mlgompertz, levlgompertz,        # aliases
        ## Three parameter distributions
        dburr, pburr, qburr, rburr, mburr, levburr,
        dinvburr, pinvburr, qinvburr, rinvburr, minvburr, levinvburr,

@@ -23,8 +23,16 @@ qinvweibull <- function(p, scale, shape, lower.tail = TRUE, log.p = FALSE)
 rinvweibull <- function(n, scale, shape)
     .External("do_random", "rinvweibull", n, scale, shape)
 
+minvweibull <- function(k, scale, shape, log = FALSE)
+     .External("do_dpq", "minvgamma", k, scale, shape, log)
+
+levinvweibull <- function(x, scale, shape, order = 1, log = FALSE)
+     .External("do_dpq", "levinvweibull", x, scale, shape, order, log)
+
 ## Aliases
 dlgompertz <- dinvweibull
 plgompertz <- pinvweibull
 qlgompertz <- qinvweibull
 rlgompertz <- rinvweibull
+mlgompertz <- minvweibull
+levlgompertz <- levinvweibull

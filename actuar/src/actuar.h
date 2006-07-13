@@ -24,6 +24,8 @@ double dinvgamma(double x, double scale, double shape, int give_log);
 double pinvgamma(double q, double scale, double shape, int lower_tail, int log_p);
 double qinvgamma(double p, double scale, double shape, int lower_tail, int log_p);
 double rinvgamma(double scale, double shape);
+double minvgamma(double k, double scale, double shape, int give_log);
+double levinvgamma(double x, double scale, double shape, double order, int give_log);
 
 double dlgamma(double x, double shapelog, double ratelog, int give_log);
 double plgamma(double q, double shapelog, double ratelog, int lower_tail, int log_p);
@@ -34,36 +36,49 @@ double dinvparalogis(double x, double shape, double scale, int give_log);
 double pinvparalogis(double q, double shape, double scale, int lower_tail, int log_p);
 double qinvparalogis(double p, double shape, double scale, int lower_tail, int log_p);
 double rinvparalogis(double shape, double scale);
+double minvparalogis(double k, double shape, double scale, int give_log);
+double levinvparalogis(double x, double shape, double scale, double order, int give_log);
 
 double dinvpareto(double x, double shape, double scale, int give_log);
 double pinvpareto(double q, double shape, double scale, int lower_tail, int log_p);
 double qinvpareto(double p, double shape, double scale, int lower_tail, int log_p);
 double rinvpareto(double shape, double scale);
+double minvpareto(double k, double shape, double scale, int give_log);
 
 double dinvweibull(double x, double scale, double shape, int give_log);
 double pinvweibull(double q, double scale, double shape, int lower_tail, int log_p);
 double qinvweibull(double p, double scale, double shape, int lower_tail, int log_p);
 double rinvweibull(double scale, double shape);
+double minvweibull(double k, double scale, double shape, int give_log);
+double levinvweibull(double x, double scale, double shape, double order, int give_log);
 
 double dllogis(double x, double shape, double scale, int give_log);
 double pllogis(double q, double shape, double scale, int lower_tail, int log_p);
 double qllogis(double p, double shape, double scale, int lower_tail, int log_p);
 double rllogis(double shape, double scale);
+double mllogis(double k, double shape, double scale, int give_log);
+double levllogis(double x, double shape, double scale, double order, int give_log);
 
 double dparalogis(double x, double shape, double scale, int give_log);
 double pparalogis(double q, double shape, double scale, int lower_tail, int log_p);
 double qparalogis(double p, double shape, double scale, int lower_tail, int log_p);
 double rparalogis(double shape, double scale);
+double mparalogis(double k, double shape, double scale, int give_log);
+double levparalogis(double x, double shape, double scale, double order, int give_log);
 
 double dpareto(double x, double shape, double scale, int give_log);
 double ppareto(double q, double shape, double scale, int lower_tail, int log_p);
 double qpareto(double p, double shape, double scale, int lower_tail, int log_p);
 double rpareto(double shape, double scale);
+double mpareto(double k, double shape, double scale, int give_log);
+double levpareto(double x, double shape, double scale, double order, int give_log);
 
 double dpareto1(double x, double shape, double scale, int give_log);
 double ppareto1(double q, double shape, double scale, int lower_tail, int log_p);
 double qpareto1(double p, double shape, double scale, int lower_tail, int log_p);
 double rpareto1(double shape, double scale);
+double mpareto1(double k, double shape, double scale, int give_log);
+double levpareto1(double x, double shape, double scale, double order, int give_log);
 
 /*   Three parameter distributions */
 double dburr(double x, double shape1, double scale, double shape2, int give_log);

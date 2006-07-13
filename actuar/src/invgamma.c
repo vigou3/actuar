@@ -79,3 +79,30 @@ double rinvgamma(double shape, double scale)
     /*    return 1.0 / qgamma(unif_rand(), shape, 1.0 / scale, 1, 0); */
     return 1.0 / rgamma(shape, 1.0 / scale);
 }
+
+double minvgamma(double k, double shape, double scale, int give_log)
+{
+    if (!R_FINITE(shape) ||
+	!R_FINITE(scale) ||
+	!R_FINITE(k) ||
+	shape <= 0.0 ||
+	scale <= 0.0 ||
+	k >= shape)
+	error(_("invalid arguments"));
+
+    return R_pow(scale, k) * gammafn(shape - k) / gammafn(shape);
+}
+
+double levinvgamma(double x, double shape, double scale, double order, int give_log)
+{
+    if (!R_FINITE(shape) ||
+	!R_FINITE(scale) ||
+	!R_FINITE(x) ||
+	!R_FINITE(order) ||
+	shape <= 0.0 ||
+	scale <= 0.0 ||
+	x <= 0.0)
+	error(_("invalid arguments"));
+
+    return R_pow(scale, order) * gammafn(shape - order) * (1.0 - pgamma(1.0 / x, shape - order, 1.0 / scale, 1, 0)) / gammafn(shape) + R_pow(x, order) * pgamma(1.0 / x, shape, 1.0 / scale, 1, 0);
+}

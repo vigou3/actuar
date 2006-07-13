@@ -81,3 +81,30 @@ double rinvweibull(double scale, double shape)
 
     return shape * scale / log(1.0 / unif_rand());
 }
+
+double minvweibull(double k, double scale, double shape, int give_log)
+{
+    if (!R_FINITE(scale) ||
+	!R_FINITE(shape) ||
+	!R_FINITE(k) ||
+	scale <= 0.0 ||
+	shape <= 0.0 ||
+	k >= shape)
+	error(_("invalid arguments"));
+    
+    return R_pow(scale, k) * gammafn(1.0 - k / shape);
+}
+
+double levinvweibull(double x, double scale, double shape, double order, int give_log)
+{
+    if (!R_FINITE(scale) ||
+	!R_FINITE(shape) ||
+	!R_FINITE(x) ||
+	!R_FINITE(order) ||
+	scale <= 0.0 ||
+	shape <= 0.0 ||
+	x <= 0.0)
+	error(_("invalid arguments"));
+
+    return R_pow(scale, order) * gammafn(1.0 - order / shape) * (1.0 - pgamma(R_pow(1.0 / x, shape), 1.0 - order / shape, 1.0 / scale, 1, 0)) + R_pow(x, order) * (1.0 - exp(-R_pow(scale / x, shape)));
+}

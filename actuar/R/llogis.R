@@ -22,3 +22,9 @@ qllogis <- function(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
 
 rllogis <- function(n, shape, scale)
      .External("do_random", "rllogis", n, shape, scale)
+
+mllogis <- function(k, shape, scale, log = FALSE)
+     .External("do_dpq", "mllogis", k, shape, scale, log)
+
+levllogis <- function(x, shape, scale, order = 1, log = FALSE)
+     .External("do_dpq", "levllogis", x, shape, scale, order, log)

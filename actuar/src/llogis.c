@@ -89,3 +89,38 @@ double rllogis(double shape, double scale)
 
     return scale * R_pow(a / (1.0 - a), 1.0 / shape);
 }
+
+double mllogis(double k, double shape, double scale, int give_log)
+{	
+	
+    if (!R_FINITE(shape) ||
+	!R_FINITE(scale) ||
+	!R_FINITE(k) ||
+	shape <= 0.0 ||
+	scale <= 0.0 ||
+	k <= -shape ||
+	k >= shape)
+	error(_("invalid arguments"));
+
+    return R_pow(scale, k) * gammafn(1.0 + k / shape) * gammafn(1.0 - k / shape);
+}
+
+double levllogis(double x, double shape, double scale, double order, int give_log)
+{	
+  double temp1, temp2;
+       
+    if (!R_FINITE(shape) ||
+	!R_FINITE(scale) ||
+	!R_FINITE(x) ||
+	!R_FINITE(order) ||
+	shape <= 0.0 ||
+	scale <= 0.0 ||
+	order <= -shape ||
+	x <= 0.0)
+	error(_("invalid arguments"));
+
+    temp1 = R_pow(x / scale, shape);
+    temp2 = temp1 / (1.0 + temp1);
+
+    return R_pow(scale, order) * gammafn(1.0 + order / shape) * gammafn(1.0 - order / shape) * pbeta(temp2, 1.0 + order / shape, 1.0 - order / shape, 1, 0) + R_pow(x, order) * (1.0 - temp2);
+}

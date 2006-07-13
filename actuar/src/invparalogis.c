@@ -93,3 +93,38 @@ double rinvparalogis(double shape, double scale)
 
     return scale * R_pow((R_pow(a, 1.0 / shape)) / (1.0 - R_pow(a, 1.0 / shape)), 1.0 / shape);
 }
+
+double minvparalogis(double k, double shape, double scale, int give_log)
+{
+	
+    if (!R_FINITE(shape) ||
+	!R_FINITE(scale) ||
+	!R_FINITE(k) ||
+	shape <= 0.0 ||
+	scale <= 0.0 ||
+	k <= -R_pow(shape, 2.0) ||
+	k >= shape)
+	error(_("invalid arguments"));
+
+    return R_pow(scale, k) * gammafn(shape + k / shape) * gammafn(1.0 - k / shape) / gammafn(shape); 
+}
+
+double levinvparalogis(double x, double shape, double scale, double order, int give_log)
+{
+  double temp1, temp2;
+	
+    if (!R_FINITE(shape) ||
+	!R_FINITE(scale) ||
+	!R_FINITE(x) ||
+	!R_FINITE(order) ||
+	shape <= 0.0 ||
+	scale <= 0.0 ||
+	order <= -R_pow(shape, 2.0) ||
+	x <= 0.0)
+	error(_("invalid arguments"));
+
+    temp1 = R_pow(x / scale, shape);
+    temp2 = temp1 / (1.0 + temp1);
+
+    return R_pow(scale, order) * gammafn(shape + order / shape) * gammafn(1.0 - order / shape) * pbeta(temp2, shape + order / shape, 1.0 - order / shape, 1, 0) + R_pow(x, order) * (1.0 - R_pow(temp2, shape));
+}

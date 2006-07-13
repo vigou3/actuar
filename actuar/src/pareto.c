@@ -75,3 +75,32 @@ double rpareto(double shape, double scale)
 
     return scale * (R_pow(unif_rand(), -1.0 / shape) - 1.0);
 }
+
+double mpareto(double k, double shape, double scale, int give_log)
+{
+    if (!R_FINITE(shape) || 
+	!R_FINITE(scale) ||
+	!R_FINITE(k) ||
+	shape <= 0.0 || 
+	scale <= 0.0 ||
+	k <= -1.0 ||
+	k >= shape)
+	error(_("invalid arguments"));
+
+    return R_pow(scale, k) * gammafn(k + 1.0) * gammafn(shape - k) / gammafn(shape);
+
+}
+
+double levpareto(double x, double shape, double scale, double order, int give_log)
+{
+    if (!R_FINITE(shape) || 
+	!R_FINITE(scale) ||
+	!R_FINITE(x) ||
+	!R_FINITE(order) ||
+	shape <= 0.0 || 
+	scale <= 0.0 ||
+	x <= 0.0)
+	error(_("invalid arguments"));
+
+    return R_pow(scale, order) * gammafn(order + 1.0) * gammafn(shape - order) * pbeta(x / (x + scale), order + 1.0, shape - order, 1, 0) / gammafn(shape) + R_pow(x, order) * R_pow(scale / (scale + x), shape);
+}

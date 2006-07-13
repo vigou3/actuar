@@ -82,3 +82,19 @@ double rinvpareto(double shape, double scale)
 
     return scale * R_pow(a, 1.0 / shape) / (1.0 - R_pow(a, 1.0 / shape));
 }
+
+double minvpareto(double k, double shape, double scale, int give_log)
+{
+	
+    if (!R_FINITE(shape) ||
+	!R_FINITE(scale) ||
+	!R_FINITE(k) ||
+	shape <= 0.0 ||
+	scale <= 0.0 ||
+	k <= -shape ||
+	k >= 1.0)
+	error(_("invalid arguments"));
+
+    return R_pow(scale, k) * gammafn(shape + k) * gammafn(1.0 - k) / gammafn(shape);
+}
+

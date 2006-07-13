@@ -77,3 +77,30 @@ double rpareto1(double shape, double min)
 
     return min / R_pow(unif_rand(), 1.0 / shape);
 }
+
+double mpareto1(double k, double shape, double min, int give_log)
+{	
+    if (!R_FINITE(shape) ||
+	!R_FINITE(min) ||
+	!R_FINITE(k) ||
+	shape <= 0.0 ||
+	min <= 0.0 ||
+	k >= shape)
+	error(_("invalid arguments"));
+
+    return shape * R_pow(min, k) / (shape - k);
+}
+
+double levpareto1(double x, double shape, double min, double order, int give_log)
+{	
+    if (!R_FINITE(shape) ||
+	!R_FINITE(min) ||
+	!R_FINITE(x) ||
+	!R_FINITE(order) ||
+	shape <= 0.0 ||
+	min <= 0.0 ||
+	x <= 0.0)
+	error(_("invalid arguments"));
+
+    return shape * R_pow(min, order) / (shape - order) - order * R_pow(min, shape) / ((shape - order) * R_pow(x, shape - order));
+}

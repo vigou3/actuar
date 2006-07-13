@@ -22,3 +22,9 @@ qinvparalogis <- function(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
 
 rinvparalogis <- function(n, shape, scale)
     .External("do_random", "rinvparalogis", n, shape, scale)
+
+minvparalogis <- function(k, shape, scale, log = FALSE)
+     .External("do_dpq", "minvparalogis", k, shape, scale, log)
+
+levinvparalogis <- function(x, shape, scale, order = 1, log = FALSE)
+     .External("do_dpq", "levinvparalogis", x, shape, scale, order, log)
