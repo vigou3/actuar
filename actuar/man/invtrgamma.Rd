@@ -1,4 +1,4 @@
-
+<
 \name{Invtrgamma}
 \alias{invtrgamma}
 \alias{print.invtrgamma}
@@ -6,10 +6,12 @@
 \alias{pinvtrgamma}
 \alias{qinvtrgamma}
 \alias{rinvtrgamma}
+\alias{minvtrgamma}
+\alias{levinvtrgamma}
 \title{The Inverse Transformed Gamma Distribution}
 \description{
-  Density, distribution function, quantile function and random generation
-  for the Inverse Transformed Gamma distribution with parameters \code{shape1},
+  Density, distribution function, quantile function, random generation,
+  raw moments, and limited moments for the Inverse Transformed Gamma distribution with parameters \code{shape1},
   \code{scale} and \code{shape2}. 
 }
 \usage{
@@ -19,17 +21,21 @@
   qinvtrgamma(p, shape1, scale, shape2, lower.tail = TRUE,
            log.p = FALSE)
   rinvtrgamma(n, shape1, scale, shape2)
+  minvtrgamma(k, shape1, scale, shape2, log = FALSE)
+  levinvtrgamma(d, shape1, scale, shape2, order = 1, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
+  \item{d}{limit of the loss variable.}
   \item{shape1, scale, shape2}{parameters. Must be strictly positive.}
   \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
     returned as log(p).}
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
-    <= x], otherwise, Pr[X > x].}  
+    <= x], otherwise, Pr[X > x].}
+  \item{k, order}{order of the moment.}
 }
 \details{
   The Inverse Transformed Gamma distribution with parameters \code{shape1} = a,
@@ -51,8 +57,9 @@
 }
 \value{
 \code{dinvtrgamma} gives the density, \code{pinvtrgamma} gives the distribution function,
-\code{qinvtrgamma} gives the quantile function, and \code{rinvtrgamma} generates random
-deviates.
+\code{qinvtrgamma} gives the quantile function, \code{rinvtrgamma} generates random
+deviates, \code{mtrbeta} gives the kth raw moment, and \code{levtrbeta} gives
+the kth moment of the limited loss variable.
 
 Invalid arguments will return warning.
 }
@@ -71,5 +78,7 @@ Also known as the inverse generalized gamma distribution.
 exp(dinvtrgamma(2, 3, 4, 5, log = TRUE))
 p <- (1:10)/10
 pinvtrgamma(qinvtrgamma(p, 2, 3, 4), 2, 3, 4)
+minvtrgamma(2, 3, 4, 5)
+levinvtrgamma(200, 3, 4, 5, 2)
 }
 \keyword{distribution}

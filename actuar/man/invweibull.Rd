@@ -6,16 +6,20 @@
 \alias{pinvweibull}
 \alias{qinvweibull}
 \alias{rinvweibull}
+\alias{minvweibull}
+\alias{levinvweibull}
 \alias{lgompertz}
 \alias{print.lgompertz}
 \alias{dlgompertz}
 \alias{plgompertz}
 \alias{qlgompertz}
 \alias{rlgompertz}
+\alias{mlgompertz}
+\alias{levlgompertz}
 \title{The Inverse Weibull Distribution}
 \description{
-  Density, distribution function, quantile function and random generation
-  for the Inverse Weibull distribution with parameters \code{scale} and \code{shape}.  
+  Density, distribution function, quantile function, random generation,
+  raw moments, and limited moments for the Inverse Weibull distribution with parameters \code{scale} and \code{shape}.  
 }
 \usage{
   dinvweibull(x, scale, shape, log = FALSE)
@@ -24,17 +28,21 @@
   qinvweibull(p, scale, shape, lower.tail = TRUE,
            log.p = FALSE)
   rinvweibull(n, scale, shape)
+  minvweibull(k, scale, shape, log = FALSE)
+  levinvweibull(d, scale, shape, order = 1, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
+  \item{d}{limit of the loss variable.}
   \item{scale, shape}{parameters. Must be strictly positive.}
   \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
     returned as log(p).}
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
     <= x], otherwise, Pr[X > x].}
+  \item{k, order}{order of the moment.}
 }
 \details{
   The Inverse Weibull distribution with parameters \code{scale} = a
@@ -50,8 +58,10 @@
 }
 \value{
 \code{dinvweibull} gives the density, \code{pinvweibull} gives the distribution function,
-\code{qinvweibull} gives the quantile function, and \code{rinvweibull} generates random
-deviates.
+\code{qinvweibull} gives the quantile function, \code{rinvweibull} generates random
+deviates, \code{minvweibull} gives the kth raw moment, and \code{levinvweibull} gives
+the kth moment of the limited loss variable.
+}
 
 Invalid arguments will return warning.
 }
@@ -70,5 +80,7 @@ Also knonw as log-Gompertz distribution.
 exp(dinvweibull(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 pinvweibull(qinvweibull(p, 2, 3), 2, 3)
+mlgompertz(2, 2, 3) - mlgompertz(1, 2, 3) ^ 2
+levinvweibull(10, 2, 3, 2)
 }
 \keyword{distribution}

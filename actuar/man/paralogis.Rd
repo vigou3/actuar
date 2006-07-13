@@ -6,27 +6,33 @@
 \alias{pparalogis}
 \alias{qparalogis}
 \alias{rparalogis}
+\alias{mparalogis}
+\alias{levparalogis}
 \title{The Paralogistic Distribution}
 \description{
-  Density, distribution function, quantile function and random generation
-  for the Paralogistic distribution with parameters \code{shape} and \code{scale}.
+  Density, distribution function, quantile function, random generation,
+  raw moments, and limited moments for the Paralogistic distribution with parameters \code{shape} and \code{scale}.
 }
 \usage{
   dparalogis(x, shape, scale, log = FALSE)
   pparalogis(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
   qparalogis(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
   rparalogis(n, shape, scale)
+  mparalogis(k, shape, scale, log = FALSE)
+  levparalogis(d, shape, scale, order = 1, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
+  \item{d}{limit of the loss variable.}
   \item{shape, scale}{parameters. Must be strictly positive.}
   \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
     returned as log(p).}
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
-    <= x], otherwise, Pr[X > x].} 
+    <= x], otherwise, Pr[X > x].}
+  \item{k, order}{order of the moment.}
 }
 \details{
   The Paralogistic distribution with parameters \code{shape} = a
@@ -37,8 +43,9 @@
 }
 \value{
 \code{dparalogis} gives the density, \code{pparalogis} gives the distribution function,
-\code{qparalogis} gives the quantile function, and \code{rparalogis} generates random
-deviates.
+\code{qparalogis} gives the quantile function, \code{rparalogis} generates random
+deviates, \code{mparalogis} gives the kth raw moment, and \code{levparalogis} gives
+the kth moment of the limited loss variable.
 
 Invalid arguments will return warning.
 }
@@ -54,5 +61,7 @@ Invalid arguments will return warning.
 exp(dparalogis(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 pparalogis(qparalogis(p, 2, 3), 2, 3)
+mparalogis(2, 2, 3) - mparalogis(1, 2, 3) ^ 2
+levparalogis(10, 2, 3, 2)
 }
 \keyword{distribution}

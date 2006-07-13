@@ -6,10 +6,12 @@
 \alias{pgenpareto}
 \alias{qgenpareto}
 \alias{rgenpareto}
+\alias{mgenpareto}
+\alias{levgenpareto}
 \title{The Generalized Pareto Distribution}
 \description{
-  Density, distribution function, quantile function and random generation
-  for the Generalized Pareto distribution with parameters \code{shape1}, \code{scale} and \code{shape2}.
+  Density, distribution function, quantile function, random generation,
+  raw moments, and limited moments for the Generalized Pareto distribution with parameters \code{shape1}, \code{scale}, and \code{shape2}.
 }
 \usage{
   dgenpareto(x, shape1, scale, shape2, log = FALSE)
@@ -18,17 +20,21 @@
   qgenpareto(p, shape1, scale, shape2, lower.tail = TRUE,
              log.p = FALSE)
   rgenpareto(n, shape1, scale, shape2)
+  mgenpareto(k, shape1, scale, shape2, log = FALSE)
+  levgenpareto(d, shape1, scale, shape2, order = 1, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
+  \item{d}{limit of the loss variable.}
   \item{shape1, scale, shape2}{parameters. Must be strictly positive.}
   \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
     returned as log(p).}
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
-    <= x], otherwise, Pr[X > x].} 
+    <= x], otherwise, Pr[X > x].}
+  \item{k, order}{order of the moment.}
 }
 \details{
   The Generalized Pareto distribution with parameters \code{shape1} = a, \code{scale} = b and
@@ -51,8 +57,9 @@
 }
 \value{
 \code{dgenpareto} gives the density, \code{pgenpareto} gives the distribution function,
-\code{qgenpareto} gives the quantile function, and \code{rgenpareto} generates random
-deviates.
+\code{qgenpareto} gives the quantile function, \code{rgenpareto} generates random
+deviates, \code{mgenpareto} gives the kth raw moment, and \code{levgenpareto} gives
+the kth moment of the limited loss variable.
 
 Invalid arguments will return warning.
 }
@@ -72,5 +79,7 @@ exp(dgenpareto(3, 3, 4, 4, log = TRUE))
 p <- (1:10)/10
 pgenpareto(qgenpareto(p, 3, 3, 1), 3, 3, 1)
 qgenpareto(.3, 3, 4, 4, lower.tail = FALSE)
+mgenpareto(2, 1, 2, 3) - mgenpareto(1, 1, 2, 3) ^ 2
+levgenpareto(10, 1, 2, 3, 2)
 }
 \keyword{distribution}
