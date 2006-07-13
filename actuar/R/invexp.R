@@ -26,5 +26,5 @@ rinvexp <- function(n, scale)
 minvexp <- function(k, scale, log = FALSE)
     .External("do_dpq", "minvexp", k, scale, log)
 
-levinvexp <- function(x, scale, order = 1, log = FALSE)
-    .External("do_dpq", "levinvexp", x, scale, order, log)
+levinvexp <- function(d, scale, order = 1, log = FALSE)
+    .External("do_dpq", "levinvexp", d, scale, order, log)

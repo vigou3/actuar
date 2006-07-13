@@ -22,5 +22,5 @@ rinvtrgamma <- function(n, shape1, scale, shape2)
 minvtrgamma <- function(k, shape1, scale, shape2, log = FALSE)
     .External("do_dpq", "minvtrgamma", k, shape1, scale, shape2, log)
 
-levinvtrgamma <- function(x, shape1, scale, shape2, order = 1, log = FALSE)
-    .External("do_dpq", "levinvtrgamma", x, shape1, scale, shape2, order, log)
+levinvtrgamma <- function(d, shape1, scale, shape2, order = 1, log = FALSE)
+    .External("do_dpq", "levinvtrgamma", d, shape1, scale, shape2, order, log)

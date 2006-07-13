@@ -26,8 +26,8 @@ rinvweibull <- function(n, scale, shape)
 minvweibull <- function(k, scale, shape, log = FALSE)
      .External("do_dpq", "minvgamma", k, scale, shape, log)
 
-levinvweibull <- function(x, scale, shape, order = 1, log = FALSE)
-     .External("do_dpq", "levinvweibull", x, scale, shape, order, log)
+levinvweibull <- function(d, scale, shape, order = 1, log = FALSE)
+     .External("do_dpq", "levinvweibull", d, scale, shape, order, log)
 
 ## Aliases
 dlgompertz <- dinvweibull

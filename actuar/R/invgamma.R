@@ -26,5 +26,5 @@ rinvgamma <- function(n, shape, scale)
 minvgamma <- function(k, shape, scale, log = FALSE)
      .External("do_dpq", "minvgamma", k, shape, scale, log)
 
-levinvgamma <- function(x, shape, scale, order = 1, log = FALSE)
-     .External("do_dpq", "levinvgamma", x, shape, scale, order, log)
+levinvgamma <- function(d, shape, scale, order = 1, log = FALSE)
+     .External("do_dpq", "levinvgamma", d, shape, scale, order, log)

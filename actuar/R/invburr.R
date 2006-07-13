@@ -26,5 +26,5 @@ rinvburr <- function(n, shape1, scale, shape2)
 minvburr <- function(k, shape1, scale, shape2, log = FALSE)
     .External("do_dpq", "minvburr", k, shape1, scale, shape2, log)
 
-levinvburr <- function(x, shape1, scale, shape2, order = 1, log = FALSE)
-    .External("do_dpq", "levinvburr", x, shape1, scale, shape2, order, log)
+levinvburr <- function(d, shape1, scale, shape2, order = 1, log = FALSE)
+    .External("do_dpq", "levinvburr", d, shape1, scale, shape2, order, log)

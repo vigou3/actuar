@@ -112,23 +112,23 @@ double mgenpareto(double k, double shape1, double scale, double shape2, int give
     return R_pow(scale, k) * gammafn(shape2 + k) * gammafn(shape1 - k) / (gammafn(shape1) * gammafn(shape2));
 }
 
-double levgenpareto(double x, double shape1, double scale, double shape2, double order, int give_log)
+double levgenpareto(double d, double shape1, double scale, double shape2, double order, int give_log)
 {	
   double u;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
 	!R_FINITE(shape2) ||
-	!R_FINITE(x) ||
+	!R_FINITE(d) ||
 	!R_FINITE(order) ||
 	shape1 <= 0.0 ||
 	scale <= 0.0 ||
 	shape2 <= 0.0 ||
-	x <= 0.0 ||
+	d <= 0.0 ||
 	order <= -shape2)
 	error(_("invalid arguments"));
 
-    u = x / (x + scale);
+    u = d / (d + scale);
 
-    return R_pow(scale, order) * gammafn(shape2 + order) * gammafn(shape1 - order) * pbeta(u, shape2 + order, shape1 - order, 1, 0) /(gammafn(shape1) * gammafn(shape2)) + R_pow(x, order) * (1.0 - pbeta(u, shape2, shape1, 1, 0));
+    return R_pow(scale, order) * gammafn(shape2 + order) * gammafn(shape1 - order) * pbeta(u, shape2 + order, shape1 - order, 1, 0) /(gammafn(shape1) * gammafn(shape2)) + R_pow(d, order) * (1.0 - pbeta(u, shape2, shape1, 1, 0));
 }

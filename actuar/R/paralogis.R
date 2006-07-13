@@ -26,5 +26,5 @@ rparalogis <- function(n, shape, scale)
 mparalogis <- function(k, shape, scale, log = FALSE)
   .External("do_dpq", "mparalogis", k, shape, scale, log)
 
-levparalogis <- function(x, shape, scale, order = 1, log = FALSE)
-  .External("do_dpq", "levparalogis", x, shape, scale, order, log)
+levparalogis <- function(d, shape, scale, order = 1, log = FALSE)
+  .External("do_dpq", "levparalogis", d, shape, scale, order, log)

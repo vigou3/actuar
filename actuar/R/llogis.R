@@ -26,5 +26,5 @@ rllogis <- function(n, shape, scale)
 mllogis <- function(k, shape, scale, log = FALSE)
      .External("do_dpq", "mllogis", k, shape, scale, log)
 
-levllogis <- function(x, shape, scale, order = 1, log = FALSE)
-     .External("do_dpq", "levllogis", x, shape, scale, order, log)
+levllogis <- function(d, shape, scale, order = 1, log = FALSE)
+     .External("do_dpq", "levllogis", d, shape, scale, order, log)

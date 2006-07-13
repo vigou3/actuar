@@ -124,7 +124,7 @@ double mtrbeta(double k, double shape1, double scale, double shape2, double shap
     return R_pow(scale, k) * gammafn(shape3 + k / shape2) * gammafn(shape1 - k / shape2) / (gammafn(shape1) * gammafn(shape3));
 }
 
-double levtrbeta(double x, double shape1, double scale, double shape2, double shape3, double order, int give_log)
+double levtrbeta(double d, double shape1, double scale, double shape2, double shape3, double order, int give_log)
 {
   double tmp, u;
 
@@ -133,18 +133,18 @@ double levtrbeta(double x, double shape1, double scale, double shape2, double sh
 	!R_FINITE(shape2) ||
 	!R_FINITE(shape3) ||
 	!R_FINITE(order) ||
-	!R_FINITE(x) ||
+	!R_FINITE(d) ||
 	shape1 <= 0.0 ||
 	scale <= 0.0 ||
 	shape2 <= 0.0 ||
 	shape3 <= 0.0 ||
-	x <= 0.0 ||
+	d <= 0.0 ||
 	order <= - shape3 * shape2)
 	error(_("invalid arguments"));
 
-    tmp = R_pow(x / scale, shape2);
+    tmp = R_pow(d / scale, shape2);
     u = tmp / (1.0 + tmp);
 
-    return R_pow(scale, order) * gammafn(shape3 + order / shape2) * gammafn(shape1 - order / shape2) * pbeta(u, shape3 + order / shape2, shape1 - order / shape2, 1, 0) / (gammafn(shape1) * gammafn(shape3)) + R_pow(x, order) * (1.0 - pbeta(u, shape3, shape1, 1, 0));
+    return R_pow(scale, order) * gammafn(shape3 + order / shape2) * gammafn(shape1 - order / shape2) * pbeta(u, shape3 + order / shape2, shape1 - order / shape2, 1, 0) / (gammafn(shape1) * gammafn(shape3)) + R_pow(d, order) * (pbeta(u, shape3, shape1, 0, 0));
 }
 

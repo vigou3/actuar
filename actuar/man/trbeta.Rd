@@ -6,16 +6,20 @@
 \alias{ptrbeta}
 \alias{qtrbeta}
 \alias{rtrbeta}
+\alias{mtrbeta}
+\alias{levtrbeta}
 \alias{pearson6}
 \alias{print.pearson6}
 \alias{dpearson6}
 \alias{ppearson6}
 \alias{qpearson6}
 \alias{rpearson6}
+\alias{mpearson6}
+\alias{levpearson6}
 \title{The Transformed Beta Distribution}
 \description{
-  Density, distribution function, quantile function and random generation
-  for the Transformed Beta distribution with parameters \code{shape1},
+  Density, distribution function, quantile function, random generation,
+  moments and limited moments for the Transformed Beta distribution with parameters \code{shape1},
   \code{scale}, \code{shape2} and \code{shape3}.
 }
 \usage{
@@ -25,18 +29,20 @@
   qtrbeta(p, shape1, scale, shape2, shape3, lower.tail = TRUE,
           log.p = FALSE)
   rtrbeta(n, shape1, scale, shape2, shape3)
+  mtrbeta(k, shape1, scale, shape2, shape3, log = FALSE)
+  levtrbeta(d, shape1, scale, shape2, shape3, order = 1, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
+  \item{d}{limit for moment.}
   \item{shape1, scale, shape2, shape3}{parameters. Must be strictly positive.}
   \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
     returned as log(p).}
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
     <= x], otherwise, Pr[X > x].} 
-  
 }
 \details{ 
   The Transformed Beta distribution with parameters \code{shape1} = a,
@@ -73,9 +79,10 @@
 }
 \value{
 \code{dtrbeta} gives the density, \code{ptrbeta} gives the distribution function,
-\code{qtrbeta} gives the quantile function, and \code{rtrbeta} generates random
-deviates.
-
+\code{qtrbeta} gives the quantile function, \code{rtrbeta} generates random
+deviates, \code{mtrbeta} gives the k-moment and \code{levtrbeta} gives
+the k-limited moment.
+}
 Invalid arguments will return warning.
 }
 \note{
@@ -94,5 +101,7 @@ exp(dtrbeta(2, 2, 3, 4, 5, log = TRUE))
 p <- (1:10)/10
 ptrbeta(qtrbeta(p, 2, 3, 4, 5), 2, 3, 4, 5)
 qpearson6(0.3, 2, 3, 4, 5, lower.tail = FALSE)
+mtrbeta(2, 1, 2, 3, 4) - mtrbeta(1, 1, 2, 3, 4)
+levtrbeta(10, 1, 2, 3, 4, 2)
 }
 \keyword{distribution}

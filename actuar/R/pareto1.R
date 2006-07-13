@@ -25,5 +25,5 @@ rpareto1 <- function(n, shape, min)
 mpareto1 <- function(k, shape, min, log = FALSE)
      .External("do_dpq", "mpareto1", k, shape, min, log)
 
-levpareto1 <- function(x, shape, min, order = 1, log = FALSE)
-     .External("do_dpq", "levpareto1", x, shape, min, order, log)
+levpareto1 <- function(d, shape, min, order = 1, log = FALSE)
+     .External("do_dpq", "levpareto1", d, shape, min, order, log)

@@ -117,23 +117,23 @@ double minvburr(double k, double shape1, double scale, double shape2, int give_l
     return R_pow(scale, k) * gammafn(shape1 + k / shape2) * gammafn(1.0 - k / shape2) / gammafn(shape1);
 }
 
-double levinvburr(double x, double shape1, double scale, double shape2, double order, int give_log)
+double levinvburr(double d, double shape1, double scale, double shape2, double order, int give_log)
 {	
   double u;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
 	!R_FINITE(shape2) ||
-	!R_FINITE(x) ||
+	!R_FINITE(d) ||
 	!R_FINITE(order) ||
 	shape1 <= 0.0 ||
 	scale <= 0.0 ||
 	shape2 <= 0.0 ||
-	x <= 0.0 ||
+	d <= 0.0 ||
 	order <= -shape1 * shape2)
 	error(_("invalid arguments"));
 
-    u = R_pow(x / scale, shape2) / (1.0 + R_pow(x / scale, shape2));
+    u = R_pow(d / scale, shape2) / (1.0 + R_pow(d / scale, shape2));
 
-    return R_pow(scale, order) * gammafn(shape1 + order / shape2) * gammafn(1.0 - order / shape2) * pbeta(u, shape1 + order / shape2, 1.0 - order / shape2, 1, 0) / gammafn(shape1) + R_pow(x, order) * (1.0 - R_pow(u, shape1));
+    return R_pow(scale, order) * gammafn(shape1 + order / shape2) * gammafn(1.0 - order / shape2) * pbeta(u, shape1 + order / shape2, 1.0 - order / shape2, 1, 0) / gammafn(shape1) + R_pow(d, order) * (1.0 - R_pow(u, shape1));
 }

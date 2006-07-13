@@ -22,8 +22,8 @@ rtrbeta <- function (n, shape1, scale, shape2, shape3)
 mtrbeta <- function (k, shape1, scale, shape2, shape3, log = FALSE)
     .External("do_dpq", "mtrbeta", k, shape1, scale, shape2, shape3, log)
 
-levtrbeta <- function (x, shape1, scale, shape2, shape3, order = 1, log = FALSE)
-    .External("do_dpq", "levtrbeta", x, shape1, scale, shape2, shape3, order, log)
+levtrbeta <- function (d, shape1, scale, shape2, shape3, order = 1, log = FALSE)
+    .External("do_dpq", "levtrbeta", d, shape1, scale, shape2, shape3, order, log)
 
 
 

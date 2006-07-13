@@ -26,5 +26,5 @@ rburr <- function(n, shape1, scale, shape2)
 mburr <- function(k, shape1, scale, shape2, log = FALSE)
     .External("do_dpq", "mburr", k, shape1, scale, shape2, log)
 
-levburr <- function(x, shape1, scale, shape2, order = 1, log = FALSE)
-    .External("do_dpq", "levburr", x, shape1, scale, shape2, order, log)
+levburr <- function(d, shape1, scale, shape2, order = 1, log = FALSE)
+    .External("do_dpq", "levburr", d, shape1, scale, shape2, order, log)

@@ -26,5 +26,5 @@ rtrgamma <- function(n, shape1, scale, shape2)
 mtrgamma <- function(k, shape1, scale, shape2, log = FALSE)
     .External("do_dpq", "mtrgamma", k, shape1, scale, shape2, log)
 
-levtrgamma <- function(x, shape1, scale, shape2, order = 1, log = FALSE)
-    .External("do_dpq", "levtrgamma", x, shape1, scale, shape2, order, log)
+levtrgamma <- function(d, shape1, scale, shape2, order = 1, log = FALSE)
+    .External("do_dpq", "levtrgamma", d, shape1, scale, shape2, order, log)

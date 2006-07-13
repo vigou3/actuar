@@ -103,21 +103,21 @@ double mparalogis(double k, double shape, double scale, int give_log)
     return R_pow(scale, k) * gammafn(1.0 + k / shape) * gammafn(shape - k / shape) / gammafn(shape);
 }
 
-double levparalogis(double x, double shape, double scale, double order, int give_log)
+double levparalogis(double d, double shape, double scale, double order, int give_log)
 {
   double temp;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
-	!R_FINITE(x) ||
+	!R_FINITE(d) ||
 	!R_FINITE(order) ||
 	shape <= 0.0 ||
 	scale <= 0.0 ||
 	order <= -shape ||
-	x <= 0.0)
+	d <= 0.0)
 	error(_("invalid arguments"));
 
-    temp = 1.0 / (1.0 + R_pow(x / scale, shape));
+    temp = 1.0 / (1.0 + R_pow(d / scale, shape));
 	
-    return R_pow(scale, order) * gammafn(1.0 + order / shape) * gammafn(shape - order / shape) * pbeta(1.0 - temp, 1.0 + order / shape, shape - order / shape, 1, 0) + R_pow(x, order) * R_pow(temp, shape);
+    return R_pow(scale, order) * gammafn(1.0 + order / shape) * gammafn(shape - order / shape) * pbeta(1.0 - temp, 1.0 + order / shape, shape - order / shape, 1, 0) + R_pow(d, order) * R_pow(temp, shape);
 }
