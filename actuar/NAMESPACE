@@ -7,7 +7,7 @@ export(## Credibility theory
        ## Risk theory
        panjer, exact, np2, exact, normal, simS, aggregateDist,
        ## One parameter distributions
-       dinvexp, pinvexp, qinvexp, rinvexp,
+       dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        ## Two parameter distributions
        dllogis, pllogis, qllogis, rllogis, mllogis, levllogis,
        dparalogis, pparalogis, qparalogis, rparalogis, mparalogis, levparalogis,

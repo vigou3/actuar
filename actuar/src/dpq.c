@@ -148,6 +148,7 @@ SEXP do_dpq1(int code, SEXP args)
     case  1:  return DPQ1_1(args, dinvexp);
     case  2:  return DPQ1_2(args, pinvexp);
     case  3:  return DPQ1_2(args, qinvexp);
+    case  4:  return DPQ1_1(args, minvexp);
     default:
 	error(_("internal error in do_dpq1"));
     }
@@ -313,6 +314,7 @@ SEXP do_dpq2(int code, SEXP args)
     case 33:  return DPQ2_1(args, dlgamma);
     case 34:  return DPQ2_2(args, plgamma);
     case 35:  return DPQ2_2(args, qlgamma);
+    case 36:  return DPQ2_1(args, levinvexp);
     default:
 	error(_("internal error in do_dpq2"));
     }

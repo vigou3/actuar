@@ -22,3 +22,9 @@ qinvexp <- function(p, scale, lower.tail = TRUE, log.p = FALSE)
 
 rinvexp <- function(n, scale)
     .External("do_random", "rinvexp", n, scale)
+
+minvexp <- function(k, scale, log = FALSE)
+    .External("do_dpq", "minvexp", k, scale, log)
+
+levinvexp <- function(x, scale, order = 1, log = FALSE)
+    .External("do_dpq", "levinvexp", x, scale, order, log)

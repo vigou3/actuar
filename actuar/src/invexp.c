@@ -68,3 +68,19 @@ double rinvexp(double scale)
 
     return scale / log(1.0 / unif_rand());
 }
+
+double minvexp(double k, double scale, int give_log)
+{
+    if (!R_FINITE(scale) || !R_FINITE(k) || scale <= 0.0 || k >= 1.0)
+	error(_("invalid arguments"));
+
+    return R_pow(scale, k) * gammafn(1.0 - k);
+}
+
+double levinvexp(double x, double scale, double order, int give_log)
+{
+    if (!R_FINITE(scale) || !R_FINITE(x) || R_FINITE(order) || scale <= 0.0 || order <= 0.0)
+	error(_("invalid arguments"));
+
+    return R_pow(scale, order) * gammafn(1.0 - order) * (1.0 - pgamma(1.0 / x, 1.0 - order, 1.0 / scale, 1, 0)) + R_pow(x, order) * (1.0 - exp(-scale / x));
+}
