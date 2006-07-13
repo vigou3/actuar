@@ -91,3 +91,39 @@ double rinvtrgamma(double shape1, double scale, double shape2)
 
   return R_pow(a, -1.0 / shape2);
 }
+
+double minvtrgamma(double k, double shape1, double scale, double shape2, int give_log)
+{
+
+  if(!R_FINITE(shape1) ||
+     !R_FINITE(scale) ||
+     !R_FINITE(shape2) ||
+     !R_FINITE(k) ||
+     shape1 <= 0.0 || 
+     scale <= 0.0 ||
+     shape2 <= 0.0
+     k >= shape1 * shape2)
+	error(_("invalid arguments"));
+
+  return R_pow(scale, k) * gammafn(shape1 - k / shape2) / gammafn(shape1);
+}
+
+double levinvtrgamma(doublex, double shape1, double scale, double shape2, double order, int gve_log)
+{
+  double u;
+
+  if (!R_FINITE(shape1) ||
+      !R_FINITE(scale) ||
+      !R_FINITE(shape2) ||
+      !R_FINITE(x) ||
+      !R_FINITE(order) ||
+      shape1 <= 0.0 || 
+      scale <= 0.0 ||
+      shape2 <= 0.0
+      x <= 0.0)
+    error(_("invalid arguments"));
+
+  u = R_pow(1.0 / x, shape2);
+
+  return R_pow(scale, order) * gammafn(shape1 - order / shape2) * pgamma(u, shape1 - order / shape2, 1.0 / scale, 0, 0) / gammafn(shape1) + R_pow(x, order) * (pgamma(u, shape1, 1.0 / scale, 1, 0)) ;
+}

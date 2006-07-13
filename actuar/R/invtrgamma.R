@@ -18,3 +18,9 @@ qinvtrgamma <- function(p, shape1, scale, shape2, lower.tail = TRUE, log.p = FAL
 
 rinvtrgamma <- function(n, shape1, scale, shape2)
     .External("do_random", "rinvtrgamma", n, shape1, scale, shape2)
+
+minvtrgamma <- function(k, shape1, scale, shape2, log = FALSE)
+    .External("do_dpq", "minvtrgamma", k, shape1, scale, shape2, log)
+
+levinvtrgamma <- function(x, shape1, scale, shape2, order = 1, log = FALSE)
+    .External("do_dpq", "levinvtrgamma", x, shape1, scale, shape2, order, log)

@@ -99,3 +99,41 @@ double rburr(double shape1, double scale, double shape2)
 	
     return scale * R_pow((1.0 - R_pow(a, tmp)) / (R_pow(a, tmp) ), 1.0 / shape2);
 }
+
+double mburr(double k, double shape1, double scale, double shape2, int give_log)
+{
+	
+    if (!R_FINITE(shape1) ||
+	!R_FINITE(scale) ||
+	!R_FINITE(shape2) ||
+	!R_FINITE(k) ||
+	shape1 <= 0.0 ||
+	scale <= 0.0 ||
+	shape2 <= 0.0
+	k <= -shape2 ||
+	k >= shape1 * shape2)
+	error(_("invalid arguments"));
+	
+    return R_pow(scale, k) * gammafn(1.0 + k / shape2) * gammafn(shape1 - k / shape2) / gammafn(shape1);
+}
+
+double levburr(double x, double shape1, double scale, double shape2, double order, int give_log)
+{
+  double u;
+
+    if (!R_FINITE(shape1) ||
+	!R_FINITE(scale) ||
+	!R_FINITE(shape2) ||
+	!R_FINITE(x) ||
+	!R_FINITE(order) ||
+	shape1 <= 0.0 ||
+	scale <= 0.0 ||
+	shape2 <= 0.0
+	x <= 0.0 ||
+	k <= -shape2)
+	error(_("invalid arguments"));
+
+    u = 1.0 / (1.0 + R_pow(x / scale, shape2));
+
+    return R_pow(scale, order) * gammafn(1.0 + order / shape2) * gammafn(shape1 - order / shape2) * pbeta(1.0 - u, 1.0 + order / shape2, shape1 - order / shape2, 1, 0) / gammafn(shape1) + R_pow(x, order) * R_pow(u, shape1);
+}

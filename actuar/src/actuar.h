@@ -70,26 +70,36 @@ double dburr(double x, double shape1, double scale, double shape2, int give_log)
 double pburr(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double qburr(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double rburr(double shape1, double scale, double shape2);
+double mburr(double k, double shape1, double scale, double shape2, int give_log);
+double levburr(double x, double shape1, double scale, double shape2, double order, int give_log);
 
 double dgenpareto(double x, double shape1, double scale, double shape2, int give_log);
 double pgenpareto(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double qgenpareto(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double rgenpareto(double shape1, double scale, double shape2);
+double mgenpareto(double k, double shape1, double scale, double shape2, int give_log);
+double levgenpareto(double x, double shape1, double scale, double shape2, double order, int give_log);
 
 double dinvburr(double x, double shape1, double scale, double shape2, int give_log);
 double pinvburr(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double qinvburr(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double rinvburr(double shape1, double scale, double shape2);
+double minvburr(double k, double shape1, double scale, double shape2, int give_log);
+double levinvburr(double x, double shape1, double scale, double shape2, double order, int give_log);
 
 double dtrgamma(double x, double shape1, double scale, double shape2, int give_log);
 double ptrgamma(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double qtrgamma(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double rtrgamma(double shape1, double scale, double shape2);
+double mtrgamma(double k, double shape1, double scale, double shape2, int give_log);
+double levtrgamma(double x, double shape1, double scale, double shape2, double order, int give_log);
 
 double dinvtrgamma(double x, double shape1, double scale, double shape2, int give_log);
 double pinvtrgamma(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double qinvtrgamma(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
 double rinvtrgamma(double shape1, double scale, double shape2);
+double minvtrgamma(double k, double shape1, double scale, double shape2, int give_log);
+double levinvtrgamma(double x, double shape1, double scale, double shape2, double order, int give_log);
 
 /*   Four parameter distributions */
 double dtrbeta(double x, double shape1, double scale, double shape2, double shape3, int give_log);

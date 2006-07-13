@@ -452,18 +452,23 @@ SEXP do_dpq3(int code, SEXP args)
     case  1:  return DPQ3_1(args, dburr);
     case  2:  return DPQ3_2(args, pburr);
     case  3:  return DPQ3_2(args, qburr);
-    case  4:  return DPQ3_1(args, dgenpareto);
-    case  5:  return DPQ3_2(args, pgenpareto);
-    case  6:  return DPQ3_2(args, qgenpareto);
-    case  7:  return DPQ3_1(args, dinvburr);
-    case  8:  return DPQ3_2(args, pinvburr);
-    case  9:  return DPQ3_2(args, qinvburr);
-    case  10: return DPQ3_1(args, dtrgamma);
-    case  11: return DPQ3_2(args, ptrgamma);
-    case  12: return DPQ3_2(args, qtrgamma);
-    case  13: return DPQ3_1(args, dinvtrgamma);
-    case  14: return DPQ3_2(args, pinvtrgamma);
-    case  15: return DPQ3_2(args, qinvtrgamma);
+    case  4:  return DPQ3_1(args, mburr);
+    case  5:  return DPQ3_1(args, dgenpareto);
+    case  6:  return DPQ3_2(args, pgenpareto);
+    case  7:  return DPQ3_2(args, qgenpareto);
+    case  8:  return DPQ3_1(args, mgenpareto);
+    case  9:  return DPQ3_1(args, dinvburr);
+    case  10:  return DPQ3_2(args, pinvburr);
+    case  11:  return DPQ3_2(args, qinvburr);
+    case  12:  return DPQ3_1(args, minvburr);
+    case  13: return DPQ3_1(args, dtrgamma);
+    case  14: return DPQ3_2(args, ptrgamma);
+    case  15: return DPQ3_2(args, qtrgamma);
+    case  16: return DPQ3_1(args, mtrgamma);
+    case  17: return DPQ3_1(args, dinvtrgamma);
+    case  18: return DPQ3_2(args, pinvtrgamma);
+    case  19: return DPQ3_2(args, qinvtrgamma);
+    case  20: return DPQ3_1(args, minvtrgamma);
     default:
 	error(_("internal error in do_dpq3"));
     }
@@ -627,6 +632,11 @@ SEXP do_dpq4(int code, SEXP args)
     case  2:  return DPQ4_2(args, ptrbeta);
     case  3:  return DPQ4_2(args, qtrbeta);
     case  4:  return DPQ4_1(args, mtrbeta);
+    case  5:  return DPQ4_1(args, levgenpareto);
+    case  6:  return DPQ4_1(args, levburr);
+    case  7:  return DPQ4_1(args, levinvburr);
+    case  8:  return DPQ4_1(args, levtrgamma);
+    case  9:  return DPQ4_1(args, levinvtrgamma);
     default:
 	error(_("internal error in do_dpq4"));
     }

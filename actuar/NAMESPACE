@@ -21,11 +21,11 @@ export(## Credibility theory
        dinvweibull, pinvweibull, qinvweibull, rinvweibull,
        dlgompertz, plgompertz, qlgompertz, rlgompertz,          # aliases
        ## Three parameter distributions
-       dburr, pburr, qburr, rburr,
-       dinvburr, pinvburr, qinvburr, rinvburr,
-       dgenpareto, pgenpareto, qgenpareto, rgenpareto,
-       dtrgamma, ptrgamma, qtrgamma, rtrgamma,
-       dinvtrgamma, pinvtrgamma, qinvtrgamma, rinvtrgamma,
+       dburr, pburr, qburr, rburr, mburr, levburr,
+       dinvburr, pinvburr, qinvburr, rinvburr, minvburr, levinvburr,
+       dgenpareto, pgenpareto, qgenpareto, rgenpareto, mgenpareto, levgenpareto,
+       dtrgamma, ptrgamma, qtrgamma, rtrgamma, mtrgamma, levtrgamma,
+       dinvtrgamma, pinvtrgamma, qinvtrgamma, rinvtrgamma, minvtrgamma, levinvtrgamma,
        ## Four parameter distributions
        dtrbeta, ptrbeta, qtrbeta, rtrbeta, mtrbeta, levtrbeta,
        dpearson6, ppearson6, qpearson6, rpearson6, mpearson6, levpearson6,  #aliases

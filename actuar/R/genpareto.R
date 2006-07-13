@@ -18,3 +18,9 @@ qgenpareto <- function(p, shape1, scale, shape2, lower.tail = TRUE, log.p = FALS
 
 rgenpareto <- function(n, shape1, scale, shape2)
      .External("do_random", "rgenpareto", n, shape1, scale, shape2)
+
+mgenpareto <- function(k, shape1, scale, shape2, log = FALSE)
+     .External("do_dpq", "mgenpareto", k, shape1, scale, shape2, log)
+
+levgenpareto <- function(x, shape1, scale, shape2, order, log = FALSE)
+     .External("do_dpq", "levgenpareto", x, shape1, scale, shape2, order, log)
