@@ -101,14 +101,14 @@ double minvtrgamma(double k, double shape1, double scale, double shape2, int giv
      !R_FINITE(k) ||
      shape1 <= 0.0 || 
      scale <= 0.0 ||
-     shape2 <= 0.0
+     shape2 <= 0.0 ||
      k >= shape1 * shape2)
 	error(_("invalid arguments"));
 
   return R_pow(scale, k) * gammafn(shape1 - k / shape2) / gammafn(shape1);
 }
 
-double levinvtrgamma(doublex, double shape1, double scale, double shape2, double order, int gve_log)
+double levinvtrgamma(double x, double shape1, double scale, double shape2, double order, int gve_log)
 {
   double u;
 
@@ -119,7 +119,7 @@ double levinvtrgamma(doublex, double shape1, double scale, double shape2, double
       !R_FINITE(order) ||
       shape1 <= 0.0 || 
       scale <= 0.0 ||
-      shape2 <= 0.0
+      shape2 <= 0.0 ||
       x <= 0.0)
     error(_("invalid arguments"));
 

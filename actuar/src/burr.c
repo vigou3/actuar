@@ -109,7 +109,7 @@ double mburr(double k, double shape1, double scale, double shape2, int give_log)
 	!R_FINITE(k) ||
 	shape1 <= 0.0 ||
 	scale <= 0.0 ||
-	shape2 <= 0.0
+	shape2 <= 0.0 ||
 	k <= -shape2 ||
 	k >= shape1 * shape2)
 	error(_("invalid arguments"));
@@ -128,9 +128,9 @@ double levburr(double x, double shape1, double scale, double shape2, double orde
 	!R_FINITE(order) ||
 	shape1 <= 0.0 ||
 	scale <= 0.0 ||
-	shape2 <= 0.0
+	shape2 <= 0.0 ||
 	x <= 0.0 ||
-	k <= -shape2)
+	order <= -shape2)
 	error(_("invalid arguments"));
 
     u = 1.0 / (1.0 + R_pow(x / scale, shape2));

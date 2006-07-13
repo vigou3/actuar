@@ -103,7 +103,7 @@ double mtrgamma(double k, double shape1, double scale, double shape2, int give_l
 	!R_FINITE(k) ||
 	shape1 <= 0.0 ||
 	scale <= 0.0 ||
-	shape2 <= 0.0
+	shape2 <= 0.0 ||
 	k <= -shape1 * shape2)
 	error(_("invalid arguments"));
 
@@ -121,9 +121,9 @@ double levtrgamma(double x, double shape1, double scale, double shape2, double o
 	!R_FINITE(order) ||
 	shape1 <= 0.0 ||
 	scale <= 0.0 ||
-	shape2 <= 0.0
+	shape2 <= 0.0 ||
 	x <= 0.0 ||
-	k <= -shape1 * shape2)
+	order <= -shape1 * shape2)
 	error(_("invalid arguments"));
 	
     u = R_pow(x, shape2);
