@@ -20,6 +20,7 @@ FUNTAB fun_tab[] = {
     {"pinvexp",		do_dpq1,	2},
     {"qinvexp",		do_dpq1,	3},
     {"minvexp",		do_dpq1,	4},
+    {"mexp",		do_dpq1,	5},
     /* Two parameter distributions */
     {"dinvparalogis",	do_dpq2,	1},
     {"pinvparalogis",	do_dpq2,	2},
@@ -56,7 +57,11 @@ FUNTAB fun_tab[] = {
     {"dlgamma",	        do_dpq2,	33},
     {"plgamma",	        do_dpq2,	34},
     {"qlgamma",	        do_dpq2,	35},
-    {"levinvexp",	do_dpq2,	36},    
+    {"levinvexp",	do_dpq2,	36}, 
+    {"levexp",	        do_dpq2,	37},
+    {"mgamma",  	do_dpq2,	38},
+    {"mweibull",	do_dpq2,	39},
+    {"mlnorm",  	do_dpq2,	40},
     /* Three parameter distributions */
     {"dburr",   	do_dpq3,	1},
     {"pburr",		do_dpq3,	2},
@@ -85,6 +90,9 @@ FUNTAB fun_tab[] = {
     {"levpareto",	do_dpq3,	25},
     {"levpareto1",	do_dpq3,	26},
     {"levinvgamma",	do_dpq3,	27},
+    {"levgamma",  	do_dpq3,	28},
+    {"levweibull",	do_dpq3,	29},
+    {"levlnorm",  	do_dpq3,	30},
     /* Four parameter distributions */
     {"dtrbeta",		do_dpq4,	1},
     {"ptrbeta",		do_dpq4,	2},

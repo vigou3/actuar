@@ -21,6 +21,9 @@ double rinvexp(double scale);
 double minvexp(double k, double scale, int give_log);
 double levinvexp(double d, double scale, double order, int give_log);
 
+double mexp(double k, double scale, int give_log);
+double levexp(double d, double scale, double order, int give_log);
+
 /*   Two parameter distributions */
 double dinvgamma(double x, double scale, double shape, int give_log);
 double pinvgamma(double q, double scale, double shape, int lower_tail, int log_p);
@@ -81,6 +84,15 @@ double qpareto1(double p, double shape, double scale, int lower_tail, int log_p)
 double rpareto1(double shape, double scale);
 double mpareto1(double k, double shape, double scale, int give_log);
 double levpareto1(double d, double shape, double scale, double order, int give_log);
+
+double mgamma(double k, double shape, double scale, int give_log);
+double levgamma(double d, double shape, double scale, double order, int give_log);
+
+double mweibull(double k, double scale, double shape, int give_log);
+double levweibull(double d, double scale, double shape, double order, int give_log);
+
+double mlnorm(double k, double mu, double sigma, int give_log);
+double levlnorm(double d, double mu, double sigma, double order, int give_log);
 
 /*   Three parameter distributions */
 double dburr(double x, double shape1, double scale, double shape2, int give_log);

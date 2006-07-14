@@ -8,6 +8,7 @@ export(## Credibility theory
        panjer, exact, np2, exact, normal, simS, aggregateDist,
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
+       mexp, levexp,
        ## Two parameter distributions
        dllogis, pllogis, qllogis, rllogis, mllogis, levllogis,
        dparalogis, pparalogis, qparalogis, rparalogis, mparalogis, levparalogis,
@@ -20,6 +21,9 @@ export(## Credibility theory
        dpareto1, ppareto1, qpareto1, rpareto1, mpareto1, levpareto2,
        dinvweibull, pinvweibull, qinvweibull, rinvweibull, minvweibull, levinvweibull,
        dlgompertz, plgompertz, qlgompertz, rlgompertz, mlgompertz, levlgompertz,        # aliases
+       mweibull, levweibull,
+       mlnorm, mlevnorm,
+       mgamma, levgamma,
        ## Three parameter distributions
        dburr, pburr, qburr, rburr, mburr, levburr,
        dinvburr, pinvburr, qinvburr, rinvburr, minvburr, levinvburr,
