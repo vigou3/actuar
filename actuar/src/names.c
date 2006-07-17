@@ -93,6 +93,7 @@ FUNTAB fun_tab[] = {
     {"levgamma",  	do_dpq3,	28},
     {"levweibull",	do_dpq3,	29},
     {"levlnorm",  	do_dpq3,	30},
+    {"levinvpareto",	do_dpq3,	31},
     /* Four parameter distributions */
     {"dtrbeta",		do_dpq4,	1},
     {"ptrbeta",		do_dpq4,	2},

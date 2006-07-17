@@ -1,6 +1,7 @@
+
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r}inverse pareto functions. The inverse Pareto
+### Definition of the {d,p,q,r,m}inverse pareto functions. The inverse Pareto
 ### distribution used in these functions has cumulative distribution
 ### function
 ###
@@ -25,5 +26,8 @@ rinvpareto <- function(n, shape, scale)
 
 minvpareto <- function(k, shape, scale, log = FALSE)
      .External("do_dpq", "minvpareto", k, shape, scale, log)
+
+levinvpareto <- function(d, shape, scale, order = 1, log = FALSE)
+     .External("do_dpq", "levinvpareto", d, shape, scale, order, log)
 
 

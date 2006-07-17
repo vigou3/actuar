@@ -49,6 +49,7 @@ double pinvpareto(double q, double shape, double scale, int lower_tail, int log_
 double qinvpareto(double p, double shape, double scale, int lower_tail, int log_p);
 double rinvpareto(double shape, double scale);
 double minvpareto(double k, double shape, double scale, int give_log);
+double levinvpareto(double d, double shape, double scale, double order, int log_p);
 
 double dinvweibull(double x, double scale, double shape, int give_log);
 double pinvweibull(double q, double scale, double shape, int lower_tail, int log_p);

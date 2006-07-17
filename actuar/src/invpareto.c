@@ -1,8 +1,8 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the inverse Pareto distribution, and to simulate random
- *  variates. See ../R/invpareto.R for details.
+ *  fonctions of the inverse Pareto distribution, to calculate raw moments of the random
+ *  variable and to simulate random variates. See ../R/invpareto.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -98,3 +98,18 @@ double minvpareto(double k, double shape, double scale, int give_log)
     return R_pow(scale, k) * gammafn(shape + k) * gammafn(1.0 - k) / gammafn(shape);
 }
 
+double levinvpareto(double d, double shape, double scale, double order, int give_log)
+{
+    if (!R_FINITE(shape) || 
+	!R_FINITE(scale) ||
+	!R_FINITE(d) ||
+	!R_FINITE(order) ||
+	shape <= 0.0 || 
+	scale <= 0.0 ||
+	d <= 0.0 ||
+	order <= -shape ||
+	order >= 1.0)
+	error(_("invalid arguments"));
+
+    return R_pow(scale, order) * shape * gammafn(order + shape) * gammafn(1.0 - order) * pbeta(d / (d + scale), order + shape, 1.0 - order, 1, 0) / gammafn(shape + 1.0) + R_pow(d, order) * (1.0 - R_pow(d / (scale + d), shape));
+}
