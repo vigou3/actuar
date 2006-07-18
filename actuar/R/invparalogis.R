@@ -1,6 +1,6 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r}inverse paralogistic functions. The inverse paralogistic
+### Definition of the {d,p,q,r,m,lev}inverse paralogistic functions. The inverse paralogistic
 ### distribution used in these functions has cumulative distribution
 ### function
 ###

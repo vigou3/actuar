@@ -1,8 +1,8 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the transformed beta distribution, and to simulate random
- *  variates. See ../R/trbeta.R for details.
+ *  fonctions of the transformed beta distribution, to calculate raw moments and limited moments 
+ *  of the random variable and to simulate random variates. See ../R/trbeta.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -139,7 +139,8 @@ double levtrbeta(double d, double shape1, double scale, double shape2, double sh
 	shape2 <= 0.0 ||
 	shape3 <= 0.0 ||
 	d <= 0.0 ||
-	order <= - shape3 * shape2)
+	order <= - shape3 * shape2 ||
+	order >= shape1 * shape2)
 	error(_("invalid arguments"));
 
     tmp = R_pow(d / scale, shape2);

@@ -1,6 +1,6 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r}transformed gamma functions. The transformed gamma
+### Definition of the {d,p,q,r,m,lev}transformed gamma functions. The transformed gamma
 ### distribution used in these functions has cumulative distribution
 ### function
 ###

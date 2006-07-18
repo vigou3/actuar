@@ -1,6 +1,6 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r}burr functions. The Burr
+### Definition of the {d,p,q,r,m,lev}burr functions. The Burr
 ### distribution used in these functions has cumulative distribution
 ### function
 ###

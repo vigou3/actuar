@@ -1,8 +1,8 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the single-parameter Pareto distribution, and to simulate random
- *  variates. See ../R/pareto1.R for details.
+ *  fonctions of the single-parameter Pareto distribution, to calculate raw moments and limited moments 
+ *  of the random variable and to simulate random variates. See ../R/pareto1.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -99,6 +99,7 @@ double levpareto1(double d, double shape, double min, double order, int give_log
 	!R_FINITE(order) ||
 	shape <= 0.0 ||
 	min <= 0.0 ||
+	order >= shape ||
 	d <= 0.0)
 	error(_("invalid arguments"));
 

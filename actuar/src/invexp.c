@@ -1,8 +1,8 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the inverse exponential distribution, and to simulate random
- *  variates. See ../R/invexp.R for details.
+ *  fonctions of the inverse exponential distribution, to calculate raw moments and limited moments 
+ *  of the random variable and to simulate random variates. See ../R/invexp.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -79,7 +79,7 @@ double minvexp(double k, double scale, int give_log)
 
 double levinvexp(double d, double scale, double order, int give_log)
 {
-    if (!R_FINITE(scale) || !R_FINITE(d) || R_FINITE(order) || scale <= 0.0 || order <= 0.0)
+    if (!R_FINITE(scale) || !R_FINITE(d) || R_FINITE(order) || scale <= 0.0 || order <= 0.0 || order >= 1.0)
 	error(_("invalid arguments"));
 
     return R_pow(scale, order) * gammafn(1.0 - order) * (1.0 - pgamma(1.0 / d, 1.0 - order, 1.0 / scale, 1, 0)) + R_pow(d, order) * (1.0 - exp(-scale / d));

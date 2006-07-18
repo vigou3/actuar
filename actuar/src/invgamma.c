@@ -1,8 +1,8 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the inverse gamma distribution, and to simulate random
- *  variates. See ../R/invgamma.R for details.
+ *  fonctions of the inverse gamma distribution, to calculate raw moments and limited moments 
+ *  of the random variable and to simulate random variates. See ../R/invgamma.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -101,6 +101,7 @@ double levinvgamma(double d, double shape, double scale, double order, int give_
 	!R_FINITE(order) ||
 	shape <= 0.0 ||
 	scale <= 0.0 ||
+	order >= shape ||
 	d <= 0.0)
 	error(_("invalid arguments"));
 

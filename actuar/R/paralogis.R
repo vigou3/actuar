@@ -1,6 +1,6 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r}paralogistic functions. The paralogistic
+### Definition of the {d,p,q,r,m,lev}paralogistic functions. The paralogistic
 ### distribution used in these functions has cumulative distribution
 ### function
 ###

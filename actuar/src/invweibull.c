@@ -1,8 +1,8 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the inverse Weibull distribution, and to simulate random
- *  variates. See ../R/invweibull.R for details.
+ *  fonctions of the inverse Weibull distribution, to calculate raw moments and limited moments 
+ *  of the random variable and to simulate random variates. See ../R/invweibull.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -103,6 +103,7 @@ double levinvweibull(double d, double scale, double shape, double order, int giv
 	!R_FINITE(order) ||
 	scale <= 0.0 ||
 	shape <= 0.0 ||
+	order >= shape ||
 	d <= 0.0)
 	error(_("invalid arguments"));
 

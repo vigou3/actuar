@@ -1,8 +1,8 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the inverse paralogistic distribution, and to simulate random
- *  variates. See ../R/invparalogis.R for details.
+ *  fonctions of the inverse paralogistic distribution, to calculate raw moments and limited moments 
+ *  of the random variable and to simulate random variates. See ../R/invparalogis.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -120,6 +120,7 @@ double levinvparalogis(double d, double shape, double scale, double order, int g
 	shape <= 0.0 ||
 	scale <= 0.0 ||
 	order <= -R_pow(shape, 2.0) ||
+	order >= shape ||
 	d <= 0.0)
 	error(_("invalid arguments"));
 

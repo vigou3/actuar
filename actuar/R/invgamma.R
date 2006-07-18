@@ -1,6 +1,6 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r}inverse gamma functions. The inverse gamma
+### Definition of the {d,p,q,r,m,lev}inverse gamma functions. The inverse gamma
 ### distribution used in these functions has cumulative distribution
 ### function
 ###

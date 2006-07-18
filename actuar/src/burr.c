@@ -1,8 +1,8 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the Burr distribution, and to simulate random
- *  variates. See ../R/burr.R for details.
+ *  fonctions of the Burr distribution, to calculate raw moments and limited moments 
+ *  of the random variable and to simulate random variates. See ../R/burr.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -130,7 +130,8 @@ double levburr(double d, double shape1, double scale, double shape2, double orde
 	scale <= 0.0 ||
 	shape2 <= 0.0 ||
 	d <= 0.0 ||
-	order <= -shape2)
+	order <= -shape2 ||
+	order >= shape1 * shape2)
 	error(_("invalid arguments"));
 
     u = 1.0 / (1.0 + R_pow(d / scale, shape2));

@@ -1,6 +1,7 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r}single-parameter pareto functions. The single-parameter ### Pareto distribution used in these functions has cumulative distribution
+### Definition of the {d,p,q,r,m,lev}single-parameter pareto functions. The single-parameter
+### Pareto distribution used in these functions has cumulative distribution
 ### function
 ###
 ###   Pr[X <= x] = 1 - (min/x)^shape, x > 0.

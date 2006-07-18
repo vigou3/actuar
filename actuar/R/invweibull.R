@@ -1,6 +1,6 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r}inverse weibull functions. The inverse Weibull
+### Definition of the {d,p,q,r,m,lev}inverse weibull functions. The inverse Weibull
 ### distribution used in these functions has cumulative distribution
 ### function
 ###

@@ -1,6 +1,6 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r}inverse exponential functions. The
+### Definition of the {d,p,q,r,m,lev}inverse exponential functions. The
 ### inverse exponential distribution used in these functions has
 ### cumulative distribution function
 ###

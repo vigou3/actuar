@@ -1,8 +1,8 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the generalized Pareto distribution, and to simulate random
- *  variates. See ../R/genpareto.R for details.
+ *  fonctions of the generalized Pareto distribution, to calculate raw moments and limited moments 
+ *  of the random variable and to simulate random variates. See ../R/genpareto.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -125,7 +125,8 @@ double levgenpareto(double d, double shape1, double scale, double shape2, double
 	scale <= 0.0 ||
 	shape2 <= 0.0 ||
 	d <= 0.0 ||
-	order <= -shape2)
+	order <= -shape2 ||
+	order >= shape1)
 	error(_("invalid arguments"));
 
     u = d / (d + scale);
