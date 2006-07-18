@@ -1,17 +1,27 @@
-### ===== actuar: an R package for Actuarial Science =====
-###
-### Buhlmann-Straub Credibility Model:
-###
-### Calculate credibility premiums in the Bühlmann-Straub
-### credibility model.
-###
-### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
-### Sébastien Auclair, and Louis-Philippe Pouliot
-
-bstraub <- function(ratios, weights, heterogeneity = c("iterative","unbiased"),TOL = 1E-6, echo = FALSE )
+cm <- function(formula, data, subset, weights, heterogeneity = c("iterative","unbiased"),TOL = 1E-6, echo = FALSE )
 {
     cl <- match.call()  
 
+    ## Get the appropriate column names or numbers.  
+    form <- formula[[length(formula)]]
+    require(nlme)
+    val <- splitFormula(asOneSidedFormula(form[[3]]), sep = "+")    
+    if("." %in% (years <- unlist(lapply(val, function(el) deparse(el[[2]])))))
+        years <- grep("Y", names(x), perl = TRUE)
+
+    ## Create a new data frame containing the appropriate contracts
+    ## and years of experience.
+    if (missing(subset))
+        r <- TRUE
+    else{
+        e <- substitute(subset)
+        r <- eval(e, data, parent.frame())
+        if (!is.logical(r)) 
+            stop("'subset' must evaluate to logical")
+        r <- r & !is.na(r)
+    }
+    ratios <- data[r, years]
+      
     ## If weights are not specified, use equal weights as in
     ## Bühlmann's model.
     if (missing(weights))
@@ -22,6 +32,8 @@ bstraub <- function(ratios, weights, heterogeneity = c("iterative","unbiased"),T
         model <- "Bühlmann"
     }
     else
+        #if (!identical(dim(weights), dim(ratios))) ## dimensions des weights? comment on donne ca?
+            #stop
         model <- "Bühlmann-Straub"
 
     ## Check other bad arguments.
@@ -120,21 +132,22 @@ bstraub <- function(ratios, weights, heterogeneity = c("iterative","unbiased"),T
                 collective = ratios.zw,
                 weights = weights.s,
                 ncontracts = ncontracts,
+                contracts = data[r,]$contract,
                 s2 = s2,
                 cred = cred,
                 call = cl,
                 unbiased = ac,
                 iterative = at)
-    class(res) <- "bstraub"
+    class(res) <- "cm"
     res
 }
 
-print.bstraub <- function(x, ...)
+print.cm <- function(x, ...)
 {
     cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
     cat("Credibility premiums using the", x$model, "model: \n\n")
     sapply(paste("  Contract ",
-                 format(1:x$ncontracts, justify = "right"),
+                 format(x$contracts, justify = "right"),
                  ": ",
                  format(x$premiums),
                  sep = ""),
