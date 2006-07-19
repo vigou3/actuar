@@ -20,6 +20,8 @@ emp.moments.default <- function(x, order = 1, ...)
 
 emp.moments.grouped.data <- function(x, order = 1, ...)
   {
+    if(any(!is.finite(x$cj)))
+      stop("infinite value")
     if(any(order < 0))
       stop("order must be positive")
     

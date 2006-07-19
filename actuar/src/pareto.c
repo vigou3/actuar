@@ -28,7 +28,7 @@ double dpareto(double x, double shape, double scale, int give_log)
 	shape * R_pow(scale, shape) / R_pow(x + scale, shape + 1.0));
 }
 
-double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
+double ppareto(double x, double shape, double scale, int lower_tail, int log_p)
 {
   double tmp;
   
@@ -38,10 +38,10 @@ double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
 	scale <= 0.0)
 	error(_("invalid arguments"));
 
-    if (q <= 0)
+    if (x <= 0)
 	return R_DT_0;
     
-    tmp = log(scale) - log(q + scale);
+    tmp = log(scale) - log(x + scale);
     
     return (lower_tail ? R_D_exp(log(1.0 - exp(shape * (tmp)))):
 	    R_D_exp(shape * (tmp)));
