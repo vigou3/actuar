@@ -23,7 +23,7 @@ dframepf <- function(x, contracts, subs = NULL)
     nrows <- d[1]
     ir <- seq(length = nrows)
     ncols <- d[2] + 1 + length(subs)
-    ic <- seq(length = d[2])    
+    ic <- seq(length = d[2])
     collabs <- c(names(subs), "contract", paste("Y", ic, sep = ""))
     value <- vector("list", ncols)
     for (i in (ic)) value[[i+1+length(subs)]] <- as.vector(x[, i])
@@ -43,3 +43,66 @@ cm(formula = ~ contract | Y1 + Y2 + Y3, data = x)
 cm(formula = ~ contract | ., data = x)
 cm(formula = ~ contract | Y1+Y2+Y3+Y4+Y5+Y6+Y7+Y8+Y9+Y10+Y11+Y12, data = x)
 cm(formula = ~ contract | ., data = x, subset = (x$unit == 1))
+
+
+######## VG #########
+
+### On peut extraire les éléments du data frame selon la
+### classification spécifiée dans la partie gauche de la formule avec
+### tapply() ou, plus pratique, avec by().
+
+## Un data frame d'exemple. Classification par secteur (s), unité (u)
+## et contrat (c).
+dd <- data.frame(s = as.factor(rep(1:2, c(9, 6))),
+                 u = as.factor(rep(1:5, each = 3)),
+                 c = as.factor(1:15),
+                 matrix(sample(1:100, 75, rep = TRUE), 15))
+names(dd)[4:8] <- paste("Y", 1:5, sep = "")
+
+## Supposons une classification par secteur et unité seulement.
+form <- ~ s + u | Y1 + Y2 + Y3 + Y4 + Y5
+( struct <- all.vars(form[[2]][[2]]) )
+( years <- all.vars(form[[2]][[3]]) )
+
+## Extraction des données.
+( X <- by(dd, dd[struct], subset, select = years) )
+
+## Données du secteur 1, unité 2.
+X[[1, 2]]
+
+## Classification par secteur, unité et contrat (hiérarchique).
+form <- ~ s + s:u + s:u:c| Y1 + Y2 + Y3 + Y4 + Y5
+( struct <- all.vars(form[[2]][[2]]) )
+( years <- all.vars(form[[2]][[3]]) )
+
+## Extraction des données.
+( X <- by(dd, dd[struct], subset, select = years) )
+
+## Données du contrat 4, unité 2, secteur 1.
+X[[1, 2, 4]]
+
+## Classification par contrat seulement (Bühlmann-Straub).
+form <- ~ c| Y1 + Y2 + Y3 + Y4 + Y5
+( struct <- all.vars(form[[2]][[2]]) )
+( years <- all.vars(form[[2]][[3]]) )
+
+## Extraction des données.
+( X <- by(dd, dd[struct], subset, select = years) )
+
+## Données du contrat 4.
+X[[4]]
+
+
+### Bon, le tout n'est pas complet:
+###
+### 1. dans le dernier exemple, nous voulons avoir les données sous
+###    forme de matrice, pas sous forme de liste. Mais est-ce
+###    absolument nécessaire? On pourrait adapter bstraub() pour
+###    supposer que les données de chaque contrat se trouvent dans un
+###    élément d'une liste.
+###
+### 2. la façon de définir 'struct', ci-dessus, ne tient pas vraiment
+###    compte des interactions entre les variables. Toutefois, je crois
+###    que l'on peut extraire cette information de 'terms(form[[2]][2]]).
+###
+### Néanmoins, je crois être sur la bonne piste.
