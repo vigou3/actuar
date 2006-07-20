@@ -32,12 +32,12 @@ double ppareto(double x, double shape, double scale, int lower_tail, int log_p)
 {
   double tmp;
   
-    if (!R_FINITE(shape) || 
-	!R_FINITE(scale) ||
-	shape <= 0.0 || 
-	scale <= 0.0)
-	error(_("invalid arguments"));
-
+  /*  if (!R_FINITE(shape) || 
+   *   !R_FINITE(scale) ||
+   *   shape <= 0.0 || 
+   *   scale <= 0.0)
+   * error(_("invalid arguments!!!"));
+   */ 
     if (x <= 0)
 	return R_DT_0;
     

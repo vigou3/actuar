@@ -41,14 +41,14 @@ double pburr(double q, double shape1, double scale, double shape2, int lower_tai
 
   double tmp1, tmp2;
 
-    if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(shape2) ||
-	shape1 <= 0.0 || 
-	scale <= 0.0 || 
-	shape2 <= 0.0) 
-	error(_("invalid arguments"));
-
+  /*    if (!R_FINITE(shape1) ||
+   *	!R_FINITE(scale) ||
+   *	!R_FINITE(shape2) ||
+   *	shape1 <= 0.0 || 
+   *	scale <= 0.0 || 
+   *	shape2 <= 0.0) 
+   *	error(_("invalid arguments"));
+   */
     if (q <= 0)
 	return R_DT_0;
 

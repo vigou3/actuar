@@ -11,9 +11,9 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-mde <-function (x, cdf, start, ...) 
+mde <-function (x, cdf, start, w, ...) 
 {
-    myfn <- function(parm, ...) drop(crossprod(dens(parm, ...) - e(k)))
+    myfn <- function(parm, ...) sum(w * (dens(parm, ...) - e(k)) ^ 2)
     Call <- match.call(expand.dots = FALSE)
     if (missing(start)) 
         start <- NULL
@@ -31,10 +31,10 @@ mde <-function (x, cdf, start, ...)
     if (any(is.na(m))) 
         stop("'start' specifies names which are not arguments to 'cdf'")
     formals(cdf) <- c(f[c(1, m)], f[-c(1, m)])
-    dens <- function(parm, x, ...) cdf(x, parm, ...)
+    dens <- function(parm, x, w, ...) cdf(x, parm, w, ...)
     if ((l <- length(nm)) > 1) 
         body(dens) <- parse(text = paste("cdf(x,", paste("parm[", 
-            1:l, "]", collapse = ", "), ", ...)"))
+            1:l, "]", collapse = ", "), ", w, ...)"))
     e <- ecdf(x)
     k <- knots(e)
     Call[[1]] <- as.name("optim")

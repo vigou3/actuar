@@ -42,15 +42,16 @@ double ptrbeta(double q, double shape1, double scale, double shape2, double shap
 {
     double u, tmp;
 
-    if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(shape2) ||
-	!R_FINITE(shape3) ||
-	shape1 <= 0.0 || 
-	scale <= 0.0 || 
-	shape2 <= 0.0 || 
-	shape3 <= 0.0) 
-	error(_("invalid arguments"));
+    /*    if (!R_FINITE(shape1) ||
+     *	!R_FINITE(scale) ||
+     *	!R_FINITE(shape2) ||
+     *	!R_FINITE(shape3) ||
+     *	shape1 <= 0.0 || 
+     *	scale <= 0.0 || 
+     *	shape2 <= 0.0 || 
+     *	shape3 <= 0.0) 
+     *	error(_("invalid arguments"));
+     */
 
     tmp = R_pow(q / scale, shape2);
     u = tmp / (1.0 + tmp);
