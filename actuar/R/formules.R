@@ -162,7 +162,9 @@ model.list <- function(formu, data)
     ml
 }
 
-model.list(~ s + s:u + s:u:c| Y1 + Y2 + Y3 + Y4 + Y5, dd)
+debug(model.list)
+model.list(~ s + s:u + s:u:c|  Y1 + Y2 + Y3 + Y4 + Y5, dd)
+
 
 
 ### test

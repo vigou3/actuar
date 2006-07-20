@@ -7,17 +7,9 @@ cm <- function(formula, data = NULL, subset, weights, heterogeneity = c("iterati
     
     ## Extract the name of each variable.
     vars <- all.vars(formula)
-    rvars <- all.vars(asOneSidedFormula(formula[[2]][[3]]))
-    lvars <- all.vars(asOneSidedFormula(formula[[2]][[2]]))
-    if (missing(subset))
-        r <- TRUE
-    else{
-        e <- substitute(subset)
-        r <- eval(e, data, parent.frame())
-        if (!is.logical(r)) 
-            stop("'subset' must evaluate to logical")
-        r <- r & !is.na(r)
-    }
+    years <- all.vars(asOneSidedFormula(formula[[2]][[3]]))
+    lvar <- all.vars(asOneSidedFormula(formula[[2]][[2]]))    
+    
     if (missing(data))
     {
         ## Stop if vectors of data in 'formula' are of different lengths.
@@ -26,10 +18,9 @@ cm <- function(formula, data = NULL, subset, weights, heterogeneity = c("iterati
         ll <- sapply(l, function(x) x == l[1])
         if (!all(ll))
             stop("all objects in 'formula' must be of equal length")
-        if ("." %in% rvars)
+        if ("." %in% years)
             stop("'.' operator is meaningless if 'data' is not specified")
         data <- data.frame(sapply(vars, get))
-        ratios <- data[r, rvars]
     }
     else
     {
@@ -37,13 +28,32 @@ cm <- function(formula, data = NULL, subset, weights, heterogeneity = c("iterati
             stop("'data' must be a 'data frame'")
         if (!all(vars %in% c(names(data), ".")))
             stop("variables in 'formula' must be names from 'data' or existing 'R' objects") 
-        if ("." %in% rvars)
-            years <- names(data)[names(data) != lvars]
-        else years <- rvars
-        
-        ratios <- data[r, years]
+        if ("." %in% years)
+            years <- names(data)[names(data) != lvar]        
     }
+    if (missing(subset))
+        r <- TRUE
+    else{
+        e <- substitute(subset)
+        r <- eval(e, data, parent.frame())
+        if (!is.logical(r)) 
+            stop("'subset' must evaluate to logical")
+        r <- r & !is.na(r)
+        if (length(unique(data[[lvar]])) < length(r[r]))    #######probleme
+            stop("Hierarchical conflict in 'formula'/'subset'")
+        data <- data[r, ]
+    }
+    if (length(unique(data[[lvar]])) != length(data[[lvar]]))
+        ratios <- t(as.data.frame(lapply(by(data, data[lvar],
+                                            match.fun(quote(subset)),
+                                            select = years),
+                                         colSums)))
+
+    else
+        ratios <- data[years]
+    rnames <- paste(lvar,unique(as.character(data[lvar][[1]])))
     
+
     ## If weights are not specified, use equal weights as in
     ## Bühlmann's model.
     if (missing(weights))
@@ -147,13 +157,12 @@ cm <- function(formula, data = NULL, subset, weights, heterogeneity = c("iterati
 
     ## Credibility premiums.
     P <- ratios.zw + cred * (ratios.w - ratios.zw)
-
+    names(P) <- rnames
     res <- list(model = model,
                 premiums = P,
                 individual = ratios.w,
                 collective = ratios.zw,
-                weights = weights.s,
-                
+                weights = weights.s,                
                 contracts = data[r,]$contract,
                 s2 = s2,
                 cred = cred,
@@ -168,7 +177,8 @@ print.cm <- function(x, ...)
 {
     cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
     cat("Credibility premiums using the", x$model, "model: \n\n")
-    cbind(
+    #print(cbind(x$P))
+    print(x$premiums)
     #sapply(paste("  Contract ",
      #            format(x$contracts, justify = "right"),
       #           ": ",
