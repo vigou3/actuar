@@ -15,7 +15,7 @@ mde <-function (x, cdf, start, methods, w, ...)
 {
   if(methods == "CvM")
     {
-      myfn <- function(parm, ...) sum(w * (fun(parm, ...) - e(k)) ^ 2)
+      myfn <- function(parm, ...) sum(w * (fun(parm, k) - e(k)) ^ 2)
       Call <- match.call(expand.dots = FALSE)
       if (missing(start)) 
         start <- NULL
@@ -57,16 +57,14 @@ mde <-function (x, cdf, start, methods, w, ...)
     }
   if(methods == "chi-square")
     {
-      myfn <- function(parm, ...) sum((sum(nj) * c(fun(parm, cj[1], ...), diff(fun(cj))) - nj) ^ 2 / nj )
-      nj <- x$nj
+      myfn <- function(parm, ...) sum((sum(nj) * diff(fun(parm, cj)) - nj) ^ 2 / nj )
+      nj <- x$nj[-1]
       cj <- x$cj
-      if(any(x$nj == 0))
+      if(any(nj == 0))
         stop("all class must contain at least one element")
        Call <- match.call(expand.dots = FALSE)
       if (missing(start)) 
         start <- NULL
-      if (missing(x) || length(x) == 0 || mode(x) != "numeric") 
-        stop("'x' must be a non-empty numeric vector")
       if (missing(cdf) || !(is.function(cdf) || is.character(cdf))) 
         stop("'cdf' must be supplied as a function or name")
       if (is.null(start) || !is.list(start)) 
