@@ -1,16 +1,14 @@
-cm <- function(formula, data, subset, weights, heterogeneity = c("iterative","unbiased"),TOL = 1E-6, echo = FALSE )
+cm <- function(formula, data = NULL, subset, weights, heterogeneity = c("iterative","unbiased"),TOL = 1E-6, echo = FALSE )
 {
     cl <- match.call()  
 
-    ## Get the appropriate column names or numbers.  
-    form <- formula[[length(formula)]]
-    require(nlme)
-    val <- splitFormula(asOneSidedFormula(form[[3]]), sep = "+")    
-    if("." %in% (years <- unlist(lapply(val, function(el) deparse(el[[2]])))))
-        years <- grep("Y", names(x), perl = TRUE)
-
     ## Create a new data frame containing the appropriate contracts
     ## and years of experience.
+    
+    ## Extract the name of each variable.
+    vars <- all.vars(formula)
+    rvars <- all.vars(asOneSidedFormula(formula[[2]][[3]]))
+    lvars <- all.vars(asOneSidedFormula(formula[[2]][[2]]))
     if (missing(subset))
         r <- TRUE
     else{
@@ -20,8 +18,32 @@ cm <- function(formula, data, subset, weights, heterogeneity = c("iterative","un
             stop("'subset' must evaluate to logical")
         r <- r & !is.na(r)
     }
-    ratios <- data[r, years]
-      
+    if (missing(data))
+    {
+        ## Stop if vectors of data in 'formula' are of different lengths.
+        ## There must be a nicer way...
+        l <- sapply(vars, function(x) length(get(x)))
+        ll <- sapply(l, function(x) x == l[1])
+        if (!all(ll))
+            stop("all objects in 'formula' must be of equal length")
+        if ("." %in% rvars)
+            stop("'.' operator is meaningless if 'data' is not specified")
+        data <- data.frame(sapply(vars, get))
+        ratios <- data[r, rvars]
+    }
+    else
+    {
+        if (!inherits(data, "data.frame"))
+            stop("'data' must be a 'data frame'")
+        if (!all(vars %in% c(names(data), ".")))
+            stop("variables in 'formula' must be names from 'data' or existing 'R' objects") 
+        if ("." %in% rvars)
+            years <- names(data)[names(data) != lvars]
+        else years <- rvars
+        
+        ratios <- data[r, years]
+    }
+    
     ## If weights are not specified, use equal weights as in
     ## Bühlmann's model.
     if (missing(weights))
@@ -131,7 +153,7 @@ cm <- function(formula, data, subset, weights, heterogeneity = c("iterative","un
                 individual = ratios.w,
                 collective = ratios.zw,
                 weights = weights.s,
-                ncontracts = ncontracts,
+                
                 contracts = data[r,]$contract,
                 s2 = s2,
                 cred = cred,
@@ -146,11 +168,12 @@ print.cm <- function(x, ...)
 {
     cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
     cat("Credibility premiums using the", x$model, "model: \n\n")
-    sapply(paste("  Contract ",
-                 format(x$contracts, justify = "right"),
-                 ": ",
-                 format(x$premiums),
-                 sep = ""),
-           cat, fill = TRUE)
+    cbind(
+    #sapply(paste("  Contract ",
+     #            format(x$contracts, justify = "right"),
+      #           ": ",
+       #          format(x$premiums),
+        #         sep = ""),
+         #  cat, fill = TRUE)
     invisible(x)
 }

@@ -38,10 +38,17 @@ dframepf <- function(x, contracts, subs = NULL)
 }
 x <- dframepf(hach, contract = c("4B12", "66FZ", "76H5", "F44R", "FGG5"), list(unit = c(1,1,2,3,2)))
 cm(formula = ~ contract | Y1 + Y2 + Y3, data = x)
+cm(formula = ~ contract | Y1 + Y2 + Y3)
 
 
 cm(formula = ~ contract | ., data = x)
 cm(formula = ~ contract | Y1+Y2+Y3+Y4+Y5+Y6+Y7+Y8+Y9+Y10+Y11+Y12, data = x)
+<<<<<<< .mine
+cm(formula = ~ contract | ., data = x, subset = (unit == 1))
+
+
+
+=======
 cm(formula = ~ contract | ., data = x, subset = (x$unit == 1))
 
 
@@ -136,21 +143,21 @@ model.list <- function(formu, data)
     ## dans la boucle
     ml <- list(data)
 
-    fun <- function(x, cols, FUN, ...)
+    fun <- function(x, cols, select)
     {
         INDICES <- x[, cols]
         if (is.list(INDICES))
             IND <- lapply(INDICES, factor)
         else
             IND <- INDICES
-        by(x, IND, FUN, ...)
+        tapply(1:nrow(x), IND, function(y) subset(x[y, ], select = select))
     }
 
     for (i in seq(to = max(ord)))
     {
         todrop <- all.vars(parse(text = labs[ord == i]))
         tokeep <- setdiff(varnames, todrop)
-        ml <- lapply(ml, fun, cols = todrop, FUN = subset, select = c(tokeep, years))
+        ml <- lapply(ml, fun, cols = todrop, select = c(tokeep, years))
     }
     ml
 }
@@ -163,3 +170,4 @@ f <- function(x, IND, sel)
     by(x, IND, subset, select = substitute(sel))
 
 f(dd, dd[, 1], c("u", "Y1"))
+>>>>>>> .r459
