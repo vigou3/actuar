@@ -106,3 +106,60 @@ X[[4]]
 ###    que l'on peut extraire cette information de 'terms(form[[2]][2]]).
 ###
 ### Néanmoins, je crois être sur la bonne piste.
+###
+### ...
+###
+### Ça, c'était à 17h30. À 2h30, j'ai presque une fonction pour créer
+### une liste contenant les données pour n'importe quel type de
+### modèle. Je l'ai appelée 'model.list', c'est bien, hein? La
+### fonction ne marche pas comme c'est là parce qu'il y a des
+### problèmes d'environnment, je crois. Mais on se rapproche drôlement.
+###
+### Là, je vais me coucher...
+
+model.list <- function(formu, data)
+{
+    form <- formu[[2]]
+
+    ## colonnes des données
+    rhs <- form[[3]]
+    years <- all.vars(rhs)
+
+    ## termes de la structure
+    lhs <- terms(asOneSidedFormula(form[[2]]))
+    vars <- attr(lhs, "variables")
+    varnames <- sapply(vars, deparse, width.cutoff = 500)[-1]
+    labs <- attr(lhs, "term.labels")
+    ord <- attr(lhs, "order")
+
+    ## il faut envelopper les données dans une liste avant d'entrer
+    ## dans la boucle
+    ml <- list(data)
+
+    fun <- function(x, cols, FUN, ...)
+    {
+        INDICES <- x[, cols]
+        if (is.list(INDICES))
+            IND <- lapply(INDICES, factor)
+        else
+            IND <- INDICES
+        by(x, IND, FUN, ...)
+    }
+
+    for (i in seq(to = max(ord)))
+    {
+        todrop <- all.vars(parse(text = labs[ord == i]))
+        tokeep <- setdiff(varnames, todrop)
+        ml <- lapply(ml, fun, cols = todrop, FUN = subset, select = c(tokeep, years))
+    }
+    ml
+}
+
+model.list(~ s + s:u + s:u:c| Y1 + Y2 + Y3 + Y4 + Y5, dd)
+
+
+### test
+f <- function(x, IND, sel)
+    by(x, IND, subset, select = substitute(sel))
+
+f(dd, dd[, 1], c("u", "Y1"))
