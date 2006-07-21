@@ -99,10 +99,8 @@ mde <-function (x, cdf, start, methods, w, ...)
   if(methods == "LAS")
     {
       myfn <- function(parm, ...) sum(w[-c(1,n)] * (diff(c(0,fun(parm, cj[-c(1,n)]))) - diff(c(0,emp.lev.moments(x)))) ^ 2)
-      nj <- x$nj[-1]
       cj <- x$cj
-      if(any(nj == 0))
-        stop("all class must contain at least one element")
+      nj <- x$nj[-1]
       Call <- match.call(expand.dots = FALSE)
       if (missing(start)) 
         start <- NULL
