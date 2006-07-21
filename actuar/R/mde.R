@@ -57,7 +57,7 @@ mde <-function (x, cdf, start, methods, w, ...)
     }
   if(methods == "chi-square")
     {
-      myfn <- function(parm, ...) sum((sum(nj) * diff(fun(parm, cj)) - nj) ^ 2 / nj )
+      myfn <- function(parm, ...) sum((sum(nj) * diff(fun(parm, cj)) - nj) ^ 2 / w )
       nj <- x$nj[-1]
       cj <- x$cj
       if(any(nj == 0))
