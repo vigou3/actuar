@@ -93,16 +93,16 @@ double mpareto(double k, double shape, double scale, int give_log)
 
 double levpareto(double d, double shape, double scale, double order, int give_log)
 {
-    if (!R_FINITE(shape) || 
-	!R_FINITE(scale) ||
-	!R_FINITE(d) ||
-	!R_FINITE(order) ||
-	shape <= 0.0 || 
-	scale <= 0.0 ||
-	d <= 0.0 ||
-	order <= -1.0 ||
-	order >= shape)
-	error(_("invalid arguments"));
-
+  /*    if (!R_FINITE(shape) || 
+   *	!R_FINITE(scale) ||
+   *	!R_FINITE(d) ||
+   *	!R_FINITE(order) ||
+   *	shape <= 0.0 || 
+   *	scale <= 0.0 ||
+   *	d <= 0.0 ||
+   *	order <= -1.0 ||
+   *	order >= shape)
+   *	error(_("invalid arguments"));
+   */
     return R_pow(scale, order) * gammafn(order + 1.0) * gammafn(shape - order) * pbeta(d / (d + scale), order + 1.0, shape - order, 1, 0) / gammafn(shape) + R_pow(d, order) * R_pow(scale / (scale + d), shape);
 }
