@@ -15,121 +15,121 @@
 double dgenpareto(double x, double shape1, double scale, double shape2, int give_log)
 {
   double tmp;
-
-    if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(shape2) ||
-	shape1 <= 0.0 || 
-	scale <= 0.0 || 
-	shape2 <= 0.0) 
-	error(_("invalid arguments"));
-
-    if (!R_FINITE(x) || x < 0.0) 
-      return R_D_d0;
-
-    tmp = x / (x + scale);
-    
-    return  give_log ?
-      dbeta(tmp, shape2, shape1, 1) + log(scale) - 2.0 * log(x + scale) :
-      dbeta(tmp, shape2, shape1, 0) * scale / R_pow(x + scale, 2.0);
+  
+  if (!R_FINITE(shape1) ||
+      !R_FINITE(scale) ||
+      !R_FINITE(shape2) ||
+      shape1 <= 0.0 || 
+      scale <= 0.0 || 
+      shape2 <= 0.0) 
+    return R_NaN;
+  
+  if (!R_FINITE(x) || x < 0.0) 
+    return R_D_d0;
+  
+  tmp = x / (x + scale);
+  
+  return  give_log ?
+    dbeta(tmp, shape2, shape1, 1) + log(scale) - 2.0 * log(x + scale) :
+    dbeta(tmp, shape2, shape1, 0) * scale / R_pow(x + scale, 2.0);
 }
 
 double pgenpareto(double q, double shape1, double scale, double shape2, int lower_tail, int log_p)
 {
-    double u;
-
-    if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(shape2) ||
-	shape1 <= 0.0 || 
-	scale <= 0.0 || 
-	shape2 <= 0.0) 
-	error(_("invalid arguments"));
-
-    u = q / (q + scale);
-
-    if (q <= 0)
-	return R_DT_0;
-
-    if (!R_FINITE(q))
-        return 1;
-    
-    return (lower_tail ? R_D_exp(pbeta(u, shape2, shape1, 1, 1)):
-	    R_D_exp(pbeta(u, shape2, shape1, 0, 1)));
+  double u;
+  
+  if (!R_FINITE(shape1) ||
+      !R_FINITE(scale) ||
+      !R_FINITE(shape2) ||
+      shape1 <= 0.0 || 
+      scale <= 0.0 || 
+      shape2 <= 0.0) 
+    return R_NaN;
+  
+  u = q / (q + scale);
+  
+  if (q <= 0)
+    return R_DT_0;
+  
+  if (!R_FINITE(q))
+    return 1;
+  
+  return (lower_tail ? R_D_exp(pbeta(u, shape2, shape1, 1, 1)):
+	  R_D_exp(pbeta(u, shape2, shape1, 0, 1)));
 }
 
 double qgenpareto(double p, double shape1, double scale, double shape2, int lower_tail, int log_p)
 {
-
+  
   double tmp;
-
+  
   if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(shape2) ||
-	shape1 <= 0.0 || 
-	scale <= 0.0 || 
-	shape2 <= 0.0) 
-	error(_("invalid arguments"));
-
-    R_Q_P01_boundaries(p, 0, R_PosInf);
-    tmp = R_D_qIv(p);
-
-    return (lower_tail ? scale * (qbeta(tmp, shape2, shape1, 1, 0) / (1.0 - qbeta(tmp, shape2, shape1, 1, 0))) :
-	    scale * qbeta(tmp, shape2, shape1, 0, 0) / (1.0 - qbeta(tmp, shape2, shape1, 0, 0)));
+      !R_FINITE(scale) ||
+      !R_FINITE(shape2) ||
+      shape1 <= 0.0 || 
+      scale <= 0.0 || 
+      shape2 <= 0.0) 
+    return R_NaN;
+  
+  R_Q_P01_boundaries(p, 0, R_PosInf);
+  tmp = R_D_qIv(p);
+  
+  return (lower_tail ? scale * (qbeta(tmp, shape2, shape1, 1, 0) / (1.0 - qbeta(tmp, shape2, shape1, 1, 0))) :
+	  scale * qbeta(tmp, shape2, shape1, 0, 0) / (1.0 - qbeta(tmp, shape2, shape1, 0, 0)));
 }
 
 double rgenpareto(double shape1, double scale, double shape2)
 {	
-    double a;
-	
-    if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(shape2) ||
-	shape1 <= 0.0 ||
-	scale <= 0.0 ||
-	shape2 <= 0.0)
-	error(_("invalid arguments"));
-
-    a = rbeta(shape2, shape1);
-
-    return scale * a / (1.0 - a);
+  double a;
+  
+  if (!R_FINITE(shape1) ||
+      !R_FINITE(scale) ||
+      !R_FINITE(shape2) ||
+      shape1 <= 0.0 ||
+      scale <= 0.0 ||
+      shape2 <= 0.0)
+    return R_NaN;
+  
+  a = rbeta(shape2, shape1);
+  
+  return scale * a / (1.0 - a);
 }
 
 double mgenpareto(double k, double shape1, double scale, double shape2, int give_log)
 {	
-	
-    if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(shape2) ||
-	!R_FINITE(k) ||
-	shape1 <= 0.0 ||
-	scale <= 0.0 ||
-	shape2 <= 0.0 ||
-	k <= -shape2 ||
-	k >= shape1)
-	error(_("invalid arguments"));
-
-    return R_pow(scale, k) * gammafn(shape2 + k) * gammafn(shape1 - k) / (gammafn(shape1) * gammafn(shape2));
+  
+  if (!R_FINITE(shape1) ||
+      !R_FINITE(scale) ||
+      !R_FINITE(shape2) ||
+      !R_FINITE(k) ||
+      shape1 <= 0.0 ||
+      scale <= 0.0 ||
+      shape2 <= 0.0 ||
+      k <= -shape2 ||
+      k >= shape1)
+    return R_NaN;
+  
+  return R_pow(scale, k) * gammafn(shape2 + k) * gammafn(shape1 - k) / (gammafn(shape1) * gammafn(shape2));
 }
 
 double levgenpareto(double d, double shape1, double scale, double shape2, double order, int give_log)
 {	
   double u;
-
-    if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(shape2) ||
-	!R_FINITE(d) ||
-	!R_FINITE(order) ||
-	shape1 <= 0.0 ||
-	scale <= 0.0 ||
-	shape2 <= 0.0 ||
-	d <= 0.0 ||
-	order <= -shape2 ||
-	order >= shape1)
-	error(_("invalid arguments"));
-
-    u = d / (d + scale);
-
-    return R_pow(scale, order) * gammafn(shape2 + order) * gammafn(shape1 - order) * pbeta(u, shape2 + order, shape1 - order, 1, 0) /(gammafn(shape1) * gammafn(shape2)) + R_pow(d, order) * (1.0 - pbeta(u, shape2, shape1, 1, 0));
+  
+  if (!R_FINITE(shape1) ||
+      !R_FINITE(scale) ||
+      !R_FINITE(shape2) ||
+      !R_FINITE(d) ||
+      !R_FINITE(order) ||
+      shape1 <= 0.0 ||
+      scale <= 0.0 ||
+      shape2 <= 0.0 ||
+      d <= 0.0 ||
+      order <= -shape2 ||
+      order >= shape1)
+    return R_NaN;
+  
+  u = d / (d + scale);
+  
+  return R_pow(scale, order) * gammafn(shape2 + order) * gammafn(shape1 - order) * pbeta(u, shape2 + order, shape1 - order, 1, 0) /(gammafn(shape1) * gammafn(shape2)) + R_pow(d, order) * (1.0 - pbeta(u, shape2, shape1, 1, 0));
 }

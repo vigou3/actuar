@@ -18,7 +18,7 @@ double dpareto(double x, double shape, double scale, int give_log)
 	!R_FINITE(scale) ||
 	shape <= 0.0 || 
 	scale <= 0.0) 
-	error(_("invalid arguments"));
+      return R_NaN;
 
     if (!R_FINITE(x) || x < 0.0) 
       return R_D_d0;
@@ -32,19 +32,19 @@ double ppareto(double x, double shape, double scale, int lower_tail, int log_p)
 {
   double tmp;
   
-  /*  if (!R_FINITE(shape) || 
-   *   !R_FINITE(scale) ||
-   *   shape <= 0.0 || 
-   *   scale <= 0.0)
-   * error(_("invalid arguments!!!"));
-   */ 
-    if (x <= 0)
-	return R_DT_0;
-    
-    tmp = log(scale) - log(x + scale);
-    
-    return (lower_tail ? R_D_exp(log(1.0 - exp(shape * (tmp)))):
-	    R_D_exp(shape * (tmp)));
+  if (!R_FINITE(shape) || 
+      !R_FINITE(scale) ||
+      shape <= 0.0 || 
+      scale <= 0.0)
+    return R_NaN;
+  
+  if (x <= 0)
+    return R_DT_0;
+  
+  tmp = log(scale) - log(x + scale);
+  
+  return (lower_tail ? R_D_exp(log(1.0 - exp(shape * (tmp)))):
+	  R_D_exp(shape * (tmp)));
 }
 
 double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
@@ -55,7 +55,7 @@ double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
 	!R_FINITE(scale) ||
 	shape <= 0.0 || 
 	scale <= 0.0)
-	error(_("invalid arguments"));
+	return R_NaN;
 
   R_Q_P01_boundaries(p, 0, R_PosInf);
   tmp = R_D_qIv(p);
@@ -71,7 +71,7 @@ double rpareto(double shape, double scale)
 	!R_FINITE(scale) ||
 	shape <= 0.0 || 
 	scale <= 0.0)
-	error(_("invalid arguments"));
+	return R_NaN;
 
     return scale * (R_pow(unif_rand(), -1.0 / shape) - 1.0);
 }
@@ -85,7 +85,7 @@ double mpareto(double k, double shape, double scale, int give_log)
 	scale <= 0.0 ||
 	k <= -1.0 ||
 	k >= shape)
-	error(_("invalid arguments"));
+	return R_NaN;
 
     return R_pow(scale, k) * gammafn(k + 1.0) * gammafn(shape - k) / gammafn(shape);
 
@@ -93,16 +93,16 @@ double mpareto(double k, double shape, double scale, int give_log)
 
 double levpareto(double d, double shape, double scale, double order, int give_log)
 {
-  /*    if (!R_FINITE(shape) || 
-   *	!R_FINITE(scale) ||
-   *	!R_FINITE(d) ||
-   *	!R_FINITE(order) ||
-   *	shape <= 0.0 || 
-   *	scale <= 0.0 ||
-   *	d <= 0.0 ||
-   *	order <= -1.0 ||
-   *	order >= shape)
-   *	error(_("invalid arguments"));
-   */
+  if (!R_FINITE(shape) || 
+      !R_FINITE(scale) ||
+      !R_FINITE(d) ||
+      !R_FINITE(order) ||
+      shape <= 0.0 || 
+      scale <= 0.0 ||
+      d <= 0.0 ||
+      order <= -1.0 ||
+      order >= shape)
+    return R_NaN;
+  
     return R_pow(scale, order) * gammafn(order + 1.0) * gammafn(shape - order) * pbeta(d / (d + scale), order + 1.0, shape - order, 1, 0) / gammafn(shape) + R_pow(d, order) * R_pow(scale / (scale + d), shape);
 }
