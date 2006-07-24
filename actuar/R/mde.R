@@ -100,7 +100,8 @@ mde <-function (x, cdf, start, methods, w, ...)
     {
       myfn <- function(parm, ...) sum(w[-c(1,n)] * (diff(c(0,fun(parm, cj[-c(1,n)]))) - diff(c(0,emp.lev.moments(x)))) ^ 2)
       cj <- x$cj
-      nj <- x$nj[-1]
+      nj <- x$nj
+      n <- length(nj)
       Call <- match.call(expand.dots = FALSE)
       if (missing(start)) 
         start <- NULL
@@ -122,6 +123,7 @@ mde <-function (x, cdf, start, methods, w, ...)
       Call[[1]] <- as.name("optim")
       Call$cdf <- Call$start <- NULL
       Call$par <- start
+      Call$x <- x
       Call$fn <- myfn
       Call$hessian <- TRUE
       if (is.null(Call$method)) {
