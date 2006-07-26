@@ -13,7 +13,6 @@
 
 mde <-function (x, cdf, start, methods = c("CvM", "chi-square", "LAS"), w = NULL, ...) 
 {
-
   Call <- match.call(expand.dots = FALSE)
   Call[[1]] <- as.name("optim")
   Call$cdf <- Call$start <- NULL
@@ -53,8 +52,6 @@ mde <-function (x, cdf, start, methods = c("CvM", "chi-square", "LAS"), w = NULL
       Call$par <- start
       Call$fn <- myfn
       res <- eval(Call)
-      if (res$convergence > 0) 
-        stop("optimization failed")
     }
   if(methods == "chi-square")
     {
@@ -70,27 +67,25 @@ mde <-function (x, cdf, start, methods = c("CvM", "chi-square", "LAS"), w = NULL
       Call$par <- start
       Call$fn <- myfn
       res <- eval(Call)
-      if (res$convergence > 0) 
-        stop("optimization failed")
     }
   if(methods == "LAS")
     {
       if(class(x) != "grouped.data")
         stop("'class' of 'x' must be 'grouped.data'")
-      myfn <- function(parm, ...) sum(w[-c(1,n)] * (diff(c(0,fun(parm, cj[-c(1,n)]))) - diff(c(0,empLEV))) ^ 2)
+      myfn <- function(parm, ...) sum(w[-c(1, n)] * (diff(c(0, fun(parm, cj[-c(1, n)]))) - diff(c(0, empLEV))) ^ 2)
       cj <- x$cj
       nj <- x$nj[-1]
       n <- length(nj)
-      empLEV <- cumsum(nj[-1] / n * (cj[-1] + cj[-n]) / 2)[-(n-1)] + cj[-c(1,n)] * (1 - cumsum(nj/sum(nj)))[-c(1,n)]
+      empLEV <- cumsum(nj[-1] / n * (cj[-1] + cj[-n]) / 2)[-(n - 1)] + cj[-c(1, n)] * (1 - cumsum(nj / sum(nj)))[-c(1, n)]
       if(is.null(w))
         w <- rep(1, n)
-      Call$par <- start
       Call$x <- x
+      Call$par <- start
       Call$fn <- myfn
       res <- eval(Call)
-      if (res$convergence > 0) 
-        stop("optimization failed")
     }
+  if (res$convergence > 0) 
+    stop("optimization failed")
   sds <- sqrt(diag(solve(res$hessian)))
   structure(list(estimate = res$par, sd = sds, loglik = -res$value))
 }
@@ -98,7 +93,7 @@ mde <-function (x, cdf, start, methods = c("CvM", "chi-square", "LAS"), w = NULL
 test <- function (p,dons,dist) 
 {
 f1<-match.fun(paste("lev",dist$dist,sep=""))
-formals(f1)[dist$par]<-p
+formals(f1)[dist$par] <- p
 n<-length(dons$nj)
 sum(diff(c(0,f1(dons$cj[-c(1,n)])))-diff(c(0,emp.lev.moments(dons))))
 }
