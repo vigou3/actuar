@@ -4,6 +4,7 @@
 \alias{grouped.data}
 \alias{hist.grouped.data}
 \alias{print.grouped.data}
+\alias{emp.moments.grouped.data}
 \alias{[.grouped.data}
 \title{Grouped data}
 \description{
@@ -17,6 +18,7 @@ grouped(x, y = NULL, digits = 2)
 "boundaries", ylab = "f(x)", plot = TRUE, ...)
 \method{print}{grouped.data}(x, ...)
 \method{[}{grouped.data}(x, i, j)
+\method{emp.moments}{grouped.data}(x, order = 1, ...)
 }
 \arguments{
   \item{x, y}{the \code{x} and \code{y} arguments provide the x and y coordinates for
@@ -34,6 +36,7 @@ grouped(x, y = NULL, digits = 2)
   \item{digits}{the desired number of digits after the decimal
 	  point.}
   \item{i, j}{elements to extract or replace. \code{is, ie} are \code{numeric} or empty.}
+  \item{order}{order of the moments.}
   \item{\dots}{potential further arguments required by generic.}
 }
 \details{

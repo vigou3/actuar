@@ -10,21 +10,12 @@
 emp.moments <- function(...)
   UseMethod("emp.moments")
 
-emp.lev.moments <- function(...)
-  UseMethod("emp.lev.moments")
-
 emp.moments.default <- function(x, order = 1, ...)
   {
     if(any(order < 0))
       stop("order must be positive")
     
     sapply(order, function(n) mean(x^n))
-  }
-
-emp.lev.moments.default <- function(x, ...)
-  {
-    n <- length(x$nj)
-    cumsum(x$nj[-1] / n * (x$cj[-1] + x$cj[-n]) / 2)[-(n-1)] + x$cj[-c(1,n)] * (1 - cumsum(x$nj/sum(x$nj)))[-c(1,n)]
   }
 
 emp.moments.grouped.data <- function(x, order = 1, ...)

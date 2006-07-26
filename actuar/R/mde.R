@@ -11,7 +11,7 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-mde <-function (x, cdf, start, methods, w = NULL, ...) 
+mde <-function (x, cdf, start, methods = c("CvM", "chi-square", "LAS"), w = NULL, ...) 
 {
 
   Call <- match.call(expand.dots = FALSE)
@@ -58,6 +58,8 @@ mde <-function (x, cdf, start, methods, w = NULL, ...)
     }
   if(methods == "chi-square")
     {
+      if(class(x) != "grouped.data")
+        stop("'class' of 'x' must be 'grouped.data'")
       myfn <- function(parm, ...) sum((sum(nj) * diff(fun(parm, cj)) - nj) ^ 2 / w )
       nj <- x$nj[-1]
       cj <- x$cj
@@ -73,10 +75,13 @@ mde <-function (x, cdf, start, methods, w = NULL, ...)
     }
   if(methods == "LAS")
     {
-      myfn <- function(parm, ...) sum(w[-c(1,n)] * (diff(c(0,fun(parm, cj[-c(1,n)]))) - diff(c(0,emp.lev.moments(x)))) ^ 2)
+      if(class(x) != "grouped.data")
+        stop("'class' of 'x' must be 'grouped.data'")
+      myfn <- function(parm, ...) sum(w[-c(1,n)] * (diff(c(0,fun(parm, cj[-c(1,n)]))) - diff(c(0,empLEV))) ^ 2)
       cj <- x$cj
-      nj <- x$nj
+      nj <- x$nj[-1]
       n <- length(nj)
+      empLEV <- cumsum(nj[-1] / n * (cj[-1] + cj[-n]) / 2)[-(n-1)] + cj[-c(1,n)] * (1 - cumsum(nj/sum(nj)))[-c(1,n)]
       if(is.null(w))
         w <- rep(1, n)
       Call$par <- start
@@ -86,7 +91,8 @@ mde <-function (x, cdf, start, methods, w = NULL, ...)
       if (res$convergence > 0) 
         stop("optimization failed")
     }
-  res
+  sds <- sqrt(diag(solve(res$hessian)))
+  structure(list(estimate = res$par, sd = sds, loglik = -res$value))
 }
 
 test <- function (p,dons,dist) 
