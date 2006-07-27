@@ -36,7 +36,7 @@ dframepf <- function(x, contracts, subs = NULL)
     class(value) <- "data.frame"
     value
 }
-x <- dframepf(hach, contract = c("4B12", "66FZ", "76H5", "F44R", "FGG5"), list(unit = c(1,1,2,3,2)))
+x <- dframepf(hach, contract = c("4B12", "66FZ", "76H5", "F44R", "FGG5"), list(sector = c(1,1,2,2,2), unit = c(1,1,2,2,3)))
 cm(formula = ~ contract | Y1 + Y2 + Y3, data = x)
 cm(formula = ~ contract | Y1 + Y2 + Y3)
 
@@ -50,6 +50,9 @@ cm(formula = ~ contract | ., data = x, subset = (unit == 1))
 
 =======
 cm(formula = ~ contract | ., data = x, subset = (x$unit == 1))
+
+formula <- ~ sector + unit:sector + sector:unit:contract | Y1 + Y2 + Y3
+
 
 
 ######## VG #########
@@ -173,3 +176,22 @@ f <- function(x, IND, sel)
 
 f(dd, dd[, 1], c("u", "Y1"))
 >>>>>>> .r459
+
+### transfo hachemeister
+
+x <- data.frame(p = c(1,1,2,2,2), c = c(1:5), cbind(hach[c(1,3,2,4,5),]))
+names(x)[3:14] <- paste("Y", 1:12, sep = "")
+
+weightsx <- hachemeister$weights[c(1,3,2,4,5),]
+
+formula <- ~p + p:c|.
+
+credH(formula, x, weights = weightsx, echo = TRUE)
+
+y <- data.frame(p = c("reshnok","ribadou","reshnok","ribadou","ribadou"), c = c(1:5), hachemeister$claims)
+names(y)[3:14] <- paste("Y", 1:12, sep = "")
+weightsy <- hachemeister$weights
+
+credH(formula, y, weights = weightsy, echo = TRUE)
+
+### en forçant s2 = 3.08 * 10^8, on obtient exactement les memes resultats que ceux du livre

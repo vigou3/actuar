@@ -1,15 +1,15 @@
-cm <- function(formula, data = NULL, subset, weights, heterogeneity = c("iterative","unbiased"),TOL = 1E-6, echo = FALSE )
+cm <- function(formula, data = NULL, subset, weights, TOL=1E-6, echo=FALSE)
 {
-    cl <- match.call()  
-
+    cl <- match.call()
     ## Create a new data frame containing the appropriate contracts
     ## and years of experience.
     
     ## Extract the name of each variable.
     vars <- all.vars(formula)
     years <- all.vars(asOneSidedFormula(formula[[2]][[3]]))
-    lvar <- all.vars(asOneSidedFormula(formula[[2]][[2]]))    
-    
+    levs <- all.vars(lhs <- asOneSidedFormula(formula[[2]][[2]]))
+    pfstruct <- c(rev(rownames(attr(terms(lhs),"factors"))), "pf")
+
     if (missing(data))
     {
         ## Stop if vectors of data in 'formula' are of different lengths.
@@ -20,7 +20,7 @@ cm <- function(formula, data = NULL, subset, weights, heterogeneity = c("iterati
             stop("all objects in 'formula' must be of equal length")
         if ("." %in% years)
             stop("'.' operator is meaningless if 'data' is not specified")
-        data <- data.frame(sapply(vars, get))
+        data <- data.frame(sapply(vars, get))        
     }
     else
     {
@@ -29,161 +29,115 @@ cm <- function(formula, data = NULL, subset, weights, heterogeneity = c("iterati
         if (!all(vars %in% c(names(data), ".")))
             stop("variables in 'formula' must be names from 'data' or existing 'R' objects") 
         if ("." %in% years)
-            years <- names(data)[names(data) != lvar]        
+            years <- suppressWarnings(names(data)[names(data) != pfstruct])       
     }
-    if (missing(subset))
-        r <- TRUE
-    else{
-        e <- substitute(subset)
-        r <- eval(e, data, parent.frame())
-        if (!is.logical(r)) 
-            stop("'subset' must evaluate to logical")
-        r <- r & !is.na(r)
-        if (length(unique(data[[lvar]])) < length(r[r]))    #######probleme
-            stop("Hierarchical conflict in 'formula'/'subset'")
-        data <- data[r, ]
-    }
-    if (length(unique(data[[lvar]])) != length(data[[lvar]]))
-        ratios <- t(as.data.frame(lapply(by(data, data[lvar],
-                                            match.fun(quote(subset)),
-                                            select = years),
-                                         colSums)))
+    ## Bind a column of '1's representing the affiliation to the one portfolio.
+    ## Used to symmetrize the further calculations.    
+    data <- cbind(pf  = rep(1, nrow(data)), data[c(levs, years)])
 
+    ## If weights are not specified, use equal weights.
+    if (missing(weights)) 
+    {
+        if (any(is.na(data[years])))
+            stop("missing values of ratios are not allowed when the matrix of weights is not specified")
+        weights <- data
+        weights[names(weights) != pfstruct] <- sapply(weights[years], function(x) rep(1, length(x)))
+    }
     else
-        ratios <- data[years]
-    rnames <- paste(lvar,unique(as.character(data[lvar][[1]])))
+    {
+        if (ncol(data[years]) < 2)
+            stop("there must be at least one contract with at least two years of experience")
+        if (nrow(data) < 2)
+            stop("there must be more than one contract")        
+        weights <- cbind(data[pfstruct], weights)
+        names(weights)[names(weights) != pfstruct] <- years
+        if (!identical(which(is.na(data)), which(is.na(weights))))
+            stop("missing values are inconsistent in 'ratios'/'weights' data")            
+    }
     
+    nlevels <- length(pfstruct) - 1    
+    nstruct <- c(length(years), sapply(pfstruct, function(x) length(unique(data[[x]]))))
 
-    ## If weights are not specified, use equal weights as in
-    ## Bühlmann's model.
-    if (missing(weights))
-    {
-        if (any(is.na(ratios)))
-            stop("missing values are not allowed in the matrix of ratios when the matrix of weights is not specified")
-        weights <- array(1, dim(ratios))
-        model <- "Bühlmann"
-    }
+    ## s^2
+    ind.weight <- rowSums(weights[years], na.rm = TRUE)
+    ind.means <- rowSums(data[years]*weights[years], na.rm = TRUE)/ind.weight
+    s2num <- sum(weights[years]*(data[years]-ind.means)^2)
+    denoms <- numeric(nlevels + 1)
+    
+    for (i in 2:(length(denoms))) denoms[i] <- nstruct[i] - nstruct[i+1]
+    s2 <- s2num/(denoms[1] <- length(na.omit(unlist(data[years]))) - nstruct[[2]])
+
+    ## Create vectors for values to be outputted.
+    
+    param <- rep(s2, nlevels + 1)        # The structure parameters
+    cred <- vector("list", nlevels)      # The credibility factors
+    w. <- vector("list", nlevels)        # The credibility weights
+    M <- vector("list", nlevels)         # The individual and collective estimators  
+     
+    ## Avoid evaluating argument 'echo' at every iteration below
+    if (echo)
+        exp <- expression(print(paramt <- param))
     else
-        #if (!identical(dim(weights), dim(ratios))) ## dimensions des weights? comment on donne ca?
-            #stop
-        model <- "Bühlmann-Straub"
+        exp <- expression({paramt <- param})
 
-    ## Check other bad arguments.
-    if (ncol(ratios) < 2)
-        stop("there must be at least one contract with at least two years of experience")
-    if (nrow(ratios) < 2)
-        stop("there must be more than one contract")
-    if(!identical(which(is.na(ratios)), which(is.na(weights))))
-        stop("missing values are not in the same positions in the matrix of weights and the matrix of ratios")
-
-    ## Individual weighted averages. It could happen that a contract
-    ## has no observations, for example when applying the model on
-    ## claim amounts. In such a situation, we will put the total
-    ## weight of the contract and the weighted average both equal to
-    ## zero. That way, the premium will be equal to the credibility
-    ## weighted average, as it should, but the contract will have no
-    ## contribution in the calculations.
-    weights.s <- rowSums(weights, na.rm = TRUE)
-    ratios.w <- ifelse(weights.s > 0, rowSums(weights * ratios, na.rm = TRUE) / weights.s, 0)
-
-    ## Size of the portfolio.
-    ncontracts <- sum(weights.s > 0)
-    ntotal <- sum(!is.na(weights))
-
-    ## Collective weighted average.
-    weights.ss <- sum(weights.s)
-    ratios.ww <- sum(weights.s * ratios.w) / weights.ss
-
-    ## Estimation of s^2.
-    s2 <-  sum(weights * (ratios - ratios.w)^2, na.rm = TRUE) / (ntotal - ncontracts)
-
-    ## First estimation of a. Always compute the unbiased estimator.
-    ac <- weights.ss * (sum(weights.s * (ratios.w - ratios.ww)^2) - (ncontracts - 1) * s2) / (weights.ss^2 - sum(weights.s^2))
-
-    ## Iterative estimation of a. Compute only if
-    ## 1. asked to in argument;
-    ## 2. the unbiased estimator is > 0;
-    ## 3. weights are not all equal (Bühlmann model).
-    heterogeneity <- match.arg(heterogeneity)
-
-    if (identical(heterogeneity, "iterative"))
+    ## Iterative estimation of the structure parameters
+    repeat
     {
-        if (ac > 0)
+        eval(exp)
+        
+        ## Individual estimators are initialized at every iteration.
+        weight <- ind.weight
+        means <- ind.means
+        for (i in 2:(nlevels + 1))
         {
-            if (diff(range(weights, na.rm = TRUE)) > .Machine$double.eps^0.5)
-            {
-                if (echo)
-                    exp <- expression(print(at1 <-  at))
-                else
-                    exp <- expression(at1 <-  at)
+            cred[[i-1]] <- 1/(1 + param[i-1]/(param[i] * weight))
+            aff <- tapply(data[[pfstruct[i]]], data[[pfstruct[i-1]]], function(x) unique(x)) 
+            weight. <- tapply(cred[[i-1]], aff, sum)
+            means. <- tapply(cred[[i-1]] * means, aff, sum) / weight.
+            param[i] <- sum(cred[[i-1]] *
+                            (means - rep(means., table(aff))[order(aff)])^2) / denoms[i]
+            
+            w.[[i-1]] <- weight
+            weight <- weight.
 
-                at <- ac
-                repeat
-                {
-                    eval(exp)
-
-                    cred <- 1 / (1 + s2/(weights.s * at))
-                    ratios.zw <- sum(cred * ratios.w) / sum(cred)
-                    at <- sum(cred * (ratios.w - ratios.zw)^2) / (ncontracts - 1)
-
-                    if (abs((at - at1)/at1) < TOL)
-                        break
-                }
-            }
-            else
-                at <- ac
+            M[[i-1]] <- means
+            means <- means.
         }
-        else
-            at <- 0
-        a <- at
+        p <- ifelse(any(param <= TOL), which(param > TOL), TRUE)
+        if (max(abs((param[p] - paramt[p])/paramt[p])) < TOL) 
+                break        
     }
-    else
-    {
-        a <- ac
-        at <- NULL
-    }
-
-    ## Final credibility factors and estimator of the collective mean.
-    if (a > 0)
-    {
-        cred <- 1 / (1 + s2/(weights.s * a))
-        ratios.zw <- sum(cred * ratios.w) / sum(cred)
-    }
-    else
-    {
-        cred <- 0
-        ratios.zw <- ratios.ww
-    }
-
-    ## Credibility premiums.
-    P <- ratios.zw + cred * (ratios.w - ratios.zw)
-    names(P) <- rnames
-    res <- list(model = model,
-                premiums = P,
-                individual = ratios.w,
-                collective = ratios.zw,
-                weights = weights.s,                
-                contracts = data[r,]$contract,
-                s2 = s2,
-                cred = cred,
-                call = cl,
-                unbiased = ac,
-                iterative = at)
-    class(res) <- "cm"
-    res
+    names(param) <- c("s2", letters[1:nlevels])
+    list(param = param, weights = w., means = M, cred = cred)
 }
-
-print.cm <- function(x, ...)
-{
-    cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
-    cat("Credibility premiums using the", x$model, "model: \n\n")
-    #print(cbind(x$P))
-    print(x$premiums)
-    #sapply(paste("  Contract ",
-     #            format(x$contracts, justify = "right"),
-      #           ": ",
-       #          format(x$premiums),
-        #         sep = ""),
-         #  cat, fill = TRUE)
-    invisible(x)
+                                        
+    
+if (missing(subset))
+    r <- TRUE
+else{
+    e <- substitute(subset)
+    r <- eval(e, data, parent.frame())
+    if (!is.logical(r)) 
+        stop("'subset' must evaluate to logical")
+    r <- r & !is.na(r)
+    if (length(unique(data[[struct]])) < length(r[r]))    ####### probleme... a voir
+        stop("Hierarchical conflict in 'formula'/'subset'")        
 }
+if (length(unique(data[[struct]])) != length(data[[struct]]))
+    data <- t(as.data.frame(lapply(by(data, data[struct],
+                                      match.fun(quote(subset)),
+                                      select = years),
+                                   colSums)))
+else 
+
+
+
+
+
+
+
+        
+            
+                              
+
+        
