@@ -34,6 +34,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
 
     if (measure == "CvM")
     {
+        x <- sort(x)
         G <- fn
         Gn <- ecdf(x)
         weights <- if (is.null(weights)) 1
@@ -46,19 +47,28 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
         if (class(x) != "grouped.data")
             stop("'x' must be an object of class 'grouped.data'")
         myfn <- function(parm, ...)
-            drop(crossprod((sum(nj) * diff(fn(parm, cj)) - nj)^2/w))
+            sum((sum(nj)*diff(fn(parm, cj)) - nj) ^ 2 / weights)
         nj <- x$nj[-1]
         cj <- x$cj
-        if(is.null(w))
-            w <- nj
+        if(is.null(weights))
+            weights <- nj
         if(any(nj == 0))
             stop("all class must contain at least one element")
         Call$par <- start
-        Call$fn <- myfn
-        res <- eval(Call)
     }
-
-
+    if (measure == "LAS")
+    {
+        if(class(x) != "grouped.data")
+            stop("'class' of 'x' must be 'grouped.data'")
+        myfn <- function(parm, ...) sum(weights[-c(1, n)] * (diff(c(0, fn(parm, cj[-c(1, n)]))) - diff(c(0, empLEV))) ^ 2)
+        cj <- x$cj
+        nj <- x$nj[-1]
+        n <- length(nj)
+        empLEV <- cumsum(nj / n * (cj[-1] + cj[-n]) / 2)[-(n - 1)] + cj[-c(1, n)] * (1 - cumsum(nj / sum(nj)))[-c(n)]
+        if(is.null(weights))
+            weights <- rep(1, n + 1)
+        Call$par <- start
+      }
     ## optim() call
     Call[[1]] <- as.name("optim")
     Call$fun <- Call$start <- Call$measure <- Call$weights <- NULL
@@ -73,27 +83,9 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
         else
             Call$method <- "Nelder-Mead"
     }
-    print(Call)
     res <- eval(Call)
     return(res)
-
-
-    if(methods == "LAS")
-    {
-        if(class(x) != "grouped.data")
-            stop("'class' of 'x' must be 'grouped.data'")
-        myfn <- function(parm, ...) sum(w[-c(1, n)] * (diff(c(0, fun(parm, cj[-c(1, n)]))) - diff(c(0, empLEV))) ^ 2)
-        cj <- x$cj
-        nj <- x$nj[-1]
-        n <- length(nj)
-        empLEV <- cumsum(nj[-1] / n * (cj[-1] + cj[-n]) / 2)[-(n - 1)] + cj[-c(1, n)] * (1 - cumsum(nj / sum(nj)))[-c(1, n)]
-        if(is.null(w))
-            w <- rep(1, n)
-        Call$x <- x
-        Call$par <- start
-        Call$fn <- myfn
-        res <- eval(Call)
-    }
+    
     if (res$convergence > 0)
         stop("optimization failed")
     sds <- sqrt(diag(solve(res$hessian)))
@@ -108,10 +100,30 @@ gd <- c(rep(25, 30), rep(50, 31), rep(100, 57), rep(150, 42),
 
 id <- c(141, 16, 46, 40, 351, 259, 317, 1511, 107, 567)
 
-test <- function (p,dons,dist)
+distanceLAS <- function (p,dons,poids,dist)
 {
     f1<-match.fun(paste("lev",dist$dist,sep=""))
     formals(f1)[dist$par] <- p
     n<-length(dons$nj)
-    sum(diff(c(0,f1(dons$cj[-c(1,n)])))-diff(c(0,emp.lev.moments(dons))))
+    sum(poids[-c(1,n)]*(diff(c(0,f1(dons$cj[-c(1,n)])))-diff(c(0,emp.lev.moments(dons))))^2)
 }
+
+distanceChi2 <- function(p,dons,dist)
+  {
+    f1 <- match.fun(paste("p", dist$dist, sep=""))
+    formals(f1)[dist$par] <- p
+    nj <- dons$nj[-1]
+    cj <- dons$cj
+    n <- length(nj) 
+    sum((sum(nj)*diff(f1(cj))-nj)^2/nj)
+  }
+
+distanceCvM <- function(p,dons,poids,dist)
+  {
+    f1 <- match.fun(paste("p",dist$dist,sep=""))
+    formals(f1)[dist$par]<-p
+    n <- length(dons)
+    repart <- (1:n)/n
+    sum(poids*(f1(dons)-repart)^2)
+  }
+
