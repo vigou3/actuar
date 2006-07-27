@@ -1,3 +1,14 @@
+### ===== actuar: an R package for Actuarial Science =====
+###
+### Fitting Credibility Models:
+###
+### Fit a credibility model in the formulation of variance components 
+### as described in Dannenburg, Kaas and Goovaerts (1996). Models supported
+### are part of a generalized hierarchical credibility theory as introduced
+### in Dannenburg (1995).
+### 
+### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Louis-Philippe Pouliot
+
 cm <- function(formula, data = NULL, subset, weights, TOL=1E-6, echo=FALSE)
 {
     cl <- match.call()
