@@ -6,37 +6,35 @@
 ### See Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
 ###
-### AUTHORS: Vincent Goulet <vincent.gouletaact.ulaval.ca>, Mathieu Pigeon
- 
- 
-grouped <- function(x, y = NULL, digits = 2)
+### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Mathieu Pigeon
+
+
+grouped.data <- function(x, y = NULL, digits = 2)
 {
-  ## 'data.frame' must contain boundaries in first column and number of
-  ## data by class in second column.
-  if(class(x) == "data.frame"){
-    y <- x[, 2]
-    x <- x[, 1]
-  }
-  nx <- length(x)
-  ny <- length(y)
+    ## 'data.frame' must contain boundaries in first column and number of
+    ## data by class in second column.
+    if (class(x) == "data.frame")
+    {
+        x <- x[, 1]
+        y <- x[, 2]
+    }
+    nx <- length(x)
+    ny <- length(y)
 
-  ## First data in 'y' won't be used. 
-  if(nx - ny > 1 || nx - ny < 0){
-    stop("length(x) incorrect")
-  }
-  if(nx - ny == 1){
-      y = c(0, y)
-  }
-  if(nx == ny && y[1] != 0){
-    stop("length(y) incorrect")
-  }
+    ## First data in 'y' won't be used.
+    if (nx - ny > 1 || nx - ny < 0)
+        stop("length(x) incorrect")
+    if (nx - ny == 1)
+        y = c(0, y)
+    if (nx == ny && y[1] != 0)
+        stop("length(y) incorrect")
 
-  ## Create an object of class 'grouped.data'.
-  res = list(cj = x, nj = y, digits = digits, j = 3)
-  class(res) <- c("grouped.data")
-  attr(res, "call") <- sys.call()
-  res
-  }
+    ## Create an object of class 'grouped.data'.
+    res = list(cj = x, nj = y, digits = digits, j = 3)
+    class(res) <- "grouped.data"
+    attr(res, "call") <- sys.call()
+    res
+}
 
 ## Calculate an empirical distribution function.
 ogive <- function(x, y = NULL)
@@ -47,7 +45,7 @@ ogive <- function(x, y = NULL)
     x <- x$cj
   }
   ## An error message is issued if 'x' is empty.
-  if (length(x) < 1) 
+  if (length(x) < 1)
     stop("'x' must have 1 or more non-missing values")
 
   ##Create an object of class 'ogive'.
@@ -56,6 +54,10 @@ ogive <- function(x, y = NULL)
   attr(Fnt, "call") <- sys.call()
   Fnt
 }
+
+### Method of knots() for objects of class 'ogive'. Identical to
+### stats::knots.stepfun().
+knots.ogive <- stats:::knots.stepfun
 
 ## Calculate an empirical density function and create the histogram.
 hist.grouped.data <- function (x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab = "boundaries", ylab = "f(x)", plot = TRUE, ...)
@@ -126,7 +128,7 @@ print.grouped.data <- function(x, ...)
   }
   if(j == 2){
     y <- unclass(x$nj)
-    
+
   }
   if(j != 1 && j != 2){
     y <- x$nj
@@ -170,11 +172,5 @@ print.grouped.data <- function(x, ...)
   class(res) <- c("grouped.data")
   attr(res, "call") <- sys.call()
   }
-  res   
+  res
 }
-  
-
-  
-  
-
-

@@ -6,60 +6,92 @@
 
 mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights = NULL, ...)
 {
+    ## General form of the function to minimize.
+    myfn <- function(parm, x, ...) sum(weights * (G(parm, x, ...) - Gn(x))^2)
 
-    myfn <- function(parm, ...) sum(weights * (G(parm, x, ...) - Gn(x))^2)
+    ## Extract call; used to build the call to optim().
+    Call <- match.call(expand.dots = TRUE)
 
-    Call <- match.call(expand.dots = FALSE)
+    ## Argument checking.
+    if (missing(start) || !is.list(start))
+        stop("'start' must be a named list")
+    if (missing(fun) || !(is.function(fun)))
+        stop("'fun' must be supplied as a function")
+    grouped <- inherits(x, "grouped.data")
+    if (!is.numeric(x) || !grouped)
+        stop("'x' must be a numeric vector or an object of class 'grouped.data'")
 
-    if (missing(start))
-        start <- NULL
+    ## Make sure that any argument of 'fun' specified in '...' is held
+    ## fixed.
     dots <- names(list(...))
     dots <- dots[!is.element(dots, c("upper", "lower"))]
+    start <- start[!is.element(names(start), dots)]
 
-    if (missing(fun) || !(is.function(fun) || is.character(fun)))
-        stop("'fun' must be supplied as a function or name")
-
-    if (is.null(start) || !is.list(start))
-        stop("'start' must be a named list")
+    ## Adapt 'fun' to our needs; taken from MASS::fitdistr.
     nm <- names(start)
     f <- formals(fun)
     args <- names(f)
     m <- match(nm, args)
     if (any(is.na(m)))
         stop("'start' specifies names which are not arguments to 'fun'")
-    formals(fun) <- c(f[c(1, m)], f[-c(1, m)])
+    formals(fun) <- c(f[c(1, m)], f[-c(1, m)]) # reorder arguments
     fn <- function(parm, x, ...) fun(x, parm, ...)
     if ((l <- length(nm)) > 1)
         body(fn) <- parse(text = paste("fun(x,", paste("parm[", 1:l, "]", collapse = ", "), ")"))
 
+    measure <- match.arg(measure)
+
+    ## Cramer-von Mises. Use the true and empirical cdf for individual
+    ## data, or the true cdf and the ogive for grouped data.
     if (measure == "CvM")
     {
-        x <- sort(x)
         G <- fn
-        Gn <- ecdf(x)
+        Gn <- if (grouped) ogive(x) else ecdf(x)
         weights <- if (is.null(weights)) 1
         Call$x <- knots(Gn)
         Call$par <- start
     }
 
+    ## Modified Chi-square.
     if (measure == "chi-square")
     {
-        if (class(x) != "grouped.data")
-            stop("'x' must be an object of class 'grouped.data'")
-        myfn <- function(parm, ...)
-            sum((sum(nj)*diff(fn(parm, cj)) - nj) ^ 2 / weights)
-        nj <- x$nj[-1]
-        cj <- x$cj
-        if(is.null(weights))
-            weights <- nj
-        if(any(nj == 0))
-            stop("all class must contain at least one element")
+        if (!grouped)
+            stop("'chi-square' measure requires an object of class 'grouped.data'")
+        if (any(x$nj == 0))
+            stop("frequency must be larger than 0 in all classes")
+        og <- ogive(x)
+        x <- knots(og)
+        G <- function(...) diff(fn(...))
+        Gn <- function(...) diff(og(...))
+        weights <- if (is.null(weights)) 1/og(x)
+        Call$x <- x
         Call$par <- start
     }
+
+    ## Layer average severity.
+    ##
+    ## !!! PAS FAIT !!!
+    ##
     if (measure == "LAS")
     {
-        if(class(x) != "grouped.data")
-            stop("'class' of 'x' must be 'grouped.data'")
+        if (!grouped)
+            stop("'LAS' measure requires an object of class 'grouped.data'")
+        G <- function(...) diff(fn(...))
+        elev <- function(cj, nj, limit)
+        {
+            x <- cj[cj <= limit]
+            ml <- match(x, cj)
+            mu <- match(setdiff(cj, x), cj)
+            nu <- sum(nj[mu])
+            n <- sum(nj[l]) + nu
+            (drop(crossprod(x[-length(x)] + diff(x)/2, nj[ml])) +
+             limit * nu)/n
+        }
+        Gn <- function(...) diff(og(...))
+        weights <- if (is.null(weights)) 1/og(x)
+        Call$x <- x
+        Call$par <- start
+
         myfn <- function(parm, ...) sum(weights[-c(1, n)] * (diff(c(0, fn(parm, cj[-c(1, n)]))) - diff(c(0, empLEV))) ^ 2)
         cj <- x$cj
         nj <- x$nj[-1]
@@ -85,7 +117,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
     }
     res <- eval(Call)
     return(res)
-    
+
     if (res$convergence > 0)
         stop("optimization failed")
     sds <- sqrt(diag(solve(res$hessian)))
@@ -94,9 +126,8 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
 
 ### Données "grouped dental" individualisée pour contrôler avec
 ### l'exemple 2.21 de Loss Models (1ere édition).
-gd <- c(rep(25, 30), rep(50, 31), rep(100, 57), rep(150, 42),
-        rep(250, 65), rep(500, 84), rep(1000, 45), rep(1500, 10),
-        rep(2500, 11), rep(4000, 3))
+gd <- grouped.data(x = c(0, 25, 50, 100, 150, 250, 500, 1000, 1500, 2500, 4000),
+                   y = c(30, 31, 57, 42, 65, 84, 45, 10, 11, 3))
 
 id <- c(141, 16, 46, 40, 351, 259, 317, 1511, 107, 567)
 
@@ -114,7 +145,7 @@ distanceChi2 <- function(p,dons,dist)
     formals(f1)[dist$par] <- p
     nj <- dons$nj[-1]
     cj <- dons$cj
-    n <- length(nj) 
+    n <- length(nj)
     sum((sum(nj)*diff(f1(cj))-nj)^2/nj)
   }
 
@@ -126,4 +157,3 @@ distanceCvM <- function(p,dons,poids,dist)
     repart <- (1:n)/n
     sum(poids*(f1(dons)-repart)^2)
   }
-
