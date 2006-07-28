@@ -11,8 +11,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-mexp <- function(k, scale, log = FALSE)
-    .External("do_dpq", "mexp", k, scale, log)
+mexp <- function(k, rate, log = FALSE)
+    .External("do_dpq", "mexp", k, rate, log)
 
-levexp <- function(d, scale, order = 1, log = FALSE)
-    .External("do_dpq", "levexp", d, scale, order, log)
+levexp <- function(d, rate, order = 1, log = FALSE)
+    .External("do_dpq", "levexp", d, rate, order, log)

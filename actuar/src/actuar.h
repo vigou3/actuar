@@ -21,8 +21,8 @@ double rinvexp(double scale);
 double minvexp(double k, double scale, int give_log);
 double levinvexp(double d, double scale, double order, int give_log);
 
-double mexp(double k, double scale, int give_log);
-double levexp(double d, double scale, double order, int give_log);
+double mexp(double k, double rate, int give_log);
+double levexp(double d, double rate, double order, int give_log);
 
 /*   Two parameter distributions */
 double dinvgamma(double x, double scale, double shape, int give_log);

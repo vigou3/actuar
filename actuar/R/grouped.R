@@ -26,8 +26,6 @@ grouped.data <- function(x, y = NULL, digits = 2)
         stop("length(x) incorrect")
     if (nx - ny == 1)
         y = c(0, y)
-    if (nx == ny && y[1] != 0)
-        stop("length(y) incorrect")
 
     ## Create an object of class 'grouped.data'.
     res = list(cj = x, nj = y, digits = digits, j = 3)
@@ -40,7 +38,7 @@ grouped.data <- function(x, y = NULL, digits = 2)
 ogive <- function(x, y = NULL)
 {
   ## Use object created by 'grouped' function.
-  if(class(x) == "grouped.data"){
+  if (class(x) == "grouped.data"){
     y <- x$nj
     x <- x$cj
   }
@@ -63,7 +61,7 @@ knots.ogive <- stats:::knots.stepfun
 hist.grouped.data <- function (x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab = "boundaries", ylab = "f(x)", plot = TRUE, ...)
 {
   ## Use object created by 'grouped' function.
-  if(class(x) == "grouped.data"){
+  if (class(x) == "grouped.data"){
     y <- x$nj
     x <- x$cj
   }
@@ -73,7 +71,7 @@ hist.grouped.data <- function (x, y = NULL, main = "Histogram", xlim = NULL, yli
   r <- structure(list(cj = x, nj = y[-1], density = fnt(x)), class = "histogram")
 
   ## If 'plot' is true, histogram is created, else, boudaries, number of data by class and density are returned.
-  if(plot){
+  if (plot){
     plot(x , fnt(x), main = main, xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, type = "S", frame = FALSE)
     segments(x, 0, x, fnt(x))
     segments(0, 0, max(x), 0)
@@ -121,16 +119,16 @@ print.grouped.data <- function(x, ...)
   digits <- x$digits
 
   ## Choose which column(s) is(are) presented.
-  if(j == 1){
+  if (j == 1){
     x <- x$cj
     x1 <- length(x)
     cat("          cj     ", "\n", paste("[",numform(x[-x1]),", ",numform(x[-1]),")", "\n", sep = ""))
   }
-  if(j == 2){
+  if (j == 2){
     y <- unclass(x$nj)
 
   }
-  if(j != 1 && j != 2){
+  if (j != 1 && j != 2){
     y <- x$nj
     x <- x$cj
     x1 <- length(x)
@@ -141,29 +139,29 @@ print.grouped.data <- function(x, ...)
 "[.grouped.data" <- function(x, i, j)
 {
   ## If 'i' is missing, all rows are presented.
-  if(missing(i)){
+  if (missing(i)){
     i <- (1:(length(x$cj)-1))
   }
   ## If 'j' is missing, all columns are presented.
-  if(missing(j)){
+  if (missing(j)){
     j <- 3
   }
 
   ## Create an object of class 'grouped.data'.
-  if(j == 1){
+  if (j == 1){
     cj <- x$cj
     cj <- cj[c((i), max(i) + 1)]
     res = list(cj = cj, digits = x$digits, j = j)
     class(res) <- c("grouped.data")
     attr(res, "call") <- sys.call()
   }
-  if(j == 2){
+  if (j == 2){
     nj <- x$nj[-1]
     nj <- nj[(i)]
     res = nj
     class(res) <- c("numeric")
   }
-  if(j != 1 && j != 2){
+  if (j != 1 && j != 2){
   nj <- x$nj[-1]
   nj <- c(0, nj[(i)])
   cj <- x$cj

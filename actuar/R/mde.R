@@ -61,13 +61,13 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
     {
         if (!grouped)
             stop("'chi-square' measure requires an object of class 'grouped.data'")
-        if (any(x$nj == 0))
+        if (any(x$nj[-1] == 0))
             stop("frequency must be larger than 0 in all classes")
         og <- ogive(x)
         x <- knots(og)
         G <- function(...) diff(fn(...))
         Gn <- function(...) diff(og(...))
-        weights <- if (is.null(weights)) 1/og(x)
+        weights <- if (is.null(weights)) 1/og(x)[-1]
         Call$x <- x
         Call$par <- start
     }
@@ -117,17 +117,17 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
 
 ### Données "grouped dental"  individualisée pour contrôler avec
 ### l'exemple 2.21 de Loss Models (1ere édition).
-gd <- grouped.data(x = c(0, 25, 50, 100, 150, 250, 500, 1000, 1500, 2500, 4000),
+#gd <- grouped.data(x = c(0, 25, 50, 100, 150, 250, 500, 1000, 1500, 2500, 4000),
                    y = c(30, 31, 57, 42, 65, 84, 45, 10, 11, 3))
-
-id <- c(141, 16, 46, 40, 351, 259, 317, 1511, 107, 567)
+#
+#id <- c(141, 16, 46, 40, 351, 259, 317, 1511, 107, 567)
 
 ## Exemple 2.21
-mde(gd, pexp, start = list(rate = 1/280)
-    measure = "CvM")                    # distance négative ???
-
-mde(gd, pexp, start = list(rate = 1/280), weights = 10,
-    measure = "CvM")                    # oups! encore du travail...
+#mde(gd, pexp, start = list(rate = 1/280),
+#    measure = "CvM")                    # distance négative ???
+#
+#mde(gd, pexp, start = list(rate = 1/280), weights = 10,
+#    measure = "CvM")                    # oups! encore du travail...
 
 
 distanceLAS <- function (p,dons,poids,dist)
