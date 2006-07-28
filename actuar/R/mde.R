@@ -105,7 +105,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
     ## Return result
     if (res$convergence > 0)
         stop("optimization failed")
-    structure(list(estimate = res$par, distance = -res$value))
+    structure(list(estimate = res$par, distance = res$value))
 }
 
 
@@ -118,7 +118,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
 ### Données "grouped dental"  individualisée pour contrôler avec
 ### l'exemple 2.21 de Loss Models (1ere édition).
 #gd <- grouped.data(x = c(0, 25, 50, 100, 150, 250, 500, 1000, 1500, 2500, 4000),
-                   y = c(30, 31, 57, 42, 65, 84, 45, 10, 11, 3))
+#                   y = c(30, 31, 57, 42, 65, 84, 45, 10, 11, 3))
 #
 #id <- c(141, 16, 46, 40, 351, 259, 317, 1511, 107, 567)
 

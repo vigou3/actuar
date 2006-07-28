@@ -34,7 +34,7 @@ export(## Credibility theory
        dtrbeta, ptrbeta, qtrbeta, rtrbeta, mtrbeta, levtrbeta,
        dpearson6, ppearson6, qpearson6, rpearson6, mpearson6, levpearson6,  #aliases
        ## ACT-21412
-       grouped.data, ogive, emp.moments, mde, distanceCvM, distanceChi2, distanceLAS
+       grouped.data, ogive, emp.moments, mde, distanceCvM, distanceChi2, distanceLAS, elev
        )
 ### Imports
 importFrom(stats, aggregate, frequency, quantile)
@@ -65,3 +65,7 @@ S3method(summary, aggregateDist)
 S3method(print, summary.aggregateDist)
 S3method(emp.moments, default)
 S3method(emp.moments, grouped.data)
+S3method(knots, elev)
+S3method(print, elev)
+S3method(elev, default)
+S3method(elev, grouped.data)
