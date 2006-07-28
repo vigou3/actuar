@@ -7,7 +7,7 @@
 mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights = NULL, ...)
 {
     ## General form of the function to minimize.
-    myfn <- function(parm, x, ...)
+    myfn <- function(parm, x, weights, ...)
     {
         y <- G(parm, x, ...) - Gn(x)
         drop(crossprod(weights * y, y))
@@ -51,7 +51,8 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
     {
         G <- fn
         Gn <- if (grouped) ogive(x) else ecdf(x)
-        weights <- if (is.null(weights)) 1
+        if (is.null(weights))
+            weights <- 1
         Call$x <- knots(Gn)
         Call$par <- start
     }
@@ -67,7 +68,8 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
         x <- knots(og)
         G <- function(...) diff(fn(...))
         Gn <- function(...) diff(og(...))
-        weights <- if (is.null(weights)) 1/og(x)[-1]
+        if (is.null(weights))
+            weights <- 1/og(x)[-1]
         Call$x <- x
         Call$par <- start
     }
@@ -81,7 +83,8 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
         x <- knots(e)
         G <- function(...) diff(fn(...))
         Gn <- function(...) diff(e(...))
-        weights <- if (is.null(weights)) 1
+        if (is.null(weights))
+            weights <- 1
         Call$x <- x
         Call$par <- start
     }
@@ -90,6 +93,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
     Call[[1]] <- as.name("optim")
     Call$fun <- Call$start <- Call$measure <- NULL
     Call$fn <- myfn
+    Call$weights <- weights
     Call$hessian <- FALSE
     if (is.null(Call$method))
     {
@@ -117,17 +121,17 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
 
 ### Données "grouped dental"  individualisée pour contrôler avec
 ### l'exemple 2.21 de Loss Models (1ere édition).
-#gd <- grouped.data(x = c(0, 25, 50, 100, 150, 250, 500, 1000, 1500, 2500, 4000),
-#                   y = c(30, 31, 57, 42, 65, 84, 45, 10, 11, 3))
+gd <- grouped.data(x = c(0, 25, 50, 100, 150, 250, 500, 1000, 1500, 2500, 4000),
+                   y = c(30, 31, 57, 42, 65, 84, 45, 10, 11, 3))
 #
 #id <- c(141, 16, 46, 40, 351, 259, 317, 1511, 107, 567)
 
 ## Exemple 2.21
-#mde(gd, pexp, start = list(rate = 1/280),
-#    measure = "CvM")                    # distance négative ???
-#
-#mde(gd, pexp, start = list(rate = 1/280), weights = 10,
-#    measure = "CvM")                    # oups! encore du travail...
+mde(gd, pexp, start = list(rate = 1/280),
+    measure = "CvM")
+
+mde(gd, pexp, start = list(rate = 1/280), weights = 10,
+    measure = "CvM")                    # oups! encore du travail...
 
 
 distanceLAS <- function (p,dons,poids,dist)
