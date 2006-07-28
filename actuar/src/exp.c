@@ -20,7 +20,7 @@ double mexp(double k, double rate, int give_log)
       k <= -1.0)
     return R_NaN;
   
-  return R_pow(rate, k) * gammafn(1.0 + k);
+  return R_pow(1.0 / rate, k) * gammafn(1.0 + k);
 }
 
 double levexp(double d, double rate, double order, int give_log)
@@ -34,5 +34,5 @@ double levexp(double d, double rate, double order, int give_log)
       order <= -1.0)
     return R_NaN;
   
-  return R_pow(rate, order) * gammafn(1.0 + order) * pgamma(d, order + 1.0, 1.0 / rate, 1, 0) + R_pow(d, order) * exp(-d / rate);
+  return R_pow(1.0 / rate, order) * gammafn(1.0 + order) * pgamma(d, order + 1.0, rate, 1, 0) + R_pow(d, order) * exp(-d * rate);
 }
