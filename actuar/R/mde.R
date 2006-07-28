@@ -7,7 +7,11 @@
 mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights = NULL, ...)
 {
     ## General form of the function to minimize.
-    myfn <- function(parm, x, ...) sum(weights * (G(parm, x, ...) - Gn(x))^2)
+    myfn <- function(parm, x, ...)
+    {
+        y <- G(parm, x, ...) - Gn(x)
+        drop(crossprod(weights * y, y))
+    }
 
     ## Extract call; used to build the call to optim().
     Call <- match.call(expand.dots = TRUE)
@@ -18,7 +22,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
     if (missing(fun) || !(is.function(fun)))
         stop("'fun' must be supplied as a function")
     grouped <- inherits(x, "grouped.data")
-    if (!is.numeric(x) || !grouped)
+    if (!(is.numeric(x) || grouped))
         stop("'x' must be a numeric vector or an object of class 'grouped.data'")
 
     ## Make sure that any argument of 'fun' specified in '...' is held
@@ -69,43 +73,24 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
     }
 
     ## Layer average severity.
-    ##
-    ## !!! PAS FAIT !!!
-    ##
     if (measure == "LAS")
     {
         if (!grouped)
             stop("'LAS' measure requires an object of class 'grouped.data'")
+        e <- elev(x)
+        x <- knots(e)
         G <- function(...) diff(fn(...))
-        elev <- function(cj, nj, limit)
-        {
-            x <- cj[cj <= limit]
-            ml <- match(x, cj)
-            mu <- match(setdiff(cj, x), cj)
-            nu <- sum(nj[mu])
-            n <- sum(nj[l]) + nu
-            (drop(crossprod(x[-length(x)] + diff(x)/2, nj[ml])) +
-             limit * nu)/n
-        }
-        Gn <- function(...) diff(og(...))
-        weights <- if (is.null(weights)) 1/og(x)
+        Gn <- function(...) diff(e(...))
+        weights <- if (is.null(weights)) 1
         Call$x <- x
         Call$par <- start
+    }
 
-        myfn <- function(parm, ...) sum(weights[-c(1, n)] * (diff(c(0, fn(parm, cj[-c(1, n)]))) - diff(c(0, empLEV))) ^ 2)
-        cj <- x$cj
-        nj <- x$nj[-1]
-        n <- length(nj)
-        empLEV <- cumsum(nj / n * (cj[-1] + cj[-n]) / 2)[-(n - 1)] + cj[-c(1, n)] * (1 - cumsum(nj / sum(nj)))[-c(n)]
-        if(is.null(weights))
-            weights <- rep(1, n + 1)
-        Call$par <- start
-      }
     ## optim() call
     Call[[1]] <- as.name("optim")
-    Call$fun <- Call$start <- Call$measure <- Call$weights <- NULL
+    Call$fun <- Call$start <- Call$measure <- NULL
     Call$fn <- myfn
-    Call$hessian <- TRUE
+    Call$hessian <- FALSE
     if (is.null(Call$method))
     {
         if (any(c("lower", "upper") %in% names(Call)))
@@ -116,20 +101,34 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
             Call$method <- "Nelder-Mead"
     }
     res <- eval(Call)
-    return(res)
 
+    ## Return result
     if (res$convergence > 0)
         stop("optimization failed")
-    sds <- sqrt(diag(solve(res$hessian)))
-    structure(list(estimate = res$par, sd = sds, loglik = -res$value))
+    structure(list(estimate = res$par, distance = -res$value))
 }
 
-### Données "grouped dental" individualisée pour contrôler avec
+
+### !!! To do !!!
+# print.mde <- function(...)
+
+
+########### Junkyard #############
+
+### Données "grouped dental"  individualisée pour contrôler avec
 ### l'exemple 2.21 de Loss Models (1ere édition).
 gd <- grouped.data(x = c(0, 25, 50, 100, 150, 250, 500, 1000, 1500, 2500, 4000),
                    y = c(30, 31, 57, 42, 65, 84, 45, 10, 11, 3))
 
 id <- c(141, 16, 46, 40, 351, 259, 317, 1511, 107, 567)
+
+## Exemple 2.21
+mde(gd, pexp, start = list(rate = 1/280)
+    measure = "CvM")                    # distance négative ???
+
+mde(gd, pexp, start = list(rate = 1/280), weights = 10,
+    measure = "CvM")                    # oups! encore du travail...
+
 
 distanceLAS <- function (p,dons,poids,dist)
 {
