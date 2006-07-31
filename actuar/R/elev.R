@@ -82,5 +82,16 @@ print.elev <- function(x, digits = getOption("digits") - 2, ...)
     invisible(x)
 }
 
-### !!! To do !!!
-# plot.elev <- function()
+plot.elev <- function(x, xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL, col = 1, ...)
+  {
+    if (attr(x, "grouped"))  
+      {
+       stop
+      }
+    else
+      {
+        xval <- eval(expression(x), env = environment(x))
+        plot(xval, x(xval), main = "Empirical Limited Function", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, col = col, type = "o", pch = 20)
+      }
+  }
+
