@@ -6,20 +6,22 @@
   Minimum distance estimators for individual and grouped data.
 }
 \usage{
-  mde(x, cdf, start, methods  = c("CvM", "chi-square", "LAS"), w = NULL, ...)
+  mde(x, fun, start, measure  = c("CvM", "chi-square", "LAS"), weights = NULL, ...)
 }
 \arguments{
   \item{x}{individual or grouped data.}
-  \item{cdf}{Either a character string or a function returning a
+  \item{fun}{Either a character string or a function returning a
     cumulative distribution evaluated at its first argument.}
   \item{start}{A named list giving the parameters to be optimized with
-          initial values }
-  \item{methods}{Either \code{CvM} for Cramer von Mises' method,
+    initial values }
+  \item{measure}{Either \code{CvM} for Cramer von Mises' method,
     \code{chi-square} for modified chi-square's method, and \code{LAS}
     for layer average severity's method.}
-  \item{w}{weights}
-  \item{\dots}{Additional parameters, either for \code{cdf} or for \code{optim}.          In particular, it can be used to specify bounds via \code{lower}
-          or \code{upper} or both.  If arguments of \code{ecdf} are included they will be held fixed. }
+  \item{weights}{weights. If arguments \code{weights} is missing,
+    all weights are equal to 1 for \code{CvM} and \code{LAS}
+    methods. For \code{chi-square}, weights are equal to \code{1 / nj}.}
+  \item{\dots}{Additional parameters, either for \code{fun} or for \code{optim}. In particular, it can be used to specify bounds via \code{lower}
+    or \code{upper} or both.  If arguments of \code{ecdf} are included they will be held fixed. }
 }
 \details{
   For \code{CvM}'s method direct optimization of the distance between
@@ -29,21 +31,21 @@
   \code{optim}, and for \code{LAS}'s direct optimization of distance
   between theorical and empirical limited distribution is performed
   using \code{optim}.
-
+  
   For one-dimensional problems the Nelder-Mead method is used and for multi-dimensional problems the BFGS method, unless arguments named \code{lower} or \code{upper} are
   supplied when \code{L-BFGS-B} is used or \code{method} is supplied
   explicitly.
-
+  
   There is \code{print} method for this class.
 }
 \value{
- An object od class \code{mde}, a list with tow components,
-
- estimate: the parameter estimates, and
-
- distance: the distance calculated.
-
- Invalid arguments will return warning.
+  An object od class \code{mde}, a list with tow components,
+  
+  estimate: the parameter estimates, and
+  
+  distance: the distance calculated.
+  
+  Invalid arguments will return warning.
 }
 \references{
   Appendix A of Klugman, Panjer & Willmot, Loss Models, Second

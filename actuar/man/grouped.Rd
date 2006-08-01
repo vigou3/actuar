@@ -13,7 +13,7 @@
   ogive. 
 }
 \usage{
-grouped(x, y = NULL, digits = 2)
+grouped.data(x, y = NULL, digits = 2)
 \method{hist}{grouped.data}(x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab =
 "boundaries", ylab = "f(x)", plot = TRUE, ...)
 \method{print}{grouped.data}(x, ...)

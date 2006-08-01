@@ -113,7 +113,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
 }
 
 print.mde <- function(x, digits = getOption("digits"), ...)
-  {
+{
     ans <- format(rbind(x$estimate, "      distance", x$distance), digits = digits)
     ans[1, ] <- sapply(ans[1, ], function(x) paste("", x))
     ans[3, ] <- sapply(ans[3, ], function(x) paste("(", x, ")", sep=""))
@@ -126,7 +126,7 @@ print.mde <- function(x, digits = getOption("digits"), ...)
     dimnames(ans) <- dn
     print(ans, quote = FALSE)
     x
-  }
+}
 
 
 ########### Junkyard #############
@@ -137,31 +137,3 @@ gd <- grouped.data(x = c(0, 25, 50, 100, 150, 250, 500, 1000, 1500, 2500, 4000),
                    y = c(30, 31, 57, 42, 65, 84, 45, 10, 11, 3))
 #
 id <- c(141, 16, 46, 40, 351, 259, 317, 1511, 107, 567)
-
-
-distanceLAS <- function (p,dons,poids,dist)
-{
-    f1<-match.fun(paste("lev",dist$dist,sep=""))
-    formals(f1)[dist$par] <- p
-    n<-length(dons$nj)
-    sum(poids[-c(1,n)]*(diff(c(0,f1(dons$cj[-c(1,n)])))-diff(c(0,emp.lev.moments(dons))))^2)
-}
-
-distanceChi2 <- function(p,dons,dist)
-  {
-    f1 <- match.fun(paste("p", dist$dist, sep=""))
-    formals(f1)[dist$par] <- p
-    nj <- dons$nj[-1]
-    cj <- dons$cj
-    n <- length(nj)
-    sum((sum(nj)*diff(f1(cj))-nj)^2/nj)
-  }
-
-distanceCvM <- function(p,dons,poids,dist)
-  {
-    f1 <- match.fun(paste("p",dist$dist,sep=""))
-    formals(f1)[dist$par]<-p
-    n <- length(dons)
-    repart <- (1:n)/n
-    sum(poids*(f1(dons)-repart)^2)
-  }
