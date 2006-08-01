@@ -124,14 +124,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
 gd <- grouped.data(x = c(0, 25, 50, 100, 150, 250, 500, 1000, 1500, 2500, 4000),
                    y = c(30, 31, 57, 42, 65, 84, 45, 10, 11, 3))
 #
-#id <- c(141, 16, 46, 40, 351, 259, 317, 1511, 107, 567)
-
-## Exemple 2.21
-mde(gd, pexp, start = list(rate = 1/280),
-    measure = "CvM")
-
-mde(gd, pexp, start = list(rate = 1/280), weights = 10,
-    measure = "CvM")                    # oups! encore du travail...
+id <- c(141, 16, 46, 40, 351, 259, 317, 1511, 107, 567)
 
 
 distanceLAS <- function (p,dons,poids,dist)

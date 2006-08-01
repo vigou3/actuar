@@ -31,7 +31,7 @@
   \item{d}{limit of the loss variable.}
   \item{shape1, scale, shape2}{parameters. Must be strictly positive.}
   \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
-    returned as log(p).}
+    returned as log(p). Arguments unused for \{mburr} and \{levburr} functions.
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
     <= x], otherwise, Pr[X > x].}
   \item{k, order}{order of the moment.}

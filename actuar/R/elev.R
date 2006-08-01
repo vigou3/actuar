@@ -3,7 +3,8 @@
 ### Sample empirical limited value functions for individual and
 ### grouped data.
 ###
-### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
+### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca> and
+###          Mathieu Pigeon
 
 elev <- function(x, ...)
 {
@@ -33,6 +34,8 @@ elev.grouped.data <- function(x)
         ## Number of classes.
         r <- length(nj)
 
+        limit <-  ifelse (limit > cj[length(cj)], cj[length(cj)], limit)
+          
         ## Class in which the limit is located.
         cl <- cut(limit, cj, include.lowest = TRUE, labels = FALSE)
 
@@ -54,6 +57,7 @@ elev.grouped.data <- function(x)
 
         ## Total
         (res1 + res2 + res3)/sum(nj)
+      
     }
     assign("cj", x$cj, env = environment(FUN))
     assign("nj", x$nj[-1], env = environment(FUN))
@@ -86,12 +90,12 @@ plot.elev <- function(x, xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL, col
   {
     if (attr(x, "grouped"))  
       {
-       stop
+       plot(knots(x), x(knots(x)), main = "Empirical Limited Function", xlim = xlim, ylim = ylim, xlab = "Limits", ylab = "Empirical limited values", col = col, type = "o", pch = 20)
       }
     else
       {
         xval <- eval(expression(x), env = environment(x))
-        plot(xval, x(xval), main = "Empirical Limited Function", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, col = col, type = "o", pch = 20)
+        plot(xval, x(xval), main = "Empirical Limited Function", xlim = xlim, ylim = ylim, xlab = "Limits", ylab = "Empirical limited values", col = col, type = "o", pch = 20)
       }
   }
 

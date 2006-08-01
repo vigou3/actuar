@@ -11,14 +11,14 @@
 emp.moments(x, order = 1, ...)
 }
 \arguments{
-  \item{x}{individual or grouped data}
+  \item{x}{individual or grouped data.}
   \item{order}{order of the moment.}
   \item{\dots}{potential further arguments required by generic.}
 }
 \value{
   \code{emp.moments} gives the kth raw empirical moment of the variable.
   
-  Invalid arguments will return warning.
+  Infinite value and negative \code{order} will return warning.
 }
 \details{
   See also \code{emp.moments.grouped.data}.
