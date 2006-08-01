@@ -109,12 +109,24 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
     ## Return result
     if (res$convergence > 0)
         stop("optimization failed")
-    structure(list(estimate = res$par, distance = res$value))
+    structure(list(estimate = res$par, distance = res$value), class = c("mde","list"))
 }
 
-
-### !!! To do !!!
-# print.mde <- function(...)
+print.mde <- function(x, digits = getOption("digits"), ...)
+  {
+    ans <- format(rbind(x$estimate, "      distance", x$distance), digits = digits)
+    ans[1, ] <- sapply(ans[1, ], function(x) paste("", x))
+    ans[3, ] <- sapply(ans[3, ], function(x) paste("(", x, ")", sep=""))
+    dn <- dimnames(ans)
+    dn[[1]] <- rep("", 3)
+    dn[[2]] <- paste(substring("      ", 1, (nchar(ans[3,]) - nchar(dn[[2]])) %/% 2), dn[[2]])
+    dn[[2]] <- paste(dn[[2]], substring("      ", 1, (nchar(ans[3,]) - nchar(dn[[2]])) %/% 2))
+    ans[2,(2:ncol(ans))] <- ""
+    ans[3,(2:ncol(ans))] <- ""
+    dimnames(ans) <- dn
+    print(ans, quote = FALSE)
+    x
+  }
 
 
 ########### Junkyard #############

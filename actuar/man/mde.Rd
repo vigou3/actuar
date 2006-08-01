@@ -1,7 +1,7 @@
 \name{mde}
 \alias{Mde}
 \alias{mde}
-\title{Minimum distance estimation}
+\title{Minimum Distance Estimation}
 \description{
   Minimum distance estimators for individual and grouped data.
 }
@@ -15,24 +15,33 @@
   \item{start}{A named list giving the parameters to be optimized with
           initial values }
   \item{methods}{Either \code{CvM} for Cramer von Mises' method,
-    \code{chi-square} for modified chi-square's method, and \code{LAS} for ???.}
+    \code{chi-square} for modified chi-square's method, and \code{LAS}
+    for layer average severity's method.}
   \item{w}{weights}
-  \item{\dots}{potential further arguments required by generic.}
+  \item{\dots}{Additional parameters, either for \code{cdf} or for \code{optim}.          In particular, it can be used to specify bounds via \code{lower}
+          or \code{upper} or both.  If arguments of \code{ecdf} are included they will be held fixed. }
 }
-\details{ 
-  \code{CvM}'s method minimizes distance between theorical and empirical
-  cumulative distribution function, modified \code{chi-square}'s method
-  minimizes chi-square statistic, and \code{LAS}'s method minimizes
-  distance between ???.
+\details{
+  For \code{CvM}'s method direct optimization of the distance between
+  theorical and empirical cumulative distribution function is performed
+  using \code{optim}, for modified \code{chi-square}'s method
+  direct optimization of the chi-square statistic is performed using
+  \code{optim}, and for \code{LAS}'s direct optimization of distance
+  between theorical and empirical limited distribution is performed
+  using \code{optim}.
+
+  For one-dimensional problems the Nelder-Mead method is used and for multi-dimensional problems the BFGS method, unless arguments named \code{lower} or \code{upper} are
+  supplied when \code{L-BFGS-B} is used or \code{method} is supplied
+  explicitly.
+
+  There is \code{print} method for this class.
 }
 \value{
- A list with three components,
+ An object od class \code{mde}, a list with tow components,
 
- estimate: the parameter estimates,
+ estimate: the parameter estimates, and
 
- sd: the estimated standard errors, and
-
- loglik: the log-likelihood.
+ distance: the distance calculated.
 
  Invalid arguments will return warning.
 }

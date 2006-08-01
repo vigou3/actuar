@@ -12,7 +12,7 @@ emp.moments(x, order = 1, ...)
 }
 \arguments{
   \item{x}{individual or grouped data.}
-  \item{order}{order of the moment.}
+  \item{order}{order of the moment. Must be positive.}
   \item{\dots}{potential further arguments required by generic.}
 }
 \value{
