@@ -1,6 +1,6 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r}pareto functions. The Loggamma
+### Definition of the {d,p,q,r}lgamma functions. The Loggamma
 ### distribution used in these functions has cumulative distribution
 ### function
 ###
