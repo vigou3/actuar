@@ -59,7 +59,7 @@ ogive <- function(x, y = NULL)
 knots.ogive <- stats:::knots.stepfun
 
 ## Calculate an empirical density function and create the histogram.
-hist.grouped.data <- function (x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab = "boundaries", ylab = "f(x)", plot = TRUE, ...)
+hist.grouped.data <- function(x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab = "boundaries", ylab = "f(x)", plot = TRUE, ...)
 {
     ## Use object created by 'grouped' function.
     if (class(x) == "grouped.data")
@@ -85,13 +85,13 @@ hist.grouped.data <- function (x, y = NULL, main = "Histogram", xlim = NULL, yli
 }
 
 ## Method to create graphic of empirical distribution function.
-plot.ogive <- function (x, y = NULL, xlim = NULL, ylim = NULL, xlab = "boundaries", ylab = "F(x)", col = 1, ...)
+plot.ogive <- function(x, y = NULL, xlim = NULL, ylim = NULL, xlab = "boundaries", ylab = "F(x)", col = 1, ...)
 {
     xval <- eval(expression(x), env = environment(x))
     plot(xval, x(xval),  main = "Ogive", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, col = col, type = "o", pch = 20)
 }
 
-print.ogive <- function (x, digits = getOption("digits") - 2, ...)
+print.ogive <- function(x, digits = getOption("digits") - 2, ...)
 {
     ## To formate numbers.
     numform <- function(x) paste(formatC(x, dig = digits), collapse = ", ")
