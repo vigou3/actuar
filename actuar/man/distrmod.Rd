@@ -28,7 +28,7 @@ distrmod(dist, param, d, u, density = TRUE, per.payment = TRUE, ...)
   \itemize{
     \item undefined for \eqn{X <= d},
     \item \eqn{(X - d)} for \eqn{d < X <= u}, and
-    \item \eqn{(u-d)} for \eqn{X > u}.
+    \item \eqn{(u - d)} for \eqn{X > u}.
   }
   Per-loss variable is define as follow:
   \itemize{
