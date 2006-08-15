@@ -9,7 +9,7 @@
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Mathieu Pigeon
 
 ## Calculate an empirical distribution function.
-ogive <- function(x, y = NULL)
+ogive <- function(x, y = NULL, ...)
 {
     ## Use object created by 'grouped' function.
     if (class(x) == "grouped.data")

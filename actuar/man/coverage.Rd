@@ -1,6 +1,6 @@
-\name{distrmod}
-\alias{distrmod}
-\alias{Distrmod}
+\name{coverage}
+\alias{coverage}
+\alias{Coverage}
 \title{Density and Cumulative Distribution Function for Modified Data}
 \description{
   Compute density and cumulative distribution function for data with
@@ -8,7 +8,7 @@
   for per-loss variable and per-payment variable.
 }
 \usage{
-distrmod(dist, param, d, u, density = TRUE, per.payment = TRUE, ...)
+coverage(dist, param, d, u, density = TRUE, per.payment = TRUE, ...)
 }
 \arguments{
   \item{dist}{named list which contains two elements: name of
@@ -48,7 +48,7 @@ distrmod(dist, param, d, u, density = TRUE, per.payment = TRUE, ...)
   Mathieu Pigeon
 }
 \examples{
-dmod <- distrmod(list(dist="gamma", par=c("shape", "rate")), c(2, 3), 5, 10,
+dmod <- coverage(list(dist="gamma", par=c("shape", "rate")), c(2, 3), 5, 10,
 TRUE, TRUE)
 curve(dmod)
 }

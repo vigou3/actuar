@@ -1,18 +1,24 @@
-\name{ogive}
-\alias{ogive}
-\alias{Ogive}
-\alias{print.ogive}
-\title{Empirical distribution function for grouped data}
+\name{plot.ogive}
+\alias{plot.ogive}
+\alias{Plot.ogive}
+\title{Graphic for Empirical distribution function for grouped data}
 \description{
-  Compute an empirical distribution function for grouped data.
+  Plot an empirical distribution function for grouped data.
+  The ogive is obtained by connecting the values of the empirical distribution function at the group boundaries with
+  straight lines. 
 }
 \usage{
-ogive(x, y = NULL, ...)
-\method{print}{ogive}(x, digits= getOption("digits") - 2, ...)
+\method{plot}{ogive}(x, y = NULL, xlim = NULL, ylim = NULL, xlab =
+"boundaries", ylab = "F(x)", col = 1, ...)
 }
 \arguments{
   \item{x, y}{grouped data with finite group boundaries.}
-  \item{digits}{the desired number of digits after the decimal point.}
+   \item{xlim}{the x limits (x1,x2) of the plot.  Note that \code{x1 > x2} is
+          allowed and leads to a "reversed axis".}
+  \item{ylim}{the y limits of the plot.}
+  \item{xlab}{a label for the x axis.}
+  \item{ylab}{a label for y axis.}
+  \item{col}{the colors for lines and points.}
   \item{\dots}{potential further arguments required by generic.}
 }
 \details{
@@ -25,7 +31,8 @@ ogive(x, y = NULL, ...)
   for \eqn{c_{j-1} \leq x \leq c_j}.
 }
 \value{
-  Returns an object of \code{class} \code{ogive}. An object of \code{class}
+  Returns an object of \code{class} \code{ogive}. Function
+  \code{plot} can be used to draw the ogive. An object of \code{class}
   \code{ogive} is a function.
 }
 \references{Klugman, Panjer & Willmot, Loss Models, Second
@@ -40,6 +47,6 @@ cj <- c(0, 10, 20, 30, 40)
 nj <- c(4, 9, 0, 12)
 data <- grouped(cj, nj)
 fnt <- ogive(data)
-fnt(7)
+plot(fnt)
 }
 \keyword{hplot}
