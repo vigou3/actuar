@@ -34,7 +34,7 @@ export(## Credibility theory
        dtrbeta, ptrbeta, qtrbeta, rtrbeta, mtrbeta, levtrbeta,
        dpearson6, ppearson6, qpearson6, rpearson6, mpearson6, levpearson6,  #aliases
        ## ACT-21412
-       grouped.data, ogive, emp.moments, mde, elev, distrmod, mdistrmod
+       grouped.data, ogive, emp.moments, mde, elev, coverage, mcoverage
        )
 ### Imports
 importFrom(stats, aggregate, frequency, quantile)
@@ -71,4 +71,4 @@ S3method(knots, elev)
 S3method(print, elev)
 S3method(plot, elev)
 S3method(print, mde)
-S3method(print, mdistrmod)
+S3method(print, mcoverage)
