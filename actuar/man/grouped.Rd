@@ -13,7 +13,7 @@
   ogive. 
 }
 \usage{
-grouped.data(x, y = NULL, digits = 2)
+grouped.data(x, y = NULL, ...)
 \method{hist}{grouped.data}(x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab =
 "boundaries", ylab = "f(x)", plot = TRUE, ...)
 \method{print}{grouped.data}(x, ...)
@@ -33,8 +33,6 @@ grouped.data(x, y = NULL, digits = 2)
   \item{ylab}{a label for y axis.}
   \item{plot}{logical.  If \code{TRUE} (default), a histogram is plotted,
           otherwise a list of \code{cj}, \code{nj} and \code{density} is returned.}
-  \item{digits}{the desired number of digits after the decimal
-	  point.}
   \item{i, j}{elements to extract or replace. \code{is, ie} are \code{numeric} or empty.}
   \item{order}{order of the moments.}
   \item{\dots}{potential further arguments required by generic.}
@@ -66,7 +64,7 @@ grouped.data(x, y = NULL, digits = 2)
 \examples{
 cj <- c(0, 10, 20, 30, 40)
 nj <- c(4, 12, 11, 2)
-data <- grouped(cj, nj)
+data <- grouped.data(cj, nj)
 hist(data, plot = FALSE)
 plot(ogive(data))
 }

@@ -67,9 +67,6 @@ elev.grouped.data <- function(x)
     FUN
 }
 
-knots.elev <- function(fn, ...)
-    eval(expression(cj), env = environment(fn))
-
 print.elev <- function(x, digits = getOption("digits") - 2, ...)
 {
     numform <- function(x) paste(formatC(x, dig = digits), collapse = ", ")
@@ -85,17 +82,3 @@ print.elev <- function(x, digits = getOption("digits") - 2, ...)
         " ..., ", numform(xx[i2]), "\n", sep = "")
     invisible(x)
 }
-
-plot.elev <- function(x, xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL, col = 1, ...)
-{
-    if (attr(x, "grouped"))  
-    {
-        plot(knots(x), x(knots(x)), main = "Empirical Limited Function", xlim = xlim, ylim = ylim, xlab = "Limits", ylab = "Empirical limited values", col = col, type = "o", pch = 20)
-    }
-    else
-    {
-        xval <- eval(expression(x), env = environment(x))
-        plot(xval, x(xval), main = "Empirical Limited Function", xlim = xlim, ylim = ylim, xlab = "Limits", ylab = "Empirical limited values", col = col, type = "o", pch = 20)
-    }
-}
-
