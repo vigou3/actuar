@@ -15,8 +15,8 @@ coverage(dist, param, d, u, density = TRUE, per.payment = TRUE, ...)
     distribution and names of parameters. The distribution must exist in
     R.}
    \item{param}{values of parameters.}
-  \item{d}{deductible. It must be less than limit.}
-  \item{u}{limit}
+  \item{d}{deductible. A scalar. It must be less than limit.}
+  \item{u}{limit. A scalar.}
   \item{density}{logical; if \code{TRUE} (default) probability/density
     is returned.}
   \item{per.payment}{logical; if \code{TRUE} (default) per-payment

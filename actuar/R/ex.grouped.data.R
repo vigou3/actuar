@@ -1,7 +1,7 @@
 
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Ogive and histogram for grouped data
+### Extract data from grouped data
 ###
 ### See Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
@@ -10,6 +10,9 @@
 
 "[.grouped.data" <- function(x, i, j)
 {
+    if (i <= 0 || j <= 0)
+      stop("'i' and 'j' must be positive")
+    
     ## If 'i' is missing, all rows are presented.
     if (missing(i))
         i <- (1:(length(x$cj)-1))

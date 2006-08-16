@@ -16,8 +16,8 @@ coverage <- function(dist, param, d, u, density = TRUE, per.payment = TRUE, ...)
     F1 <- match.fun(paste("p", dist$dist, sep = ""))
     formals(F1)[dist$par] <- param
     Call <- match.call()
-    if (u < d)
-      stop("deductible must be less than limit.")
+    if (any(u < d))
+      stop("deductible must be less than limit")
     
     ## Create modified density
     if (density)
