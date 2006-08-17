@@ -1,0 +1,68 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-08-17 10:55-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: dpq.c:62 dpq.c:185 dpq.c:357 dpq.c:536 dpq.c:703 random.c:61 random.c:68
+#: random.c:142 random.c:149 random.c:237 random.c:244 random.c:331
+#: random.c:338
+msgid "invalid arguments"
+msgstr ""
+
+#: dpq.c:94 dpq.c:223 dpq.c:400 dpq.c:585 dpq.c:757 random.c:101 random.c:193
+#: random.c:285 random.c:377
+msgid "NAs produced"
+msgstr ""
+
+#: dpq.c:154
+msgid "internal error in do_dpq1"
+msgstr ""
+
+#: dpq.c:324
+msgid "internal error in do_dpq2"
+msgstr ""
+
+#: dpq.c:499
+msgid "internal error in do_dpq3"
+msgstr ""
+
+#: dpq.c:667
+msgid "internal error in do_dpq4"
+msgstr ""
+
+#: dpq.c:799
+msgid "internal error in do_dpq5"
+msgstr ""
+
+#: random.c:98
+msgid "internal error in do_random1"
+msgstr ""
+
+#: random.c:190
+msgid "internal error in do_random2"
+msgstr ""
+
+#: random.c:282
+msgid "internal error in do_random3"
+msgstr ""
+
+#: random.c:374
+msgid "internal error in do_random4"
+msgstr ""
+
+#: random.c:405
+msgid "internal error in do_random"
+msgstr ""
