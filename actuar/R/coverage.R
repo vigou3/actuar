@@ -8,7 +8,6 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-
 coverage <- function(dist, param, d, u, density = TRUE, per.payment = TRUE, ...)
 {
     f1 <- match.fun(paste("d", dist$dist, sep = ""))
