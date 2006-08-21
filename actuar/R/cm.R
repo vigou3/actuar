@@ -9,81 +9,124 @@
 ### 
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Louis-Philippe Pouliot
 
-cm <- function(formula, data = NULL, subset, weights, TOL=1E-6, echo=FALSE)
+cm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALSE)
 {
     cl <- match.call()
+
+    ## Check if 'formula' expresses hierarchical
+    ## interactions.
+    if (any(table(attr(terms(formula), "order")) > 1))
+        stop("only hierarchical interactions are supported")
+    
     ## Create a new data frame containing the appropriate contracts
     ## and years of experience.
-    
-    ## Extract the name of each variable.
-    vars <- all.vars(formula)
-    years <- all.vars(asOneSidedFormula(formula[[2]][[3]]))
-    levs <- all.vars(lhs <- asOneSidedFormula(formula[[2]][[2]]))
-    pfstruct <- c(rev(rownames(attr(terms(lhs),"factors"))), "pf")
+   
 
-    if (missing(data))
+    
+    pfstruct <- c(rev(rownames(attr(terms(formula),"factors"))))
+
+    if (missing(subset))
+        r <- TRUE
+    else{
+        e <- substitute(subset)
+        r <- eval(e, data, parent.frame())
+        if (!is.logical(r)) 
+            stop("'subset' must evaluate to logical")
+        r <- r & !is.na(r)
+        #if (length(unique(data[[struct]])) < length(r[r]))    ####### probleme... a voir
+         #   stop("Hierarchical conflict in 'formula'/'subset'")        
+    }
+
+    if (!inherits(data, "data.frame"))
+        stop("'data' must be a 'data frame'")
+        
+    if (missing(years))
     {
-        ## Stop if vectors of data in 'formula' are of different lengths.
-        ## There must be a nicer way...
-        l <- sapply(vars, function(x) length(get(x)))
-        ll <- sapply(l, function(x) x == l[1])
-        if (!all(ll))
-            stop("all objects in 'formula' must be of equal length")
-        if ("." %in% years)
-            stop("'.' operator is meaningless if 'data' is not specified")
-        data <- data.frame(sapply(vars, get))        
+        if (!missing(weights))
+            stop("ratios have to be specified if weigths are")
+        years <- suppressWarnings(names(data)[!(names(data) %in% pfstruct)])
     }
     else
     {
-        if (!inherits(data, "data.frame"))
-            stop("'data' must be a 'data frame'")
-        if (!all(vars %in% c(names(data), ".")))
-            stop("variables in 'formula' must be names from 'data' or existing 'R' objects") 
-        if ("." %in% years)
-            years <- suppressWarnings(names(data)[names(data) != pfstruct])       
+        nl <- as.list(1:ncol(data))
+        names(nl) <- names(data)
+        years <- eval(substitute(years), nl, parent.frame()) 
     }
-    ## Bind a column of '1's representing the affiliation to the one portfolio.
-    ## Used to symmetrize the further calculations.    
-    data <- cbind(pf  = rep(1, nrow(data)), data[c(levs, years)])
+    
+    #}
+    
+    ## Check if interactions are consistent with the data;
+    ## superior levels in the model should have smaller groups. ###mal dit
+    
+    nstruct <- c(length(years), sapply(pfstruct, function(x) length(unique(data[[x]]))), pf = 1)
+    #if (!all(sort(nstruct, decreasing = TRUE) == nstruct))
+        #stop("hierarchical interactions are inconsistent with the data")
 
+    ## This value will be used quite often.
+    ratios <- data[r, years]
+    
     ## If weights are not specified, use equal weights.
     if (missing(weights)) 
     {
-        if (any(is.na(data[years])))
+        if (any(is.na(ratios)))
             stop("missing values of ratios are not allowed when the matrix of weights is not specified")
-        weights <- data
-        weights[names(weights) != pfstruct] <- sapply(weights[years], function(x) rep(1, length(x)))
+        wt <- matrix(1, nrow(data[r, ]), length(years))
     }
     else
     {
-        if (ncol(data[years]) < 2)
+        if (ncol(ratios) < 2)
             stop("there must be at least one contract with at least two years of experience")
         if (nrow(data) < 2)
-            stop("there must be more than one contract")        
-        weights <- cbind(data[pfstruct], weights)
-        names(weights)[names(weights) != pfstruct] <- years
-        if (!identical(which(is.na(data)), which(is.na(weights))))
-            stop("missing values are inconsistent in 'ratios'/'weights' data")            
+            stop("there must be more than one contract")
+        
+        weights <- eval(substitute(weights), nl, parent.frame())
+        if (length(weights) != length(years))
+            stop("'years' and 'weights' must have the same length")
+        wt <- data[r, weights]
+        if (!identical(which(is.na(ratios)), which(is.na(wt))))
+            stop("missing values are inconsistent in 'ratios'/'weights' data")
+        
     }
     
-    nlevels <- length(pfstruct) - 1    
-    nstruct <- c(length(years), sapply(pfstruct, function(x) length(unique(data[[x]]))))
-
-    ## s^2
-    ind.weight <- rowSums(weights[years], na.rm = TRUE)
-    ind.means <- rowSums(data[years]*weights[years], na.rm = TRUE)/ind.weight
-    s2num <- sum(weights[years]*(data[years]-ind.means)^2)
-    denoms <- numeric(nlevels + 1)
+    ## Coerce the structural part of the data frame to class 'factor', with
+    ## levels considering the order of the first occurence of a value in the frame.
     
-    for (i in 2:(length(denoms))) denoms[i] <- nstruct[i] - nstruct[i+1]
-    s2 <- s2num/(denoms[1] <- length(na.omit(unlist(data[years]))) - nstruct[[2]])
+    ## Bind a column of '1's representing the affiliation to the one global portfolio.
+    ## Used to symmetrize further calculations.
+    data <- cbind(pf = 1, data)
+    pfstruct <- c(pfstruct, "pf")
+    fstruct <- data.frame(sapply(as.list(data[pfstruct]), function(x) factor(x, levels = unique(x))))[r, ]
+    
+    nlevels <- length(pfstruct) - 1
+    
+    
+    ## A list expressing the affiliation structure
+    aff <- vector("list", nlevels)
+    for (i in 1:nlevels)
+        aff[[i]] <- tapply(fstruct[[pfstruct[i + 1]]], fstruct[[pfstruct[i]]], function(x) unique(x))
+    
+        
+    
+    
+    ind.weight <- rowSums(wt, na.rm = TRUE)  
+    ind.means <- rowSums(ratios * wt, na.rm = TRUE) / ind.weight
+    
+    ## s^2        
+    s2num <- sum(wt * (ratios - ind.means) ^ 2, na.rm = TRUE)
+    
+    denoms <- numeric(nlevels + 1)
+    for (i in 2:(length(denoms))) denoms[i] <- nstruct[i] - nstruct[i + 1]
+    
+    s2 <- s2num /(denoms[1] <- sum(!is.na(ratios)) - nstruct[[2]])
 
     ## Create vectors for values to be outputted.
     
     param <- rep(s2, nlevels + 1)        # The structure parameters
     cred <- vector("list", nlevels)      # The credibility factors
-    w. <- vector("list", nlevels)        # The credibility weights
-    M <- vector("list", nlevels)         # The individual and collective estimators  
+    w. <- vector("list", nlevels + 1)    # The credibility weights
+    M <- vector("list", nlevels + 1)     # The individual and collective estimators
+
+    
      
     ## Avoid evaluating argument 'echo' at every iteration below
     if (echo)
@@ -99,14 +142,16 @@ cm <- function(formula, data = NULL, subset, weights, TOL=1E-6, echo=FALSE)
         ## Individual estimators are initialized at every iteration.
         weight <- ind.weight
         means <- ind.means
+
+    
+        
         for (i in 2:(nlevels + 1))
         {
-            cred[[i-1]] <- 1/(1 + param[i-1]/(param[i] * weight))
-            aff <- tapply(data[[pfstruct[i]]], data[[pfstruct[i-1]]], function(x) unique(x)) 
-            weight. <- tapply(cred[[i-1]], aff, sum)
-            means. <- tapply(cred[[i-1]] * means, aff, sum) / weight.
+            cred[[i-1]] <- 1/(1 + param[i-1]/(param[i] * weight)) 
+            weight. <- tapply(cred[[i-1]], aff[[i-1]], sum)
+            means. <- tapply(cred[[i-1]] * means, aff[[i-1]], sum) / weight.
             param[i] <- sum(cred[[i-1]] *
-                            (means - rep(means., table(aff))[order(aff)])^2) / denoms[i]
+                            (means - rep(means., table(aff[[i-1]]))[order(aff[[i-1]])])^2) / denoms[i]
             
             w.[[i-1]] <- weight
             weight <- weight.
@@ -118,37 +163,40 @@ cm <- function(formula, data = NULL, subset, weights, TOL=1E-6, echo=FALSE)
         if (max(abs((param[p] - paramt[p])/paramt[p])) < TOL) 
                 break        
     }
-    names(param) <- c("s2", letters[1:nlevels])
-    list(param = param, weights = w., means = M, cred = cred)
+    w.[[length(w.)]] <- weight.
+    M[[length(M)]] <- means.
+    res <- list(param = param,
+                weights = w.,
+                means = M,
+                cred = cred,
+                call = cl,
+                data = data[r, ],
+                pfstruct = pfstruct,
+                aff = aff)
+    class(res) <- "cm"
+    res
 }
-                                        
+
+print.cm <- function(x, ...)
+{
+    cat("\nCall: ", deparse(x$call), "\n\n")
+    cat("Structure Parameters Estimators\n\n")
+    cat("  Collective premium: ", x$means[[length(x$means)]], "\n")
+    cat("  Expected variance: ", x$param[1],"\n")
+    for (i in (l <- 2:length(x$param)))
+        cat(" ", letters[i-1], " :", x$param[i], "\n")
+    for (i in (l-1))
+    {
+        a <- sapply(aff[[i]], function(x) as.character(unique(data[pfstruct][[i + 1]]))[x]) 
+        cat("\nLevel: ", pfstruct[i], "\n")
+        m <- data.frame(x$mean[[i]], x$cred[[i]], a)
+        dimnames(m) <- list(unique(unlist(x$data[[x$pfstruct[i]]])),
+                            c("ind. estimator", "cred. factor", paste(x$pfstruct[i + 1], "affiliation")))
+                            
+        print(m)
+        
+    }
     
-if (missing(subset))
-    r <- TRUE
-else{
-    e <- substitute(subset)
-    r <- eval(e, data, parent.frame())
-    if (!is.logical(r)) 
-        stop("'subset' must evaluate to logical")
-    r <- r & !is.na(r)
-    if (length(unique(data[[struct]])) < length(r[r]))    ####### probleme... a voir
-        stop("Hierarchical conflict in 'formula'/'subset'")        
 }
-if (length(unique(data[[struct]])) != length(data[[struct]]))
-    data <- t(as.data.frame(lapply(by(data, data[struct],
-                                      match.fun(quote(subset)),
-                                      select = years),
-                                   colSums)))
-else 
 
 
-
-
-
-
-
-        
-            
-                              
-
-        
