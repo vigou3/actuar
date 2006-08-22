@@ -1,0 +1,17 @@
+predict.cm <- function(object, ...)
+{
+    nLevels <- length(object$means)
+    premiums <- vector("list", nLevels)
+    cred <- rev(object$cred)
+    premiums[[1]] <- as.vector(object$means[[nLevels]])
+    aff <- rev(object$aff)
+    for (i in 2:nLevels)
+    {
+        M <- rep(premiums[[i-1]], table(aff[[i-1]]))[order(aff[[i-1]])]
+        cred <- as.vector(rev(object$cred)[[i-1]])
+        means <- as.vector(rev(object$means)[[i]])        
+        premiums[[i]] <- cred * means + (1 - cred) * M
+        names(premiums[[i]]) <- unique(object$data[rev(object$pfstruct)][[i]])
+    }
+    premiums[[nLevels]]
+}

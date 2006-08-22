@@ -93,16 +93,17 @@ cm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALS
     
     ## Bind a column of '1's representing the affiliation to the one global portfolio.
     ## Used to symmetrize further calculations.
-    data <- cbind(pf = 1, data)
+    data <- cbind(pf = 1, data[r, ])    
     pfstruct <- c(pfstruct, "pf")
-    fstruct <- data.frame(sapply(as.list(data[pfstruct]), function(x) factor(x, levels = unique(x))))[r, ]
+    nLevels <- length(pfstruct)
+    fstruct <- data.frame(sapply(data[pfstruct], function(x) factor(x, levels = unique(x))))
     
-    nlevels <- length(pfstruct) - 1
+    
     
     
     ## A list expressing the affiliation structure
-    aff <- vector("list", nlevels)
-    for (i in 1:nlevels)
+    aff <- vector("list", nLevels - 1)
+    for (i in 1:(nlevels - 1))
         aff[[i]] <- tapply(fstruct[[pfstruct[i + 1]]], fstruct[[pfstruct[i]]], function(x) unique(x))
     
         
@@ -112,19 +113,19 @@ cm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALS
     ind.means <- rowSums(ratios * wt, na.rm = TRUE) / ind.weight
     
     ## s^2        
-    s2num <- sum(wt * (ratios - ind.means) ^ 2, na.rm = TRUE)
+    s2 <- sum(wt * (ratios - ind.means) ^ 2, na.rm = TRUE)
     
-    denoms <- numeric(nlevels + 1)
-    for (i in 2:(length(denoms))) denoms[i] <- nstruct[i] - nstruct[i + 1]
+    denoms <- numeric(nlevels)
+    for (i in 2:nlevels) denoms[i] <- nstruct[i] - nstruct[i + 1]
     
-    s2 <- s2num /(denoms[1] <- sum(!is.na(ratios)) - nstruct[[2]])
+    s2 <- s2 /(denoms[1] <- sum(!is.na(ratios)) - nstruct[[2]])
 
     ## Create vectors for values to be outputted.
     
-    param <- rep(s2, nlevels + 1)        # The structure parameters
-    cred <- vector("list", nlevels)      # The credibility factors
-    w. <- vector("list", nlevels + 1)    # The credibility weights
-    M <- vector("list", nlevels + 1)     # The individual and collective estimators
+    param <- rep(s2, nlevels)        # The structure parameters
+    cred <- vector("list", nlevels - 1)      # The credibility factors
+    w. <- vector("list", nlevels)    # The credibility weights
+    M <- vector("list", nlevels)     # The individual and collective estimators
 
     
      
@@ -145,38 +146,38 @@ cm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALS
 
     
         
-        for (i in 2:(nlevels + 1))
+        for (i in 1:(nlevels - 1))
         {
-            cred[[i-1]] <- 1/(1 + param[i-1]/(param[i] * weight)) 
-            weight. <- tapply(cred[[i-1]], aff[[i-1]], sum)
-            means. <- tapply(cred[[i-1]] * means, aff[[i-1]], sum) / weight.
-            param[i] <- sum(cred[[i-1]] *
-                            (means - rep(means., table(aff[[i-1]]))[order(aff[[i-1]])])^2) / denoms[i]
+            cred[[i]] <- 1/(1 + param[i]/(param[i + 1] * weight)) 
+            weight. <- tapply(cred[[i]], aff[[i]], sum)
+            means. <- tapply(cred[[i]] * means, aff[[i]], sum) / weight.
+            param[i + 1] <- sum(cred[[i]] *
+                            (means - rep(means., table(aff[[i]]))[order(aff[[i]])])^2) / denoms[i + 1]
             
-            w.[[i-1]] <- weight
+            w.[[i]] <- weight
             weight <- weight.
 
-            M[[i-1]] <- means
+            M[[i]] <- means
             means <- means.
         }
         p <- ifelse(any(param <= TOL), which(param > TOL), TRUE)
         if (max(abs((param[p] - paramt[p])/paramt[p])) < TOL) 
                 break        
     }
-    w.[[length(w.)]] <- weight.
-    M[[length(M)]] <- means.
+    w.[[nlevels]] <- weight.
+    M[[nlevels]] <- means.
     res <- list(param = param,
                 weights = w.,
                 means = M,
                 cred = cred,
                 call = cl,
-                data = data[r, ],
+                data = data,
                 pfstruct = pfstruct,
                 aff = aff)
     class(res) <- "cm"
     res
 }
-
+print.cm <- function(x, ...) NextMethod()
 print.cm <- function(x, ...)
 {
     cat("\nCall: ", deparse(x$call), "\n\n")
@@ -187,8 +188,8 @@ print.cm <- function(x, ...)
         cat(" ", letters[i-1], " :", x$param[i], "\n")
     for (i in (l-1))
     {
-        a <- sapply(aff[[i]], function(x) as.character(unique(data[pfstruct][[i + 1]]))[x]) 
-        cat("\nLevel: ", pfstruct[i], "\n")
+        a <- sapply(x$aff[[i]], function(z) as.character(unique(x$data[x$pfstruct][[i + 1]]))[z]) 
+        cat("\nLevel: ", x$pfstruct[i], "\n")
         m <- data.frame(x$mean[[i]], x$cred[[i]], a)
         dimnames(m) <- list(unique(unlist(x$data[[x$pfstruct[i]]])),
                             c("ind. estimator", "cred. factor", paste(x$pfstruct[i + 1], "affiliation")))
