@@ -33,5 +33,4 @@ model.freq <- list(dist = "pois", par = c(lambda = 4))
 model.sev <- list(dist = "norm", par = c(mean = 10, sd = 1.5))
 simS(1e+05, model.freq, model.sev)
 }
-\keyword{distribution}
 \keyword{models}

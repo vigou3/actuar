@@ -1,4 +1,4 @@
-predict.cm <- function(object, ...)
+predict.ghcm <- function(object, ...)
 {
     nLevels <- length(object$means)
     premiums <- vector("list", nLevels)
@@ -11,7 +11,7 @@ predict.cm <- function(object, ...)
         cred <- as.vector(rev(object$cred)[[i-1]])
         means <- as.vector(rev(object$means)[[i]])        
         premiums[[i]] <- cred * means + (1 - cred) * M
-        names(premiums[[i]]) <- unique(object$data[rev(object$pfstruct)][[i]])
+        names(premiums[[i]]) <- unique(object$data[rev(object$levs)][[i]])
     }
-    premiums[[nLevels]]
+    premiums
 }

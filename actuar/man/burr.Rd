@@ -55,7 +55,7 @@
 \code{dburr} gives the density, \code{pburr} gives the distribution function,
 \code{qburr} gives the quantile function, \code{rburr} generates random
 deviates, \code{mburr} gives the kth raw moment, and \code{levburr} gives
-the kth moment of the limited loss variabl.
+the kth moment of the limited loss variable.
 
 Invalid arguments will return warning.
 }

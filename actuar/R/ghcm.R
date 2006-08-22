@@ -1,6 +1,6 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Fitting Credibility Models:
+### Generalized Hierarchical Credibility Models:
 ###
 ### Fit a credibility model in the formulation of variance components 
 ### as described in Dannenburg, Kaas and Goovaerts (1996). Models supported
@@ -9,21 +9,19 @@
 ### 
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Louis-Philippe Pouliot
 
-cm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALSE)
+ghcm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALSE)
 {
     cl <- match.call()
 
     ## Check if 'formula' expresses hierarchical
     ## interactions.
     if (any(table(attr(terms(formula), "order")) > 1))
-        stop("only hierarchical interactions are supported")
+        stop("interactions expressed in 'formula' not recognized as supported")
     
     ## Create a new data frame containing the appropriate contracts
     ## and years of experience.
    
-
-    
-    pfstruct <- c(rev(rownames(attr(terms(formula),"factors"))))
+    levs <- c(rev(rownames(attr(terms(formula),"factors"))))
 
     if (missing(subset))
         r <- TRUE
@@ -44,7 +42,7 @@ cm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALS
     {
         if (!missing(weights))
             stop("ratios have to be specified if weigths are")
-        years <- suppressWarnings(names(data)[!(names(data) %in% pfstruct)])
+        years <- suppressWarnings(names(data)[!(names(data) %in% levs)])
     }
     else
     {
@@ -53,12 +51,11 @@ cm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALS
         years <- eval(substitute(years), nl, parent.frame()) 
     }
     
-    #}
     
     ## Check if interactions are consistent with the data;
     ## superior levels in the model should have smaller groups. ###mal dit
     
-    nstruct <- c(length(years), sapply(pfstruct, function(x) length(unique(data[[x]]))), pf = 1)
+    nstruct <- c(length(years), sapply(levs, function(x) length(unique(data[[x]]))), pf = 1)
     #if (!all(sort(nstruct, decreasing = TRUE) == nstruct))
         #stop("hierarchical interactions are inconsistent with the data")
 
@@ -84,8 +81,7 @@ cm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALS
             stop("'years' and 'weights' must have the same length")
         wt <- data[r, weights]
         if (!identical(which(is.na(ratios)), which(is.na(wt))))
-            stop("missing values are inconsistent in 'ratios'/'weights' data")
-        
+            stop("missing values are inconsistent in 'ratios'/'weights' data")        
     }
     
     ## Coerce the structural part of the data frame to class 'factor', with
@@ -94,17 +90,17 @@ cm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALS
     ## Bind a column of '1's representing the affiliation to the one global portfolio.
     ## Used to symmetrize further calculations.
     data <- cbind(pf = 1, data[r, ])    
-    pfstruct <- c(pfstruct, "pf")
-    nLevels <- length(pfstruct)
-    fstruct <- data.frame(sapply(data[pfstruct], function(x) factor(x, levels = unique(x))))
+    levs <- c(levs, "pf")
+    nLevels <- length(levs)
+    fstruct <- data.frame(sapply(data[levs], function(x) factor(x, levels = unique(x))))
     
     
     
     
     ## A list expressing the affiliation structure
     aff <- vector("list", nLevels - 1)
-    for (i in 1:(nlevels - 1))
-        aff[[i]] <- tapply(fstruct[[pfstruct[i + 1]]], fstruct[[pfstruct[i]]], function(x) unique(x))
+    for (i in 1:(nLevels - 1))
+        aff[[i]] <- tapply(fstruct[[levs[i + 1]]], fstruct[[levs[i]]], function(x) unique(x))
     
         
     
@@ -115,17 +111,17 @@ cm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALS
     ## s^2        
     s2 <- sum(wt * (ratios - ind.means) ^ 2, na.rm = TRUE)
     
-    denoms <- numeric(nlevels)
-    for (i in 2:nlevels) denoms[i] <- nstruct[i] - nstruct[i + 1]
+    denoms <- numeric(nLevels)
+    for (i in 2:nLevels) denoms[i] <- nstruct[i] - nstruct[i + 1]
     
     s2 <- s2 /(denoms[1] <- sum(!is.na(ratios)) - nstruct[[2]])
 
     ## Create vectors for values to be outputted.
     
-    param <- rep(s2, nlevels)        # The structure parameters
-    cred <- vector("list", nlevels - 1)      # The credibility factors
-    w. <- vector("list", nlevels)    # The credibility weights
-    M <- vector("list", nlevels)     # The individual and collective estimators
+    param <- rep(s2, nLevels)        # The structure parameters
+    cred <- vector("list", nLevels - 1)      # The credibility factors
+    w. <- vector("list", nLevels)    # The credibility weights
+    M <- vector("list", nLevels)     # The individual and collective estimators
 
     
      
@@ -146,7 +142,7 @@ cm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALS
 
     
         
-        for (i in 1:(nlevels - 1))
+        for (i in 1:(nLevels - 1))
         {
             cred[[i]] <- 1/(1 + param[i]/(param[i + 1] * weight)) 
             weight. <- tapply(cred[[i]], aff[[i]], sum)
@@ -156,7 +152,6 @@ cm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALS
             
             w.[[i]] <- weight
             weight <- weight.
-
             M[[i]] <- means
             means <- means.
         }
@@ -164,21 +159,20 @@ cm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALS
         if (max(abs((param[p] - paramt[p])/paramt[p])) < TOL) 
                 break        
     }
-    w.[[nlevels]] <- weight.
-    M[[nlevels]] <- means.
+    w.[[nLevels]] <- weight.
+    M[[nLevels]] <- means.
     res <- list(param = param,
                 weights = w.,
                 means = M,
                 cred = cred,
                 call = cl,
                 data = data,
-                pfstruct = pfstruct,
+                levs = levs,
                 aff = aff)
-    class(res) <- "cm"
+    class(res) <- "ghcm"
     res
 }
-print.cm <- function(x, ...) NextMethod()
-print.cm <- function(x, ...)
+print.ghcm <- function(x, ...)
 {
     cat("\nCall: ", deparse(x$call), "\n\n")
     cat("Structure Parameters Estimators\n\n")
@@ -188,16 +182,13 @@ print.cm <- function(x, ...)
         cat(" ", letters[i-1], " :", x$param[i], "\n")
     for (i in (l-1))
     {
-        a <- sapply(x$aff[[i]], function(z) as.character(unique(x$data[x$pfstruct][[i + 1]]))[z]) 
-        cat("\nLevel: ", x$pfstruct[i], "\n")
+        a <- sapply(x$aff[[i]], function(z) as.character(unique(x$data[x$levs][[i + 1]]))[z]) 
+        cat("\nLevel: ", x$levs[i], "\n")
         m <- data.frame(x$mean[[i]], x$cred[[i]], a)
-        dimnames(m) <- list(unique(unlist(x$data[[x$pfstruct[i]]])),
-                            c("ind. estimator", "cred. factor", paste(x$pfstruct[i + 1], "affiliation")))
-                            
-        print(m)
-        
-    }
-    
+        dimnames(m) <- list(unique(unlist(x$data[[x$levs[i]]])),
+                            c("ind. estimator", "cred. factor", paste(x$levs[i + 1], "affiliation")))                           
+        print(m)        
+    }    
 }
 
 

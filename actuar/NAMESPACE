@@ -3,7 +3,7 @@ useDynLib(actuar, .registration = TRUE)
 
 ### Functions
 export(## Credibility theory
-       bstraub, rearrangepf, simpf, severity,
+       bstraub, rearrangepf, simpf, severity, ghcm,
        ## Risk theory
        panjer, exact, np2, exact, normal, simS, aggregateDist,
        ## One parameter distributions
@@ -72,3 +72,5 @@ S3method(print, elev)
 S3method(plot, elev)
 S3method(print, mde)
 S3method(print, mcoverage)
+S3method(print, ghcm)
+S3method(predict, ghcm)
