@@ -13,5 +13,5 @@ predict.ghcm <- function(object, ...)
         premiums[[i]] <- cred * means + (1 - cred) * M
         names(premiums[[i]]) <- unique(object$data[rev(object$levs)][[i]])
     }
-    premiums
+    premiums[[nLevels]]
 }

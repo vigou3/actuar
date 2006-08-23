@@ -9,7 +9,7 @@
 ### 
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Louis-Philippe Pouliot
 
-ghcm <- function(formula, data = NULL, years, weights, subset, TOL=1E-6, echo=FALSE)
+ghcm <- function(formula, data, years, weights, subset, TOL=1E-6, echo=FALSE)
 {
     cl <- match.call()
 
