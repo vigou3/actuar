@@ -8,21 +8,27 @@
 }
 \arguments{
   \item{object}{Object of class inheriting from \code{"ghcm"}}
-  \item{\dots}{further arguments passed to or from other methods.}
+  \item{\dots}{potential further arguments required by generic.}  
 }
 \details{
-  To see how premiums are calculated, let us take a portfolio with
-  two hierarchical levels: sector subsctripted j, and contracts
-  subsctripted i.
-  Let \eqn{B} be 
-  
-  The risk premium of sector \eqn{j} is 
+  \code{ghcm} objects contain all the estimated values needed to
+  calculate the credibility premiums. To give an example of how the
+  premiums are computed, let us consider a portfolio divided in sectors,
+  which are further divided in classes, which themselves contain
+  homogeneous insureds. Let subsctripts \eqn{p, k, i} denote
+  respectively the different sectors, classes, and insureds. Then, the
+  credibility premium, \eqn{P_i^{(kp)}}{P[i]}, is determined as follows:
 
-  \deqn{\hat{M}_j = z_p^{(2)} + (1 - z_i) X_{zw},}{z[i] X[iw] + (1 - z[i]) X[zw],}
-
-
-  ah putain jsais pas koi mettre
-  ..............................
+  \deqn{P_i^{(kp)} = z_i^{(kp)} B_i^{(kp)} + (1 - z_i^{(kp)})
+    \hat{M}_{kp},}{P[i] = z[i] B[i] + (1 - z[i]) M[kp],}
+  \deqn{\hat{M}_{kp} = z_k^{(p)} B_k^{(p)} + (1 - z_k^{(p)})
+    \hat{M}_{k},}{M[kp] = z[k] B[k] + (1 - z[k]) M[k],}
+  \deqn{\hat{M}_{k} = z_p B_p + (1 - z_p) \hat{M},}{M[k] = z[p] B[p] +
+    (1 - z[p]) M,}
+  where \eqn{B_i^{(kp)}, B_k^{(p)}, B_p}{B[i], B[k] , B[p]} are the
+  contract, class, and sector linearly sufficient statictics,
+  respectively. \eqn{\hat{M}_{kp}, \hat{M}_{k}, \hat{M}}{M[kp], M[k], M}
+  are respectively the class, sector, and portfolio risk premiums.
 }
 \value{
   Returns a vector of of credibility premiums for each contract.

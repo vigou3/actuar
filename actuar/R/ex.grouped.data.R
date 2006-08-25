@@ -9,10 +9,7 @@
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Mathieu Pigeon
 
 "[.grouped.data" <- function(x, i, j)
-{
-    if (i <= 0 || j <= 0)
-      stop("'i' and 'j' must be positive")
-    
+{   
     ## If 'i' is missing, all rows are presented.
     if (missing(i))
         i <- (1:(length(x$cj)-1))
@@ -20,15 +17,18 @@
     ## If 'j' is missing, all columns are presented.
     if (missing(j))
       {
-        nj <- x$nj[-1]
-        nj <- c(0, nj[(i)])
-        cj <- x$cj
-        cj <- cj[c((i), max(i) + 1)]
-        j <- 0
-        res = list(cj = cj, nj =  nj)
-        class(res) <- c("grouped.data", class(res))
-        attr(res, "call") <- sys.call()
-        attr(res, "j") <- FALSE
+          if (i <= 0)
+              stop("'i' and 'j' must be positive")
+          
+          nj <- x$nj[-1]
+          nj <- c(0, nj[(i)])
+          cj <- x$cj
+          cj <- cj[c((i), max(i) + 1)]
+          j <- 0
+          res = list(cj = cj, nj =  nj)
+          class(res) <- c("grouped.data", class(res))
+          attr(res, "call") <- sys.call()
+          attr(res, "j") <- FALSE
       }
 
     ## Create an object of class 'grouped.data' or 'numeric'.
@@ -50,3 +50,5 @@
     }
     res
 }
+
+    

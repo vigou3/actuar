@@ -62,7 +62,8 @@ ghcm(formula, data, years, weights, subset, TOL = 1E-6, echo = FALSE)
   following components:
   \item{param}{a vector containing the structure parameters}
   \item{weights}{a list containing, for each level, the vector of weights}
-  \item{means}{a list containing, for each level, the vector of means}
+  \item{means}{a list containing the linearly sufficient statistics of
+    each level}
   \item{cred}{a list containing, for each level, the vector of
     credibility factors}
   \item{call}{the matched call}
