@@ -12,7 +12,7 @@ elev <- function(x, ...)
     UseMethod("elev")
 }
 
-elev.default <- function(x)
+elev.default <- function(x, ...)
 {
     if (!exists("Call", inherits = FALSE))
         Call <- match.call()
@@ -25,7 +25,7 @@ elev.default <- function(x)
     FUN
 }
 
-elev.grouped.data <- function(x)
+elev.grouped.data <- function(x, ...)
 {
     if (!exists("Call", inherits = FALSE))
         Call <- match.call()
@@ -35,7 +35,7 @@ elev.grouped.data <- function(x)
         r <- length(nj)
 
         limit <-  ifelse (limit > cj[length(cj)], cj[length(cj)], limit)
-          
+
         ## Class in which the limit is located.
         cl <- cut(limit, cj, include.lowest = TRUE, labels = FALSE)
 
@@ -57,7 +57,7 @@ elev.grouped.data <- function(x)
 
         ## Total
         (res1 + res2 + res3)/sum(nj)
-      
+
     }
     assign("cj", x$cj, env = environment(FUN))
     assign("nj", x$nj[-1], env = environment(FUN))
