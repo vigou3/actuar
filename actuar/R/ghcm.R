@@ -16,10 +16,11 @@ ghcm <- function(formula, data, years, weights, subset, TOL=1E-6, echo=FALSE)
     ## Check if 'formula' expresses hierarchical
     ## interactions.
     if (any(table(attr(terms(formula), "order")) > 1))
-        stop("interactions expressed in 'formula' not recognized as supported")
+        stop("interactions expressed in 'formula' not supported")
     
-    ## Create a new data frame containing the appropriate contracts
-    ## and years of experience.
+    ## A subset of 'data' is created, and it is then divided into
+    ## three data frames: one for the portfolio structure, one for the ratios
+    ## and one for the weights. 
    
     levs <- c(rev(rownames(attr(terms(formula),"factors"))))
 
@@ -52,14 +53,12 @@ ghcm <- function(formula, data, years, weights, subset, TOL=1E-6, echo=FALSE)
     }
     
     
-    ## Check if interactions are consistent with the data;
-    ## superior levels in the model should have smaller groups. ###mal dit
+    ## Check if interactions are consistent with the data
     
     nstruct <- c(length(years), sapply(levs, function(x) length(unique(data[[x]]))), pf = 1)
-    #if (!all(sort(nstruct, decreasing = TRUE) == nstruct))
-        #stop("hierarchical interactions are inconsistent with the data")
+    if (!all(sort(nstruct, decreasing = TRUE) == nstruct))
+        stop("hierarchical interactions are inconsistent with the data")
 
-    ## This value will be used quite often.
     ratios <- data[r, years]
     
     ## If weights are not specified, use equal weights.
@@ -89,22 +88,19 @@ ghcm <- function(formula, data, years, weights, subset, TOL=1E-6, echo=FALSE)
     
     ## Bind a column of '1's representing the affiliation to the one global portfolio.
     ## Used to symmetrize further calculations.
+    
     data <- cbind(pf = 1, data[r, ])    
     levs <- c(levs, "pf")
     nLevels <- length(levs)
     fstruct <- data.frame(sapply(data[levs], function(x) factor(x, levels = unique(x))))
     
-    
-    
-    
+   
     ## A list expressing the affiliation structure
     aff <- vector("list", nLevels - 1)
     for (i in 1:(nLevels - 1))
         aff[[i]] <- tapply(fstruct[[levs[i + 1]]], fstruct[[levs[i]]], function(x) unique(x))
     
-        
-    
-    
+  
     ind.weight <- rowSums(wt, na.rm = TRUE)  
     ind.means <- rowSums(ratios * wt, na.rm = TRUE) / ind.weight
     
@@ -122,8 +118,6 @@ ghcm <- function(formula, data, years, weights, subset, TOL=1E-6, echo=FALSE)
     cred <- vector("list", nLevels - 1)      # The credibility factors
     w. <- vector("list", nLevels)    # The credibility weights
     M <- vector("list", nLevels)     # The individual and collective estimators
-
-    
      
     ## Avoid evaluating argument 'echo' at every iteration below
     if (echo)
@@ -139,8 +133,6 @@ ghcm <- function(formula, data, years, weights, subset, TOL=1E-6, echo=FALSE)
         ## Individual estimators are initialized at every iteration.
         weight <- ind.weight
         means <- ind.means
-
-    
         
         for (i in 1:(nLevels - 1))
         {
@@ -159,10 +151,10 @@ ghcm <- function(formula, data, years, weights, subset, TOL=1E-6, echo=FALSE)
         if (max(abs((param[p] - paramt[p])/paramt[p])) < TOL) 
                 break        
     }
-    w.[[nLevels]] <- weight.
+    w.[[nLevels]] <- weight. ## is it necessary?
     M[[nLevels]] <- means.
     res <- list(param = param,
-                weights = w.,
+                weights = w., ## is it?
                 means = M,
                 cred = cred,
                 call = cl,

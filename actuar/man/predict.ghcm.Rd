@@ -31,7 +31,7 @@
   are respectively the class, sector, and portfolio risk premiums.
 }
 \value{
-  Returns a vector of of credibility premiums for each contract.
+  Returns a vector of credibility premiums for each contract.
 }
 \references{
   Goulet, V. (1998), \emph{Principles and Application of Credibility

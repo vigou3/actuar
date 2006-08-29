@@ -40,11 +40,11 @@ ghcm(formula, data, years, weights, subset, TOL = 1E-6, echo = FALSE)
   A formula describing this hierarchical interaction would
   then be \eqn{~ sector + sector:class + sector:class:insured}, given
   that the terms of the formula are column names in \code{data}. At the
-  moment, \code{ghcm} can only handle a hierarchical model with any given number of
-  levels, for which the Buhlmann-Straub model is a special case where
+  moment, \code{ghcm} can only handle a hierarchical model (with any given number of
+  levels), for which the Buhlmann-Straub model is a special case where
   there is only one level. Consequently, the formula has to be
   equivalent to \eqn{~ a + a:b + a:b:c + a:b:c:d + ...}. As there can be many
-  equivalents to one formula, more formally, we expect the
+  equivalents to one formula, more formally, it is expected that the
   \code{order} attribute of \code{terms(formula)} to be the sequence of
   the \code{n} first integers, where \code{n} is the number of levels.
 

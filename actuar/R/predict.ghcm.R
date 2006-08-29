@@ -1,3 +1,12 @@
+### ===== actuar: an R package for Actuarial Science =====
+###
+### 'Predict' method for Generalized Hierarchical Credibility Models
+###
+### Predicted values of claim ratios (credibility premiums)
+### based on hierarchical credibility model object.
+###
+### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Louis-Philippe Pouliot
+
 predict.ghcm <- function(object, ...)
 {
     nLevels <- length(object$means)
@@ -13,5 +22,6 @@ predict.ghcm <- function(object, ...)
         premiums[[i]] <- cred * means + (1 - cred) * M
         names(premiums[[i]]) <- unique(object$data[rev(object$levs)][[i]])
     }
-    premiums[[nLevels]]
+    names(premiums) <- rev(object$levs)
+    premiums
 }
