@@ -7,6 +7,5 @@
 ###          Mathieu Pigeon
 
 
-knots.elev <- function(fn, ...)
+knots.elev <- function(Fn, ...)
     eval(expression(cj), env = environment(fn))
-
