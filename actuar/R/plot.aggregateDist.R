@@ -14,7 +14,7 @@ plot.aggregateDist <- function(x, xlim, ...)
 
         ## Method for class 'ecdf' will most
         ## probably be used.
-        NextMethod(ylab = "", main = main) 
+        NextMethod(ylab = "", main = main, ...) 
     }
     else
     {
@@ -26,8 +26,8 @@ plot.aggregateDist <- function(x, xlim, ...)
             sd <- sqrt(get("var", environment(x)))
             xlim <- c(mean - 3*sd, mean + 3*sd)
         }
-        curve(x, main = main, ylab = "", xlim = xlim, ylim = c(0,1))
+        curve(x, main = main, ylab = "", xlim = xlim, ylim = c(0,1), ...)
     }
     mtext(expression(F*scriptstyle(s)(x)), side = 2, line = 2)
-    mtext(comment(x), line = 0)    
+    mtext(comment(x), line = 0.4)    
 }

@@ -31,9 +31,7 @@ ghcm <- function(formula, data, years, weights, subset, TOL=1E-6, echo=FALSE)
         r <- eval(e, data, parent.frame())
         if (!is.logical(r)) 
             stop("'subset' must evaluate to logical")
-        r <- r & !is.na(r)
-        #if (length(unique(data[[struct]])) < length(r[r]))    ####### probleme... a voir
-         #   stop("Hierarchical conflict in 'formula'/'subset'")        
+        r <- r & !is.na(r)        
     }
 
     if (!inherits(data, "data.frame"))
@@ -99,8 +97,7 @@ ghcm <- function(formula, data, years, weights, subset, TOL=1E-6, echo=FALSE)
     aff <- vector("list", nLevels - 1)
     for (i in 1:(nLevels - 1))
         aff[[i]] <- tapply(fstruct[[levs[i + 1]]], fstruct[[levs[i]]], function(x) unique(x))
-    
-  
+      
     ind.weight <- rowSums(wt, na.rm = TRUE)  
     ind.means <- rowSums(ratios * wt, na.rm = TRUE) / ind.weight
     
@@ -151,10 +148,8 @@ ghcm <- function(formula, data, years, weights, subset, TOL=1E-6, echo=FALSE)
         if (max(abs((param[p] - paramt[p])/paramt[p])) < TOL) 
                 break        
     }
-    w.[[nLevels]] <- weight. ## is it necessary?
     M[[nLevels]] <- means.
     res <- list(param = param,
-                weights = w., ## is it?
                 means = M,
                 cred = cred,
                 call = cl,
@@ -170,15 +165,20 @@ print.ghcm <- function(x, ...)
     cat("Structure Parameters Estimators\n\n")
     cat("  Collective premium: ", x$means[[length(x$means)]], "\n")
     cat("  Expected variance: ", x$param[1],"\n")
+    struct <- x$data[rev(x$levs)][-1]
     for (i in (l <- 2:length(x$param)))
         cat(" ", letters[i-1], " :", x$param[i], "\n")
     for (i in (l-1))
     {
-        a <- sapply(x$aff[[i]], function(z) as.character(unique(x$data[x$levs][[i + 1]]))[z]) 
+        
+        
+        rows <- match(unique(struct[[x$levs[i]]]), struct[[x$levs[i]]])
+        cols <- seq(1, length(levs) - i)
         cat("\nLevel: ", x$levs[i], "\n")
-        m <- data.frame(x$mean[[i]], x$cred[[i]], a)
-        dimnames(m) <- list(unique(unlist(x$data[[x$levs[i]]])),
-                            c("ind. estimator", "cred. factor", paste(x$levs[i + 1], "affiliation")))                           
+        m <- data.frame(struct[rows,][cols],
+                        ind.estimator = x$mean[[i]],
+                        cred.factor = x$cred[[i]],
+                        row.names = length(levs) - i)                           
         print(m)        
     }    
 }

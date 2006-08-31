@@ -17,7 +17,7 @@
     ## If 'j' is missing, all columns are presented.
     if (missing(j))
       {
-          if (i <= 0)
+          if (any(i == 0))
               stop("'i' and 'j' must be positive")
           
           nj <- x$nj[-1]
@@ -51,4 +51,5 @@
     res
 }
 
-    
+"[.grouped.data" <- function(x, i, j)
+    NextMethod(x, i, j)
