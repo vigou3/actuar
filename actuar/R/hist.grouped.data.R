@@ -14,7 +14,7 @@
 hist.grouped.data <- function(x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab = "boundaries", ylab = "f(x)", plot = TRUE, ...)
 {
     ## Use object created by 'grouped' function.
-    if (class(x) == "grouped.data")
+    if (inherits(x, "grouped.data")
     {
         y <- x$nj
         x <- x$cj

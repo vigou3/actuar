@@ -51,5 +51,4 @@
     res
 }
 
-"[.grouped.data" <- function(x, i, j)
-    NextMethod(x, i, j)
+

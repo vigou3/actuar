@@ -1,4 +1,3 @@
-
 ### ===== actuar: an R package for Actuarial Science =====
 ###
 ### Ogive and histogram for grouped data
@@ -8,7 +7,8 @@
 ###
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Mathieu Pigeon
 
-grData <- function(x, y = NULL, ...)
+
+grouped.data <- function(x, y = NULL, ...)
 {
     ## 'data.frame' must contain boundaries in first column and number of
     ## data by class in second column.
@@ -26,20 +26,36 @@ grData <- function(x, y = NULL, ...)
     if (nx - ny == 1)
         y = c(0, y)
 
+    ## Create an object of class 'grouped.data'.
+    res = list(cj = x, nj = y)
+    class(res) <- c("grouped.data", class(res))
+    attr(res, "call") <- sys.call()
+    attr(res, "j") <- FALSE
+    res
+}
+
+print.grouped.data <- function(x, ...)
+{
+    ## To formate numbers.
     numform <- function(x) formatC(x, digits = 2, format = "e")
     numformy <- function(x) formatC(x)
 
-    res <- data.frame(Interval = paste("[",numform(x[-length(x)]),", ",numform(x[-1]),")", sep = ""),
-                           Frequency = paste(numformy(y[-1]), sep = ""))
-    ## Create an object of class 'grouped.data'.
-    #res = list(cj = x, nj = y)
-    class(res) <- c("grData", "data.frame")
-    attr(res, "call") <- sys.call()
-    environment(res) <- new.env()
-    assign("x", x, envir = environment(res))
-    assign("y", y, envir = environment(res))
-    res
+    ## Use object created by 'grouped' function
+    if (attr(x, "j"))
+    {
+        x <- x$cj
+        x1 <- length(x)
+        cat("          cj     ", "\n", paste("[",numform(x[-x1]),", ",numform(x[-1]),")", "\n", sep = ""))
+    }
+    else
+    {
+        y <- x$nj
+        x <- x$cj
+        x1 <- length(x)
+        cat("          cj     ", "          nj       ", "\n",paste("[",numform(x[-x1]),", ",numform(x[-1]),")", "       ", numformy(y[-1]), "\n", sep = ""))
+    }
 }
+
 
 
 
