@@ -83,8 +83,10 @@ coverage <- function(dist, deductible = 0, franchise = FALSE,
     {
         bound1 <- coinsurance * deductible
         bound2 <- coinsurance * limit
-        cond1 <- substitute(0 <= x & x <= b1,
-                            list(x = x, b1 = bound1))
+        cond1 <- if (cdf)
+                     substitute(0 <= x & x <= b1, list(x = x, b1 = bound1))
+                 else
+                     substitute(x == 0, list(x = x))
         cond2 <- substitute(b1 < x & x < b2,
                             list(x = x, b1 = bound1, b2 = bound2))
     }
@@ -96,22 +98,27 @@ coverage <- function(dist, deductible = 0, franchise = FALSE,
         cond2 <- substitute(0 < x & x < b, list(x = x, b = bound2))
     }
 
-    ## 1. Function definition for the first branch.
-    ##
-    ## 2. Definition of 1 - F(d) for the 'per.loss = FALSE' case.
-    ##    Uses 'lower.tail = FALSE' if available in 'pdist'().
-    if (per.loss)
-        f1 <- substitute(do.call(F, a), list(F = F, a = c(d, argsF)))
+    ## Definitions of 1 - F(d) and 1 - F(u), using 'lower.tail =
+    ## FALSE' if available in 'pdist'().
+    if (has.lower)
+    {
+        Sd <- substitute(do.call(F, a),
+                         list(F = F, a = c(d, argsF, lower.tail = FALSE)))
+        Su <- substitute(do.call(F, a),
+                         list(F = F, a = c(u, argsF, lower.tail = FALSE)))
+    }
     else
     {
-        f1 <- 0
-        S <- if (has.lower)
-                 substitute(do.call(F, a),
-                            list(F = F, a = c(d, argsF, lower.tail = FALSE)))
-             else
-                 substitute(1 - do.call(F, a),
-                            list(F = F, a = c(d, argsF)))
+        Sd <- substitute(1 - do.call(F, a),
+                         list(F = F, a = c(d, argsF)))
+        Su <- substitute(1 - do.call(F, a),
+                         list(F = F, a = c(u, argsF)))
     }
+
+    ## Function definition for the first branch.
+    f1 <- if (per.loss & deductible)
+              substitute(do.call(F, a), list(F = F, a = c(d, argsF)))
+          else 0
 
     ## Function definitions for the second and third branches. The
     ## 'cdf = TRUE' and 'CDF = FALSE' must be treated separately.
@@ -120,24 +127,22 @@ coverage <- function(dist, deductible = 0, franchise = FALSE,
         cond3 <- substitute(x >= b, list(x = x, b = bound2))
         f2 <- substitute(do.call(F, a),
                          list(F = F, a = c(x.mod, argsF)))
+        f3 <- 1
         if (!per.loss & deductible)
             f2 <- substitute((f - do.call(F, d))/S,
-                             list(f = f2, F = F, S = S, d = c(d, argsF)))
-        f3 <- 1
+                             list(f = f2, F = F, S = Sd, d = c(d, argsF)))
     }
     else
     {
         cond3 <- substitute(x == b, list(x = x, b = bound2))
         f2 <- substitute(do.call(f, a),
                          list(f = f, a = c(x.mod, argsf)))
-        f3 <- if (is.finite(limit))
-                  substitute(1 - do.call(F, a), list(F = F, a = c(u, argsF)))
-              else 0
+        f3 <- if (is.finite(limit)) Su else 0
         if (!per.loss & deductible)
         {
-            f2 <- substitute(f/S, list(f = f2, S = S))
+            f2 <- substitute(f/S, list(f = f2, S = Sd))
             if (is.finite(limit))
-                f3 <- substitute(f/S, list(f = f3, S = S))
+                f3 <- substitute(f/S, list(f = f3, S = Sd))
         }
         if (inflation | coinsurance < 1)
             f2 <- substitute(f/k, list(f = f2, k = coinsurance * r))
@@ -158,22 +163,74 @@ coverage <- function(dist, deductible = 0, franchise = FALSE,
 ### TESTS
 
 ## Franchise ordinaire seulement, par sinistre
-coverage("gamma", deductible = 1000, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1000, per.loss = TRUE, cdf = FALSE)
+coverage("gamma", deductible = 1100, per.loss = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, per.loss = TRUE, cdf = FALSE)
+
+coverage("gamma", limit = 5100, per.loss = TRUE, cdf = TRUE)
+coverage("gamma", limit = 5100, per.loss = TRUE, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100, per.loss = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100, per.loss = TRUE, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
+         coinsurance = 0.8, per.loss = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
+         coinsurance = 0.8, per.loss = TRUE, cdf = FALSE)
+
 
 ## Franchise ordinaire seulement, par paiement
-coverage("gamma", deductible = 1000, per.loss = FALSE, cdf = TRUE)
-coverage("gamma", deductible = 1000, per.loss = FALSE, cdf = FALSE)
+coverage("gamma", deductible = 1100, cdf = TRUE)
+coverage("gamma", deductible = 1100, cdf = FALSE)
+
+coverage("gamma", limit = 5100, cdf = TRUE)
+coverage("gamma", limit = 5100, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
+         coinsurance = 0.8, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
+         coinsurance = 0.8, cdf = FALSE)
 
 ## Franchise décroissante seulement, par sinistre
-coverage("gamma", deductible = 1000, franchise = TRUE, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1000, franchise = TRUE, per.loss = TRUE, cdf = FALSE)
+coverage("gamma", deductible = 1100, franchise = TRUE,
+         per.loss = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, franchise = TRUE,
+         per.loss = TRUE, cdf = FALSE)
+
+coverage("gamma", limit = 5100, franchise = TRUE,
+         per.loss = TRUE, cdf = TRUE)
+coverage("gamma", limit = 5100, franchise = TRUE,
+         per.loss = TRUE, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100,
+         franchise = TRUE, per.loss = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100,
+         franchise = TRUE,  per.loss = TRUE, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100,
+         inflation = 0.1, coinsurance = 0.8,
+         franchise = TRUE, per.loss = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100,
+         inflation = 0.1, coinsurance = 0.8,
+         franchise = TRUE, per.loss = TRUE, cdf = FALSE)
 
 ## Franchise décroissante seulement, par paiement
-coverage("gamma", deductible = 1000, franchise = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1000, franchise = TRUE, cdf = FALSE)
+coverage("gamma", deductible = 1100, franchise = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, franchise = TRUE, cdf = FALSE)
 
+coverage("gamma", limit = 5100, franchise = TRUE, cdf = TRUE)
+coverage("gamma", limit = 5100, franchise = TRUE, cdf = FALSE)
 
-## Tout le toutim, franchise ordinaire, par sinistre
-coverage("gamma", deductible = 1, limit = 10, coinsurance = 0.9,
-         inflation = 0.05, per.loss = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100,
+         franchise = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100,
+         franchise = TRUE, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100,
+         inflation = 0.1, coinsurance = 0.8,
+         franchise = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100,
+         inflation = 0.1, coinsurance = 0.8,
+         franchise = TRUE, cdf = FALSE)
