@@ -1,0 +1,363 @@
+\documentclass{article}
+  \usepackage{amsmath}
+
+  %\VignetteIndexEntry{Complete formulas used by coverage}
+  %\VignettePackage{actuar}
+
+  \newcommand{\D}{\displaystyle}
+  \newcommand{\coverage}{\texttt{coverage}}
+
+  \title{Complete formulas used by coverage}
+  \author{Vincent Goulet}
+
+\begin{document}
+
+\maketitle
+
+\section{Ordinary deductible, payment per loss}
+
+\begin{align*}
+  Y^L
+  &=
+  \begin{cases}
+    0,
+      & X < \D \frac{d}{1 + r} \\
+    \alpha ((1 + r) X - d),
+      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
+    \alpha (u - d),
+      & \D X \geq \frac{u}{1 + r}
+  \end{cases} \\
+  F_{Y^L}(y)
+  &=
+  \begin{cases}
+    F_X \left( \D\frac{d}{1 + r} \right),
+      & y = 0 \\
+    F_X \left( \D\frac{y + \alpha d}{\alpha(1 + r)} \right),
+      & 0 < y < \alpha (u - d) \\
+    1,
+      & y \geq \alpha(u - d)
+  \end{cases} \\
+  f_{Y^L}(y)
+  &=
+  \begin{cases}
+    F_X \left( \D\frac{d}{1 + r} \right),
+      & y = 0 \\
+    \D\frac{1}{\alpha (1 + r)} f_X \left( \D\frac{y + \alpha
+        d}{\alpha(1 + r)} \right),
+      & 0 < y < \alpha (u - d) \\
+    1 - F_X \left( \D\frac{u}{1 + r} \right),
+      & y = \alpha(u - d)
+  \end{cases}
+\end{align*}
+
+
+\section{Ordinary deductible, payment per payment}
+
+\begin{align*}
+  Y^P
+  &=
+  \begin{cases}
+    \text{undefined},
+      & X < \D \frac{d}{1 + r} \\
+    \alpha ((1 + r) X - d),
+      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
+    \alpha (u - d),
+      & \D X \geq \frac{u}{1 + r}
+  \end{cases} \\
+  F_{Y^P}(y)
+  &=
+  \begin{cases}
+    0,
+      & y = 0 \\
+    \D\frac{F_X \left( \frac{y + \alpha d}{\alpha (1 + r)} \right) - F_X
+      \left( \frac{d}{1 + r} \right)}{%
+      1 - F_X \left( \frac{d}{1 + r} \right)},
+      & 0 < y < \alpha (u - d) \\
+    1,
+      & y \geq \alpha(u - d)
+  \end{cases} \\
+  f_{Y^P}(y)
+  &=
+  \begin{cases}
+    0,
+      & y = 0 \\
+    \left( \D\frac{1}{\alpha (1 + r)} \right)
+    \D\frac{f_X \left( \frac{y + \alpha d}{\alpha(1 + r)} \right)}{%
+      1 - F_X \left( \frac{d}{1 + r} \right)},
+      & 0 < y < \alpha (u - d) \\
+    \D\frac{1 - F_X \Big( \frac{u}{1 + r} \Big)}{%
+      1 - F_X \left( \frac{d}{1 + r} \right)},
+      & y = \alpha(u - d)
+  \end{cases}
+\end{align*}
+
+
+
+\section{Franchise, payment per loss}
+
+\begin{align*}
+  Y^L
+  &=
+  \begin{cases}
+    0,
+      & X < \D \frac{d}{1 + r} \\
+    \alpha (1 + r) X,
+      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
+    \alpha u,
+      & \D X \geq \frac{u}{1 + r}
+  \end{cases} \\
+  F_{Y^L}(y)
+  &=
+  \begin{cases}
+    F_X \left( \D\frac{d}{1 + r} \right),
+      & 0 \leq y \leq \alpha d \\
+    F_X \left( \D\frac{y}{\alpha(1 + r)} \right),
+      & \alpha d < y < \alpha u \\
+    1,
+      & y \geq \alpha u
+  \end{cases} \\
+  f_{Y^L}(y)
+  &=
+  \begin{cases}
+    F_X \left( \D\frac{d}{1 + r} \right),
+      & y = 0 \\
+    \D\frac{1}{\alpha (1 + r)} f_X \left( \D\frac{y}{\alpha(1 + r)} \right),
+      & \alpha d < y < \alpha u \\
+    1 - F_X \left( \D\frac{u}{1 + r} \right),
+      & y = \alpha u
+  \end{cases}
+\end{align*}
+
+
+\section{Franchise, payment per payment}
+
+\begin{align*}
+  Y^P
+  &=
+  \begin{cases}
+    \text{undefined},
+      & X < \D \frac{d}{1 + r} \\
+    \alpha (1 + r) X,
+      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
+    \alpha u,
+      & \D X \geq \frac{u}{1 + r}
+  \end{cases} \\
+  F_{Y^P}(y)
+  &=
+  \begin{cases}
+    0,
+      & 0 \leq y \leq \alpha d \\
+    \D\frac{F_X \left( \frac{y}{\alpha (1 + r)} \right) - F_X
+      \left( \frac{d}{1 + r} \right)}{%
+      1 - F_X \left( \frac{d}{1 + r} \right)},
+      & \alpha d < y < \alpha u \\
+    1,
+      & y \geq \alpha u
+  \end{cases} \\
+  f_{Y^P}(y)
+  &=
+  \begin{cases}
+    0,
+      & 0 \leq y \leq \alpha d \\
+    \left( \D\frac{1}{\alpha (1 + r)} \right)
+    \D\frac{f_X \left( \frac{y}{\alpha(1 + r)} \right)}{%
+      1 - F_X \left( \frac{d}{1 + r} \right)},
+      & \alpha d < y < \alpha u \\
+    \D\frac{1 - F_X \Big( \frac{u}{1 + r} \Big)}{%
+      1 - F_X \left( \frac{d}{1 + r} \right)},
+      & y = \alpha u
+  \end{cases}
+\end{align*}
+
+<<>>=
+
+## Franchise ordinaire seulement, par sinistre
+coverage("gamma", deductible = 1100, per.loss = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, per.loss = TRUE, cdf = FALSE)
+
+coverage("gamma", limit = 5100, per.loss = TRUE, cdf = TRUE)
+coverage("gamma", limit = 5100, per.loss = TRUE, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100, per.loss = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100, per.loss = TRUE, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
+         coinsurance = 0.8, per.loss = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
+         coinsurance = 0.8, per.loss = TRUE, cdf = FALSE)
+
+
+## Franchise ordinaire seulement, par paiement
+coverage("gamma", deductible = 1100, cdf = TRUE)
+coverage("gamma", deductible = 1100, cdf = FALSE)
+
+coverage("gamma", limit = 5100, cdf = TRUE)
+coverage("gamma", limit = 5100, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
+         coinsurance = 0.8, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
+         coinsurance = 0.8, cdf = FALSE)
+
+## Franchise décroissante seulement, par sinistre
+coverage("gamma", deductible = 1100, franchise = TRUE,
+         per.loss = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, franchise = TRUE,
+         per.loss = TRUE, cdf = FALSE)
+
+coverage("gamma", limit = 5100, franchise = TRUE,
+         per.loss = TRUE, cdf = TRUE)
+coverage("gamma", limit = 5100, franchise = TRUE,
+         per.loss = TRUE, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100,
+         franchise = TRUE, per.loss = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100,
+         franchise = TRUE,  per.loss = TRUE, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100,
+         inflation = 0.1, coinsurance = 0.8,
+         franchise = TRUE, per.loss = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100,
+         inflation = 0.1, coinsurance = 0.8,
+         franchise = TRUE, per.loss = TRUE, cdf = FALSE)
+
+## Franchise décroissante seulement, par paiement
+coverage("gamma", deductible = 1100, franchise = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, franchise = TRUE, cdf = FALSE)
+
+coverage("gamma", limit = 5100, franchise = TRUE, cdf = TRUE)
+coverage("gamma", limit = 5100, franchise = TRUE, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100,
+         franchise = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100,
+         franchise = TRUE, cdf = FALSE)
+
+coverage("gamma", deductible = 1100, limit = 5100,
+         inflation = 0.1, coinsurance = 0.8,
+         franchise = TRUE, cdf = TRUE)
+coverage("gamma", deductible = 1100, limit = 5100,
+         inflation = 0.1, coinsurance = 0.8,
+         franchise = TRUE, cdf = FALSE)
+
+par(mfcol = c(4, 2))
+curve(pgamma(x, 5, 0.6), xlim = c(0, 25))
+curve(dgamma(x, 5, 0.6), xlim = c(0, 25))
+
+deductible <- 5
+limit <- 13
+
+### ORDINARY DEDUCTIBLE
+pgammaL <- coverage("gamma", deductible = deductible, limit = limit,
+                     per.loss = TRUE, cdf = TRUE)
+dgammaL <- coverage("gamma", deductible = deductible, limit = limit,
+                     per.loss = TRUE)
+pgammaP <- coverage("gamma", deductible = deductible, limit = limit,
+                    cdf = TRUE)
+dgammaP <- coverage("gamma", deductible = deductible, limit = limit)
+
+formals(pgammaL)[c("shape", "rate")] <- c(5, 0.6)
+formals(dgammaL)[c("shape", "rate")] <- c(5, 0.6)
+formals(pgammaP)[c("shape", "rate")] <- c(5, 0.6)
+formals(dgammaP)[c("shape", "rate")] <- c(5, 0.6)
+
+d <- deductible
+u <- limit - d
+e <- 0.001
+
+## Payment per loss
+curve(pgammaL(x), from = 0, to = u - e,
+      xlim = c(0, limit), ylim = c(0, 1),
+      xlab = "", ylab = "", xaxt = "n")
+curve(pgammaL(x), from = u, add = TRUE)
+axis(1, at = c(0, u), labels = c("0", "u - d"))
+
+ylim <- c(0, dgammaL(0))
+
+curve(dgammaL(x), from = 0 + e, to = u - e,
+      xlim = c(0, limit), ylim = ylim,
+      xlab = "", ylab = "", xaxt = "n")
+points(c(0, u), dgammaL(c(0, u)), type = "h", lwd = 2)
+points(c(0, u), dgammaL(c(0, u)), pch = 16)
+axis(1, at = c(0, u), labels = c("0", "u - d"))
+
+## Payment per payment
+curve(pgammaP(x), from = 0, to = u - e,
+      xlim = c(0, limit), ylim = c(0, 1),
+      xlab = "", ylab = "", xaxt = "n")
+curve(pgammaP(x), from = u, add = TRUE)
+axis(1, at = c(0, u), labels = c("0", "u - d"))
+
+curve(dgammaP(x), from = 0 + e, to = u - e,
+      xlim = c(0, limit), ylim = ylim,
+      xlab = "", ylab = "", xaxt = "n")
+points(u, dgammaP(u), type = "h", lwd = 2)
+points(u, dgammaP(u), pch = 16)
+axis(1, at = c(0, u), labels = c("0", "u - d"))
+
+
+
+### FRANCHISE DEDUCTIBLE
+pgammaL <- coverage("gamma", deductible = deductible, limit = limit,
+                     per.loss = TRUE, franchise = TRUE, cdf = TRUE)
+dgammaL <- coverage("gamma", deductible = deductible, limit = limit,
+                     per.loss = TRUE, franchise = TRUE)
+pgammaP <- coverage("gamma", deductible = deductible, limit = limit,
+                    cdf = TRUE, franchise = TRUE)
+dgammaP <- coverage("gamma", deductible = deductible, limit = limit,
+                    franchise = TRUE)
+
+formals(pgammaL)[c("shape", "rate")] <- c(5, 0.6)
+formals(dgammaL)[c("shape", "rate")] <- c(5, 0.6)
+formals(pgammaP)[c("shape", "rate")] <- c(5, 0.6)
+formals(dgammaP)[c("shape", "rate")] <- c(5, 0.6)
+
+d <- deductible
+u <- limit
+e <- 0.001
+
+## Payment per loss
+curve(pgammaL(x), from = 0, to = u - e,
+      xlim = c(0, limit + d), ylim = c(0, 1),
+      xlab = "", ylab = "", xaxt = "n")
+curve(pgammaL(x), from = u, add = TRUE)
+axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
+
+ylim <- c(0, dgammaL(0))
+
+curve(dgammaL(x), from = d + e, to = u - e,
+      xlim = c(0, limit + d), ylim = ylim,
+      xlab = "", ylab = "", xaxt = "n")
+curve(dgammaL(x), from = 0 + e, to = d, add = TRUE)
+points(c(0, u), dgammaL(c(0, u)), type = "h", lwd = 2)
+points(c(0, u), dgammaL(c(0, u)), pch = 16)
+axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
+
+## Ordinary deductible, payment per payment
+curve(pgammaP(x), from = 0, to = u - e,
+      xlim = c(0, limit + d), ylim = c(0, 1),
+      xlab = "", ylab = "", xaxt = "n")
+curve(pgammaP(x), from = u, add = TRUE)
+axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
+
+curve(dgammaP(x), from = d + e, to = u - e,
+      xlim = c(0, limit + d), ylim = ylim,
+      xlab = "", ylab = "", xaxt = "n")
+curve(dgammaL(x), from = 0 + e, to = d, add = TRUE)
+points(u, dgammaP(u), type = "h", lwd = 2)
+points(u, dgammaP(u), pch = 16)
+axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
+
+x
+@
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
