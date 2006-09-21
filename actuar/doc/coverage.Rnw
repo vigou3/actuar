@@ -7,251 +7,172 @@
   \newcommand{\D}{\displaystyle}
   \newcommand{\coverage}{\texttt{coverage}}
 
-  \title{Complete formulas used by coverage}
+  \title{Complete formulas used by \coverage}
   \author{Vincent Goulet}
 
 \begin{document}
 
 \maketitle
 
+<<echo=FALSE>>=
+coverage <- function(dist, deductible = 0, franchise = FALSE,
+                     limit = Inf, coinsurance = 1, inflation = 0,
+                     per.loss = FALSE, cdf = FALSE)
+{
+    ## Sanity check of arguments
+    if (any(deductible < 0, limit < 0, coinsurance < 0, inflation < 0))
+        stop("coverage modifications must be positive")
+    if (limit <= deductible)
+      stop("deductible must be smaller than the limit")
+    if (coinsurance > 1)
+        stop("coinsurance must be between 0 and 1")
+
+    ## Function 'pdist'() is always needed. Get its argument list to
+    ## build function calls and, eventually, specify arguments of the
+    ## output function.
+    F <- paste("p", dist, sep = "")     # 'pdist'()
+    formalsF <- formals(F)              # arguments as list
+    argsF <- names(formalsF)            # arguments names as strings
+
+    ## Remember if argument 'lower.tail' is available, so we can use
+    ## it later. Then, drop unsupported arguments 'lower.tail' and
+    ## 'log.p'.
+    has.lower <- if ("lower.tail" %in% argsF) TRUE else FALSE
+    argsF <- setdiff(argsF, c("lower.tail", "log.p"))
+
+    ## 1. Set arguments of the output function. Should be those of
+    ##    'pdist'() or 'ddist'() depending if 'cdf' is 'TRUE' or
+    ##    'FALSE', respectively.
+    ##
+    ## 2. Set the symbol representing the variable in function
+    ##    calls. Should be the first argument of the output
+    ##    function.
+    ##
+    ## 3. Drop unsupported argument 'log', if present, in 'ddist'().
+    ##
+    ## 4. Drop the first argument of 'pdist'() and 'ddist'() which are
+    ##    no longer used after this block and prepare argument list
+    ##    for use in do.call().
+    if (cdf)
+    {
+        argsFUN <- formalsF[argsF]      # arguments of output function
+        x <- as.name(argsF[1])          # symbol
+    }
+    else
+    {
+        f <- paste("d", dist, sep = "") # 'ddist'()
+        formalsf <- formals(f)          # arguments as list
+        argsf <- setdiff(names(formalsf), "log") # drop argument 'log'
+        argsFUN <- formalsf[argsf]      # arguments of output function
+        x <- as.name(argsf[1])          # symbol
+        argsf <- sapply(argsf[-1], as.name) # for use in do.call()
+    }
+    argsF <- sapply(argsF[-1], as.name) # for use in do.call()
+
+    ## Quantites often used
+    r <- 1 + inflation
+    d <- deductible/r
+    u <- limit/r
+
+    ## Build the value at which the underlying pdf/cdf will be called
+    ## for non special case values of 'x'.
+    x.mod <- x
+    if (coinsurance < 1)
+        x.mod <- substitute(x/alpha, list(x = x.mod, alpha = coinsurance))
+    if (deductible & !franchise)
+        x.mod <- substitute(x + d, list(x = x.mod, d = deductible))
+    if (inflation)
+        x.mod <- substitute((x)/r, list(x = x.mod, r = r))
+
+    ## Each pdf/cdf is defined in three branches. Define the
+    ## boundaries and conditions for the first two branches.
+    if (franchise)
+    {
+        bound1 <- coinsurance * deductible
+        bound2 <- coinsurance * limit
+        cond1 <- if (cdf)
+                     substitute(0 <= x & x <= b1, list(x = x, b1 = bound1))
+                 else
+                     substitute(x == 0, list(x = x))
+        cond2 <- substitute(b1 < x & x < b2,
+                            list(x = x, b1 = bound1, b2 = bound2))
+    }
+    else
+    {
+        bound1 <- 0
+        bound2 <- coinsurance * (limit - deductible)
+        cond1 <- substitute(x == 0, list(x = x))
+        cond2 <- substitute(0 < x & x < b, list(x = x, b = bound2))
+    }
+
+    ## Definitions of 1 - F(d) and 1 - F(u), using 'lower.tail =
+    ## FALSE' if available in 'pdist'().
+    if (has.lower)
+    {
+        Sd <- substitute(do.call(F, a),
+                         list(F = F, a = c(d, argsF, lower.tail = FALSE)))
+        Su <- substitute(do.call(F, a),
+                         list(F = F, a = c(u, argsF, lower.tail = FALSE)))
+    }
+    else
+    {
+        Sd <- substitute(1 - do.call(F, a),
+                         list(F = F, a = c(d, argsF)))
+        Su <- substitute(1 - do.call(F, a),
+                         list(F = F, a = c(u, argsF)))
+    }
+
+    ## Function definition for the first branch.
+    f1 <- if (per.loss & deductible)
+              substitute(do.call(F, a), list(F = F, a = c(d, argsF)))
+          else 0
+
+    ## Function definitions for the second and third branches. The
+    ## 'cdf = TRUE' and 'CDF = FALSE' must be treated separately.
+    if (cdf)
+    {
+        cond3 <- substitute(x >= b, list(x = x, b = bound2))
+        f2 <- substitute(do.call(F, a),
+                         list(F = F, a = c(x.mod, argsF)))
+        f3 <- 1
+        if (!per.loss & deductible)
+            f2 <- substitute((f - do.call(F, d))/S,
+                             list(f = f2, F = F, S = Sd, d = c(d, argsF)))
+    }
+    else
+    {
+        cond3 <- substitute(x == b, list(x = x, b = bound2))
+        f2 <- substitute(do.call(f, a),
+                         list(f = f, a = c(x.mod, argsf)))
+        f3 <- if (is.finite(limit)) Su else 0
+        if (!per.loss & deductible)
+        {
+            f2 <- substitute(f/S, list(f = f2, S = Sd))
+            if (is.finite(limit))
+                f3 <- substitute(f/S, list(f = f3, S = Sd))
+        }
+        if (inflation | coinsurance < 1)
+            f2 <- substitute(f/k, list(f = f2, k = coinsurance * r))
+    }
+
+    ## Output function
+    eval(substitute(FUN <- function()
+               ifelse(cond1, f1,
+                      ifelse(cond2, f2,
+                             ifelse(cond3, f3, 0))),
+               list(cond1 = cond1, cond2 = cond2, cond3 = cond3,
+                    f1 = f1, f2 = f2, f3 = f3)))
+    formals(FUN) <- argsFUN             # set arguments
+    FUN
+}
+@
+
 \section{Ordinary deductible, payment per loss}
 
-\begin{align*}
-  Y^L
-  &=
-  \begin{cases}
-    0,
-      & X < \D \frac{d}{1 + r} \\
-    \alpha ((1 + r) X - d),
-      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
-    \alpha (u - d),
-      & \D X \geq \frac{u}{1 + r}
-  \end{cases} \\
-  F_{Y^L}(y)
-  &=
-  \begin{cases}
-    F_X \left( \D\frac{d}{1 + r} \right),
-      & y = 0 \\
-    F_X \left( \D\frac{y + \alpha d}{\alpha(1 + r)} \right),
-      & 0 < y < \alpha (u - d) \\
-    1,
-      & y \geq \alpha(u - d)
-  \end{cases} \\
-  f_{Y^L}(y)
-  &=
-  \begin{cases}
-    F_X \left( \D\frac{d}{1 + r} \right),
-      & y = 0 \\
-    \D\frac{1}{\alpha (1 + r)} f_X \left( \D\frac{y + \alpha
-        d}{\alpha(1 + r)} \right),
-      & 0 < y < \alpha (u - d) \\
-    1 - F_X \left( \D\frac{u}{1 + r} \right),
-      & y = \alpha(u - d)
-  \end{cases}
-\end{align*}
-
-
-\section{Ordinary deductible, payment per payment}
-
-\begin{align*}
-  Y^P
-  &=
-  \begin{cases}
-    \text{undefined},
-      & X < \D \frac{d}{1 + r} \\
-    \alpha ((1 + r) X - d),
-      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
-    \alpha (u - d),
-      & \D X \geq \frac{u}{1 + r}
-  \end{cases} \\
-  F_{Y^P}(y)
-  &=
-  \begin{cases}
-    0,
-      & y = 0 \\
-    \D\frac{F_X \left( \frac{y + \alpha d}{\alpha (1 + r)} \right) - F_X
-      \left( \frac{d}{1 + r} \right)}{%
-      1 - F_X \left( \frac{d}{1 + r} \right)},
-      & 0 < y < \alpha (u - d) \\
-    1,
-      & y \geq \alpha(u - d)
-  \end{cases} \\
-  f_{Y^P}(y)
-  &=
-  \begin{cases}
-    0,
-      & y = 0 \\
-    \left( \D\frac{1}{\alpha (1 + r)} \right)
-    \D\frac{f_X \left( \frac{y + \alpha d}{\alpha(1 + r)} \right)}{%
-      1 - F_X \left( \frac{d}{1 + r} \right)},
-      & 0 < y < \alpha (u - d) \\
-    \D\frac{1 - F_X \Big( \frac{u}{1 + r} \Big)}{%
-      1 - F_X \left( \frac{d}{1 + r} \right)},
-      & y = \alpha(u - d)
-  \end{cases}
-\end{align*}
-
-
-
-\section{Franchise, payment per loss}
-
-\begin{align*}
-  Y^L
-  &=
-  \begin{cases}
-    0,
-      & X < \D \frac{d}{1 + r} \\
-    \alpha (1 + r) X,
-      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
-    \alpha u,
-      & \D X \geq \frac{u}{1 + r}
-  \end{cases} \\
-  F_{Y^L}(y)
-  &=
-  \begin{cases}
-    F_X \left( \D\frac{d}{1 + r} \right),
-      & 0 \leq y \leq \alpha d \\
-    F_X \left( \D\frac{y}{\alpha(1 + r)} \right),
-      & \alpha d < y < \alpha u \\
-    1,
-      & y \geq \alpha u
-  \end{cases} \\
-  f_{Y^L}(y)
-  &=
-  \begin{cases}
-    F_X \left( \D\frac{d}{1 + r} \right),
-      & y = 0 \\
-    \D\frac{1}{\alpha (1 + r)} f_X \left( \D\frac{y}{\alpha(1 + r)} \right),
-      & \alpha d < y < \alpha u \\
-    1 - F_X \left( \D\frac{u}{1 + r} \right),
-      & y = \alpha u
-  \end{cases}
-\end{align*}
-
-
-\section{Franchise, payment per payment}
-
-\begin{align*}
-  Y^P
-  &=
-  \begin{cases}
-    \text{undefined},
-      & X < \D \frac{d}{1 + r} \\
-    \alpha (1 + r) X,
-      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
-    \alpha u,
-      & \D X \geq \frac{u}{1 + r}
-  \end{cases} \\
-  F_{Y^P}(y)
-  &=
-  \begin{cases}
-    0,
-      & 0 \leq y \leq \alpha d \\
-    \D\frac{F_X \left( \frac{y}{\alpha (1 + r)} \right) - F_X
-      \left( \frac{d}{1 + r} \right)}{%
-      1 - F_X \left( \frac{d}{1 + r} \right)},
-      & \alpha d < y < \alpha u \\
-    1,
-      & y \geq \alpha u
-  \end{cases} \\
-  f_{Y^P}(y)
-  &=
-  \begin{cases}
-    0,
-      & 0 \leq y \leq \alpha d \\
-    \left( \D\frac{1}{\alpha (1 + r)} \right)
-    \D\frac{f_X \left( \frac{y}{\alpha(1 + r)} \right)}{%
-      1 - F_X \left( \frac{d}{1 + r} \right)},
-      & \alpha d < y < \alpha u \\
-    \D\frac{1 - F_X \Big( \frac{u}{1 + r} \Big)}{%
-      1 - F_X \left( \frac{d}{1 + r} \right)},
-      & y = \alpha u
-  \end{cases}
-\end{align*}
-
-<<>>=
-
-## Franchise ordinaire seulement, par sinistre
-coverage("gamma", deductible = 1100, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, per.loss = TRUE, cdf = FALSE)
-
-coverage("gamma", limit = 5100, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", limit = 5100, per.loss = TRUE, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100, per.loss = TRUE, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
-         coinsurance = 0.8, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
-         coinsurance = 0.8, per.loss = TRUE, cdf = FALSE)
-
-
-## Franchise ordinaire seulement, par paiement
-coverage("gamma", deductible = 1100, cdf = TRUE)
-coverage("gamma", deductible = 1100, cdf = FALSE)
-
-coverage("gamma", limit = 5100, cdf = TRUE)
-coverage("gamma", limit = 5100, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
-         coinsurance = 0.8, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
-         coinsurance = 0.8, cdf = FALSE)
-
-## Franchise décroissante seulement, par sinistre
-coverage("gamma", deductible = 1100, franchise = TRUE,
-         per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, franchise = TRUE,
-         per.loss = TRUE, cdf = FALSE)
-
-coverage("gamma", limit = 5100, franchise = TRUE,
-         per.loss = TRUE, cdf = TRUE)
-coverage("gamma", limit = 5100, franchise = TRUE,
-         per.loss = TRUE, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100,
-         franchise = TRUE, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100,
-         franchise = TRUE,  per.loss = TRUE, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100,
-         inflation = 0.1, coinsurance = 0.8,
-         franchise = TRUE, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100,
-         inflation = 0.1, coinsurance = 0.8,
-         franchise = TRUE, per.loss = TRUE, cdf = FALSE)
-
-## Franchise décroissante seulement, par paiement
-coverage("gamma", deductible = 1100, franchise = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, franchise = TRUE, cdf = FALSE)
-
-coverage("gamma", limit = 5100, franchise = TRUE, cdf = TRUE)
-coverage("gamma", limit = 5100, franchise = TRUE, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100,
-         franchise = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100,
-         franchise = TRUE, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100,
-         inflation = 0.1, coinsurance = 0.8,
-         franchise = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100,
-         inflation = 0.1, coinsurance = 0.8,
-         franchise = TRUE, cdf = FALSE)
-
-par(mfcol = c(4, 2))
-curve(pgamma(x, 5, 0.6), xlim = c(0, 25))
-curve(dgamma(x, 5, 0.6), xlim = c(0, 25))
-
+<<echo=FALSE>>=
 deductible <- 5
 limit <- 13
 
-### ORDINARY DEDUCTIBLE
 pgammaL <- coverage("gamma", deductible = deductible, limit = limit,
                      per.loss = TRUE, cdf = TRUE)
 dgammaL <- coverage("gamma", deductible = deductible, limit = limit,
@@ -268,40 +189,131 @@ formals(dgammaP)[c("shape", "rate")] <- c(5, 0.6)
 d <- deductible
 u <- limit - d
 e <- 0.001
+ylim <- c(0, dgammaL(0))
+@
 
-## Payment per loss
+\begin{align*}
+  Y^L
+  &=
+  \begin{cases}
+    0,
+      & X < \D \frac{d}{1 + r} \\
+    \alpha ((1 + r) X - d),
+      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
+    \alpha (u - d),
+      & \D X \geq \frac{u}{1 + r}
+  \end{cases} & \\
+  F_{Y^L}(y)
+  &=
+  \begin{cases}
+    F_X \left( \D\frac{d}{1 + r} \right),
+      & y = 0 \\
+    F_X \left( \D\frac{y + \alpha d}{\alpha(1 + r)} \right),
+      & 0 < y < \alpha (u - d) \\
+    1,
+      & y \geq \alpha(u - d)
+  \end{cases} &
+  \begin{minipage}{0.4\linewidth}
+<<echo=FALSE, fig=TRUE, width=4, height=3>>=
+par(mar = c(2, 3, 1, 1))
 curve(pgammaL(x), from = 0, to = u - e,
       xlim = c(0, limit), ylim = c(0, 1),
       xlab = "", ylab = "", xaxt = "n")
 curve(pgammaL(x), from = u, add = TRUE)
 axis(1, at = c(0, u), labels = c("0", "u - d"))
-
-ylim <- c(0, dgammaL(0))
-
+@
+  \end{minipage} \\
+  f_{Y^L}(y)
+  &=
+  \begin{cases}
+    F_X \left( \D\frac{d}{1 + r} \right),
+      & y = 0 \\
+    \D\frac{1}{\alpha (1 + r)} f_X \left( \D\frac{y + \alpha
+        d}{\alpha(1 + r)} \right),
+      & 0 < y < \alpha (u - d) \\
+    1 - F_X \left( \D\frac{u}{1 + r} \right),
+      & y = \alpha(u - d)
+  \end{cases} &
+  \begin{minipage}{0.4\linewidth}
+<<echo=FALSE, fig=TRUE, width=4, height=3>>=
+par(mar = c(2, 3, 1, 1))
 curve(dgammaL(x), from = 0 + e, to = u - e,
       xlim = c(0, limit), ylim = ylim,
       xlab = "", ylab = "", xaxt = "n")
 points(c(0, u), dgammaL(c(0, u)), type = "h", lwd = 2)
 points(c(0, u), dgammaL(c(0, u)), pch = 16)
 axis(1, at = c(0, u), labels = c("0", "u - d"))
+@
+  \end{minipage}
+\end{align*}
 
-## Payment per payment
+
+\section{Ordinary deductible, payment per payment}
+
+\begin{align*}
+  Y^P
+  &=
+  \begin{cases}
+    \text{undefined},
+      & X < \D \frac{d}{1 + r} \\
+    \alpha ((1 + r) X - d),
+      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
+    \alpha (u - d),
+      & \D X \geq \frac{u}{1 + r}
+  \end{cases} & \\
+  F_{Y^P}(y)
+  &=
+  \begin{cases}
+    0,
+      & y = 0 \\
+    \D\frac{F_X \left( \frac{y + \alpha d}{\alpha (1 + r)} \right) - F_X
+      \left( \frac{d}{1 + r} \right)}{%
+      1 - F_X \left( \frac{d}{1 + r} \right)},
+      & 0 < y < \alpha (u - d) \\
+    1,
+      & y \geq \alpha(u - d)
+  \end{cases} &
+  \begin{minipage}{0.4\linewidth}
+<<echo=FALSE, fig=TRUE, width=4, height=3>>=
+par(mar = c(2, 3, 1, 1))
 curve(pgammaP(x), from = 0, to = u - e,
       xlim = c(0, limit), ylim = c(0, 1),
       xlab = "", ylab = "", xaxt = "n")
 curve(pgammaP(x), from = u, add = TRUE)
 axis(1, at = c(0, u), labels = c("0", "u - d"))
-
+@
+  \end{minipage} \\
+  f_{Y^P}(y)
+  &=
+  \begin{cases}
+    0,
+      & y = 0 \\
+    \left( \D\frac{1}{\alpha (1 + r)} \right)
+    \D\frac{f_X \left( \frac{y + \alpha d}{\alpha(1 + r)} \right)}{%
+      1 - F_X \left( \frac{d}{1 + r} \right)},
+      & 0 < y < \alpha (u - d) \\
+    \D\frac{1 - F_X \Big( \frac{u}{1 + r} \Big)}{%
+      1 - F_X \left( \frac{d}{1 + r} \right)},
+      & y = \alpha(u - d)
+  \end{cases} &
+  \begin{minipage}{0.4\linewidth}
+<<echo=FALSE, fig=TRUE, width=4, height=3>>=
+par(mar = c(2, 3, 1, 1))
 curve(dgammaP(x), from = 0 + e, to = u - e,
       xlim = c(0, limit), ylim = ylim,
       xlab = "", ylab = "", xaxt = "n")
 points(u, dgammaP(u), type = "h", lwd = 2)
 points(u, dgammaP(u), pch = 16)
 axis(1, at = c(0, u), labels = c("0", "u - d"))
+@
+  \end{minipage}
+\end{align*}
 
 
 
-### FRANCHISE DEDUCTIBLE
+\section{Franchise deductible, payment per loss}
+
+<<echo=FALSE>>=
 pgammaL <- coverage("gamma", deductible = deductible, limit = limit,
                      per.loss = TRUE, franchise = TRUE, cdf = TRUE)
 dgammaL <- coverage("gamma", deductible = deductible, limit = limit,
@@ -319,16 +331,53 @@ formals(dgammaP)[c("shape", "rate")] <- c(5, 0.6)
 d <- deductible
 u <- limit
 e <- 0.001
+ylim <- c(0, dgammaL(0))
+@
 
-## Payment per loss
+\begin{align*}
+  Y^L
+  &=
+  \begin{cases}
+    0,
+      & X < \D \frac{d}{1 + r} \\
+    \alpha (1 + r) X,
+      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
+    \alpha u,
+      & \D X \geq \frac{u}{1 + r}
+  \end{cases} & \\
+  F_{Y^L}(y)
+  &=
+  \begin{cases}
+    F_X \left( \D\frac{d}{1 + r} \right),
+      & 0 \leq y \leq \alpha d \\
+    F_X \left( \D\frac{y}{\alpha(1 + r)} \right),
+      & \alpha d < y < \alpha u \\
+    1,
+      & y \geq \alpha u
+  \end{cases} &
+  \begin{minipage}{0.4\linewidth}
+<<echo=FALSE, fig=TRUE, width=4, height=3>>=
+par(mar = c(2, 3, 1, 1))
 curve(pgammaL(x), from = 0, to = u - e,
       xlim = c(0, limit + d), ylim = c(0, 1),
       xlab = "", ylab = "", xaxt = "n")
 curve(pgammaL(x), from = u, add = TRUE)
 axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
-
-ylim <- c(0, dgammaL(0))
-
+@
+  \end{minipage} \\
+  f_{Y^L}(y)
+  &=
+  \begin{cases}
+    F_X \left( \D\frac{d}{1 + r} \right),
+      & y = 0 \\
+    \D\frac{1}{\alpha (1 + r)} f_X \left( \D\frac{y}{\alpha(1 + r)} \right),
+      & \alpha d < y < \alpha u \\
+    1 - F_X \left( \D\frac{u}{1 + r} \right),
+      & y = \alpha u
+  \end{cases} &
+  \begin{minipage}{0.4\linewidth}
+<<echo=FALSE, fig=TRUE, width=4, height=3>>=
+par(mar = c(2, 3, 1, 1))
 curve(dgammaL(x), from = d + e, to = u - e,
       xlim = c(0, limit + d), ylim = ylim,
       xlab = "", ylab = "", xaxt = "n")
@@ -336,14 +385,62 @@ curve(dgammaL(x), from = 0 + e, to = d, add = TRUE)
 points(c(0, u), dgammaL(c(0, u)), type = "h", lwd = 2)
 points(c(0, u), dgammaL(c(0, u)), pch = 16)
 axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
+@
+  \end{minipage}
+\end{align*}
 
-## Ordinary deductible, payment per payment
+
+\section{Franchise deductible, payment per payment}
+
+\begin{align*}
+  Y^P
+  &=
+  \begin{cases}
+    \text{undefined},
+      & X < \D \frac{d}{1 + r} \\
+    \alpha (1 + r) X,
+      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
+    \alpha u,
+      & \D X \geq \frac{u}{1 + r}
+  \end{cases} & \\
+  F_{Y^P}(y)
+  &=
+  \begin{cases}
+    0,
+      & 0 \leq y \leq \alpha d \\
+    \D\frac{F_X \left( \frac{y}{\alpha (1 + r)} \right) - F_X
+      \left( \frac{d}{1 + r} \right)}{%
+      1 - F_X \left( \frac{d}{1 + r} \right)},
+      & \alpha d < y < \alpha u \\
+    1,
+      & y \geq \alpha u
+  \end{cases} &
+  \begin{minipage}{0.4\linewidth}
+<<echo=FALSE, fig=TRUE, width=4, height=3>>=
+par(mar = c(2, 3, 1, 1))
 curve(pgammaP(x), from = 0, to = u - e,
       xlim = c(0, limit + d), ylim = c(0, 1),
       xlab = "", ylab = "", xaxt = "n")
 curve(pgammaP(x), from = u, add = TRUE)
 axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
-
+@
+  \end{minipage} \\
+  f_{Y^P}(y)
+  &=
+  \begin{cases}
+    0,
+      & 0 \leq y \leq \alpha d \\
+    \left( \D\frac{1}{\alpha (1 + r)} \right)
+    \D\frac{f_X \left( \frac{y}{\alpha(1 + r)} \right)}{%
+      1 - F_X \left( \frac{d}{1 + r} \right)},
+      & \alpha d < y < \alpha u \\
+    \D\frac{1 - F_X \Big( \frac{u}{1 + r} \Big)}{%
+      1 - F_X \left( \frac{d}{1 + r} \right)},
+      & y = \alpha u
+  \end{cases} &
+  \begin{minipage}{0.4\linewidth}
+<<echo=FALSE, fig=TRUE, width=4, height=3>>=
+par(mar = c(2, 3, 1, 1))
 curve(dgammaP(x), from = d + e, to = u - e,
       xlim = c(0, limit + d), ylim = ylim,
       xlab = "", ylab = "", xaxt = "n")
@@ -351,9 +448,9 @@ curve(dgammaL(x), from = 0 + e, to = d, add = TRUE)
 points(u, dgammaP(u), type = "h", lwd = 2)
 points(u, dgammaP(u), pch = 16)
 axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
-
-x
 @
+  \end{minipage}
+\end{align*}
 
 \end{document}
 
