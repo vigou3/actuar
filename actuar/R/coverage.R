@@ -1,9 +1,10 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Create modified density and modified cumulative distribution function
-### for data with deductible d and limit u.
+### Create modified density and modified cumulative distribution
+### function for data with deductible, limit, coinsurance and
+### inflation.
 ###
-### See Klugman, Panjer & Willmot, Loss Models, Second
+### See Chapter 5 of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
@@ -158,79 +159,3 @@ coverage <- function(dist, deductible = 0, franchise = FALSE,
     formals(FUN) <- argsFUN             # set arguments
     FUN
 }
-
-
-### TESTS
-
-## Franchise ordinaire seulement, par sinistre
-coverage("gamma", deductible = 1100, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, per.loss = TRUE, cdf = FALSE)
-
-coverage("gamma", limit = 5100, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", limit = 5100, per.loss = TRUE, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100, per.loss = TRUE, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
-         coinsurance = 0.8, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
-         coinsurance = 0.8, per.loss = TRUE, cdf = FALSE)
-
-
-## Franchise ordinaire seulement, par paiement
-coverage("gamma", deductible = 1100, cdf = TRUE)
-coverage("gamma", deductible = 1100, cdf = FALSE)
-
-coverage("gamma", limit = 5100, cdf = TRUE)
-coverage("gamma", limit = 5100, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
-         coinsurance = 0.8, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100, inflation = 0.1,
-         coinsurance = 0.8, cdf = FALSE)
-
-## Franchise décroissante seulement, par sinistre
-coverage("gamma", deductible = 1100, franchise = TRUE,
-         per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, franchise = TRUE,
-         per.loss = TRUE, cdf = FALSE)
-
-coverage("gamma", limit = 5100, franchise = TRUE,
-         per.loss = TRUE, cdf = TRUE)
-coverage("gamma", limit = 5100, franchise = TRUE,
-         per.loss = TRUE, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100,
-         franchise = TRUE, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100,
-         franchise = TRUE,  per.loss = TRUE, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100,
-         inflation = 0.1, coinsurance = 0.8,
-         franchise = TRUE, per.loss = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100,
-         inflation = 0.1, coinsurance = 0.8,
-         franchise = TRUE, per.loss = TRUE, cdf = FALSE)
-
-## Franchise décroissante seulement, par paiement
-coverage("gamma", deductible = 1100, franchise = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, franchise = TRUE, cdf = FALSE)
-
-coverage("gamma", limit = 5100, franchise = TRUE, cdf = TRUE)
-coverage("gamma", limit = 5100, franchise = TRUE, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100,
-         franchise = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100,
-         franchise = TRUE, cdf = FALSE)
-
-coverage("gamma", deductible = 1100, limit = 5100,
-         inflation = 0.1, coinsurance = 0.8,
-         franchise = TRUE, cdf = TRUE)
-coverage("gamma", deductible = 1100, limit = 5100,
-         inflation = 0.1, coinsurance = 0.8,
-         franchise = TRUE, cdf = FALSE)
