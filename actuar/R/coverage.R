@@ -157,5 +157,6 @@ coverage <- function(dist, deductible = 0, franchise = FALSE,
                list(cond1 = cond1, cond2 = cond2, cond3 = cond3,
                     f1 = f1, f2 = f2, f3 = f3)))
     formals(FUN) <- argsFUN             # set arguments
+    environment(FUN) <- new.env()       # new, empty environment
     FUN
 }
