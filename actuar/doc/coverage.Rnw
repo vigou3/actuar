@@ -14,6 +14,43 @@
 
 \maketitle
 
+The {\coverage} function is used to define a new function to compute
+the probability density function (pdf) of cumulative distribution
+function (cdf) of any probability law%
+\footnote{Provided functions \texttt{pfoo} and \texttt{dfoo} exist in
+  the current \textsf{R} environment for probability law
+  \texttt{foo}.} %
+under the following insurance coverage modifications: ordinary or
+franchise deductible, limit, coinsurance, inflation. In addition, the
+function can return the distribution of either the payment per loss or
+the payment per payment random variable. For the exact definitions of
+these terms as used by {\coverage}, see Chapter~5 of
+\cite{LossModels2e}.
+
+In the presence of a deductible, four random variables can be defined:
+\begin{enumerate}
+\item $Y^P$, the payment per payment with an ordinary deductible;
+\item $Y^L$, the payment per loss with an ordinary deductible;
+\item $\tilde{Y}^P$, the payment per payment with a franchise
+  deductible;
+\item $\tilde{Y}^L$, the payment per loss with a franchise deductible.
+\end{enumerate}
+The most common case in insurance applications is the distribution of
+the amount paid per payment with an ordinary deductible, $Y^P$.
+Hence, it is the default in {\coverage}.
+
+When there is no deductible, all four random variables are equivalent.
+
+This vignette presents the definitions of the above four random
+variables and their corresponding cdf and pdf for a deductible $d$, a
+limit $u$, a coinsurance level $\alpha$ and an inflation rate $r$. An
+illustrative plot of each cdf and pdf is also included. In these
+plots, a dot at the end of a vertical bar represents a probability
+mass at the given point.
+
+In definitions below, $X$ is the nonnegative random variable of the
+losses with cdf $F_X(\cdot)$ and pdf $f_X(\cdot)$.
+
 <<echo=FALSE>>=
 coverage <- function(dist, deductible = 0, franchise = FALSE,
                      limit = Inf, coinsurance = 1, inflation = 0,
@@ -167,12 +204,14 @@ coverage <- function(dist, deductible = 0, franchise = FALSE,
 }
 @
 
-\section{Ordinary deductible, payment per loss}
-
 <<echo=FALSE>>=
 deductible <- 5
 limit <- 13
+@
 
+\section{Payment per payment, ordinary deductible}
+
+<<echo=FALSE>>=
 pgammaL <- coverage("gamma", deductible = deductible, limit = limit,
                      per.loss = TRUE, cdf = TRUE)
 dgammaL <- coverage("gamma", deductible = deductible, limit = limit,
@@ -191,64 +230,6 @@ u <- limit - d
 e <- 0.001
 ylim <- c(0, dgammaL(0))
 @
-
-\begin{align*}
-  Y^L
-  &=
-  \begin{cases}
-    0,
-      & X < \D \frac{d}{1 + r} \\
-    \alpha ((1 + r) X - d),
-      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
-    \alpha (u - d),
-      & \D X \geq \frac{u}{1 + r}
-  \end{cases} & \\
-  F_{Y^L}(y)
-  &=
-  \begin{cases}
-    F_X \left( \D\frac{d}{1 + r} \right),
-      & y = 0 \\
-    F_X \left( \D\frac{y + \alpha d}{\alpha(1 + r)} \right),
-      & 0 < y < \alpha (u - d) \\
-    1,
-      & y \geq \alpha(u - d)
-  \end{cases} &
-  \begin{minipage}{0.4\linewidth}
-<<echo=FALSE, fig=TRUE, width=4, height=3>>=
-par(mar = c(2, 3, 1, 1))
-curve(pgammaL(x), from = 0, to = u - e,
-      xlim = c(0, limit), ylim = c(0, 1),
-      xlab = "", ylab = "", xaxt = "n")
-curve(pgammaL(x), from = u, add = TRUE)
-axis(1, at = c(0, u), labels = c("0", "u - d"))
-@
-  \end{minipage} \\
-  f_{Y^L}(y)
-  &=
-  \begin{cases}
-    F_X \left( \D\frac{d}{1 + r} \right),
-      & y = 0 \\
-    \D\frac{1}{\alpha (1 + r)} f_X \left( \D\frac{y + \alpha
-        d}{\alpha(1 + r)} \right),
-      & 0 < y < \alpha (u - d) \\
-    1 - F_X \left( \D\frac{u}{1 + r} \right),
-      & y = \alpha(u - d)
-  \end{cases} &
-  \begin{minipage}{0.4\linewidth}
-<<echo=FALSE, fig=TRUE, width=4, height=3>>=
-par(mar = c(2, 3, 1, 1))
-curve(dgammaL(x), from = 0 + e, to = u - e,
-      xlim = c(0, limit), ylim = ylim,
-      xlab = "", ylab = "", xaxt = "n")
-points(c(0, u), dgammaL(c(0, u)), type = "h", lwd = 2)
-points(c(0, u), dgammaL(c(0, u)), pch = 16)
-axis(1, at = c(0, u), labels = c("0", "u - d"))
-@
-  \end{minipage}
-\end{align*}
-
-
-\section{Ordinary deductible, payment per payment}
 
 \begin{align*}
   Y^P
@@ -310,8 +291,65 @@ axis(1, at = c(0, u), labels = c("0", "u - d"))
 \end{align*}
 
 
+\section{Payment per loss, ordinary deductible}
 
-\section{Franchise deductible, payment per loss}
+\begin{align*}
+  Y^L
+  &=
+  \begin{cases}
+    0,
+      & X < \D \frac{d}{1 + r} \\
+    \alpha ((1 + r) X - d),
+      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
+    \alpha (u - d),
+      & \D X \geq \frac{u}{1 + r}
+  \end{cases} & \\
+  F_{Y^L}(y)
+  &=
+  \begin{cases}
+    F_X \left( \D\frac{d}{1 + r} \right),
+      & y = 0 \\
+    F_X \left( \D\frac{y + \alpha d}{\alpha(1 + r)} \right),
+      & 0 < y < \alpha (u - d) \\
+    1,
+      & y \geq \alpha(u - d)
+  \end{cases} &
+  \begin{minipage}{0.4\linewidth}
+<<echo=FALSE, fig=TRUE, width=4, height=3>>=
+par(mar = c(2, 3, 1, 1))
+curve(pgammaL(x), from = 0, to = u - e,
+      xlim = c(0, limit), ylim = c(0, 1),
+      xlab = "", ylab = "", xaxt = "n")
+curve(pgammaL(x), from = u, add = TRUE)
+axis(1, at = c(0, u), labels = c("0", "u - d"))
+@
+  \end{minipage} \\
+  f_{Y^L}(y)
+  &=
+  \begin{cases}
+    F_X \left( \D\frac{d}{1 + r} \right),
+      & y = 0 \\
+    \D\frac{1}{\alpha (1 + r)} f_X \left( \D\frac{y + \alpha
+        d}{\alpha(1 + r)} \right),
+      & 0 < y < \alpha (u - d) \\
+    1 - F_X \left( \D\frac{u}{1 + r} \right),
+      & y = \alpha(u - d)
+  \end{cases} &
+  \begin{minipage}{0.4\linewidth}
+<<echo=FALSE, fig=TRUE, width=4, height=3>>=
+par(mar = c(2, 3, 1, 1))
+curve(dgammaL(x), from = 0 + e, to = u - e,
+      xlim = c(0, limit), ylim = ylim,
+      xlab = "", ylab = "", xaxt = "n")
+points(c(0, u), dgammaL(c(0, u)), type = "h", lwd = 2)
+points(c(0, u), dgammaL(c(0, u)), pch = 16)
+axis(1, at = c(0, u), labels = c("0", "u - d"))
+@
+  \end{minipage}
+\end{align*}
+
+
+\section{Payment per payment, franchise deductible}
 
 <<echo=FALSE>>=
 pgammaL <- coverage("gamma", deductible = deductible, limit = limit,
@@ -335,65 +373,7 @@ ylim <- c(0, dgammaL(0))
 @
 
 \begin{align*}
-  Y^L
-  &=
-  \begin{cases}
-    0,
-      & X < \D \frac{d}{1 + r} \\
-    \alpha (1 + r) X,
-      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
-    \alpha u,
-      & \D X \geq \frac{u}{1 + r}
-  \end{cases} & \\
-  F_{Y^L}(y)
-  &=
-  \begin{cases}
-    F_X \left( \D\frac{d}{1 + r} \right),
-      & 0 \leq y \leq \alpha d \\
-    F_X \left( \D\frac{y}{\alpha(1 + r)} \right),
-      & \alpha d < y < \alpha u \\
-    1,
-      & y \geq \alpha u
-  \end{cases} &
-  \begin{minipage}{0.4\linewidth}
-<<echo=FALSE, fig=TRUE, width=4, height=3>>=
-par(mar = c(2, 3, 1, 1))
-curve(pgammaL(x), from = 0, to = u - e,
-      xlim = c(0, limit + d), ylim = c(0, 1),
-      xlab = "", ylab = "", xaxt = "n")
-curve(pgammaL(x), from = u, add = TRUE)
-axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
-@
-  \end{minipage} \\
-  f_{Y^L}(y)
-  &=
-  \begin{cases}
-    F_X \left( \D\frac{d}{1 + r} \right),
-      & y = 0 \\
-    \D\frac{1}{\alpha (1 + r)} f_X \left( \D\frac{y}{\alpha(1 + r)} \right),
-      & \alpha d < y < \alpha u \\
-    1 - F_X \left( \D\frac{u}{1 + r} \right),
-      & y = \alpha u
-  \end{cases} &
-  \begin{minipage}{0.4\linewidth}
-<<echo=FALSE, fig=TRUE, width=4, height=3>>=
-par(mar = c(2, 3, 1, 1))
-curve(dgammaL(x), from = d + e, to = u - e,
-      xlim = c(0, limit + d), ylim = ylim,
-      xlab = "", ylab = "", xaxt = "n")
-curve(dgammaL(x), from = 0 + e, to = d, add = TRUE)
-points(c(0, u), dgammaL(c(0, u)), type = "h", lwd = 2)
-points(c(0, u), dgammaL(c(0, u)), pch = 16)
-axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
-@
-  \end{minipage}
-\end{align*}
-
-
-\section{Franchise deductible, payment per payment}
-
-\begin{align*}
-  Y^P
+  \tilde{Y}^P
   &=
   \begin{cases}
     \text{undefined},
@@ -403,7 +383,7 @@ axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
     \alpha u,
       & \D X \geq \frac{u}{1 + r}
   \end{cases} & \\
-  F_{Y^P}(y)
+  F_{\tilde{Y}^P}(y)
   &=
   \begin{cases}
     0,
@@ -425,7 +405,7 @@ curve(pgammaP(x), from = u, add = TRUE)
 axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 @
   \end{minipage} \\
-  f_{Y^P}(y)
+  f_{\tilde{Y}^P}(y)
   &=
   \begin{cases}
     0,
@@ -451,6 +431,68 @@ axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 @
   \end{minipage}
 \end{align*}
+
+
+\section{Payment per loss, franchise deductible}
+
+\begin{align*}
+  \tilde{Y}^L
+  &=
+  \begin{cases}
+    0,
+      & X < \D \frac{d}{1 + r} \\
+    \alpha (1 + r) X,
+      & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
+    \alpha u,
+      & \D X \geq \frac{u}{1 + r}
+  \end{cases} & \\
+  F_{\tilde{Y}^L}(y)
+  &=
+  \begin{cases}
+    F_X \left( \D\frac{d}{1 + r} \right),
+      & 0 \leq y \leq \alpha d \\
+    F_X \left( \D\frac{y}{\alpha(1 + r)} \right),
+      & \alpha d < y < \alpha u \\
+    1,
+      & y \geq \alpha u
+  \end{cases} &
+  \begin{minipage}{0.4\linewidth}
+<<echo=FALSE, fig=TRUE, width=4, height=3>>=
+par(mar = c(2, 3, 1, 1))
+curve(pgammaL(x), from = 0, to = u - e,
+      xlim = c(0, limit + d), ylim = c(0, 1),
+      xlab = "", ylab = "", xaxt = "n")
+curve(pgammaL(x), from = u, add = TRUE)
+axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
+@
+  \end{minipage} \\
+  f_{\tilde{Y}^L}(y)
+  &=
+  \begin{cases}
+    F_X \left( \D\frac{d}{1 + r} \right),
+      & y = 0 \\
+    \D\frac{1}{\alpha (1 + r)} f_X \left( \D\frac{y}{\alpha(1 + r)} \right),
+      & \alpha d < y < \alpha u \\
+    1 - F_X \left( \D\frac{u}{1 + r} \right),
+      & y = \alpha u
+  \end{cases} &
+  \begin{minipage}{0.4\linewidth}
+<<echo=FALSE, fig=TRUE, width=4, height=3>>=
+par(mar = c(2, 3, 1, 1))
+curve(dgammaL(x), from = d + e, to = u - e,
+      xlim = c(0, limit + d), ylim = ylim,
+      xlab = "", ylab = "", xaxt = "n")
+curve(dgammaL(x), from = 0 + e, to = d, add = TRUE)
+points(c(0, u), dgammaL(c(0, u)), type = "h", lwd = 2)
+points(c(0, u), dgammaL(c(0, u)), pch = 16)
+axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
+@
+  \end{minipage}
+\end{align*}
+
+\bibliographystyle{plain}
+\bibliography{actuar}
+
 
 \end{document}
 
