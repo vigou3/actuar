@@ -1,38 +1,73 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Ogive and histogram for grouped data
+### Creation and manipulation of grouped data objects
 ###
 ### See Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
 ###
-### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Mathieu Pigeon
+### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Mathieu Pigeon,
+### Louis-Philippe Pouliot
 
-
-grouped.data <- function(x, y = NULL, ...)
+grouped.data <- function(...)
 {
-    ## 'data.frame' must contain boundaries in first column and number of
-    ## data by class in second column.
-    if (class(x) == "data.frame")
+    ## Utility function
+    numform <- function(x) formatC(x, digits = 2, format = "fg")
+
+    ## The function can be called with either one or two arguments.
+    ##
+    ## One argument: a data frame containing the class boundaries in
+    ## the first column and the frequencies in the second column (the
+    ## other columns are ignored).
+    ##
+    ## Two arguments: the first is the vector of class boundaries and
+    ## the second the vector of frequencies.
+    x <- list(...)
+
+    ## One argument: a data frame
+    if (length(x) == 1 & class(x[[1]]) == "data.frame")
     {
-        y <- x[, 2]
-        x <- x[, 1]
+        vnames <- names(x[[1]])
+        y <- x[[1]][, 2]
+        x <- x[[1]][, 1]
     }
+    ## Two arguments: two vectors
+    else if (length(x) == 2)
+    {
+        defvnames <- c("Class", "Frequency")
+        vnames <- names(x)
+        if (is.null(vnames))
+            vnames <- defvnames
+        else
+        {
+            mn <- which(names(x) == "")
+            vnames[mn] <- defnames[mn]
+        }
+        y <- x[[2]]
+        x <- x[[1]]
+    }
+    else
+        stop("incorrect number of arguments")
+
     nx <- length(x)
     ny <- length(y)
 
-    ## First data in 'y' won't be used.
-    if (nx - ny > 1 || nx - ny < 0)
-        stop("length(x) incorrect")
-    if (nx - ny == 1)
-        y = c(0, y)
+    ## There must be exactly one class boudary more than frequencies.
+    if (nx - ny != 1)
+        stop("incorrect number of class boundaries and frequencies")
 
-    ## Create an object of class 'grouped.data'.
-    res = list(cj = x, nj = y)
-    class(res) <- c("grouped.data", class(res))
+    ## Return a data frame with formatted class boundaries in the
+    ## first column.
+    xfmt <- paste("[", numform(x[-nx]), ", ", numform(x[-1]), ")", sep = "")
+    res <- data.frame(xfmt, y)
+    names(res) <- vnames
+    class(res) <- c("gouped.data", "data.frame")
     attr(res, "call") <- sys.call()
-    attr(res, "j") <- FALSE
+    environment(res) <- new.env()
+    assign("cj", x, envir = environment(res))
+    assign("nj", y, envir = environment(res))
     res
 }
+
 
 print.grouped.data <- function(x, ...)
 {
@@ -55,7 +90,3 @@ print.grouped.data <- function(x, ...)
         cat("          cj     ", "          nj       ", "\n",paste("[",numform(x[-x1]),", ",numform(x[-1]),")", "       ", numformy(y[-1]), "\n", sep = ""))
     }
 }
-
-
-
-
