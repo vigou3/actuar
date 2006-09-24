@@ -15,10 +15,11 @@ coverage(dist, deductible = 0, franchise = FALSE,
 }
 \arguments{
   \item{dist}{character string of the name of a probability law.}
-  \item{deductible}{a unique positive value.}
+  \item{deductible}{a unique positive numeric value.}
   \item{franchise}{logical; \code{TRUE} for a franchise deductible,
     \code{FALSE} (default) for an ordinary deductible.}
-  \item{limit}{a unique positive value larger than \code{deductible}.}
+  \item{limit}{a unique positive numeric value larger than
+    \code{deductible}.}
   \item{coinsurance}{a unique value between 0 and 1; the proportion of
     coinsurance.}
   \item{inflation}{a unique value between 0 and 1; the rate of
@@ -41,7 +42,7 @@ coverage(dist, deductible = 0, franchise = FALSE,
 \value{
   An object of mode \code{"function"} with the same arguments as
   \code{pdist} or \code{ddist}, except \code{"lower.tail"},
-  \code{"log.p"} or \code{"log"}, which are not supported.
+  \code{"log.p"} and \code{"log"}, which are not supported.
 }
 \references{Klugman, Panjer & Willmot, Loss Models, Second
   Edition, Wiley, 2004.
