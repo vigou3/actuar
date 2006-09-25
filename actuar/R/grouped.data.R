@@ -8,7 +8,8 @@
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Mathieu Pigeon,
 ### Louis-Philippe Pouliot
 
-grouped.data <- function(...)
+grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
+                check.names = TRUE)
 {
     ## Utility function
     numform <- function(x) formatC(x, digits = 2, format = "fg")
@@ -57,7 +58,8 @@ grouped.data <- function(...)
     ## Return a data frame with formatted class boundaries in the
     ## first column.
     xfmt <- paste("[", numform(x[-nx]), ", ", numform(x[-1]), ")", sep = "")
-    res <- data.frame(xfmt, y)
+    res <- data.frame(xfmt, y, row.names = row.names, check.rows = check.rows,
+                      check.names = check.names)
     names(res) <- cnames
     class(res) <- c("grouped.data", "data.frame")
     environment(res) <- new.env()
@@ -67,40 +69,45 @@ grouped.data <- function(...)
 
 "[.grouped.data" <- function(x, i, j)
 {
-    ## Convert logical column selectors to numeric
-    if (is.logical(j))
-        j <- (1:2)[j]
-
-    ## Extraction of both columns case
-    if (missing(j) || identical(sort(j), c(1, 2)))
+    ## We need row and column indexes to be strictly positive integers.
+    ii <- seq(nrow(x))
+    ii <- if (!missing(i))
     {
-        if (missing(i))
-            return(x)
-        if (is.unsorted(i))
-        {
-            warning("rows are extracted in increasing order")
-            i <- sort(i)
-        }
-        res <- as.data.frame(NextMethod("["))
-        class(res) <- c("grouped.data", class(res))
-        cj <- get("cj", environment(x))
-        environment(res) <- new.env()
-        assign("cj", cj[sort(unique(c(i, i + 1)))], environment(res))
-        return(res)
+        if (is.matrix(i))
+            return(as.matrix(x)[i])     # barely supported
+        ii[i]                           # conversion
+    }
+    ij <- if (missing(j)) integer(0) else c(1, 2)[j]
+
+    ## Extraction of frequencies column only; only case not requiring
+    ## any work on the vector of class boundaries.
+    if (identical(ij, 2))
+        return(NextMethod("["))
+
+    ## Extraction of class boundaries in increasing order only
+    ## (untractable otherwise).
+    if (is.unsorted(ii))
+    {
+        warning("rows extracted in increasing order")
+        ii <- sort(ii)
     }
 
-    ## Extraction of class boudaries column case
-    if (j %in% c(1, -2))
-    {
-        cj <- get("cj", environment(x))
-        if (missing(i))
-            return(cj)
-        return(cj[sort(unique(c(i, i + 1)))])
-    }
+    ## Fetch the appropriate class boundaries.
+    cj <- eval(expression(cj), env = environment(x))
+    cj <- cj[sort(unique(c(ii, ii + 1)))]
 
-    ## Leave other cases (extraction of frequencies column or invalid
-    ## arguments) to "[.data.frame"().
-    NextMethod("[")
+    ## Extraction of the first column only: return the vector of class
+    ## boundaries.
+    if (identical(ij, 1))
+        return(cj)
+
+    ## Extraction of both columns: return a modified 'grouped.data'
+    ## object.
+    res <- as.data.frame(NextMethod("["))
+    class(res) <- c("grouped.data", class(res))
+    environment(res) <- new.env()
+    assign("cj", cj, environment(res))
+    res
 }
 
 "[<-.grouped.data" <- function(x, i, j, value)
