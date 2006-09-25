@@ -16,31 +16,30 @@ grouped.data <- function(...)
     ## The function can be called with either one or two arguments.
     ##
     ## One argument: a data frame containing the class boundaries in
-    ## the first column and the frequencies in the second column (the
-    ## other columns are ignored).
+    ## the first column and the class frequencies in the second
+    ## column. The first value of the second column is dropped. The
+    ## other columns, if any, are ignored.
     ##
     ## Two arguments: the first is the vector of class boundaries and
-    ## the second the vector of frequencies.
+    ## the second the vector of frequencies. The second vector is one
+    ## element shorter than the first.
     x <- list(...)
-
-    ## One argument: a data frame
     if (length(x) == 1 & class(x[[1]]) == "data.frame")
     {
-        vnames <- names(x[[1]])
-        y <- x[[1]][, 2]
+        cnames <- names(x[[1]])
+        y <- x[[1]][-1, 2]              # drop dummy frequency
         x <- x[[1]][, 1]
     }
-    ## Two arguments: two vectors
     else if (length(x) == 2)
     {
-        defvnames <- c("Class", "Frequency")
-        vnames <- names(x)
-        if (is.null(vnames))
-            vnames <- defvnames
+        cnames.def <- c("Class", "Frequency")
+        cnames <- names(x)
+        if (is.null(cnames))
+            cnames <- cnames.def
         else
         {
             mn <- which(names(x) == "")
-            vnames[mn] <- defnames[mn]
+            cnames[mn] <- defnames[mn]
         }
         y <- x[[2]]
         x <- x[[1]]
@@ -59,11 +58,10 @@ grouped.data <- function(...)
     ## first column.
     xfmt <- paste("[", numform(x[-nx]), ", ", numform(x[-1]), ")", sep = "")
     res <- data.frame(xfmt, y)
-    names(res) <- vnames
+    names(res) <- cnames
     class(res) <- c("grouped.data", "data.frame")
     environment(res) <- new.env()
     assign("cj", x, environment(res))
-    assign("nj", y, environment(res))
     res
 }
 
@@ -76,20 +74,18 @@ grouped.data <- function(...)
             return(x)
         if (is.unsorted(i))
         {
-            warning("rows will be extracted in sorted order")
+            warning("rows are extracted in increasing order")
             i <- sort(i)
         }
-        res <- as.data.frame(NextMethod(x, i))
+        res <- as.data.frame(NextMethod("["))
         class(res) <- c("grouped.data", class(res))
         cj <- get("cj", environment(x))
-        nj <- get("nj", environment(x))
         environment(res) <- new.env()
         assign("cj", cj[sort(unique(c(i, i + 1)))], environment(res))
-        assign("nj", nj[i], environment(res))
         return(res)
     }
 
-    ## Extraction of classes column case
+    ## Extraction of class boudaries column case
     if (identical(j, 1))
     {
         cj <- get("cj", environment(x))
@@ -98,7 +94,7 @@ grouped.data <- function(...)
         return(cj[sort(unique(c(i, i + 1)))])
     }
 
-    ## Let other cases (extraction of frequencies column or invalid
-    ## arguments) be handled by "[.data.frame".
+    ## Leave other cases (extraction of frequencies column or invalid
+    ## arguments) to "[.data.frame"().
     NextMethod("[")
 }
