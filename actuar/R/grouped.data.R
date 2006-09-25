@@ -60,33 +60,45 @@ grouped.data <- function(...)
     xfmt <- paste("[", numform(x[-nx]), ", ", numform(x[-1]), ")", sep = "")
     res <- data.frame(xfmt, y)
     names(res) <- vnames
-    class(res) <- c("gouped.data", "data.frame")
-    attr(res, "call") <- sys.call()
+    class(res) <- c("grouped.data", "data.frame")
     environment(res) <- new.env()
-    assign("cj", x, envir = environment(res))
-    assign("nj", y, envir = environment(res))
+    assign("cj", x, environment(res))
+    assign("nj", y, environment(res))
     res
 }
 
-
-print.grouped.data <- function(x, ...)
+"[.grouped.data" <- function(x, i, j)
 {
-    ## To formate numbers.
-    numform <- function(x) formatC(x, digits = 2, format = "e")
-    numformy <- function(x) formatC(x)
+    ## Extraction of both columns case
+    if (missing(j) || identical(sort(j), c(1, 2)))
+    {
+        if (missing(i))
+            return(x)
+        if (is.unsorted(i))
+        {
+            warning("rows will be extracted in sorted order")
+            i <- sort(i)
+        }
+        res <- as.data.frame(NextMethod(x, i))
+        class(res) <- c("grouped.data", class(res))
+        cj <- get("cj", environment(x))
+        nj <- get("nj", environment(x))
+        environment(res) <- new.env()
+        assign("cj", cj[sort(unique(c(i, i + 1)))], environment(res))
+        assign("nj", nj[i], environment(res))
+        return(res)
+    }
 
-    ## Use object created by 'grouped' function
-    if (attr(x, "j"))
+    ## Extraction of classes column case
+    if (identical(j, 1))
     {
-        x <- x$cj
-        x1 <- length(x)
-        cat("          cj     ", "\n", paste("[",numform(x[-x1]),", ",numform(x[-1]),")", "\n", sep = ""))
+        cj <- get("cj", environment(x))
+        if (missing(i))
+            return(cj)
+        return(cj[sort(unique(c(i, i + 1)))])
     }
-    else
-    {
-        y <- x$nj
-        x <- x$cj
-        x1 <- length(x)
-        cat("          cj     ", "          nj       ", "\n",paste("[",numform(x[-x1]),", ",numform(x[-1]),")", "       ", numformy(y[-1]), "\n", sep = ""))
-    }
+
+    ## Let other cases (extraction of frequencies column or invalid
+    ## arguments) be handled by "[.data.frame".
+    NextMethod("[")
 }
