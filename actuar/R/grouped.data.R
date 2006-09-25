@@ -98,3 +98,29 @@ grouped.data <- function(...)
     ## arguments) to "[.data.frame"().
     NextMethod("[")
 }
+
+"[<-.grouped.data" <- function(x, i, j, value)
+{
+    ## Impossible to assign both columns at the same time
+    if (missing(j) || identical(sort(j), c(1, 2)))
+        stop("impossible to replace class boundaries and class frequencies simultaneously")
+
+    ## Replacement of class boundaries
+    if (identical(j, 1))
+    {
+        ni <- length(i)
+        if (length(x) - ni != 1)
+            stop("invalid number of class boundaries")
+        cj <- get("cj", environment(x))
+        if (missing(i))
+            cj <- value
+        else
+            cj[sort(unique(c(i, i + 1)))] <- value
+        res <- grouped.data(cj, x[, 2])
+        names(res) <- names(x)
+        return(res)
+    }
+
+    ## Leave replacement of frequencies to "[<-.data.frame"().
+    NextMethod("[<-")
+}
