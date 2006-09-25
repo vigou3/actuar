@@ -1,17 +1,25 @@
-
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Ogive and histogram for grouped data
+### plot() method for ogives
 ###
 ### See Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
 ###
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Mathieu Pigeon
 
-## Method to create graphic of empirical distribution function.
-plot.ogive <- function(x, y = NULL, xlim = NULL, ylim = NULL, xlab = "boundaries", ylab = "F(x)", col = 1, ...)
+plot.ogive <- function(x, ..., main = NULL, xlab = "x", ylab = "F(x)")
 {
-    xval <- eval(expression(x), env = environment(x))
-    plot(xval, x(xval),  main = "Ogive", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, col = col, type = "o", pch = 20)
-}
+    ## Sanity check
+    if (!inherits(x, "ogive"))
+        stop("wrong method")
 
+    if (missing(main))
+        main <- {
+            cl <- attr(x, "call")
+            deparse(if (!is.null(cl)) cl else sys.call())
+        }
+
+    env <- environment(x)
+    plot(get("x", env), get("y", env),  ..., type = "o", pch = 16,
+         main = main, xlab = xlab, ylab = ylab)
+}
