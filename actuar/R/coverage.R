@@ -85,9 +85,9 @@ coverage <- function(dist, deductible = 0, franchise = FALSE,
         bound1 <- coinsurance * deductible
         bound2 <- coinsurance * limit
         cond1 <- if (cdf)
-                     substitute(0 <= x & x <= b1, list(x = x, b1 = bound1))
-                 else
-                     substitute(x == 0, list(x = x))
+            substitute(0 <= x & x <= b1, list(x = x, b1 = bound1))
+        else
+            substitute(x == 0, list(x = x))
         cond2 <- substitute(b1 < x & x < b2,
                             list(x = x, b1 = bound1, b2 = bound2))
     }
@@ -118,8 +118,8 @@ coverage <- function(dist, deductible = 0, franchise = FALSE,
 
     ## Function definition for the first branch.
     f1 <- if (per.loss & deductible)
-              substitute(do.call(F, a), list(F = F, a = c(d, argsF)))
-          else 0
+        substitute(do.call(F, a), list(F = F, a = c(d, argsF)))
+    else 0
 
     ## Function definitions for the second and third branches. The
     ## 'cdf = TRUE' and 'CDF = FALSE' must be treated separately.
