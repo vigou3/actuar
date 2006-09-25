@@ -73,9 +73,10 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
     ii <- seq(nrow(x))
     ii <- if (!missing(i))
     {
+        ## Matrix extraction is barely supported
         if (is.matrix(i))
-            return(as.matrix(x)[i])     # barely supported
-        ii[i]                           # conversion
+            return(as.matrix(x)[i])
+        ii[i]
     }
     ij <- if (missing(j)) integer(0) else c(1, 2)[j]
 
@@ -112,29 +113,46 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
 
 "[<-.grouped.data" <- function(x, i, j, value)
 {
-    ## Convert logical column selectors to numeric
-    if (is.logical(j))
-        j <- (1:2)[j]
-
-    ## Impossible to assign both columns at the same time
-    if (missing(j) || identical(sort(j), c(1, 2)))
-        stop("impossible to replace class boundaries and class frequencies simultaneously")
-
-    ## Replacement of class boundaries
-    if (j %in% c(1, -2))
+    ## We need row and column indexes to be strictly positive integers.
+    ii <- seq(nrow(x))
+    ii <- if (!missing(i))
     {
-        ni <- length(i)
-        if (length(x) - ni != 1)
-            stop("invalid number of class boundaries")
-        cj <- get("cj", environment(x))
-        if (missing(i))
-            cj <- value
-        else
-            cj[sort(unique(c(i, i + 1)))] <- value
-        res <- grouped.data(cj, x[, 2])
-        names(res) <- names(x)
-        return(res)
+        ## Matrix indexing only supported for logical matrices.
+        if (is.logical(i) && is.matrix(i) && all(dim(i) == dim(x)))
+        {
+            j <- apply(i, 2, any)       # columns with replacements
+            i <- i[, j]                 # keep appropriate column only
+        }
+        if (is.matrix(i))
+            stop("only logical matrix subscripts are allowed in replacement")
+        ii[i]                           # conversion
     }
+    ij <- if (missing(j)) integer(0) else c(1, 2)[j]
+
+    ## Replacement in both columns at the same time not supported.
+    if (!length(j) || identical(sort(ij), c(1, 2)))
+        stop("impossible to replace bounds and frequencies simultaneously")
+
+    ## Replacement of frequencies only; only case not requiring
+    ## any work on the vector of class boundaries.
+    if (identical(ij, 2))
+        return(NextMethod("[<-"))
+
+    ## Fetch the appropriate class boundaries.
+    cj <- eval(expression(cj), env = environment(x))
+    cj <- cj[sort(unique(c(ii, ii + 1)))]
+
+    ni <- length(i)
+    if (length(x) - ni != 1)
+        stop("incorrect number of class boundaries")
+    if (missing(i))
+        cj <- value
+    else
+        cj[sort(unique(c(i, i + 1)))] <- value
+    res <- grouped.data(cj, x[, 2])
+    names(res) <- names(x)
+    return(res)
+}
 
     ## Leave replacement of frequencies to "[<-.data.frame"().
     NextMethod("[<-")
