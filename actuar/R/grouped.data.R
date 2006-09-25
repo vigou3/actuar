@@ -86,7 +86,7 @@ grouped.data <- function(...)
     }
 
     ## Extraction of class boudaries column case
-    if (identical(j, 1))
+    if (j %in% c(1, -2))
     {
         cj <- get("cj", environment(x))
         if (missing(i))
@@ -106,7 +106,7 @@ grouped.data <- function(...)
         stop("impossible to replace class boundaries and class frequencies simultaneously")
 
     ## Replacement of class boundaries
-    if (identical(j, 1))
+    if (j %in% c(1, -2))
     {
         ni <- length(i)
         if (length(x) - ni != 1)
