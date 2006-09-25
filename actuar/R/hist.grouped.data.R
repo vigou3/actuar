@@ -1,38 +1,63 @@
-
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Ogive and histogram for grouped data
+### Histogram for grouped data
 ###
 ### See Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
 ###
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Mathieu Pigeon
 
-
-
-## Calculate an empirical density function and create the histogram.
-hist.grouped.data <- function(x, y = NULL, main = "Histogram", xlim = NULL, ylim = NULL, xlab = "boundaries", ylab = "f(x)", plot = TRUE, ...)
+hist.grouped.data <-
+    function(x, freq = NULL, probability = !freq,
+             density = NULL, angle = 45, col = NULL, border = NULL,
+             main = paste("Histogram of", xname), xlim = range(cj),
+             ylim = NULL, xlab = xname, ylab, axes = TRUE,
+             plot = TRUE, labels = FALSE, ...)
 {
-    ## Use object created by 'grouped' function.
-    if (inherits(x, "grouped.data")
-    {
-        y <- x$nj
-        x <- x$cj
-    }
+    ## Sanity check
+    if (!inherits(x, "grouped.data"))
+        stop("wrong method")
 
-    ## Create an object of class 'histogram'.
-    fnt <- approxfun(x, c(0, y[-1] / (sum(y) * diff(x))), yleft = 0, yright = 0, f = 1, method = "constant")
-    r <- structure(list(cj = x, nj = y[-1], density = fnt(x)), class = "histogram")
+    ## Class boundaries are in the environment of 'x'
+    cj <- get("cj", environment(x))
+    nj <- x[, 2]
 
-    ## If 'plot' is true, histogram is created, else, boudaries, number of data by class and density are returned.
+    ## If any frequency is non finite, omit the class
+    keep <- which(is.finite(nj))
+    nj <- nj[keep]
+    cj <- cj[c(1, keep + 1)]
+
+    ## Some useful values
+    n <- sum(nj)                        # total number of observations
+    h <- diff(cj)                       # class widths
+    dens <- nj/(n * h)                  # class "densities"
+
     if (plot)
     {
-        plot(x , fnt(x), main = main, xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, type = "S", frame = FALSE)
-        segments(x, 0, x, fnt(x))
-        segments(0, 0, max(x), 0)
+        ## Cannot plot histogram with infinite class
+        if (any(is.infinite(cj)))
+            stop("infinite class boundaries")
+
+        ## The rest is taken from hist.default()
+        xname <- paste(deparse(substitute(x), 500), collapse = "\n")
+        equidist <- diff(range(h)) < 1e-07 * mean(h)
+        if (is.null(freq)) {
+            freq <- if (!missing(probability))
+                !as.logical(probability)
+            else equidist
+        }
+        else if (!missing(probability) && any(probability == freq))
+            stop("'probability' is an alias for '!freq', however they differ.")
+        mids <- 0.5 * (cj[-1] + cj[-length(cj)])
+        r <- structure(list(breaks = cj, counts = nj, intensities = dens,
+                            density = dens, mids = mids, xname = xname,
+                            equidist = equidist),
+                       class = "histogram")
+        plot(r, freq = freq, col = col, border = border, angle = angle,
+            density = density, main = main, xlim = xlim, ylim = ylim,
+            xlab = xlab, ylab = ylab, axes = axes, labels = labels, ...)
         invisible(r)
     }
     else
-        r
+        approxfun(cj, dens, yleft = 0, yright = 0, f = 1, method = "constant")
 }
-
