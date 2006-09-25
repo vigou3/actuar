@@ -67,6 +67,10 @@ grouped.data <- function(...)
 
 "[.grouped.data" <- function(x, i, j)
 {
+    ## Convert logical column selectors to numeric
+    if (is.logical(j))
+        j <- (1:2)[j]
+
     ## Extraction of both columns case
     if (missing(j) || identical(sort(j), c(1, 2)))
     {
@@ -101,6 +105,10 @@ grouped.data <- function(...)
 
 "[<-.grouped.data" <- function(x, i, j, value)
 {
+    ## Convert logical column selectors to numeric
+    if (is.logical(j))
+        j <- (1:2)[j]
+
     ## Impossible to assign both columns at the same time
     if (missing(j) || identical(sort(j), c(1, 2)))
         stop("impossible to replace class boundaries and class frequencies simultaneously")
