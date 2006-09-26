@@ -78,44 +78,46 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
             return(as.matrix(x)[i])
         ii[i]
     }
-    ij <- if (missing(j)) integer(0) else c(1, 2)[j]
+    ij <- if (missing(j)) integer(0) else seq(ncol(x))[j]
 
-    ## Extraction of frequencies column only; only case not requiring
-    ## any work on the vector of class boundaries.
-    if (identical(ij, 2))
-        return(NextMethod("["))
-
-    ## Extraction of class boundaries in increasing order only
-    ## (untractable otherwise).
-    if (is.unsorted(ii))
+    ## Extraction of at least the class boundaries (the complicated case).
+    if (1 %in% ij)
     {
-        warning("rows extracted in increasing order")
-        ii <- sort(ii)
+        ## Extraction of class boundaries in increasing order only
+        ## (untractable otherwise).
+        if (is.unsorted(ii))
+        {
+            warning("rows extracted in increasing order")
+            ii <- sort(ii)
+        }
+
+        ## Fetch the appropriate class boundaries.
+        cj <- eval(expression(cj), env = environment(x))
+        cj <- cj[sort(unique(c(ii, ii + 1)))]
+
+        ## Extraction of the first column only: return the vector of class
+        ## boundaries.
+        if (identical(ij, 1))
+            return(cj)
+
+        ## Extraction of both columns: return a modified 'grouped.data'
+        ## object.
+        res <- as.data.frame(NextMethod("["))
+        class(res) <- c("grouped.data", class(res))
+        environment(res) <- new.env()
+        assign("cj", cj, environment(res))
+        return(res)
     }
 
-    ## Fetch the appropriate class boundaries.
-    cj <- eval(expression(cj), env = environment(x))
-    cj <- cj[sort(unique(c(ii, ii + 1)))]
-
-    ## Extraction of the first column only: return the vector of class
-    ## boundaries.
-    if (identical(ij, 1))
-        return(cj)
-
-    ## Extraction of both columns: return a modified 'grouped.data'
-    ## object.
-    res <- as.data.frame(NextMethod("["))
-    class(res) <- c("grouped.data", class(res))
-    environment(res) <- new.env()
-    assign("cj", cj, environment(res))
-    res
+    ## All other cases handled as a regular data frame.
+    NextMethod("[")
 }
 
 "[<-.grouped.data" <- function(x, i, j, value)
 {
     ## We need row and column indexes to be strictly positive integers.
     ii <- seq(nrow(x))
-    ii <- if (!missing(i))
+    if (!missing(i))
     {
         ## Matrix indexing only supported for logical matrices.
         if (is.logical(i) && is.matrix(i) && all(dim(i) == dim(x)))
@@ -125,35 +127,28 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
         }
         if (is.matrix(i))
             stop("only logical matrix subscripts are allowed in replacement")
-        ii[i]                           # conversion
+        ii <- ii[i]                     # conversion
     }
     ij <- if (missing(j)) integer(0) else c(1, 2)[j]
 
     ## Replacement in both columns at the same time not supported.
-    if (!length(j) || identical(sort(ij), c(1, 2)))
-        stop("impossible to replace bounds and frequencies simultaneously")
+    if (!length(ij) || identical(sort(ij), c(1, 2)))
+        stop("impossible to replace boundaries and frequencies simultaneously")
 
-    ## Replacement of frequencies only; only case not requiring
-    ## any work on the vector of class boundaries.
-    if (identical(ij, 2))
-        return(NextMethod("[<-"))
+    ## Replacement of class boundaries
+    if (identical(ij, 1))
+    {
+        cj <- eval(expression(cj), env = environment(x))
+        cj[sort(unique(c(ii, ii + 1)))] <- value
 
-    ## Fetch the appropriate class boundaries.
-    cj <- eval(expression(cj), env = environment(x))
-    cj <- cj[sort(unique(c(ii, ii + 1)))]
+                                        #ni <- length(i)
+                                        #if (length(x) - ni != 1)
+                                        #    stop("incorrect number of class boundaries")
+        res <- grouped.data(cj, x[, 2])
+        names(res) <- names(x)
+        return(res)
+    }
 
-    ni <- length(i)
-    if (length(x) - ni != 1)
-        stop("incorrect number of class boundaries")
-    if (missing(i))
-        cj <- value
-    else
-        cj[sort(unique(c(i, i + 1)))] <- value
-    res <- grouped.data(cj, x[, 2])
-    names(res) <- names(x)
-    return(res)
-}
-
-    ## Leave replacement of frequencies to "[<-.data.frame"().
+    ## All other cases handled as a regular data frame.
     NextMethod("[<-")
 }
