@@ -14,38 +14,31 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
     ## Utility function
     numform <- function(x) formatC(x, digits = 2, format = "fg")
 
-    ## The function can be called with either one or two arguments.
-    ##
-    ## One argument: a data frame containing the class boundaries in
-    ## the first column and the class frequencies in the second
-    ## column. The first value of the second column is dropped. The
-    ## other columns, if any, are ignored.
-    ##
-    ## Two arguments: the first is the vector of class boundaries and
-    ## the second the vector of frequencies. The second vector is one
-    ## element shorter than the first.
+    ## The function must be called with at least two arguments. The
+    ## first is the vector of class boundaries. The others are vectors
+    ## of class frequencies. All arguments will be converted to data
+    ## frames.
     x <- list(...)
-    xnames <- names(x)
-
-    y <- as.data.frame(x[-1])
-    x <- as.data.frame(x[[1]])
-
+    xnames <- names(x)                  # preserve names
+    y <- as.data.frame(x[-1])           # class frequencies
+    x <- as.data.frame(x[[1]])          # class boundaries
     nx <- nrow(x)
     ny <- nrow(y)
 
-    ## There must be exactly one class boudary more than frequencies.
+    ## There must be exactly one class boundary more than frequencies.
     if (nx - ny != 1)
         stop("incorrect number of class boundaries and frequencies")
 
     ## Return a data frame with formatted class boundaries in the
     ## first column.
-    xfmt <- paste("[", numform(x[-nx]), ", ", numform(x[-1]), ")", sep = "")
+    xfmt <- paste("[", numform(x[-nx, ]), ", ", numform(x[-1, ]), ")",
+                  sep = "")
     res <- data.frame(xfmt, y, row.names = row.names, check.rows = check.rows,
                       check.names = check.names)
     names(res) <- c(xnames[1], names(y))
     class(res) <- c("grouped.data", "data.frame")
     environment(res) <- new.env()
-    assign("cj", x, environment(res))
+    assign("cj", unlist(x, use.names = FALSE), environment(res))
     res
 }
 
@@ -58,15 +51,15 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
             return(x)
         if (is.matrix(i))
             return(as.matrix(x)[i])
-        if (identical(1, seq(ncol(x))[i]))
-            return(eval(expression(cj), env = environment(x)))
-        return(NextMethod("["))
+        res <- NextMethod("[")
+        if (identical(seq(ncol(x))[i], as.integer(1)))
+            environment(res) <- environment(x)
+        return(res)
     }
 
     ## We need row and column indexes to be strictly positive integers.
-    ii <- seq(nrow(x))                  # default: all rows
-    ii <- if (!missing(i)) ii[i]        # rows specified
-    ij <- if (missing(j)) integer(0) else seq(ncol(x))[j] # columns
+    ii <- if (missing(i)) seq(nrow(x)) else seq(nrow(x))[i]
+    ij <- if (missing(j)) integer(0) else seq(ncol(x))[j]
 
     ## Extraction of at least the class boundaries (the complicated case).
     if (1 %in% ij)
@@ -85,12 +78,12 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
 
         ## Extraction of the first column only: return the vector of class
         ## boundaries.
-        if (identical(ij, 1))
+        if (identical(ij, as.integer(1)))
             return(cj)
 
         ## Return a modified 'grouped.data' object.
-        res <- as.data.frame(NextMethod("["))
-        class(res) <- c("grouped.data", class(res))
+        res <- NextMethod("[")
+        #class(res) <- c("grouped.data", class(res))
         environment(res) <- new.env()
         assign("cj", cj, environment(res))
         return(res)
