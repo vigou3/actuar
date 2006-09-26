@@ -31,7 +31,7 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
 
     ## Return a data frame with formatted class boundaries in the
     ## first column.
-    xfmt <- paste("[", numform(x[-nx, ]), ", ", numform(x[-1, ]), ")",
+    xfmt <- paste("(", numform(x[-nx, ]), ", ", numform(x[-1, ]), "]",
                   sep = "")
     res <- data.frame(xfmt, y, row.names = row.names, check.rows = check.rows,
                       check.names = check.names)
@@ -95,40 +95,67 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
 
 "[<-.grouped.data" <- function(x, i, j, value)
 {
-    ## We need row and column indexes to be strictly positive integers.
-    ii <- seq(nrow(x))
-    if (!missing(i))
+    print(nargs())
+    nA <- nargs()
+    if (nA == 4)
     {
-        ## Matrix indexing only supported for logical matrices.
+        i <- if (missing(i)) NULL else i
+        j <- if (missing(j)) NULL else j
+    }
+    else if (nA == 3)
+    {
+        ## No arguments inside [ ]: only replacing by NULL is supported.
+        if (missing(i) && missing(j))
+        {
+            if (is.null(value))
+                return(x[logical(0)])
+            stop("impossible to replace boundaries and frequencies simultaneously")
+        }
+        ## Indexing by a logical matrix is supported, but only two
+        ## types of replacement are allowed: replacing in the
+        ## first column only, or replacing in any column but the
+        ## first.
         if (is.logical(i) && is.matrix(i) && all(dim(i) == dim(x)))
         {
             j <- apply(i, 2, any)       # columns with replacements
-            i <- i[, j]                 # keep appropriate column only
+            if (match(TRUE, j) == 1)    # boundaries to replace
+            {
+                if (length(j) > 1)      # boundaries and frequencies
+                    stop("impossible to replace boundaries and frequencies simultaneously")
+                i <- i[, j]             # boundaries only
+            }
+            return(NextMethod("[<-"))   # frequencies only
         }
+        ## Indexing by a non logical matrix is not supported.
         if (is.matrix(i))
             stop("only logical matrix subscripts are allowed in replacement")
-        ii <- ii[i]                     # conversion
+        ## Indexing by a vector: the argument specifies columns to
+        ## replace.
+        j <- i
+        i <- NULL
     }
-    ij <- if (missing(j)) integer(0) else c(1, 2)[j]
+    else
+        stop("need 0, 1, or 2 subscripts")
 
-    ## Replacement in both columns at the same time not supported.
-    if (!length(ij) || identical(sort(ij), c(1, 2)))
+    ## We need row and column indexes to be strictly positive integers.
+    ii <- if (is.null(i)) seq(nrow(x)) else seq(nrow(x))[i]
+    ij <- if (is.null(j)) integer(0) else seq(ncol(x))[j]
+
+    ## Replacement in the column of boundaries and any other column is
+    ## not supported (untractable).
+    if (!length(ij) || (length(ij) < 1 && 1 %in% ij))
         stop("impossible to replace boundaries and frequencies simultaneously")
 
-    ## Replacement of class boundaries
-    if (identical(ij, 1))
+    ## Replacement of class boundaries only.
+    if (identical(ij, as.integer(1)))
     {
         cj <- eval(expression(cj), env = environment(x))
         cj[sort(unique(c(ii, ii + 1)))] <- value
-
-                                        #ni <- length(i)
-                                        #if (length(x) - ni != 1)
-                                        #    stop("incorrect number of class boundaries")
-        res <- grouped.data(cj, x[, 2])
+        res <- grouped.data(cj, x[, -1])
         names(res) <- names(x)
         return(res)
     }
 
-    ## All other cases handled as a regular data frame.
+    ## All other cases handled like a regular data frame.
     NextMethod("[<-")
 }
