@@ -25,31 +25,13 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
     ## the second the vector of frequencies. The second vector is one
     ## element shorter than the first.
     x <- list(...)
-    if (length(x) == 1 & class(x[[1]]) == "data.frame")
-    {
-        cnames <- names(x[[1]])
-        y <- x[[1]][-1, 2]              # drop dummy frequency
-        x <- x[[1]][, 1]
-    }
-    else if (length(x) == 2)
-    {
-        cnames.def <- c("Class", "Frequency")
-        cnames <- names(x)
-        if (is.null(cnames))
-            cnames <- cnames.def
-        else
-        {
-            mn <- which(names(x) == "")
-            cnames[mn] <- defnames[mn]
-        }
-        y <- x[[2]]
-        x <- x[[1]]
-    }
-    else
-        stop("incorrect number of arguments")
+    xnames <- names(x)
 
-    nx <- length(x)
-    ny <- length(y)
+    y <- as.data.frame(x[-1])
+    x <- as.data.frame(x[[1]])
+
+    nx <- nrow(x)
+    ny <- nrow(y)
 
     ## There must be exactly one class boudary more than frequencies.
     if (nx - ny != 1)
@@ -60,7 +42,7 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
     xfmt <- paste("[", numform(x[-nx]), ", ", numform(x[-1]), ")", sep = "")
     res <- data.frame(xfmt, y, row.names = row.names, check.rows = check.rows,
                       check.names = check.names)
-    names(res) <- cnames
+    names(res) <- c(xnames[1], names(y))
     class(res) <- c("grouped.data", "data.frame")
     environment(res) <- new.env()
     assign("cj", x, environment(res))
@@ -69,16 +51,22 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
 
 "[.grouped.data" <- function(x, i, j)
 {
-    ## We need row and column indexes to be strictly positive integers.
-    ii <- seq(nrow(x))
-    ii <- if (!missing(i))
+    ## Only columns to extract are specified.
+    if (nargs() < 3)
     {
-        ## Matrix extraction is barely supported
+        if (missing(i))
+            return(x)
         if (is.matrix(i))
             return(as.matrix(x)[i])
-        ii[i]
+        if (identical(1, seq(ncol(x))[i]))
+            return(eval(expression(cj), env = environment(x)))
+        return(NextMethod("["))
     }
-    ij <- if (missing(j)) integer(0) else seq(ncol(x))[j]
+
+    ## We need row and column indexes to be strictly positive integers.
+    ii <- seq(nrow(x))                  # default: all rows
+    ii <- if (!missing(i)) ii[i]        # rows specified
+    ij <- if (missing(j)) integer(0) else seq(ncol(x))[j] # columns
 
     ## Extraction of at least the class boundaries (the complicated case).
     if (1 %in% ij)
@@ -100,8 +88,7 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
         if (identical(ij, 1))
             return(cj)
 
-        ## Extraction of both columns: return a modified 'grouped.data'
-        ## object.
+        ## Return a modified 'grouped.data' object.
         res <- as.data.frame(NextMethod("["))
         class(res) <- c("grouped.data", class(res))
         environment(res) <- new.env()
@@ -109,7 +96,7 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
         return(res)
     }
 
-    ## All other cases handled as a regular data frame.
+    ## All other cases handled like a regular data frame.
     NextMethod("[")
 }
 
