@@ -19,7 +19,8 @@ plot.ogive <- function(x, ..., main = NULL, xlab = "x", ylab = "F(x)")
             deparse(if (!is.null(cl)) cl else sys.call())
         }
 
-    env <- environment(x)
-    plot(get("x", env), get("y", env),  ..., type = "o", pch = 16,
+    kn <- knots(x)
+    Fn <- x(kn)
+    plot(kn, Fn,  ..., type = "o", pch = 16,
          main = main, xlab = xlab, ylab = ylab)
 }
