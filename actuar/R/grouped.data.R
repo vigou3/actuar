@@ -51,18 +51,21 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
             return(x)
         if (is.matrix(i))
             return(as.matrix(x)[i])
-        res <- NextMethod("[")
-        if (identical(seq(ncol(x))[i], as.integer(1)))
+        res <- as.data.frame(NextMethod())
+        if (length(i) > 1 && 1 %in% seq(ncol(x))[i])
+        {
             environment(res) <- environment(x)
+            class(res) <- c("grouped.data", class(res))
+        }
         return(res)
     }
 
-    ## We need row and column indexes to be strictly positive integers.
+    ## Convert row and column indexes to strictly positive integers.
     ii <- if (missing(i)) seq(nrow(x)) else seq(nrow(x))[i]
     ij <- if (missing(j)) integer(0) else seq(ncol(x))[j]
 
     ## Extraction of at least the class boundaries (the complicated case).
-    if (1 %in% ij)
+    if (!length(ij) || 1 %in% ij)
     {
         ## Extraction of class boundaries in increasing order only
         ## (untractable otherwise).
@@ -82,25 +85,23 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
             return(cj)
 
         ## Return a modified 'grouped.data' object.
-        res <- NextMethod("[")
-        #class(res) <- c("grouped.data", class(res))
+        res <- NextMethod()
         environment(res) <- new.env()
         assign("cj", cj, environment(res))
         return(res)
     }
 
     ## All other cases handled like a regular data frame.
-    NextMethod("[")
+    NextMethod()
 }
 
 "[<-.grouped.data" <- function(x, i, j, value)
 {
-    print(nargs())
     nA <- nargs()
     if (nA == 4)
     {
-        i <- if (missing(i)) NULL else i
-        j <- if (missing(j)) NULL else j
+        ii <- if (missing(i)) NULL else i
+        ij <- if (missing(j)) NULL else j
     }
     else if (nA == 3)
     {
@@ -117,45 +118,47 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
         ## first.
         if (is.logical(i) && is.matrix(i) && all(dim(i) == dim(x)))
         {
-            j <- apply(i, 2, any)       # columns with replacements
-            if (match(TRUE, j) == 1)    # boundaries to replace
+            ij <- apply(i, 2, any)      # columns with replacements
+            if (match(TRUE, ij) == 1)   # boundaries to replace
             {
-                if (length(j) > 1)      # boundaries and frequencies
+                if (length(ij) > 1)     # boundaries and frequencies
                     stop("impossible to replace boundaries and frequencies simultaneously")
-                i <- i[, j]             # boundaries only
+                ii <- i[, ij]           # boundaries only
             }
-            return(NextMethod("[<-"))   # frequencies only
+            return(NextMethod())        # frequencies only
         }
         ## Indexing by a non logical matrix is not supported.
         if (is.matrix(i))
             stop("only logical matrix subscripts are allowed in replacement")
         ## Indexing by a vector: the argument specifies columns to
         ## replace.
-        j <- i
-        i <- NULL
+        ij <- i
+        ii <- NULL
     }
     else
         stop("need 0, 1, or 2 subscripts")
 
-    ## We need row and column indexes to be strictly positive integers.
-    ii <- if (is.null(i)) seq(nrow(x)) else seq(nrow(x))[i]
-    ij <- if (is.null(j)) integer(0) else seq(ncol(x))[j]
+    ## Convert row and column indexes to integers.
+    ii <- if (is.null(ii)) seq(nrow(x)) else seq(nrow(x))[ii]
+    ij <- if (is.null(ij)) integer(0) else seq(ncol(x))[ij]
 
-    ## Replacement in the column of boundaries and any other column is
-    ## not supported (untractable).
-    if (!length(ij) || (length(ij) < 1 && 1 %in% ij))
-        stop("impossible to replace boundaries and frequencies simultaneously")
-
-    ## Replacement of class boundaries only.
-    if (identical(ij, as.integer(1)))
+    ## Replacement at least in the class boundaries column.
+    if (!length(ij) || 1 %in% ij)
     {
-        cj <- eval(expression(cj), env = environment(x))
-        cj[sort(unique(c(ii, ii + 1)))] <- value
-        res <- grouped.data(cj, x[, -1])
-        names(res) <- names(x)
-        return(res)
+        ## supported: replacement of class boundaries only
+        if (identical(ij, as.integer(1)))
+        {
+            cj <- eval(expression(cj), env = environment(x))
+            cj[sort(unique(c(ii, ii + 1)))] <- value
+            res <- grouped.data(cj, x[, -1])
+            names(res) <- names(x)
+            return(res)
+        }
+        ## not supported (untractable): replacement in the column of
+        ## boundaries and any other column
+        stop("impossible to replace boundaries and frequencies simultaneously")
     }
 
     ## All other cases handled like a regular data frame.
-    NextMethod("[<-")
+    NextMethod()
 }
