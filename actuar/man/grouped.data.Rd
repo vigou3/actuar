@@ -7,7 +7,7 @@
   group form.
 }
 \usage{
-grouped.data(..., row.names = NULL, check.rows = FALSE,
+grouped.data(\dots, row.names = NULL, check.rows = FALSE,
              check.names = TRUE)
 }
 \arguments{
