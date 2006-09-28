@@ -21,7 +21,6 @@ elev(x, ...)
 \method{plot}{elev}(x, \dots, main = NULL, xlab = "x",
    ylab = "Empirical LEV")
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{a vector or an object of class \code{"grouped.data"}.}
   \item{digits}{number of significant digits to use, see
@@ -32,14 +31,26 @@ elev(x, ...)
   \item{\dots}{arguments to be passed to subsequent methods.}
 }
 \details{
-  The formula of the ELEV is...
-}
+  The limited expected value (LEV) at \eqn{u} of a random variable
+  \eqn{X} is
+  \eqn{E[X \wedge u] = E[\min(X, u)]}{E[X ^ u] = E[min(X, u)]}.
+
+  For individual data \eqn{x_1, \dots, x_n}, the empirical LEV is thus
+  \deqn{E_n[X \wedge u] = \frac{1}{n}
+    \left( \sum_{x_j < u} x_j + \sum_{x_j \geq x} u}{%
+    E_n[X ^ u] = (sum_{x_j < u} x_j + sum_{x_j >= x} u)/n}
+
+  Methods of \code{elev} exist for individual data or for grouped data
+  created with \code{\link{grouped.data}}. The formula in this case is
+  too long to show here. See the references for details.
+    
 \value{
   For \code{elev}, a function of class \code{"elev"}, inheriting from the
   \code{"\link{function}"} class.
 }
 \references{
-    Klugman, Panjer & Willmot, Loss Models, Wiley, 1998.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
+  \emph{Loss Models, From Data to Decisions}, Wiley.
 }
 \seealso{
   \code{\link{grouped.data}} to create grouped data objects;
