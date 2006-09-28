@@ -1,7 +1,7 @@
 \name{elev}
 \alias{elev}
-\alias{elev}
-\alias{Elev}
+\alias{elev.default}
+\alias{elev.grouped.data}
 \alias{print.elev}
 \alias{summary.elev}
 \alias{knots.elev}
@@ -17,7 +17,7 @@ elev(x, ...)
 \method{elev}{grouped.data}(x, \dots)
 \method{print}{elev}(x, digits = getOption("digits") - 2, \dots)
 \method{summary}{elev}(object, \dots)
-\method{knots}{elev}(fn, \dots)
+\method{knots}{elev}(Fn, \dots)
 \method{plot}{elev}(x, \dots, main = NULL, xlab = "x",
                     ylab = "Empirical LEV")
 }
@@ -26,7 +26,7 @@ elev(x, ...)
   \item{x}{a vector or an object of class \code{"grouped.data"}.}
   \item{digits}{number of significant digits to use, see
     \code{\link{print}}.}
-  \item{fn, object}{an \R object inheriting from \code{"ogive"}.}
+  \item{Fn, object}{an \R object inheriting from \code{"ogive"}.}
   \item{main}{main title.}
   \item{xlab, ylab}{labels of x and y axis.}
   \item{\dots}{arguments to be passed to subsequent methods.}

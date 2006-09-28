@@ -1,6 +1,5 @@
 \name{ogive}
 \alias{ogive}
-\alias{Ogive}
 \alias{print.ogive}
 \alias{summary.ogive}
 \alias{knots.ogive}

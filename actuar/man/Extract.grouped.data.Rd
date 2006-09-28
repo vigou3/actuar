@@ -1,4 +1,5 @@
 \name{Extract.grouped.data}
+\alias{Extract.grouped.data}
 \alias{[.grouped.data}
 \alias{[<-.grouped.data}
 \title{Extract or Replace Parts of a Grouped Data Object}

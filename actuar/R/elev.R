@@ -100,12 +100,12 @@ summary.elev <- function (object, ...)
 }
 
 ### Identical to stats::knots.stepfun().
-knots.elev <- function(fn, ...)
+knots.elev <- function(Fn, ...)
 {
-    if (attr(fn, "grouped"))
-        eval(expression(cj), env = environment(fn))
+    if (attr(Fn, "grouped"))
+        eval(expression(cj), env = environment(Fn))
     else
-        eval(expression(x), env = environment(fn))
+        eval(expression(x), env = environment(Fn))
 }
 
 plot.elev <- function(x, ..., main = NULL, xlab = "x", ylab = "Empirical LEV")
