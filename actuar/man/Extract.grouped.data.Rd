@@ -77,7 +77,8 @@ gdental[c(1, 3, 5),]      # avoid this
 
 gdental[1:2, 1] <- c(0, 30, 60) # modified boundaries
 gdental[, 2] <- 10              # modified frequencies
-gdental[1, ] <- 2               # not allowed
+\dontrun{gdental[1, ] <- 2}   # not allowed
+
 }
 \keyword{manip}
 \keyword{array}

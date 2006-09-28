@@ -38,7 +38,7 @@ severity.default <- function(x, bycol = FALSE, ...)
             if (0 < (lengthi <- lengths[i]))
                 mat[1:lengthi, i] <- unlist(x[ , i])[1:lengthi]
         }
-    } 
+    }
     mat
 }
 
@@ -54,16 +54,16 @@ severity.simpf <- function(x, bycol = FALSE, y.exclude = 0, ...)
     if (y.exclude %% 1 != 0 | y.exclude < 0)
         stop("y.exclude must be a positive integer")
     if (!bycol) names.first <- list(unlist(dimnames(x)[1]), NULL)
-    else names.first <- list(NULL, unlist(dimnames(x)[2])[1:(ncol(x) - y.exclude)])     
+    else names.first <- list(NULL, unlist(dimnames(x)[2])[1:(ncol(x) - y.exclude)])
     x <- x[ , seq(length = ncol(x) - y.exclude)]
     res <- NextMethod()
     dimnames(res) <- names.first
-    
+
     if (y.exclude > 0)
     {
         if (!bycol) names.last <- names.first
         else names.last <- list(NULL, unlist(dimnames(y)[2])[(ncol(y) - y.exclude + 1):(ncol(y))])
-        
+
         x <- y[ , seq(ncol(y) - y.exclude + 1, ncol(y))]
         if (!is.matrix(x)) x <- as.matrix(x)
         mat.last <- NextMethod()
@@ -71,6 +71,5 @@ severity.simpf <- function(x, bycol = FALSE, y.exclude = 0, ...)
         res <- list(mat.first = res, mat.last = mat.last)
     }
     print(res)
-    
-}
 
+}

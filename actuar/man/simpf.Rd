@@ -77,8 +77,11 @@ simpf(contracts, years, model.freq, model.sev, weights)
   Sébastien Auclair, and Louis-Philippe Pouliot
 }
 \seealso{
-  \code{\link{rearrangepf}} \code{\link{severity}}
-  \code{\link{aggregate.simpf}} \code{\link{frequency.simpf}} 
+  \code{\link{aggregate.simpf}},
+  \code{\link{frequency.simpf}} and
+  \code{\link{severity}}
+  to create the matrices of aggregate claim amounts, frequencies and
+  individual claim amounts, respectively.
 }
 \examples{
 ## Portfolio where both frequency and severity models are mixed.

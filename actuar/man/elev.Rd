@@ -19,7 +19,7 @@ elev(x, ...)
 \method{summary}{elev}(object, \dots)
 \method{knots}{elev}(Fn, \dots)
 \method{plot}{elev}(x, \dots, main = NULL, xlab = "x",
-                    ylab = "Empirical LEV")
+   ylab = "Empirical LEV")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

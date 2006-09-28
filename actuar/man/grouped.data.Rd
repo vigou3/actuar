@@ -55,13 +55,13 @@ nj <- c(30, 31, 57, 42, 45, 10)
 (x <- grouped.data(Group = cj, Frequency = nj))
 class(x)
 
+x[, 1] # group boundaries
+x[, 2] # group frequencies
+
 ## Multiple frequency columns are supported
 x <- sample(1:100, 9)
 y <- sample(1:100, 9)
 grouped.data(cj = 1:10, nj.1 = x, nj.2 = y)
-
-x[, 1] # group boundaries
-x[, 2] # group frequencies
 }
 \keyword{classes}
 \keyword{methods}
