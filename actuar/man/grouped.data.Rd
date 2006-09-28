@@ -37,7 +37,8 @@ grouped.data(\dots, row.names = NULL, check.rows = FALSE,
   an environment containing the vector \code{cj} of group boundaries.
 }
 \references{
-  Klugman, Panjer & Willmot, Loss Models, Wiley, 1998.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
+  \emph{Loss Models, From Data to Decisions}, Wiley.
 }
 \seealso{
   \code{\link{[.grouped.data}} for subsetting methods,

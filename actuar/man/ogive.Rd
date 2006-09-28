@@ -45,7 +45,8 @@ ogive(x, y = NULL, \dots)
   \code{"\link{function}"} class.
 }
 \references{
-  Klugman, Panjer & Willmot, Loss Models, Wiley, 1998.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
+  \emph{Loss Models, From Data to Decisions}, Wiley.
 }
 \seealso{
   \code{\link{grouped.data}} to create grouped data objects;
