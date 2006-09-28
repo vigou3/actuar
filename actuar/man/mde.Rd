@@ -59,7 +59,7 @@
 x <- rpareto(10000, 8, 10)
 d <- list(shape = 2, scale = 2)
 mde(x, ppareto, d, "CvM")
-t <- grouped(x = c(2, 4, 6, 10, 20), y = c(1, 4, 2, 1))
-mde(t, pgamma, d, "chi-square")
+t <- grouped.data(x = c(2, 4, 6, 10, 20), y = c(1, 4, 2, 1))
+\dontrun{mde(t, pgamma, d, "chi-square")}
 }
 \keyword{models}
