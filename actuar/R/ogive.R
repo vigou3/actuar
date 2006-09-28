@@ -2,12 +2,12 @@
 ###
 ### Ogive for grouped data
 ###
-### See Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
+### See Klugman, Panjer & Willmot, Loss Models, Wiley, 1998.
 ###
-### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Mathieu Pigeon
+### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
+### Mathieu Pigeon
 
-ogive <- function(x, y = NULL, ...)
+ogive <- function(x, y = NULL, freq = 2, ...)
 {
     ## Can compute the ogive either from an object of class
     ## 'grouped.data', or from a vector of class boundaries and a
@@ -16,12 +16,12 @@ ogive <- function(x, y = NULL, ...)
     if (inherits(x, "grouped.data"))
     {
         y <- x[, 2]
-        x <- get("cj", environment(x))
+        x <- eval(expression(cj), env = environment(x))
     }
     else
     {
         if (length(x) - length(y) != 1)
-            stop("incorrect number of class boundaries and frequencies")
+            stop("incorrect number of group boundaries and frequencies")
     }
 
     ## Create an object of class 'ogive'.
@@ -32,13 +32,14 @@ ogive <- function(x, y = NULL, ...)
     res
 }
 
+### Essentially identical to stats::print.ecdf().
 print.ogive <- function(x, digits = getOption("digits") - 2, ...)
 {
     ## Utility function
     numform <- function(x) paste(formatC(x, dig = digits), collapse = ", ")
 
     ## The rest is adapted from ecdf()
-    cat("Empirical CDF for grouped data \nCall: ")
+    cat("Ogive for grouped data \nCall: ")
     print(attr(x, "call"), ...)
     nc <- length(xxc <- get("x", env = environment(x)))
     nn <- length(xxn <- get("y", env = environment(x)))
@@ -51,4 +52,33 @@ print.ogive <- function(x, digits = getOption("digits") - 2, ...)
     cat(" F(x) = ", numform(xxn[i3]), if (nn > 3) ", ",
         if (nn > 5) " ..., ", numform(xxn[i4]), "\n", sep = "")
     invisible(x)
+}
+
+### Essentially identical to stats::summary.ecdf().
+summary.ogive <- function (object, ...)
+{
+    cat("Ogive:\t ", eval(expression(n), env = environment(object)),
+        "unique values with summary\n")
+    summary(knots(object), ...)
+}
+
+### Identical to stats::knots.stepfun().
+knots.ogive <- stats:::knots.stepfun
+
+plot.ogive <- function(x, ..., main = NULL, xlab = "x", ylab = "F(x)")
+{
+    ## Sanity check
+    if (!inherits(x, "ogive"))
+        stop("wrong method")
+
+    if (missing(main))
+        main <- {
+            cl <- attr(x, "call")
+            deparse(if (!is.null(cl)) cl else sys.call())
+        }
+
+    kn <- knots(x)
+    Fn <- x(kn)
+    plot(kn, Fn,  ..., type = "o", pch = 16,
+         main = main, xlab = xlab, ylab = ylab)
 }
