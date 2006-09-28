@@ -15,21 +15,21 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
     numform <- function(x) formatC(x, digits = 2, format = "fg")
 
     ## The function must be called with at least two arguments. The
-    ## first is the vector of class boundaries. The others are vectors
-    ## of class frequencies. All arguments will be converted to data
+    ## first is the vector of group boundaries. The others are vectors
+    ## of group frequencies. All arguments will be converted to data
     ## frames.
     x <- list(...)
     xnames <- names(x)                  # preserve names
-    y <- as.data.frame(x[-1])           # class frequencies
-    x <- as.data.frame(x[[1]])          # class boundaries
+    y <- as.data.frame(x[-1])           # group frequencies
+    x <- as.data.frame(x[[1]])          # group boundaries
     nx <- nrow(x)
     ny <- nrow(y)
 
-    ## There must be exactly one class boundary more than frequencies.
+    ## There must be exactly one group boundary more than frequencies.
     if (nx - ny != 1)
-        stop("incorrect number of class boundaries and frequencies")
+        stop("incorrect number of group boundaries and frequencies")
 
-    ## Return a data frame with formatted class boundaries in the
+    ## Return a data frame with formatted group boundaries in the
     ## first column.
     xfmt <- paste("(", numform(x[-nx, ]), ", ", numform(x[-1, ]), "]",
                   sep = "")
@@ -64,10 +64,10 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
     ii <- if (missing(i)) seq(nrow(x)) else seq(nrow(x))[i]
     ij <- if (missing(j)) integer(0) else seq(ncol(x))[j]
 
-    ## Extraction of at least the class boundaries (the complicated case).
+    ## Extraction of at least the group boundaries (the complicated case).
     if (!length(ij) || 1 %in% ij)
     {
-        ## Extraction of class boundaries in increasing order only
+        ## Extraction of group boundaries in increasing order only
         ## (untractable otherwise).
         if (is.unsorted(ii))
         {
@@ -75,11 +75,11 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
             ii <- sort(ii)
         }
 
-        ## Fetch the appropriate class boundaries.
+        ## Fetch the appropriate group boundaries.
         cj <- eval(expression(cj), env = environment(x))
         cj <- cj[sort(unique(c(ii, ii + 1)))]
 
-        ## Extraction of the first column only: return the vector of class
+        ## Extraction of the first column only: return the vector of group
         ## boundaries.
         if (identical(ij, as.integer(1)))
             return(cj)
@@ -142,10 +142,10 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
     ii <- if (is.null(ii)) seq(nrow(x)) else seq(nrow(x))[ii]
     ij <- if (is.null(ij)) integer(0) else seq(ncol(x))[ij]
 
-    ## Replacement at least in the class boundaries column.
+    ## Replacement at least in the group boundaries column.
     if (!length(ij) || 1 %in% ij)
     {
-        ## supported: replacement of class boundaries only
+        ## supported: replacement of group boundaries only
         if (identical(ij, as.integer(1)))
         {
             cj <- eval(expression(cj), env = environment(x))
