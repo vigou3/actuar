@@ -56,7 +56,8 @@ x[i, j] <- value
   columns.
 }
 \seealso{
-  \code{\link{Extract.data.frame}}, \code{\link{grouped.data}}
+  \code{\link{[.data.frame}} for extraction and replacement methods of
+  data frames, \code{\link{grouped.data}} to create grouped data objects.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
