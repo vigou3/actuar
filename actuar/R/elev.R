@@ -66,7 +66,7 @@ elev.grouped.data <- function(x, ...)
     assign("cj", eval(expression(cj), env = environment(x)),
            env = environment(FUN))
     assign("nj", x[, 2], env = environment(FUN))
-    assign("n", length(nrow(x)), env = environment(FUN))
+    assign("n", nrow(x), env = environment(FUN))
     class(FUN) <- c("elev", class(FUN))
     attr(FUN, "call") <- Call
     attr(FUN, "grouped") <- TRUE
