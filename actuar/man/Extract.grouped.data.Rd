@@ -24,12 +24,12 @@ x[i, j] <- value
   \item{value}{a suitable replacement value.}
 }
 \details{
-  Objects of class \code{grouped.data} can mostly be indexed like data
+  Objects of class \code{"grouped.data"} can mostly be indexed like data
   frames, with the following restrictions:
   \enumerate{
     \item For \code{[}, the extracted object must keep a group
       boundaries column and at least one group frequencies column to
-      remain of class \code{grouped.data};
+      remain of class \code{"grouped.data"};
     \item For \code{[<-}, it is not possible to replace group boundaries
       and group frequencies simultaneously;
     \item When replacing group boundaries, \code{length(value) ==
@@ -45,10 +45,10 @@ x[i, j] <- value
   frames.
 }
 \value{
-  For \code{[} an object of class \code{grouped.data}, a data frame or a
+  For \code{[} an object of class \code{"grouped.data"}, a data frame or a
   vector.
 
-  For \code{[<-} an object of class \code{grouped.data}.
+  For \code{[<-} an object of class \code{"grouped.data"}.
 }
 \note{
   Currently \code{[[}, \code{[[<-}, \code{$} and \code{$<-} are not 
@@ -77,4 +77,5 @@ gdental[1:2, 1] <- c(0, 30, 60) # modified boundaries
 gdental[, 2] <- 10              # modified frequencies
 gdental[1, ] <- 2               # not allowed
 }
+\keyword{manip}
 \keyword{array}
