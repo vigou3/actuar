@@ -40,7 +40,7 @@ elev.grouped.data <- function(x, ...)
         limit <-  pmin(limit, cj[r + 1])
 
         ## Class in which the limit is located.
-        cl <- cut(limit, cj, include.lowest = FALSE, labels = FALSE)
+        cl <- cut(limit, cj, include.lowest = TRUE, labels = FALSE)
 
         ## Means for all classes below each limit.
         cjt <- head(cj, max(cl))        # upper bounds
