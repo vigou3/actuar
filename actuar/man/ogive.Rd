@@ -36,8 +36,8 @@ ogive(x, y = NULL, \dots)
   
   The equation of the ogive is
   \deqn{F_n(x) = \frac{(c_j - x) F_n(c_{j-1}) + (x - c_{j-1})
-      F_n(c_j)}{c_j - c_{j - 1}}
-    {Fn(x) = ((c_j - x) Fn(c_{j-1})) + (x - c_{j-1})
+      F_n(c_j)}{c_j - c_{j - 1}}}
+    {Fn(x) = ((c_j - x) Fn(c_{j-1}) + (x - c_{j-1})
       Fn(c_j))/(c_j - c_{j-1})}
   for \eqn{c_{j-1} < x \leq c_j}.
 }
