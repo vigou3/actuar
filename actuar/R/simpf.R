@@ -1,13 +1,12 @@
 ### ===== actuar: an R package for Actuarial Science =====
-### 
-### Simulate a portfolio of data for insurance applications. 
+###
+### Simulate a portfolio of data for insurance applications.
 ### Both frequency and severity distributions can have an unknown
 ### risk parameter --- that is, they can each be mixtures of
 ### models.
-### 
-### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>, Sébastien Auclair,
-### and Louis-Philippe Pouliot
-
+###
+### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>,
+### Sébastien Auclair and Louis-Philippe Pouliot
 
 simpf <- function(contracts, years, model.freq, model.sev, weights)
 {
@@ -165,17 +164,17 @@ print.simpf <- function(x, ...)
                        paste(as.character(x$freq$par2), collapse = ", "), ")", sep = "")
     else freq2 <- NULL
 
-    
+
     sev1 <- paste(x$sev$dist1, "(", paste(as.character(x$sev$par1), collapse = ", "), ")", sep = "")
     if (!is.null(x$sev$dist2))
         sev2 <- paste("/ ",x$sev$dist2, "(", paste(as.character(x$sev$par2), collapse = ", "), ")", sep = "")
     else sev2 <- NULL
 
-    
+
     cat("\nPortfolio of claim amounts \n\n")
     cat("  Frequency Model: ", freq1, freq2, "\n")
     cat("  Severity Model: ", sev1, sev2, "\n")
     cat("\n  Number of claims per contract and per year: \n\n")
     print(array(sapply(x$data, length),dim(x$data), dimnames = dimnames(x$data)))
-    invisible(x)   
+    invisible(x)
 }

@@ -1,8 +1,9 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Compute Summary Statistics of a Portfolio
+### Summary statistics of a portfolio
 ###
-### AUTHORS:  Louis-Philippe Pouliot, Vincent Goulet <vincent.goulet@act.ulaval.ca>
+### AUTHORS: Louis-Philippe Pouliot,
+### Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 aggregate.simpf <- function(x, by = c("contract", "year"), FUN = sum, ...)
 {
@@ -16,9 +17,3 @@ frequency.simpf <- function(x, by = c("contract", "year"), ...)
     MARGIN <- match(by, c("contract", "year"))
     apply(x$data, MARGIN, function(x) length(unlist(x)))
 }
-
-
-        
-    
-    
-    

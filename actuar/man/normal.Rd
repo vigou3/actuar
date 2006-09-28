@@ -1,7 +1,10 @@
 \name{normal}
 \alias{normal}
 \alias{np2}
-\title{Normal and Normal Power Approximation of the Total Amount of Claims Ditribution }
+\title{
+  Normal and Normal Power Approximation of the Total Amount of Claims
+  Distribution
+}
 \description{
   Approximate the total amount of claims distribution using the first
   two or the first three moments. 
