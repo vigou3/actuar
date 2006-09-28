@@ -17,7 +17,7 @@ grouped.data(..., row.names = NULL, check.rows = FALSE,
     of \code{data.frame}.}
 }
 \details{
-  A grouped data object is a special form of data frame consisting of
+  A grouped data object is a special form of data frame consisting of:
   \enumerate{
     \item one column of contiguous group boundaries;
     \item one or more columns of frequencies within each class.
@@ -29,8 +29,8 @@ grouped.data(..., row.names = NULL, check.rows = FALSE,
   frequencies. All arguments are coerced to data frames.
 
   Extraction and replacement methods exist for \code{grouped.data}
-  objects, but working on non adjacent groups can yield to
-  unpredictable results.  
+  objects, but working on non adjacent groups will most likely yield
+  useless results.  
 }
 \value{
   An object of \code{class} \code{c("grouped.data", "data.frame")} with

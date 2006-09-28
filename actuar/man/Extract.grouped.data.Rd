@@ -51,12 +51,15 @@ x[i, j] <- value
   For \code{[<-} an object of class \code{grouped.data}.
 }
 \note{
-  \code{[[}, \code{[[<-}, \code{$} and \code{$<-} are not currently
+  Currently \code{[[}, \code{[[<-}, \code{$} and \code{$<-} are not 
   specifically supported, but should work as usual on group frequency
   columns.
 }
 \seealso{
   \code{\link{Extract.data.frame}}, \code{\link{grouped.data}}
+}
+\author{
+  Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
 }
 \examples{
 data(gdental)
