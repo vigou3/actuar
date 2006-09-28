@@ -7,7 +7,7 @@
   automobile liability insurance in five U.S. states between July 1970
   and June 1973 and the corresponding number of claims.
 }
-\usage{data(hachemeister)}
+\usage{hachemeister}
 \format{A list with two components:
   \describe{
     \item{\code{claims}}{a \eqn{5 \times 12} matrix of average claim
