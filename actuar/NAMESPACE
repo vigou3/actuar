@@ -1,7 +1,7 @@
 ### C code
 useDynLib(actuar, .registration = TRUE)
 
-### Functions
+### Exports
 export(## Credibility theory
        bstraub, rearrangepf, simpf, severity, ghcm,
        ## Risk theory
@@ -37,8 +37,7 @@ export(## Credibility theory
        grouped.data, ogive, emp.moments, mde, elev, coverage, mcoverage
        )
 ### Imports
-importFrom(stats, aggregate, frequency, quantile)
-importFrom(graphics, plot)
+import(stats, graphics)
 
 ### Methods
 S3method("[", grouped.data)
