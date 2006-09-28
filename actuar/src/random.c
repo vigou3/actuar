@@ -33,10 +33,10 @@
 /* Functions for one parameter distributions */
 static Rboolean random1(double (*f)(), double *a, int na, double *x, int n)
 {
-    double ai; 
+    double ai;
     int i;
     Rboolean naflag = FALSE;
-    for (i = 0; i < n; i++) 
+    for (i = 0; i < n; i++)
     {
 	ai = a[i % na];
 	x[i] = f(ai);
@@ -59,20 +59,20 @@ SEXP do_random1(int code, SEXP args)
     /* Check validity of arguments */
     if (!isVector(CAR(args)) || !isNumeric(CADR(args)))
 	error(_("invalid arguments"));
-    
+
     /* Number of variates to generate */
-    if (LENGTH(CAR(args)) == 1) 
+    if (LENGTH(CAR(args)) == 1)
     {
 	n = asInteger(CAR(args));
 	if (n == NA_INTEGER || n < 0)
 	    error(_("invalid arguments"));
     }
-    else 
+    else
 	n = LENGTH(CAR(args));
 
     /* If n == 0, return numeric(0) */
     PROTECT(x = allocVector(REALSXP, n));
-    if (n == 0) 
+    if (n == 0)
     {
 	UNPROTECT(1);
 	return(x);
@@ -91,7 +91,7 @@ SEXP do_random1(int code, SEXP args)
 	PROTECT(a = coerceVector(CADR(args), REALSXP));
 	naflag = FALSE;
 	GetRNGstate();
-	switch (code) 
+	switch (code)
 	{
 	    RAND1(1, rinvexp);
 	default:
@@ -108,13 +108,13 @@ SEXP do_random1(int code, SEXP args)
 
 
 /* Functions for two parameter distributions */
-static Rboolean random2(double (*f)(), double *a, int na, 
+static Rboolean random2(double (*f)(), double *a, int na,
 			double *b, int nb, double *x, int n)
 {
-    double ai, bi; 
+    double ai, bi;
     int i;
     Rboolean naflag = FALSE;
-    for (i = 0; i < n; i++) 
+    for (i = 0; i < n; i++)
     {
 	ai = a[i % na];
 	bi = b[i % nb];
@@ -140,20 +140,20 @@ SEXP do_random2(int code, SEXP args)
 	!isNumeric(CADR(args)) ||
 	!isNumeric(CADDR(args)))
 	error(_("invalid arguments"));
-    
+
     /* Number of variates to generate */
-    if (LENGTH(CAR(args)) == 1) 
+    if (LENGTH(CAR(args)) == 1)
     {
 	n = asInteger(CAR(args));
 	if (n == NA_INTEGER || n < 0)
 	    error(_("invalid arguments"));
     }
-    else 
+    else
 	n = LENGTH(CAR(args));
 
     /* If n == 0, return numeric(0) */
     PROTECT(x = allocVector(REALSXP, n));
-    if (n == 0) 
+    if (n == 0)
     {
 	UNPROTECT(1);
 	return(x);
@@ -162,7 +162,7 @@ SEXP do_random2(int code, SEXP args)
     /* If length of parameters < 1, return NaN */
     na = LENGTH(CADR(args));
     nb = LENGTH(CADDR(args));
-    if (na < 1 || nb < 1) 
+    if (na < 1 || nb < 1)
     {
 	for (i = 0; i < n; i++)
 	    REAL(x)[i] = NA_REAL;
@@ -174,7 +174,7 @@ SEXP do_random2(int code, SEXP args)
 	PROTECT(b = coerceVector(CADDR(args), REALSXP));
 	naflag = FALSE;
 	GetRNGstate();
-	switch (code) 
+	switch (code)
 	{
 	    RAND2(1, rinvparalogis);
 	    RAND2(2, rinvpareto);
@@ -200,14 +200,14 @@ SEXP do_random2(int code, SEXP args)
 
 
 /* Functions for three parameter distributions */
-static Rboolean random3(double (*f) (), double *a, int na, 
-			double *b, int nb, double *c, int nc, 
+static Rboolean random3(double (*f) (), double *a, int na,
+			double *b, int nb, double *c, int nc,
 			double *x, int n)
 {
     double ai, bi, ci;
     int i;
     Rboolean naflag = FALSE;
-    for (i = 0; i < n; i++) 
+    for (i = 0; i < n; i++)
     {
 	ai = a[i % na];
 	bi = b[i % nb];
@@ -235,20 +235,20 @@ SEXP do_random3(int code, SEXP args)
 	!isNumeric(CADDR(args)) ||
 	!isNumeric(CADDDR(args)))
 	error(_("invalid arguments"));
-    
+
     /* Number of variates to generate */
-    if (LENGTH(CAR(args)) == 1) 
+    if (LENGTH(CAR(args)) == 1)
     {
 	n = asInteger(CAR(args));
 	if (n == NA_INTEGER || n < 0)
 	    error(_("invalid arguments"));
     }
-    else 
+    else
 	n = LENGTH(CAR(args));
 
     /* If n == 0, return numeric(0) */
     PROTECT(x = allocVector(REALSXP, n));
-    if (n == 0) 
+    if (n == 0)
     {
 	UNPROTECT(1);
 	return(x);
@@ -258,7 +258,7 @@ SEXP do_random3(int code, SEXP args)
     na = LENGTH(CADR(args));
     nb = LENGTH(CADDR(args));
     nc = LENGTH(CADDDR(args));
-    if (na < 1 || nb < 1 || nc < 1) 
+    if (na < 1 || nb < 1 || nc < 1)
     {
 	for (i = 0; i < n; i++)
 	    REAL(x)[i] = NA_REAL;
@@ -271,7 +271,7 @@ SEXP do_random3(int code, SEXP args)
 	PROTECT(c = coerceVector(CADDDR(args), REALSXP));
 	naflag = FALSE;
 	GetRNGstate();
-	switch (code) 
+	switch (code)
 	{
 	    RAND3(1, rburr);
 	    RAND3(2, rgenpareto);
@@ -292,14 +292,14 @@ SEXP do_random3(int code, SEXP args)
 
 
 /* Functions for four parameter distributions */
-static Rboolean random4(double (*f) (), double *a, int na, 
-			double *b, int nb, double *c, int nc, 
+static Rboolean random4(double (*f) (), double *a, int na,
+			double *b, int nb, double *c, int nc,
 			double *d, int nd, double *x, int n)
 {
     double ai, bi, ci, di;
     int i;
     Rboolean naflag = FALSE;
-    for (i = 0; i < n; i++) 
+    for (i = 0; i < n; i++)
     {
 	ai = a[i % na];
 	bi = b[i % nb];
@@ -329,20 +329,20 @@ SEXP do_random4(int code, SEXP args)
 	!isNumeric(CADDDR(args)) ||
 	!isNumeric(CAD4R(args)))
 	error(_("invalid arguments"));
-    
+
     /* Number of variates to generate */
-    if (LENGTH(CAR(args)) == 1) 
+    if (LENGTH(CAR(args)) == 1)
     {
 	n = asInteger(CAR(args));
 	if (n == NA_INTEGER || n < 0)
 	    error(_("invalid arguments"));
     }
-    else 
+    else
 	n = LENGTH(CAR(args));
 
     /* If n == 0, return numeric(0) */
     PROTECT(x = allocVector(REALSXP, n));
-    if (n == 0) 
+    if (n == 0)
     {
 	UNPROTECT(1);
 	return(x);
@@ -353,7 +353,7 @@ SEXP do_random4(int code, SEXP args)
     nb = LENGTH(CADDR(args));
     nc = LENGTH(CADDDR(args));
     nd = LENGTH(CAD4R(args));
-    if (na < 1 || nb < 1 || nc < 1 || nd < 1) 
+    if (na < 1 || nb < 1 || nc < 1 || nd < 1)
     {
 	for (i = 0; i < n; i++)
 	    REAL(x)[i] = NA_REAL;
@@ -367,7 +367,7 @@ SEXP do_random4(int code, SEXP args)
 	PROTECT(d = coerceVector(CAD4R(args), REALSXP));
 	naflag = FALSE;
 	GetRNGstate();
-	switch (code) 
+	switch (code)
 	{
 	    RAND4(1, rtrbeta);
 	default:
@@ -395,10 +395,10 @@ SEXP do_random(SEXP args)
     name = CHAR(STRING_ELT(CAR(args), 0));
 
     /* Dispatch to do_random{1,2,3,4} */
-    for (i = 0; fun_tab[i].name; i++) 
-    { 
+    for (i = 0; fun_tab[i].name; i++)
+    {
 	if (!strcmp(fun_tab[i].name, name))
-	    return fun_tab[i].cfun(fun_tab[i].code, CDR(args)); 
+	    return fun_tab[i].cfun(fun_tab[i].code, CDR(args));
     }
 
     /* No dispatch is an error */
