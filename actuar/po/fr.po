@@ -1,31 +1,32 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# French translations for actuar package
+# Traduction française du package actuar.
+# Copyright (C) 2006 Vincent Goulet
+# This file is distributed under the same license as the actuar package.
+# Vincent Goulet <vincent@vgoulet.act.ulaval.ca>, 2006.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.1-5\n"
-"Report-Msgid-Bugs-To: Vincent Goulet\n"
-"POT-Creation-Date: 2006-08-17 10:55-0400\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Mathieu Pigeon\n"
-"Language-Team: FRENCH <fr@li.org>\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
+"POT-Creation-Date: 2006-09-29 10:52-0400\n"
+"PO-Revision-Date: 2006-09-29 11:17-0400\n"
+"Last-Translator: Vincent Goulet <vincent@vgoulet.act.ulaval.ca>\n"
+"Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: dpq.c:62 dpq.c:185 dpq.c:357 dpq.c:536 dpq.c:703 random.c:61 random.c:68
 #: random.c:142 random.c:149 random.c:237 random.c:244 random.c:331
 #: random.c:338
 msgid "invalid arguments"
-msgstr "arguments invalides"
+msgstr "arguments incorrects"
 
 #: dpq.c:94 dpq.c:223 dpq.c:400 dpq.c:585 dpq.c:757 random.c:101 random.c:193
 #: random.c:285 random.c:377
 msgid "NAs produced"
-msgstr "présence de NAs"
+msgstr "production de NAs"
 
 #: dpq.c:154
 msgid "internal error in do_dpq1"
