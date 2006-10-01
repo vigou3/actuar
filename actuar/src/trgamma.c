@@ -1,8 +1,9 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the transformed beta distribution, to calculate raw moments and limited moments
- *  of the random variable and to simulate random variates. See ../R/trbeta.R for details.
+ *  fonctions of the transformed beta distribution, to calculate raw
+ *  moments and limited moments of the random variable and to simulate
+ *  random variates. See ../R/trgamma.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -12,9 +13,10 @@
 #include "locale.h"
 #include "dpq.h"
 
-double dtrgamma(double x, double shape1, double scale, double shape2, int give_log)
+double dtrgamma(double x, double shape1, double scale, double shape2,
+		int give_log)
 {
-  double tmp;
+  double tmp1, tmp2;
 
   if (!R_FINITE(shape1) ||
       !R_FINITE(scale) ||
@@ -27,15 +29,17 @@ double dtrgamma(double x, double shape1, double scale, double shape2, int give_l
   if (!R_FINITE(x) || x < 0.0)
     return R_D_d0;
 
-  tmp = R_pow(x/scale, shape2);
+  tmp1 = R_pow(x, shape2);
+  tmp2 = R_pow(scale, shape2);
 
-  return  (give_log ? dgamma(tmp, shape1, 1.0 / scale, 1) + log(shape2) + (shape2 - 1.0) * log(x) :
-	   shape2 * R_pow(x, shape2 - 1.0) * dgamma(tmp, shape1, 1.0 / scale, 0));
+  return  (give_log ? dgamma(tmp1, shape1, tmp2, 1) + log(shape2) + (shape2 - 1.0) * log(x) :
+	   shape2 * R_pow(x, shape2 - 1.0) * dgamma(tmp1, shape1, tmp2, 0));
 }
 
-double ptrgamma(double q, double shape1, double scale, double shape2, int lower_tail, int log_p)
+double ptrgamma(double q, double shape1, double scale, double shape2,
+		int lower_tail, int log_p)
 {
-  double tmp;
+  double tmp1, tmp2;
 
   if (!R_FINITE(shape1) ||
       !R_FINITE(scale) ||
@@ -45,21 +49,23 @@ double ptrgamma(double q, double shape1, double scale, double shape2, int lower_
       shape2 <= 0.0)
     return R_NaN;
 
-  tmp = R_pow(q/scale, shape2);
-
   if (q <= 0)
     return R_DT_0;
 
   if (!R_FINITE(q))
     return 1;
 
-  return (lower_tail ? R_D_exp(pgamma(tmp, shape1, 1.0 / scale, 1, 1)):
-	  R_D_exp(pgamma(tmp, shape1, 1.0 / scale, 0, 1)));
+  tmp1 = R_pow(q, shape2);
+  tmp2 = R_pow(scale, shape2);
+
+  return (lower_tail ? R_D_exp(pgamma(tmp1, shape1, tmp2, 1, 1)):
+	  R_D_exp(pgamma(tmp1, shape1, tmp2, 0, 1)));
 }
 
-double qtrgamma(double p, double shape1, double scale, double shape2, int lower_tail, int log_p)
+double qtrgamma(double p, double shape1, double scale, double shape2,
+		int lower_tail, int log_p)
 {
-  double tmp, tmp1;
+  double tmp1, tmp2, tmp3;
 
   if (!R_FINITE(shape1) ||
       !R_FINITE(scale) ||
@@ -70,11 +76,12 @@ double qtrgamma(double p, double shape1, double scale, double shape2, int lower_
     return R_NaN;
 
   R_Q_P01_boundaries(p, 0, R_PosInf);
-  tmp = R_D_qIv(p);
-  tmp1 = 1.0 / shape2;
+  tmp1 = R_D_qIv(p);
+  tmp2 = R_pow(scale, shape2);
+  tmp3 = 1.0 / shape2;
 
-  return (lower_tail ? R_pow(qgamma(tmp, shape1, 1.0 / scale, 1, 0), tmp1) :
-	  R_pow(qgamma(tmp, shape1, 1.0 / scale, 0, 0), tmp1));
+  return (lower_tail ? R_pow(qgamma(tmp1, shape1, tmp2, 1, 0), tmp3) :
+	  R_pow(qgamma(tmp1, shape1, tmp2, 0, 0), tmp3));
 }
 
 double rtrgamma(double shape1, double scale, double shape2)
@@ -89,12 +96,13 @@ double rtrgamma(double shape1, double scale, double shape2)
       shape2 <= 0.0)
     return R_NaN;
 
-  a = rgamma(shape1, 1.0 / scale);
+  a = rgamma(shape1, 1.0);
 
-  return R_pow(a, 1.0 / shape2);
+  return R_pow(a, 1.0 / shape2)/scale;
 }
 
-double mtrgamma(double k, double shape1, double scale, double shape2, int give_log)
+double mtrgamma(double k, double shape1, double scale, double shape2,
+		int give_log)
 {
 
   if (!R_FINITE(shape1) ||
@@ -110,9 +118,10 @@ double mtrgamma(double k, double shape1, double scale, double shape2, int give_l
   return R_pow(scale, k) * gammafn(shape1 + k / shape2) / gammafn(shape1);
 }
 
-double levtrgamma(double d, double shape1, double scale, double shape2, double order, int give_log)
+double levtrgamma(double d, double shape1, double scale, double shape2,
+		  double order, int give_log)
 {
-  double u;
+  double u, tmp2;
 
   if (!R_FINITE(shape1) ||
       !R_FINITE(scale) ||
@@ -126,7 +135,8 @@ double levtrgamma(double d, double shape1, double scale, double shape2, double o
       order <= -shape1 * shape2)
     return R_NaN;
 
-  u = R_pow(d/scale, shape2);
+  u = R_pow(d, shape2);
+  tmp2 = R_pow(scale, shape2);
 
-  return R_pow(scale, order) * gammafn(shape1 + order / shape2) * pgamma(u, shape1 + order / shape2, 1.0 / scale, 1, 0) / gammafn(shape1) + R_pow(d, order) * (pgamma(u, shape1, 1.0 / scale, 0, 0)) ;
+  return R_pow(scale, order) * gammafn(shape1 + order / shape2) * pgamma(u, shape1 + order / shape2, tmp2, 1, 0) / gammafn(shape1) + R_pow(d, order) * (pgamma(u, shape1, tmp2, 0, 0)) ;
 }
