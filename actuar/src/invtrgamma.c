@@ -14,7 +14,7 @@
 
 double dinvtrgamma(double x, double shape1, double scale, double shape2, int give_log)
 {
-  double tmp;
+  double tmp1, tmp2;
   
   if (!R_FINITE(shape1) ||
       !R_FINITE(scale)  ||
@@ -27,16 +27,17 @@ double dinvtrgamma(double x, double shape1, double scale, double shape2, int giv
   if (!R_FINITE(x) || x < 0.0) 
     return R_D_d0;
   
-  tmp = R_pow(1.0 / x, shape2);
-  
+  tmp1 = R_pow(1.0 / x, shape2);
+  tmp2 = R_pow(scale, -shape2);
+
   return  give_log ?
-    log(shape2) - (shape2 + 1.0) * log(x) + dgamma(tmp, shape1, 1.0 / scale, 1) :
-    shape2 *  R_pow(x, -shape2 - 1.0) * dgamma(tmp, shape1, 1.0 / scale, 0);
+    log(shape2) - (shape2 + 1.0) * log(x) + dgamma(tmp1, shape1, tmp2, 1) :
+    shape2 *  R_pow(x, -shape2 - 1.0) * dgamma(tmp1, shape1, tmp2, 0);
 }
 
 double pinvtrgamma(double q, double shape1, double scale, double shape2, int lower_tail, int log_p)
 {
-  double tmp;
+  double tmp1, tmp2;
   
   if (!R_FINITE(shape1) ||
       !R_FINITE(scale) ||
@@ -50,14 +51,15 @@ double pinvtrgamma(double q, double shape1, double scale, double shape2, int low
     return R_DT_0;
   
   tmp = R_pow(1.0 / q, shape2);
+  tmp2 = R_pow(scale, -shape2);
   
-  return (lower_tail ? R_D_exp(pgamma(tmp, shape1, 1.0 / scale, 0,1)):
-	  R_D_exp(pgamma(tmp, shape1, 1.0 / scale, 1,1)));
+  return (lower_tail ? R_D_exp(pgamma(tmp1, shape1, tmp2, 0,1)):
+	  R_D_exp(pgamma(tmp1, shape1, tmp2, 1,1)));
 }
 
 double qinvtrgamma(double p, double shape1, double scale, double shape2, int lower_tail, int log_p)
 {
-  double tmp;
+  double tmp1, tmp2, tmp3;
   
   if (!R_FINITE(shape1) ||
       !R_FINITE(scale) ||
@@ -68,10 +70,12 @@ double qinvtrgamma(double p, double shape1, double scale, double shape2, int low
     return R_NaN;;
   
   R_Q_P01_boundaries(p, 0, R_PosInf);
-  tmp = R_D_qIv(p);
+  tmp1 = R_D_qIv(p);
+  tmp2 = R_pow(scale, -shape2);
+  tmp3 = 1.0 / shape2
   
-  return (lower_tail ? R_pow(qgamma(tmp, shape1, 1.0 / scale, 0, 0), -1.0 / shape2) :
-	  R_pow(qgamma(tmp, shape1, 1.0 / scale, 1, 0), -1.0 / shape2));
+  return (lower_tail ? R_pow(qgamma(tmp1, shape1, tmp2, 0, 0), -tmp3) :
+	  R_pow(qgamma(tmp1, shape1, tmp2, 1, 0), -tmp3));
 }
 
 double rinvtrgamma(double shape1, double scale, double shape2)
@@ -86,9 +90,9 @@ double rinvtrgamma(double shape1, double scale, double shape2)
       shape2 <= 0.0)
     return R_NaN;;
   
-  a = rgamma(shape1, 1.0 / scale);
+  a = rgamma(shape1, 1.0);
   
-  return R_pow(a, -1.0 / shape2);
+  return R_pow(a, -1.0 / shape2) / scale;
 }
 
 double minvtrgamma(double k, double shape1, double scale, double shape2, int give_log)
@@ -109,7 +113,7 @@ double minvtrgamma(double k, double shape1, double scale, double shape2, int giv
 
 double levinvtrgamma(double d, double shape1, double scale, double shape2, double order, int gve_log)
 {
-  double u;
+  double u, tmp2;
   
   if (!R_FINITE(shape1) ||
       !R_FINITE(scale) ||
@@ -124,6 +128,7 @@ double levinvtrgamma(double d, double shape1, double scale, double shape2, doubl
     return R_NaN;;
   
   u = R_pow(1.0 / d, shape2);
+  tmp2 = R_pow(scale, -shape2)
   
-  return R_pow(scale, order) * gammafn(shape1 - order / shape2) * pgamma(u, shape1 - order / shape2, 1.0 / scale, 0, 0) / gammafn(shape1) + R_pow(d, order) * (pgamma(u, shape1, 1.0 / scale, 1, 0)) ;
+  return R_pow(scale, order) * gammafn(shape1 - order / shape2) * pgamma(u, shape1 - order / shape2, tmp2, 0, 0) / gammafn(shape1) + R_pow(d, order) * (pgamma(u, shape1, tmp2, 1, 0)) ;
 }
