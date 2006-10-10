@@ -43,8 +43,8 @@ double ppareto(double x, double shape, double scale, int lower_tail, int log_p)
 
     tmp = log(scale) - log(x + scale);
 
-    return lower_tail ? R_D_exp(log(1.0 - exp(shape * (tmp)))) :
-	R_D_exp(shape * (tmp));
+    return lower_tail ? R_D_exp(log(1.0 - exp(shape * tmp))) :
+	R_D_exp(shape * tmp);
 }
 
 double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
@@ -92,6 +92,8 @@ double mpareto(double order, double shape, double scale, int give_log)
 
 double levpareto(double limit, double shape, double scale, double order, int give_log)
 {
+    double tmp;
+
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	!R_FINITE(limit) ||
@@ -103,5 +105,6 @@ double levpareto(double limit, double shape, double scale, double order, int giv
 	order >= shape)
 	return R_NaN;
 
-    return R_pow(scale, order) * gammafn(order + 1.0) * gammafn(shape - order) * pbeta(limit / (limit + scale), order + 1.0, shape - order, 1, 0) / gammafn(shape) + R_pow(limit, order) * R_pow(scale / (scale + limit), shape);
+    tmp = limit + scale
+    return R_pow(scale, order) * gammafn(order + 1.0) * gammafn(shape - order) * pbeta(limit / tmp, order + 1.0, shape - order, 1, 0) / gammafn(shape) + R_pow(limit, order) * R_pow(scale / tmp, shape);
 }
