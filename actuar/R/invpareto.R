@@ -23,8 +23,8 @@ qinvpareto <- function(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
 rinvpareto <- function(n, shape, scale)
      .External("do_random", "rinvpareto", n, shape, scale)
 
-minvpareto <- function(k, shape, scale, log = FALSE)
+minvpareto <- function(order, shape, scale, log = FALSE)
      .External("do_dpq", "minvpareto", k, shape, scale, log)
 
-levinvpareto <- function(d, shape, scale, order = 1, log = FALSE)
+levinvpareto <- function(limit, shape, scale, order = 1, log = FALSE)
      .External("do_dpq", "levinvpareto", d, shape, scale, order, log)
