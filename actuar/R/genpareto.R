@@ -1,7 +1,12 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
 ### Definition of the {d,p,q,r,m,lev}genpareto functions to compute
-### characteristics of the Generalized Pareto distribution.
+### characteristics of the Generalized Pareto distribution. The version
+### used in these functions has cumulative distribution function
+###
+###   Pr[X <= x] = Pr[Y <=  x / (x + scale)],
+###
+### where Y has a Beta distribution with parameters shape2 and shape1.
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
