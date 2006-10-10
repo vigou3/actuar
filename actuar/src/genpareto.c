@@ -1,7 +1,7 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
- *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions, raw and limited moments and to simulate random variates
+ *  Functions to compute density, cumulative distribution and quantile
+ *  functions, raw and limited moments and to simulate random variates
  *  for the Generalized Pareto distribution.. See ../R/genpareto.R for
  *  details.
  *
