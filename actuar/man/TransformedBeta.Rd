@@ -55,9 +55,9 @@
   density:
   \deqn{f(x) = \frac{\Gamma(\alpha + \tau)}{\Gamma(\alpha)\Gamma(\tau)}
     \frac{\gamma (x/\theta)^{\gamma \tau}}{%
-      x (1 + (x/\theta)^\gamma)^{\alpha + \tau}}}{%
+      x [1 + (x/\theta)^\gamma]^{\alpha + \tau}}}{%
     f(x) = Gamma(a + c)/(Gamma(a) * Gamma(c)) (b (x/s)^(bc))/%
-    (x (1 + (x/s)^b)^(a + c))}
+    (x [1 + (x/s)^b]^(a + c))}
   for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0}, \eqn{\gamma > 0}{b > 0},
   \eqn{\tau > 0}{c > 0} and \eqn{\theta > 0}{s > 0}.
   (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
