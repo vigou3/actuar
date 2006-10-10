@@ -17,7 +17,7 @@
 \description{
   Density, distribution function, quantile function, random generation,
   raw moments and limited moments for the Transformed Beta distribution
-  with parameters \code{shape1}, \code{shape2}, \code{shape3} and ,
+  with parameters \code{shape1}, \code{shape2}, \code{shape3} and
   \code{scale}.
 }
 \usage{
