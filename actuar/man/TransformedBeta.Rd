@@ -41,8 +41,8 @@
   \item{shape1, shape2, shape3, scale}{parameters. Must be strictly
     positive.}
   \item{rate}{an alternative way to specify the scale.}
-  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
-    returned as \eqn{log(p)}.}
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities
+    \eqn{p} are returned as \eqn{\log(p)}{log(p)}.}
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
     \eqn{P[X \le x]}{P[X <= x]}, otherwise, \eqn{P[X > x]}.}
   \item{order}{order of the moment.}
@@ -54,17 +54,17 @@
   \eqn{= \tau}{= c} and \code{scale} \eqn{= \theta}{= s}, has
   density:
   \deqn{f(x) = \frac{\Gamma(\alpha + \tau)}{\Gamma(\alpha)\Gamma(\tau)}
-    \frac{\gamma (x/\theta)^{(\gamma \tau)}}{%
-      x (1 + (x/\theta)^\gamma)^{(\alpha + \tau)}}}{%
-    f(x) = Gamma(a + c)/(Gamma(a) * Gamma(c)) ((b (x/s)^(bc))/%
-    (x (1 + (x/s)^b)^(a + c)))}
+    \frac{\gamma (x/\theta)^{\gamma \tau}}{%
+      x (1 + (x/\theta)^\gamma)^{\alpha + \tau}}}{%
+    f(x) = Gamma(a + c)/(Gamma(a) * Gamma(c)) (b (x/s)^(bc))/%
+    (x (1 + (x/s)^b)^(a + c))}
   for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0}, \eqn{\gamma > 0}{b > 0},
   \eqn{\tau > 0}{c > 0} and \eqn{\theta > 0}{s > 0}.
-  (Here \eqn{\Gamma(\alpha)}{Gamma(a)} ma(a) is the function implemented
+  (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
   by R's \code{\link{gamma}()} and defined in its help.)
 
   The Transformed Beta is the distribution of the random variable
-  \deqn{\theta \left(\frac{X}{1 - X}\right)^{(1/\gamma)},}{%
+  \deqn{\theta \left(\frac{X}{1 - X}\right)^{1/\gamma},}{%
     s (X/(1 - X))^(1/b),}
   where \eqn{X} has a Beta distribution with parameters \eqn{\alpha}{a}
   and \eqn{\tau}{c}.
