@@ -42,7 +42,7 @@
     positive.}
   \item{rate}{an alternative way to specify the scale.}
   \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
-    returned as log(p).}
+    returned as \eqn{log(p)}.}
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
     \eqn{P[X \le x]}{P[X <= x]}, otherwise, \eqn{P[X > x]}.}
   \item{order}{order of the moment.}
