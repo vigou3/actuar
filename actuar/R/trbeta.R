@@ -1,7 +1,12 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
 ### Definition of the {d,p,q,r,m,lev}trbeta functions to compute
-### characteristics of the Transformed Beta distribution.
+### characteristics of the Transformed Beta distribution. The version
+### used in these functions has cumulative distribution function
+###
+###   Pr[X <= x] = Pr[Y <= (x/scale)^shape2 / (1 + (x/scale)^shape2)],
+###
+### where Y has a Beta distribution with parameters shape3 and shape1.
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
