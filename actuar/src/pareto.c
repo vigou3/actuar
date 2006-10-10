@@ -105,6 +105,7 @@ double levpareto(double limit, double shape, double scale, double order, int giv
 	order >= shape)
 	return R_NaN;
 
-    tmp = limit + scale
+    tmp = limit + scale;
+
     return R_pow(scale, order) * gammafn(order + 1.0) * gammafn(shape - order) * pbeta(limit / tmp, order + 1.0, shape - order, 1, 0) / gammafn(shape) + R_pow(limit, order) * R_pow(scale / tmp, shape);
 }
