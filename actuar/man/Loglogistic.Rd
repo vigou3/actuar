@@ -1,0 +1,73 @@
+\name{Loglogistic}
+\alias{Loglogistic}
+\alias{dllogis}
+\alias{pllogis}
+\alias{qllogis}
+\alias{rllogis}
+\alias{mllogis}
+\alias{levllogis}
+\title{The Loglogistic Distribution}
+\description{
+  Density, distribution function, quantile function, random generation,
+  raw moments and limited moments for the Loglogistic distribution with
+  parameters \code{shape} and \code{scale}.
+}
+\usage{
+  dllogis(x, shape, scale, log = FALSE)
+  pllogis(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
+  qllogis(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
+  rllogis(n, shape, scale)
+  mllogis(order, shape, scale, log = FALSE)
+  levllogis(limit, shape, scale, order = 1, log = FALSE)
+}
+\arguments{
+  \item{x, q}{vector of quantiles.}
+  \item{p}{vector of probabilities.}
+  \item{n}{number of observations. If \code{length(n) > 1}, the length is
+    taken to be the number required.}
+  \item{shape, scale}{parameters. Must be strictly positive.}
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities
+    \eqn{p} are returned as \eqn{\log(p)}{log(p)}.}
+  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
+    \eqn{P[X \le x]}{P[X <= x]}, otherwise, \eqn{P[X > x]}.}
+  \item{order}{order of the moment.}
+  \item{limit}{limit of the loss variable.}
+}
+\details{
+  The Loglogistic distribution with parameters \code{shape} \eqn{=
+    \gamma}{= a} and \code{scale} \eqn{= \theta}{= s} has density:
+  \deqn{f(x) = \frac{\gamma (x/\theta)^\gamma}{%
+      x [1 + (x/\theta)^\gamma]^2}}{%
+    f(x) = a (x/s)^a / (x [1 + (x/s)^a]^2)}
+  for \eqn{x > 0}, \eqn{\gamma > 0}{a > 0} and \eqn{\theta > 0}{b > 0}.
+}
+\value{
+  \code{dllogis} gives the density,
+  \code{pllogis} gives the distribution function,
+  \code{qllogis} gives the quantile function,
+  \code{rllogis} generates random deviates,
+  \code{mllogis} gives the \eqn{k}th raw moment, and
+  \code{levllogis} gives the \eqn{k}th moment of the limited loss
+  variable.
+
+  Invalid arguments will result in return value \code{NaN}, with a warning.
+}
+\note{
+  Also known as the Fisk distribution.
+}
+\references{
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
+  \emph{Loss Models, From Data to Decisions}, Wiley.
+}
+\author{
+  Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
+  Mathieu Pigeon
+}
+\examples{
+exp(dllogis(2, 3, 4, log = TRUE))
+p <- (1:10)/10
+pllogis(qllogis(p, 2, 3), 2, 3)
+mllogis(1, 2, 3)
+levllogis(10, 2, 3, 1)
+}
+\keyword{distribution}
