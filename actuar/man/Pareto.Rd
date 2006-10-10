@@ -24,8 +24,8 @@
   ppareto(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
   qpareto(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
   rpareto(n, shape, scale)
-  mpareto(k, shape, scale, log = FALSE)
-  levpareto(d, shape, scale, order = 1, log = FALSE)
+  mpareto(order, shape, scale, log = FALSE)
+  levpareto(limit, shape, scale, order = 1, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
