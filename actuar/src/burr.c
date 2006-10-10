@@ -31,9 +31,9 @@ double dburr(double x, double shape1, double shape2, double scale, int give_log)
 
     tmp = R_pow(x / scale, shape2);
 
-    return (give_log ?
-	    log(shape1) + log(shape2) + shape2 * (log(x) - log(scale)) - log(x) - (shape1 + 1.0) * (log(R_pow(scale, shape2) + R_pow(x, shape2)) - shape2 * log(scale)) :
-	    shape1 * shape2 * tmp / (x * R_pow(1.0 + tmp, shape1 + 1.0)));
+    return give_log ?
+	log(shape1) + log(shape2) + shape2 * (log(x) - log(scale)) - log(x) - (shape1 + 1.0) * (log(R_pow(scale, shape2) + R_pow(x, shape2)) - shape2 * log(scale)) :
+	shape1 * shape2 * tmp / (x * R_pow(1.0 + tmp, shape1 + 1.0));
 }
 
 double pburr(double q, double shape1, double shape2, double scale, int lower_tail, int log_p)
@@ -54,8 +54,9 @@ double pburr(double q, double shape1, double shape2, double scale, int lower_tai
     tmp1 = R_pow(scale, shape2);
     tmp2 = R_pow(q, shape2);
 
-    return (lower_tail ? R_D_exp(log(1.0 - exp(shape1 * (shape2 * log(scale) - log(tmp1 + tmp2))))):
-	    R_D_exp(shape1 * (shape2 * log(scale) - log(tmp1 + tmp2))));
+    return lower_tail ?
+	R_D_exp(log(1.0 - exp(shape1 * (shape2 * log(scale) - log(tmp1 + tmp2))))):
+	R_D_exp(shape1 * (shape2 * log(scale) - log(tmp1 + tmp2)));
 }
 
 double qburr(double p, double shape1, double shape2, double scale, int lower_tail, int log_p)
@@ -77,8 +78,9 @@ double qburr(double p, double shape1, double shape2, double scale, int lower_tai
     tmp1 = 1.0 / shape1;
     tmp2 = 1.0 / shape2;
 
-    return (lower_tail ? scale * R_pow((1.0 - R_pow(1.0 - tmp, tmp1)) / R_pow(1.0 - tmp, tmp1), tmp2) :
-	    scale * R_pow((1.0 - R_pow(tmp, tmp1)) / R_pow(tmp, tmp1), tmp2));
+    return lower_tail ?
+	scale * R_pow((1.0 - R_pow(1.0 - tmp, tmp1)) / R_pow(1.0 - tmp, tmp1), tmp2) :
+	scale * R_pow((1.0 - R_pow(tmp, tmp1)) / R_pow(tmp, tmp1), tmp2);
 }
 
 double rburr(double shape1, double shape2, double scale)
