@@ -66,8 +66,8 @@
   The Transformed Beta is the distribution of the random variable
   \deqn{\theta \left(\frac{X}{1 - X}\right)^{1/\gamma},}{%
     s (X/(1 - X))^(1/b),}
-  where \eqn{X} has a Beta distribution with parameters \eqn{\alpha}{a}
-  and \eqn{\tau}{c}.
+  where \eqn{X} has a Beta distribution with parameters \eqn{\tau}{c}
+  and \eqn{\alpha}{a}.
 
   The Transformed Beta distribution defines a family of distributions
   with the following special cases:
