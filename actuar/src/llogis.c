@@ -95,11 +95,11 @@ double mllogis(double order, double shape, double scale, int give_log)
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
-	!R_FINITE(k) ||
+	!R_FINITE(order) ||
 	shape <= 0.0 ||
 	scale <= 0.0 ||
-	k <= -shape ||
-	k >= shape)
+	order <= -shape ||
+	order >= shape)
 	return R_NaN;
 
     tmp = order / shape;
@@ -114,17 +114,17 @@ double levllogis(double limit, double shape, double scale, double order, int giv
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	!R_FINITE(x) ||
-	!R_FINITE(order) ||
+	!R_FINITE(limit) ||
 	shape <= 0.0 ||
 	scale <= 0.0 ||
 	order <= -shape ||
 	order >= shape ||
-	x <= 0.0)
+	limit <= 0.0)
 	return R_NaN;
 
-    tmp1 = R_pow(x / scale, shape);
+    tmp1 = R_pow(limit / scale, shape);
     tmp2 = tmp1 / (1.0 + tmp1);
     tmp3 = order / shape;
 
-    return R_pow(scale, order) * gammafn(1.0 + tmp3) * gammafn(1.0 - tmp3) * pbeta(tmp2, 1.0 +tmp3, 1.0 - tmp3, 1, 0) + R_pow(limit, order) * (1.0 - tmp2);
+    return R_pow(scale, order) * gammafn(1.0 + tmp3) * gammafn(1.0 - tmp3) * pbeta(tmp2, 1.0 + tmp3, 1.0 - tmp3, 1, 0) + R_pow(limit, order) * (1.0 - tmp2);
 }
