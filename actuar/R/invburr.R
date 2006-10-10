@@ -1,30 +1,38 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r,m,lev}inverse burr functions. The inverse Burr
-### distribution used in these functions has cumulative distribution
-### function
+### Definition of the {d,p,q,r,m,lev}burr functions to compute
+### characteristics of the Inverse Burr distribution. The version used
+### in these functions has cumulative distribution function
 ###
-###   Pr[X <= x] = ((x/scale)^shape2/(1 + (x/scale)^shape2))^shape1 x > 0.
+###   Pr[X <= x] = (u/(1 + u))^shape1, u = (x/scale)^shape2, x > 0.
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dinvburr <- function (x, shape1, scale, shape2, log = FALSE)
-    .External("do_dpq", "dinvburr", x, shape1, scale, shape2, log)
+dinvburr <- function (x, shape1, shape2, rate = 1, scale = 1/rate,
+                      log = FALSE)
+    .External("do_dpq", "dinvburr", x, shape1, shape2, scale, log)
 
-pinvburr <- function(q, shape1, scale, shape2, lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "pinvburr", q, shape1, scale, shape2, lower.tail, log.p)
+pinvburr <- function(q, shape1, shape2, rate = 1, scale = 1/rate,
+                     lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "pinvburr", q, shape1, shape2, scale,
+              lower.tail, log.p)
 
-qinvburr <- function(p, shape1, scale, shape2, lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "qinvburr", p, shape1, scale, shape2, lower.tail, log.p)
+qinvburr <- function(p, shape1, shape2, rate = 1, scale = 1/rate,
+                     lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "qinvburr", p, shape1, shape2, scale,
+              lower.tail, log.p)
 
-rinvburr <- function(n, shape1, scale, shape2)
-    .External("do_random", "rinvburr", n, shape1, scale, shape2)
+rinvburr <- function(n, shape1, shape2, rate = 1, scale = 1/rate)
+    .External("do_random", "rinvburr", n, shape1, shape2, scale)
 
-minvburr <- function(k, shape1, scale, shape2, log = FALSE)
-    .External("do_dpq", "minvburr", k, shape1, scale, shape2, log)
+minvburr <- function(order, shape1, shape2, rate = 1, scale = 1/rate,
+                     log = FALSE)
+    .External("do_dpq", "minvburr", order, shape1, shape2, scale, log)
 
-levinvburr <- function(d, shape1, scale, shape2, order = 1, log = FALSE)
-    .External("do_dpq", "levinvburr", d, shape1, scale, shape2, order, log)
+levinvburr <- function(limit, shape1, shape2, rate = 1, scale = 1/rate,
+                       order = 1, log = FALSE)
+    .External("do_dpq", "levinvburr", limit, shape1, shape2, scale,
+              order, log)
