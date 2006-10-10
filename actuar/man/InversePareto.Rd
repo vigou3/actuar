@@ -17,8 +17,8 @@
   pinvpareto(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
   qinvpareto(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
   rinvpareto(n, shape, scale)
-  minvpareto(k, shape, scale, log = FALSE)
-  levinvpareto(d, shape, scale, order = 1, log = FALSE)
+  minvpareto(order, shape, scale, log = FALSE)
+  levinvpareto(limit, shape, scale, order = 1, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
