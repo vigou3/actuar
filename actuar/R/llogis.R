@@ -1,10 +1,10 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r}loglogistic functions. The loglogistic
-### distribution used in these functions has cumulative distribution
-### function
+### Definition of the {d,p,q,r}llogis functions to compute
+### characteristics of the loglogistic distribution. The version used
+### in these functions has cumulative distribution function
 ###
-###   Pr[X <= x] = ((x/scale)^shape/(1 + (x/scale)^shape)), x > 0.
+###   Pr[X <= x] = u/(1 + u), u = (x/scale)^shape, x > 0.
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
@@ -23,8 +23,8 @@ qllogis <- function(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
 rllogis <- function(n, shape, scale)
      .External("do_random", "rllogis", n, shape, scale)
 
-mllogis <- function(k, shape, scale, log = FALSE)
-     .External("do_dpq", "mllogis", k, shape, scale, log)
+mllogis <- function(order, shape, scale, log = FALSE)
+     .External("do_dpq", "mllogis", order, shape, scale, log)
 
-levllogis <- function(d, shape, scale, order = 1, log = FALSE)
-     .External("do_dpq", "levllogis", d, shape, scale, order, log)
+levllogis <- function(limit, shape, scale, order = 1, log = FALSE)
+     .External("do_dpq", "levllogis", limit, shape, scale, order, log)
