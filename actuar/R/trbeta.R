@@ -7,25 +7,37 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dtrbeta <- function (x, shape1, scale, shape2, shape3, log = FALSE)
-    .External("do_dpq", "dtrbeta", x, shape1, scale, shape2, shape3, log)
+dtrbeta <-
+    function (x, shape1, shape2, shape3, rate = 1, scale = 1/rate,
+              log = FALSE)
+    .External("do_dpq", "dtrbeta", x, shape1, shape2, shape3, scale, log)
 
-ptrbeta <- function (q, shape1, scale, shape2, shape3, lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "ptrbeta", q, shape1, scale, shape2, shape3, lower.tail, log.p)
+ptrbeta <-
+    function (q, shape1, shape2, shape3, rate = 1, scale = 1/rate,
+              lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "ptrbeta", q, shape1, shape2, shape3, scale,
+              lower.tail, log.p)
 
-qtrbeta <- function (p, shape1, scale, shape2, shape3, lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "qtrbeta", p, shape1, scale, shape2, shape3, lower.tail, log.p)
+qtrbeta <-
+    function (p, shape1, shape2, shape3, rate = 1, scale = 1/rate,
+              lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "qtrbeta", p, shape1, shape2, shape3, scale,
+              lower.tail, log.p)
 
-rtrbeta <- function (n, shape1, scale, shape2, shape3)
+rtrbeta <-
+    function (n, shape1, shape2, shape3, rate = 1, scale = 1/rate)
     .External("do_random", "rtrbeta", n, shape1, scale, shape2, shape3)
 
-mtrbeta <- function (k, shape1, scale, shape2, shape3, log = FALSE)
-    .External("do_dpq", "mtrbeta", k, shape1, scale, shape2, shape3, log)
+mtrbeta <-
+    function (order, shape1, shape2, shape3, rate = 1, scale = 1/rate,
+              log = FALSE)
+    .External("do_dpq", "mtrbeta", order, shape1, shape2, shape3, scale, log)
 
-levtrbeta <- function (d, shape1, scale, shape2, shape3, order = 1, log = FALSE)
-    .External("do_dpq", "levtrbeta", d, shape1, scale, shape2, shape3, order, log)
-
-
+levtrbeta <-
+    function (limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
+              order = 1, log = FALSE)
+    .External("do_dpq", "levtrbeta", limit, shape1, shape2, shape3, scale,
+              order, log)
 
 ## Aliases
 dpearson6 <- dtrbeta
@@ -34,4 +46,3 @@ qpearson6 <- qtrbeta
 rpearson6 <- rtrbeta
 mpearson6 <- mtrbeta
 levpearson6 <- levtrbeta
-
