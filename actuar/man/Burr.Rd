@@ -62,7 +62,7 @@
     \item A \link[=dparalogis]{Paralogistic} distribution when
     \code{shape2 == shape1};
     \item A \link[=dpareto]{Pareto} distribution when \code{shape2 ==
-      1};
+      1}.
   }    
 }
 \value{
