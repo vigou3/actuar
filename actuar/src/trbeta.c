@@ -1,8 +1,8 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the transformed beta distribution, raw and limited
- *  moments and to simulate random variates. See ../R/trbeta.R for
+ *  fonctions, raw and limited moments and to simulate random variates
+ *  for the transformed beta distribution See ../R/trbeta.R for
  *  details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
