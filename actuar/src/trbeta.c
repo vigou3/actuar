@@ -34,9 +34,9 @@ double dtrbeta(double x, double shape1, double shape2, double shape3, double sca
     tmp2 = R_pow(tmp1, shape2);
     tmp3 = tmp2 / (1 + tmp2);
 
-    return (give_log ?
-	    dbeta(tmp3, shape3, shape1, 1) + log(shape2) - log(scale) + (shape2 - 1.0) * (log(x) - log(scale)) + 2.0 * (-log(1.0 + exp(shape2 * (log(x) - log(scale))))) :
-	    dbeta(tmp3, shape3, shape1, 0) * shape2 * tmp2 / (scale * tmp1 * R_pow_di(1.0 + tmp2, 2)));
+    return give_log ?
+	dbeta(tmp3, shape3, shape1, 1) + log(shape2) - log(scale) + (shape2 - 1.0) * (log(x) - log(scale)) + 2.0 * (-log(1.0 + exp(shape2 * (log(x) - log(scale))))) :
+	dbeta(tmp3, shape3, shape1, 0) * shape2 * tmp2 / (scale * tmp1 * R_pow_di(1.0 + tmp2, 2));
 }
 
 double ptrbeta(double q, double shape1, double shape2, double shape3, double scale, int lower_tail, int log_p)
@@ -62,8 +62,8 @@ double ptrbeta(double q, double shape1, double shape2, double shape3, double sca
     if (!R_FINITE(q))
 	return 1;
 
-    return (lower_tail ? R_D_exp(pbeta(u, shape3, shape1, 1, 1)):
-	    R_D_exp(pbeta(u, shape3, shape1, 0, 1)));
+    return lower_tail ? R_D_exp(pbeta(u, shape3, shape1, 1, 1)):
+	R_D_exp(pbeta(u, shape3, shape1, 0, 1));
 }
 
 double qtrbeta(double p, double shape1, double shape2, double shape3, double scale, int lower_tail, int log_p)
@@ -83,8 +83,9 @@ double qtrbeta(double p, double shape1, double shape2, double shape3, double sca
     R_Q_P01_boundaries(p, 0, R_PosInf);
     tmp = R_D_qIv(p);
 
-    return (lower_tail ? scale * R_pow(qbeta(tmp, shape3, shape1, 1, 0) / (1.0 - qbeta(tmp, shape3, shape1, 1 ,0)), 1.0 / shape2)  :
-	    scale * R_pow((qbeta(tmp, shape3, shape1, 0, 0)) / (1.0 - qbeta(tmp, shape3, shape1, 0, 0)), 1.0 / shape2));
+    return lower_tail ?
+	scale * R_pow(qbeta(tmp, shape3, shape1, 1, 0) / (1.0 - qbeta(tmp, shape3, shape1, 1 ,0)), 1.0 / shape2)  :
+	scale * R_pow((qbeta(tmp, shape3, shape1, 0, 0)) / (1.0 - qbeta(tmp, shape3, shape1, 0, 0)), 1.0 / shape2);
 }
 
 double rtrbeta(double shape1, double shape2, double shape3, double scale)
