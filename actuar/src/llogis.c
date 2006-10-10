@@ -113,8 +113,8 @@ double levllogis(double limit, double shape, double scale, double order, int giv
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
-	!R_FINITE(x) ||
 	!R_FINITE(limit) ||
+	!R_FINITE(order) ||
 	shape <= 0.0 ||
 	scale <= 0.0 ||
 	order <= -shape ||
