@@ -77,7 +77,8 @@
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  Distribution also known as the Burr Type XII and Singh-Maddala.
+  Distribution also known as the Burr Type XII or Singh-Maddala
+  distribution.
 }
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
