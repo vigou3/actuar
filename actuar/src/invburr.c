@@ -14,7 +14,7 @@
 
 double dinvburr(double x, double shape1, double shape2, double scale, int give_log)
 {
-    double tmp;
+    double tmp1, tmp2, tmp3;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
@@ -27,17 +27,18 @@ double dinvburr(double x, double shape1, double shape2, double scale, int give_l
     if (!R_FINITE(x) || x < 0.0)
 	return R_D_d0;
 
-    tmp = log(x) - log(scale);
+    tmp1 = x / scale;
+    tmp2 = R_pow(tmp1, shape2);
+    tmp3 = shape2 * (log(x) - log(scale));
 
     return give_log ?
-	log(shape1) + log(shape2) + shape2 * shape1 * tmp - log(x) - (shape1 + 1.0) * log(1.0 + exp(shape2 * tmp)) :
-	shape1 * shape2 * R_pow(x / scale, shape2 * shape1) / (x * R_pow(1 + R_pow(x / scale, shape2), shape1 + 1.0));
+	log(shape1) + log(shape2) + shape1 * tmp3 - log(x) - (shape1 + 1.0) * log(1.0 + tmp2) :
+	shape1 * shape2 * R_pow(tmp2, shape1) / (x * R_pow(1 + tmp2, shape1 + 1.0));
 }
 
 double pinvburr(double q, double shape1, double shape2, double scale, int lower_tail, int log_p)
 {
-
-    double tmp;
+    double tmp1, tmp2, tmp3;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
@@ -53,15 +54,17 @@ double pinvburr(double q, double shape1, double shape2, double scale, int lower_
     if (!R_FINITE(q))
 	return 1;
 
-    tmp = log(q) - log(scale);
+    tmp1 = q / scale;
+    tmp2 = R_pow(tmp1, shape2);
+    tmp3 = shape2 * (log(q) - log(scale));
 
-    return lower_tail ? R_D_exp(shape1 * shape2 * tmp - shape1 * log(1.0 + exp(shape2 * tmp))):
-	    R_D_exp(log(1.0 - exp(shape1 * shape2 * tmp - shape1 * log(1.0 + exp(shape2 * tmp)))));
+    return lower_tail ?
+	R_D_exp(shape1 * (tmp3 - log(1.0 + tmp2))):
+	R_D_exp(log(1.0 - exp(shape1 * (tmp3 - log(1.0 + tmp2)))));
 }
 
 double qinvburr(double p, double shape1, double shape2, double scale, int lower_tail, int log_p)
 {
-
     double tmp, tmp1;
 
     if (!R_FINITE(shape1) ||
@@ -83,7 +86,7 @@ double qinvburr(double p, double shape1, double shape2, double scale, int lower_
 
 double rinvburr(double shape1, double shape2, double scale)
 {
-    double a;
+    double a, tmp;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
@@ -94,12 +97,14 @@ double rinvburr(double shape1, double shape2, double scale)
 	return R_NaN;
 
     a = unif_rand();
+    tmp = R_pow(a, 1.0 / shape1);
 
-    return scale * R_pow(R_pow(a, 1.0 / shape1) / (1.0 - R_pow(a, 1.0 / shape1)), 1.0 / shape2);
+    return scale * R_pow(tmp / (1.0 - tmp), 1.0 / shape2);
 }
 
 double minvburr(double order, double shape1, double shape2, double scale, int give_log)
 {
+    double tmp;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
@@ -112,12 +117,14 @@ double minvburr(double order, double shape1, double shape2, double scale, int gi
 	order >= shape2)
 	return R_NaN;
 
-    return R_pow(scale, order) * gammafn(shape1 + order / shape2) * gammafn(1.0 - order / shape2) / gammafn(shape1);
+    tmp = order / shape2;
+
+    return R_pow(scale, order) * gammafn(shape1 + tmp) * gammafn(1.0 - tmp) / gammafn(shape1);
 }
 
 double levinvburr(double limit, double shape1, double shape2, double scale, double order, int give_log)
 {
-    double u;
+    double u, tmp1, tmp2;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
@@ -132,7 +139,9 @@ double levinvburr(double limit, double shape1, double shape2, double scale, doub
 	order >= shape2)
 	return R_NaN;
 
-    u = R_pow(limit / scale, shape2) / (1.0 + R_pow(limit / scale, shape2));
+    tmp1 = limit / scale;
+    tmp2 = order / shape2;
+    u = R_pow(tmp1, shape2) / (1.0 + R_pow(tmp1, shape2));
 
-    return R_pow(scale, order) * gammafn(shape1 + order / shape2) * gammafn(1.0 - order / shape2) * pbeta(u, shape1 + order / shape2, 1.0 - order / shape2, 1, 0) / gammafn(shape1) + R_pow(limit, order) * (1.0 - R_pow(u, shape1));
+    return R_pow(scale, order) * gammafn(shape1 + tmp2) * gammafn(1.0 - tmp2) * pbeta(u, shape1 + tmp2, 1.0 - tmp2, 1, 0) / gammafn(shape1) + R_pow(limit, order) * (1.0 - R_pow(u, shape1));
 }
