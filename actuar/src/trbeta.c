@@ -128,7 +128,7 @@ double mtrbeta(double order, double shape1, double shape2, double shape3, double
 
 double levtrbeta(double limit, double shape1, double shape2, double shape3, double scale, double order, int give_log)
 {
-    double tmp, u;
+    double u, tmp1, tmp2;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
@@ -145,8 +145,9 @@ double levtrbeta(double limit, double shape1, double shape2, double shape3, doub
 	order >= shape1 * shape2)
 	return R_NaN;
 
-    tmp = R_pow(limit / scale, shape2);
-    u = tmp / (1.0 + tmp);
+    tmp1 = R_pow(limit / scale, shape2);
+    tmp2 = order / shape2;
+    u = tmp1 / (1.0 + tmp1);
 
-    return R_pow(scale, order) * gammafn(shape3 + order / shape2) * gammafn(shape1 - order / shape2) * pbeta(u, shape3 + order / shape2, shape1 - order / shape2, 1, 0) / (gammafn(shape1) * gammafn(shape3)) + R_pow(limit, order) * (pbeta(u, shape3, shape1, 0, 0));
+    return R_pow(scale, order) * gammafn(shape3 + tmp2) * gammafn(shape1 - tmp2) * pbeta(u, shape3 + tmp2, shape1 - tmp2, 1, 0) / (gammafn(shape1) * gammafn(shape3)) + R_pow(limit, order) * pbeta(u, shape3, shape1, 0, 0);
 }
