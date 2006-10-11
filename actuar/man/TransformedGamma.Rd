@@ -1,7 +1,5 @@
-
-\name{Trgamma}
-\alias{trgamma}
-\alias{print.trgamma}
+\name{TransformedGamma}
+\alias{TransformedGamma}
 \alias{dtrgamma}
 \alias{ptrgamma}
 \alias{qtrgamma}
@@ -11,69 +9,83 @@
 \title{The Transformed Gamma Distribution}
 \description{
   Density, distribution function, quantile function, random generation,
-  raw moments, and limited moments for the Transformed Gamma distribution with parameters \code{shape1},
-  \code{scale}, and \code{shape2}.
+  raw moments and limited moments for the Transformed Gamma distribution
+  with parameters \code{shape1}, \code{shape2} and \code{scale}.
 }
 \usage{
-  dtrgamma(x, shape1, scale, shape2, log = FALSE)
-  ptrgamma(q, shape1, scale, shape2, lower.tail = TRUE,
-           log.p = FALSE)
-  qtrgamma(p, shape1, scale, shape2, lower.tail = TRUE,
-           log.p = FALSE)
-  rtrgamma(n, shape1, scale, shape2)
-  mtrgamma(k, shape1, scale, shape2, log = FALSE)
-  levtrgamma(d, shape1, scale, shape2, order = 1, log = FALSE)
+  dtrgamma(x, shape1, shape2, rate = 1, scale = 1/rate,
+           log = FALSE)
+  ptrgamma(q, shape1, shape2, rate = 1, scale = 1/rate,
+           lower.tail = TRUE, log.p = FALSE)
+  qtrgamma(p, shape1, shape2, rate = 1, scale = 1/rate,
+           lower.tail = TRUE, log.p = FALSE)
+  rtrgamma(n, shape1, shape2, rate = 1, scale = 1/rate)
+  mtrgamma(order, shape1, shape2, rate = 1, scale = 1/rate,
+           log = FALSE)
+  levtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
+             order = 1, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
-  \item{d}{limit of loss variable.}
-  \item{shape1, scale, shape2}{parameters. Must be strictly positive.}
-  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
-    returned as log(p).}
-  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
-    <= x], otherwise, Pr[X > x].}
-  \item{k, order}{order of the moment.}
+  \item{shape1, shape2, scale}{parameters. Must be strictly positive.}
+  \item{rate}{an alternative way to specify the scale.}
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities
+    \eqn{p} are returned as \eqn{\log(p)}{log(p)}.}
+  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
+    \eqn{P[X \le x]}{P[X <= x]}, otherwise, \eqn{P[X > x]}.}
+  \item{order}{order of the moment.}
+  \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Transformed Gamma distribution with parameters \code{shape1} = a,
-  \code{scale} = b, and \code{shape2} = c has density:
-  \deqn{p(x) = \frac{c (\frac{x}{b})^{(a c)} e^{-(\frac{x}{b})^c}}{x
-      \Gamma(a)}}{p(x) = c (x / b)^(a c) exp(-(x / b)^c) / (x gamma(a))}
-  for \eqn{x > 0, a > 0, b > 0,} and
-  \eqn{c > 0}. Here Gamma(a) is the function implemented by R's
-  \code{gamma()} and defined in its help.
+  The Transformed Gamma distribution with parameters \code{shape1} \eqn{=
+    \alpha}{= a}, \code{shape2} \eqn{= \tau}{= b} and \code{scale}
+  \eqn{= \theta}{= s}, has density:
+  \deqn{f(x) = \frac{\tau u^\alpha e^{-u}}{x \Gamma(\alpha)}, %
+      \quad u = (x/\theta)^\tau}{%
+    f(x) = b u^a exp(-u) / (x Gamma(a)), u = (x/s)^b}
+  for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0}, \eqn{\tau > 0}{b > 0},
+  and \eqn{\theta > 0}{s > 0}.
+  (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
+  by R's \code{\link{gamma}()} and defined in its help.)
 
-  Let Y be a Gamma random variable with parameters
-  \code{shape1} and \code{scale}. \deqn{Y^{\frac{1}{shape2}}}{Y^(1/shape2)}
-  has the Transformed Gamma probability density function with parameters
-  \code{shape1}, \code{scale} and \code{shape2}.
+  The Transformed Gamma is the distribution of the random variable
+  \eqn{\theta X^{1/\tau},}{s X^(1/b),}
+  where \eqn{X} has a Gamma distribution with shape parameter \eqn{\alpha}{a}
+  and scale parameter \eqn{1} or, equivalently, of the random variable
+  \eqn{Y^{1/\tau}}{Y^(1/b)}
+  with \eqn{Y} a Gamma distribution with shape parameter \eqn{\alpha}{a}
+  and scale parameter \eqn{\theta^\tau}{s^b}.
 
   The Transformed Gamma probability distribution defines a family of
   distributions with the following special cases:
   \itemize{
-    \item \code{shape2} == 1 is a Gamma distribution,
-    \item \code{shape2} == \code{shape1} == 1 is an Exponential
-    distribution, and
-    \item \code{shape1} == 1 is a Weibull distribution.
+    \item A \link[=dgamma]{Gamma} distribution when \code{shape2 == 1};
+    \item A \link[=dweibull]{Weibull} distribution when \code{shape1 ==
+      1};
+    \item An \link[=dexp]{Exponential} distribution when \code{shape2 ==
+      shape1 == 1}.
   }
 }
 \value{
-\code{dtrgamma} gives the density, \code{ptrgamma} gives the distribution function,
-\code{qtrgamma} gives the quantile function, \code{rtrgamma} generates random
-deviates, \code{mtrgamma} gives the kth raw moment, and \code{levtrgamma}
-gives de kth moment of the limited loss variable.
+  \code{dtrgamma} gives the density,
+  \code{ptrgamma} gives the distribution function,
+  \code{qtrgamma} gives the quantile function,
+  \code{rtrgamma} generates random deviates,
+  \code{mtrgamma} gives the \eqn{k}th raw moment, and
+  \code{levtrgamma} gives the \eqn{k}th moment of the limited loss
+  variable.
 
-Invalid arguments will return warning.
+  Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-Also known as the generalized gamma distribution.
+  Distribution also known as the Generalized Gamma.
 }
 \references{
-  Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-  Edition, Wiley, 2004.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
+  \emph{Loss Models, From Data to Decisions}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
