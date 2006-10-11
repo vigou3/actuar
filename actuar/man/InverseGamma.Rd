@@ -1,7 +1,5 @@
-
-\name{Invgamma}
-\alias{invgamma}
-\alias{print.invgamma}
+\name{InverseGamma}
+\alias{InverseGamma}
 \alias{dinvgamma}
 \alias{pinvgamma}
 \alias{qinvgamma}
@@ -11,58 +9,64 @@
 \title{The Inverse Gamma Distribution}
 \description{
   Density, distribution function, quantile function, random generation,
-  raw moments, and limited moments for the Inverse Gamma distribution with parameters \code{shape} and \code{scale}.
+  raw moments, and limited moments for the Inverse Gamma distribution
+  with parameters \code{shape} and \code{scale}.
 }
 \usage{
-  dinvgamma(x, shape, scale, log = FALSE)
-  pinvgamma(q, shape, scale, lower.tail = TRUE,
-           log.p = FALSE)
-  qinvgamma(p, shape, scale, lower.tail = TRUE,
-           log.p = FALSE)
-  rinvgamma(n, shape, scale)
-  minvgamma(k, shape, scale, log = FALSE)
-  levinvgamma(d, shape, scale, order = 1, log = FALSE)
+  dinvgamma(x, shape, rate = 1, scale = 1/rate, log = FALSE)
+  pinvgamma(q, shape, rate = 1, scale = 1/rate,
+            lower.tail = TRUE, log.p = FALSE)
+  qinvgamma(p, shape, rate = 1, scale = 1/rate,
+            lower.tail = TRUE, log.p = FALSE)
+  rinvgamma(n, shape, rate = 1, scale = 1/rate)
+  minvgamma(order, shape, rate = 1, scale = 1/rate, log = FALSE)
+  levinvgamma(limit, shape, rate = 1, scale = 1/rate,
+              order = 1, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
-  \item{d}{limit of the loss variable.}
   \item{shape, scale}{parameters. Must be strictly positive.}
-  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
-    returned as log(p).}
-  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
-    <= x], otherwise, Pr[X > x].}
-  \item{k, order}{order of the moment.}
+  \item{rate}{an alternative way to specify the scale.}
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities
+    \eqn{p} are returned as \eqn{\log(p)}{log(p)}.}
+  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
+    \eqn{P[X \le x]}{P[X <= x]}, otherwise, \eqn{P[X > x]}.}
+  \item{order}{order of the moment.}
+  \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Inverse Gamma distribution with parameters \code{shape} = a
-  and \code{scale} = b has density:
-  \deqn{p(x) = \frac{(\frac{b}{x})^a e^{\frac{-b}{x}}}{x
-      \Gamma(a)}}{p(x) = (b/x)^a exp(-b/x) / (x gamma(a))}
-  for \eqn{x > 0, a > 0} and \eqn{b > 0}. Here Gamma(a) is the function implemented by R's
-  \code{gamma()} and defined in its help.
+  The Inverse Gamma distribution with parameters \code{shape} \eqn{=
+    \alpha}{= a} and \code{scale} \eqn{= \theta}{= s} has density:
+  \deqn{f(x) = \frac{u^\alpha e^{-u}}{x \Gamma(\alpha)}, %
+    \quad u = \theta/x}{%
+    f(x) = u^a exp(-u)/(x Gamma(a)), u = s/x}
+  for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0} and \eqn{\theta > 0}{s > 0}.
+  (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
+  by R's \code{\link{gamma}()} and defined in its help.)
 
-  The Inverse Gamma distribution has the following special case:
-  \itemize{
-    \item \code{shape1} == 1 is an Inverse Exponential distribution.
-  }
+  When \code{shape == 1}, this is an
+  \link[=dinvexp]{Inverse Exponential} distribution.
 }
 \value{
-\code{dinvgamma} gives the density, \code{pinvgamma} gives the distribution function,
-\code{qinvgamma} gives the quantile function, \code{rinvgamma} generates random
-deviates, \code{minvgamma} gives the kth raw moment, and \code{levinvgamma} gives
-the kth moment of the limited loss variable.
+  \code{dinvgamma} gives the density,
+  \code{pinvgamma} gives the distribution function,
+  \code{qinvgamma} gives the quantile function,
+  \code{rinvgamma} generates random deviates,
+  \code{minvgamma} gives the \eqn{k}th raw moment, and
+  \code{levinvgamma} gives the \eqn{k}th moment of the limited loss
+  variable.
 
-Invalid arguments will return warning.
+  Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-Also known as Vinci distribution.
+  Also known as the Vinci distribution.
 }
 \references{
-  Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-  Edition, Wiley, 2004.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
+  \emph{Loss Models, From Data to Decisions}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
