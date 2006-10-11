@@ -1,26 +1,43 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r,m,lev}inverse transformed gamma functions.
+### Definition of the {d,p,q,r,m,lev}invtrgamma functions to compute
+### characteristics of the Inverse Transformed Gamma distribution. The
+### version used in these functions has cumulative distribution
+### function
+###
+###   Pr[X <= x] = 1 - pgamma((x/scale)^shape2, shape1, scale = 1)
+###
+### or, equivalently,
+###
+###   Pr[X <= x] = 1 - pgamma(x^shape2, shape1, scale = scale^shape2).
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dinvtrgamma <- function (x, shape1, scale, shape2, log = FALSE)
-    .External("do_dpq", "dinvtrgamma", x, shape1, scale, shape2, log)
+dinvtrgamma <- function (x, shape1, shape2, rate = 1, scale = 1/rate,
+                         log = FALSE)
+    .External("do_dpq", "dinvtrgamma", x, shape1, shape2, scale, log)
 
-pinvtrgamma <- function(q, shape1, scale, shape2, lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "pinvtrgamma", q, shape1, scale, shape2, lower.tail, log.p)     
+pinvtrgamma <- function(q, shape1, shape2, rate = 1, scale = 1/rate,
+                        lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "pinvtrgamma", q, shape1, shape2, scale,
+              lower.tail, log.p)
 
-qinvtrgamma <- function(p, shape1, scale, shape2, lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "qinvtrgamma", p, shape1, scale, shape2, lower.tail, log.p)   
+qinvtrgamma <- function(p, shape1, shape2, rate = 1, scale = 1/rate,
+                        lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "qinvtrgamma", p, shape1, shape2, scale,
+              lower.tail, log.p)
 
-rinvtrgamma <- function(n, shape1, scale, shape2)
-    .External("do_random", "rinvtrgamma", n, shape1, scale, shape2)
+rinvtrgamma <- function(n, shape1, shape2, rate = 1, scale = 1/rate)
+    .External("do_random", "rinvtrgamma", n, shape1, shape2, scale)
 
-minvtrgamma <- function(k, shape1, scale, shape2, log = FALSE)
-    .External("do_dpq", "minvtrgamma", k, shape1, scale, shape2, log)
+minvtrgamma <- function(order, shape1, shape2, rate = 1, scale = 1/rate,
+                        log = FALSE)
+    .External("do_dpq", "minvtrgamma", order, shape1, shape2, scale, log)
 
-levinvtrgamma <- function(d, shape1, scale, shape2, order = 1, log = FALSE)
-    .External("do_dpq", "levinvtrgamma", d, shape1, scale, shape2, order, log)
+levinvtrgamma <- function(limit, shape1, shape2, rate = 1, scale = 1/rate,
+                          order = 1, log = FALSE)
+    .External("do_dpq", "levinvtrgamma", limit, shape1, shape2, scale,
+              order, log)

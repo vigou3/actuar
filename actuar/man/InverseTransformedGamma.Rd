@@ -1,6 +1,5 @@
-\name{Invtrgamma}
-\alias{invtrgamma}
-\alias{print.invtrgamma}
+\name{InverseTransformedGamma}
+\alias{InverseTransformedGamma}
 \alias{dinvtrgamma}
 \alias{pinvtrgamma}
 \alias{qinvtrgamma}
@@ -10,64 +9,87 @@
 \title{The Inverse Transformed Gamma Distribution}
 \description{
   Density, distribution function, quantile function, random generation,
-  raw moments, and limited moments for the Inverse Transformed Gamma distribution with parameters \code{shape1},
-  \code{scale} and \code{shape2}. 
+  raw moments, and limited moments for the Inverse Transformed Gamma
+  distribution with parameters \code{shape1}, \code{shape2} and
+  \code{scale}.
 }
 \usage{
-  dinvtrgamma(x, shape1, scale, shape2, log = FALSE)
-  pinvtrgamma(q, shape1, scale, shape2, lower.tail = TRUE,
-           log.p = FALSE)
-  qinvtrgamma(p, shape1, scale, shape2, lower.tail = TRUE,
-           log.p = FALSE)
-  rinvtrgamma(n, shape1, scale, shape2)
-  minvtrgamma(k, shape1, scale, shape2, log = FALSE)
-  levinvtrgamma(d, shape1, scale, shape2, order = 1, log = FALSE)
+  dinvtrgamma(x, shape1, shape2, rate = 1, scale = 1/rate,
+              log = FALSE)
+  pinvtrgamma(q, shape1, shape2, rate = 1, scale = 1/rate,
+              lower.tail = TRUE, log.p = FALSE)
+  qinvtrgamma(p, shape1, shape2, rate = 1, scale = 1/rate,
+              lower.tail = TRUE, log.p = FALSE)
+  rinvtrgamma(n, shape1, shape2, rate = 1, scale = 1/rate)
+  minvtrgamma(order, shape1, shape2, rate = 1, scale = 1/rate,
+              log = FALSE)
+  levinvtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
+                order = 1, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
-  \item{d}{limit of the loss variable.}
-  \item{shape1, scale, shape2}{parameters. Must be strictly positive.}
-  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
-    returned as log(p).}
-  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
-    <= x], otherwise, Pr[X > x].}
-  \item{k, order}{order of the moment.}
+  \item{shape1, shape2, scale}{parameters. Must be strictly positive.}
+  \item{rate}{an alternative way to specify the scale.}
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities
+    \eqn{p} are returned as \eqn{\log(p)}{log(p)}.}
+  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
+    \eqn{P[X \le x]}{P[X <= x]}, otherwise, \eqn{P[X > x]}.}
+  \item{order}{order of the moment.}
+  \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Inverse Transformed Gamma distribution with parameters \code{shape1} = a,
-  \code{scale} = b and \code{shape2} = c has density:
-  \deqn{p(x) = \frac{c (\frac{b}{x})^c e^{(\frac{-b}{x})^c}}{x
-      \Gamma(a)}}{p(x) = c (b/x)^c exp((-b/x)^c) / x Gamma(x)}
-  for \eqn{x > 0, a > 0, b > 0} and
-  \eqn{c > 0}. Here Gamma(a) is the function implemented by R's
-  \code{gamma()} and defined in its help.
+  The Inverse Transformed Gamma distribution with parameters
+  \code{shape1} \eqn{= \alpha}{= a}, \code{shape2} \eqn{= \tau}{= b} and
+  \code{scale} \eqn{= \theta}{= s}, has density:
+  \deqn{f(x) = \frac{\tau u^\alpha e^{-u}}{x \Gamma(\alpha)}, %
+      \quad u = (\theta/x)^\tau}{%
+    f(x) = b u^a exp(-u) / (x Gamma(a)), u = (s/x)^b}
+  for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0}, \eqn{\tau > 0}{b > 0}
+  and \eqn{\theta > 0}{s > 0}.
+  (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
+  by R's \code{\link{gamma}()} and defined in its help.)
+
+  The Inverse Transformed Gamma is the distribution of the random
+  variable
+  \eqn{\theta X^{-1/\tau},}{s X^(-1/b),}
+  where \eqn{X} has a Gamma distribution with shape parameter
+  \eqn{\alpha}{a} and scale parameter \eqn{1} or, equivalently, of the
+  random variable
+  \eqn{Y^{-1/\tau}}{Y^(-1/b)}
+  with \eqn{Y} a Gamma distribution with shape parameter \eqn{\alpha}{a}
+  and scale parameter \eqn{\theta^{-\tau}}{s^(-b)}.
 
   The Inverse Transformed Gamma distribution defines a family of
   distributions with the following special cases:
   \itemize{
-    \item \code{shape2} == 1 is an Inverse Gamma distribution,
-    \item \code{shape2} == \code{shape1} == 1 is an Inverse Exponential
-    distribution, and
-    \item \code{shape1} == 1 is an Inverse Weibull distribution.
+    \item An \link[=dinvgamma]{Inverse Gamma} distribution when
+    \code{shape2 == 1};
+    \item An \link[=dinvweibull]{Inverse Weibull} distribution when
+    \code{shape1 == 1};
+    \item An \link[=dinvexp]{Inverse Exponential} distribution when
+    \code{shape1 == shape2 == 1};
   }
 }
 \value{
-\code{dinvtrgamma} gives the density, \code{pinvtrgamma} gives the distribution function,
-\code{qinvtrgamma} gives the quantile function, \code{rinvtrgamma} generates random
-deviates, \code{mtrbeta} gives the kth raw moment, and \code{levtrbeta} gives
-the kth moment of the limited loss variable.
+  \code{dinvtrgamma} gives the density,
+  \code{pinvtrgamma} gives the distribution function,
+  \code{qinvtrgamma} gives the quantile function,
+  \code{rinvtrgamma} generates random deviates,
+  \code{minvtrgamma} gives the \eqn{k}th raw moment, and
+  \code{levinvtrgamma} gives the \eqn{k}th moment of the limited loss
+  variable.
 
-Invalid arguments will return warning.
+  Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-Also known as the inverse generalized gamma distribution.
+  Distribution also known as the Inverse Generalized Gamma.
 }
 \references{
-  Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-  Edition, Wiley, 2004.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
+  \emph{Loss Models, From Data to Decisions}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
