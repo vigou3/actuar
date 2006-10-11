@@ -13,12 +13,15 @@
   parameters \code{shape} and \code{scale}.
 }
 \usage{
-  dllogis(x, shape, scale, log = FALSE)
-  pllogis(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
-  qllogis(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
-  rllogis(n, shape, scale)
-  mllogis(order, shape, scale, log = FALSE)
-  levllogis(limit, shape, scale, order = 1, log = FALSE)
+  dllogis(x, shape, rate = 1, scale = 1/rate, log = FALSE)
+  pllogis(q, shape, rate = 1, scale = 1/rate,
+          lower.tail = TRUE, log.p = FALSE)
+  qllogis(p, shape, rate = 1, scale = 1/rate,
+          lower.tail = TRUE, log.p = FALSE)
+  rllogis(n, shape, rate = 1, scale = 1/rate)
+  mllogis(order, shape, rate = 1, scale = 1/rate, log = FALSE)
+  levllogis(limit, shape, rate = 1, scale = 1/rate,
+            order = 1, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
@@ -26,6 +29,7 @@
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
   \item{shape, scale}{parameters. Must be strictly positive.}
+  \item{rate}{an alternative way to specify the scale.}
   \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities
     \eqn{p} are returned as \eqn{\log(p)}{log(p)}.}
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
