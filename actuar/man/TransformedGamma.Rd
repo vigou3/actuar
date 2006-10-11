@@ -53,8 +53,9 @@
 
   The Transformed Gamma is the distribution of the random variable
   \eqn{\theta X^{1/\tau},}{s X^(1/b),}
-  where \eqn{X} has a Gamma distribution with shape parameter \eqn{\alpha}{a}
-  and scale parameter \eqn{1} or, equivalently, of the random variable
+  where \eqn{X} has a Gamma distribution with shape parameter
+  \eqn{\alpha}{a} and scale parameter \eqn{1} or, equivalently, of the
+  random variable
   \eqn{Y^{1/\tau}}{Y^(1/b)}
   with \eqn{Y} a Gamma distribution with shape parameter \eqn{\alpha}{a}
   and scale parameter \eqn{\theta^\tau}{s^b}.
