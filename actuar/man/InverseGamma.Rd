@@ -47,7 +47,7 @@
   (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
   by R's \code{\link{gamma}()} and defined in its help.)
 
-  When \code{shape == 1}, this is an
+  The special case \code{shape == 1} is an
   \link[=dinvexp]{Inverse Exponential} distribution.
 }
 \value{
