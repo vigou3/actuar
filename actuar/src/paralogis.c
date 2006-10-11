@@ -34,7 +34,7 @@ double dparalogis(double x, double shape, double scale, int give_log)
 	R_pow(shape, 2.0) * tmp2 / (x * R_pow(1.0 + tmp2, shape + 1.0));
 }
 
-double pparalogis(double x, double shape, double scale, int lower_tail, int log_p)
+double pparalogis(double q, double shape, double scale, int lower_tail, int log_p)
 {
     double tmp1, tmp2;
 
@@ -48,7 +48,7 @@ double pparalogis(double x, double shape, double scale, int lower_tail, int log_
 	return R_DT_0;
 
     tmp1 = R_pow(scale, shape);
-    tmp2 = R_pow(x, shape);
+    tmp2 = R_pow(q, shape);
 
     return lower_tail ?
 	R_D_exp(log(1.0 - exp(shape * (shape * log(scale) - log(tmp1 + tmp2))))):
