@@ -44,7 +44,7 @@ double pparalogis(double q, double shape, double scale, int lower_tail, int log_
 	scale <= 0.0)
 	return R_NaN;
 
-    if (x <= 0)
+    if (q <= 0)
 	return R_DT_0;
 
     tmp1 = R_pow(scale, shape);
