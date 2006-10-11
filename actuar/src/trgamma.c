@@ -98,7 +98,7 @@ double rtrgamma(double shape1, double shape2, double scale)
 
     a = rgamma(shape1, 1.0);
 
-    return R_pow(a, 1.0 / shape2)/scale;
+    return scale * R_pow(a, 1.0 / shape2);
 }
 
 double mtrgamma(double order, double shape1, double shape2, double scale, int give_log)
