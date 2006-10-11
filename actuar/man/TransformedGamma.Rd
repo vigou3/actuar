@@ -42,7 +42,7 @@
 \details{
   The Transformed Gamma distribution with parameters \code{shape1} \eqn{=
     \alpha}{= a}, \code{shape2} \eqn{= \tau}{= b} and \code{scale}
-  \eqn{= \theta}{= s}, has density:
+  \eqn{= \theta}{= s} has density:
   \deqn{f(x) = \frac{\tau u^\alpha e^{-u}}{x \Gamma(\alpha)}, %
       \quad u = (x/\theta)^\tau}{%
     f(x) = b u^a exp(-u) / (x Gamma(a)), u = (x/s)^b}
