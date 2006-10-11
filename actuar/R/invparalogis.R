@@ -1,30 +1,35 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r,m,lev}inverse paralogistic functions. The inverse paralogistic
-### distribution used in these functions has cumulative distribution
+### Definition of the {d,p,q,r,m,lev}invparalogis functions to compute
+### characteristics of the Inverse Paralogistic distribution. The
+### version used in these functions has cumulative distribution
 ### function
 ###
-###   Pr[X <= x] = ((x/scale)^shape/(1 + (x/scale)^shape))^shape, x > 0.
+###   Pr[X <= x] = (u/(1 + u))^shape, u = (x/scale)^shape, x > 0.
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dinvparalogis <- function (x, shape, scale, log = FALSE)
+dinvparalogis <- function (x, shape, rate = 1, scale = 1/rate, log = FALSE)
     .External("do_dpq", "dinvparalogis", x, shape, scale, log)
 
-pinvparalogis <- function(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
+pinvparalogis <- function(q, shape, rate = 1, scale = 1/rate,
+                          lower.tail = TRUE, log.p = FALSE)
     .External("do_dpq", "pinvparalogis", q, shape, scale, lower.tail, log.p)
 
-qinvparalogis <- function(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
+qinvparalogis <- function(p, shape, rate = 1, scale = 1/rate,
+                          lower.tail = TRUE, log.p = FALSE)
     .External("do_dpq", "qinvparalogis", p, shape, scale, lower.tail, log.p)
 
-rinvparalogis <- function(n, shape, scale)
+rinvparalogis <- function(n, shape, rate = 1, scale = 1/rate)
     .External("do_random", "rinvparalogis", n, shape, scale)
 
-minvparalogis <- function(k, shape, scale, log = FALSE)
-     .External("do_dpq", "minvparalogis", k, shape, scale, log)
+minvparalogis <- function(order, shape, rate = 1, scale = 1/rate,
+                          log = FALSE)
+     .External("do_dpq", "minvparalogis", order, shape, scale, log)
 
-levinvparalogis <- function(d, shape, scale, order = 1, log = FALSE)
-     .External("do_dpq", "levinvparalogis", d, shape, scale, order, log)
+levinvparalogis <- function(limit, shape, rate = 1, scale = 1/rate,
+                            order = 1, log = FALSE)
+     .External("do_dpq", "levinvparalogis", limit, shape, scale, order, log)

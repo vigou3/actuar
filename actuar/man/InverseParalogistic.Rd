@@ -1,7 +1,5 @@
-
-\name{Invparalogis}
-\alias{invparalogis}
-\alias{print.invparalogis}
+\name{InverseParalogistic}
+\alias{InverseParalogistic}
 \alias{dinvparalogis}
 \alias{pinvparalogis}
 \alias{qinvparalogis}
@@ -11,49 +9,56 @@
 \title{The Inverse Paralogistic Distribution}
 \description{
   Density, distribution function, quantile function, random generation,
-  raw moments and limited moments for the Inverse Paralogistic distribution with parameters \code{shape} and \code{scale}.
+  raw moments and limited moments for the Inverse Paralogistic
+  distribution with parameters \code{shape} and \code{scale}.
 }
 \usage{
-  dinvparalogis(x, shape, scale, log = FALSE)
-  pinvparalogis(q, shape, scale, lower.tail = TRUE,
-           log.p = FALSE)
-  qinvparalogis(p, shape, scale, lower.tail = TRUE,
-           log.p = FALSE)
-  rinvparalogis(n, shape, scale)
-  minvparalogis(k, shape, scale, log = FALSE)
-  levinvparalogis(d, shape, scale, order = 1, log = FALSE)
+  dinvparalogis(x, shape, rate = 1, scale = 1/rate, log = FALSE)
+  pinvparalogis(q, shape, rate = 1, scale = 1/rate,
+                lower.tail = TRUE, log.p = FALSE)
+  qinvparalogis(p, shape, rate = 1, scale = 1/rate,
+                lower.tail = TRUE, log.p = FALSE)
+  rinvparalogis(n, shape, rate = 1, scale = 1/rate)
+  minvparalogis(order, shape, rate = 1, scale = 1/rate, log = FALSE)
+  levinvparalogis(limit, shape, rate = 1, scale = 1/rate,
+                  order = 1, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
-  \item{d}{limit of the loss variable.}
   \item{shape, scale}{parameters. Must be strictly positive.}
-  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities p are
-    returned as log(p).}
-  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are P[X
-    <= x], otherwise, Pr[X > x].}
-  \item{k, order}{order of the moment.}
+  \item{rate}{an alternative way to specify the scale.}
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities
+    \eqn{p} are returned as \eqn{\log(p)}{log(p)}.}
+  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
+    \eqn{P[X \le x]}{P[X <= x]}, otherwise, \eqn{P[X > x]}.}
+  \item{order}{order of the moment.}
+  \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Inverse Paralogistic distribution with parameters \code{shape} = a
-  and \code{scale} = b has density:
-  \deqn{p(x) = \frac{a^2 (\frac{x}{b})^{a^2}}{x(1 + (\frac{x}{b})^a)^{(a
-	+ 1)}}}{p(x) = a^2 (x / b)^(a^2) / (x(1 + (x/b)^a)^(a + 1))}
-  for \eqn{x > 0, a > 0} and \eqn{b > 0}. 
+  The Inverse Paralogistic distribution with parameters \code{shape}
+  \eqn{= \tau}{= a} and \code{scale} \eqn{= \theta}{= s} has density:
+  \deqn{f(x) = \frac{\tau^2 (x/\theta)^{\tau^2}}{%
+      x [1 + (x/\theta)^\tau]^{\tau + 1}}}{%
+    f(x) = a^2 (x/s)^(a^2)/(x [1 + (x/s)^a]^(a + 1))}
+  for \eqn{x > 0}, \eqn{\tau > 0}{a > 0} and \eqn{\theta > 0}{b > 0}.
 }
 \value{
-\code{dinvparalogis} gives the density, \code{pinvparalogis} gives the distribution function,
-\code{qinvparalogis} gives the quantile function, \code{rinvparalogis} generates random
-deviates, \code{minvparalogis} gives the kth raw moment, and \code{levinvparalogis} gives
-the kth moment of the limited loss variable.
+  \code{dinvparalogis} gives the density,
+  \code{pinvparalogis} gives the distribution function,
+  \code{qinvparalogis} gives the quantile function,
+  \code{rinvparalogis} generates random deviates,
+  \code{minvparalogis} gives the \eqn{k}th raw moment, and
+  \code{levinvparalogis} gives the \eqn{k}th moment of the limited loss
+  variable.
 
-Invalid arguments will return warning.
+  Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \references{
-  Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-  Edition, Wiley, 2004.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
+  \emph{Loss Models, From Data to Decisions}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
