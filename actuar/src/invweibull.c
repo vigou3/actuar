@@ -1,8 +1,9 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
- *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the inverse Weibull distribution, to calculate raw moments and limited moments 
- *  of the random variable and to simulate random variates. See ../R/invweibull.R for details.
+ *  Functions to compute density, cumulative distribution and quantile
+ *  functions, raw and limited moments and to simulate random variates
+ *  for the inverse Weibull distribution. See ../R/invweibull.R for
+ *  details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -12,100 +13,104 @@
 #include "locale.h"
 #include "dpq.h"
 
-double dinvweibull(double x, double scale, double shape, int give_log)
+double dinvweibull(double x, double shape, double scale, int give_log)
 {
-  
-  double tmp;
-  
-  if (!R_FINITE(scale) ||
-      !R_FINITE(shape)  ||
-      scale <= 0.0 || 
-      shape <= 0.0) 
-    return R_NaN;;
-  
-  if (!R_FINITE(x) || x < 0.0) 
-    return R_D_d0;
-  
-  tmp = R_pow(scale / x, shape);
-  
-  return  give_log ?
-    log(shape) + shape * (log(scale) - log(x)) - tmp - log(x) :
-    shape * tmp * exp(-tmp) / x;
+    double tmp;
+
+    if (!R_FINITE(scale) ||
+	!R_FINITE(shape)  ||
+	scale <= 0.0 ||
+	shape <= 0.0)
+	return R_NaN;;
+
+    if (!R_FINITE(x) || x < 0.0)
+	return R_D_d0;
+
+    tmp = R_pow(scale / x, shape);
+
+    return  give_log ?
+	log(shape) + shape * (log(scale) - log(x)) - tmp - log(x) :
+	shape * tmp * exp(-tmp) / x;
 }
 
-double pinvweibull(double q, double scale, double shape, int lower_tail, int log_p)
+double pinvweibull(double q, double shape, double scale, int lower_tail, int log_p)
 {
-  double tmp;
-  
-  if (!R_FINITE(scale) || 
-      !R_FINITE(shape) ||
-      scale <= 0.0 || 
-      shape <= 0.0)
-    return R_NaN;;
-  
-  if (q <= 0)
-    return R_DT_0;
-  
-  tmp = R_pow(scale / q, shape);
-  
-  return (lower_tail ? R_D_exp(-tmp):
-	  R_D_exp(log(1.0 - exp(tmp))));
+    double tmp;
+
+    if (!R_FINITE(scale) ||
+	!R_FINITE(shape) ||
+	scale <= 0.0 ||
+	shape <= 0.0)
+	return R_NaN;;
+
+    if (q <= 0)
+	return R_DT_0;
+
+    tmp = R_pow(scale / q, shape);
+
+    return lower_tail ? R_D_exp(-tmp): R_D_exp(log(1.0 - exp(-tmp)));
 }
 
-double qinvweibull(double p, double scale, double shape, int lower_tail, int log_p)
+double qinvweibull(double p, double shape, double scale, int lower_tail, int log_p)
 {
-  double tmp, tmp1;
-  
-  if (!R_FINITE(scale) || 
-      !R_FINITE(shape) ||
-      scale <= 0.0 || 
-      shape <= 0.0)
-    return R_NaN;;
-  
-  R_Q_P01_boundaries(p, 0, R_PosInf);
-  tmp = R_D_qIv(p);
-  
-  tmp1 = 1 / shape;
-  
-  return (lower_tail ? scale * R_pow(log(1.0 / tmp), -tmp1):
-	  scale * R_pow(log(1.0 / (1.0 - tmp)), -tmp1));
+    double tmp, tmp1;
+
+    if (!R_FINITE(scale) ||
+	!R_FINITE(shape) ||
+	scale <= 0.0 ||
+	shape <= 0.0)
+	return R_NaN;;
+
+    R_Q_P01_boundaries(p, 0, R_PosInf);
+    tmp = R_D_qIv(p);
+
+    tmp1 = -1.0 / shape;
+
+    return lower_tail ?
+	scale * R_pow(-log(tmp), tmp1):
+	scale * R_pow(-log(1.0 - tmp), tmp1);
 }
 
-double rinvweibull(double scale, double shape)
+double rinvweibull(double shape, double scale)
 {
-  if (!R_FINITE(scale) ||
-      !R_FINITE(shape) ||
-      scale <= 0.0 ||
-      shape <= 0.0)
-    return R_NaN;;
-  
-  return shape * scale / log(1.0 / unif_rand());
+    if (!R_FINITE(scale) ||
+	!R_FINITE(shape) ||
+	scale <= 0.0 ||
+	shape <= 0.0)
+	return R_NaN;;
+
+    return scale * R_pow(-log(unif_rand()), -1.0/shape);
 }
 
-double minvweibull(double k, double scale, double shape, int give_log)
+double minvweibull(double order, double shape, double scale, int give_log)
 {
-  if (!R_FINITE(scale) ||
-      !R_FINITE(shape) ||
-      !R_FINITE(k) ||
-      scale <= 0.0 ||
-      shape <= 0.0 ||
-      k >= shape)
-    return R_NaN;;
-  
-  return R_pow(scale, k) * gammafn(1.0 - k / shape);
+    if (!R_FINITE(scale) ||
+	!R_FINITE(shape) ||
+	!R_FINITE(order) ||
+	scale <= 0.0 ||
+	shape <= 0.0 ||
+	order >= shape)
+	return R_NaN;;
+
+    return R_pow(scale, order) * gammafn(1.0 - order / shape);
 }
 
-double levinvweibull(double d, double scale, double shape, double order, int give_log)
+double levinvweibull(double limit, double shape, double scale, double order, int give_log)
 {
-  if (!R_FINITE(scale) ||
-      !R_FINITE(shape) ||
-      !R_FINITE(d) ||
-      !R_FINITE(order) ||
-      scale <= 0.0 ||
-      shape <= 0.0 ||
-      order >= shape ||
-      d <= 0.0)
-    return R_NaN;;
-  
-  return R_pow(scale, order) * gammafn(1.0 - order / shape) * (1.0 - pgamma(R_pow(1.0 / d, shape), 1.0 - order / shape, 1.0 / scale, 1, 0)) + R_pow(d, order) * (1.0 - exp(-R_pow(scale / d, shape)));
+    double tmp1, tmp2;
+
+    if (!R_FINITE(scale) ||
+	!R_FINITE(shape) ||
+	!R_FINITE(limit) ||
+	!R_FINITE(order) ||
+	scale <= 0.0 ||
+	shape <= 0.0 ||
+	order >= shape ||
+	limit <= 0.0)
+	return R_NaN;;
+
+    tmp1 = R_pow(scale / limit, shape);
+    tmp2 = order / shape;
+
+    return R_pow(scale, order) * gammafn(1.0 - tmp2) * pgamma(tmp1, 1.0 - tmp2, 1.0, 0, 0) + R_pow(limit, order) * (1.0 - exp(-tmp1));
 }

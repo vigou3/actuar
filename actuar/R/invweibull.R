@@ -1,33 +1,36 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r,m,lev}inverse weibull functions. The inverse Weibull
-### distribution used in these functions has cumulative distribution
-### function
+### Definition of the {d,p,q,r,m,lev}invweibull functions to compute
+### characteristics of the Inverse Weibull distribution. The version
+### used in these functions has cumulative distribution function
 ###
-###   Pr[X <= x] = 1 - exp(-(x/scale)^shape), x > 0.
+###   Pr[X <= x] = exp(-(x/scale)^shape), x > 0.
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dinvweibull <- function (x, scale, shape, log = FALSE)
-    .External("do_dpq", "dinvweibull", x, scale, shape, log)
+dinvweibull <- function (x, shape, rate = 1, scale = 1/rate, log = FALSE)
+    .External("do_dpq", "dinvweibull", x, shape, scale, log)
 
-pinvweibull <- function(q, scale, shape, lower.tail = TRUE, log.p = FALSE)
-     .External("do_dpq", "pinvweibull", q, scale, shape, lower.tail, log.p)
+pinvweibull <- function(q, shape, rate = 1, scale = 1/rate,
+                        lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "pinvweibull", q, shape, scale, lower.tail, log.p)
 
-qinvweibull <- function(p, scale, shape, lower.tail = TRUE, log.p = FALSE)
-     .External("do_dpq", "qinvweibull", p, scale, shape, lower.tail, log.p)
+qinvweibull <- function(p, shape, rate = 1, scale = 1/rate,
+                        lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpq", "qinvweibull", p, shape, scale, lower.tail, log.p)
 
-rinvweibull <- function(n, scale, shape)
-    .External("do_random", "rinvweibull", n, scale, shape)
+rinvweibull <- function(n, shape, rate = 1, scale = 1/rate)
+    .External("do_random", "rinvweibull", n, shape, scale)
 
-minvweibull <- function(k, scale, shape, log = FALSE)
-     .External("do_dpq", "minvgamma", k, scale, shape, log)
+minvweibull <- function(order, shape, rate = 1, scale = 1/rate, log = FALSE)
+    .External("do_dpq", "minvgamma", order, shape, scale, log)
 
-levinvweibull <- function(d, scale, shape, order = 1, log = FALSE)
-     .External("do_dpq", "levinvweibull", d, scale, shape, order, log)
+levinvweibull <- function(limit, shape, rate = 1, scale = 1/rate,
+                          order = 1, log = FALSE)
+    .External("do_dpq", "levinvweibull", limit, shape, scale, order, log)
 
 ## Aliases
 dlgompertz <- dinvweibull
