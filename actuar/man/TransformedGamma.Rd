@@ -46,7 +46,7 @@
   \deqn{f(x) = \frac{\tau u^\alpha e^{-u}}{x \Gamma(\alpha)}, %
       \quad u = (x/\theta)^\tau}{%
     f(x) = b u^a exp(-u) / (x Gamma(a)), u = (x/s)^b}
-  for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0}, \eqn{\tau > 0}{b > 0},
+  for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0}, \eqn{\tau > 0}{b > 0}
   and \eqn{\theta > 0}{s > 0}.
   (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
   by R's \code{\link{gamma}()} and defined in its help.)
