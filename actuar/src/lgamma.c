@@ -39,7 +39,7 @@ double plgamma(double q, double shapelog, double ratelog, int lower_tail, int lo
     if (q <= 1.0)
 	return R_DT_0;
 
-    return R_D_exp(pgamma(log(q), shapelog, 1.0 / ratelog, lower_tail, 1);
+    return pgamma(log(q), shapelog, 1.0 / ratelog, lower_tail, log_p);
 }
 
 double qlgamma(double p, double shapelog, double ratelog, int lower_tail, int log_p)
@@ -67,7 +67,7 @@ double rlgamma(double shapelog, double ratelog)
     return exp(rgamma(shapelog, 1.0 / ratelog));
 }
 
-double mlgamma(double order, double shapelog, double ratelog)
+double mlgamma(double order, double shapelog, double ratelog, int give_log)
 {
     if (!R_FINITE(shapelog) ||
 	!R_FINITE(ratelog) ||
@@ -80,7 +80,7 @@ double mlgamma(double order, double shapelog, double ratelog)
     return R_pow(1.0 - order / ratelog, -shapelog);
 }
 
-double levlgamma(double limit, double shapelog, double ratelog, double order)
+double levlgamma(double limit, double shapelog, double ratelog, double order, int give_log)
 {
     double u;
 
@@ -96,5 +96,5 @@ double levlgamma(double limit, double shapelog, double ratelog, double order)
 
     u = log(limit);
 
-    return R_pow(1.0 - order / scale, -shapelog) * pgamma(u, shapelog, ratelog - order, 1, 0) + R_pow(limit, order) * pgamma(u, shapelog, ratelog, 0, 0);
+    return R_pow(1.0 - order / ratelog, -shapelog) * pgamma(u * (ratelog - order), shapelog, 1.0, 1, 0) + R_pow(limit, order) * pgamma(u * ratelog, shapelog, 1.0, 0, 0);
 }

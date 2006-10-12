@@ -17,8 +17,8 @@
   plgamma(q, shapelog, ratelog, lower.tail = TRUE, log.p = FALSE)
   qlgamma(p, shapelog, ratelog, lower.tail = TRUE, log.p = FALSE)
   rlgamma(n, shapelog, ratelog)
-  mtrgamma(order, shapelog, ratelog)
-  levtrgamma(limit, shapelog, ratelog, order = 1)
+  mlgamma(order, shapelog, ratelog)
+  levlgamma(limit, shapelog, ratelog, order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
@@ -72,7 +72,7 @@
 exp(dlgamma(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 plgamma(qlgamma(p, 2, 3), 2, 3)
-mlgamma(2, 3, 4) - mtrgamma(1, 3, 4) ^ 2
+mlgamma(2, 3, 4) - mlgamma(1, 3, 4)^2
 levlgamma(10, 3, 4, 2)
 }
 \keyword{distribution}

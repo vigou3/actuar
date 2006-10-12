@@ -1,12 +1,12 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
- *  Functions to generate variates of some probability laws not in base
- *  R. Function .External() calls do_random() with arguments:
+ *  Functions to generate variates of some probability laws not in
+ *  base R. Function .External() calls do_random() with arguments:
  *
- *       1. the name of the distribution from which to simulate, with
- *          an "r" prepended to it (e.g. "rpareto");
- *       2. the number of variates;
- *    3-... the parameters of the distribution.
+ *      1. the name of the distribution from which to simulate, with
+ *         an "r" prepended to it (e.g. "rpareto");
+ *      2. the number of variates;
+ *    3:x. the parameters of the distribution.
  *
  *  Function do_random() will extract the name of the distribution,
  *  look up in table fun_tab defined in names.c which of
@@ -15,14 +15,14 @@
  *  function rdist() to get actual variates from distribution "dist".
  *
  *  This scheme is essentially what is used in base R (see files
- *  .../src/main/random.c, .../src/main/names.c in R sources). It looks
- *  convoluted at first, but adding a new distribution is plain simple:
- *  write an rdist() function, add an entry in names.c and in the
- *  definition of the corresponding do_random{1,2,3,4} function,
- *  declare the function in actuar.h.
+ *  .../src/main/random.c, .../src/main/names.c in R sources).
+ *
+ * To add a new distribution: write an rdist() function, add an entry
+ * in names.c and in the definition of the corresponding
+ * do_random{1,2,3,4} function, declare the function in actuar.h.
  *
  *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
- *          with much help from the R Core Team
+ *          with much indirect help from the R Core Team
  */
 
 #include <R.h>
@@ -176,16 +176,15 @@ SEXP do_random2(int code, SEXP args)
 	GetRNGstate();
 	switch (code)
 	{
-	    RAND2(1, rinvparalogis);
-	    RAND2(2, rinvpareto);
-	    RAND2(3, rinvweibull);
-	    RAND2(4, rllogis);
-	    RAND2(5, rparalogis);
-	    RAND2(6, rpareto);
-	    RAND2(7, rpareto1);
-	    RAND2(8, rinvgamma);
-	    RAND2(9, rlgamma);
-
+	    RAND2(1, rinvgamma);
+	    RAND2(2, rinvparalogis);
+	    RAND2(3, rinvpareto);
+	    RAND2(4, rinvweibull);
+	    RAND2(5, rlgamma);
+	    RAND2(6, rllogis);
+	    RAND2(7, rparalogis);
+	    RAND2(8, rpareto);
+	    RAND2(9, rpareto1);
 	default:
 	    error(_("internal error in do_random2"));
 	}
@@ -276,8 +275,8 @@ SEXP do_random3(int code, SEXP args)
 	    RAND3(1, rburr);
 	    RAND3(2, rgenpareto);
 	    RAND3(3, rinvburr);
-	    RAND3(4, rtrgamma);
-	    RAND3(5, rinvtrgamma);
+	    RAND3(4, rinvtrgamma);
+	    RAND3(5, rtrgamma);
 	default:
 	    error(_("internal error in do_random3"));
 	}
