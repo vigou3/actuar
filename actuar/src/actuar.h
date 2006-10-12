@@ -14,8 +14,8 @@ SEXP do_random4(int code, SEXP args);
 
 /* Utility functions */
 /*   One parameter distributions */
-double mexp(double order, double rate, int give_log);
-double levexp(double limit, double rate, double order, int give_log);
+double mexp(double order, double scale, int give_log);
+double levexp(double limit, double scale, double order, int give_log);
 
 double dinvexp(double x, double scale, int give_log);
 double pinvexp(double q, double scale, int lower_tail, int log_p);
