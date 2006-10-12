@@ -1,14 +1,15 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {m,lev}weibull functions. 
+### Definition of the {m,lev}weibull functions to compute raw and
+### limited moments for the Weibull distribution (as defined in R).
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-mweibull <- function(k, scale, shape, log = FALSE)
-    .External("do_dpq", "mweibull", k, scale, shape, log)
+mweibull <- function(order, shape, scale = 1)
+    .External("do_dpq", "mweibull", order, scale, shape, FALSE)
 
-levweibull <- function(d, scale, shape, order = 1, log = FALSE)
-    .External("do_dpq", "levweibull", d, scale, shape, order, log)
+levweibull <- function(limit, shape, scale = 1, order = 1)
+    .External("do_dpq", "levweibull", limit, scale, shape, order, FALSE)
