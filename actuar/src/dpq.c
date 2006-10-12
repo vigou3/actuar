@@ -1,8 +1,9 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Functions to compute probability density, cumulative probability
- *  and quantile functions for some probability laws not in base
- *  R. Function .External() calls do_dpq() with arguments:
+ *  and quantile functions, raw moments and limited moments for some
+ *  probability laws not in base R. Function .External() calls
+ *  do_dpq() with arguments:
  *
  *       1. the name of the distribution from which to simulate, with
  *          a "d", a "p" or "q" prepended to it (e.g. "dpareto",
@@ -17,18 +18,18 @@
  *  up in table fun_tab defined in names.c which of do_dpq{1,2,3,4}
  *  should take care of the calculation and dispatch to this
  *  function. In turn, functions do_dpq{1,2,3,4} call function
- *  {d,p,q}dist() to get actual values from distribution "dist".
+ *  {d,p,q,m,lev}dist() to get actual values from distribution "dist".
  *
  *  Functions therein are essentially identical to those found in
  *  .../src/main/arithmetic.c of R sources with a different naming
  *  scheme.
  *
- *  To add a new distribution: write a {d,p,q}dist() function, add an
- *  entry in names.c and in the definition of the corresponding
+ *  To add a new distribution: write a {d,p,q,m,lev}dist() function,
+ *  add an entry in names.c and in the definition of the corresponding
  *  do_dpq{1,2,3,4} function, declare the function in actuar.h.
  *
  *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
- *          with much help from the R Core Team
+ *          with much indirect help from the R Core Team
  */
 
 #include <R.h>
@@ -823,7 +824,7 @@ SEXP do_dpq(SEXP args)
     }
 
     /* No dispatch is an error */
-    error("internal error in do_random");
+    error("internal error in do_dpq");
 
     return args;		/* never used; to keep -Wall happy */
 }

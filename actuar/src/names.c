@@ -13,7 +13,7 @@
 #include <Rinternals.h>
 #include "actuar.h"
 
-FUNTAB fun_tab[] = { 
+FUNTAB fun_tab[] = {
     /* DENSITY, CUMULATIVE PROBABILITY AND QUANTILE FUNCTIONS */
     /* One parameter distributions */
     {"dinvexp",		do_dpq1,	1},
@@ -57,7 +57,9 @@ FUNTAB fun_tab[] = {
     {"dlgamma",	        do_dpq2,	33},
     {"plgamma",	        do_dpq2,	34},
     {"qlgamma",	        do_dpq2,	35},
-    {"levinvexp",	do_dpq2,	36}, 
+    {"mlgamma",	        do_dpq2,	35},
+    {"levlgamma",       do_dpq2,	35},
+    {"levinvexp",	do_dpq2,	36},
     {"levexp",	        do_dpq2,	37},
     {"mgamma",  	do_dpq2,	38},
     {"mweibull",	do_dpq2,	39},
@@ -106,14 +108,14 @@ FUNTAB fun_tab[] = {
     {"levinvtrgamma",	do_dpq4,	9},
     /* Five parameter distributions */
     {"levtrbeta",	do_dpq5,	1},
-	
+
     /* RANDOM NUMBERS FUNCTIONS */
     /* One parameter distributions */
     {"rinvexp", 	do_random1,	1},
     /* Two parameter distributions */
     {"rinvparalogis", 	do_random2,	1},
     {"rinvpareto", 	do_random2,	2},
-    {"rinvweibull",	do_random2,	3},               
+    {"rinvweibull",	do_random2,	3},
     {"rllogis", 	do_random2,	4},
     {"rparalogis", 	do_random2,	5},
     {"rpareto", 	do_random2,	6},

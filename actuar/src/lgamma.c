@@ -1,8 +1,8 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
- *  Fonctions to compute density, cumulative distribution and quantile
- *  fonctions of the Pareto distribution, and to simulate random
- *  variates. See ../R/lgamma.R for details.
+ *  Functions to compute density, cumulative distribution and quantile
+ *  functions, and to simulate random variates for the loggamma
+ *  distribution. See ../R/lgamma.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -14,64 +14,87 @@
 
 double dlgamma(double x, double shapelog, double ratelog, int give_log)
 {
-  if (!R_FINITE(shapelog) || 
-      !R_FINITE(ratelog) ||
-      shapelog <= 0.0 || 
-      ratelog <= 0.0) 
-    return R_NaN;;
-  
-  if (!R_FINITE(x) || x < 0.0) 
-    return R_D_d0;
-  
-  return (give_log ?
-	  -log(x) + dgamma(log(x), shapelog, 1.0 / ratelog, 1)  :
-	  dgamma(log(x), shapelog, 1.0 / ratelog, 0) / x);
+    if (!R_FINITE(shapelog) ||
+	!R_FINITE(ratelog) ||
+	shapelog <= 0.0 ||
+	ratelog <= 0.0)
+	return R_NaN;;
+
+    if (!R_FINITE(x) || x < 1.0)
+	return R_D_d0;
+
+    return give_log ?
+	-log(x) + dgamma(log(x), shapelog, 1.0 / ratelog, 1) :
+	dgamma(log(x), shapelog, 1.0 / ratelog, 0) / x;
 }
 
 double plgamma(double q, double shapelog, double ratelog, int lower_tail, int log_p)
 {
-  
-  if (!R_FINITE(shapelog) || 
-      !R_FINITE(ratelog) ||
-      shapelog <= 0.0 || 
-      ratelog <= 0.0)
-    return R_NaN;;
-  
-  if (q <= 0)
-    return R_DT_0;
-  
-  return (lower_tail ? R_D_exp(pgamma(log(q), shapelog, 1.0 / ratelog, 1, 1)):
-	  R_D_exp(pgamma(log(q), shapelog, 1.0 / ratelog, 0, 1)));
+    if (!R_FINITE(shapelog) ||
+	!R_FINITE(ratelog) ||
+	shapelog <= 0.0 ||
+	ratelog <= 0.0)
+	return R_NaN;;
+
+    if (q <= 1.0)
+	return R_DT_0;
+
+    return R_D_exp(pgamma(log(q), shapelog, 1.0 / ratelog, lower_tail, 1);
 }
 
 double qlgamma(double p, double shapelog, double ratelog, int lower_tail, int log_p)
 {
-  double tmp;
-  
-  if (!R_FINITE(shapelog) || 
-      !R_FINITE(ratelog) ||
-      shapelog <= 0.0 || 
-      ratelog <= 0.0)
-    return R_NaN;;
-  
-  R_Q_P01_boundaries(p, 1, R_PosInf);
-  tmp = R_D_qIv(p);
-  
-  return (lower_tail ? exp(qgamma(tmp, shapelog, 1.0 / ratelog, 1, 0)) :
-	  exp(qgamma(tmp, shapelog, 1.0 / ratelog, 0, 0)));
+    if (!R_FINITE(shapelog) ||
+	!R_FINITE(ratelog) ||
+	shapelog <= 0.0 ||
+	ratelog <= 0.0)
+	return R_NaN;;
+
+    R_Q_P01_boundaries(p, 1, R_PosInf);
+    p = R_D_qIv(p);
+
+    return exp(qgamma(p, shapelog, 1.0 / ratelog, lower_tail, 0));
 }
 
 double rlgamma(double shapelog, double ratelog)
 {
-  double a;
-  
-  if (!R_FINITE(shapelog) || 
-      !R_FINITE(ratelog) ||
-      shapelog <= 0.0 || 
-      ratelog <= 0.0)
-    return R_NaN;;
-  
-  a = rgamma(shapelog, 1.0 / ratelog);
-  
-  return exp(a);
+    if (!R_FINITE(shapelog) ||
+	!R_FINITE(ratelog) ||
+	shapelog <= 0.0 ||
+	ratelog <= 0.0)
+	return R_NaN;;
+
+    return exp(rgamma(shapelog, 1.0 / ratelog));
+}
+
+double mlgamma(double order, double shapelog, double ratelog)
+{
+    if (!R_FINITE(shapelog) ||
+	!R_FINITE(ratelog) ||
+	!R_FINITE(order) ||
+	shapelog <= 0.0 ||
+	ratelog <= 0.0 ||
+	order >= ratelog)
+	return R_NaN;
+
+    return R_pow(1.0 - order / ratelog, -shapelog);
+}
+
+double levlgamma(double limit, double shapelog, double ratelog, double order)
+{
+    double u;
+
+    if (!R_FINITE(shapelog) ||
+	!R_FINITE(ratelog) ||
+	!R_FINITE(limit) ||
+	!R_FINITE(order) ||
+	shapelog <= 0.0 ||
+	ratelog <= 0.0 ||
+	limit <= 0.0 ||
+	order >= ratelog)
+	return R_NaN;
+
+    u = log(limit);
+
+    return R_pow(1.0 - order / scale, -shapelog) * pgamma(u, shapelog, ratelog - order, 1, 0) + R_pow(limit, order) * pgamma(u, shapelog, ratelog, 0, 0);
 }
