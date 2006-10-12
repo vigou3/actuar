@@ -23,8 +23,8 @@ qpareto1 <- function(p, shape, min, lower.tail = TRUE, log.p = FALSE)
 rpareto1 <- function(n, shape, min)
     .External("do_random", "rpareto1", n, shape, min)
 
-mpareto1 <- function(k, shape, min, log = FALSE)
-     .External("do_dpq", "mpareto1", k, shape, min, log)
+mpareto1 <- function(order, shape, min, log = FALSE)
+     .External("do_dpq", "mpareto1", order, shape, min, log)
 
-levpareto1 <- function(d, shape, min, order = 1, log = FALSE)
-     .External("do_dpq", "levpareto1", d, shape, min, order, log)
+levpareto1 <- function(limit, shape, min, order = 1, log = FALSE)
+     .External("do_dpq", "levpareto1", limit, shape, min, order, log)
