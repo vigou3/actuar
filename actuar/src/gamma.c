@@ -1,7 +1,7 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Functions to calculate raw and limited moments for the Gamma
- *  distribution. See ../R/gamma.R for details.
+ *  distribution.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
