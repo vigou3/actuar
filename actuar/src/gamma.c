@@ -1,7 +1,7 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
- *  Fonctions to calculate raw moments and limited moments 
- *  of the Gamma distribution. See ../R/gamma.R for details.
+ *  Functions to calculate raw and limited moments for the Gamma
+ *  distribution. See ../R/gamma.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -11,32 +11,37 @@
 #include "locale.h"
 #include "dpq.h"
 
-double mgamma(double k, double shape, double scale, int give_log)
+double mgamma(double order, double shape, double scale, int give_log)
 {
-  
-  if (!R_FINITE(shape) ||
-      !R_FINITE(scale) ||
-      !R_FINITE(k) ||
-      shape <= 0.0 ||
-      scale <= 0.0 ||
-      k <= -shape)
-    return R_NaN;
-  
-  return R_pow(scale, k) * gammafn(k + shape) / gammafn(shape);
+    if (!R_FINITE(shape) ||
+	!R_FINITE(scale) ||
+	!R_FINITE(order) ||
+	shape <= 0.0 ||
+	scale <= 0.0 ||
+	order <= -shape)
+	return R_NaN;
+
+    return R_pow(scale, order) * gammafn(order + shape) / gammafn(shape);
 }
 
-double levgamma(double d, double shape, double scale, double order, int give_log)
+double levgamma(double limit, double shape, double scale, double order,
+		int give_log)
 {
-  
-  if (!R_FINITE(shape) ||
-      !R_FINITE(scale) ||
-      !R_FINITE(d) ||
-      !R_FINITE(order) ||
-      shape <= 0.0 ||
-      scale <= 0.0 ||
-      d <= 0.0 ||
-      order <= -shape)
-    return R_NaN;
-  
-  return R_pow(scale, order) * gammafn(shape + order) * pgamma(d, shape + order, 1.0 / scale, 1, 0) / gammafn(shape) + R_pow(d, order) * pgamma(d, shape, 1.0 / scale, 0, 0);
+    double u, tmp;
+
+    if (!R_FINITE(shape) ||
+	!R_FINITE(scale) ||
+	!R_FINITE(limit) ||
+	!R_FINITE(order) ||
+	shape <= 0.0 ||
+	scale <= 0.0 ||
+	limit <= 0.0 ||
+	order <= -shape)
+	return R_NaN;
+
+    u = limit/scale;
+    tmp = shape + limit;
+
+    return R_pow(scale, order) * gammafn(tmp) * pgamma(u, tmp, 1.0, 1, 0) /
+	gammafn(shape) + R_pow(limit, order) * pgamma(u, shape, 1.0, 0, 0);
 }

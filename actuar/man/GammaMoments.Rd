@@ -1,0 +1,44 @@
+\name{GammaMoments}
+\alias{GammaMoments}
+\alias{mgamma}
+\alias{levgamma}
+\title{Raw and Limited Moments of the Gamma Distribution}
+\description{
+  Raw moments and limited moments for the Gamma distribution with
+  parameters \code{shape} and \code{scale}.
+}
+\usage{
+  mgamma(order, shape, rate = 1, scale = 1/rate)
+  levgamma(limit, shape, rate = 1, scale = 1/rate, order = 1)
+}
+\arguments{
+  \item{order}{order of the moment.}
+  \item{limit}{limit of the loss variable.}
+  \item{rate}{an alternative way to specify the scale.}
+  \item{shape, scale}{shape and scale parameters. Must be strictly
+    positive.}
+}
+\value{
+  \code{mgamma} gives the \eqn{k}th raw moment, and
+  \code{levgamma} gives the \eqn{k}th moment of the limited loss
+  variable.
+
+  Invalid arguments will result in return value \code{NaN}, with a warning.
+}
+\seealso{
+  \code{\link{GammaDist}} for details on the Gamma distribution and
+  functions \code{{d,p,q,r}gamma}.
+}
+\references{
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
+  \emph{Loss Models, From Data to Decisions}, Wiley.
+}
+\author{
+  Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
+  Mathieu Pigeon
+}
+\examples{
+mgamma(2, 3, 4) - mgamma(1, 3, 4)^2
+levgamma(10, 3, 4, 2)
+}
+\keyword{distribution}
