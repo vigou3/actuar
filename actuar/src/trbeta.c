@@ -152,6 +152,9 @@ double levtrbeta(double limit, double shape1, double shape2, double shape3,
 	order  <= - shape3 * shape2)
 	return R_NaN;
 
+    if (limit <= 0.0)
+	return 0;
+
     if (!R_FINITE(limit))
 	return mtrbeta(order, shape1, shape2, shape3, scale, 0);
 
