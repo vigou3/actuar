@@ -13,20 +13,17 @@
 #include "locale.h"
 #include "dpq.h"
 
-/*  To take advantage of optimizations in R's dbeta.c, we code the
- *  density as
+/*  We can write the density of the transformed beta as
  *
- *      shape2 * u * (1 - u) * dbeta(u, shape3, shape1) / x,
+ *   shape2 * u^shape3 * (1 - u)^shape1 / (x * beta(shape1, shape3)
  *
- *  with u = v/(1 + v), v = (x/scale)^shape2. Furthermore, in the
- *  hope to reduce rounding error and/or over/underflows, we work
- *  in the log of the terms.
+ *  with u = v/(1 + v), v = (x/scale)^shape2.
  */
 
 double dtrbeta(double x, double shape1, double shape2, double shape3,
 	       double scale, int give_log)
 {
-    double logv, logu, log1mu, tmp;
+    double tmp, logu, log1mu;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(shape2) ||
@@ -41,14 +38,12 @@ double dtrbeta(double x, double shape1, double shape2, double shape3,
     if (!R_FINITE(x) || x < 0.0)
 	return R_D_d0;
 
-    logv = shape2 * (log(x) - log(scale));
-    log1mu = - log1p(exp(logv));
-    logu = logv + log1mu;
+    tmp = shape2 * (log(x) - log(scale));
+    log1mu = - log1p(exp(tmp));
+    logu = tmp + log1mu;
 
-    tmp = dbeta(exp(logu), shape3, shape1, 1) +
-	logu + log1mu + log(shape2) - log(x);
-
-    return give_log ? tmp : exp(tmp);
+    return R_D_exp(log(shape2) + shape3 * logu + shape1 * log1mu
+		   - log(x) - lbeta(shape3, shape1));
 }
 
 double ptrbeta(double q, double shape1, double shape2, double shape3,
@@ -81,8 +76,6 @@ double ptrbeta(double q, double shape1, double shape2, double shape3,
 double qtrbeta(double p, double shape1, double shape2, double shape3,
 	       double scale, int lower_tail, int log_p)
 {
-    double tmp;
-
     if (!R_FINITE(shape1) ||
 	!R_FINITE(shape2) ||
 	!R_FINITE(shape3) ||
@@ -96,9 +89,8 @@ double qtrbeta(double p, double shape1, double shape2, double shape3,
     R_Q_P01_boundaries(p, 0, R_PosInf);
     p = R_D_qIv(p);
 
-    tmp = qbeta(p, shape3, shape1, lower_tail, 0);
-
-    return scale * R_pow(tmp / (1.0 - tmp), 1.0 / shape2);
+    return scale * R_pow(1.0 / qbeta(p, shape3, shape1, lower_tail, 0) - 1.0,
+			 -1.0 / shape2);
 }
 
 double rtrbeta(double shape1, double shape2, double shape3, double scale)
@@ -115,9 +107,8 @@ double rtrbeta(double shape1, double shape2, double shape3, double scale)
 	scale <= 0.0)
 	return R_NaN;
 
-    a = rbeta(shape3, shape1);
-
-    return scale * R_pow(a / (1.0 - a), 1.0 / shape2);
+    return scale * R_pow(1.0 / rbeta(shape3, shape1) - 1.0,
+			 -1.0 / shape2);
 }
 
 double mtrbeta(double order, double shape1, double shape2, double shape3,
@@ -140,8 +131,8 @@ double mtrbeta(double order, double shape1, double shape2, double shape3,
 
     tmp = order / shape2;
 
-    return R_pow(scale, order) * beta(shape3 + tmp, shape1 - tmp) /
-	beta(shape1, shape3);
+    return R_pow(scale, order) * beta(shape3 + tmp, shape1 - tmp)
+	/ beta(shape1, shape3);
 }
 
 double levtrbeta(double limit, double shape1, double shape2, double shape3,
@@ -171,7 +162,7 @@ double levtrbeta(double limit, double shape1, double shape2, double shape3,
     tmp = shape2 * (log(limit) - log(scale));
     u = exp(tmp - log1p(exp(tmp)));
 
-    return R_pow(scale, order) * beta(tmp2, tmp3) / beta(shape1, shape3) *
-	pbeta(u, tmp2, tmp3, 1, 0) +
-	R_pow(limit, order) * pbeta(u, shape3, shape1, 0, 0);
+    return R_pow(scale, order) * beta(tmp2, tmp3) / beta(shape1, shape3)
+	* pbeta(u, tmp2, tmp3, 1, 0)
+	+ R_pow(limit, order) * pbeta(u, shape3, shape1, 0, 0);
 }
