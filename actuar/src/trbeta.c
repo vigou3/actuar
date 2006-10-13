@@ -18,7 +18,7 @@ double dtrbeta(double x, double shape1, double shape2, double shape3,
 {
     /*  We work with the density expressed as
      *
-     *  shape2 * u^shape3 * (1 - u)^shape1 / (x * beta(shape1, shape3)
+     *  shape2 * u^shape3 * (1 - u)^shape1 / (x * beta(shape1, shape3))
      *
      *  with u = v/(1 + v) = 1/(1 + 1/v), v = (x/scale)^shape2.
      */
