@@ -36,8 +36,8 @@ double dburr(double x, double shape1, double shape2, double scale,
 	return R_D_d0;
 
     tmp = shape2 * (log(x) - log(scale));
-    log1mu = - log1p(exp(tmp));
-    logu = tmp + log1mu;
+    logu = - log1p(exp(tmp));
+    log1mu = - log1p(exp(-tmp));
 
     return R_D_exp(log(shape1) + log(shape2) + logu + log1mu - log(x));
 }
@@ -45,7 +45,7 @@ double dburr(double x, double shape1, double shape2, double scale,
 double pburr(double q, double shape1, double shape2, double scale,
 	     int lower_tail, int log_p)
 {
-    double u, tmp;
+    double u;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(shape2) ||
@@ -58,10 +58,9 @@ double pburr(double q, double shape1, double shape2, double scale,
     if (q <= 0)
 	return R_DT_0;
 
-    tmp = shape2 * (log(q) - log(scale));
-    u = exp(tmp - log1p(exp(tmp)));
+    u = exp(-log1p(exp(shape2 * (log(q) - log(scale)))));
 
-    return R_DT_Cval(R_pow(1.0 + tmp, -shape1));
+    return R_DT_Cval(R_pow(u, shape1));
 }
 
 double qburr(double p, double shape1, double shape2, double scale,
@@ -134,14 +133,11 @@ double levburr(double limit, double shape1, double shape2, double scale,
     if (limit <= 0.0)
 	return 0;
 
-    if (!R_FINITE(limit))
-	return mburr(order, shape1, shape2, scale, 0);
-
     tmp1 = order / shape2;
     tmp2 = 1.0 + tmp1;
     tmp3 = shape1 - tmp1;
 
-    u = 1.0 / (1.0 + exp(shape2 * (log(limit) - log(scale))));
+    u = exp(-log1p(exp(shape2 * (log(q) - log(scale)))));
 
     return R_pow(scale, order) * gammafn(tmp2) * gammafn(tmp3)
 	* pbeta(0.5 - u + 0.5, tmp2, tmp3, 1, 0) / gammafn(shape1)
