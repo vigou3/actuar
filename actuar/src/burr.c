@@ -78,7 +78,7 @@ double qburr(double p, double shape1, double shape2, double scale,
     R_Q_P01_boundaries(p, 0, R_PosInf );
     p =  R_D_qIv(p);
 
-    return scale * R_pow(R_pow(R_D_Cval(p), -1.0/shape1) - 1.0, 1.0 / shape2);
+    return scale * R_pow(R_pow(R_D_Cval(p), -1.0/shape1) - 1.0, 1.0/shape2);
 }
 
 double rburr(double shape1, double shape2, double scale)
@@ -144,6 +144,6 @@ double levburr(double limit, double shape1, double shape2, double scale,
     u = 1.0 / (1.0 + exp(shape2 * (log(limit) - log(scale))));
 
     return R_pow(scale, order) * gammafn(tmp2) * gammafn(tmp3)
-	* pbeta(1.0 - u, tmp2, tmp3, 1, 0) / gammafn(shape1)
+	* pbeta(0.5 - u + 0.5, tmp2, tmp3, 1, 0) / gammafn(shape1)
 	+ R_pow(limit, order) * R_pow(u, shape1);
 }
