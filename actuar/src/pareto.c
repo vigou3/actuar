@@ -42,7 +42,7 @@ double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
 
     u = exp(-log1p(exp(log(limit) - log(scale))));
 
-    return R_DT_Cval(R_pow(u, -shape));
+    return R_DT_Cval(R_pow(u, shape));
 }
 
 double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
