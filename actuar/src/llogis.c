@@ -14,7 +14,14 @@
 
 double dllogis(double x, double shape, double scale, int give_log)
 {
-    double tmp1, tmp2;
+    /*  We work with the density expressed as
+     *
+     *  shape * u * (1 - u) / x
+     *
+     *  with u = v/(1 + v) = 1/(1 + 1/v), v = (x/scale)^shape.
+     */
+
+    double tmp, logu, log1mu;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -25,17 +32,16 @@ double dllogis(double x, double shape, double scale, int give_log)
     if (!R_FINITE(x) || x < 0.0)
 	return R_D_d0;
 
-    tmp1 = shape * (log(x) - log(scale));
-    tmp2 = R_pow(x / scale, shape);
+    tmp = shape * (log(x) - log(scale));
+    logu = - log1p(exp(-tmp));
+    log1mu = - log1p(exp(tmp));
 
-    return give_log ?
-	log(shape) + tmp1 - log(x) - 2.0 * log(1.0 + exp(tmp1)) :
-	shape * tmp2 / (x * R_pow(1.0 + tmp2, 2.0));
+    return R_D_exp(log(shape) + logu + log1mu - log(x));
 }
 
 double pllogis(double q, double shape, double scale, int lower_tail, int log_p)
 {
-    double tmp1, tmp2;
+    double u;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -46,20 +52,13 @@ double pllogis(double q, double shape, double scale, int lower_tail, int log_p)
     if (q <= 0)
 	return R_DT_0;
 
-    if (!R_FINITE(q))
-	return 1;
+    u = exp(-log1p(exp(shape * (log(scale) - log(q)))));
 
-    tmp1 = R_pow(q / scale, shape);
-    tmp2 = shape * (log(q) - log(scale));
-
-    return lower_tail ? R_D_exp(tmp1 - log(1.0 + tmp2)):
-	R_D_exp(log(1.0 - tmp1 / (1.0 + tmp1)));
+    return R_DT_Cval(u);
 }
 
 double qllogis(double p, double shape, double scale, int lower_tail, int log_p)
 {
-    double tmp, tmp1;
-
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	shape <= 0.0 ||
@@ -67,26 +66,20 @@ double qllogis(double p, double shape, double scale, int lower_tail, int log_p)
 	return R_NaN;
 
     R_Q_P01_boundaries(p, 0, R_PosInf);
-    tmp = R_D_qIv(p);
-    tmp1 = 1.0 / shape;
+    p = R_D_qIv(p);
 
-    return lower_tail ? scale * R_pow(tmp / (1.0 - tmp), tmp1) :
-	scale * R_pow((1.0 - tmp) / tmp, tmp1);
+    return scale * R_pow(1.0 / R_D_Cval(p) - 1.0, 1.0/shape);
 }
 
 double rllogis(double shape, double scale)
 {
-    double a;
-
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	shape <= 0.0 ||
 	scale <= 0.0)
 	return R_NaN;
 
-    a = unif_rand();
-
-    return scale * R_pow(a / (1.0 - a), 1.0 / shape);
+    return scale * R_pow(1.0 / unif_rand() - 1.0, 1.0 / shape);
 }
 
 double mllogis(double order, double shape, double scale, int give_log)
@@ -107,24 +100,26 @@ double mllogis(double order, double shape, double scale, int give_log)
     return R_pow(scale, order) * gammafn(1.0 + tmp) * gammafn(1.0 - tmp);
 }
 
-double levllogis(double limit, double shape, double scale, double order, int give_log)
+double levllogis(double limit, double shape, double scale, double order,
+		 int give_log)
 {
-    double tmp1, tmp2, tmp3;
+    double u, tmp1, tmp2, tmp3;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
-	!R_FINITE(limit) ||
 	!R_FINITE(order) ||
 	shape <= 0.0 ||
 	scale <= 0.0 ||
-	order <= -shape ||
-	order >= shape ||
-	limit <= 0.0)
+	order <= -shape)
 	return R_NaN;
 
-    tmp1 = R_pow(limit / scale, shape);
-    tmp2 = tmp1 / (1.0 + tmp1);
-    tmp3 = order / shape;
+    tmp1 = order / shape;
+    tmp2 = 1.0 + tmp1;
+    tmp3 = 1.0 - tmp1;
 
-    return R_pow(scale, order) * gammafn(1.0 + tmp3) * gammafn(1.0 - tmp3) * pbeta(tmp2, 1.0 + tmp3, 1.0 - tmp3, 1, 0) + R_pow(limit, order) * (1.0 - tmp2);
+    u = exp(-log1p(exp(shape * (log(scale) - log(limit)))));
+
+    return R_pow(scale, order) * gammafn(tmp2) * gammafn(tmp3)
+	* pbeta(u, tmp2, tmp3, 1, 0)
+	+ R_pow(limit, order) * (0.5 - u + 0.5);
 }
