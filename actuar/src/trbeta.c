@@ -20,7 +20,7 @@ double dtrbeta(double x, double shape1, double shape2, double shape3,
      *
      *  shape2 * u^shape3 * (1 - u)^shape1 / (x * beta(shape1, shape3)
      *
-     *  with u = v/(1 + v), v = (x/scale)^shape2.
+     *  with u = v/(1 + v) = 1/(1 + 1/v), v = (x/scale)^shape2.
      */
 
     double tmp, logu, log1mu;
@@ -39,8 +39,8 @@ double dtrbeta(double x, double shape1, double shape2, double shape3,
 	return R_D_d0;
 
     tmp = shape2 * (log(x) - log(scale));
+    logu = - log1p(exp(-tmp));
     log1mu = - log1p(exp(tmp));
-    logu = tmp + log1mu;
 
     return R_D_exp(log(shape2) + shape3 * logu + shape1 * log1mu
 		   - log(x) - lbeta(shape3, shape1));
@@ -64,11 +64,8 @@ double ptrbeta(double q, double shape1, double shape2, double shape3,
     if (q <= 0)
 	return R_DT_0;
 
-    if (!R_FINITE(q))
-	return 1;
-
     tmp = shape2 * (log(q) - log(scale));
-    u = exp(tmp - log1p(exp(tmp)));
+    u = exp(-log1p(exp(-tmp)));
 
     return pbeta(u, shape3, shape1, lower_tail, log_p);
 }
@@ -107,8 +104,7 @@ double rtrbeta(double shape1, double shape2, double shape3, double scale)
 	scale <= 0.0)
 	return R_NaN;
 
-    return scale * R_pow(1.0 / rbeta(shape3, shape1) - 1.0,
-			 -1.0 / shape2);
+    return scale * R_pow(1.0 / rbeta(shape3, shape1) - 1.0, -1.0 / shape2);
 }
 
 double mtrbeta(double order, double shape1, double shape2, double shape3,
@@ -155,15 +151,11 @@ double levtrbeta(double limit, double shape1, double shape2, double shape3,
     if (limit <= 0.0)
 	return 0;
 
-    if (!R_FINITE(limit))
-	return mtrbeta(order, shape1, shape2, shape3, scale, 0);
-
     tmp1 = order / shape2;
     tmp2 = shape3 + tmp1;
     tmp3 = shape1 - tmp1;
 
-    tmp = shape2 * (log(limit) - log(scale));
-    u = exp(tmp - log1p(exp(tmp)));
+    u = exp(-log1p(exp(-shape2 * (log(limit) - log(scale)))));
 
     return R_pow(scale, order) * beta(tmp2, tmp3) / beta(shape1, shape3)
 	* pbeta(u, tmp2, tmp3, 1, 0)
