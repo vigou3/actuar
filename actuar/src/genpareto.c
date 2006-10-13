@@ -60,7 +60,7 @@ double pgenpareto(double q, double shape1, double shape2, double scale,
     if (q <= 0)
 	return R_DT_0;
 
-    u = exp(-log1p(exp(log(scale) - log(x))));
+    u = exp(-log1p(exp(log(scale) - log(q))));
 
     return pbeta(u, shape2, shape1, lower_tail, log_p);
 }
@@ -134,7 +134,7 @@ double levgenpareto(double limit, double shape1, double shape2, double scale,
     tmp1 = shape1 - order;
     tmp2 = shape2 + order;
 
-    u = exp(-log1p(exp(log(scale) - log(x))));
+    u = exp(-log1p(exp(log(scale) - log(limit))));
 
     return R_pow(scale, order) * beta(tmp1, tmp2) / beta(shape1, shape2)
 	* pbeta(u, tmp2, tmp1, 1, 0)
