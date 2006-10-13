@@ -70,8 +70,8 @@ double rllogis(double shape, double scale);
 double mllogis(double order, double shape, double scale, int give_log);
 double levllogis(double limit, double shape, double scale, double order, int give_log);
 
-double mlnorm(double order, double mu, double sigma, int give_log);
-double levlnorm(double limit, double mu, double sigma, double order, int give_log);
+double mlnorm(double order, double logmean, double logsd, int give_log);
+double levlnorm(double limit, double logmean, double logsd, double order, int give_log);
 
 double dparalogis(double x, double shape, double scale, int give_log);
 double pparalogis(double q, double shape, double scale, int lower_tail, int log_p);

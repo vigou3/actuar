@@ -7,8 +7,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-mlnorm <- function(k, mu, sigma, log = FALSE)
-    .External("do_dpq", "mlnorm", k, mu, sigma, log)
+mlnorm <- function(order, meanlog = 0, sdlog = 1)
+    .External("do_dpq", "mlnorm", order, meanlog, sdlog, FALSE)
 
-levlnorm <- function(d, mu, sigma, order = 1, log = FALSE)
-    .External("do_dpq", "levlnorm", d, mu, sigma, order, log)
+levlnorm <- function(limit, meanlog = 0, sdlog = 1, order = 1)
+    .External("do_dpq", "levlnorm", limit, meanlog, sdlog, order, FALSE)
