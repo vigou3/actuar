@@ -46,7 +46,7 @@ double dinvburr(double x, double shape1, double shape2, double scale,
 double pinvburr(double q, double shape1, double shape2, double scale,
 		int lower_tail, int log_p)
 {
-    double u, tmp;
+    double u;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(shape2) ||
@@ -59,10 +59,7 @@ double pinvburr(double q, double shape1, double shape2, double scale,
     if (q <= 0)
 	return R_DT_0;
 
-    if (!R_FINITE(q))
-	return 1;
-
-    u = exp(-log1p(exp(-shape2 * (log(q) - log(scale)))));
+    u = exp(-log1p(exp(shape2 * (log(scale) - log(q)))));
 
     return R_DT_val(R_pow(u, shape1));
 }
@@ -141,7 +138,7 @@ double levinvburr(double limit, double shape1, double shape2, double scale,
     tmp2 = shape1 + tmp1;
     tmp3 = 1.0 - tmp1;
 
-    u = exp(-log1p(exp(-shape2 * (log(limit) - log(scale)))));
+    u = exp(-log1p(exp(shape2 * (log(scale) - log(q)))));
 
     return R_pow(scale, order) * gammafn(tmp2) * gammafn(tmp3)
 	* pbeta(u, tmp2, tmp3, 1, 0) / gammafn(shape1)
