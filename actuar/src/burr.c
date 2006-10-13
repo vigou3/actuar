@@ -19,7 +19,7 @@ double dburr(double x, double shape1, double shape2, double scale,
      *
      *  shape1 * shape2 * u * (1 - u) / x
      *
-     *  with u = v/(1 + v), v = (x/scale)^shape2.
+     *  with u = 1/(1 + v), v = (x/scale)^shape2.
      */
 
     double tmp, logu, log1mu;
