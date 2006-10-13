@@ -28,10 +28,9 @@ qburr <- function(p, shape1, shape2, rate = 1, scale = 1/rate,
 rburr <- function(n, shape1, shape2, rate = 1, scale = 1/rate)
     .External("do_random", "rburr", n, shape1, shape2, scale)
 
-mburr <- function(order, shape1, shape2, rate = 1, scale = 1/rate,
-                  log = FALSE)
-    .External("do_dpq", "mburr", order, shape1, shape2, scale, log)
+mburr <- function(order, shape1, shape2, rate = 1, scale = 1/rate)
+    .External("do_dpq", "mburr", order, shape1, shape2, scale, FALSE)
 
 levburr <- function(limit, shape1, shape2, rate = 1, scale = 1/rate,
-                    order = 1, log = FALSE)
-    .External("do_dpq", "levburr", limit, shape1, shape2, scale, order, log)
+                    order = 1)
+    .External("do_dpq", "levburr", limit, shape1, shape2, scale, order, FALSE)

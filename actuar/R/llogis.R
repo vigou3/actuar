@@ -25,9 +25,9 @@ qllogis <- function(p, shape, rate = 1, scale = 1/rate,
 rllogis <- function(n, shape, rate = 1, scale = 1/rate)
      .External("do_random", "rllogis", n, shape, scale)
 
-mllogis <- function(order, shape, rate = 1, scale = 1/rate, log = FALSE)
-     .External("do_dpq", "mllogis", order, shape, scale, log)
+mllogis <- function(order, shape, rate = 1, scale = 1/rate)
+     .External("do_dpq", "mllogis", order, shape, scale, FALSE)
 
 levllogis <- function(limit, shape, rate = 1, scale = 1/rate,
-                      order = 1, log = FALSE)
-     .External("do_dpq", "levllogis", limit, shape, scale, order, log)
+                      order = 1)
+     .External("do_dpq", "levllogis", limit, shape, scale, order, FALSE)

@@ -26,10 +26,9 @@ qinvparalogis <- function(p, shape, rate = 1, scale = 1/rate,
 rinvparalogis <- function(n, shape, rate = 1, scale = 1/rate)
     .External("do_random", "rinvparalogis", n, shape, scale)
 
-minvparalogis <- function(order, shape, rate = 1, scale = 1/rate,
-                          log = FALSE)
-     .External("do_dpq", "minvparalogis", order, shape, scale, log)
+minvparalogis <- function(order, shape, rate = 1, scale = 1/rate)
+     .External("do_dpq", "minvparalogis", order, shape, scale, FALSE)
 
 levinvparalogis <- function(limit, shape, rate = 1, scale = 1/rate,
-                            order = 1, log = FALSE)
-     .External("do_dpq", "levinvparalogis", limit, shape, scale, order, log)
+                            order = 1)
+     .External("do_dpq", "levinvparalogis", limit, shape, scale, order, FALSE)

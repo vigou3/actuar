@@ -17,8 +17,8 @@
   ppareto1(q, shape, min, lower.tail = TRUE, log.p = FALSE)
   qpareto1(p, shape, min, lower.tail = TRUE, log.p = FALSE)
   rpareto1(n, shape, min)
-  mpareto1(order, shape, min, log = FALSE)
-  levpareto1(limit, shape, min, order = 1, log = FALSE)
+  mpareto1(order, shape, min)
+  levpareto1(limit, shape, min, order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
@@ -58,8 +58,8 @@
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
-  \emph{Loss Models, From Data to Decisions}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
+  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and

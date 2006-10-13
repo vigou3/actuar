@@ -25,12 +25,12 @@ qinvweibull <- function(p, shape, rate = 1, scale = 1/rate,
 rinvweibull <- function(n, shape, rate = 1, scale = 1/rate)
     .External("do_random", "rinvweibull", n, shape, scale)
 
-minvweibull <- function(order, shape, rate = 1, scale = 1/rate, log = FALSE)
-    .External("do_dpq", "minvgamma", order, shape, scale, log)
+minvweibull <- function(order, shape, rate = 1, scale = 1/rate)
+    .External("do_dpq", "minvgamma", order, shape, scale, FALSE)
 
 levinvweibull <- function(limit, shape, rate = 1, scale = 1/rate,
-                          order = 1, log = FALSE)
-    .External("do_dpq", "levinvweibull", limit, shape, scale, order, log)
+                          order = 1)
+    .External("do_dpq", "levinvweibull", limit, shape, scale, order, FALSE)
 
 ## Aliases
 dlgompertz <- dinvweibull

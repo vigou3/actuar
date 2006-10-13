@@ -23,11 +23,11 @@ qpareto <- function (p, shape, scale, lower.tail = TRUE, log.p = FALSE)
 rpareto <- function(n, shape, scale)
     .External("do_random", "rpareto", n, shape, scale)
 
-mpareto <- function(order, shape, scale, log = FALSE)
-     .External("do_dpq", "mpareto", order, shape, scale, log)
+mpareto <- function(order, shape, scale)
+     .External("do_dpq", "mpareto", order, shape, scale, FALSE)
 
-levpareto <- function(limit, shape, scale, order = 1, log = FALSE)
-     .External("do_dpq", "levpareto", limit, shape, scale, order, log)
+levpareto <- function(limit, shape, scale, order = 1)
+     .External("do_dpq", "levpareto", limit, shape, scale, order, FALSE)
 
 ## Aliases
 dpareto2 <- dpareto

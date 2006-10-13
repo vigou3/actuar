@@ -17,8 +17,8 @@
   pinvpareto(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
   qinvpareto(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
   rinvpareto(n, shape, scale)
-  minvpareto(order, shape, scale, log = FALSE)
-  levinvpareto(limit, shape, scale, order = 1, log = FALSE)
+  minvpareto(order, shape, scale)
+  levinvpareto(limit, shape, scale, order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
@@ -52,8 +52,8 @@
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
-  \emph{Loss Models, From Data to Decisions}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
+  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and

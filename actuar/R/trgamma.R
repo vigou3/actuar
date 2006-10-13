@@ -32,10 +32,9 @@ qtrgamma <- function(p, shape1, shape2, rate = 1, scale = 1/rate,
 rtrgamma <- function(n, shape1, shape2, rate = 1, scale = 1/rate)
     .External("do_random", "rtrgamma", n, shape1, shape2, scale)
 
-mtrgamma <- function(order, shape1, shape2, rate = 1, scale = 1/rate,
-                     log = FALSE)
-    .External("do_dpq", "mtrgamma", order, shape1, shape2, scale, log)
+mtrgamma <- function(order, shape1, shape2, rate = 1, scale = 1/rate)
+    .External("do_dpq", "mtrgamma", order, shape1, shape2, scale, FALSE)
 
 levtrgamma <- function(limit, shape1, shape2, rate = 1, scale = 1/rate,
-                       order = 1, log = FALSE)
-    .External("do_dpq", "levtrgamma", limit, shape1, shape2, scale, order, log)
+                       order = 1)
+    .External("do_dpq", "levtrgamma", limit, shape1, shape2, scale, order, FALSE)

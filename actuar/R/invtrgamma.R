@@ -33,11 +33,10 @@ qinvtrgamma <- function(p, shape1, shape2, rate = 1, scale = 1/rate,
 rinvtrgamma <- function(n, shape1, shape2, rate = 1, scale = 1/rate)
     .External("do_random", "rinvtrgamma", n, shape1, shape2, scale)
 
-minvtrgamma <- function(order, shape1, shape2, rate = 1, scale = 1/rate,
-                        log = FALSE)
-    .External("do_dpq", "minvtrgamma", order, shape1, shape2, scale, log)
+minvtrgamma <- function(order, shape1, shape2, rate = 1, scale = 1/rate)
+    .External("do_dpq", "minvtrgamma", order, shape1, shape2, scale, FALSE)
 
 levinvtrgamma <- function(limit, shape1, shape2, rate = 1, scale = 1/rate,
-                          order = 1, log = FALSE)
+                          order = 1)
     .External("do_dpq", "levinvtrgamma", limit, shape1, shape2, scale,
               order, log)

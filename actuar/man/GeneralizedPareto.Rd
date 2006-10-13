@@ -21,10 +21,9 @@
   qgenpareto(p, shape1, shape2, rate = 1, scale = 1/rate,
              lower.tail = TRUE, log.p = FALSE)
   rgenpareto(n, shape1, shape2, rate = 1, scale = 1/rate)
-  mgenpareto(order, shape1, shape2, rate = 1, scale = 1/rate,
-             log = FALSE)
+  mgenpareto(order, shape1, shape2, rate = 1, scale = 1/rate)
   levgenpareto(limit, shape1, shape2, rate = 1, scale = 1/rate,
-               order = 1, log = FALSE)
+               order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
@@ -83,8 +82,8 @@
   Distribution also known as the Beta of the Second Kind.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
-  \emph{Loss Models, From Data to Decisions}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
+  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and

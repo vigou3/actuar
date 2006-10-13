@@ -25,9 +25,9 @@ qparalogis <- function(p, shape, rate = 1, scale = 1/rate,
 rparalogis <- function(n, shape, rate = 1, scale = 1/rate)
     .External("do_random", "rparalogis", n, shape, scale)
 
-mparalogis <- function(order, shape, rate = 1, scale = 1/rate, log = FALSE)
-    .External("do_dpq", "mparalogis", order, shape, scale, log)
+mparalogis <- function(order, shape, rate = 1, scale = 1/rate)
+    .External("do_dpq", "mparalogis", order, shape, scale, FALSE)
 
 levparalogis <- function(limit, shape, rate = 1, scale = 1/rate,
-                         order = 1, log = FALSE)
-    .External("do_dpq", "levparalogis", limit, shape, scale, order, log)
+                         order = 1)
+    .External("do_dpq", "levparalogis", limit, shape, scale, order, FALSE)

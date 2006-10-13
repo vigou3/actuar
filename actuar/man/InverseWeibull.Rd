@@ -25,9 +25,9 @@
   qinvweibull(p, shape, rate = 1, scale = 1/rate,
               lower.tail = TRUE, log.p = FALSE)
   rinvweibull(n, shape, rate = 1, scale = 1/rate)
-  minvweibull(order, shape, rate = 1, scale = 1/rate, log = FALSE)
+  minvweibull(order, shape, rate = 1, scale = 1/rate)
   levinvweibull(limit, shape, rate = 1, scale = 1/rate,
-                order = 1, log = FALSE)
+                order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
@@ -68,8 +68,8 @@
   Distribution also knonw as the log-Gompertz.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
-  \emph{Loss Models, From Data to Decisions}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
+  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
