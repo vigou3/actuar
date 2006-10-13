@@ -24,7 +24,8 @@ double mweibull(double order, double shape, double scale, int give_log)
     return R_pow(scale, order) * gammafn(1.0 + order / shape);
 }
 
-double levweibull(double d, double shape, double scale, double order, int give_log)
+double levweibull(double limit, double shape, double scale, double order,
+		  int give_log)
 {
     double u, tmp;
 
