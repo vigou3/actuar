@@ -19,7 +19,7 @@
     positive.}
 }
 \value{
-  \code{mgamma} gives the \eqn{k}th raw moment, and
+  \code{mgamma} gives the \eqn{k}th raw moment and
   \code{levgamma} gives the \eqn{k}th moment of the limited loss
   variable.
 
