@@ -15,6 +15,15 @@
 
 double dinvpareto(double x, double shape, double scale, int give_log)
 {
+    /*  We work with the density expressed as
+     *
+     *  shape * u^shape * (1 - u) / x
+     *
+     *  with u = x/(x + scale) = 1/(1 + scale/x).
+     */
+
+    double tmp, logu, log1mu;
+
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	shape <= 0.0 ||
@@ -24,14 +33,16 @@ double dinvpareto(double x, double shape, double scale, int give_log)
     if (!R_FINITE(x) || x < 0.0)
 	return R_D_d0;
 
-    return give_log ?
-	log(shape) + log (scale) + (shape - 1.0) * log(x) - (shape + 1.0) * log(x + scale) :
-	shape * scale * R_pow(x, shape - 1.0) / R_pow(x + scale, shape + 1.0);
+    logu = - log(1 + scale / x);
+    log1mu = - log(1 + x / scale);
+
+    return R_D_exp(log(shape) + shape * logu + log1mu - log(x));
 }
 
-double pinvpareto(double q, double shape, double scale, int lower_tail, int log_p)
+double pinvpareto(double q, double shape, double scale, int lower_tail,
+		  int log_p)
 {
-    double tmp;
+    double u;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -42,19 +53,14 @@ double pinvpareto(double q, double shape, double scale, int lower_tail, int log_
     if (q <= 0)
 	return R_DT_0;
 
-    if (!R_FINITE(q))
-	return 1;
+    u = exp(-log1p(exp(log(scale) - log(q))));
 
-    tmp = shape * (log(q) - log(q + scale));
-
-    return lower_tail ? R_D_exp(tmp):
-	R_D_exp(log(1.0 - exp(tmp)));
+    return R_DT_val(R_pow(q, shape));
 }
 
-double qinvpareto(double p, double shape, double scale, int lower_tail, int log_p)
+double qinvpareto(double p, double shape, double scale, int lower_tail,
+		  int log_p)
 {
-    double tmp, tmp1, tmp2;
-
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	shape <= 0.0 ||
@@ -62,35 +68,24 @@ double qinvpareto(double p, double shape, double scale, int lower_tail, int log_
 	return R_NaN;;
 
     R_Q_P01_boundaries(p, 0, R_PosInf);
-    tmp = R_D_qIv(p);
+    p = R_D_qIv(p);
 
-    tmp1 = R_pow(tmp, 1.0 /shape);
-    tmp2 = R_pow(1.0 - tmp, 1.0 /shape);
-
-    return lower_tail ?
-	scale * tmp1 / (1.0 - tmp1) :
-	scale * tmp2 / (1.0 - tmp2);
+    return scale / (R_pow(R_D_Lval(p), -1.0 / shape) - 1.0);
 }
 
 double rinvpareto(double shape, double scale)
 {
-    double a, tmp;
-
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	shape <= 0.0 ||
 	scale <= 0.0)
 	return R_NaN;;
 
-    a = unif_rand();
-    tmp = R_pow(a, 1.0 / shape);
-
-    return scale * tmp / (1.0 - tmp);
+    return scale / (R_pow(unif_rand(), -1.0 / shape) - 1.0);
 }
 
 double minvpareto(double order, double shape, double scale, int give_log)
 {
-
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	!R_FINITE(order) ||
@@ -100,25 +95,32 @@ double minvpareto(double order, double shape, double scale, int give_log)
 	order >= 1.0)
 	return R_NaN;;
 
-    return R_pow(scale, order) * gammafn(shape + order) * gammafn(1.0 - order) / gammafn(shape);
+    return R_pow(scale, order) * gammafn(shape + order) * gammafn(1.0 - order)
+	/ gammafn(shape);
 }
 
-double levinvpareto(double limit, double shape, double scale, double order, int give_log)
+double levinvpareto(double limit, double shape, double scale, double order,
+		    int give_log)
 {
-    double tmp;
+    double u, tmp1, tmp2;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
-	!R_FINITE(limit) ||
 	!R_FINITE(order) ||
 	shape <= 0.0 ||
 	scale <= 0.0 ||
-	limit <= 0.0 ||
-	order <= -shape ||
-	order >= 1.0)
+	order <= -shape)
 	return R_NaN;;
 
-    tmp = limit / (limit + scale);
+    if (limit <= 0.0)
+	return 0;
 
-    return R_pow(scale, order) * shape * gammafn(order + shape) * gammafn(1.0 - order) * pbeta(tmp, order + shape, 1.0 - order, 1, 0) / gammafn(shape + 1.0) + R_pow(limit, order) * (1.0 - R_pow(tmp, shape));
+    tmp1 = shape + order;
+    tmp2 = 1.0 - order;
+
+    u = exp(-log1p(exp(log(scale) - log(limit))));
+
+    return R_pow(scale, order) * gammafn(tmp1) * gammafn(tmp2)
+	* pbeta(u, tmp1, tmp2, 1, 0) / gammafn(shape)
+	+ R_pow(limit, order) * (0.5 - R_pow(u, shape) + 0.5);
 }
