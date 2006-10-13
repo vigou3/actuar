@@ -9,8 +9,19 @@
 #define R_D_d1	(give_log ? 0. : 1.)
 #define R_DT_0	(lower_tail ? R_D__0 : R_D__1)
 #define R_DT_1	(lower_tail ? R_D__1 : R_D__0)
-#define R_D_qIv(p)	(log_p	? exp(p) : (p))
-#define R_D_exp(x)	(log_p	?  (x)	 : exp(x))
+
+/* Use 0.5 - p + 0.5 to perhaps gain 1 bit of accuracy */
+#define R_D_Lval(p)	(lower_tail ? (p) : (0.5 - (p) + 0.5))	/*  p  */
+#define R_D_Cval(p)	(lower_tail ? (0.5 - (p) + 0.5) : (p))	/*  1 - p */
+
+#define R_D_val(x)	(log_p	? log(x) : (x))		/*  x  in pF(x,..) */
+#define R_D_qIv(p)	(log_p	? exp(p) : (p))		/*  p  in qF(p,..) */
+#define R_D_exp(x)	(log_p	?  (x)	 : exp(x))	/* exp(x) */
+#define R_D_log(p)	(log_p	?  (p)	 : log(p))	/* log(p) */
+#define R_D_Clog(p)	(log_p	? log1p(-(p)) : (0.5 - (p) + 0.5)) /* [log](1-p) */
+
+#define R_DT_val(x)	(lower_tail ? R_D_val(x)  : R_D_Clog(x))
+#define R_DT_Cval(x)	(lower_tail ? R_D_Clog(x) : R_D_val(x))
 
 /*Boundaries*/
 #define R_Q_P01_boundaries(p, _LEFT_, _RIGHT_)		\
