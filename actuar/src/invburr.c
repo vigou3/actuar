@@ -138,7 +138,7 @@ double levinvburr(double limit, double shape1, double shape2, double scale,
     tmp2 = shape1 + tmp1;
     tmp3 = 1.0 - tmp1;
 
-    u = exp(-log1p(exp(shape2 * (log(scale) - log(q)))));
+    u = exp(-log1p(exp(shape2 * (log(scale) - log(limit)))));
 
     return R_pow(scale, order) * gammafn(tmp2) * gammafn(tmp3)
 	* pbeta(u, tmp2, tmp3, 1, 0) / gammafn(shape1)
