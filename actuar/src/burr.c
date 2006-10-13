@@ -17,7 +17,7 @@ double dburr(double x, double shape1, double shape2, double scale,
 {
     /*  We work with the density expressed as
      *
-     *  shape1 * shape2 * u * (1 - u) / x
+     *  shape1 * shape2 * u^shape1 * (1 - u) / x
      *
      *  with u = 1/(1 + v), v = (x/scale)^shape2.
      */
@@ -39,7 +39,8 @@ double dburr(double x, double shape1, double shape2, double scale,
     logu = - log1p(exp(tmp));
     log1mu = - log1p(exp(-tmp));
 
-    return R_D_exp(log(shape1) + log(shape2) + logu + log1mu - log(x));
+    return R_D_exp(log(shape1) + log(shape2) + shape1 * logu
+		   + log1mu - log(x));
 }
 
 double pburr(double q, double shape1, double shape2, double scale,
