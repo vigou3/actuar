@@ -13,16 +13,16 @@
 #include "locale.h"
 #include "dpq.h"
 
-/*  We can write the density of the transformed beta as
- *
- *   shape2 * u^shape3 * (1 - u)^shape1 / (x * beta(shape1, shape3)
- *
- *  with u = v/(1 + v), v = (x/scale)^shape2.
- */
-
 double dtrbeta(double x, double shape1, double shape2, double shape3,
 	       double scale, int give_log)
 {
+    /*  We work with the density expressed as
+     *
+     *  shape2 * u^shape3 * (1 - u)^shape1 / (x * beta(shape1, shape3)
+     *
+     *  with u = v/(1 + v), v = (x/scale)^shape2.
+     */
+
     double tmp, logu, log1mu;
 
     if (!R_FINITE(shape1) ||
