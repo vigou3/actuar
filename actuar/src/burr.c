@@ -45,7 +45,7 @@ double dburr(double x, double shape1, double shape2, double scale,
 double pburr(double q, double shape1, double shape2, double scale,
 	     int lower_tail, int log_p)
 {
-    double tmp;
+    double u, tmp;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(shape2) ||
@@ -58,7 +58,8 @@ double pburr(double q, double shape1, double shape2, double scale,
     if (q <= 0)
 	return R_DT_0;
 
-    tmp = exp(shape2 * (log(q) - log(scale)));
+    tmp = shape2 * (log(q) - log(scale));
+    u = exp(tmp - log1p(exp(tmp)));
 
     return R_DT_Cval(R_pow(1.0 + tmp, -shape1));
 }
@@ -77,7 +78,7 @@ double qburr(double p, double shape1, double shape2, double scale,
     R_Q_P01_boundaries(p, 0, R_PosInf );
     p =  R_D_qIv(p);
 
-    return scale * R_pow(R_pow(R_D_Cval(p), -1.0/shape1) - 1.0, 1.0/shape2);
+    return scale * R_pow(R_pow(R_D_Cval(p), -1.0/shape1) - 1.0, 1.0 / shape2);
 }
 
 double rburr(double shape1, double shape2, double scale)
