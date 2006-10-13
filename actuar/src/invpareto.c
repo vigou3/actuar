@@ -19,7 +19,7 @@ double dinvpareto(double x, double shape, double scale, int give_log)
      *
      *  shape * u^shape * (1 - u) / x
      *
-     *  with u = x/(x + scale) = 1/(1 + scale/x).
+     *  with u = v/(1 + v) = 1/(1 + 1/v), v = x/scale.
      */
 
     double tmp, logu, log1mu;
@@ -33,8 +33,9 @@ double dinvpareto(double x, double shape, double scale, int give_log)
     if (!R_FINITE(x) || x < 0.0)
 	return R_D_d0;
 
-    logu = - log(1 + scale / x);
-    log1mu = - log(1 + x / scale);
+    tmp = log(x) - log(scale);
+    logu = - log1p(exp(-tmp));
+    log1mu = - log1p(exp(tmp));
 
     return R_D_exp(log(shape) + shape * logu + log1mu - log(x));
 }
