@@ -49,7 +49,7 @@ double dtrbeta(double x, double shape1, double shape2, double shape3,
 double ptrbeta(double q, double shape1, double shape2, double shape3,
 	       double scale, int lower_tail, int log_p)
 {
-    double tmp, u;
+    double u;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(shape2) ||
@@ -64,8 +64,7 @@ double ptrbeta(double q, double shape1, double shape2, double shape3,
     if (q <= 0)
 	return R_DT_0;
 
-    tmp = shape2 * (log(q) - log(scale));
-    u = exp(-log1p(exp(-tmp)));
+    u = exp(-log1p(exp(-shape2 * (log(q) - log(scale)))));
 
     return pbeta(u, shape3, shape1, lower_tail, log_p);
 }
@@ -134,7 +133,7 @@ double mtrbeta(double order, double shape1, double shape2, double shape3,
 double levtrbeta(double limit, double shape1, double shape2, double shape3,
 		 double scale, double order, int give_log)
 {
-    double u, tmp, tmp1, tmp2, tmp3;
+    double u, tmp1, tmp2, tmp3;
 
     if (!R_FINITE(shape1) ||
 	!R_FINITE(shape2) ||
