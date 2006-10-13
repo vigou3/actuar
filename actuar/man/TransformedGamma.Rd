@@ -68,6 +68,10 @@
     \item An \link[=dexp]{Exponential} distribution when \code{shape2 ==
       shape1 == 1}.
   }
+
+  The \eqn{k}th raw moment of the random variable \eqn{X} is
+  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
+  \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}.
 }
 \value{
   \code{dtrgamma} gives the density,

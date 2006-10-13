@@ -40,6 +40,10 @@
       (x + \theta)^{\tau + 1}}}{%
     f(x) = a s x^(a - 1)/(x + s)^(a + 1)}
   for \eqn{x > 0}, \eqn{\tau > 0}{a > 0} and \eqn{\theta > 0}{s > 0}.
+
+  The \eqn{k}th raw moment of the random variable \eqn{X} is
+  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
+  \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}.
 }
 \value{
   \code{dinvpareto} gives the density,

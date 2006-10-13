@@ -44,6 +44,10 @@
       x [1 + (x/\theta)^\alpha)^{\alpha + 1}}}{%
     f(x) = a^2 (x/s)^a / (x [1 + (x/s)^a]^(a + 1))}
   for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0} and \eqn{\theta > 0}{b > 0}.
+
+  The \eqn{k}th raw moment of the random variable \eqn{X} is
+  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
+  \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}.
 }
 \value{
   \code{dparalogis} gives the density,

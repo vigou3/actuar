@@ -18,6 +18,11 @@
   \item{shape, scale}{shape and scale parameters. Must be strictly
     positive.}
 }
+\details{
+  The \eqn{k}th raw moment of the random variable \eqn{X} is
+  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
+  \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}.
+}
 \value{
   \code{mgamma} gives the \eqn{k}th raw moment and
   \code{levgamma} gives the \eqn{k}th moment of the limited loss

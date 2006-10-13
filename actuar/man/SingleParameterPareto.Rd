@@ -45,6 +45,10 @@
   Although there appears to be two parameters, only \code{shape} is a true
   parameter. The value of \code{min} \eqn{= \theta}{= b} must be set in
   advance.
+
+  The \eqn{k}th raw moment of the random variable \eqn{X} is
+  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
+  \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}.
 }
 \value{
   \code{dpareto1} gives the density,

@@ -52,6 +52,10 @@
 
   The special case \code{shape == 1} is an
   \link[=dinvexp]{Inverse Exponential} distribution.
+
+  The \eqn{k}th raw moment of the random variable \eqn{X} is
+  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
+  \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}.
 }
 \value{
   \code{dinvweibull} gives the density,

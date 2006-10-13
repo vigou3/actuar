@@ -41,6 +41,10 @@
   for \eqn{x > 0} and \eqn{\theta > 0}{s > 0}.
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
+
+  The \eqn{k}th raw moment of the random variable \eqn{X} is
+  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
+  \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}.
 }
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),

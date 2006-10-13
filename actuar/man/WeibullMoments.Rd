@@ -17,6 +17,11 @@
   \item{shape, scale}{shape and scale parameters, the latter defaulting
     to 1.}
 }
+\details{
+  The \eqn{k}th raw moment of the random variable \eqn{X} is
+  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
+  \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}.
+}
 \value{
   \code{mweibull} gives the \eqn{k}th raw moment and
   \code{levweibull} gives the \eqn{k}th moment of the limited loss
