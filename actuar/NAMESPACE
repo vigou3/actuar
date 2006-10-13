@@ -34,7 +34,7 @@ export(## Credibility theory
        dtrbeta, ptrbeta, qtrbeta, rtrbeta, mtrbeta, levtrbeta,
        dpearson6, ppearson6, qpearson6, rpearson6, mpearson6, levpearson6, #aliases
        ## Loss distributions
-       grouped.data, ogive, emp.moments, mde, elev, coverage, mcoverage
+       grouped.data, ogive, emp.moments, mde, elev, coverage
        )
 ### Imports
 import(stats, graphics)
