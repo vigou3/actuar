@@ -59,6 +59,7 @@ S3method(knots, ogive)
 S3method(knots, elev)
 
 S3method(mean, aggregateDist)
+S3method(mean, grouped.data)
 
 S3method(plot, aggregateDist)
 S3method(plot, ogive)
