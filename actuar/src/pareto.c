@@ -40,7 +40,7 @@ double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
     if (q <= 0)
 	return R_DT_0;
 
-    u = exp(-log1p(exp(log(limit) - log(scale))));
+    u = exp(-log1p(exp(log(q) - log(scale))));
 
     return R_DT_Cval(R_pow(u, shape));
 }
