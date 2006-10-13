@@ -32,7 +32,7 @@ qtrbeta <-
 
 rtrbeta <-
     function (n, shape1, shape2, shape3, rate = 1, scale = 1/rate)
-    .External("do_random", "rtrbeta", n, shape1, scale, shape2, shape3)
+    .External("do_random", "rtrbeta", n, shape1, shape2, shape3, scale)
 
 mtrbeta <-
     function (order, shape1, shape2, shape3, rate = 1, scale = 1/rate)
