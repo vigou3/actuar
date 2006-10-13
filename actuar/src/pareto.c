@@ -14,6 +14,15 @@
 
 double dpareto(double x, double shape, double scale, int give_log)
 {
+    /*  We work with the density expressed as
+     *
+     *  shape * u^shape * (1 - u) / x
+     *
+     *  with u = 1/(1 + v), v = x/scale.
+     */
+
+    double tmp, logu, log1mu;
+
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	shape <= 0.0 ||
@@ -23,8 +32,11 @@ double dpareto(double x, double shape, double scale, int give_log)
     if (!R_FINITE(x) || x < 0.0)
 	return R_D_d0;
 
-    return R_D_exp(log(shape) + shape * log(scale)
-		   - (shape + 1.0) * log(x + scale));
+    tmp = log(x) - log(scale);
+    logu = - log1p(exp(tmp));
+    log1mu = - log1p(exp(-tmp));
+
+    return R_D_exp(log(shape) + shape * logu + log1mu - log(x));
 }
 
 double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
