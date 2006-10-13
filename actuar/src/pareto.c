@@ -23,15 +23,12 @@ double dpareto(double x, double shape, double scale, int give_log)
     if (!R_FINITE(x) || x < 0.0)
 	return R_D_d0;
 
-    return give_log ?
-	log(shape) + shape * log(scale) - (shape + 1.0) * log(x + scale) :
-	shape * R_pow(scale, shape) / R_pow(x + scale, shape + 1.0);
+    return R_D_exp(log(shape) + shape * log(scale)
+		   - (shape + 1.0) * log(x + scale));
 }
 
 double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
 {
-    double tmp;
-
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	shape <= 0.0 ||
@@ -41,16 +38,11 @@ double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
     if (q <= 0)
 	return R_DT_0;
 
-    tmp = log(scale) - log(q + scale);
-
-    return lower_tail ? R_D_exp(log(1.0 - exp(shape * tmp))) :
-	R_D_exp(shape * tmp);
+    return R_DT_Cval(R_pow(1.0 + q / scale, -shape));
 }
 
 double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
 {
-    double tmp, tmp1;
-
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	shape <= 0.0 ||
@@ -58,11 +50,9 @@ double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
 	return R_NaN;
 
     R_Q_P01_boundaries(p, 0, R_PosInf);
-    tmp = R_D_qIv(p);
-    tmp1 = 1.0 / shape;
+    p = R_D_qIv(p);
 
-    return lower_tail ? scale * (R_pow(1.0 - tmp, -tmp1) - 1.0) :
-	scale * (R_pow(tmp, -tmp1) - 1.0);
+    return scale * (R_pow(R_D_Cval(p), -1.0 / shape) - 1.0);
 }
 
 double rpareto(double shape, double scale)
@@ -87,25 +77,34 @@ double mpareto(double order, double shape, double scale, int give_log)
 	order >= shape)
 	return R_NaN;
 
-    return R_pow(scale, order) * gammafn(order + 1.0) * gammafn(shape - order) / gammafn(shape);
+    return R_pow(scale, order) * gammafn(1.0 + order) * gammafn(shape - order)
+	/ gammafn(shape);
 }
 
-double levpareto(double limit, double shape, double scale, double order, int give_log)
+double levpareto(double limit, double shape, double scale, double order,
+		 int give_log)
 {
-    double tmp;
+    double u, tmp1, tmp2;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
-	!R_FINITE(limit) ||
 	!R_FINITE(order) ||
 	shape <= 0.0 ||
-	scale <= 0.0 ||
-	limit <= 0.0 ||
-	order <= -1.0 ||
-	order >= shape)
+	scale <= 0.0)
 	return R_NaN;
 
-    tmp = limit + scale;
+    if (limit <= 0.0)
+	return 0;
 
-    return R_pow(scale, order) * gammafn(order + 1.0) * gammafn(shape - order) * pbeta(limit / tmp, order + 1.0, shape - order, 1, 0) / gammafn(shape) + R_pow(limit, order) * R_pow(scale / tmp, shape);
+    if (!R_FINITE(limit))
+	return mpareto(order, shape, scale, 0);
+
+    tmp1 = 1.0 + order;
+    tmp2 = shape - order;
+
+    u = limit / (limit + scale);
+
+    return R_pow(scale, order) * gammafn(tmp1) * gammafn(tmp2)
+	* pbeta(u, tmp1, tmp2, 1, 0) / gammafn(shape)
+	+ R_pow(limit, order) * R_pow(0.5 - u + 0.5, shape);
 }
