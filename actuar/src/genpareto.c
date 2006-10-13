@@ -13,32 +13,40 @@
 #include "locale.h"
 #include "dpq.h"
 
-double dgenpareto(double x, double shape1, double shape2, double scale, int give_log)
+double dgenpareto(double x, double shape1, double shape2, double scale,
+		  int give_log)
 {
-    double tmp;
+    /*  We work with the density expressed as
+     *
+     *  scale^shape1 * u^shape2 * (1 - u)^shape1 / (x * beta(shape1, shape2)
+     *
+     *  with u = x/(x + scale).
+     */
+
+    double tmp, logu, log1mu;
 
     if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
 	!R_FINITE(shape2) ||
+	!R_FINITE(scale)  ||
 	shape1 <= 0.0 ||
-	scale <= 0.0 ||
-	shape2 <= 0.0)
+	shape2 <= 0.0 ||
+	scale  <= 0.0)
 	return R_NaN;
 
     if (!R_FINITE(x) || x < 0.0)
 	return R_D_d0;
 
-    tmp = x / (x + scale);
+    tmp = x + scale;
+    log1mu = - log(exp(tmp));
+    logu = log(x) + log1mu;
 
-    return  give_log ?
-	dbeta(tmp, shape2, shape1, 1) + log(scale) - 2.0 * log(x + scale) :
-	dbeta(tmp, shape2, shape1, 0) * scale / R_pow(x + scale, 2.0);
+    return R_D_exp(shape1 * log(scale) + shape2 * logu + shape1 * log1mu
+		   - log(x) - lbeta(shape2, shape1));
 }
 
-double pgenpareto(double q, double shape1, double shape2, double scale, int lower_tail, int log_p)
+double pgenpareto(double q, double shape1, double shape2, double scale,
+		  int lower_tail, int log_p)
 {
-    double u;
-
     if (!R_FINITE(shape1) ||
 	!R_FINITE(scale) ||
 	!R_FINITE(shape2) ||
@@ -46,8 +54,6 @@ double pgenpareto(double q, double shape1, double shape2, double scale, int lowe
 	scale <= 0.0 ||
 	shape2 <= 0.0)
 	return R_NaN;
-
-    u = q / (q + scale);
 
     if (q <= 0)
 	return R_DT_0;
@@ -55,83 +61,84 @@ double pgenpareto(double q, double shape1, double shape2, double scale, int lowe
     if (!R_FINITE(q))
 	return 1;
 
-    return lower_tail ? R_D_exp(pbeta(u, shape2, shape1, 1, 1)):
-	R_D_exp(pbeta(u, shape2, shape1, 0, 1));
+    return pbeta(q / (q + scale), shape2, shape1, lower_tail, log_p);
 }
 
-double qgenpareto(double p, double shape1, double shape2, double scale, int lower_tail, int log_p)
+double qgenpareto(double p, double shape1, double shape2, double scale,
+		  int lower_tail, int log_p)
 {
-
-    double tmp;
-
     if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
 	!R_FINITE(shape2) ||
+	!R_FINITE(scale)  ||
 	shape1 <= 0.0 ||
-	scale <= 0.0 ||
-	shape2 <= 0.0)
+	shape2 <= 0.0 ||
+	scale  <= 0.0)
 	return R_NaN;
 
     R_Q_P01_boundaries(p, 0, R_PosInf);
-    tmp = R_D_qIv(p);
+    p = R_D_qIv(p);
 
-    return lower_tail ?
-	scale * (qbeta(tmp, shape2, shape1, 1, 0) / (1.0 - qbeta(tmp, shape2, shape1, 1, 0))) :
-	scale * qbeta(tmp, shape2, shape1, 0, 0) / (1.0 - qbeta(tmp, shape2, shape1, 0, 0));
+    return scale / (1.0 - 1.0 / qbeta(p, shape2, shape1, lower_tail, 0));
 }
 
 double rgenpareto(double shape1, double shape2, double scale)
 {
-    double a;
-
     if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
 	!R_FINITE(shape2) ||
+	!R_FINITE(scale)  ||
 	shape1 <= 0.0 ||
-	scale <= 0.0 ||
-	shape2 <= 0.0)
+	shape2 <= 0.0 ||
+	scale  <= 0.0)
 	return R_NaN;
 
-    a = rbeta(shape2, shape1);
-
-    return scale * a / (1.0 - a);
+    return scale / (1.0 - 1.0 / rbeta(shape2, shape1));
 }
 
-double mgenpareto(double order, double shape1, double shape2, double scale, int give_log)
+double mgenpareto(double order, double shape1, double shape2, double scale,
+		  int give_log)
 {
-
     if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
 	!R_FINITE(shape2) ||
-	!R_FINITE(order) ||
+	!R_FINITE(scale)  ||
+	!R_FINITE(order)  ||
 	shape1 <= 0.0 ||
-	scale <= 0.0 ||
 	shape2 <= 0.0 ||
-	order <= -shape2 ||
-	order >= shape1)
+	scale  <= 0.0 ||
+	order  <= -shape2 ||
+	order  >= shape1)
 	return R_NaN;
 
-    return R_pow(scale, order) * gammafn(shape2 + order) * gammafn(shape1 - order) / (gammafn(shape1) * gammafn(shape2));
+    return R_pow(scale, order) * beta(shape1 - order, shape2 + order)
+	/ beta(shape1, shape2);
 }
 
-double levgenpareto(double limit, double shape1, double shape2, double scale, double order, int give_log)
+double levgenpareto(double limit, double shape1, double shape2, double scale,
+		    double order, int give_log)
 {
-    double u;
+    double u, tmp1, tmp2;
 
     if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
 	!R_FINITE(shape2) ||
-	!R_FINITE(limit) ||
-	!R_FINITE(order) ||
+	!R_FINITE(scale)  ||
+	!R_FINITE(order)  ||
 	shape1 <= 0.0 ||
-	scale <= 0.0 ||
 	shape2 <= 0.0 ||
-	limit <= 0.0 ||
-	order <= -shape2 ||
-	order >= shape1)
+	scale  <= 0.0 ||
+	order  <= -shape2)
 	return R_NaN;
+
+    if (limit <= 0.0)
+	return 0;
+
+    if (!R_FINITE(limit))
+	return mgenpareto(order, shape1, shape2, scale, 0);
+
+    tmp1 = shape1 - order;
+    tmp2 = shape2 + order;
 
     u = limit / (limit + scale);
 
-    return R_pow(scale, order) * gammafn(shape2 + order) * gammafn(shape1 - order) * pbeta(u, shape2 + order, shape1 - order, 1, 0) /(gammafn(shape1) * gammafn(shape2)) + R_pow(limit, order) * (1.0 - pbeta(u, shape2, shape1, 1, 0));
+    return R_pow(scale, order) * beta(tmp1, tmp2) / beta(shape1, shape2)
+	* pbeta(u, tmp2, tmp1, 1, 0)
+	+ R_pow(limit, order) * pbeta(u, shape2, shape1, 0, 0);
 }
