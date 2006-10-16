@@ -16,5 +16,5 @@ mean.grouped.data <- function(x, ...)
 
     midpoints <- cj[-length(cj)] + diff(cj)/2
 
-    sapply(x[, -1], function(x) drop(crossprod(x, midpoints)))
+    sapply(x[-1], function(x) drop(crossprod(x, midpoints)))
 }
