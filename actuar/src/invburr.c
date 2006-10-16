@@ -142,5 +142,5 @@ double levinvburr(double limit, double shape1, double shape2, double scale,
 
     return R_pow(scale, order) * gammafn(tmp2) * gammafn(tmp3)
 	* pbeta(u, tmp2, tmp3, 1, 0) / gammafn(shape1)
-	+ R_pow(limit, order) * (0.5 - R_pow(u, shape1) + 0.5);
+	+ R_VG__0(limit, order) * (0.5 - R_pow(u, shape1) + 0.5);
 }

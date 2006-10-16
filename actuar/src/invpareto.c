@@ -123,5 +123,5 @@ double levinvpareto(double limit, double shape, double scale, double order,
 
     return R_pow(scale, order) * gammafn(tmp1) * gammafn(tmp2)
 	* pbeta(u, tmp1, tmp2, 1, 0) / gammafn(shape)
-	+ R_pow(limit, order) * (0.5 - R_pow(u, shape) + 0.5);
+	+ R_VG__0(limit, order) * (0.5 - R_pow(u, shape) + 0.5);
 }

@@ -142,5 +142,5 @@ double levburr(double limit, double shape1, double shape2, double scale,
 
     return R_pow(scale, order) * gammafn(tmp2) * gammafn(tmp3)
 	* pbeta(0.5 - u + 0.5, tmp2, tmp3, 1, 0) / gammafn(shape1)
-	+ R_pow(limit, order) * R_pow(u, shape1);
+	+ R_VG__0(limit, order) * R_pow(u, shape1);
 }

@@ -99,5 +99,5 @@ double levlgamma(double limit, double shapelog, double ratelog, double order,
 
     return R_pow(1.0 - order / ratelog, -shapelog)
 	* pgamma(u * (ratelog - order), shapelog, 1.0, 1, 0)
-	+ R_pow(limit, order) * pgamma(u * ratelog, shapelog, 1.0, 0, 0);
+	+ R_VG__0(limit, order) * pgamma(u * ratelog, shapelog, 1.0, 0, 0);
 }

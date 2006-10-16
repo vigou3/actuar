@@ -38,5 +38,5 @@ double levexp(double limit, double scale, double order, int give_log)
 
     return R_pow(scale, order) * gammafn(tmp) *
 	pgamma(limit, tmp, scale, 1, 0) +
-	R_pow(limit, order) * exp(-limit * scale);
+	R_VG__0(limit, order) * exp(-limit * scale);
 }

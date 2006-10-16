@@ -43,5 +43,5 @@ double levgamma(double limit, double shape, double scale, double order,
 
     return R_pow(scale, order) * gammafn(tmp) *
 	pgamma(limit, tmp, scale, 1, 0) / gammafn(shape) +
-	R_pow(limit, order) * pgamma(limit, shape, scale, 0, 0);
+	R_VG__0(limit, order) * pgamma(limit, shape, scale, 0, 0);
 }

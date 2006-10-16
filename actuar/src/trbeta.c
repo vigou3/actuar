@@ -158,5 +158,5 @@ double levtrbeta(double limit, double shape1, double shape2, double shape3,
 
     return R_pow(scale, order) * beta(tmp2, tmp3) / beta(shape1, shape3)
 	* pbeta(u, tmp2, tmp3, 1, 0)
-	+ R_pow(limit, order) * pbeta(u, shape3, shape1, 0, 0);
+	+ R_VG__0(limit, order) * pbeta(u, shape3, shape1, 0, 0);
 }

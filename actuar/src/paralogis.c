@@ -136,5 +136,5 @@ double levparalogis(double limit, double shape, double scale, double order,
 
     return R_pow(scale, order) * gammafn(tmp2) * gammafn(tmp3)
 	* pbeta(0.5 - u + 0.5, tmp2, tmp3, 1, 0) / gamma(shape)
-	+ R_pow(limit, order) * R_pow(u, shape);
+	+ R_VG__0(limit, order) * R_pow(u, shape);
 }

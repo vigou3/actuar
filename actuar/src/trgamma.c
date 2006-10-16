@@ -135,5 +135,5 @@ double levtrgamma(double limit, double shape1, double shape2, double scale,
 
     return R_pow(scale, order) * gammafn(tmp)
 	* pgamma(u, tmp, 1.0, 1, 0) / gammafn(shape1)
-	+ R_pow(limit, order) * pgamma(u, shape1, 1.0, 0, 0);
+	+ R_VG__0(limit, order) * pgamma(u, shape1, 1.0, 0, 0);
 }

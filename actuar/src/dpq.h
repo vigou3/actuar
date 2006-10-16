@@ -42,13 +42,7 @@
 	    return lower_tail ? _RIGHT_ : _LEFT_;	\
     }
 
-
-#ifndef M_PI
-#define M_PI		3.141592653589793238462643383280	/* pi */
-#endif
-
-#ifndef M_2PI
-#define M_2PI		6.283185307179586476925286766559	/* 2*pi */
-#endif
+/* Infinite limit in "lev" */
+#define R_VG__0(x, y)	(R_FINITE(x) ? R_pow(x, y) : 0.)
 
 #define R_NaN  (0.0/0.0)

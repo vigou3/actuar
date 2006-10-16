@@ -98,5 +98,5 @@ double levinvexp(double limit, double scale, double order, int give_log)
     u = exp(log(scale) - log(limit));
 
     return R_pow(scale, order) * gammafn(tmp) * pgamma(u, tmp, 1.0, 0, 0)
-	+ R_pow(limit, order) * (0.5 - exp(-u) + 0.5);
+	+ R_VG__0(limit, order) * (0.5 - exp(-u) + 0.5);
 }

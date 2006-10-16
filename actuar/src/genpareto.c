@@ -138,5 +138,5 @@ double levgenpareto(double limit, double shape1, double shape2, double scale,
 
     return R_pow(scale, order) * beta(tmp1, tmp2) / beta(shape1, shape2)
 	* pbeta(u, tmp2, tmp1, 1, 0)
-	+ R_pow(limit, order) * pbeta(u, shape2, shape1, 0, 0);
+	+ R_VG__0(limit, order) * pbeta(u, shape2, shape1, 0, 0);
 }
