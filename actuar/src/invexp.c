@@ -15,7 +15,14 @@
 
 double dinvexp(double x, double scale, int give_log)
 {
-    double tmp;
+    /*  We work with the density expressed as
+     *
+     *  u * e^(-u) / x
+     *
+     *  with u = scale/x.
+     */
+
+    double logu;
 
     if (!R_FINITE(scale) || scale <= 0.0)
 	return R_NaN;
@@ -23,16 +30,14 @@ double dinvexp(double x, double scale, int give_log)
     if (!R_FINITE(x) || x < 0.0)
 	return R_D_d0;
 
-    tmp = scale / x;
+    logu = log(scale) - log(x);
 
-    return  give_log ?
-	log(scale) - tmp - 2.0 * log (x) :
-	tmp * exp(-tmp) / x;
+    return R_D_exp(logu - exp(logu) - log(x));
 }
 
 double pinvexp(double q, double scale, int lower_tail, int log_p)
 {
-    double tmp;
+    double u;
 
     if (!R_FINITE(scale) || scale <= 0.0)
 	return R_NaN;
@@ -40,31 +45,28 @@ double pinvexp(double q, double scale, int lower_tail, int log_p)
     if (q <= 0)
 	return R_DT_0;
 
-    tmp = scale / q;
+    u = exp(log(scale) - log(q));
 
-    return lower_tail ? R_D_exp(-tmp): R_D_exp(log(1.0 - exp(-tmp)));
+    return R_DT_val(exp(-u));
 }
 
 double qinvexp(double p, double scale, int lower_tail, int log_p)
 {
-    double tmp;
-
     if (!R_FINITE(scale) || scale <= 0.0)
 	return R_NaN;
 
     R_Q_P01_boundaries(p, 0, R_PosInf);
-    tmp = R_D_qIv(p);
+    p = R_D_qIv(p);
 
-    return lower_tail ? -scale / log(tmp) : -scale / log(1.0 - tmp);
+    return -scale / log(R_D_Lval(p));
 }
-
 
 double rinvexp(double scale)
 {
     if (!R_FINITE(scale) || scale <= 0.0)
 	return R_NaN;
 
-    return -scale / log(unif_rand());
+    return -scale / rexp(1.0);
 }
 
 double minvexp(double order, double scale, int give_log)
@@ -80,7 +82,7 @@ double minvexp(double order, double scale, int give_log)
 
 double levinvexp(double limit, double scale, double order, int give_log)
 {
-    double tmp;
+    double u, tmp;
 
     if (!R_FINITE(scale) ||
 	!R_FINITE(limit) ||
@@ -91,7 +93,10 @@ double levinvexp(double limit, double scale, double order, int give_log)
 	limit <= 0.0)
 	return R_NaN;
 
-    tmp = scale / limit;
+    tmp = 1.0 - order;
 
-    return R_pow(scale, order) * gammafn(1.0 - order) * pgamma(tmp, 1.0 - order, 1.0, 0, 0) + R_pow(limit, order) * (1.0 - exp(-tmp));
+    u = exp(log(scale) - log(limit));
+
+    return R_pow(scale, order) * gammafn(tmp) * pgamma(u, tmp, 1.0, 0, 0)
+	+ R_pow(limit, order) * (0.5 - exp(-u) + 0.5);
 }
