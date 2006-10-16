@@ -12,9 +12,16 @@ mean.grouped.data <- function(x, ...)
     if (!inherits(x, "grouped.data"))
         stop("wrong method")
 
+    ## Get group boundaries
     cj <- eval(expression(cj), env = environment(x))
 
+    ## Compute group midpoints
     midpoints <- cj[-length(cj)] + diff(cj)/2
 
-    sapply(x[-1], function(x) drop(crossprod(x, midpoints))/sum(x))
+    ## Drop the boundaries column and convert to matrix for use in
+    ## crossprod()
+    x <- as.matrix(x[-1])
+
+    ## Compute mean per column
+    drop(crossprod(x, midpoints))/colSums(x)
 }
