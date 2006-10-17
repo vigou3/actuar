@@ -27,7 +27,7 @@ double mgamma(double order, double shape, double scale, int give_log)
 double levgamma(double limit, double shape, double scale, double order,
 		int give_log)
 {
-    double tmp;
+    double u, tmp;
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
@@ -42,7 +42,9 @@ double levgamma(double limit, double shape, double scale, double order,
 
     tmp = order + shape;
 
+    u = exp(log(limit) - log(scale));
+
     return R_pow(scale, order) * gammafn(tmp) *
-	pgamma(limit, tmp, scale, 1, 0) / gammafn(shape) +
-	R_VG__0(limit, order) * pgamma(limit, shape, scale, 0, 0);
+	pgamma(u, tmp, 1.0, 1, 0) / gammafn(shape) +
+	R_VG__0(limit, order) * pgamma(u, shape, 1.0, 0, 0);
 }
