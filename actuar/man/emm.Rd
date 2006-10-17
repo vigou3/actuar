@@ -13,12 +13,15 @@ emm(x, order = 1, \dots)
 }
 \arguments{
   \item{x}{a vector or matrix of individual data, or an object of class
-    \code{grouped data}.}
+    \code{"grouped data"}.}
   \item{order}{order of the moment. Must be positive.}
-  \item{\dots}{potential further arguments passed to \code{colMeans}
-    (e.g. \code{na.rm}).}
+  \item{\dots}{further arguments passed to or from other methods.}
 }
 \details{
+  Arguments \code{\dots} are passed to \code{\link{colMeans}};
+  \code{na.rm = TRUE} may be useful for individual data with missing
+  values. 
+
   For individual data, the \eqn{k}th empirical moment is
   \deqn{\sum_{j = 1}^n x_j^k.}{sum(x[j]^k).}
 
@@ -32,8 +35,7 @@ emm(x, order = 1, \dots)
   where \eqn{n = \sum_{j = 1}^r n_j}{n = sum(nj)}.
 }
 \value{
-  A vector of matrix of moments, one line for each value of
-  \code{order}.
+  A vector or matrix of moments.
 }
 \seealso{
   \code{\link{mean}} and \code{\link{mean.grouped.data}} for simpler
