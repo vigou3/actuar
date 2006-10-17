@@ -31,13 +31,14 @@ double levgamma(double limit, double shape, double scale, double order,
 
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
-	!R_FINITE(limit) ||
 	!R_FINITE(order) ||
 	shape <= 0.0 ||
 	scale <= 0.0 ||
-	limit <= 0.0 ||
 	order <= -shape)
 	return R_NaN;
+
+    if (limit <= 0.0)
+	return 0;
 
     tmp = order + shape;
 
