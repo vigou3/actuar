@@ -29,14 +29,14 @@ double levlnorm(double limit, double logmean, double logsd, double order,
 
     if (!R_FINITE(logmean) ||
 	!R_FINITE(logsd) ||
-	!R_FINITE(limit) ||
 	!R_FINITE(order) ||
-	logsd <= 0.0 ||
-	limit <= 0.0)
+	logsd <= 0.0)
 	return R_NaN;
 
-    u = (log(limit) - logmean)/logsd;
+    if (limit <= 0.0)
+	return 0;
 
+    u = (log(limit) - logmean)/logsd;
 
     return exp(order * (logmean + 0.5 * order * R_pow(logsd, 2.0))) *
 	pnorm(u - order * logsd, 0., 1.0, 1, 0) +
