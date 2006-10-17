@@ -34,7 +34,7 @@ export(## Credibility theory
        dtrbeta, ptrbeta, qtrbeta, rtrbeta, mtrbeta, levtrbeta,
        dpearson6, ppearson6, qpearson6, rpearson6, mpearson6, levpearson6, #aliases
        ## Loss distributions
-       grouped.data, ogive, emp.moments, mde, elev, coverage
+       grouped.data, ogive, emm, mde, elev, coverage
        )
 ### Imports
 import(stats, graphics)
@@ -50,8 +50,8 @@ S3method(frequency, simpf)
 S3method(elev, default)
 S3method(elev, grouped.data)
 
-S3method(emp.moments, default)
-S3method(emp.moments, grouped.data)
+S3method(emm, default)
+S3method(emm, grouped.data)
 
 S3method(hist, grouped.data)
 
