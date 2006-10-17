@@ -4,7 +4,8 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights = NULL, ...)
+mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
+                weights = NULL, ...)
 {
     ## General form of the function to minimize.
     myfn <- function(parm, x, weights, ...)
@@ -51,8 +52,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
     {
         G <- fn
         Gn <- if (grouped) ogive(x) else ecdf(x)
-        if (is.null(weights))
-            weights <- 1
+        if (is.null(weights)) weights <- 1
         Call$x <- knots(Gn)
         Call$par <- start
     }
@@ -62,7 +62,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
     {
         if (!grouped)
             stop("'chi-square' measure requires an object of class 'grouped.data'")
-        if (any(x$nj[-1] == 0))
+        if (any(x[, -2] == 0))
             stop("frequency must be larger than 0 in all classes")
         og <- ogive(x)
         x <- knots(og)
@@ -109,12 +109,14 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"), weights 
     ## Return result
     if (res$convergence > 0)
         stop("optimization failed")
-    structure(list(estimate = res$par, distance = res$value), class = c("mde","list"))
+    structure(list(estimate = res$par, distance = res$value),
+              class = c("mde","list"))
 }
 
 print.mde <- function(x, digits = getOption("digits"), ...)
 {
-    ans <- format(rbind(x$estimate, "      distance", x$distance), digits = digits)
+    ans <- format(rbind(x$estimate, "      distance", x$distance),
+                  digits = digits)
     ans[1, ] <- sapply(ans[1, ], function(x) paste("", x))
     ans[3, ] <- sapply(ans[3, ], function(x) paste("(", x, ")", sep=""))
     dn <- dimnames(ans)
@@ -127,13 +129,3 @@ print.mde <- function(x, digits = getOption("digits"), ...)
     print(ans, quote = FALSE)
     x
 }
-
-
-########### Junkyard #############
-
-### Données "grouped dental"  individualisée pour contrôler avec
-### l'exemple 2.21 de Loss Models (1ere édition).
-gd <- grouped.data(x = c(0, 25, 50, 100, 150, 250, 500, 1000, 1500, 2500, 4000),
-                   y = c(30, 31, 57, 42, 65, 84, 45, 10, 11, 3))
-#
-id <- c(141, 16, 46, 40, 351, 259, 317, 1511, 107, 567)
