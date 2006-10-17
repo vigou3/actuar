@@ -12,10 +12,11 @@
   \item{\dots}{further arguments passed to or from other methods.}
 }
 \details{
-  The mean of grouped data with \eqn{n_j}{nj} values in group \eqn{(c_{j
-      - 1}, c_j]}{(c{j-1}, c{j}]}, \eqn{j = 1, \dots, r} is
+  The mean of grouped data with group boundaries \eqn{c_1, \dots,
+    c_r}{cj[1], \dots, cj[r]} and group frequencies \eqn{n_1, \dots,
+    n_r}{nj[1], \dots, nj[r]} is
   \deqn{\sum_{j = 1}^r \frac{c_{j - 1} + c_j}{2}\, n_j.}{%
-    sum ((c{j-1} + c{j})/2 * nj).}
+    sum((cj[j-1] + cj[j])/2 * nj).}
 }
 \value{
   A named vector of means.
