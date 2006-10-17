@@ -8,7 +8,7 @@
 \method{mean}{grouped.data}(x, \dots)
 }
 \arguments{
-  \item{x}{an object of class \code{grouped.data}.}
+  \item{x}{an object of class \code{"grouped.data"}.}
   \item{\dots}{further arguments passed to or from other methods.}
 }
 \details{
@@ -22,7 +22,12 @@
   A named vector of means.
 }
 \seealso{
-  \code{\link{grouped.data}} to create grouped data objects.
+  \code{\link{grouped.data}} to create grouped data objects;
+  \code{\link{emm}} to compute higher moments.
+}
+\references{
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
+  \emph{Loss Models, From Data to Decisions}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
