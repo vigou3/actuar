@@ -28,6 +28,8 @@ grouped.data(\dots, row.names = NULL, check.rows = FALSE,
   the other arguments, which will be taken as vectors of group
   frequencies. All arguments are coerced to data frames.
 
+  Missing frequencies are replaced by zeros, with a warning.
+  
   Extraction and replacement methods exist for \code{grouped.data}
   objects, but working on non adjacent groups will most likely yield
   useless results.  
