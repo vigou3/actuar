@@ -6,60 +6,62 @@
   Minimum distance estimators for individual and grouped data.
 }
 \usage{
-  mde(x, fun, start, measure  = c("CvM", "chi-square", "LAS"), weights = NULL, ...)
+mde(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
+    weights = NULL, ...)
 }
 \arguments{
-  \item{x}{individual or grouped data.}
-  \item{fun}{Either a character string or a function returning a
+  \item{x}{a vector or an object of class \code{"grouped data"}.}
+  \item{fun}{either a character string or a function returning a
     cumulative distribution evaluated at its first argument.}
-  \item{start}{A named list giving the parameters to be optimized with
-    initial values }
-  \item{measure}{Either \code{CvM} for Cramer von Mises' method,
-    \code{chi-square} for modified chi-square's method, and \code{LAS}
+  \item{start}{a named list giving the parameters to be optimized with
+    initial values}
+  \item{measure}{either \code{"CvM"} for Cramer-von Mises' method,
+    \code{"chi-square"} for modified chi-square's method, or \code{"LAS"}
     for layer average severity's method.}
   \item{weights}{weights. If arguments \code{weights} is missing,
-    all weights are equal to 1 for \code{CvM} and \code{LAS}
-    methods. For \code{chi-square}, weights are equal to \code{1 / nj}.}
-  \item{\dots}{Additional parameters, either for \code{fun} or for \code{optim}. In particular, it can be used to specify bounds via \code{lower}
-    or \code{upper} or both.  If arguments of \code{ecdf} are included they will be held fixed. }
+    all weights are equal to 1 for \code{measure = "CvM"} and
+    \code{measure = "LAS"}. For \code{measure = "chi-square"}, weights
+    are equal to \code{1/nj}.}
+  \item{\dots}{Additional parameters, either for \code{fun} or for
+    \code{optim}. In particular, it can be used to specify bounds via
+    \code{lower} or \code{upper} or both.  If arguments of \code{fun}
+    are included they will be held fixed.}
 }
 \details{
-  For \code{CvM}'s method direct optimization of the distance between
-  theorical and empirical cumulative distribution function is performed
-  using \code{optim}, for modified \code{chi-square}'s method
-  direct optimization of the chi-square statistic is performed using
-  \code{optim}, and for \code{LAS}'s direct optimization of distance
-  between theorical and empirical limited distribution is performed
-  using \code{optim}.
+  The Cramer-von Mises method (\code{"CvM"}) minimizes the distance
+  between the theoretical cdf and the empirical cdf (for individual
+  data) or the ogive (for grouped data).
+
+  The modified chi-square method (\code{"chi-square"}) minimizes the
+  chi-square statistic for grouped data, that is the difference between
+  the expected and observed frequency within each group.
+
+  The layer average severity method (\code{"LAS"}) minimizes the
+  difference between the theoretical and empirical limited expected
+  value within each group for grouped data.
   
-  For one-dimensional problems the Nelder-Mead method is used and for multi-dimensional problems the BFGS method, unless arguments named \code{lower} or \code{upper} are
-  supplied when \code{L-BFGS-B} is used or \code{method} is supplied
-  explicitly.
-  
-  There is \code{print} method for this class.
+  Optimization is performed using \code{\link{optim}}. For
+  one-dimensional problems the Nelder-Mead method is used and for
+  multi-dimensional problems the BFGS method, unless arguments named
+  \code{lower} or \code{upper} are supplied when \code{L-BFGS-B} is used
+  or \code{method} is supplied explicitly.
 }
 \value{
-  An object od class \code{mde}, a list with tow components,
+  An object of class \code{"mde"}, a list with two components:
   
-  estimate: the parameter estimates, and
-  
-  distance: the distance calculated.
-  
-  Invalid arguments will return warning.
+  \item{estimate}{the parameter estimates, and}  
+  \item{distance}{the distance.}
 }
 \references{
-  Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-  Edition, Wiley, 2004.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
+  \emph{Loss Models, From Data to Decisions}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Mathieu Pigeon
 }
 \examples{
-x <- rpareto(10000, 8, 10)
-d <- list(shape = 2, scale = 2)
-mde(x, ppareto, d, "CvM")
-t <- grouped.data(x = c(2, 4, 6, 10, 20), y = c(1, 4, 2, 1))
 \dontrun{mde(t, pgamma, d, "chi-square")}
 }
-\keyword{models}
+\keyword{distribution}
+\keyword{htest}
