@@ -31,16 +31,18 @@ double levweibull(double limit, double shape, double scale, double order,
 
     if (!R_FINITE(scale) ||
 	!R_FINITE(shape) ||
-	!R_FINITE(limit) ||
 	!R_FINITE(order) ||
 	scale <= 0.0 ||
 	shape <= 0.0 ||
-	limit <= 0.0 ||
 	order <= -shape)
 	return R_NaN;
 
-    u = R_pow(limit / scale, shape);
+    if (limit <= 0.0)
+	return 0;
+
     tmp = 1.0 + order / shape;
+
+    u = exp(shape * (log(limit) - log(scale)));
 
     return R_pow(scale, order) * gammafn(tmp) * pgamma(u, tmp, 1.0, 1, 0) +
 	R_VG__0(limit, order) * exp(-u);
