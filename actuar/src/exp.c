@@ -27,12 +27,13 @@ double levexp(double limit, double scale, double order, int give_log)
     double tmp;
 
     if (!R_FINITE(scale) ||
-	!R_FINITE(limit) ||
 	!R_FINITE(order) ||
 	scale <= 0.0 ||
-	limit <= 0.0 ||
 	order <= -1.0)
 	return R_NaN;
+
+    if (limit <= 0.0)
+	return 0;
 
     tmp = 1.0 + order;
 
