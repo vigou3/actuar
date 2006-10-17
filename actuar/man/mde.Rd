@@ -11,34 +11,41 @@ mde(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
 }
 \arguments{
   \item{x}{a vector or an object of class \code{"grouped data"}.}
-  \item{fun}{either a character string or a function returning a
-    cumulative distribution evaluated at its first argument.}
+  \item{fun}{function returning a cumulative distribution (for
+    \code{measure = "CvM"} and \code{measure = "chi-square"}) or a
+    limited expected value (for \code{measure = "LAS"}) evaluated at
+    its first argument.}
   \item{start}{a named list giving the parameters to be optimized with
     initial values}
-  \item{measure}{either \code{"CvM"} for Cramer-von Mises' method,
-    \code{"chi-square"} for modified chi-square's method, or \code{"LAS"}
-    for layer average severity's method.}
-  \item{weights}{weights. If arguments \code{weights} is missing,
-    all weights are equal to 1 for \code{measure = "CvM"} and
-    \code{measure = "LAS"}. For \code{measure = "chi-square"}, weights
-    are equal to \code{1/nj}.}
+  \item{measure}{either \code{"CvM"} for the Cramer-von Mises method,
+    \code{"chi-square"} for modified the chi-square method, or \code{"LAS"}
+    for the layer average severity method.}
+  \item{weights}{weights; see details.}
   \item{\dots}{Additional parameters, either for \code{fun} or for
     \code{optim}. In particular, it can be used to specify bounds via
     \code{lower} or \code{upper} or both.  If arguments of \code{fun}
     are included they will be held fixed.}
 }
 \details{
-  The Cramer-von Mises method (\code{"CvM"}) minimizes the distance
-  between the theoretical cdf and the empirical cdf (for individual
-  data) or the ogive (for grouped data).
+  The Cramer-von Mises method (\code{"CvM"}) minimizes the squared
+  distance between the theoretical cdf and the empirical cdf (for
+  individual data) or the ogive (for grouped data).
 
   The modified chi-square method (\code{"chi-square"}) minimizes the
-  chi-square statistic for grouped data, that is the difference between
-  the expected and observed frequency within each group.
+  modified chi-square statistic for grouped data, that is the squared
+  difference between the expected and observed frequency within each
+  group.
 
   The layer average severity method (\code{"LAS"}) minimizes the
-  difference between the theoretical and empirical limited expected
-  value within each group for grouped data.
+  squared difference between the theoretical and empirical limited
+  expected value within each group for grouped data.
+
+  All sum of squares can be weighted. If arguments \code{weights} is
+  missing, all weights are by default equal to 1 for \code{measure =
+    "CvM"} and \code{measure = "LAS"}; for \code{measure =
+    "chi-square"}, weights are equal to \eqn{n/n_j}{n/nj}, where
+  \eqn{n_j}{nj} is the frequency in group \eqn{j} and \eqn{n = \sum_{j =
+      1}^r n_j}{n = sum(nj)}.
   
   Optimization is performed using \code{\link{optim}}. For
   one-dimensional problems the Nelder-Mead method is used and for
@@ -61,7 +68,27 @@ mde(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
   Mathieu Pigeon
 }
 \examples{
-\dontrun{mde(t, pgamma, d, "chi-square")}
+## Individual data example
+data(dental)
+mde(dental, pexp, start = list(rate = 1/200), measure = "CvM")
+
+## Example 2.21 of Klugman et al. (1998)
+data(gdental)
+mde(gdental, pexp, start = list(rate = 1/200), measure = "CvM")
+mde(gdental, pexp, start = list(rate = 1/200), measure = "chi-square")
+mde(gdental, levexp, start = list(rate = 1/200), measure = "LAS")
+
+## Two-parameter distribution example
+try(mde(gdental, ppareto, start = list(shape = 3, scale = 600),
+        measure = "CvM")) # no convergence
+
+## Working in log scale often solves the problem
+pparetolog <- function(x, shape, scale)
+    ppareto(x, exp(shape), exp(scale))
+
+( p <- mde(gdental, pparetolog, start = list(shape = log(3),
+           scale = log(600)), measure = "CvM") )
+exp(p$estimate)
 }
 \keyword{distribution}
 \keyword{htest}
