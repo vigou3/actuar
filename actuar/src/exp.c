@@ -24,7 +24,7 @@ double mexp(double order, double scale, int give_log)
 
 double levexp(double limit, double scale, double order, int give_log)
 {
-    double tmp;
+    double u, tmp;
 
     if (!R_FINITE(scale) ||
 	!R_FINITE(order) ||
@@ -37,7 +37,9 @@ double levexp(double limit, double scale, double order, int give_log)
 
     tmp = 1.0 + order;
 
+    u = exp(log(limit) - log(scale));
+
     return R_pow(scale, order) * gammafn(tmp) *
-	pgamma(limit, tmp, scale, 1, 0) +
-	R_VG__0(limit, order) * exp(-limit * scale);
+	pgamma(u, tmp, 1.0, 1, 0) +
+	R_VG__0(limit, order) * exp(-u);
 }
