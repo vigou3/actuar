@@ -28,6 +28,14 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
     if (nx - ny != 1)
         stop("incorrect number of group boundaries and frequencies")
 
+    ## Replace missing frequencies by zeros.
+    nax <- is.na(x)
+    if (any(nax))
+    {
+        x[nax] <- 0
+        warning("missing frequencies replaced by zeros")
+    }
+
     ## Return a data frame with formatted group boundaries in the
     ## first column.
     xfmt <- paste("(", numform(x[-nx, ]), ", ", numform(x[-1, ]), "]",
