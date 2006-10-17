@@ -29,16 +29,16 @@ ogive(x, y = NULL, \dots)
   \item{\dots}{arguments to be passed to subsequent methods.}
 }
 \details{
-  The ogive of a group data set links the values of the empirical
+  The ogive of a grouped data set links the values of the empirical
   cumulative distribution known at group boundaries by straight line
   segments, resulting in an approximation of the empirical cdf.
   
   The equation of the ogive is
   \deqn{F_n(x) = \frac{(c_j - x) F_n(c_{j-1}) +
       (x - c_{j-1}) F_n(c_j)}{c_j - c_{j - 1}}}{%
-    Fn(x) = ((c_j - x) Fn(c_{j-1}) +
-    (x - c_{j-1}) Fn(c_j))/(c_j - c_{j-1})}
-  for \eqn{c_{j-1} < x \leq c_j}.
+    Fn(x) = ((cj[j] - x) Fn(cj[j-1]) +
+    (x - cj[j-1]) Fn(cj[j]))/(cj[j] - cj[j-1])}
+  for \eqn{c_{j-1} < x \leq c_j}{cj[j-1] < x <= cj[j]}.
 }
 \value{
   For \code{ogive}, a function of class \code{"ogive"}, inheriting from the
