@@ -32,32 +32,33 @@ hist.grouped.data <-
     h <- diff(cj)                       # class widths
     dens <- nj/(n * h)                  # class "densities"
 
+    ## Cannot plot histogram with infinite class
+    if (any(is.infinite(cj)))
+        stop("infinite class boundaries")
+
+    ## The rest is taken from hist.default()
+    xname <- paste(deparse(substitute(x), 500), collapse = "\n")
+    equidist <- diff(range(h)) < 1e-07 * mean(h)
+    if (is.null(freq))
+    {
+        freq <- if (!missing(probability))
+            !as.logical(probability)
+        else equidist
+    }
+    else if (!missing(probability) && any(probability == freq))
+        stop("'probability' is an alias for '!freq', however they differ.")
+    mids <- 0.5 * (cj[-1] + cj[-length(cj)])
+    r <- structure(list(breaks = cj, counts = nj, intensities = dens,
+                        density = dens, mids = mids, xname = xname,
+                        equidist = equidist),
+                   class = "histogram")
     if (plot)
     {
-        ## Cannot plot histogram with infinite class
-        if (any(is.infinite(cj)))
-            stop("infinite class boundaries")
-
-        ## The rest is taken from hist.default()
-        xname <- paste(deparse(substitute(x), 500), collapse = "\n")
-        equidist <- diff(range(h)) < 1e-07 * mean(h)
-        if (is.null(freq)) {
-            freq <- if (!missing(probability))
-                !as.logical(probability)
-            else equidist
-        }
-        else if (!missing(probability) && any(probability == freq))
-            stop("'probability' is an alias for '!freq', however they differ.")
-        mids <- 0.5 * (cj[-1] + cj[-length(cj)])
-        r <- structure(list(breaks = cj, counts = nj, intensities = dens,
-                            density = dens, mids = mids, xname = xname,
-                            equidist = equidist),
-                       class = "histogram")
         plot(r, freq = freq, col = col, border = border, angle = angle,
-            density = density, main = main, xlim = xlim, ylim = ylim,
-            xlab = xlab, ylab = ylab, axes = axes, labels = labels, ...)
+             density = density, main = main, xlim = xlim, ylim = ylim,
+             xlab = xlab, ylab = ylab, axes = axes, labels = labels, ...)
         invisible(r)
     }
     else
-        approxfun(cj, dens, yleft = 0, yright = 0, f = 1, method = "constant")
+        r
 }
