@@ -44,9 +44,9 @@ mde(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
   All sum of squares can be weighted. If arguments \code{weights} is
   missing, all weights are by default equal to 1 for \code{measure =
     "CvM"} and \code{measure = "LAS"}; for \code{measure =
-    "chi-square"}, weights are equal to \eqn{n/n_j}{n/nj}, where
-  \eqn{n_j}{nj} is the frequency in group \eqn{j} and \eqn{n = \sum_{j =
-      1}^r n_j}{n = sum(nj)}.
+    "chi-square"}, weights are equal to \eqn{n/n_j}{n/n[j]}, where
+  \eqn{n_j}{n[j]} is the frequency in group \eqn{j} and \eqn{n = \sum_{j =
+      1}^r n_j}{n = sum(j; n[j])}.
   
   Optimization is performed using \code{\link{optim}}. For
   one-dimensional problems the Nelder-Mead method is used and for

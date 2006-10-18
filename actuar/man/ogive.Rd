@@ -36,9 +36,11 @@ ogive(x, y = NULL, \dots)
   The equation of the ogive is
   \deqn{F_n(x) = \frac{(c_j - x) F_n(c_{j-1}) +
       (x - c_{j-1}) F_n(c_j)}{c_j - c_{j - 1}}}{%
-    Fn(x) = ((cj[j] - x) Fn(cj[j-1]) +
-    (x - cj[j-1]) Fn(cj[j]))/(cj[j] - cj[j-1])}
-  for \eqn{c_{j-1} < x \leq c_j}{cj[j-1] < x <= cj[j]}.
+    Fn(x) = ((c[j] - x) Fn(c[j - 1]) +
+    (x - c[j - 1]) Fn(c[j]))/(c[j] - c[j - 1])}
+  for \eqn{c_{j-1} < x \leq c_j}{c[j - 1] < x <= c[j]} and where
+  \eqn{c_0, \dots, c_r}{c[0], \dots, c[r]} are the \eqn{r + 1} group
+  boundaries.
 }
 \value{
   For \code{ogive}, a function of class \code{"ogive"}, inheriting from the

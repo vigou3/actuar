@@ -13,10 +13,10 @@
 }
 \details{
   The mean of grouped data with group boundaries \eqn{c_1, \dots,
-    c_r}{cj[1], \dots, cj[r]} and group frequencies \eqn{n_1, \dots,
-    n_r}{nj[1], \dots, nj[r]} is
+    c_r}{c[1], \dots, c[r]} and group frequencies \eqn{n_1, \dots,
+    n_r}{n[1], \dots, n[r]} is
   \deqn{\sum_{j = 1}^r \frac{c_{j - 1} + c_j}{2}\, n_j.}{%
-    sum((cj[j-1] + cj[j])/2 * nj).}
+    sum(j; (c[j - 1] + c[j])/2 * n[j]).}
 }
 \value{
   A named vector of means.

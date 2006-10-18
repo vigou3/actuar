@@ -23,16 +23,16 @@ emm(x, order = 1, \dots)
   values. 
 
   For individual data, the \eqn{k}th empirical moment is
-  \deqn{\sum_{j = 1}^n x_j^k.}{sum(x[j]^k).}
+  \deqn{\sum_{j = 1}^n x_j^k.}{sum(j; x[j]^k).}
 
-  For grouped data with group boundaries \eqn{c_1, \dots, c_r}{cj[1],
-    \dots, cj[r]} and group frequencies \eqn{n_1, \dots, n_r}{nj[1],
-    \dots, nj[r]}, the \eqn{k}th empirical moment is
+  For grouped data with group boundaries \eqn{c_1, \dots, c_r}{c[1],
+    \dots, c[r]} and group frequencies \eqn{n_1, \dots, n_r}{n[1],
+    \dots, n[r]}, the \eqn{k}th empirical moment is
   \deqn{\sum_{j = 1}^r \frac{n_j (c_j^k - c_{j - 1}^k)}{%
       n (k + 1) (c_j - c_{j - 1})},}{%
-    sum((nj[j] * (cj[j]^k - cj[j-1]^k)/(n * (k+1) * (cj[j] -
-    cj[j-1]))),}
-  where \eqn{n = \sum_{j = 1}^r n_j}{n = sum(nj)}.
+    sum(j; (n[j] * (c[j]^k - c[j-1]^k)/(n * (k+1) * (c[j] -
+    c[j-1])))),}
+  where \eqn{n = \sum_{j = 1}^r n_j}{n = sum(j; n[j])}.
 }
 \value{
   A vector or matrix of moments.

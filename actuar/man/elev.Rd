@@ -36,10 +36,11 @@ elev(x, ...)
   \eqn{X} is
   \eqn{E[X \wedge u] = E[\min(X, u)]}{E[X ^ u] = E[min(X, u)]}.
 
-  For individual data \eqn{x_1, \dots, x_n}, the empirical LEV is thus
+  For individual data \eqn{x_1, \dots, x_n}{x[1], \dots, x[n]}, the
+  empirical LEV \eqn{E_n[X \wedge u]}{En[X ^ u]} is thus
   \deqn{E_n[X \wedge u] = \frac{1}{n}
-    \left( \sum_{x_j < u} x_j + \sum_{x_j \geq u} u \right)}{%
-    E_n[X ^ u] = (sum(x : x < u) + sum(u : x >= u))/n}
+    \left( \sum_{x_j < u} x_j + \sum_{x_j \geq u} u \right).}{%
+    En[X ^ u] = (sum(x[j] < u; 1) + sum(x[j] >= u; u))/n.}
 
   Methods of \code{elev} exist for individual data or for grouped data
   created with \code{\link{grouped.data}}. The formula in this case is
