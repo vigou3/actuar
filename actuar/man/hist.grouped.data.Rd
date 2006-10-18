@@ -1,6 +1,13 @@
 \name{hist.grouped.data}
-\name{hist.grouped.data}
+\alias{hist.grouped.data}
 \title{Histogram for grouped data}
+\description{
+  This method for the generic function \code{\link{hist}} is mainly
+  useful to plot the histogram of grouped data. If \code{plot = FALSE},
+  the resulting object of \code{\link[base]{class} "histogram"} is
+  returned for compatibility with \code{\link{hist.default}}, but does
+  not contain much information not already in \code{x}.
+}
 \usage{
 \method{hist}{grouped.data}(x, freq = NULL, probability = !freq,
      density = NULL, angle = 45, col = NULL, border = NULL,
@@ -43,59 +50,15 @@
     \code{\link{plot.histogram}} and their to \code{\link{title}} and
     \code{\link{axis}} (if \code{plot=TRUE}).}
 }
-\description{
-  The generic function \code{hist} computes a histogram of the given
-  data values.  If \code{plot=TRUE}, the resulting object of
-  \code{\link[base]{class} "histogram"} is plotted by
-  \code{\link{plot.histogram}}, before it is returned.
-}
-\details{
-  The definition of \dQuote{histogram} differs by source (with
-  country-specific biases).  \R's default with equi-spaced breaks (also
-  the default) is to plot the counts in the cells defined by
-  \code{breaks}.  Thus the height of a rectangle is proportional to
-  the number of points falling into the cell, as is the area
-  \emph{provided} the breaks are equally-spaced.
-
-  The default with non-equi-spaced breaks is to give
-  a plot of area one, in which the \emph{area} of the rectangles is the
-  fraction of the data points falling in the cells.
-
-  If \code{right = TRUE} (default), the histogram cells are intervals
-  of the form \code{(a, b]}, i.e., they include their right-hand endpoint,
-  but not their left one, with the exception of the first cell when
-  \code{include.lowest} is \code{TRUE}.
-
-  For \code{right = FALSE}, the intervals are of the form \code{[a, b)},
-  and \code{include.lowest} really has the meaning of
-  \dQuote{\emph{include highest}}.
-
-  A numerical tolerance of \eqn{10^{-7}}{1e-7} times the median bin size
-  is applied when counting entries on the edges of bins.
-
-  The default for \code{breaks} is \code{"Sturges"}: see
-  \code{\link{nclass.Sturges}}.  Other names for which algorithms
-  are supplied are \code{"Scott"} and \code{"FD"} /
-  \code{"Friedman-Diaconis"} (with corresponding functions
-  \code{\link{nclass.scott}} and \code{\link{nclass.FD}}).
-  Case is ignored and partial matching is used.
-  Alternatively, a function can be supplied which
-  will compute the intended number of breaks as a function of \code{x}.
-}
 \value{
-  an object of class \code{"histogram"} which is a list with components:
-  \item{breaks}{the \eqn{n+1} cell boundaries (= \code{breaks} if that
-  was a vector).}
-  \item{counts}{\eqn{n} integers; for each cell, the number of
-    \code{x[]} inside.}
-  \item{density}{values \eqn{\hat f(x_i)}{f^(x[i])}, as estimated
-    density values. If \code{all(diff(breaks) == 1)}, they are the
-    relative frequencies \code{counts/n} and in general satisfy
-    \eqn{\sum_i \hat f(x_i) (b_{i+1}-b_i) = 1}{sum[i; f^(x[i])
-      (b[i+1]-b[i])] = 1}, where \eqn{b_i}{b[i]} = \code{breaks[i]}.}
+  An object of class \code{"histogram"} which is a list with components:
+  \item{breaks}{the \eqn{r + 1} group boundaries.}
+  \item{counts}{\eqn{r} integers; the frequency within each group.}
+  \item{density}{the relative frequencies  within each group
+    \eqn{n_j/n}{n[j]/n}, where \eqn{n_j}{n[j]} = \code{counts[j]}.}
   \item{intensities}{same as \code{density}. Deprecated, but retained
     for compatibility.}
-  \item{mids}{the \eqn{n} cell midpoints.}
+  \item{mids}{the \eqn{r} group midpoints.}
   \item{xname}{a character string with the actual \code{x} argument name.}
   \item{equidist}{logical, indicating if the distances between
     \code{breaks} are all the same.}
@@ -104,60 +67,18 @@
   The resulting value does \emph{not} depend on the values of
   the arguments \code{freq} (or \code{probability})
   or \code{plot}.  This is intentionally different from S.
-
-  Prior to \R 1.7.0, the element \code{breaks} of the result was
-  adjusted for numerical tolerances.  The nominal values are now
-  returned even though tolerances are still used when counting.
 }
-
-\references{
-  Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
-  \emph{The New S Language}.
-  Wadsworth \& Brooks/Cole.
-
-  Venables, W. N. and Ripley. B. D. (2002)
-  \emph{Modern Applied Statistics with S}.  Springer.
-}
-
 \seealso{
-  \code{\link{nclass.Sturges}}, \code{\link{stem}},
-  \code{\link{density}},  \code{\link[MASS]{truehist}} in package \pkg{MASS}.
-
-  Typical plots with vertical bars are \emph{not} histograms.  Consider
-  \code{\link{barplot}} or \code{\link{plot}(*, type = "h")}
-  for such bar plots.
+  \code{\link{hist}} and \code{\link{hist.default}} for histograms of
+  individual data.
 }
-
+\references{
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
+  \emph{Loss Models, From Data to Decisions}, Wiley.
+}
 \examples{
-op <- par(mfrow=c(2, 2))
-hist(islands)
-utils::str(hist(islands, col="gray", labels = TRUE))
-
-hist(sqrt(islands), br = 12, col="lightblue", border="pink")
-##-- For non-equidistant breaks, counts should NOT be graphed unscaled:
-r <- hist(sqrt(islands), br = c(4*0:5, 10*3:5, 70, 100, 140), col='blue1')
-text(r$mids, r$density, r$counts, adj=c(.5, -.5), col='blue3')
-sapply(r[2:3], sum)
-sum(r$density * diff(r$breaks)) # == 1
-lines(r, lty = 3, border = "purple") # -> lines.histogram(*)
-par(op)
-
-utils::str(hist(islands, br=12, plot= FALSE)) #-> 10 (~= 12) breaks
-utils::str(hist(islands, br=c(12,20,36,80,200,1000,17000), plot = FALSE))
-
-hist(islands, br=c(12,20,36,80,200,1000,17000), freq = TRUE,
-     main = "WRONG histogram") # and warning
-
-set.seed(14)
-x <- rchisq(100, df = 4)
-\dontshow{op <- par(mfrow = 2:1, mgp = c(1.5, 0.6, 0), mar = .1 + c(3,3:1))}
-## Comparing data with a model distribution should be done with qqplot()!
-qqplot(x, qchisq(ppoints(x), df = 4)); abline(0,1, col = 2, lty = 2)
-
-## if you really insist on using hist() ... :
-hist(x, freq = FALSE, ylim = c(0, 0.2))
-curve(dchisq(x, df = 4), col = 2, lty = 2, lwd = 2, add = TRUE)
-\dontshow{par(op)}
+data(gdental)
+hist(gdental)
 }
 \keyword{dplot}
 \keyword{hplot}
