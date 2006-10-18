@@ -35,14 +35,11 @@ emm.grouped.data <- function(x, order = 1, ...)
     ## f_j = (c_j^{k + 1} - c_{j-1}^{k+1})/((k+1) * (c_j - c_{j-1}))
     ##
     ## for all values of 'j' and 'k' == 'order'.
-    y <- diff(outer(cj, order + 1, "^")) /
-        outer(diff(cj), order + 1)
+    y <- diff(outer(cj, order + 1, "^")) / outer(diff(cj), order + 1)
 
     ## Drop the group boundaries column
     x <- as.matrix(x[-1])
 
     ## Compute sum(n_j * f_j)/sum(nj) for all values of 'order'.
-    res <- drop(crossprod(x, y)) / colSums(x, ...)
-
-    ##
+    drop(crossprod(x, y)) / colSums(x, ...)
 }
