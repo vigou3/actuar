@@ -10,7 +10,8 @@ mde(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
     weights = NULL, ...)
 }
 \arguments{
-  \item{x}{a vector or an object of class \code{"grouped data"}.}
+  \item{x}{a vector or an object of class \code{"grouped data"} (in
+    which case only the first column of frequencies is used).}
   \item{fun}{function returning a cumulative distribution (for
     \code{measure = "CvM"} and \code{measure = "chi-square"}) or a
     limited expected value (for \code{measure = "LAS"}) evaluated at
