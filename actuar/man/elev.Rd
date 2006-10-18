@@ -22,7 +22,8 @@ elev(x, ...)
    ylab = "Empirical LEV")
 }
 \arguments{
-  \item{x}{a vector or an object of class \code{"grouped.data"}.}
+  \item{x}{a vector or an object of class \code{"grouped.data"} (in
+    which case only the first column of frequencies is used).}
   \item{digits}{number of significant digits to use, see
     \code{\link{print}}.}
   \item{Fn, object}{an \R object inheriting from \code{"ogive"}.}
@@ -37,8 +38,8 @@ elev(x, ...)
 
   For individual data \eqn{x_1, \dots, x_n}, the empirical LEV is thus
   \deqn{E_n[X \wedge u] = \frac{1}{n}
-    \left( \sum_{x_j < u} x_j + \sum_{x_j \geq x} u \right)}{%
-    E_n[X ^ u] = (sum_{x_j < u} x_j + sum_{x_j >= x} u)/n}
+    \left( \sum_{x_j < u} x_j + \sum_{x_j \geq u} u \right)}{%
+    E_n[X ^ u] = (sum(x : x < u) + sum(u : x >= u))/n}
 
   Methods of \code{elev} exist for individual data or for grouped data
   created with \code{\link{grouped.data}}. The formula in this case is
