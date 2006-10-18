@@ -19,7 +19,7 @@ hist.grouped.data <-
         stop("wrong method")
 
     ## Class boundaries are in the environment of 'x'
-    cj <- get("cj", environment(x))
+    cj <- eval(expression(cj), env = environment(x))
     nj <- x[, 2]
 
     ## If any frequency is non finite, omit the class
