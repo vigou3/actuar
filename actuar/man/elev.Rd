@@ -13,13 +13,18 @@
 }
 \usage{
 elev(x, ...)
+
 \method{elev}{default}(x, \dots)
+
 \method{elev}{grouped.data}(x, \dots)
+
 \method{print}{elev}(x, digits = getOption("digits") - 2, \dots)
+
 \method{summary}{elev}(object, \dots)
+
 \method{knots}{elev}(Fn, \dots)
-\method{plot}{elev}(x, \dots, main = NULL, xlab = "x",
-   ylab = "Empirical LEV")
+
+\method{plot}{elev}(x, \dots, main = NULL, xlab = "x", ylab = "Empirical LEV")
 }
 \arguments{
   \item{x}{a vector or an object of class \code{"grouped.data"} (in
@@ -34,9 +39,8 @@ elev(x, ...)
 \details{
   The limited expected value (LEV) at \eqn{u} of a random variable
   \eqn{X} is
-  \eqn{E[X \wedge u] = E[\min(X, u)]}{E[X ^ u] = E[min(X, u)]}.
-
-  For individual data \eqn{x_1, \dots, x_n}{x[1], \dots, x[n]}, the
+  \eqn{E[X \wedge u] = E[\min(X, u)]}{E[X ^ u] = E[min(X, u)]}. For
+  individual data \eqn{x_1, \dots, x_n}{x[1], \dots, x[n]}, the
   empirical LEV \eqn{E_n[X \wedge u]}{En[X ^ u]} is thus
   \deqn{E_n[X \wedge u] = \frac{1}{n}
     \left( \sum_{x_j < u} x_j + \sum_{x_j \geq u} u \right).}{%
@@ -56,8 +60,8 @@ elev(x, ...)
 }
 \seealso{
   \code{\link{grouped.data}} to create grouped data objects;
-  \code{\link{stepfun}} for useful documentation (although the empirical
-  LEV is not a step function).
+  \code{\link{stepfun}} for related documentation (even though the
+  empirical LEV is not a step function).
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
