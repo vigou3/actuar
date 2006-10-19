@@ -91,8 +91,6 @@ double qtrbeta(double p, double shape1, double shape2, double shape3,
 
 double rtrbeta(double shape1, double shape2, double shape3, double scale)
 {
-    double a;
-
     if (!R_FINITE(shape1) ||
 	!R_FINITE(shape2) ||
 	!R_FINITE(shape3) ||
