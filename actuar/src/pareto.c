@@ -118,6 +118,6 @@ double levpareto(double limit, double shape, double scale, double order,
     u = exp(-log1p(exp(log(limit) - log(scale))));
 
     return R_pow(scale, order) * gammafn(tmp1) * gammafn(tmp2)
-	* pbeta(u, tmp1, tmp2, 1, 0) / gammafn(shape)
-	+ R_VG__0(limit, order) * R_pow(0.5 - u + 0.5, shape);
+	* pbeta(0.5 - u + 0.5, tmp1, tmp2, 1, 0) / gammafn(shape)
+	+ R_VG__0(limit, order) * R_pow(u, shape);
 }
