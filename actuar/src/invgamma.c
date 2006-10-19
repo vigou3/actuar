@@ -118,5 +118,5 @@ double levinvgamma(double limit, double shape, double scale, double order,
 
     return R_pow(scale, order) * gammafn(shape - order)
 	* pgamma(u, tmp, 1.0, 0, 0) / gammafn(shape)
-	+ R_VG__0(limit, order) * pgamma(u, tmp, 1.0, 1, 0);
+	+ R_VG__0(limit, order) * pgamma(u, shape, 1.0, 1, 0);
 }
