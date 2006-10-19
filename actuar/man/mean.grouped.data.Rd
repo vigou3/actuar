@@ -1,6 +1,6 @@
 \name{mean.grouped.data}
 \alias{mean.grouped.data}
-\title{Extract or Replace Parts of a Grouped Data Object}
+\title{Arithmetic Mean}
 \description{
   Mean of grouped data objects.
 }
