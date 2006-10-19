@@ -54,7 +54,7 @@ double pllogis(double q, double shape, double scale, int lower_tail, int log_p)
 
     u = exp(-log1p(exp(shape * (log(scale) - log(q)))));
 
-    return R_DT_Cval(u);
+    return R_DT_val(u);
 }
 
 double qllogis(double p, double shape, double scale, int lower_tail, int log_p)
