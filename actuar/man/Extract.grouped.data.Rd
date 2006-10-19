@@ -34,7 +34,7 @@ x[i, j] <- value
     \item For \code{[<-}, it is not possible to replace group boundaries
       and group frequencies simultaneously;
     \item When replacing group boundaries, \code{length(value) ==
-      \length(i) + 1}.
+      length(i) + 1}.
   }
 
   \code{x[, 1]} will return the plain vector of group boundaries.
