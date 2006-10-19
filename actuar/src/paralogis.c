@@ -135,6 +135,6 @@ double levparalogis(double limit, double shape, double scale, double order,
     u = exp(-log1p(exp(shape * (log(limit) - log(scale)))));
 
     return R_pow(scale, order) * gammafn(tmp2) * gammafn(tmp3)
-	* pbeta(0.5 - u + 0.5, tmp2, tmp3, 1, 0) / gamma(shape)
+	* pbeta(0.5 - u + 0.5, tmp2, tmp3, 1, 0) / gammafn(shape)
 	+ R_VG__0(limit, order) * R_pow(u, shape);
 }
