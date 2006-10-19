@@ -8,9 +8,9 @@ require(actuar);
 if(dev.cur() <= 1) get(getOption("device"))()
 
 op <- par(ask = interactive() &&
-            (.Device %in% c("X11", "GTK", "gnome", "windows","quartz")))
+          (.Device %in% c("X11", "GTK", "gnome", "windows","quartz")))
 
-### A utily function to create graphs for probability laws
+### A utility function to create graphs for probability laws
 showgraphs <- function(fun, par, mfrow = c(2, 2))
 {
     dist <- switch(fun,
@@ -47,17 +47,20 @@ showgraphs <- function(fun, par, mfrow = c(2, 2))
     formals(mf)[names(par)]   <- par
     formals(levf)[names(par)] <- par
 
-    x <- rf(1000)
-    limit <- seq(0, max(x), length = 10)
-    k <- seq(1, 5, length = 10)
+    x <- rf(5000)
+    limit <- seq(floor(min(x)), max(x), length = 10)
+    k <- seq(1, 3, length = 6)
 
     op <- par(mfrow = mfrow, oma = c(0, 0, 2, 0))
 
-    hist(x, prob = TRUE, main = "Density")
+    hist(x, prob = TRUE, xlim = c(0, max(x)),
+         main = "Density")
     curve(df(x), add = TRUE, col = "blue", lwd = 2, lty = 2)
-    plot(ecdf(x), pch = "", main = "Distribution function", lwd = 2)
+    plot(ecdf(x), xlim = c(0, max(x)), pch = "",
+         main = "Distribution function", lwd = 2)
     curve(pf(x), add = TRUE, col = "blue", lwd = 2, lty = 2)
-    plot(k, emm(x, k), type = "l", lwd = 2, main = "Raw moments")
+    plot(k, emm(x, k), type = "l", lwd = 2,
+         main = "Raw moments")
     lines(k, mf(k), col = "blue", lwd = 2, lty = 2)
     plot(limit, elev(x)(limit), type = "l", lwd = 2,
          main = "Limited expected value")
@@ -92,6 +95,11 @@ data(gdental); gdental
 ## theoretical raw moments and "lev" functions to compute limited
 ## moments for all the above probability laws, plus the following
 ## already in R: exponential, gamma, lognormal and Weibull.
+##
+## We illustrate the various distributions by plotting for each four
+## graphs combining empirical and theoretical quantities: the pdf, the
+## cdf, the first few raw moments, the limited expected value at a
+## few limits.
 
 ## TRANSFORMED BETA FAMILY
 
@@ -111,7 +119,7 @@ showgraphs("invburr", list(shape1 = 3, shape2 = 6, scale = 10))
 showgraphs("pareto", list(shape = 6, scale = 10))
 
 ## Inverse Pareto distribution
-showgraphs("invpareto", list(shape = 0.1, scale = 1))
+showgraphs("invpareto", list(shape = 1, scale = 1))
 
 ## Loglogistic distribution
 showgraphs("llogis", list(shape = 6, scale = 10))
@@ -120,7 +128,7 @@ showgraphs("llogis", list(shape = 6, scale = 10))
 showgraphs("paralogis", list(shape = 3, scale = 10))
 
 ## Inverse paralogistic distribution
-showgraphs("invparalogis", list(shape = 3, scale = 10))
+showgraphs("invparalogis", list(shape = 6, scale = 10))
 
 ## TRANSFORMED GAMMA FAMILY
 
@@ -128,7 +136,7 @@ showgraphs("invparalogis", list(shape = 3, scale = 10))
 showgraphs("trgamma", list(shape1 = 3, shape2 = 1, scale = 10))
 
 ## Inverse transformed gamma distribution
-showgraphs("invtrgamma", list(shape1 = 3, shape2 = 1.5, scale = 10))
+showgraphs("invtrgamma", list(shape1 = 3, shape2 = 2, scale = 10))
 
 ## Gamma distribution ('mgamma' and 'levgamma')
 showgraphs("gamma", list(shape = 3, scale = 10))
@@ -137,7 +145,7 @@ showgraphs("gamma", list(shape = 3, scale = 10))
 showgraphs("invgamma", list(shape = 6, scale = 10))
 
 ## Weibull distribution ('mweibull' and 'levweibull')
-showgraphs("weibull", list(shape = 3, scale = 10))
+showgraphs("weibull", list(shape = 1.5, scale = 10))
 
 ## Inverse Weibull distribution
 showgraphs("invweibull", list(shape = 6, scale = 10))
@@ -146,18 +154,18 @@ showgraphs("invweibull", list(shape = 6, scale = 10))
 showgraphs("exp", list(rate = 0.1))
 
 ## Inverse exponential distribution
-showgraphs("invexp", list(rate = 10))
+showgraphs("invexp", list(rate = 1))
 
 ## OTHER DISTRIBUTIONS
 
 ## Lognormal distribution ('mlnorm' and 'levlnorm')
-showgraphs("lnorm", list(meanlog = 5, sdlog = 1))
+showgraphs("lnorm", list(meanlog = 1, sdlog = 1))
 
 ## Single parameter Pareto distribution
-showgraphs("pareto1", list(shape = 3, min = 10))
+showgraphs("pareto1", list(shape = 5, min = 10))
 
 ## Loggamma distribution
-showgraphs("lgamma", list(shapelog = 5, ratelog = 1))
+showgraphs("lgamma", list(shapelog = 2, ratelog = 5))
 
 
 ###
@@ -165,7 +173,7 @@ showgraphs("lgamma", list(shapelog = 5, ratelog = 1))
 ###
 
 ## Creation of grouped data objects
-x <- grouped.data(group = c(0, 25, 50, 100, 150, 250, 500),
+x <- grouped.data(groups = c(0, 25, 50, 100, 150, 250, 500),
                   line1 = c(30, 31, 57, 42, 65, 84),
                   line2 = c(26, 33, 31, 19, 16, 11))
 
@@ -213,11 +221,11 @@ emm(gdental, order = 1:3)               # idem
 ## grouped data.
 lev <- elev(dental)
 lev(knots(lev))                         # ELEV at data points
-plot(lev)                               # plot of the ELEV function
+plot(lev, type = "o", pch = 19)         # plot of the ELEV function
 
 lev <- elev(gdental)
 lev(knots(lev))                         # ELEV at data points
-plot(lev)                               # plot of the ELEV function
+plot(lev, type = "o", pch = 19)         # plot of the ELEV function
 
 
 ###
@@ -227,9 +235,9 @@ plot(lev)                               # plot of the ELEV function
 ## Maximum likelihood estimation (for individual data) is well covered
 ## by 'fitdistr' in package MASS. We provide function 'mde' to fit
 ## models using three distance minimization techniques: Cramer-von
-## Mises (for individual and grouped data), chi-square (grouped data
-## only) and layes average severity (grouped data only). Usage (and
-## inner working) is very similar to 'fitdistr'.
+## Mises (for individual and grouped data), chi-square and layer
+## average severity (both grouped data only). Usage (and inner
+## working) is very similar to 'fitdistr'.
 mde(dental, pexp, start = list(rate = 1/200), measure = "CvM")
 mde(gdental, pexp, start = list(rate = 1/200), measure = "CvM")
 mde(gdental, pexp, start = list(rate = 1/200), measure = "chi-square")
