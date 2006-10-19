@@ -8,7 +8,9 @@
 }
 \usage{
 emm(x, order = 1, \dots)
+
 \method{emm}{default}(x, order = 1, \dots)
+
 \method{emm}{grouped.data}(x, order = 1, \dots)
 }
 \arguments{
@@ -23,19 +25,18 @@ emm(x, order = 1, \dots)
   values. 
 
   For individual data, the \eqn{k}th empirical moment is
-  \deqn{\sum_{j = 1}^n x_j^k.}{sum(j; x[j]^k).}
+  \eqn{\sum_{j = 1}^n x_j^k}{sum(j; x[j]^k)}.
 
   For grouped data with group boundaries \eqn{c_1, \dots, c_r}{c[1],
     \dots, c[r]} and group frequencies \eqn{n_1, \dots, n_r}{n[1],
     \dots, n[r]}, the \eqn{k}th empirical moment is
   \deqn{\sum_{j = 1}^r \frac{n_j (c_j^k - c_{j - 1}^k)}{%
       n (k + 1) (c_j - c_{j - 1})},}{%
-    sum(j; (n[j] * (c[j]^k - c[j-1]^k)/(n * (k+1) * (c[j] -
-    c[j-1])))),}
+    sum(j; (n[j]*(c[j]^k - c[j-1]^k)/(n*(k+1)*(c[j] - c[j-1])))),}
   where \eqn{n = \sum_{j = 1}^r n_j}{n = sum(j; n[j])}.
 }
 \value{
-  A vector or matrix of moments.
+  A named vector or matrix of moments.
 }
 \seealso{
   \code{\link{mean}} and \code{\link{mean.grouped.data}} for simpler
