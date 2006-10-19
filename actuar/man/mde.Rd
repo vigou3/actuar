@@ -3,7 +3,8 @@
 \alias{mde}
 \title{Minimum Distance Estimation}
 \description{
-  Minimum distance estimators for individual and grouped data.
+  Minimum distance fitting of univariate distributions, allowing
+  parameters to be held fixed if desired.
 }
 \usage{
 mde(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
@@ -19,7 +20,7 @@ mde(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
   \item{start}{a named list giving the parameters to be optimized with
     initial values}
   \item{measure}{either \code{"CvM"} for the Cramer-von Mises method,
-    \code{"chi-square"} for modified the chi-square method, or \code{"LAS"}
+    \code{"chi-square"} for the modified chi-square method, or \code{"LAS"}
     for the layer average severity method.}
   \item{weights}{weights; see details.}
   \item{\dots}{Additional parameters, either for \code{fun} or for
@@ -42,11 +43,11 @@ mde(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
   expected value within each group for grouped data.
 
   All sum of squares can be weighted. If arguments \code{weights} is
-  missing, all weights are by default equal to 1 for \code{measure =
-    "CvM"} and \code{measure = "LAS"}; for \code{measure =
-    "chi-square"}, weights are equal to \eqn{n/n_j}{n/n[j]}, where
-  \eqn{n_j}{n[j]} is the frequency in group \eqn{j} and \eqn{n = \sum_{j =
-      1}^r n_j}{n = sum(j; n[j])}.
+  missing, weights default to 1 for \code{measure = "CvM"} and
+  \code{measure = "LAS"}; for \code{measure = "chi-square"}, weights
+  default to \eqn{n/n_j}{n/n[j]}, where \eqn{n_j}{n[j]} is the frequency
+  in group \eqn{j = 1, \dots, r} and \eqn{n = \sum_{j = 1}^r n_j}{n =
+    sum(j; n[j])}.
   
   Optimization is performed using \code{\link{optim}}. For
   one-dimensional problems the Nelder-Mead method is used and for
