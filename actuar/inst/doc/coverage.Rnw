@@ -12,6 +12,10 @@
 
 \begin{document}
 
+<<>>=
+library(actuar)
+@
+
 \maketitle
 
 The {\coverage} function is used to define a new function to compute
