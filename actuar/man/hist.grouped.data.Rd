@@ -4,9 +4,9 @@
 \description{
   This method for the generic function \code{\link{hist}} is mainly
   useful to plot the histogram of grouped data. If \code{plot = FALSE},
-  the resulting object of \code{\link[base]{class} "histogram"} is
-  returned for compatibility with \code{\link{hist.default}}, but does
-  not contain much information not already in \code{x}.
+  the resulting object of class \code{"histogram"} is returned for
+  compatibility with \code{\link{hist.default}}, but does not contain
+  much information not already in \code{x}.
 }
 \usage{
 \method{hist}{grouped.data}(x, freq = NULL, probability = !freq,
@@ -22,7 +22,7 @@
     representation of frequencies, the \code{counts} component of
     the result; if \code{FALSE}, probability densities, component
     \code{density}, are plotted (so that the histogram has a total area
-    of one).  Defaults to \code{TRUE} \emph{iff} group boundaries are
+    of one). Defaults to \code{TRUE} \emph{iff} group boundaries are
     equidistant (and \code{probability} is not specified).}
   \item{probability}{an \emph{alias} for \code{!freq}, for S compatibility.}
   \item{density}{the density of shading lines, in lines per inch.
@@ -33,7 +33,7 @@
     degrees (counter-clockwise).}
   \item{col}{a colour to be used to fill the bars.
     The default of \code{NULL} yields unfilled bars.}
-  \item{border}{the color of the border around the bars.  The default
+  \item{border}{the color of the border around the bars. The default
     is to use the standard foreground color.}
   \item{main, xlab, ylab}{these arguments to \code{title} have useful
     defaults here.}
@@ -44,7 +44,7 @@
     plot is drawn.}
   \item{plot}{logical. If \code{TRUE} (default), a histogram is
     plotted, otherwise a list of breaks and counts is returned.}
-  \item{labels}{logical or character.  Additionally draw labels on top
+  \item{labels}{logical or character. Additionally draw labels on top
     of bars, if not \code{FALSE}; see \code{\link{plot.histogram}}.}
   \item{\dots}{further graphical parameters passed to
     \code{\link{plot.histogram}} and their to \code{\link{title}} and
@@ -54,7 +54,7 @@
   An object of class \code{"histogram"} which is a list with components:
   \item{breaks}{the \eqn{r + 1} group boundaries.}
   \item{counts}{\eqn{r} integers; the frequency within each group.}
-  \item{density}{the relative frequencies  within each group
+  \item{density}{the relative frequencies within each group
     \eqn{n_j/n}{n[j]/n}, where \eqn{n_j}{n[j]} = \code{counts[j]}.}
   \item{intensities}{same as \code{density}. Deprecated, but retained
     for compatibility.}
@@ -66,11 +66,11 @@
 \note{
   The resulting value does \emph{not} depend on the values of
   the arguments \code{freq} (or \code{probability})
-  or \code{plot}.  This is intentionally different from S.
+  or \code{plot}. This is intentionally different from S.
 }
 \seealso{
   \code{\link{hist}} and \code{\link{hist.default}} for histograms of
-  individual data.
+  individual data and fancy examples.
 }
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (1998),
