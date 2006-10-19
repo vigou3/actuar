@@ -28,7 +28,8 @@ elev(x, ...)
 }
 \arguments{
   \item{x}{a vector or an object of class \code{"grouped.data"} (in
-    which case only the first column of frequencies is used).}
+    which case only the first column of frequencies is used); for the
+    methods, an object of class \code{"elev"}, typically.}
   \item{digits}{number of significant digits to use, see
     \code{\link{print}}.}
   \item{Fn, object}{an \R object inheriting from \code{"ogive"}.}
