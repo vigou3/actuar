@@ -26,7 +26,7 @@ rinvweibull <- function(n, shape, rate = 1, scale = 1/rate)
     .External("do_random", "rinvweibull", n, shape, scale)
 
 minvweibull <- function(order, shape, rate = 1, scale = 1/rate)
-    .External("do_dpq", "minvgamma", order, shape, scale, FALSE)
+    .External("do_dpq", "minvweibull", order, shape, scale, FALSE)
 
 levinvweibull <- function(limit, shape, rate = 1, scale = 1/rate,
                           order = 1)
