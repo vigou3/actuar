@@ -56,7 +56,7 @@ double pinvpareto(double q, double shape, double scale, int lower_tail,
 
     u = exp(-log1p(exp(log(scale) - log(q))));
 
-    return R_DT_val(R_pow(q, shape));
+    return R_DT_val(R_pow(u, shape));
 }
 
 double qinvpareto(double p, double shape, double scale, int lower_tail,
