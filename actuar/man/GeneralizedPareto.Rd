@@ -47,11 +47,7 @@
     \frac{\theta^\alpha x^{\tau - 1}}{%
       (x + \theta)^{\alpha + \tau}}}{%
     f(x) = Gamma(a + b)/(Gamma(a) * Gamma(b)) (s^a x^(b - 1))/%
-    (x + s)^(a + b))
-  The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}.
-}
+    (x + s)^(a + b)}
   for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0}, \eqn{\tau > 0}{b > 0} and
   \eqn{\theta > 0}{s > 0}.
   (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
