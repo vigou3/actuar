@@ -1,12 +1,12 @@
 Package: actuar
 Type: Package
 Title: Actuarial functions
-Version: 0.8-3
+Version: 0.8-4
 Date: 2006-05-12
 Author: Vincent Goulet, Sébastien Auclair, Louis-Philippe Pouliot, Mathieu Pigeon
 Maintainer: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 Description: Collection of functions and data sets related to
   actuarial science applications, mostly loss distributions,
   credibility theory and risk theory, for the moment.
-Depends: R (>= 2.3.1)
+Depends: R (>= 2.4.0)
 License: GPL version 2 or newer
