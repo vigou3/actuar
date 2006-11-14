@@ -46,7 +46,7 @@ elev.grouped.data <- function(x, ...)
         cjt <- head(cj, max(cl))        # upper bounds
         res1 <- sapply(cl - 1, function(n, x)
                        drop(crossprod(head(x, n), head(nj, n))),
-                       (cjt[-1] + cjt[-length(cjt)])/2)
+                       (head(cjt, -1) + tail(cjt, -1))/2)
 
         ## Means for classes with each limit.
         cjt <- cj[cl]                   # lower bounds
@@ -56,7 +56,7 @@ elev.grouped.data <- function(x, ...)
 
         ## Means for classes above each limit.
         res3 <- limit * sapply(r - cl, function(n, x) sum(tail(x, n)),
-                               nj[-(1:min(cl))])
+                               tail(nj, -min(cl)))
 
         ## Total
         (res1 + res2 + res3)/sum(nj)
