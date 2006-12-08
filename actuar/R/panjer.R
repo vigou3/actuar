@@ -1,18 +1,18 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Panjer recursion formula to compute the approximate distribution
-### of the total amount of claims of a portfolio.  
+### Panjer recursion formula to compute the approximate aggreagte
+### claim amount distribution of a portfolio over a period.
 ###
 ### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>,
-### Sébastien Auclair, and Louis-Philippe Pouliot
+### Sébastien Auclair and Louis-Philippe Pouliot
 
-panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
+panjer <- function(fx, model.freq, p0 = NULL, x.scale = 1, TOL = 1e-8, echo = FALSE)
 {
     call <- match.call()
+
     ## Express TOL as a value close to 1.
     TOL <- 1 - TOL
 
-    
     ## f_X(0) is no longer needed after the calculation of f_S(0).
     fx0 <- fx[1]
     fx <- fx[-1]
@@ -20,7 +20,6 @@ panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
     ## Distributions are expressed as a member of the (a, b, 0) or (a,
     ## b, 1) families of distributions. Assign parameters 'a' and 'b'
     ## depending of the chosen distribution and compute f_S(0) in
-    ## every case, and p1 if p0 is specified in argument.
     ## every case, and p1 if p0 is specified in argument.
     dist <- model.freq$dist
     par <- model.freq$par
@@ -35,12 +34,11 @@ panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
         lambda <- par$lambda
         a <- 0
         b <- lambda
-
-        if (missing(p0))
+        if (is.null(p0))
             fs0 <- exp(-lambda * (1 - fx0))
         else
         {
-            fs0 <- p0 + (1 - p0)*(exp(lambda * fx0) - 1)/(exp(lambda) - 1)
+            fs0 <- p0 + (1 - p0) * (exp(lambda * fx0) - 1)/(exp(lambda) - 1)
             p1 <- (1 - p0) * lambda/(exp(lambda) - 1)
         }
     }
@@ -50,12 +48,12 @@ panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
         r <- par$size
         a <- beta/(1 + beta)
         b <- (r - 1) * a
-        if (missing(p0))
+        if (is.null(p0))
             fs0 <- (1 - beta * (fx0 - 1))^(-r)
         else
         {
             fs0 <- p0 + (1 - p0) * ((1 + beta * (1 - fx0))^(-r) - (1 + beta)^(-r))/(1 - (1 + beta)^(-r))
-            p1 <- (1 - p0) * r * beta/((1 + beta)^(r+1) - (1 + beta))
+            p1 <- (1 - p0) * r * beta/((1 + beta)^(r + 1) - (1 + beta))
         }
     }
     else if (dist == "binom")
@@ -64,7 +62,7 @@ panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
         q <- par$prob
         a <- - q/(1 - q)
         b <- -(m + 1)*a
-        if (missing(p0))
+        if (is.null(p0))
             fs0 <- (1 + q * (fx0 - 1))^m
         else
         {
@@ -74,21 +72,23 @@ panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
     }
     else if (dist == "logarithmic")
     {
-        if (missing(p0))
-            stop("p0 must be specified with the logarithmic distribution")
+        if (is.null(p0))
+            stop("'p0' must be specified with the logarithmic distribution")
         beta <- (1/par$prob) - 1
         a <- beta/(1 + beta)
         b <- -a
         fs0 <- p0 + (1 - p0)*(1 - log(1 - beta(fx0 - 1))/log(1 + beta))
         p1 <- beta/((1 + beta) * log(1 + beta))
     }
+    else
+        stop("frequency distribution not in the (a, b, 0) or (a, b, 1) families")
 
     ## If fs0 is equal to zero, the recursion will not start. There is
     ## no provision to automatically cope with this situation in the
-    ## current version of this version. Just issue an error message
+    ## current version of this function. Just issue an error message
     ## and let the user do the work by hand.
     if (identical(fs0, 0))
-        stop("the value of fs0 is equal to 0; impossible to start the recursion")
+        stop("Pr[S = 0] is numerically equal to 0; impossible to start the recursion")
 
     ## The recursion formula is slightly different for the (a, b, 0)
     ## and (a, b, 1) cases. We do the split here to avoid repeatedly
@@ -101,15 +101,14 @@ panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
     cumul <- sum(fs)
 
     ## (a, b, 0) case
-    if (missing(p0))
+    if (is.null(p0))
     {
         ## See in the (a, b, 1) case why this is defined here.
         r <- length(fx)
 
         repeat
         {
-            if (echo)
-                print(tail(cumul, 1))
+            if (echo)  print(tail(cumul, 1))
 
             x <- length(fs)
             m <- min(x, r)
@@ -131,8 +130,7 @@ panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
 
         repeat
         {
-            if (echo)
-                print(tail(cumul, 1))
+            if (echo) print(tail(cumul, 1))
 
             x <- length(fs)
             m <- min(x, r)
@@ -141,12 +139,14 @@ panjer <- function(fx, x.scale = 1, model.freq, p0, TOL=1e-8, echo = FALSE)
                 break
         }
     }
+
+    return(fs)
+
     FUN <- stepfun((0:(length(fs)-1))*x.scale, c(0,cumsum(fs)))
     class(FUN) <- c("aggregateDist", "ecdf", class(FUN))
     assign("fs", fs, env = environment(FUN))
     assign("call", call, env = environment(FUN))
     assign("x.scale", x.scale, env = environment(FUN))
     comment(FUN) <- "Recursive method approximation"
-    FUN    
+    FUN
 }
-
