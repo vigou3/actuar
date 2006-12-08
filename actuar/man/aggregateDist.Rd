@@ -4,16 +4,16 @@
 \alias{plot.aggregateDist}
 \alias{summary.aggregateDist}
 \alias{mean.aggregateDist}
-\title{Compute the Distribution of Claim Amounts}
+\title{Aggregate Claim Amount Distribution}
 \description{
-  Use one of five methods to generate the
-  aggregate claims distribution of a portfolio over one year given a frequency and a
-  severity model or the true moments of the distribution.  
+  Compute the aggregate claim amount of a portfolio over a period
+  using one of five methods given a frequency and a severity model or
+  the true moments of the distribution.
 }
 \usage{
-aggregateDist(method = c("normal", "np2", "simulation", "recursive", "exact"),
-      model.sev, model.freq, moments = c(mean = 0, var = 1, skewness = NULL), 
-      x.scale = 1, n, p0, TOL = 1e-06, echo = FALSE, ...)
+aggregateDist(method = c("recursive", "exact", "normal", "np2", "simulation"),
+              model.sev, model.freq, p0 = NULL, x.scale = 1, moments, nb.simul,
+              TOL = 1e-06, echo = FALSE, \dots)
 
 \method{print}{aggregateDist}(x, \dots)
 
@@ -24,109 +24,90 @@ aggregateDist(method = c("normal", "np2", "simulation", "recursive", "exact"),
 \method{mean}{aggregateDist}(x, \dots)
 }
 \arguments{
-  \item{method}{ method to be used}
-  \item{model.freq}{ vector of the (discretized) claim amount
-    distribution or a named list containing the frequency model (see details
-    below). Ignored when using \code{normal} and \code{np2} methods.}
-  \item{model.sev}{ vector of the number of claims probabilities or a
-    named list containing the severity model (see details
-    below). Ignored when using \code{normal} and \code{np2} methods.}
-  \item{moments}{ vector containing the moments required by the
-    method chosen. Ignored unless \code{normal} or \code{np2} method is called.}
-  \item{x.scale}{ value of an amount of 1 in the severity model. Ignored
-  unless \code{recursive} or \code{exact} method is used.}
-  \item{n}{ number simulations when using the simulation method.} 
-  \item{p0}{ arbitrary amount of probability at zero given to the
-    frequency distribution. It creates zero-modified or
-    zero-truncated distributions. Ignored unless \code{recursive}
-    method is called (see \code{panjer}).}
-  \item{TOL}{ used to stop recursion when cumulative probability function is
-    less than TOL away from 1 in the \code{recursive} method and passed
-    on to a quantile function to limit the discretization of
-    distributions when parameterized models (named lists) are given in argument for
-    the \code{recursive} and \code{exact} methods.}
-  \item{echo}{print the cumulative distribution of the total amount of
-    claims as it is computed when approximating by recursion.}
-  \item{x, object}{ an \code{aggregateDist} object}
-  \item{xlim}{the x limits (x1,x2) of the plot.} 
-  \item{...}{ arguments potentially required by additionnal methods and
+  \item{method}{method to be used}
+  \item{model.sev}{severity model (see details below) for
+    \code{"simulation"} method or a vector of claim amount probabilities for
+    \code{"recursive"} and \code{"exact"} methods. Ignored with
+    \code{normal} and \code{np2} methods.}
+  \item{model.freq}{frequency model (see details below) for
+    \code{"simulation"} and \code{"recursive"} methods or a vector of
+    the claim number probabilities for \code{"exact"} method. Ignored
+    with \code{normal} and \code{np2} methods.}
+  \item{p0}{arbitrary probability at zero for the frequency
+    distribution. Creates a zero-modified or zero-truncated
+    distribution. Used only with \code{"recursive"} method.}
+  \item{x.scale}{value of an amount of 1 in the severity model (monetary
+    unit). Used only with \code{"recursive"} and \code{"exact"} methods.}
+  \item{moments}{vector of the moments required by the \code{"normal"}
+    or \code{"np2"} methods.}
+  \item{nb.simul}{number of simulations in the \code{"simulation"} method.} 
+  \item{TOL}{the recursion in the \code{recursive} method stops when the
+    cumulative distribution function is less than \code{TOL} away from 1.}
+  \item{echo}{echo the recursions to screen in the \code{recursive} method.}
+  \item{x, object}{an object of class \code{"aggregateDist"}.}
+  \item{xlim}{the x limits (x1, x2) of the plot.} 
+  \item{\dots}{arguments potentially required by additionnal methods and
     additionnal plotting options in the case of \code{plot.aggregateDist}}   	  
 }
 \details{
+  \code{aggregateDist} essentially calls functions creating
+  \code{"aggregateDist"} objects. Each method yields a function to
+  compute the aggregate claim amount cumulative distribution function (cdf).
 
-  \code{aggregateDist} essentiallly calls functions creating \code{aggregateDist}
-  objects. \code{\link{normal}}, \code{\link{np2}}, and \code{\link{exact}} methods call
-  functions of the same name.  \code{simulation} and \code{recursive}
-  methods respectively call functions \code{simS} and \code{panjer}.
-
-  \code{normal} and \code{np2} methods only require the \code{moments} argument. The
-  latter must contain the correctly ordered moments required by
-  \code{normal} or \code{np2}, that is the true mean and the true
-  variance in the first case, and additionally the true skewness in the second.
-  Other arguments will be ignored. \code{moments} will only be read if one of those two methods is called. 
-
-  The simulation method directly calls simS(), with
-  a number of observations equal to \code{n}. \code{model.freq} and
-  \code{model.sev} must necessarily be named lists representing
-  parameterized distributions (see \code{\link{simS}}). Only those three
-  arguments will be read.
-
-  The exact method gives the possibility to directly send
-  user-vectorized severity and frequency models in argument as required
-  by \code{exact}, but also has the ability to discretize models sent as
-  named lists (as in the \code{simulation} method).
-
-  The \code{recursive} method gives the same latitude, but only for the
-  severity model. That is, \code{model.freq} must be given accordingly to the
-  original usage of \code{\link{panjer}}. 
+  The \code{"recursive"} method computes the cdf using the Panjer
+  algorithm; the \code{"exact"} method using convolutions; the
+  \code{"normal"} method using a normal approximation; the \code{"np2"}
+  method using the normal power approximation; the \code{"simulation"}
+  method using simulations.
 }
 \value{
-A function of class \code{"aggregateDist"}, inheriting from the
-\code{"function"} class when using Normal and Normal Power
-approximations and additionally inheriting from the \code{"ecdf"} and
-\code{"stepfun"} classes when other methods are used.  
+  A function of class \code{"aggregateDist"}, inheriting from the
+  \code{"function"} class when using Normal and Normal Power
+  approximations and additionally inheriting from the \code{"ecdf"} and
+  \code{"stepfun"} classes when other methods are used.  
 }
 \seealso{
-  \code{\link{panjer}} \code{\link{exact}}
-  \code{\link{simS}} \code{\link{np2}} \code{\link{normal}}
-  }
+  \code{"\link{panjer}"} for the \code{"recursive"}  method,
+  \code{"\link{exact}"}  for the \code{"exact"}      method,
+  \code{"\link{normal}"} for the \code{"normal"}     method,
+  \code{"\link{np2}"}    for the \code{"np2"}        method,
+  \code{"\link{simS}"}   for the \code{"simulation"} method,
+  \code{"\link{discretize}"}.
+}
+\references{
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
+  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
+}
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Louis-Philippe Pouliot
 }
 \examples{
+## Exact method (example 6.6 of Klugman et al. (2004))
+fx <- c(0.05, .15, .2, .25, .125, .075, .05, .05, .05, .025, .025)
+pn <- c(0.05, 0.1, .15, .2, .25, .15, .06, .03, .01)
+Fs <- aggregateDist("exact", model.sev = fx, model.freq = pn, x.scale = 25)
+summary(Fs)
+diff(Fs(25 * 0:21)) # prob. mass function
+plot(Fs)
+
+## Recursive method
+#  model.sev <- c(0.1, 0.1, 0.2, 0.3, 0.2, 0.1)
+model.freq <- list(dist = "pois", par = list(lambda = 3))
+Fs <- aggregateDist("recursive", model.sev = fx, model.freq = model.freq,
+                    x.scale = 25))
+plot(Fs)
+
 ## Normal Power approximation
-  res <- aggregateDist("np2", moments = c(200, 200, 0.5))
-  res(210)
+Fs <- aggregateDist("np2", moments = c(200, 200, 0.5))
+plot(Fs)
 
 ## Simulation method
-  model.freq <- list(dist = "pois", par = list(lambda = 4))
-  model.sev <- list(dist = "gamma", par = list(shape = 100, rate = 2))
-  res <- aggregateDist("simulation", model.sev = model.sev,
-                       model.freq = model.freq, n = 10000)
-  mean(res)
-  res(250)
-
-## Approximation by the recursive method
-  # with a parameterized distribution severity model
-
-  model.sev <- list(dist = "gamma", par = list(shape = 100, rate = 2))
-  (res <- aggregateDist("recursive", model.sev, model.freq,
-                       x.scale = 1))
-
-  # with a vectorized severity model
-
-  model.sev <- c(0.1, 0.1, 0.2, 0.3, 0.2, 0.1)
-  (res <- aggregateDist("recursive", model.sev, model.freq,
-                       x.scale = 100))
-  plot(res)
-
-## Exact calculation
-
-  model.freq <- c(0.1, 0.1, 0.2, 0.3, 0.2, 0.1)
-  (res <- aggregateDist("exact", model.sev = model.sev, model.freq = model.freq, x.scale = 100))
-  plot(res)
-  res(1000)
+model.sev <- list(dist = "gamma", par = list(shape = 100, rate = 2))
+Fs <- aggregateDist("simulation", model.sev = model.sev,
+                     model.freq = model.freq, n = 10000)
+mean(Fs)
+plot(Fs)
 }
 \keyword{distribution}
 \keyword{models}
