@@ -6,9 +6,9 @@
   quantiles for the given distribution.  
 }
 \usage{
-\method{quantile}{aggregateDist}(x, approx.lin = FALSE,
+\method{quantile}{aggregateDist}(x, 
          probs = c(0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99, 0.995),
-         names = TRUE, \dots)
+         approx.lin = FALSE, names = TRUE, \dots)
 }  
 \arguments{
   \item{x}{an \code{\link{aggregateDist}} object.}
