@@ -1,7 +1,5 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Buhlmann-Straub Credibility Model:
-###
 ### Calculate credibility premiums in the Bühlmann-Straub
 ### credibility model.
 ###
@@ -10,7 +8,7 @@
 
 bstraub <- function(ratios, weights, heterogeneity = c("iterative","unbiased"),TOL = 1E-6, echo = FALSE )
 {
-    cl <- match.call()  
+    cl <- match.call()
 
     ## If weights are not specified, use equal weights as in
     ## Bühlmann's model.
@@ -19,10 +17,10 @@ bstraub <- function(ratios, weights, heterogeneity = c("iterative","unbiased"),T
         if (any(is.na(ratios)))
             stop("missing values are not allowed in the matrix of ratios when the matrix of weights is not specified")
         weights <- array(1, dim(ratios))
-        model <- "Bühlmann"
+        model <- "Buhlmann"
     }
     else
-        model <- "Bühlmann-Straub"
+        model <- "Buhlmann-Straub"
 
     ## Check other bad arguments.
     if (ncol(ratios) < 2)
