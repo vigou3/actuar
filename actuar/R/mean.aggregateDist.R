@@ -17,7 +17,7 @@ mean.aggregateDist <- function(x, ...)
     val <- get("x", environment(x))
     prob <-
         if (comment(x) == "Approximation by simulation")
-            c(x[1], diff(get("y", environment(x))))
+            c(val[1], diff(get("y", environment(x))))
         else
             get("fs", environment(x))
     drop(crossprod(val, prob))
