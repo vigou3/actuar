@@ -16,7 +16,8 @@ quantile.aggregateDist <-
     ## function qnorm().
     if (label == "Normal approximation")
         ## A call to qnorm() with the given the moments of the distribution
-        qnorm(probs, get("mean" ,environment(x)), sqrt(get("var", environment(x))))
+        qnorm(probs, get("mean", environment(x)),
+              sqrt(get("var", environment(x))))
     if (label == "Normal Power approximation")
     {
         mean <- get("mean" ,environment(x))
