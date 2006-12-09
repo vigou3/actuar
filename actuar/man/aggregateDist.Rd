@@ -6,9 +6,8 @@
 \alias{mean.aggregateDist}
 \title{Aggregate Claim Amount Distribution}
 \description{
-  Compute the aggregate claim amount of a portfolio over a period
-  using one of five methods given a frequency and a severity model or
-  the true moments of the distribution.
+  Compute the aggregate claim amount cumulative distribution function of
+  a portfolio over a period using one of five methods.
 }
 \usage{
 aggregateDist(method = c("recursive", "exact", "normal", "np2", "simulation"),
@@ -51,7 +50,7 @@ aggregateDist(method = c("recursive", "exact", "normal", "np2", "simulation"),
 }
 \details{
   \code{aggregateDist} essentially calls functions creating
-  \code{"aggregateDist"} objects. Each method yields a function to
+  \code{"aggregateDist"} objects. Each method returns a function to
   compute the aggregate claim amount cumulative distribution function (cdf).
 
   The \code{"recursive"} method computes the cdf using the Panjer
@@ -84,28 +83,29 @@ aggregateDist(method = c("recursive", "exact", "normal", "np2", "simulation"),
 }
 \examples{
 ## Exact method (example 6.6 of Klugman et al. (2004))
-fx <- c(0.05, .15, .2, .25, .125, .075, .05, .05, .05, .025, .025)
-pn <- c(0.05, 0.1, .15, .2, .25, .15, .06, .03, .01)
+fx <- c(0, 0.15, 0.2, 0.25, 0.125, 0.075, 0.05, 0.05, 0.05, 0.025, 0.025)
+pn <- c(0.05, 0.1, 0.15, 0.2, 0.25, 0.15, 0.06, 0.03, 0.01)
 Fs <- aggregateDist("exact", model.sev = fx, model.freq = pn, x.scale = 25)
 summary(Fs)
-diff(Fs(25 * 0:21)) # prob. mass function
+c(Fs(0), diff(Fs(25 * 0:21))) # prob. mass function
 plot(Fs)
 
 ## Recursive method
 #  model.sev <- c(0.1, 0.1, 0.2, 0.3, 0.2, 0.1)
 model.freq <- list(dist = "pois", par = list(lambda = 3))
 Fs <- aggregateDist("recursive", model.sev = fx, model.freq = model.freq,
-                    x.scale = 25))
+                    x.scale = 25)
 plot(Fs)
 
 ## Normal Power approximation
 Fs <- aggregateDist("np2", moments = c(200, 200, 0.5))
-plot(Fs)
+Fs(210)
 
 ## Simulation method
-model.sev <- list(dist = "gamma", par = list(shape = 100, rate = 2))
+model.freq <- list(dist1 = "pois", par1 = list(lambda = 3))
+model.sev <- list(dist1 = "gamma", par1 = list(shape = 100, rate = 2))
 Fs <- aggregateDist("simulation", model.sev = model.sev,
-                     model.freq = model.freq, n = 10000)
+                     model.freq = model.freq, nb.simul = 10000)
 mean(Fs)
 plot(Fs)
 }

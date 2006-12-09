@@ -7,7 +7,8 @@
 
 simS <- function(n, model.freq, model.sev)
 {
-    call <- match.call()
+    if (!exists("Call", inherits = FALSE))
+        Call <- match.call()
 
     x <- drop(aggregate(simpf(contracts = 1, years = n,
                               model.freq = model.freq,
@@ -15,7 +16,7 @@ simS <- function(n, model.freq, model.sev)
 
     FUN <- ecdf(x)
     class(FUN) <- c("aggregateDist", class(FUN))
-    assign("call", call, env = environment(FUN))
+    assign("Call", Call, env = environment(FUN))
     comment(FUN) <- "Approximation by simulation"
     FUN
 }

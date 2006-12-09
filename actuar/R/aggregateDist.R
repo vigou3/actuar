@@ -12,6 +12,8 @@ aggregateDist <-
              model.sev, model.freq, p0 = NULL, x.scale = 1, moments, nb.simul,
              TOL = 1e-06, echo = FALSE, ...)
 {
+    Call <- match.call()
+
     ## The method used essentially tells which function should be
     ## called for the calculation of the aggregate claims
     ## distribution.
@@ -67,7 +69,7 @@ print.aggregateDist <- function(x, ...)
     #    cat("Discretization step :", get("x.scale", envir = environment(x)), "\n\n")
 
     cat("Call:\n")
-    print(get("call", envir = environment(x)))
+    print(get("Call", envir = environment(x)))
     cat("\n")
 
     if (label %in% c("Exact calculation (convolutions)",

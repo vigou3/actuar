@@ -1,79 +1,51 @@
 \name{exact}
 \alias{exact}
-\title{Exact Calculation of the Total Amount of Claims Ditribution}
+\title{Exact Calculation of the Aggregate Claim Amount Distribution}
 \description{
-  Directly compute the exact distribution of the total amount of claims
-  by convolution.
+  Compute the aggregate claim amount cumulative distribution function of
+  a portfolio over a period by convolutions.
 }
 \usage{
-exact(x.scale = 1, fx, pn)
+exact(fx, pn, x.scale = 1)
 }
-
 \arguments{
-  \item{x.scale}{ integer, the value of an amount of 1 in the severity
-  of model, expressed through the vector of probabilities \code{fx}}  
-  \item{fx}{ a vector of the (discretized) claim amount distribution;
-    first element *must* be \eqn{f_X(0)}}
-  \item{pn}{ a vector of the number of claims probabilities; first
-    element must be Pr[N = 0]}
+  \item{fx}{a vector of the (discretized) claim amount distribution;
+    first element \strong{must} be \eqn{f_X(0)}.}
+  \item{pn}{a vector of the number of claims probabilities; first
+    element \strong{must} be \eqn{Pr[N = 0]}.}
+  \item{x.scale}{real value of a claim amount of 1 (monetary unit).}  
 }
 \details{
-  The distribution function of the total amount of claims \code{S} has
-  formula:
-
-  \deqn{Fs(x) = \sum_{n=0}^{\infty} p_n F_X^{*n}(x)}{
-    Fs(x) = sum(n=0 to inf;pn Fx^*n(x))}
-  
-  where
-
-  \deqn{p_n = Pr(X \le x)}{pn = Pr(X <= x)}
-
-  and
-
-  \deqn{F_X^{*k}(x) = \sum_{y=0}^{x} F_X^{*(k-1)}(x-y)f_X(y)}{
-    Fx^*k(x) = sum(y=0 to x;Fx^*(k-1)(x-y) fx(y))}
-  
-  for \eqn{x = 0, 1,..., k = 2, 3,....}
-
-  Since this convolution product for discrete distributions is defined
-  for unitary amounts of claims, the vector of probabilities \code{fx}
-  \emph{must} have elements 1, 2, 3, ... respectively equal to \eqn{f_X(0)},
-  \eqn{f_X(1)}, \eqn{f_X(2)}, and so on. It is to the user's discretion
-  to choose a scale for the amounts that will give a relatively good
-  precision without demanding considerable computer time. It is well
-  known that the n-fold convolutions are computer intensive, thereupon
-  the \code{actuar} package proposes a series of approximation methods
-  (see below) to compute CDFs.
+  The cumulative distribution function (cdf) \eqn{F_S(x)}{Fs(x)} of the
+  aggregate claim amount of a portfolio in the collective risk model is
+  \deqn{F_S(x) = \sum_{n = 0}^{\infty} F_X^{*n}(x) p_n,}{%
+    Fs(x) = sum(n; Fx^*n(x) * pn)}
+  for \eqn{x = 0, 1, \dots}; \eqn{p_n = \Pr[N = n]}{pn = Pr[N = n]} is
+  the frequency probability mass function and
+  \eqn{F_X^{*n}(x)}{Fx^*n(x)} is the cdf of the \eqn{n}th convolution of
+  the (discrete) claim amount random variable.
 }
 \value{
- An empirical distribution function of class \code{aggregateDist}. For details on
- such objects, refer to the more general function \code{\link{aggregateDist}}. 
+  An object of class \code{"aggregateDist"}. See
+  \code{\link{aggregateDist}} for details on such objects.
 }
 \seealso{
-  \code{\link{aggregateDist}} \code{\link{panjer}} \code{\link{normal}}
-  \code{\link{np2}} \code{\link{simS}}
+  \code{\link{discretize}},
+  \code{\link{aggregateDist}}
 }
-\references{  Klugman, S.A and Panjer,H.H and Willmot, G.E (2004),
-  \emph{Loss Models: from data to decision, Second Edition}, Wiley, Sections
-  4.6.5 - 4.6.7, 6.6 and Appendix B}
-
+\references{
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
+  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
+}
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Louis-Philippe Pouliot
-  }
-
-  \examples{
-x.scale <- 100
-limsev <- qbeta(1 - 1E-5, 2, 5)                         ### Discretization of
-Fx <- pbeta(seq(from=0, to=limsev, by=1/x.scale), 2, 5) ### the severity distribution
-fx <- c(0, diff(Fx))
-
-
-limfreq <- qpois(1-1E-5, 3)                      ### Discretization of
-Pn <- ppois(seq(from=0, to=limfreq), 3)          ### the frequency distribution
-pn <- c(0, diff(Pn))
-
-(d <- exact(x.scale, fx, pn)) 
+}
+\examples{
+fx <- c(0, 0.15, 0.2, 0.25, 0.125, 0.075, 0.05, 0.05, 0.05, 0.025, 0.025)
+pn <- c(0.05, 0.1, 0.15, 0.2, 0.25, 0.15, 0.06, 0.03, 0.01)
+Fs <- exact(fx, pn, x.scale = 25)
+c(Fs(0), diff(Fs(25 * 0:21)))
 }
 \keyword{distribution}
 \keyword{models}

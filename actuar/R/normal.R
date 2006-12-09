@@ -13,13 +13,14 @@ normal <- function(mean, var)
 {
     ## Approximate the total amount of claims distribution using the first
     ## two moments.
-    call <- match.call()
+    if (!exists("Call", inherits = FALSE))
+        Call <- match.call()
 
-    FUN <- function(x) pnorm((x - mean)/sqrt(var))
+    FUN <- function(x) pnorm(x, mean = mean, sd = sqrt(var))
 
     class(FUN) <- c("aggregateDist", class(FUN))
-    assign("call", call, environment(FUN))
-    attr(FUN, "source") <- "function(x) pnorm((x - mean)/sqrt(var))"
+    assign("Call", Call, environment(FUN))
+    attr(FUN, "source") <- "function(x) pnorm(x, mean = mean, sd = sqrt(var))"
     comment(FUN) <- "Normal approximation"
     FUN
 }
@@ -28,7 +29,8 @@ np2 <- function(mean, var, skewness)
 {
     ## Approximate the total amount of claims distribution using the first
     ## three moments.
-    call <- match.call()
+    if (!exists("Call", inherits = FALSE))
+        Call <- match.call()
 
     FUN <- function(x)
         ifelse(x <= mean, NA,
@@ -37,7 +39,7 @@ np2 <- function(mean, var, skewness)
 
     class(FUN) <- c("aggregateDist", class(FUN))
     comment(FUN) <- "Normal Power approximation"
-    assign("call", call, environment(FUN))
+    assign("Call", Call, environment(FUN))
     attr(FUN, "source") <- "function(x) ifelse(x <= mean, NA, pnorm(sqrt(1 + 9/skewness^2 + 6 * (x - mean)/(sqrt(var) * skewness)) - 3/skewness))"
     FUN
 }

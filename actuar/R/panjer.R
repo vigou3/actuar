@@ -8,7 +8,8 @@
 
 panjer <- function(fx, model.freq, p0 = NULL, x.scale = 1, TOL = 1e-8, echo = FALSE)
 {
-    call <- match.call()
+    if (!exists("Call", inherits = FALSE))
+        Call <- match.call()
 
     ## Express TOL as a value close to 1.
     TOL <- 1 - TOL
@@ -140,12 +141,10 @@ panjer <- function(fx, model.freq, p0 = NULL, x.scale = 1, TOL = 1e-8, echo = FA
         }
     }
 
-    return(fs)
-
-    FUN <- stepfun((0:(length(fs)-1))*x.scale, c(0,cumsum(fs)))
+    FUN <- stepfun((0:(length(fs) - 1)) * x.scale, c(0, cumsum(fs)))
     class(FUN) <- c("aggregateDist", "ecdf", class(FUN))
     assign("fs", fs, env = environment(FUN))
-    assign("call", call, env = environment(FUN))
+    assign("Call", Call, env = environment(FUN))
     assign("x.scale", x.scale, env = environment(FUN))
     comment(FUN) <- "Recursive method approximation"
     FUN

@@ -14,8 +14,7 @@ panjer(fx, model.freq, p0 = NULL, x.scale = 1, TOL = 1e-8, echo = FALSE)
     first element \strong{must} be \eqn{f_X(0)}.}
   \item{model.freq}{named list containing the frequency model (see details
     below).}
-  \item{x.scale}{value of an amount of 1 (monetary unit) in the severity
-    model given in \code{fx}.}
+  \item{x.scale}{real value of a claim amount of 1 (monetary unit).}
   \item{p0}{arbitrary amount of probability at zero given to the
     frequency distribution. If not \code{NULL}, creates a zero-modified
     or zero-truncated distribution.}
@@ -46,6 +45,10 @@ panjer(fx, model.freq, p0 = NULL, x.scale = 1, TOL = 1e-8, echo = FALSE)
   An object of class \code{"aggregateDist"}. See
   \code{\link{aggregateDist}} for details on such objects.
 }
+\seealso{
+  \code{\link{discretize}},
+  \code{\link{aggregateDist}}
+}
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
   \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
@@ -64,7 +67,7 @@ panjer(fx = rep(0.5, 2), model.freq = model.freq, echo = TRUE)
 model.freq <- list(dist = "nbinom", par = list(size = 0.2, prob = 0.25))  
 Fs <- panjer(fx = c(0.3, 0.5, 0.2), model.freq = model.freq, p0 = 0,
              x.scale = 10, TOL = 1E-5)
-Fs(c(10, 20, 30, 40))
+Fs(c(0, 10, 20, 30, 40))
 }
 \keyword{distribution}
 \keyword{models}

@@ -2,61 +2,53 @@
 \alias{normal}
 \alias{np2}
 \title{
-  Normal and Normal Power Approximation of the Total Amount of Claims
-  Distribution
+  Normal and Normal Power Approximations
 }
 \description{
-  Approximate the total amount of claims distribution using the first
-  two or the first three moments. 
+  Normal and Normal Power 2 approximations of a cumulative distribution
+  function.
 }
 \usage{
 normal(mean, var)
 
 np2(mean, var, skewness)
-
 }
-
 \arguments{
-  \item{mean}{ true mean of the distribution}
-  \item{var}{ true variance of the distribution}
+  \item{mean}{true mean of the distribution}
+  \item{var}{true variance of the distribution}
   \item{skewness}{true skewness of the distribution}
 }
 \details{
-  \code{normal} computes the very common normal standardization, having:
+  The Normal approximation of a cumulative distribution function (cdf)
+  \eqn{F(x)} with mean \eqn{\mu}{m} and standard deviation
+  \eqn{\sigma}{s} is
+  \deqn{F(x) \approx \Phi\left( \frac{x - \mu}{\sigma} \right).}{%
+    F(x) ~= pnorm((x - m)/s).}
 
-  \deqn{F(X) \approx N(v(X))}{F(X) ~= N(v(X))}
-
-  where \emph{N} is the normal d.f. and
-
-  \deqn{v(X) = \frac{(X - \mu_x)}{\sigma_X}}{
-    v(X) = (X - mu_x)/sigma_x}
-
-  standardizes the variable.
-
-  \code{np2} approximation has formula:
-
-  \deqn{F(x) \approx N(v(X)) = N \left(-\frac{3}{\gamma_X}+\sqrt{\frac{9}{\gamma_X^2}+1+\frac{6}{\gamma_X}*\frac{X-\mu_X}{\sigma_X}}\right)}{F(X) ~= N(v(X)) = N(-3/gamma_x + sqrt(9/gamma_x^2 + 1 + 6/gamma_x*(X-mu_x)/sigma_x))}
-
-  This formula is valid only for the right-hand tail of the distribution and skewness should not exceed unity.
+  The Normal Power 2 approximation of a cumulative distribution function (cdf)
+  \eqn{F(x)} with mean \eqn{\mu}{m}, standard deviation \eqn{\sigma}{s}
+  and skewness \eqn{\gamma}{g} is
+  \deqn{F(x) \approx \Phi \left(%
+    -\frac{3}{\gamma} + \sqrt{\frac{9}{\gamma^2} + 1 %
+      + \frac{6}{\gamma} \frac{x - \mu}{\sigma}} \right).}{%
+    F(x) ~= pnorm(-3/g + sqrt(9/g^2 + 1 + (6/g) * (x - m)/s)).}
+  This formula is valid only for the right-hand tail of the distribution
+  and skewness should not exceed unity.
 }
 \value{
- A distribution function of class \code{aggregateDist}. For details on
- such objects, refer to the more general function \code{\link{aggregateDist}}. 
+  An object of class \code{"aggregateDist"}. See
+  \code{\link{aggregateDist}} for details on such objects.
 }
-\seealso{
-  \code{\link{aggregateDist}} \code{\link{panjer}} \code{\link{exact}}
-  \code{\link{simS}}
-  }
-\references{ Daykin, C.D. and Pentikäinen, T. and Pesonen, M. (1994), \emph{Practical
-Risk Theory for Actuaries}, Chapman & Hall, Sections 4.2.2 - 4.2.4}
-
+\references{
+  Daykin, C.D., Pentikäinen, T. and Pesonen, M. (1994), \emph{Practical 
+    Risk Theory for Actuaries}, Chapman & Hall.
+}
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Louis-Philippe Pouliot}
-
 \examples{
-(distribution <- normal(mean = 200, var = 500))
-(distribution <- np2(mean = 200, var = 500, skewness = 0.25))
+normal(mean = 200, var = 500)(c(220, 250, 300))
+np2(mean = 200, var = 500, skewness = 0.25)(c(220, 250, 300))
 }
 \keyword{distribution}
 \keyword{models}
