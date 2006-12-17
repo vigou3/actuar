@@ -30,7 +30,7 @@ aggregateDist(method = c("recursive", "exact", "normal", "np2", "simulation"),
     \code{normal} and \code{np2} methods.}
   \item{model.freq}{frequency model (see details below) for
     \code{"simulation"} and \code{"recursive"} methods or a vector of
-    the claim number probabilities for \code{"exact"} method. Ignored
+    claim number probabilities for \code{"exact"} method. Ignored
     with \code{normal} and \code{np2} methods.}
   \item{p0}{arbitrary probability at zero for the frequency
     distribution. Creates a zero-modified or zero-truncated
@@ -51,7 +51,8 @@ aggregateDist(method = c("recursive", "exact", "normal", "np2", "simulation"),
 \details{
   \code{aggregateDist} essentially calls functions creating
   \code{"aggregateDist"} objects. Each method returns a function to
-  compute the aggregate claim amount cumulative distribution function (cdf).
+  compute the aggregate claim amount cumulative distribution function
+  (cdf).
 
   The \code{"recursive"} method computes the cdf using the Panjer
   algorithm; the \code{"exact"} method using convolutions; the
