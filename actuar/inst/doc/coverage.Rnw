@@ -1,5 +1,6 @@
 \documentclass{article}
   \usepackage{amsmath}
+  \usepackage{Sweave}
 
   %\VignetteIndexEntry{Complete formulas used by coverage}
   %\VignettePackage{actuar}
@@ -12,7 +13,7 @@
 
 \begin{document}
 
-<<>>=
+<<echo=FALSE>>=
 library(actuar)
 @
 
