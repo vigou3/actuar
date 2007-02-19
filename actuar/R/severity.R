@@ -3,43 +3,45 @@
 ### Display all values of a matrix of vectors by 'unrolling' the
 ### object vertically or horizontally.  The method for class 'simpf'
 ### specifically handles the matrices of data returned by function
-### simpf(), where each element is a vector of losses during a
-### particular year.
+### simpf(), where each element is a vector of claim amounts in a
+### particular node.
 ###
-### AUTHORS:  Louis-Philippe Pouliot, Vincent Goulet <vincent.goulet@act.ulaval.ca>
+### AUTHORS: Louis-Philippe Pouliot,
+### Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-severity <- function(x, bycol = FALSE, ...) UseMethod("severity")
+### Create a new generic
+severity <- function(x, ...) UseMethod("severity")
 
-## A new matrix is created where all the data is displayed and empty
-## spaces are filled with NA.
-
+### Default method new matrix is created where all the data is
+### displayed and empty spaces are filled with NA.
 severity.default <- function(x, bycol = FALSE, ...)
 {
-    if (!bycol)
+    if (length(dim(x)) > 2)
+        stop("'x' must be a vector or a matrix")
+
+    if (is.null(dim(x)))
+        x <- rbind(x)
+
+    fun <- function(x) if (identical(x, NA)) NA else length(x)
+    frequencies <- array(sapply(x, fun), dim = dim(x))
+
+    if (bycol)
     {
-        ncolumns <- ncol(x)
-        frequencies <- array(dim=dim(x), sapply(x, length))
-        lengths <- rowSums(frequencies[,1:ncolumns, drop=FALSE])
-        mat <- matrix(NA, nrow(x), max(lengths))
-        for (i in 1:nrow(x))
-        {
+        lengths <- colSums(frequencies, na.rm = TRUE)
+        mat <- matrix(NA, max(lengths), ncol(x))
+        for (i in seq_len(ncol(x)))
             if (0 < (lengthi <- lengths[i]))
-                mat[i, 1:lengthi] <- unlist(x[i,])[1:lengthi]
-        }
+                mat[seq_len(lengthi), i] <- unlist(x[!is.na(x[, i]), i])
     }
     else
     {
-        nrows <- nrow(x)
-        frequencies <- array(dim=dim(x), sapply(x, length))
-        lengths <- colSums(frequencies[1:nrows, , drop=FALSE])
-        mat <- matrix(NA, max(lengths), ncol(x))
-        for (i in 1:ncol(x))
-        {
+        lengths <- rowSums(frequencies, na.rm = TRUE)
+        mat <- matrix(NA, nrow(x), max(lengths))
+        for (i in seq_len(nrow(x)))
             if (0 < (lengthi <- lengths[i]))
-                mat[1:lengthi, i] <- unlist(x[ , i])[1:lengthi]
-        }
+                mat[i, seq_len(lengthi)] <- unlist(x[i, !is.na(x[i, ])])
     }
-    mat
+    drop(mat)
 }
 
 ## 'simpf' objects are treated more specifically, being displayed more
@@ -47,8 +49,39 @@ severity.default <- function(x, bycol = FALSE, ...)
 ## possibility of treating separetly the last years of experience is
 ## also given.
 
-severity.simpf <- function(x, bycol = FALSE, y.exclude = 0, ...)
+severity.simpf <- function(x, by = head(x$node, -1), split = NULL, ...)
 {
+    if (is.numeric(split))
+        if (any(split < 0 | split > ncol(x$data)))
+            stop("invalid split column specification")
+    if (is.character(split))
+        if (any(is.na(split <- match(split, colnames(x$data)))))
+            stop("invalid split column specification")
+
+    level.names <- names(x$nodes)       # level names
+
+    if (identical(by, level.names))
+    {
+        warning("nothing to do")
+        return(x)
+    }
+
+    if (tail(level.names, 1) %in% by)
+    {
+        if (length(by) > 1)
+            stop(paste("'", tail(level.names, 1), "' cannot be combined with another level"))
+        res <- NextMethod(object = x$data, bycol = TRUE)
+    }
+    else
+    {
+        s <- x$classification[, by, drop = FALSE]   # subscripts
+        f <- apply(s, 1, paste, collapse = "")      # factors
+        xx <- cbind(lapply(split(x$data, f), unlist)) # split data
+        res <- NextMethod(object = xx)
+    }
+    res
+}
+
     x <- x$data
     y <- x
     if (y.exclude %% 1 != 0 | y.exclude < 0)
