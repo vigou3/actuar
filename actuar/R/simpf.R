@@ -14,17 +14,15 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     ## of levels) should be the same everywhere.
     hasfreq <- !is.null(model.freq)     # frequency model present?
     hassev  <- !is.null(model.sev)      # severity model present?
-    if (!hasfreq & !hassev)
+    if (!hasfreq && !hassev)
         stop("one of 'model.freq' or 'model.sev' must be non-NULL")
-    if ((hasfreq & !identical(names(nodes), names(model.freq))) |
-        (hassev  & !identical(names(nodes), names(model.sev))))
+    if ((hasfreq && !identical(names(nodes), names(model.freq))) ||
+        (hassev  && !identical(names(nodes), names(model.sev))))
         stop("level names are different in 'nodes', 'model.freq' and 'model.sev'")
 
-    ## Level names
-    level.names <- names(nodes)
-
-    ## Number of levels
-    nlevels <- length(nodes)
+    ## Frequently used quantities
+    level.names <- names(nodes)         # level names
+    nlevels <- length(nodes)            # number of levels
 
     ## Recycling of the number of nodes (if needed) must be done
     ## "manually". We do it here once and for all since in any case
@@ -34,10 +32,10 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     for (i in 2:nlevels)           # first node doesn't need recycling
         nodes[[i]] <- rep(nodes[[i]], length = sum(nodes[[i - 1]]))
 
-    ## Simulation of the risk (or mixing) parameters for each level
-    ## (e.g. class, contract) and, at the last level, the actual
-    ## frequencies. If 'model.freq' is NULL, this is equivalent to
-    ## having one claim per node.
+    ## Simulation of the frequency risk (or mixing) parameters for
+    ## each level (e.g. class, contract) and, at the last level, the
+    ## actual frequencies. If 'model.freq' is NULL, this is equivalent
+    ## to having one claim per node.
     if (hasfreq)
     {
         for (i in seq_len(nlevels))
@@ -51,8 +49,8 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
             ## Correctly repeat the mixing parameters of all levels
             ## above the current one. Normally, only the immediately
             ## above mixing parameter will be used in the model for a
-            ## level, but the code here allows for all preceeding
-            ## parameters to be used.
+            ## level, but the code here allows for more general
+            ## schemes.
             for (param in intersect(all.vars(Call), level.names))
                 eval(substitute(x <- rep.int(x, n.current),
                                 list(x = as.name(param))))
@@ -77,8 +75,8 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
         ## Repeat the same procedure as for the frequency model, with
         ## one difference: when reaching the last level (claim
         ## amounts), the number of variates to simulate is not given
-        ## by the number of nodes but rather by the number of claims,
-        ## as simulated above.
+        ## by the number of nodes but rather by the number of claims
+        ## as found in 'frequencies'.
         for (i in seq_len(nlevels))
         {
             n.current <- nodes[[i]]
@@ -101,7 +99,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
                 ## For the simulation of claim amounts, the number of
                 ## variates is rather given by the 'frequencies'
                 ## object. Furthermore, the mixing parameters must be
-                ## replicated once more to match the vector of
+                ## recycled once more to match the vector of
                 ## frequencies.
                 for (param in intersect(all.vars(Call), level.names))
                     eval(substitute(x <- rep.int(x, frequencies),
@@ -125,15 +123,15 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     ## given by 'n.current' since we reached the last level in (either
     ## one of) the above loops.
     ##
-    ## Assign a unique id to each node, leaving gaps for nodes without
+    ## Assign a unique ID to each node, leaving gaps for nodes without
     ## observations.
     ind <- unlist(mapply(seq,
                          from = seq(by = max(n.current), along = n.current),
                          length = n.current))
 
-    ## Repeating the vector of ids according to the frequencies
-    ## effectively assigns a node id to each claim amount. The vector
-    ## of claim amounrs is then split by node, yielding a list where
+    ## Repeating the vector of IDs according to the frequencies
+    ## effectively assigns a node ID to each claim amount. The vector
+    ## of claim amounts is then split by node, yielding a list where
     ## each element corresponds to a node with claims.
     f <- rep.int(ind, frequencies)
     severities <- split(severities, f)
@@ -142,7 +140,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     ## from having no observation (NA).
     freq0 <- ind[which(frequencies == 0)]
 
-    ## Finally, rearrange the list of claim amounts in a matrix;
+    ## Rearrange the list of claim amounts in a matrix;
     ##
     ##      number of rows: number of nodes at the penultimate level
     ##                      (number of entities)
@@ -175,7 +173,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
         ## the desired result. To avoid another explicit loop, I use a
         ## 'lapply' with a direct assignment in the current
         ## frame. Somewhat unusual, but this is the simplest procedure
-        ## I came up with.
+        ## I managed to come up with.
         x <- unlist(lapply(nodes[[i]], seq))
         lapply(nodes[(i + 1):(nlevels - 1)],
                function(v) assign("x", rep(x, v), envir = parent.frame(2)))
@@ -183,9 +181,15 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     }
     m[, ncol] <- unlist(lapply(nodes[[ncol]], seq)) # last column
 
+    ## Reshape weights into a matrix, if necessary
+    weights <- if (is.null(weights))
+        NULL
+    else
+        matrix(weights, nrow = nrow, byrow = TRUE, dimnames = dimnames(res))
+
     ## Return object of class 'simpf'
-    structure(list(freq = frequencies,
-                   data = res,
+    structure(list(data = res,
+                   weights = weights,
                    classification = m,
                    nodes = nodes,
                    model.freq = model.freq,
@@ -193,7 +197,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
               class = "simpf")
 }
 
-
+### 'print' method for 'simpf' objects
 print.simpf <- function(x, ...)
 {
     cat("\nPortfolio of claim amounts \n\n")
@@ -214,72 +218,11 @@ print.simpf <- function(x, ...)
         cat(paste("    ",
                   format(nn, width = nc),
                   " ~ ",
-                  x$model.freq,
+                  x$model.sev,
                   "\n", sep = ""), sep = "")
     }
     cat("\n  Number of claims per node: \n\n")
-    compfreq <- function(x) if (identical(x, NA)) NA else length(x)
-    print(cbind(x$classification,
-                array(sapply(x$data, compfreq), dim(x$data),
-                      dimnames = dimnames(x$data))))
+    print(frequency(x))
+    cat("\nUse 'aggregate', 'frequency' and 'severity' to manipulate\n\n")
     invisible(x)
 }
-
-### TODO
-
-## * Vérifier si l'un des modèles est NULL
-## * Vérifier la prise en compte des poids
-
-### TESTS
-nodes <- list(group = 3,
-              contract = c(3, 4, 2),
-              year = c(5, 4, 3, 4, 3, 5, 4, 4, 5))
-
-model.freq <- expression(group = rexp(0.5),
-    contract = rgamma(group, 1),
-    year = rpois(contract))
-
-model.sev <- expression(group = rnorm(6, 0.1),
-    contract = rnorm(group, 1),
-    year = rlnorm(contract, 1))
-
-pf <- simpf(nodes, model.freq, model.sev)
-pf <- simpf(nodes, model.freq, NULL)
-pf
-
-###
-
-nodes <- list(sector = 2,
-              unit = c(3, 4),
-              contract = c(3, 4, 3, 4, 2, 3, 4),
-              year = 5)
-
-model.freq <- expression(sector = rexp(1),
-    unit = rexp(sector),
-    contract = rgamma(unit, 1),
-    year = rpois(contract))
-
-model.sev <- expression(sector = rnorm(6, 0.1),
-    unit = rnorm(sector, 1),
-    contract = rnorm(unit, 1),
-    year = rlnorm(contract, 1))
-
-pf <- simpf(nodes, model.freq, model.sev)
-
-
-modelfreq <- list(dist1 = "pois",
-                  par1 = list(lambda = quote(Lambda * weights)),
-                  dist2 = "gamma",
-                  par2 = c(shape = 2, rate = 1))
-modelsev<-list(dist1 = "lnorm",
-               par1 = list(meanlog = quote(Theta), sdlog = 1),
-               dist2 = "norm",
-               par2 = c(mean = 5, sd = 1))
-system.time(simpf(1000, 12, modelfreq, modelsev))
-
-model.freq <- expression(contrat = rgamma(2, 1),
-    year = rpois(contrat))
-model.sev <- expression(contrat = rnorm(5, 1),
-    year = rlnorm(contrat, 1))
-system.time(simpf(nodes = list(contrat = 1000, year = 12), model.freq, model.sev))
-simpf(nodes = list(contrat = 100, year = 5), model.freq, model.sev)
