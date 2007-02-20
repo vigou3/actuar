@@ -12,8 +12,10 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     ## Sanity checks: at least either of 'model.freq' or 'model.sev'
     ## should be specified; level names (and consequently the number
     ## of levels) should be the same everywhere.
-    hasfreq <- !is.null(model.freq)     # frequency model present?
-    hassev  <- !is.null(model.sev)      # severity model present?
+    hasfreq <- !(is.null(model.freq) || # frequency model present?
+                 all(sapply(model.freq, is.null)))
+    hassev  <- !(is.null(model.sev) ||  # severity model present?
+                 all(sapply(model.sev, is.null)))
     if (!hasfreq && !hassev)
         stop("one of 'model.freq' or 'model.sev' must be non-NULL")
     if ((hasfreq && !identical(names(nodes), names(model.freq))) ||
@@ -29,7 +31,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     ## below we will need to know the total number of nodes in the
     ## portfolio. Furthermore, the recycled list 'nodes' will be
     ## returned by the function.
-    for (i in 2:nlevels)           # first node doesn't need recycling
+    for (i in 2:nlevels)     # first node doesn't need recycling
         nodes[[i]] <- rep(nodes[[i]], length = sum(nodes[[i - 1]]))
 
     ## Simulation of the frequency risk (or mixing) parameters for
@@ -46,23 +48,28 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
             ## Extract simulation model for the level.
             Call <- model.freq[[i]]
 
-            ## Correctly repeat the mixing parameters of all levels
-            ## above the current one. Normally, only the immediately
-            ## above mixing parameter will be used in the model for a
-            ## level, but the code here allows for more general
-            ## schemes.
-            for (param in intersect(all.vars(Call), level.names))
-                eval(substitute(x <- rep.int(x, n.current),
-                                list(x = as.name(param))))
+            ## Simulate data only if there is a model at the current
+            ## level.
+            if (!is.null(Call))
+            {
+                ## Correctly repeat the mixing parameters of all
+                ## levels above the current one. Normally, only the
+                ## immediately above mixing parameter will be used in
+                ## the model for a level, but the code here allows for
+                ## more general schemes.
+                for (param in intersect(all.vars(Call), level.names))
+                    eval(substitute(x <- rep.int(x, n.current),
+                                    list(x = as.name(param))))
 
-            ## Add the number of variates to the call.
-            Call$n <- sum(n.current)
+                ## Add the number of variates to the call.
+                Call$n <- sum(n.current)
 
-            ## Simulation of the mixing parameters or the data. In the
-            ## latter case, store the results in a fixed variable
-            ## name.
-            assign(ifelse(i < nlevels, level.names[[i]], "frequencies"),
-                   eval(Call))
+                ## Simulation of the mixing parameters or the data. In
+                ## the latter case, store the results in a fixed
+                ## variable name.
+                assign(ifelse(i < nlevels, level.names[[i]], "frequencies"),
+                       eval(Call))
+            }
         }
     }
     else
@@ -81,31 +88,35 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
         {
             n.current <- nodes[[i]]
             Call <- model.sev[[i]]
-            for (param in intersect(all.vars(Call), level.names))
-                eval(substitute(x <- rep.int(x, n.current),
-                                list(x = as.name(param))))
-
-            ## The rest of the procedure differs depending if we are
-            ## still simulating mixing parameters or claim amounts.
-            if (i < nlevels)
+            if (!is.null(Call))
             {
-                ## Simulation of mixing parameters is identical to the
-                ## simulation of frequencies.
-                Call$n <- sum(n.current)
-                assign(level.names[[i]], eval(Call))
-            }
-            else
-            {
-                ## For the simulation of claim amounts, the number of
-                ## variates is rather given by the 'frequencies'
-                ## object. Furthermore, the mixing parameters must be
-                ## recycled once more to match the vector of
-                ## frequencies.
                 for (param in intersect(all.vars(Call), level.names))
-                    eval(substitute(x <- rep.int(x, frequencies),
+                    eval(substitute(x <- rep.int(x, n.current),
                                     list(x = as.name(param))))
-                Call$n <- sum(frequencies)
-                severities <-eval(Call)
+
+                ## The rest of the procedure differs depending if we
+                ## are still simulating mixing parameters or claim
+                ## amounts.
+                if (i < nlevels)
+                {
+                    ## Simulation of mixing parameters is identical to the
+                    ## simulation of frequencies.
+                    Call$n <- sum(n.current)
+                    assign(level.names[[i]], eval(Call))
+                }
+                else
+                {
+                    ## For the simulation of claim amounts, the number
+                    ## of variates is rather given by the
+                    ## 'frequencies' object. Furthermore, the mixing
+                    ## parameters must be recycled once more to match
+                    ## the vector of frequencies.
+                    for (param in intersect(all.vars(Call), level.names))
+                        eval(substitute(x <- rep.int(x, frequencies),
+                                        list(x = as.name(param))))
+                    Call$n <- sum(frequencies)
+                    severities <-eval(Call)
+                }
             }
         }
     }
