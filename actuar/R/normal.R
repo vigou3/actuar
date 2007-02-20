@@ -25,7 +25,7 @@ normal <- function(mean, var)
     FUN
 }
 
-np2 <- function(mean, var, skewness)
+npower <- function(mean, var, skewness)
 {
     ## Approximate the total amount of claims distribution using the first
     ## three moments.
