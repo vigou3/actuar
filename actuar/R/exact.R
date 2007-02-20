@@ -12,16 +12,16 @@ exact <- function(fx, pn, x.scale = 1)
     if (!exists("Call", inherits = FALSE))
         Call <- match.call()
 
-    ## Some useful lengths.
+    ## Some useful lengths
     m <- length(fx)                   # 1 + maximum claim amount
     n <- length(pn) - 1               # maximum number of claims
     r <- n * m - n + 1                # maximum total amount of claims
 
-    ## Initialization of the output vector.
+    ## Initialization of the output vector
     fs <- rep(0, r)
     fs[1] <- pn[1]                    # Pr[N = 0]
 
-    ## Convolutions.
+    ## Convolutions
     fxc <- 1
     for (i in 1:n)
     {
