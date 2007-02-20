@@ -3,7 +3,7 @@ useDynLib(actuar, .registration = TRUE)
 
 ### Exports
 export(## Credibility theory
-       bstraub, simpf, severity, ghcm,
+       bstraub, simpf, severity, cm,
        ## Risk theory
        aggregateDist, discretize, discretise, exact, normal, np2, panjer, simS,
        ## One parameter distributions
@@ -65,12 +65,12 @@ S3method(plot, aggregateDist)
 S3method(plot, ogive)
 S3method(plot, elev)
 
-S3method(predict, ghcm)
+S3method(predict, cm)
 
 S3method(print, aggregateDist)
 S3method(print, bstraub)
 S3method(print, elev)
-S3method(print, ghcm)
+S3method(print, cm)
 S3method(print, mde)
 S3method(print, ogive)
 S3method(print, simpf)
@@ -88,3 +88,5 @@ S3method(summary, bstraub)
 S3method(summary, elev)
 S3method(summary, ogive)
 S3method(summary, simpf)
+
+S3method(weights, simpf)
