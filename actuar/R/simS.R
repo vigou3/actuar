@@ -10,9 +10,12 @@ simS <- function(n, model.freq, model.sev)
     if (!exists("Call", inherits = FALSE))
         Call <- match.call()
 
-    x <- drop(aggregate(simpf(contracts = 1, years = n,
-                              model.freq = model.freq,
-                              model.sev = model.sev)))
+    nodes <- list(1, n)
+    names(nodes) <- names(model.freq)
+
+    x <- aggregate(simpf(nodes = nodes,
+                         model.freq = model.freq,
+                         model.sev = model.sev))[-1]
 
     FUN <- ecdf(x)
     class(FUN) <- c("aggregateDist", class(FUN))
