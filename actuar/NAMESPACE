@@ -5,7 +5,7 @@ useDynLib(actuar, .registration = TRUE)
 export(## Credibility theory
        bstraub, simpf, severity, cm,
        ## Risk theory
-       aggregateDist, discretize, discretise, exact, normal, np2, panjer, simS,
+       aggregateDist, discretize, discretise,
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        mexp, levexp,
