@@ -110,10 +110,6 @@ knots.elev <- function(Fn, ...)
 
 plot.elev <- function(x, ..., main = NULL, xlab = "x", ylab = "Empirical LEV")
 {
-    ## Sanity check
-    if (!inherits(x, "elev"))
-        stop("wrong method")
-
     if (missing(main))
         main <- {
             cl <- attr(x, "call")

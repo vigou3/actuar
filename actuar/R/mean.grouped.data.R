@@ -8,10 +8,6 @@
 
 mean.grouped.data <- function(x, ...)
 {
-    ## Sanity check
-    if (!inherits(x, "grouped.data"))
-        stop("wrong method")
-
     ## Get group boundaries
     cj <- eval(expression(cj), env = environment(x))
 

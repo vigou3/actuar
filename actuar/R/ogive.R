@@ -67,10 +67,6 @@ knots.ogive <- stats:::knots.stepfun
 
 plot.ogive <- function(x, ..., main = NULL, xlab = "x", ylab = "F(x)")
 {
-    ## Sanity check
-    if (!inherits(x, "ogive"))
-        stop("wrong method")
-
     if (missing(main))
         main <- {
             cl <- attr(x, "call")

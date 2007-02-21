@@ -17,7 +17,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
     ## Extract call; used to build the call to optim().
     Call <- match.call(expand.dots = TRUE)
 
-    ## Argument checking.
+    ## Argument checking
     if (missing(start) || !is.list(start))
         stop("'start' must be a named list")
     if (missing(fun) || !(is.function(fun)))

@@ -14,10 +14,6 @@ hist.grouped.data <-
              ylim = NULL, xlab = xname, ylab, axes = TRUE,
              plot = TRUE, labels = FALSE, ...)
 {
-    ## Sanity check
-    if (!inherits(x, "grouped.data"))
-        stop("wrong method")
-
     ## Class boundaries are in the environment of 'x'
     cj <- eval(expression(cj), env = environment(x))
     nj <- x[, 2]

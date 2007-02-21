@@ -19,10 +19,6 @@ emm.default <- function(x, order = 1, ...)
 
 emm.grouped.data <- function(x, order = 1, ...)
 {
-    ## Sanity check
-    if (!inherits(x, "grouped.data"))
-        stop("wrong method")
-
     ## Function does not work for negative moments
     if (any(order < 0))
         stop("order must be positive")
