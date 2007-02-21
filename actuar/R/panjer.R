@@ -6,7 +6,8 @@
 ### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 ### Sébastien Auclair and Louis-Philippe Pouliot
 
-panjer <- function(fx, model.freq, p0 = NULL, x.scale = 1, TOL = 1e-8, echo = FALSE)
+panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
+                   TOL = 1e-8, echo = FALSE)
 {
     if (!exists("Call", inherits = FALSE))
         Call <- match.call()
@@ -18,19 +19,21 @@ panjer <- function(fx, model.freq, p0 = NULL, x.scale = 1, TOL = 1e-8, echo = FA
     fx0 <- fx[1]
     fx <- fx[-1]
 
+    ## Argument '...' should contain the values of the parameters of
+    ## 'dist'.
+    par <- list(...)
+
     ## Distributions are expressed as a member of the (a, b, 0) or (a,
     ## b, 1) families of distributions. Assign parameters 'a' and 'b'
     ## depending of the chosen distribution and compute f_S(0) in
     ## every case, and p1 if p0 is specified in argument.
-    dist <- model.freq$dist
-    par <- model.freq$par
-    if (dist == "geom")
+    if (dist == "geometric")
     {
-        dist <- "nbinom"
+        dist <- "negative binomial"
         par$size <- 1
     }
 
-    if (dist == "pois")
+    if (dist == "poisson")
     {
         lambda <- par$lambda
         a <- 0
@@ -43,7 +46,7 @@ panjer <- function(fx, model.freq, p0 = NULL, x.scale = 1, TOL = 1e-8, echo = FA
             p1 <- (1 - p0) * lambda/(exp(lambda) - 1)
         }
     }
-    else if (dist == "nbinom")
+    else if (dist == "negative binomial")
     {
         beta <- 1/(par$prob) - 1
         r <- par$size
@@ -57,7 +60,7 @@ panjer <- function(fx, model.freq, p0 = NULL, x.scale = 1, TOL = 1e-8, echo = FA
             p1 <- (1 - p0) * r * beta/((1 + beta)^(r + 1) - (1 + beta))
         }
     }
-    else if (dist == "binom")
+    else if (dist == "binomial")
     {
         m <- par$size
         q <- par$prob

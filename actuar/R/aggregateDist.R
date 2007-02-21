@@ -8,9 +8,9 @@
 ### Louis-Philippe Pouliot
 
 aggregateDist <-
-    function(method = c("recursive", "exact", "normal", "np2", "simulation"),
-             model.sev, model.freq, p0 = NULL, x.scale = 1, moments, nb.simul,
-             TOL = 1e-06, echo = FALSE, ...)
+    function(method = c("recursive", "convolution", "normal", "npower", "simulation"),
+             model.freq = NULL, model.sev = NULL, p0 = NULL, x.scale = 1,
+             moments, nb.simul, ..., TOL = 1e-06, echo = FALSE)
 {
     Call <- match.call()
 
@@ -25,48 +25,61 @@ aggregateDist <-
         ## is not appropriate for the method. However it is the user's
         ## responsability to list the moments in the correct order
         ## since the vector is not required to be named.
-        if (length(moments) < 2)
-            stop("'normal' method requires the mean and variance of the distribution")
+        if (missing(moments) || length(moments) < 2)
+            stop("'moments' must supply the mean and variance of the distribution")
         return(normal(moments[1], moments[2]))
     }
 
-    if (method == "np2")
+    if (method == "npower")
     {
-        if (length(moments) < 3)
-            stop("'np2' method requires the mean, variance and skewness of the distribution")
-        return(np2(moments[1], moments[2], moments[3]))
+        if (missing(moments) || length(moments) < 3)
+            stop("'moments' must supply the mean, variance and skewness of the distribution")
+        return(npower(moments[1], moments[2], moments[3]))
     }
 
     if (method == "simulation")
-        return(simS(nb.simul, model.freq, model.sev))
+    {
+        if (missing(nb.simul))
+            stop("'nb.simul' must supply the number of simulations")
+        if (is.null(names(model.freq)) && is.null(names(model.sev)))
+            stop("expressions in 'model.freq' and 'model.sev' must be named")
+        return(simS(nb.simul, model.freq = model.freq, model.sev = model.sev))
+    }
 
-    ## We're now in the "recursive" or "exact" cases. Both require a
-    ## discrete distribution of claim amounts, that is a vector of
+    ## "recursive" and "convolution" cases. Both require a discrete
+    ## distribution of claim amounts, that is a vector of
     ## probabilities in argument 'model.sev'.
-    if (mode(model.sev) != "numeric")
-        stop("'model.sev' must be a vector of probabilities for methods 'recursive' and 'exact'")
+    if (!is.numeric(model.sev))
+        stop("'model.sev' must be a vector of probabilities")
 
     ## Recursive method uses a model for the frequency distribution.
     if (method == "recursive")
-        return(panjer(fx = model.sev, model.freq = model.freq, p0 = p0,
-                      x.scale = x.scale, echo = echo, TOL = TOL))
-
-    ## Exact (convolution) method requires a vector of probabilites in
-    ## argument 'model.freq'.
-    if (method == "exact")
     {
-        if (mode(model.freq) != "numeric")
-            stop("'model.freq' must be a vector of prababilities in method 'exact'")
-        return(exact(x.scale = x.scale, fx = fx, pn = pn))
+        if (is.null(model.freq) || !is.character(model.freq))
+            stop("frequency distribution must be supplied as a character string")
+        dist <- match.arg(tolower(model.freq),
+                          c("poisson", "geometric", "negative binomial",
+                            "binomial", "logarithmic"))
+        return(panjer(fx = model.sev, dist = dist, p0 = p0,
+                      x.scale = x.scale, ..., echo = echo, TOL = TOL))
     }
+
+    ## Convolution method requires a vector of probabilites in
+    ## argument 'model.freq'.
+    if (method == "convolution")
+    {
+        if (!is.numeric(model.freq))
+            stop("'model.freq' must be a vector of probabilities")
+        return(exact(fx = model.sev, pn = model.freq, x.scale = x.scale))
+    }
+
+    stop("internal error")
 }
 
 print.aggregateDist <- function(x, ...)
 {
     cat("\nAggregate Claim Amount Distribution\n")
     cat("  ", label <- comment(x), "\n\n")
-    #if (label %in% c("Direct calculation", "Recursive method approximation"))
-    #    cat("Discretization step :", get("x.scale", envir = environment(x)), "\n\n")
 
     cat("Call:\n")
     print(get("Call", envir = environment(x)))

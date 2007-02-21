@@ -9,17 +9,21 @@
 
 simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 {
-    ## Sanity checks: at least either of 'model.freq' or 'model.sev'
-    ## should be specified; level names (and consequently the number
-    ## of levels) should be the same everywhere.
-    hasfreq <- !(is.null(model.freq) || # frequency model present?
+    ## Sanity checks: 'nodes' must be a named list; at least either of
+    ## 'model.freq' or 'model.sev' should be non-NULL; level names
+    ## (and consequently the number of levels) should be the same
+    ## everywhere.
+    if (missing(nodes) || !is.list(nodes))
+        stop("'nodes' must be a named list")
+
+    has.freq <- !(is.null(model.freq) || # frequency model present?
                  all(sapply(model.freq, is.null)))
-    hassev  <- !(is.null(model.sev) ||  # severity model present?
+    has.sev  <- !(is.null(model.sev) ||  # severity model present?
                  all(sapply(model.sev, is.null)))
-    if (!hasfreq && !hassev)
+    if (!has.freq && !has.sev)
         stop("one of 'model.freq' or 'model.sev' must be non-NULL")
-    if ((hasfreq && !identical(names(nodes), names(model.freq))) ||
-        (hassev  && !identical(names(nodes), names(model.sev))))
+    if ((has.freq && !identical(names(nodes), names(model.freq))) ||
+        (has.sev  && !identical(names(nodes), names(model.sev))))
         stop("level names different in 'nodes', 'model.freq' and 'model.sev'")
 
     ## The function is written for models with at least two levels
@@ -29,9 +33,9 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     {
         nodes <- c(node = 1, nodes)
         model.freq <-
-            if (hasfreq) c(expression(node = NULL), model.freq) else NULL
+            if (has.freq) c(expression(node = NULL), model.freq) else NULL
         model.sev <-
-            if (hassev) c(expression(node = NULL), model.sev) else NULL
+            if (has.sev) c(expression(node = NULL), model.sev) else NULL
     }
 
     ## Frequently used quantities
@@ -50,7 +54,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     ## each level (e.g. class, contract) and, at the last level, the
     ## actual frequencies. If 'model.freq' is NULL, this is equivalent
     ## to having one claim per node.
-    if (hasfreq)
+    if (has.freq)
     {
         for (i in seq_len(nlevels))
         {
@@ -89,7 +93,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 
     ## Simulation of the claim amounts. If 'model.sev' is NULL, this
     ## is equivalent to simulating frequencies only.
-    if (hassev)
+    if (has.sev)
     {
         ## Repeat the same procedure as for the frequency model, with
         ## one difference: when reaching the last level (claim
