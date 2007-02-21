@@ -9,21 +9,23 @@ aggregate.simpf <- function(x, by = names(x$nodes), FUN = sum, ...)
 {
     level.names <- names(x$nodes)       # level names
     nlevels <- length(level.names)      # number of levels
+    years <- level.names[nlevels]       # name of last level
 
-    by <- pmatch(by, level.names, duplicates.ok = TRUE)
+    ## Match level names in 'by' to those in the model
+    by <- match.arg(by, level.names, several.ok = TRUE)
 
     ## Version of FUN able to work on lists
     fun <- function(x, ...) FUN(unlist(x), ...)
 
     ## The most common case should be to aggregate claim amounts by
     ## node. This case being very simple, it is treated separately.
-    if (identical(length(by), nlevels))
+    if (identical(by, level.names))
         return(cbind(x$classification,
                      array(sapply(x$data, FUN, ...), dim(x$data),
                            dimnames = dimnames(x$data))))
 
     ## Summaries only by last level (years) are also simple to handle.
-    if (identical(by, nlevels))
+    if (identical(by, years))
         return(apply(x$data, 2, fun, ...))
 
     ## The other possibilities require to split the data in groups as
@@ -31,18 +33,17 @@ aggregate.simpf <- function(x, by = names(x$nodes), FUN = sum, ...)
     ## 'by', then the matrix structure must be retained to make the
     ## summaries. Otherwise, it can just be dropped since summaries
     ## will span the years of observation.
-    years <- level.names[nlevels]       # name of last level (years)
-
+    ##
     ## Convert the sequence of subscripts into factors by pasting the
     ## digits together.
-    rows <- setdiff(by, nlevels)        # groups other than years
+    rows <- setdiff(by, years)          # groups other than years
     s <- x$classification[, rows, drop = FALSE] # subscripts
     f <- apply(s, 1, paste, collapse = "")      # factors
-    s <- s[match(unique(f), f),]                # unique subscripts
+    s <- s[match(unique(f), f), , drop = FALSE] # unique subscripts
     xx <- split(x$data, f)                      # split data
 
     ## Make summaries
-    if (nlevels %in% by)
+    if (years %in% by)
     {
         xx <- lapply(xx, matrix, ncol = ncol(x$data))
         res <- t(sapply(xx, function(x, ...) apply(x, 2, fun, ...), ...))

@@ -13,7 +13,7 @@
 severity <- function(x, ...) UseMethod("severity")
 
 ### Default method for vectors and matrices of vectors (that is, lists
-### withour 'dim' attribute or with a 'dim' attribute of length
+### without 'dim' attribute or with a 'dim' attribute of length
 ### 2)
 severity.default <- function(x, bycol = FALSE, ...)
 {
@@ -43,7 +43,7 @@ severity.default <- function(x, bycol = FALSE, ...)
             if (0 < (lengthi <- lengths[i]))
                 mat[i, seq_len(lengthi)] <- unlist(x[i, !is.na(x[i, ])])
     }
-    drop(mat)
+    mat
 }
 
 ## Method for 'simpf' objects. Two differences with the default
@@ -56,14 +56,15 @@ severity.simpf <- function(x, by = head(names(x$node), -1),
     level.names <- names(x$nodes)       # level names
     ci <- seq_len(ncol(x$data))         # column indexes
 
+    ## Match level names in 'by' to those in the model
+    by <- match.arg(by, level.names, several.ok = TRUE)
+
     ## Sanity checks
     if (identical(by, level.names))
     {
         warning("nothing to do")
         return(x)
     }
-    if (any(!by %in% level.names))
-        stop("invalid 'by' specification")
 
     ## Convert character 'splitcol' to numeric and then from numeric
     ## or NULL to boolean.
@@ -86,14 +87,14 @@ severity.simpf <- function(x, by = head(names(x$node), -1),
     ## Unrolling per row (or group of rows) is more work. It requires
     ## to split the columns of the matrix first, and then to apply the
     ## unrolling procedure twice (if 'splitcol' != NULL).
-
+    ##
     ## Utility function
     fun <- function(x) unlist(x[!is.na(x)])
 
     ## Split rows according to the 'by' argument.
     s <- x$classification[, by, drop = FALSE]   # subscripts
     f <- apply(s, 1, paste, collapse = "")      # factors
-    s <- s[match(unique(f), f),]                # unique subscripts
+    s <- s[match(unique(f), f), , drop = FALSE] # unique subscripts
 
     ## Keep the 'splitcol' columns for later use.
     x.last <- x$data[, splitcol]
@@ -124,7 +125,7 @@ severity.simpf <- function(x, by = head(names(x$node), -1),
         x <- cbind(lapply(split(x.last, f), fun))     # split data
         res.last <- NextMethod(bycol = FALSE)
         res.last <-
-            if (0 < (nc <- ncol(res.last)))/
+            if (0 < (nc <- ncol(res.last)))
             {
                 dimnames(res.last) <-
                     list(NULL, paste("claim", seq_len(nc), sep = "."))

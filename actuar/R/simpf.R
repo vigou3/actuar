@@ -20,7 +20,19 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
         stop("one of 'model.freq' or 'model.sev' must be non-NULL")
     if ((hasfreq && !identical(names(nodes), names(model.freq))) ||
         (hassev  && !identical(names(nodes), names(model.sev))))
-        stop("level names are different in 'nodes', 'model.freq' and 'model.sev'")
+        stop("level names different in 'nodes', 'model.freq' and 'model.sev'")
+
+    ## The function is written for models with at least two levels
+    ## (entity and year). If there is only one, add a dummy level to
+    ## avoid scattering the code with conditions.
+    if (length(nodes) < 2)
+    {
+        nodes <- c(node = 1, nodes)
+        model.freq <-
+            if (hasfreq) c(expression(node = NULL), model.freq) else NULL
+        model.sev <-
+            if (hassev) c(expression(node = NULL), model.sev) else NULL
+    }
 
     ## Frequently used quantities
     level.names <- names(nodes)         # level names
@@ -31,7 +43,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     ## below we will need to know the total number of nodes in the
     ## portfolio. Furthermore, the recycled list 'nodes' will be
     ## returned by the function.
-    for (i in 2:nlevels)     # first node doesn't need recycling
+    for (i in 2:nlevels)       # first node doesn't need recycling
         nodes[[i]] <- rep(nodes[[i]], length = sum(nodes[[i - 1]]))
 
     ## Simulation of the frequency risk (or mixing) parameters for
@@ -160,8 +172,8 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     ##
     ## Moreover, assign a value of 'numeric(0)' to nodes with a
     ## frequency of 0.
-    nrow <- length(n.current)
-    ncol <- max(n.current)
+    nrow <- length(n.current)           # number of entities
+    ncol <- max(n.current)              # number of years
     res <- as.list(rep.int(NA, nrow * ncol))
     res[unique(f)] <- severities
     res[freq0] <- lapply(rep.int(0, length(freq0)), numeric)
@@ -175,9 +187,9 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     ## subscripts i, j and k. As we move from right to left in the
     ## columns of 'm', the subcripts are increasingly repeated.
     ncol <- nlevels - 1
-    m <- matrix(NA, nrow, ncol,
+    m <- matrix(1, nrow, ncol,
                 dimnames = list(NULL, head(level.names, ncol)))
-    for (i in seq_len(ncol - 1))        # all but the last column
+    for (i in seq_len(ncol - 1))    # all but the last column
     {
         ## Vector 'x' will originally contain all subscripts for one
         ## level. These subscripts are then repeated as needed to give
