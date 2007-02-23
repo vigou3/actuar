@@ -1,38 +1,50 @@
 \name{aggregate.simpf}
 \alias{aggregate.simpf}
 \alias{frequency.simpf}
-\title{Compute Summary Statistics of a Portfolio}
+\title{Summary Statistics of a Portfolio}
 \description{
-  \code{aggregate} method for class \code{"simpf"}. Splits portfolio
-  data into subsets, computes summary statistics for each.
+  \code{aggregate} method for \link[base]{class} \code{"simpf"}. Splits
+  portfolio data into subsets, computes summary statistics for each.
 
-  \code{frequency} method for class \code{"simpf"}. Computes the
-  frequency of claims for subsets of portfolio data.
+  \code{frequency} method for \link[base]{class}
+  \code{"simpf"}. Computes the frequency of claims for subsets of
+  portfolio data.
 }
 \usage{
-\method{aggregate}{simpf}(x, by = c("contract", "year"),
-          FUN = sum, \dots)
+\method{aggregate}{simpf}(x, by = names(x$nodes), FUN = sum, \dots)
 
-\method{frequency}{simpf}(x, by = c("contract", "year"), \dots)
+\method{frequency}{simpf}(x, by = names(x$nodes))
 }
 \arguments{
-  \item{x}{a \code{simpf} object, typically created by \code{\link{simpf}}}
-  \item{by}{vector, indicates how data should be aggregated}
-  \item{FUN}{the function to be applied to data subsets}
-  \item{\dots}{potential further arguments required by generic.}
-
+  \item{x}{an object of class \code{"simpf"}, typically created
+    with \code{\link{simpf}}.}
+  \item{by}{character vector of grouping elements using the level names
+    of the portfolio in \code{x}. The names can be abbreviated. Defaults
+    to summaries by elements of the matrix in \code{x$data}.}
+  \item{FUN}{the function to be applied to data subsets.}
+  \item{\dots}{optional arguments to \code{FUN}.}
 }
 \details{
   \code{aggregate.simpf} and \code{frequency.simpf} are respectively
-  methods for functions \code{aggregate} and \code{frequency}, both from
-  package \code{stats}. Both methods offer the possibility to aggregate
-  the claims with respect to the contracts, the years, both or neither
-  through argument \code{by}.
-  Using \code{frequency.simpf} is equivalent to using
-  \code{aggregate.simpf} with argument \code{FUN} equal to
-  \code{length}.   
+  methods for functions \code{\link[stats]{aggregate}} and
+  \code{\link[stats]{frequency}}, both from package \code{stats}.
+
+  By default, \code{aggregate.simpf} computes the aggregate claim amount
+  for the grouping specified in \code{by}. Any other statistic based on
+  the individual claim amounts can be used through argument \code{FUN}.
+
+  \code{frequency.simpf} is equivalent to using \code{aggregate.simpf}
+  with argument \code{FUN} equal to \code{if (identical(x, NA)) NA else
+  length(x)}.
 }
 \value{
+
+  A matrix obtained by binding the appropriate node identifiers
+  extracted from \code{x$classification} and the summaries per
+  grouping. If the name of the last level is in \code{by}, the column
+  names of \code{x$data} are retained; otherwise, the column name is
+  replaced by the deparsed name of \code{FUN}.
+
   The object returned depends on the way data is aggregated with respect
   to the call:
 

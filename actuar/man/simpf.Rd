@@ -3,78 +3,95 @@
 \alias{print.simpf}
 \title{Simulation of a portfolio of data}
 \description{
-  \code{simpf} simulates a portfolio of data for insurance
-  applications. Both frequency and severity distributions can have an
-  unknown risk parameter --- that is, they can each be mixtures of
-  models. An object of class \code{simpf} is returned.
+  \code{simpf} simulates data for insurance applications allowing
+  hierarchical structures and separate models for the frequency and
+  severity of claims distributions.
 }
 \usage{
-simpf(contracts, years, model.freq, model.sev, weights)
+simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 
 \method{print}{simpf}(x, \dots)
 }
 \arguments{
-  \item{contracts}{the number of contracts in the porfolio}
-  \item{years}{the number of years of experience for each contract}
-  \item{model.freq}{named list containing the frequency model (see details
-    below); if \code{NULL}, only claim amounts are simulated}
-  \item{model.sev}{named list containing the severity model (see details
-    below); if \code{NULL}, only claim numbers are simulated}
-  \item{weights}{a matrix of weights (one per contract and per year) to
-    be used in the simulation of frequencies}
-  \item{x}{a \code{simpf} object}
+  \item{nodes}{a named list giving the number of "nodes" at each level
+    in the hierarchy of the portfolio. The nodes are listed from top
+    (portfolio) to bottom (usually the years of experience).}
+  \item{model.freq}{a named vector of expressions specifying the
+    frequency of claims model (see details); if \code{NULL}, only claim
+    amounts are simulated.}
+  \item{model.sev}{a named vector of expressions specifying the severity
+    of claims model (see details); if \code{NULL}, only claim numbers
+    are simulated.}
+  \item{weights}{a vector of weights.}
+  \item{x}{a \code{simpf} object.}
   \item{\dots}{potential further arguments required by generic.}
 }
 \details{
-  The function allows for continuous mixtures of models for both
-  frequency and severity of losses. The mixing (or risk) parameter
-  is called \code{Lambda} in the frequency model and \code{Theta} in the
-  severity model.
-  
-  Distribution assumptions are specified using the base name of random
-  number generation functions, e.g. \code{"pois"} for the Poisson distribution
-  or \code{"lnorm"} for the lognormal.
-  
-  \code{model.freq} and \code{model.sev} are \code{NULL} or named lists
-  composed of:
-  \describe{
-    \item{\code{dist1}}{base name of the distribution for a simple model,
-      or of the conditional distribution for a mixed model.}
-    \item{\code{par1}}{named list of the parameters of \code{dist1} as
-      they are defined in \code{rdist1}. If needed, the mixing parameter
-      is identified by an unevaluated expression in \code{Lambda} and
-      \code{weights} for \code{model.freq}, or \code{Theta} for
-      \code{model.sev}.}
-    \item{\code{dist2}}{base name of the mixing distribution, if
-      any.}
-    \item{\code{par2}}{named list of the parameters of \code{dist2} as
-      they are defined in \code{rdist2}.}
-  }
+  The order and the names of the elements in \code{nodes},
+  \code{model.freq} and \code{model.sev} must match.  At least one of
+  \code{model.freq} and \code{model.sev} must be non \code{NULL}.
+
+  \code{nodes} specifies the hierarchical layout of the portfolio.  Each
+  element of the list is a vector of the number of nodes at a given
+  level.  Vectors are recycled as necessary.
+
+  \code{model.freq} and \code{model.sev} specify the simulation models
+  for claim numbers and claim amounts, respectively.  A model is
+  expressed in a semi-symbolic fashion using an object of mode
+  \code{\link[expression]{"expression"}}.  Each element of the object
+  must be named and should be a complete call to a random number
+  generation function, with the number of variates omitted.  Hierarchical
+  (or mixtures of) models are achieved by replacing one or more
+  parameters of a distribution at a given level by any combination of
+  the names of the levels above.  If no mixing is to take place at a
+  level, the model for this level can be \code{NULL}.
+
+  The argument of the random number generation functions for the number
+  of variates to simulate must be named \code{n}.
+
+  Weights will be used wherever the name \code{"weights"} appears in a
+  model.  It is the user's resposibility to ensure that the length of
+  \code{weights} will match the number of nodes when weights are to be
+  used.  Normally, there should be one weight per node at the lowest
+  level in the model.
+
+  Data is generated is lexicographic order, that is by row is the output
+  matrix.
 }
 \value{
-  Returns an object of \code{\link[base]{class}}
-  \code{"simpf"}. A \code{print} method for this class displays the models used in the
-  simulation as well as the frequency of claims for each year and
-  contract. Function \code{\link{summary.simpf}} can be used to display detailed
-  information on individual claim amounts.
+  An object of \code{\link[base]{class}} \code{"simpf"}.  A \code{print}
+  method for this class displays the models used in the simulation as
+  well as the frequency of claims for each year and entity in the
+  portfolio.
 
   An object of class \code{"simpf"} is a list containing the following
   components:
-  \item{data}{a two dimension (\code{contracts} rows and
-    \code{years} columns) list where each element is a vector of
-    losses, or a matrix if each element has length 1}
-  \item{weights}{the matrix of weights given in argument, or a matrix of
-    1 otherwise.}
-  \item{model.freq}{named list given in argument, describing the
-    frequency model.}
-  \item{model.sev}{named list given in argument, describing the severity
-    model.}
+  \item{data}{a two dimension list where each element is a vector of
+    claim amounts;}
+  \item{weights}{the vector of weights given in argument reshaped as a
+    matrix matching element \code{data}, or \code{NULL};}
+  \item{classification}{a matrix of integers where each row is a unique
+    set of subscripts identifying an entity in the portfolio
+    (e.g. integers \eqn{i}, \eqn{j} and \eqn{k} for data
+    \eqn{X_{ijkt}}{X[ijkt]});}
+  \item{nodes}{the \code{nodes} argument, appropriately recycled;}
+  \item{model.freq}{the frequency model as given in argument}
+  \item{model.sev}{the severity model as given in argument.}
 }
-\references{Goulet, V. (2006), \emph{Credibility for severity
-    revisited}, North American Actuarial Journal, to appear.}
+\section{Working with \code{"simpf"} objects}{
+  It is recommended to manipulate objects of class \code{"simpf"} by
+  means of the corresponding methods of functions
+  \code{\link[=aggregate.simpf]{aggregate}},
+  \code{\link[=frequency.simpf]{frequency}},
+  \code{\link[=severity.simpf]{severity}}.
+}
+\references{
+  Goulet, V. (2006), \emph{Credibility for severity
+    revisited}, North American Actuarial Journal \bold{10}, 49--62.
+}
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
-  Sébastien Auclair, and Louis-Philippe Pouliot
+  Sébastien Auclair and Louis-Philippe Pouliot
 }
 \seealso{
   \code{\link{aggregate.simpf}},
@@ -84,29 +101,35 @@ simpf(contracts, years, model.freq, model.sev, weights)
   individual claim amounts, respectively.
 }
 \examples{
-## Portfolio where both frequency and severity models are mixed.
-modelfreq <- list(dist1 = "pois",
-                  par1 = list(lambda = quote(Lambda * weights)),
-                  dist2 = "gamma",
-                  par2 = c(shape = 2, rate = 1))
-modelsev<-list(dist1 = "lnorm",
-               par1 = list(meanlog = quote(Theta), sdlog = 1),
-               dist2 = "norm",
-               par2 = c(mean = 5, sd = 1))
-data(hachemeister)
-weights <- hachemeister$weights/mean(hachemeister$weights)
-simpf(5, 12, modelfreq, modelsev, weights)
+## Simple two level (contracts and years) portfolio with frequency model
+## Nit|Theta_i ~ Poisson(Theta_i), Theta_i ~ Gamma(2, 3) and severity
+## model X ~ Lognormal(5, 1)
+simpf(nodes = list(contract = 10, year = 5),
+      model.freq = expression(contract = rgamma(2, 3),
+                              year = rpois(contract)),
+      model.sev = expression(contract = NULL,
+                             year = rlnorm(5, 1)))
 
-## Portfolio where the frequency model is mixed, but not the
-## severity model.
-modelsev <- list(dist1 = "lnorm", par1 = list(meanlog = 7, sd = 1))  
-simpf(5, 12, modelfreq, modelsev)
+## Model with weights and mixtures for both frequency and severity
+## models
+weights <- sample(2:10, 35, replace = TRUE)
+simpf(nodes = list(entity = 8, year = c(5, 4, 4, 5, 3, 5, 4, 5)),
+      model.freq = expression(entity = rgamma(2, 3),
+                              year = rpois(contract)),
+      model.sev = expression(entity = rnorm(5, 1),
+                             year = rlnorm(entity, 1)))
 
-## Portofolio with a severity model only and a user function for the
-## simulation of claim amounts.
-rpareto <- function(n, alpha, lambda) lambda * (runif(n)^(-1/alpha) - 1)
-modelsev <- list(dist1 = "pareto", par1 = list(alpha = 3, lambda = 8000))
-(x <- simpf(5, 12, model.freq = NULL, modelsev))
-summary(x, contracts = 1:2, years = 10:12)
+## Four level hierarchical model for frequency only
+nodes <- list(sector = 3, unit = c(3, 4),
+              employer = c(3, 4, 3, 4, 2, 3, 4), year = 5)
+model.freq <- expression(sector = rexp(1),
+                         unit = rexp(sector),
+                         employer = rgamma(unit, 1),
+                         year = rpois(contract))
+pf <- simpf(nodes, model.freq, NULL)
+pf 				# print method
+aggregate(pf) 			# aggregate claim amounts
+frequency(pf)  			# frequencies
+severity(pf)			# individual claim amounts
 }
 \keyword{datagen}
