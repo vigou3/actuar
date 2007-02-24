@@ -57,7 +57,7 @@ aggregate.simpf <- function(x, by = names(x$nodes), FUN = sum, ...)
 
     ## Return results as a matrix
     structure(cbind(s, res),
-              dimnames = list(NULL, c(level.names[rows], cols)))
+              dimnames = list(NULL, c(rows, cols)))
 }
 
 frequency.simpf <- function(x, by = names(x$nodes))
