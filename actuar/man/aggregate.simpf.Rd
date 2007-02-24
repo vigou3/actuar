@@ -39,48 +39,43 @@
 }
 \value{
 
-  A matrix obtained by binding the appropriate node identifiers
-  extracted from \code{x$classification} and the summaries per
-  grouping. If the name of the last level is in \code{by}, the column
-  names of \code{x$data} are retained; otherwise, the column name is
-  replaced by the deparsed name of \code{FUN}.
+  A matrix or vector depending on the groupings specified in \code{by}.
 
-  The object returned depends on the way data is aggregated with respect
-  to the call:
+  If at least one level other than the last one is used for grouping,
+  the result is a matrix obtained by binding the appropriate node
+  identifiers extracted from \code{x$classification} and the summaries
+  per grouping. If the last level is used, the column names of
+  \code{x$data} are retained; otherwise, the column name is replaced by
+  the deparsed name of \code{FUN}.
 
-  If data is aggregated by both contract and year, a matrix will
-  be returned with FUN applied to all losses vectors in all years and in
-  all contracts. Therefore, the dimensions of this resulting matrix will
-  be the same as the dimensions of the data matrix listed in the
-  \code{simpf} object, as long as order is respected in the
-  \sQuote{by} vector. Otherwise, the resulting matrix will be transposed.   
-
-  If the argument to \code{by} is of length 1, function \code{FUN} will
-  be applied to either each contract for all years or to each year for
-  all contracts. Therefore, the resulting object will be a vector of
-  length equal to either the number of years or the number of contracts.
+  If \emph{only} the last level is used (column summaries), a named
+  vector is returned.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Louis-Philippe Pouliot
 }
 \seealso{
-  \code{\link{aggregate}} \code{\link{simpf}} \code{\link{severity}}
-  \code{\link{frequency}} \code{\link{frequency.simpf}}
-  }
+  \code{\link{simpf}} to generate data;
+  \code{\link{severity.simpf}} to obtain individual claim amounts.
+}
 \examples{
-modelfreq <- list(dist1 = "pois",
-                  par1 = list(lambda = quote(Lambda * weights)),
-                  dist2 = "gamma",
-                  par2 = c(shape = 2, rate = 1))
-modelsev<-list(dist1 = "lnorm",
-               par1 = list(meanlog = quote(Theta), sdlog = 1),
-               dist2 = "norm",
-               par2 = c(mean = 5, sd = 1))
-data(hachemeister)
-weights <- hachemeister$weights/mean(hachemeister$weights)
-x <- simpf(5, 12, modelfreq, modelsev, weights)
-aggregate(x, by = "contract", FUN = mean)
-frequency(x)
+nodes <- list(sector = 3, unit = c(3, 4),
+              employer = c(3, 4, 3, 4, 2, 3, 4), year = 5)
+model.freq <- expression(sector = rexp(1),
+                         unit = rexp(sector),
+                         employer = rgamma(unit, 1),
+                         year = rpois(contract))
+model.sev <- expression(sector = rnorm(6, 0.1),
+                        unit = rnorm(sector, 1),
+                        employer = rnorm(unit, 1),
+                        year = rlnorm(contract, 1))
+pf <- simpf(nodes, model.freq, model.sev)
+
+aggregate(pf)        # aggregate claim amount by employer and year
+aggregate(pf, by = "sector")	     # by sector 
+aggregate(pf, by = "y")		     # by year
+aggregate(pf, by = c("s", "u"), var) # variance by sector and unit
+frequency(pf)			     # number of claims
 }
 \keyword{models}
