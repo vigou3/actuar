@@ -93,8 +93,9 @@ severity.simpf <- function(x, by = head(names(x$node), -1),
 
     ## Split rows according to the 'by' argument.
     s <- x$classification[, by, drop = FALSE]   # subscripts
-    f <- apply(s, 1, paste, collapse = "")      # factors
-    s <- s[match(unique(f), f), , drop = FALSE] # unique subscripts
+    f <- apply(s, 1, paste, collapse = "")      # grouping IDs
+    f <- factor(f, levels = unique(f))          # factors
+    s <- s[match(levels(f), f), , drop = FALSE] # unique subscripts
 
     ## Keep the 'splitcol' columns for later use.
     x.last <- x$data[, splitcol]
