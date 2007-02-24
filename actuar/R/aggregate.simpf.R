@@ -35,11 +35,14 @@ aggregate.simpf <- function(x, by = names(x$nodes), FUN = sum, ...)
     ## will span the years of observation.
     ##
     ## Convert the sequence of subscripts into factors by pasting the
-    ## digits together.
+    ## digits together. It is important *not* to sort the levels in
+    ## case the levels in 'by' are not in the same order as in
+    ## 'level.names'.
     rows <- setdiff(by, years)          # groups other than years
     s <- x$classification[, rows, drop = FALSE] # subscripts
-    f <- apply(s, 1, paste, collapse = "")      # factors
-    s <- s[match(unique(f), f), , drop = FALSE] # unique subscripts
+    f <- apply(s, 1, paste, collapse = "")      # grouping IDs
+    f <- factor(f, levels = unique(f))          # factors
+    s <- s[match(levels(f), f), , drop = FALSE] # unique subscripts
     xx <- split(x$data, f)                      # split data
 
     ## Make summaries
