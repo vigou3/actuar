@@ -9,9 +9,6 @@
 
 exact <- function(fx, pn, x.scale = 1)
 {
-    if (!exists("Call", inherits = FALSE))
-        Call <- match.call()
-
     ## Some useful lengths
     m <- length(fx)                   # 1 + maximum claim amount
     n <- length(pn) - 1               # maximum number of claims
@@ -31,10 +28,8 @@ exact <- function(fx, pn, x.scale = 1)
     }
 
     FUN <- stepfun((0:(length(fs) - 1)) * x.scale, c(0, cumsum(fs)))
-    class(FUN) <- c("aggregateDist", "ecdf", class(FUN))
-    assign("Call", Call, environment(FUN))
+    class(FUN) <- c("ecdf", class(FUN))
     assign("fs", fs, environment(FUN))
     assign("x.scale", x.scale, environment(FUN))
-    comment(FUN) <- "Exact calculation (convolutions)"
     FUN
 }

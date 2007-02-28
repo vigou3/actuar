@@ -1,12 +1,13 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Calculate credibility premiums in the Bühlmann-Straub
-### credibility model.
+### Bühlmann-Straub credibility model calculations
 ###
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 ### Sébastien Auclair, and Louis-Philippe Pouliot
 
-bstraub <- function(ratios, weights, heterogeneity = c("iterative","unbiased"),TOL = 1E-6, echo = FALSE )
+bstraub <- function(ratios, weights,
+                    heterogeneity = c("iterative", "unbiased"),
+                    TOL = 1E-6, echo = FALSE)
 {
     cl <- match.call()
 
@@ -60,7 +61,7 @@ bstraub <- function(ratios, weights, heterogeneity = c("iterative","unbiased"),T
     ## 3. weights are not all equal (Bühlmann model).
     heterogeneity <- match.arg(heterogeneity)
 
-    if (identical(heterogeneity, "iterative"))
+    if (heterogeneity == "iterative")
     {
         if (ac > 0)
         {
@@ -109,33 +110,54 @@ bstraub <- function(ratios, weights, heterogeneity = c("iterative","unbiased"),T
         ratios.zw <- ratios.ww
     }
 
-    ## Credibility premiums.
-    P <- ratios.zw + cred * (ratios.w - ratios.zw)
-
-    res <- list(model = model,
-                premiums = P,
-                individual = ratios.w,
-                collective = ratios.zw,
-                weights = weights.s,
-                ncontracts = ncontracts,
-                s2 = s2,
-                cred = cred,
-                call = cl,
-                unbiased = ac,
-                iterative = at)
-    class(res) <- "bstraub"
-    res
+    structure(list(model = model,
+                   individual = ratios.w,
+                   collective = ratios.zw,
+                   weights = weights.s,
+                   ncontracts = ncontracts,
+                   s2 = s2,
+                   cred = cred,
+                   call = cl,
+                   unbiased = ac,
+                   iterative = at),
+              class = "bstraub")
 }
 
 print.bstraub <- function(x, ...)
 {
     cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
-    cat("Credibility premiums using the", x$model, "model: \n\n")
-    sapply(paste("  Contract ",
-                 format(1:x$ncontracts, justify = "right"),
-                 ": ",
-                 format(x$premiums),
-                 sep = ""),
-           cat, fill = TRUE)
+    cat("Structure Parameters Estimators\n\n")
+    cat("  Collective premium:       ", x$collective, "\n")
+    cat("  Within contract variance: ", x$s2, "\n")
+    cat("  Portfolio heterogeneity:  ",
+        if (is.null(x$iterative)) x$unbiased else x$iterative, "\n\n")
+    invisible(x)
+}
+
+predict.bstraub <- function(object, ...)
+    object$collective + object$cred * (object$individual - object$collective)
+
+
+summary.bstraub <- function(object, ...)
+    structure(object, class = c("summary.bstraub", class(object)))
+
+print.summary.bstraub <- function(x, ...)
+{
+    cat("\nCredibility model:", x$model, "\n\n")
+    cat("Structure Parameters Estimators\n\n")
+    cat("  Collective premium:        ", x$collective, "\n")
+    cat("  Within contract variance: ", x$s2, "\n")
+    cat("  Portfolio heterogeneity:   ", x$unbiased, " (unbiased)\n")
+    cat("                             ", x$iterative, " (iterative)\n")
+    cat("  Credibility constant:      ",
+        x$s2 / if (is.null(x$iterative)) x$unbiased else x$iterative,
+        "\n\n")
+    cat("Detailed premiums\n\n")
+    cred <- cbind(1:x$ncontracts, x$individual, x$weights,
+                  x$cred, predict(x))
+    colnames(cred) <- c(" Contract", "Ind. premium", "Weight",
+                        "Cred. factor", "Cred. premium")
+    rownames(cred) <- rep("", x$ncontracts)
+    print(cred)
     invisible(x)
 }

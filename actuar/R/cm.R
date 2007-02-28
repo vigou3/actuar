@@ -162,10 +162,11 @@ cm <- function(formula, data, years, weights, subset, TOL = 1E-6, echo = FALSE)
                 data = data,
                 levs = levs,
                 aff = aff)
-    class(res) <- "ghcm"
+    class(res) <- "cm"
     res
 }
-print.ghcm <- function(x, ...)
+
+print.cm <- function(x, ...)
 {
     cat("\nCall: ", deparse(x$call), "\n\n")
     cat("Structure Parameters Estimators\n\n")

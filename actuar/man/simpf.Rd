@@ -115,7 +115,7 @@ simpf(nodes = list(contract = 10, year = 5),
 weights <- sample(2:10, 35, replace = TRUE)
 simpf(nodes = list(entity = 8, year = c(5, 4, 4, 5, 3, 5, 4, 5)),
       model.freq = expression(entity = rgamma(2, 3),
-                              year = rpois(contract)),
+                              year = rpois(entity)),
       model.sev = expression(entity = rnorm(5, 1),
                              year = rlnorm(entity, 1)))
 
@@ -125,7 +125,7 @@ nodes <- list(sector = 3, unit = c(3, 4),
 model.freq <- expression(sector = rexp(1),
                          unit = rexp(sector),
                          employer = rgamma(unit, 1),
-                         year = rpois(contract))
+                         year = rpois(employer))
 pf <- simpf(nodes, model.freq, NULL)
 pf 				# print method
 aggregate(pf) 			# aggregate claim amounts

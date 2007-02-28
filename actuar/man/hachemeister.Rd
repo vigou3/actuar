@@ -8,16 +8,19 @@
   and June 1973 and the corresponding number of claims.
 }
 \usage{hachemeister}
-\format{A list with two components:
+\format{
+  A matrix with 5 rows and the following 25 columns:
   \describe{
-    \item{\code{claims}}{a \eqn{5 \times 12} matrix of average claim
-      amounts}
-    \item{\code{weights}}{a \eqn{5 \times 12} matrix of corresponding
-      weights}
+    \item{\code{state}}{the state number;}
+    \item{\code{year.1}, \dots, \code{year.12}}{the average claim
+      amounts;}
+    \item{\code{weight.1}, \dots, \code{weight.12}}{the 
+      corresponding number of claims.}
   }
 }
-\source{Hachemeister, C. A. (1975), Credibility for regression
-  models with application to trend, \emph{Proceedings of the Berkeley
-    Actuarial Research Conference on Credibility}, Academic Press.
+\source{
+  Hachemeister, C. A. (1975), \emph{Credibility for regression
+    models with application to trend}, Proceedings of the Berkeley
+  Actuarial Research Conference on Credibility, Academic Press.
 }
 \keyword{datasets}

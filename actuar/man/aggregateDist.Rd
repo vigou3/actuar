@@ -103,8 +103,7 @@ aggregateDist(method = c("recursive", "convolution", "normal", "npower", "simula
   claim amount distribution; the first element \strong{must} be
   \eqn{f_X(0)}{fx(0)}.
 }
-\section{Normal and Normal Power 2 methods}
-{
+\section{Normal and Normal Power 2 methods}{
   The Normal approximation of a cumulative distribution function (cdf)
   \eqn{F(x)} with mean \eqn{\mu}{m} and standard deviation
   \eqn{\sigma}{s} is
@@ -133,10 +132,16 @@ aggregateDist(method = c("recursive", "convolution", "normal", "npower", "simula
   A function of class \code{"aggregateDist"}, inheriting from the
   \code{"function"} class when using normal and Normal Power
   approximations and additionally inheriting from the \code{"ecdf"} and
-  \code{"stepfun"} classes when other methods are used.  
+  \code{"stepfun"} classes when other methods are used.
+
+  There are methods available to summarize (\code{summary}), represent
+  (\code{print}), plot (\code{plot}), compute quantiles
+  (\code{quantile}) and the mean (\code{mean}) of \code{"aggregateDist"}
+  objects.
 }
 \seealso{
-  \code{"\link{discretize}"} to discretize a severity distribution;
+  \code{\link{discretize}} to discretize a severity distribution;
+  \code{\link{quantile.aggregateDist}} for the \code{quantile} method;
   \code{\link{simpf}}.
 }
 \references{
@@ -161,7 +166,6 @@ c(Fs(0), diff(Fs(25 * 0:21))) # prob. mass function
 plot(Fs)
 
 ## Recursive method
-model.freq <- list(dist = "pois", par = list(lambda = 3))
 Fs <- aggregateDist("recursive", model.freq = "poisson", model.sev = fx,
                     lambda = 3, x.scale = 25)
 plot(Fs)
@@ -171,8 +175,8 @@ Fs <- aggregateDist("npower", moments = c(200, 200, 0.5))
 Fs(210)
 
 ## Simulation method
-model.freq <- expression(rpois(3))
-model.sev <- expression(rgamma(100, 2))
+model.freq <- expression(data = rpois(3))
+model.sev <- expression(data = rgamma(100, 2))
 Fs <- aggregateDist("simulation", model.freq, model.sev, nb.simul = 1000)
 mean(Fs)
 plot(Fs)

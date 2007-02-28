@@ -10,10 +10,10 @@
          approx.lin = FALSE, names = TRUE, \dots)
 }  
 \arguments{
-  \item{x}{an \code{\link{aggregateDist}} object.}
+  \item{x}{an object of class \code{"aggregateDist"}.}
+  \item{probs}{numeric vector of probabilities with values in \eqn{[0, 1)}.}
   \item{approx.lin}{logical; when \code{TRUE} and \code{x} is a step
     function, quantiles are linearly interpolated between knots.}
-  \item{probs}{numeric vector of probabilities with values in [0, 1)}
   \item{names}{logical; if true, the result has a 'names' attribute.  Set to
     'FALSE' for speedup with many 'probs'.}
   \item{\dots}{further arguments passed to or from other methods.}
@@ -26,15 +26,17 @@
 \value{
   A numeric vector, named if \code{names} is \code{TRUE}.
 }
+\seealso{
+  \code{\link{aggregateDist}}
+}
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and 
   Louis-Philippe Pouliot
 }
 \examples{
-model.freq <- list(dist1 = "pois", par1 = c(lambda = 4))
-model.sev <- list(dist1 = "lnorm", par1 = c(meanlog = 10, sdlog = 1.5))
-Fs <- aggregateDist("simulation", model.freq = model.freq,
-                    model.sev = model.sev, nb.simul = 1000)
+model.freq <- expression(data = rpois(3))
+model.sev <- expression(data = rlnorm(10, 1.5))
+Fs <- aggregateDist("simulation", model.freq, model.sev, nb.simul = 1000)
 quantile(Fs, probs = c(0.25, 0.5, 0.75))
 }
-\keyword{internal}
+\keyword{univar}

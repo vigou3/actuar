@@ -9,37 +9,33 @@
 ### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>
 ### and Louis-Philippe Pouliot
 
-normal <- function(mean, var)
+normal <- function(mean, variance)
 {
     ## Approximate the total amount of claims distribution using the first
     ## two moments.
-    if (!exists("Call", inherits = FALSE))
-        Call <- match.call()
+    FUN <- function(x) pnorm(x, mean = mean, sd = sqrt(variance))
 
-    FUN <- function(x) pnorm(x, mean = mean, sd = sqrt(var))
-
-    class(FUN) <- c("aggregateDist", class(FUN))
-    assign("Call", Call, environment(FUN))
-    attr(FUN, "source") <- "function(x) pnorm(x, mean = mean, sd = sqrt(var))"
-    comment(FUN) <- "Normal approximation"
+    environment(FUN) <- new.env()
+    assign("mean", mean, envir = environment(FUN))
+    assign("variance", variance, envir = environment(FUN))
+    attr(FUN, "source") <- "function(x) pnorm(x, mean = mean, sd = sqrt(variance))"
     FUN
 }
 
-npower <- function(mean, var, skewness)
+npower <- function(mean, variance, skewness)
 {
     ## Approximate the total amount of claims distribution using the first
     ## three moments.
-    if (!exists("Call", inherits = FALSE))
-        Call <- match.call()
-
     FUN <- function(x)
         ifelse(x <= mean, NA,
-               pnorm(sqrt(1 + 9/skewness^2 + 6 * (x - mean)/(sqrt(var) * skewness)) -
+               pnorm(sqrt(1 + 9/skewness^2 + 6 * (x - mean)/(sqrt(variance) *
+                                                             skewness)) -
                      3/skewness))
 
-    class(FUN) <- c("aggregateDist", class(FUN))
-    comment(FUN) <- "Normal Power approximation"
-    assign("Call", Call, environment(FUN))
-    attr(FUN, "source") <- "function(x) ifelse(x <= mean, NA, pnorm(sqrt(1 + 9/skewness^2 + 6 * (x - mean)/(sqrt(var) * skewness)) - 3/skewness))"
+    environment(FUN) <- new.env()
+    assign("mean", mean, envir = environment(FUN))
+    assign("variance", variance, envir = environment(FUN))
+    assign("skewness", skewness, envir = environment(FUN))
+    attr(FUN, "source") <- "function(x) ifelse(x <= mean, NA, pnorm(sqrt(1 + 9/skewness^2 + 6 * (x - mean)/(sqrt(variance) * skewness)) - 3/skewness))"
     FUN
 }

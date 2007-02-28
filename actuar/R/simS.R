@@ -7,10 +7,7 @@
 
 simS <- function(n, model.freq, model.sev)
 {
-    if (!exists("Call", inherits = FALSE))
-        Call <- match.call()
-
-    ## Prepare the call to simpf() by building up 'nodes'.
+    ## Prepare the call to simpf() by building up 'nodes'
     level.names <- names(if (is.null(model.freq)) model.sev else model.freq)
     nlevels <- length(level.names)
     nodes <- as.list(c(rep(1, nlevels - 1), n))
@@ -23,7 +20,5 @@ simS <- function(n, model.freq, model.sev)
 
     FUN <- ecdf(x)
     class(FUN) <- c("aggregateDist", class(FUN))
-    assign("Call", Call, env = environment(FUN))
-    comment(FUN) <- "Approximation by simulation"
     FUN
 }

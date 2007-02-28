@@ -250,6 +250,5 @@ print.simpf <- function(x, ...)
     }
     cat("\n  Number of claims per node: \n\n")
     print(frequency(x))
-    cat("\nUse 'aggregate', 'frequency' and 'severity' to manipulate\n\n")
     invisible(x)
 }

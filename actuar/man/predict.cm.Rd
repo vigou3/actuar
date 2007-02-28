@@ -1,17 +1,17 @@
-\name{predict.ghcm}
-\alias{predict.ghcm}
+\name{predict.cm}
+\alias{predict.cm}
 \title{Predict method for Generalized Hierarchical Credibility Models}
 \description{Predicted values of claim ratios (credibility premiums)
   based on credibility model object}
 \usage{
-\method{predict}{ghcm}(object, \dots)
+\method{predict}{cm}(object, \dots)
 }
 \arguments{
-  \item{object}{Object of class inheriting from \code{"ghcm"}}
+  \item{object}{Object of class inheriting from \code{"cm"}}
   \item{\dots}{potential further arguments required by generic.}  
 }
 \details{
-  \code{ghcm} objects contain all the estimated values needed to
+  \code{cm} objects contain all the estimated values needed to
   calculate the credibility premiums. To give an example of how the
   premiums are computed, let us consider a portfolio divided in sectors,
   which are further divided in classes, which themselves contain
@@ -46,16 +46,12 @@
 }
 \examples{
 data(hachemeister)
-contract <- c("C1", "C2" ,"C3", "C4", "C5")
-sector <- LETTERS[c(1,2,1,2,2)]
-x <- data.frame(sector, contract, hachemeister$claims,
-hachemeister$weights)
-
-(z <- ghcm(~sector + sector:contract, x, X1:X12, X1.1:X12.1))
-
-predict(z)
+data(hachemeister)
+fit <- cm(~state, as.data.frame(hachemeister),
+          years = year.1:year.12, weights = weight.1:weight.12)
+predict(fit)
 }
-\keyword{models}
+\keyword{methods}
   
   
 

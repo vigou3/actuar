@@ -1,92 +1,46 @@
 \name{severity}
 \alias{severity}
 \alias{severity.default}
-\alias{severity.simpf}
-\title{Display a Two-Dimension Version of a Matrix of Vectors}
+\title{Manipulation of Individual Claim Amounts}
 \description{
-  severity() displays all values of a matrix of vectors by
-  \sQuote{unrolling} the object vertically or horizontally.   
+  \code{severity} is a generic function created to manipulate individual
+  claim amounts. The function invokes particular \emph{methods} which
+  depend on the \code{\link[base]{class}} of the first argument.
 }
 \usage{
-## default S3 method:
-severity(x, bycol = FALSE, \dots)
+severity(x, ...)
 
-\method{severity}{simpf}(x, bycol = FALSE, y.exclude = 0, \dots)
+\method{severity}{default}(x, bycol = FALSE, drop = TRUE, \dots)
 }
 \arguments{
-  \item{x}{matrix of vectors or a \code{\link{simpf}} object}
-  \item{bycol}{boolean, whether to \sQuote{unroll} horizontally
-    (\code{FALSE})or vertically (\code{TRUE})}
-  \item{y.exclude}{integer, a number of years of observations at the tail of the
-    portfolio to be displayed seperately}
-  \item{\dots}{potential further arguments for future methods}
-
+  \item{x}{an \R object.}
+  \item{bycol}{logical; whether to \dQuote{unroll} horizontally
+    (\code{FALSE}) or vertically (\code{TRUE})}
+  \item{\dots}{further arguments to be passed to or from other methods.}
+  \item{drop}{logical; if \code{TRUE}, the result is coerced to the
+    lowest possible dimension.}
 }
 \details{
-  \code{severity} gives the possibility to visualize all data contained
-  in a matrix of elements of length greater than 1, that is,
-  a matrix where each element can be a vector. The name \sQuote{severity}
-  was chosen because of the actuarial context where the need of \sQuote{unrolling}
-  a matrix appeared. The function was first designed to treat the matrix
-  of data returned in a \code{\link{simpf}} object, where each element is
-  a vector of losses during a particular year for a particular
-  contract. Because the \sQuote{unrolling} task is not specific to this
-  context, a generic was created along with a method for class
-  \code{"simpf"}.
-
-  
+  Currently, the default method is equivalent to
+  \code{\link{unroll}}. This is liable to change since the link between
+  the name and the use of the function is rather weak.
 }
 \value{
-  The object returned is a matrix where vector elements are concatenated
-  by row if argument \code{bycol} is FALSE or by column in the opposite
-  case, making every element of every vector visible. This operation can
-  cause rows or columns to be of different lengths, so the matrix is
-  filled with \code{NA}.
-  
-  If \code{y.exclude} is greater than 0, a second matrix is returned. It 
-  displays the losses for the \dQuote{y.exclude} last years, with the
-  same method as for the preceding years.  
-  
-  It is important to realize that the function brings a nice visualisation
-  with detriment to precision. In an insurance context where we have a
-  matrix of losses, for example, with vectors of claims for each
-  contract and each year, the matrix returned by severity() will cause
-  either years or contracts to be indistinguishable, depending on the
-  value of \code{bycol}. 
+  A vector or matrix.
 }
 \seealso{
-  \code{\link{aggregate.simpf}} \code{\link{simpf}} \code{\link{matrix}}
+  \code{\link{severity.simpf}} for the original motivation of these
+  functions.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Louis-Philippe Pouliot
 }
 \examples{
-
 x <- list(c(1:3), c(1:8), c(1:4), c(1:3))
-(mat <- matrix(x, 2, 2))             ## The matrix of vectors
+(mat <- matrix(x, 2, 2))
+severity(mat)
 severity(mat, bycol = TRUE)
-
-
-## With a simpf object
-
-modelfreq <- list(dist1 = "pois",
-                  par1 = list(lambda = quote(Lambda * weights)),
-                  dist2 = "gamma",
-                  par2 = c(shape = 2, rate = 1))
-modelsev<-list(dist1 = "lnorm",
-               par1 = list(meanlog = quote(Theta), sdlog = 1),
-               dist2 = "norm",
-               par2 = c(mean = 5, sd = 1))
-data(hachemeister)
-weights <- hachemeister$weights/mean(hachemeister$weights)
-x <- simpf(5, 12, modelfreq, modelsev, weights)           ## The simpf object
-
-severity(x,                  ## A matrix of losses,
-         bycol = FALSE,      ## 'unrolled' by row,
-         y.exclude = 1)      ## with claims for the last year displayed separately.
-                                          
 }
 \keyword{datagen}
 \keyword{manip}
-

@@ -27,59 +27,72 @@ aggregateDist <-
         ## since the vector is not required to be named.
         if (missing(moments) || length(moments) < 2)
             stop("'moments' must supply the mean and variance of the distribution")
-        return(normal(moments[1], moments[2]))
+        FUN <- normal(moments[1], moments[2])
+        comment(FUN) <- "Normal approximation"
     }
 
-    if (method == "npower")
+    else if (method == "npower")
     {
         if (missing(moments) || length(moments) < 3)
             stop("'moments' must supply the mean, variance and skewness of the distribution")
-        return(npower(moments[1], moments[2], moments[3]))
+        FUN <- npower(moments[1], moments[2], moments[3])
+        comment(FUN) <- "Normal Power approximation"
     }
 
-    if (method == "simulation")
+    else if (method == "simulation")
     {
         if (missing(nb.simul))
             stop("'nb.simul' must supply the number of simulations")
         if (is.null(names(model.freq)) && is.null(names(model.sev)))
             stop("expressions in 'model.freq' and 'model.sev' must be named")
-        return(simS(nb.simul, model.freq = model.freq, model.sev = model.sev))
+        FUN <- simS(nb.simul, model.freq = model.freq, model.sev = model.sev)
+        comment(FUN) <- "Approximation by simulation"
     }
 
-    ## "recursive" and "convolution" cases. Both require a discrete
-    ## distribution of claim amounts, that is a vector of
-    ## probabilities in argument 'model.sev'.
-    if (!is.numeric(model.sev))
-        stop("'model.sev' must be a vector of probabilities")
-
-    ## Recursive method uses a model for the frequency distribution.
-    if (method == "recursive")
+    else
     {
-        if (is.null(model.freq) || !is.character(model.freq))
-            stop("frequency distribution must be supplied as a character string")
-        dist <- match.arg(tolower(model.freq),
-                          c("poisson", "geometric", "negative binomial",
-                            "binomial", "logarithmic"))
-        return(panjer(fx = model.sev, dist = dist, p0 = p0,
-                      x.scale = x.scale, ..., echo = echo, TOL = TOL))
+        ## "recursive" and "convolution" cases. Both require a
+        ## discrete distribution of claim amounts, that is a vector of
+        ## probabilities in argument 'model.sev'.
+        if (!is.numeric(model.sev))
+            stop("'model.sev' must be a vector of probabilities")
+
+        ## Recursive method uses a model for the frequency distribution.
+        if (method == "recursive")
+        {
+            if (is.null(model.freq) || !is.character(model.freq))
+                stop("frequency distribution must be supplied as a character string")
+            dist <- match.arg(tolower(model.freq),
+                              c("poisson", "geometric", "negative binomial",
+                                "binomial", "logarithmic"))
+            FUN <- panjer(fx = model.sev, dist = dist, p0 = p0,
+                          x.scale = x.scale, ..., echo = echo, TOL = TOL)
+            comment(FUN) <- "Recursive method approximation"
+        }
+
+        ## Convolution method requires a vector of probabilites in
+        ## argument 'model.freq'.
+        else if (method == "convolution")
+        {
+            if (!is.numeric(model.freq))
+                stop("'model.freq' must be a vector of probabilities")
+            FUN <- exact(fx = model.sev, pn = model.freq, x.scale = x.scale)
+            comment(FUN) <- "Exact calculation (convolutions)"
+        }
+        else
+            stop("internal error")
     }
 
-    ## Convolution method requires a vector of probabilites in
-    ## argument 'model.freq'.
-    if (method == "convolution")
-    {
-        if (!is.numeric(model.freq))
-            stop("'model.freq' must be a vector of probabilities")
-        return(exact(fx = model.sev, pn = model.freq, x.scale = x.scale))
-    }
-
-    stop("internal error")
+    ## Return cumulative distribution function
+    class(FUN) <- c("aggregateDist", class(FUN))
+    assign("Call", Call, environment(FUN))
+    FUN
 }
 
 print.aggregateDist <- function(x, ...)
 {
     cat("\nAggregate Claim Amount Distribution\n")
-    cat("  ", label <- comment(x), "\n\n")
+    cat("  ", label <- comment(x), "\n\n", sep = "")
 
     cat("Call:\n")
     print(get("Call", envir = environment(x)))
@@ -108,4 +121,80 @@ print.aggregateDist <- function(x, ...)
     print(environment(x))
     cat("Class attribute:\n")
     print(attr(x, "class"))
+}
+
+plot.aggregateDist <- function(x, xlim, ...)
+{
+    ## Function plot() is used for the step cdfs and function curve()
+    ## in the continuous cases.
+    main <- "Aggregate Claim Amount Distribution"
+    ylab <- expression(F[S](x))
+
+    if ("stepfun" %in% class(x))
+    {
+        ## Method for class 'ecdf' will most probably be used.
+        NextMethod(main = main, ylab = ylab, ...)
+    }
+    else
+    {
+        ## Limits for the x-axis are supplied if none are given
+        ## in argument.
+        if (missing(xlim))
+        {
+            mean <- get("mean", environment(x))
+            sd <- sqrt(get("var", environment(x)))
+            xlim <- c(mean - 3 * sd, mean + 3 * sd)
+        }
+        curve(x, main = main, ylab = ylab, xlim = xlim, ylim = c(0, 1), ...)
+    }
+    mtext(comment(x), line = 0.4)
+}
+
+summary.aggregateDist <- function(object, ...)
+    structure(object, class = c("summary.aggregateDist", class(object)))
+
+print.summary.aggregateDist <- function(x, ...)
+{
+    cat(ifelse(comment(x) %in%
+               c("Normal approximation", "Normal Power approximation"),
+               "Aggregate Claim Amount CDF:\n",
+               "Aggregate Claim Amount Empirical CDF:\n"))
+    q <- quantile(x, p = c(0.25, 0.5, 0.75))
+    expectation <- mean(x)
+
+    if (comment(x) %in% c("Normal approximation", "Normal Power approximation"))
+    {
+        min <- 0
+        max <- NA
+    }
+    else
+    {
+        max <- tail(eval(expression(x), environment(x)), 1)
+        min <- head(eval(expression(x), environment(x)), 1)
+    }
+    res <- c(min, q[c(1, 2)], expectation, q[3], max)
+    names(res) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
+    print(res)
+}
+
+mean.aggregateDist <- function(x, ...)
+{
+    label <- comment(x)
+
+    ## Simply return the value of the true mean given in argument in
+    ## the case of the Normal and Normal Power approximations.
+    if (label %in%
+        c("Normal approximation", "Normal Power approximation"))
+        return(get("mean", environment(x)))
+
+    ## For the recursive, exact and simulation methods, compute the
+    ## mean from the stepwise cdf. For the first two, use the pmf
+    ## saved in the environment of the object.
+    val <- get("x", environment(x))
+    prob <-
+        if (label == "Approximation by simulation")
+            c(val[1], diff(get("y", environment(x))))
+        else
+            get("fs", environment(x))
+    drop(crossprod(val, prob))
 }
