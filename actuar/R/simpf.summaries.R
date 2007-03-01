@@ -66,8 +66,8 @@ aggregate.simpf <- function(x, by = names(x$nodes), FUN = sum, ...)
 
 frequency.simpf <- function(x, by = names(x$nodes), ...)
 {
-    FUN <- function(x) if (identical(x, NA)) NA else length(x)
-    aggregate(x, by, FUN)
+    freq <- function(x) if (identical(x, NA)) NA else length(x)
+    aggregate(x, by, freq)
 }
 
 severity.simpf <- function(x, by = head(names(x$node), -1),
