@@ -7,8 +7,8 @@
 ### supported are part of a generalized hierarchical credibility
 ### theory as introduced in Dannenburg (1995).
 ###
-### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
-### Louis-Philippe Pouliot
+### AUTHORS: Louis-Philippe Pouliot,
+### Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 
 cm <- function(formula, data, years, weights, subset, TOL = 1E-6, echo = FALSE)
 {

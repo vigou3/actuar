@@ -10,9 +10,11 @@
   a portfolio over a period using one of five methods.
 }
 \usage{
-aggregateDist(method = c("recursive", "convolution", "normal", "npower", "simulation"),
-              model.freq = NULL, model.sev = NULL, p0 = NULL, x.scale = 1, 
-              moments, nb.simul, \dots, TOL = 1e-06, echo = FALSE)
+aggregateDist(method = c("recursive", "convolution", "normal",
+                         "npower", "simulation"),
+              model.freq = NULL, model.sev = NULL, p0 = NULL,
+              x.scale = 1, moments, nb.simul, \dots,
+              TOL = 1e-06, echo = FALSE)
 
 \method{print}{aggregateDist}(x, \dots)
 
@@ -52,15 +54,15 @@ aggregateDist(method = c("recursive", "convolution", "normal", "npower", "simula
     case of \code{plot.aggregateDist}.}
   \item{TOL}{the recursion in the \code{"recursive"} method stops when the
     cumulative distribution function is less than \code{TOL} away from 1.}
-  \item{echo}{echo the recursions to screen in the \code{"recursive"} method.}
+  \item{echo}{logical; echo the recursions to screen in the
+    \code{"recursive"} method.}
   \item{x, object}{an object of class \code{"aggregateDist"}.}
-  \item{xlim}{the x limits (x1, x2) of the plot.} 
+  \item{xlim}{numeric of length 2; the \eqn{x} limits of the plot.}
 }
 \details{
-  \code{aggregateDist} essentially checks the arguments and then calls
-  functions creating \code{"aggregateDist"} objects. Each method returns
-  a function to compute the aggregate claim amount cumulative
-  distribution function (cdf).
+  \code{aggregateDist} returns a function to compute the cumulative
+  distribution function (cdf) of the aggregate claim amount distribution
+  in any point.  
 
   The \code{"recursive"} method computes the cdf using the Panjer
   algorithm; the \code{"convolution"} method using convolutions; the
@@ -71,9 +73,7 @@ aggregateDist(method = c("recursive", "convolution", "normal", "npower", "simula
 \section{Recursive method}{
   The frequency distribution is a member of the \eqn{(a, b, 0)} family
   of discrete distributions if \code{p0} is \code{NULL} and a member of
-  the \eqn{(a, b, 1)} family if \code{p0} is specified. The logarithmic
-  distribution is a limiting case of the negative binomial distribution
-  where the size parameter is equal to 0.
+  the \eqn{(a, b, 1)} family if \code{p0} is specified.
 
   \code{model.freq} must be one of \code{"binomial"},
   \code{"geometric"}, \code{"negative binomial"}, \code{"poisson"} or
@@ -81,10 +81,12 @@ aggregateDist(method = c("recursive", "convolution", "normal", "npower", "simula
   frequency distribution must be specified using names identical to the
   arguments of functions \code{\link{dbinom}}, \code{\link{dgeom}},
   \code{\link{dnbinom}}, \code{\link{dpois}} and \code{\link{dnbinom}},
-  respecively.
+  respectively. (The logarithmic distribution is a limiting case of the
+  negative binomial distribution with size parameter equal to 0.)
 
   \code{model.sev} is a vector of the (discretized) claim amount
-  distribution; the first element \strong{must} be \eqn{f_X(0)}{fx(0)}.
+  distribution; the first element \strong{must} be \eqn{f_X(0) = \Pr[X =
+    0]}{fx(0) = Pr[X = 0]}.
 }
 \section{Convolution method}{
   The cumulative distribution function (cdf) \eqn{F_S(x)}{Fs(x)} of the
@@ -122,7 +124,7 @@ aggregateDist(method = c("recursive", "convolution", "normal", "npower", "simula
 }
 \section{Simulation method}{
   This methods returns the empirical distribution function of a sample
-  of size code{nb.simul} of the aggregate claim amount distribution
+  of size \code{nb.simul} of the aggregate claim amount distribution
   specified by \code{model.freq} and
   \code{model.sev}. \code{\link{simpf}} is used for the simulation of
   claim amounts, hence both the frequency and severity models can be
@@ -136,8 +138,8 @@ aggregateDist(method = c("recursive", "convolution", "normal", "npower", "simula
 
   There are methods available to summarize (\code{summary}), represent
   (\code{print}), plot (\code{plot}), compute quantiles
-  (\code{quantile}) and the mean (\code{mean}) of \code{"aggregateDist"}
-  objects.
+  (\code{quantile}) and compute the mean (\code{mean}) of
+  \code{"aggregateDist"} objects.
 }
 \seealso{
   \code{\link{discretize}} to discretize a severity distribution;
@@ -157,17 +159,18 @@ aggregateDist(method = c("recursive", "convolution", "normal", "npower", "simula
 }
 \examples{
 ## Convolution method (example 6.6 of Klugman et al. (2004))
-fx <- c(0, 0.15, 0.2, 0.25, 0.125, 0.075, 0.05, 0.05, 0.05, 0.025, 0.025)
+fx <- c(0, 0.15, 0.2, 0.25, 0.125, 0.075,
+        0.05, 0.05, 0.05, 0.025, 0.025)
 pn <- c(0.05, 0.1, 0.15, 0.2, 0.25, 0.15, 0.06, 0.03, 0.01)
-Fs <- aggregateDist("convolution", model.freq = pn, model.sev = fx,
-                    x.scale = 25)
+Fs <- aggregateDist("convolution", model.freq = pn,
+                    model.sev = fx, x.scale = 25)
 summary(Fs)
-c(Fs(0), diff(Fs(25 * 0:21))) # prob. mass function
+c(Fs(0), diff(Fs(25 * 0:21))) # probability mass function
 plot(Fs)
 
 ## Recursive method
-Fs <- aggregateDist("recursive", model.freq = "poisson", model.sev = fx,
-                    lambda = 3, x.scale = 25)
+Fs <- aggregateDist("recursive", model.freq = "poisson",
+                    model.sev = fx, lambda = 3, x.scale = 25)
 plot(Fs)
 
 ## Normal Power approximation
@@ -177,7 +180,8 @@ Fs(210)
 ## Simulation method
 model.freq <- expression(data = rpois(3))
 model.sev <- expression(data = rgamma(100, 2))
-Fs <- aggregateDist("simulation", model.freq, model.sev, nb.simul = 1000)
+Fs <- aggregateDist("simulation", nb.simul = 1000,
+                    model.freq, model.sev)
 mean(Fs)
 plot(Fs)
 }

@@ -47,15 +47,15 @@ simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
   level, the model for this level can be \code{NULL}.
 
   The argument of the random number generation functions for the number
-  of variates to simulate must be named \code{n}.
+  of variates to simulate \strong{must} be named \code{n}.
 
   Weights will be used wherever the name \code{"weights"} appears in a
   model.  It is the user's resposibility to ensure that the length of
   \code{weights} will match the number of nodes when weights are to be
   used.  Normally, there should be one weight per node at the lowest
-  level in the model.
+  level of the model.
 
-  Data is generated is lexicographic order, that is by row is the output
+  Data is generated is lexicographic order, that is by row in the output
   matrix.
 }
 \value{
@@ -77,13 +77,10 @@ simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
   \item{nodes}{the \code{nodes} argument, appropriately recycled;}
   \item{model.freq}{the frequency model as given in argument}
   \item{model.sev}{the severity model as given in argument.}
-}
-\section{Working with \code{"simpf"} objects}{
+
   It is recommended to manipulate objects of class \code{"simpf"} by
-  means of the corresponding methods of functions
-  \code{\link[=aggregate.simpf]{aggregate}},
-  \code{\link[=frequency.simpf]{frequency}},
-  \code{\link[=severity.simpf]{severity}}.
+  means of the corresponding methods of functions \code{aggregate},
+  \code{frequency} and \code{severity}.
 }
 \references{
   Goulet, V. (2006), \emph{Credibility for severity
@@ -94,11 +91,9 @@ simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
   Sébastien Auclair and Louis-Philippe Pouliot
 }
 \seealso{
-  \code{\link{aggregate.simpf}},
-  \code{\link{frequency.simpf}} and
-  \code{\link{severity}}
-  to create the matrices of aggregate claim amounts, frequencies and
-  individual claim amounts, respectively.
+  \code{\link{simpf.summaries}} for the functions to create the
+  matrices of aggregate claim amounts, frequencies and individual
+  claim amounts.
 }
 \examples{
 ## Simple two level (contracts and years) portfolio with frequency model
