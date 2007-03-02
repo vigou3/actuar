@@ -1,4 +1,5 @@
 \name{simpf.summaries}
+\alias{simpf.summaries}
 \alias{aggregate.simpf}
 \alias{frequency.simpf}
 \alias{severity.simpf}
