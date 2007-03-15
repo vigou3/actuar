@@ -107,12 +107,13 @@ simpf(nodes = list(contract = 10, year = 5),
 
 ## Model with weights and mixtures for both frequency and severity
 ## models
-weights <- sample(2:10, 35, replace = TRUE)
-simpf(nodes = list(entity = 8, year = c(5, 4, 4, 5, 3, 5, 4, 5)),
+wit <- sample(2:10, 35, replace = TRUE)
+p<-simpf(nodes = list(entity = 8, year = c(5, 4, 4, 5, 3, 5, 4, 5)),
       model.freq = expression(entity = rgamma(2, 3),
-                              year = rpois(entity)),
+                              year = rpois(weights * entity)),
       model.sev = expression(entity = rnorm(5, 1),
-                             year = rlnorm(entity, 1)))
+                             year = rlnorm(entity, 1)),
+      weights = wit)
 
 ## Four level hierarchical model for frequency only
 nodes <- list(sector = 3, unit = c(3, 4),

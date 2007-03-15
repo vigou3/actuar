@@ -208,11 +208,16 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     }
     m[, ncol] <- unlist(lapply(nodes[[ncol]], seq)) # last column
 
-    ## Reshape weights into a matrix, if necessary
+    ## Reshape weights as a matrix, if necessary.
     weights <- if (is.null(weights))
         NULL
     else
-        matrix(weights, nrow = nrow, byrow = TRUE, dimnames = dimnames(res))
+    {
+        ## Integrate NAs into the weights matrix as appropriate.
+        w <- rep(NA, nrow * ncol)
+        w[ind] <- weights
+        matrix(w, nrow = nrow, byrow = TRUE, dimnames = dimnames(res))
+    }
 
     ## Return object of class 'simpf'
     structure(list(data = res,
