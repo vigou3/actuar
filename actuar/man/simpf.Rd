@@ -108,7 +108,7 @@ simpf(nodes = list(contract = 10, year = 5),
 ## Model with weights and mixtures for both frequency and severity
 ## models
 wit <- sample(2:10, 35, replace = TRUE)
-p<-simpf(nodes = list(entity = 8, year = c(5, 4, 4, 5, 3, 5, 4, 5)),
+simpf(nodes = list(entity = 8, year = c(5, 4, 4, 5, 3, 5, 4, 5)),
       model.freq = expression(entity = rgamma(2, 3),
                               year = rpois(weights * entity)),
       model.sev = expression(entity = rnorm(5, 1),
