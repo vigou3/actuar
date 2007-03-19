@@ -18,7 +18,9 @@ aggregateDist(method = c("recursive", "convolution", "normal",
 
 \method{print}{aggregateDist}(x, \dots)
 
-\method{plot}{aggregateDist}(x, xlim, \dots)
+\method{plot}{aggregateDist}(x, xlim, ylab = expression(F[S](x)),
+     main = "Aggregate Claim Amount Distribution",
+     sub = comment(x), \dots)
 
 \method{summary}{aggregateDist}(object, \dots)
 
@@ -50,14 +52,17 @@ aggregateDist(method = c("recursive", "convolution", "normal",
     or \code{"npower"} methods.}
   \item{nb.simul}{number of simulations for the \code{"simulation"} method.} 
   \item{\dots}{parameters of the frequency distribution for the
-    \code{"recursive"} method, or additionnal plotting options in the
-    case of \code{plot.aggregateDist}.}
+    \code{"recursive"} method; further arguments to be passed to or
+    from other methods otherwise.}
   \item{TOL}{the recursion in the \code{"recursive"} method stops when the
     cumulative distribution function is less than \code{TOL} away from 1.}
   \item{echo}{logical; echo the recursions to screen in the
     \code{"recursive"} method.}
   \item{x, object}{an object of class \code{"aggregateDist"}.}
   \item{xlim}{numeric of length 2; the \eqn{x} limits of the plot.}
+  \item{ylab}{label of the y axis.}
+  \item{main}{main title.}
+  \item{sub}{subtitle, defaulting to the calculation method.}
 }
 \details{
   \code{aggregateDist} returns a function to compute the cumulative

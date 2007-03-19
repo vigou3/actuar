@@ -123,13 +123,13 @@ print.aggregateDist <- function(x, ...)
     print(attr(x, "class"))
 }
 
-plot.aggregateDist <- function(x, xlim, ...)
+plot.aggregateDist <- function(x, xlim,
+                               ylab = expression(F[S](x)),
+                               main = "Aggregate Claim Amount Distribution",
+                               sub = comment(x), ...)
 {
     ## Function plot() is used for the step cdfs and function curve()
     ## in the continuous cases.
-    main <- "Aggregate Claim Amount Distribution"
-    ylab <- expression(F[S](x))
-
     if ("stepfun" %in% class(x))
     {
         ## Method for class 'ecdf' will most probably be used.
@@ -142,12 +142,12 @@ plot.aggregateDist <- function(x, xlim, ...)
         if (missing(xlim))
         {
             mean <- get("mean", environment(x))
-            sd <- sqrt(get("var", environment(x)))
+            sd <- sqrt(get("variance", environment(x)))
             xlim <- c(mean - 3 * sd, mean + 3 * sd)
         }
         curve(x, main = main, ylab = ylab, xlim = xlim, ylim = c(0, 1), ...)
     }
-    mtext(comment(x), line = 0.4)
+    mtext(sub)
 }
 
 summary.aggregateDist <- function(object, ...)
