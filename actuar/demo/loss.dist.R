@@ -4,7 +4,7 @@
 ###
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-require(actuar);
+require(actuar)
 if(dev.cur() <= 1) get(getOption("device"))()
 
 op <- par(ask = interactive() &&
