@@ -3,8 +3,7 @@
 ### Function to discretize a continuous distribution using various
 ### methods.
 ###
-### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
-### Louis-Philippe Pouliot
+### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 discretize <- function (cdf, from, to, step = 1,
                         method = c("upper", "lower", "rounding", "unbiased"),
@@ -36,29 +35,32 @@ discretize <- function (cdf, from, to, step = 1,
 
     if (method %in% c("upper", "lower"))
     {
-        ## The "upper" discretization is the forward difference of Fx:
+        ## The "upper" discretization method assigns to point x =
+        ## from, from + step, ..., to - step the probability mass F(x
+        ## + step) - F(x).
         ##
-        ##   Fx(step) - Fx(from), ..., Fx(to) - Fx(to - step),
+        ## The "lower" discretization method assigns to point x = from
+        ## the probability mass 0 and to x = from + step, ..., to the
+        ## probability mass F(x) - F(x - step).
         ##
-        ## whereas the "lower" discretization is the backward difference
-        ##
-        ##   Fx(from), Fx(step) - Fx(from), ..., Fx(to) - Fx(to - step).
-        ##
-        ## Hence, the latter case simply has one more element than the
+        ## Hence, the latter method simply has one more element than the
         ## former.
         x <- seq.int(from, to, by)
         Fx <- eval(cdf, envir = list(x = x), enclos = parent.frame())
-        return(c(if(method == "lower") Fx[1], diff(Fx)))
+        return(c(if(method == "lower") 0, diff(Fx)))
     }
 
     if (method == "rounding")
     {
-        ## Rounding method assigns to point x > 'from' the probability
-        ## in [x - step/2, x + step/2) and to 'from' the probability
-        ## in ['from', step/2). The limits of the intervals (closed or
-        ## open) are important for discrete distributions, but it is
-        ## left to the user to make the adjustment via 'cdf'.
-        x <- c(from, seq.int(from + by/2, to - by/2, by), to)
+        ## Rounding method assigns to point x = from the probability
+        ## mass F(from + step/2) - F(from) and to point x = from +
+        ## step, ..., to - step the probability mass F(x - step/2) -
+        ## F(x + step/2).
+        ##
+        ## It is possible to make adjustments for the limits of the
+        ## intervals (closed or open) for discrete distributions via
+        ## 'cdf'.
+        x <- c(from, seq.int(from + by/2, to - by/2, by))
         Fx <- eval(cdf, envir = list(x = x), enclos = parent.frame())
         return(diff(Fx))
     }
@@ -85,28 +87,26 @@ discretize <- function (cdf, from, to, step = 1,
             lev <- slev
         }
 
-        ## The first limited moment must be evaluated in 'from',
-        ## 'from' + 'step', ..., 'to' and the cdf in 'from' and 'to'
+        ## The first limited moment must be evaluated in x = from,
+        ## from + step, ..., to and the cdf in x = from and x = to
         ## only (see below).
         x <- seq.int(from, to, by)
         Ex <- eval(lev, envir = list(x = x), enclos = parent.frame())
         Fx <- eval(cdf, envir = list(x = c(from, to)), enclos = parent.frame())
 
-        ## We use the formulas of exercise 6.36 in Loss Models, 2nd
-        ## edition, adapted for 'from' > 0 and 'to' < Infinity. The
-        ## probability mass in 'from' is
+        ## The probability mass in x = from is
         ##
-        ##   (E[X ^ 'from'] - E[X ^ 'from' + 'step'])/'step'
-        ##   + 1 - cdf('from').
+        ##   (E[X ^ x] - E[X ^ x + step])/step + 1 - F(x).
         ##
-        ## The probability mass in 'from' < x < 'to' is
+        ## The probability mass in x = from + step, ..., to - step is
         ##
-        ##   (2 * E[X ^ x] - E[X ^ x - 'step'] - E[X ^ x + 'step'])/'step'.
+        ##   (2 * E[X ^ x] - E[X ^ x - step] - E[X ^ x + step])/step.
         ##
-        ## The probability mass in 'to' is
+        ## The probability mass in x = to is
         ##
-        ##   (E[X ^ 'to'] - E[X ^ 'to' - 'step'])/'step'
-        ##   - 1 + cdf('to').
+        ##   (E[X ^ x] - E[X ^ x - step])/step - 1 + F(x).
+        ##
+        ## See exercise 6.36 in Loss Models, 2nd edition.
         return(c(-diff(head(Ex, 2))/step + 1 - Fx[1],
                  (2 * head(Ex[-1], -1) - head(Ex, -2) - tail(Ex, -2))/step,
                  diff(tail(Ex, 2))/step - 1 + Fx[2]))
