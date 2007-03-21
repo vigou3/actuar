@@ -56,6 +56,16 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     ## to having one claim per node.
     if (has.freq)
     {
+        ## Normally, only the immediately above mixing parameter will
+        ## be used in the model for a level, but the code here allows
+        ## for more general schemes. For this to work, all mixing
+        ## parameters have to be correctly recycled at each level
+        ## where they *could* be used. Since the model at any level
+        ## could be NULL, 'params' will keep track of the mixing
+        ## parameters that were simulated in previous iteration of the
+        ## forthcoming loop.
+        params <- character(0)
+
         for (i in seq_len(nlevels))
         {
             ## Number of nodes at the current level
@@ -64,27 +74,29 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
             ## Extract simulation model for the level.
             Call <- model.freq[[i]]
 
+            ## Repeat the mixing parameters of all levels above the
+            ## current one that were simulated in the past.
+            for (j in seq_along(params))
+                eval(substitute(x <- rep.int(x, n.current),
+                                list(x = as.name(params[[j]]))))
+
             ## Simulate data only if there is a model at the current
             ## level.
             if (!is.null(Call))
             {
-                ## Correctly repeat the mixing parameters of all
-                ## levels above the current one. Normally, only the
-                ## immediately above mixing parameter will be used in
-                ## the model for a level, but the code here allows for
-                ## more general schemes.
-                for (param in intersect(all.vars(Call), level.names))
-                    eval(substitute(x <- rep.int(x, n.current),
-                                    list(x = as.name(param))))
-
                 ## Add the number of variates to the call.
                 Call$n <- sum(n.current)
 
                 ## Simulation of the mixing parameters or the data. In
                 ## the latter case, store the results in a fixed
                 ## variable name.
-                assign(ifelse(i < nlevels, level.names[[i]], "frequencies"),
-                       eval(Call))
+                if (i < nlevels)
+                {
+                    assign(level.names[[i]], eval(Call))
+                    params[i] <- level.names[[i]] # remember the parameter
+                }
+                else
+                    frequencies <- eval(Call)
             }
         }
     }
@@ -100,16 +112,19 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
         ## amounts), the number of variates to simulate is not given
         ## by the number of nodes but rather by the number of claims
         ## as found in 'frequencies'.
+        params <- character(0)
+
         for (i in seq_len(nlevels))
         {
             n.current <- nodes[[i]]
             Call <- model.sev[[i]]
+
+            for (j in seq_along(params))
+                eval(substitute(x <- rep.int(x, n.current),
+                                list(x = as.name(params[[j]]))))
+
             if (!is.null(Call))
             {
-                for (param in intersect(all.vars(Call), level.names))
-                    eval(substitute(x <- rep.int(x, n.current),
-                                    list(x = as.name(param))))
-
                 ## The rest of the procedure differs depending if we
                 ## are still simulating mixing parameters or claim
                 ## amounts.
@@ -119,6 +134,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
                     ## simulation of frequencies.
                     Call$n <- sum(n.current)
                     assign(level.names[[i]], eval(Call))
+                    params[i] <- level.names[[i]]
                 }
                 else
                 {
@@ -127,9 +143,9 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
                     ## 'frequencies' object. Furthermore, the mixing
                     ## parameters must be recycled once more to match
                     ## the vector of frequencies.
-                    for (param in intersect(all.vars(Call), level.names))
+                    for (p in intersect(all.vars(Call), params))
                         eval(substitute(x <- rep.int(x, frequencies),
-                                        list(x = as.name(param))))
+                                        list(x = as.name(p))))
                     Call$n <- sum(frequencies)
                     severities <-eval(Call)
                 }
