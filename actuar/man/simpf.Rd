@@ -108,21 +108,24 @@ simpf(nodes = list(contract = 10, year = 5),
 ## Model with weights and mixtures for both frequency and severity
 ## models
 wit <- sample(2:10, 35, replace = TRUE)
-simpf(nodes = list(entity = 8, year = c(5, 4, 4, 5, 3, 5, 4, 5)),
-      model.freq = expression(entity = rgamma(2, 3),
-                              year = rpois(weights * entity)),
-      model.sev = expression(entity = rnorm(5, 1),
-                             year = rlnorm(entity, 1)),
-      weights = wit)
+nodes <- list(entity = 8, year = c(5, 4, 4, 5, 3, 5, 4, 5))
+mf <- expression(entity = rgamma(2, 3),
+                 year = rpois(weights * entity))
+ms <- expression(entity = rnorm(5, 1),
+                 year = rlnorm(entity, 1))
+pf <- simpf(nodes, mf, ms, wit)
+pf 				# print method
+weights(pf)			# extraction of weights
+aggregate(pf)[, -1]/weights(pf)[, -1] # ratios
 
 ## Four level hierarchical model for frequency only
 nodes <- list(sector = 3, unit = c(3, 4),
               employer = c(3, 4, 3, 4, 2, 3, 4), year = 5)
-model.freq <- expression(sector = rexp(1),
-                         unit = rexp(sector),
-                         employer = rgamma(unit, 1),
-                         year = rpois(employer))
-pf <- simpf(nodes, model.freq, NULL)
+mf <- expression(sector = rexp(1),
+                 unit = rexp(sector),
+                 employer = rgamma(unit, 1),
+                 year = rpois(employer))
+pf <- simpf(nodes, mf, NULL)
 pf 				# print method
 aggregate(pf) 			# aggregate claim amounts
 frequency(pf)  			# frequencies
