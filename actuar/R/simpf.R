@@ -101,7 +101,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
         }
     }
     else
-        frequencies <- rep(1, sum(nodes[[nlevels]]))
+        frequencies <- rep.int(1, sum(nodes[[nlevels]]))
 
     ## Simulation of the claim amounts. If 'model.sev' is NULL, this
     ## is equivalent to simulating frequencies only.
@@ -153,7 +153,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
         }
     }
     else
-        severities <- rep(1, sum(frequencies))
+        severities <- rep.int(1, sum(frequencies))
 
     ## We must now distribute the claim amounts in vector 'severities'
     ## to the appropriate nodes. This is complicated by the
@@ -219,7 +219,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
         ## I managed to come up with.
         x <- unlist(lapply(nodes[[i]], seq))
         lapply(nodes[(i + 1):(nlevels - 1)],
-               function(v) assign("x", rep(x, v), envir = parent.frame(2)))
+               function(v) assign("x", rep.int(x, v), envir = parent.frame(2)))
         m[, i] <- x
     }
     m[, ncol] <- unlist(lapply(nodes[[ncol]], seq)) # last column
@@ -230,7 +230,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     else
     {
         ## Integrate NAs into the weights matrix as appropriate.
-        w <- rep(NA, nrow * ncol)
+        w <- rep.int(NA, nrow * ncol)
         w[ind] <- weights
         matrix(w, nrow = nrow, byrow = TRUE, dimnames = dimnames(res))
     }
