@@ -28,7 +28,7 @@ double dinvexp(double x, double scale, int give_log)
 	return R_NaN;
 
     if (!R_FINITE(x) || x < 0.0)
-	return R_D_d0;
+	return R_D__0;
 
     logu = log(scale) - log(x);
 

@@ -10,6 +10,7 @@ export(## Credibility theory
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        mexp, levexp,
        ## Two parameter distributions
+       mbeta, levbeta,
        mgamma, levgamma,
        dinvgamma, pinvgamma, qinvgamma, rinvgamma, minvgamma, levinvgamma,
        dinvparalogis, pinvparalogis, qinvparalogis, rinvparalogis, minvparalogis, levinvparalogis,
@@ -31,6 +32,7 @@ export(## Credibility theory
        dinvtrgamma, pinvtrgamma, qinvtrgamma, rinvtrgamma, minvtrgamma, levinvtrgamma,
        dtrgamma, ptrgamma, qtrgamma, rtrgamma, mtrgamma, levtrgamma,
        ## Four parameter distributions
+       dgenbeta, pgenbeta, qgenbeta, rgenbeta, mgenbeta, levgenbeta,
        dtrbeta, ptrbeta, qtrbeta, rtrbeta, mtrbeta, levtrbeta,
        dpearson6, ppearson6, qpearson6, rpearson6, mpearson6, levpearson6, #aliases
        ## Loss distributions

@@ -369,6 +369,7 @@ SEXP do_random4(int code, SEXP args)
 	switch (code)
 	{
 	    RAND4(1, rtrbeta);
+	    RAND4(2, rgenbeta);
 	default:
 	    error(_("internal error in do_random4"));
 	}

@@ -33,7 +33,7 @@ double dburr(double x, double shape1, double shape2, double scale,
 	return R_NaN;
 
     if (!R_FINITE(x) || x < 0.0)
-	return R_D_d0;
+	return R_D__0;
 
     tmp = shape2 * (log(x) - log(scale));
     logu = - log1p(exp(tmp));

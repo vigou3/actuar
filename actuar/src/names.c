@@ -64,6 +64,7 @@ FUNTAB fun_tab[] = {
     {"mweibull",	do_dpq2,	39},
     {"levexp",	        do_dpq2,	40},
     {"levinvexp",	do_dpq2,	41},
+    {"mbeta",	        do_dpq2,	42},
     /* Three parameter distributions */
     {"dburr",   	do_dpq3,	 1},
     {"pburr",		do_dpq3,	 2},
@@ -97,6 +98,7 @@ FUNTAB fun_tab[] = {
     {"levpareto",	do_dpq3,	30},
     {"levpareto1",	do_dpq3,	31},
     {"levweibull",	do_dpq3,	32},
+    {"levbeta",	        do_dpq3,	33},
     /* Four parameter distributions */
     {"dtrbeta",		do_dpq4,	1},
     {"ptrbeta",		do_dpq4,	2},
@@ -107,8 +109,13 @@ FUNTAB fun_tab[] = {
     {"levinvburr",	do_dpq4,	7},
     {"levinvtrgamma",	do_dpq4,	8},
     {"levtrgamma",	do_dpq4,	9},
+    {"dgenbeta",	do_dpq4,        10},
+    {"pgenbeta",	do_dpq4,        11},
+    {"qgenbeta",	do_dpq4,        12},
+    {"mgenbeta",	do_dpq4,        13},
     /* Five parameter distributions */
     {"levtrbeta",	do_dpq5,	1},
+    {"levgenbeta",	do_dpq5,	2},
 
     /* RANDOM NUMBERS FUNCTIONS */
     /* One parameter distributions */
@@ -131,5 +138,6 @@ FUNTAB fun_tab[] = {
     {"rtrgamma",	do_random3,	5},
     /* Four parameter distributions */
     {"rtrbeta", 	do_random4,	1},
+    {"rgenbeta", 	do_random4,	2},
     {0, 0, 0}
 };

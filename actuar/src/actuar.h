@@ -25,6 +25,9 @@ double minvexp(double order, double scale, int give_log);
 double levinvexp(double limit, double scale, double order, int give_log);
 
 /*   Two parameter distributions */
+double mbeta(double order, double shape1, double shape2, int give_log);
+double levbeta(double limit, double shape1, double shape2, double order, int give_log);
+
 double mgamma(double order, double shape, double scale, int give_log);
 double levgamma(double limit, double shape, double scale, double order, int give_log);
 
@@ -98,48 +101,55 @@ double mweibull(double order, double scale, double shape, int give_log);
 double levweibull(double limit, double scale, double shape, double order, int give_log);
 
 /*   Three parameter distributions */
-double dburr(double x, double shape1, double scale, double shape2, int give_log);
-double pburr(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
-double qburr(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
-double rburr(double shape1, double scale, double shape2);
-double mburr(double order, double shape1, double scale, double shape2, int give_log);
-double levburr(double limit, double shape1, double scale, double shape2, double order, int give_log);
+double dburr(double x, double shape1, double shape2, double scale, int give_log);
+double pburr(double q, double shape1, double shape2, double scale, int lower_tail, int log_p);
+double qburr(double p, double shape1, double shape2, double scale, int lower_tail, int log_p);
+double rburr(double shape1, double shape2, double scale);
+double mburr(double order, double shape1, double shape2, double scale, int give_log);
+double levburr(double limit, double shape1, double shape2, double scale, double order, int give_log);
 
-double dgenpareto(double x, double shape1, double scale, double shape2, int give_log);
-double pgenpareto(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
-double qgenpareto(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
-double rgenpareto(double shape1, double scale, double shape2);
-double mgenpareto(double order, double shape1, double scale, double shape2, int give_log);
-double levgenpareto(double limit, double shape1, double scale, double shape2, double order, int give_log);
+double dgenpareto(double x, double shape1, double shape2, double scale, int give_log);
+double pgenpareto(double q, double shape1, double shape2, double scale, int lower_tail, int log_p);
+double qgenpareto(double p, double shape1, double shape2, double scale, int lower_tail, int log_p);
+double rgenpareto(double shape1, double shape2, double scale);
+double mgenpareto(double order, double shape1, double shape2, double scale, int give_log);
+double levgenpareto(double limit, double shape1, double shape2, double scale, double order, int give_log);
 
-double dinvburr(double x, double shape1, double scale, double shape2, int give_log);
-double pinvburr(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
-double qinvburr(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
-double rinvburr(double shape1, double scale, double shape2);
-double minvburr(double order, double shape1, double scale, double shape2, int give_log);
-double levinvburr(double limit, double shape1, double scale, double shape2, double order, int give_log);
+double dinvburr(double x, double shape1, double shape2, double scale, int give_log);
+double pinvburr(double q, double shape1, double shape2, double scale, int lower_tail, int log_p);
+double qinvburr(double p, double shape1, double shape2, double scale, int lower_tail, int log_p);
+double rinvburr(double shape1, double shape2, double scale);
+double minvburr(double order, double shape1, double shape2, double scale, int give_log);
+double levinvburr(double limit, double shape1, double shape2, double scale, double order, int give_log);
 
-double dinvtrgamma(double x, double shape1, double scale, double shape2, int give_log);
-double pinvtrgamma(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
-double qinvtrgamma(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
-double rinvtrgamma(double shape1, double scale, double shape2);
-double minvtrgamma(double order, double shape1, double scale, double shape2, int give_log);
-double levinvtrgamma(double limit, double shape1, double scale, double shape2, double order, int give_log);
+double dinvtrgamma(double x, double shape1, double shape2, double scale, int give_log);
+double pinvtrgamma(double q, double shape1, double shape2, double scale, int lower_tail, int log_p);
+double qinvtrgamma(double p, double shape1, double shape2, double scale, int lower_tail, int log_p);
+double rinvtrgamma(double shape1, double shape2, double scale);
+double minvtrgamma(double order, double shape1, double shape2, double scale, int give_log);
+double levinvtrgamma(double limit, double shape1, double shape2, double scale, double order, int give_log);
 
-double dtrgamma(double x, double shape1, double scale, double shape2, int give_log);
-double ptrgamma(double q, double shape1, double scale, double shape2, int lower_tail, int log_p);
-double qtrgamma(double p, double shape1, double scale, double shape2, int lower_tail, int log_p);
-double rtrgamma(double shape1, double scale, double shape2);
-double mtrgamma(double order, double shape1, double scale, double shape2, int give_log);
-double levtrgamma(double limit, double shape1, double scale, double shape2, double order, int give_log);
+double dtrgamma(double x, double shape1, double shape2, double scale, int give_log);
+double ptrgamma(double q, double shape1, double shape2, double scale, int lower_tail, int log_p);
+double qtrgamma(double p, double shape1, double shape2, double scale, int lower_tail, int log_p);
+double rtrgamma(double shape1, double shape2, double scale);
+double mtrgamma(double order, double shape1, double shape2, double scale, int give_log);
+double levtrgamma(double limit, double shape1, double shape2, double scale, double order, int give_log);
 
 /*   Four parameter distributions */
-double dtrbeta(double x, double shape1, double scale, double shape2, double shape3, int give_log);
-double ptrbeta(double q, double shape1, double scale, double shape2, double shape3, int lower_tail, int log_p);
-double qtrbeta(double p, double shape1, double scale, double shape2, double shape3, int lower_tail, int log_p);
-double rtrbeta(double shape1, double scale, double shape2, double shape3);
-double mtrbeta(double order, double shape1, double scale, double shape2, double shape3, int give_log);
-double levtrbeta(double limit, double shape1, double scale, double shape2, double shape3, double order, int give_log);
+double dgenbeta(double x, double shape1, double shape2, double shape3, double scale, int give_log);
+double pgenbeta(double q, double shape1, double shape2, double shape3, double scale, int lower_tail, int log_p);
+double qgenbeta(double p, double shape1, double shape2, double shape3, double scale, int lower_tail, int log_p);
+double rgenbeta(double shape1, double shape2, double shape3, double scale);
+double mgenbeta(double order, double shape1, double shape2, double shape3, double scale, int give_log);
+double levgenbeta(double limit, double shape1, double shape2, double shape3, double scale, double order, int give_log);
+
+double dtrbeta(double x, double shape1, double shape2, double shape3, double scale, int give_log);
+double ptrbeta(double q, double shape1, double shape2, double shape3, double scale, int lower_tail, int log_p);
+double qtrbeta(double p, double shape1, double shape2, double shape3, double scale, int lower_tail, int log_p);
+double rtrbeta(double shape1, double shape2, double shape3, double scale);
+double mtrbeta(double order, double shape1, double shape2, double shape3, double scale, int give_log);
+double levtrbeta(double limit, double shape1, double shape2, double shape3, double scale, double order, int give_log);
 
 
 /* Definitions for the table linking the first group of functions to

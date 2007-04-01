@@ -30,7 +30,7 @@ double dpareto(double x, double shape, double scale, int give_log)
 	return R_NaN;
 
     if (!R_FINITE(x) || x < 0.0)
-	return R_D_d0;
+	return R_D__0;
 
     tmp = log(x) - log(scale);
     logu = - log1p(exp(tmp));

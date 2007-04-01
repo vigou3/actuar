@@ -330,6 +330,7 @@ SEXP do_dpq2(int code, SEXP args)
     case 39:  return DPQ2_1(args, mweibull);
     case 40:  return DPQ2_1(args, levexp);
     case 41:  return DPQ2_1(args, levinvexp);
+    case 42:  return DPQ2_1(args, mbeta);
     default:
 	error(_("internal error in do_dpq2"));
     }
@@ -506,6 +507,7 @@ SEXP do_dpq3(int code, SEXP args)
     case 30:  return DPQ3_1(args, levpareto);
     case 31:  return DPQ3_1(args, levpareto1);
     case 32:  return DPQ3_1(args, levweibull);
+    case 33:  return DPQ3_1(args, levbeta);
     default:
 	error(_("internal error in do_dpq3"));
     }
@@ -674,6 +676,10 @@ SEXP do_dpq4(int code, SEXP args)
     case  7:  return DPQ4_1(args, levinvburr);
     case  8:  return DPQ4_1(args, levinvtrgamma);
     case  9:  return DPQ4_1(args, levtrgamma);
+    case 10:  return DPQ4_1(args, dgenbeta);
+    case 11:  return DPQ4_1(args, pgenbeta);
+    case 12:  return DPQ4_1(args, qgenbeta);
+    case 13:  return DPQ4_1(args, mgenbeta);
     default:
 	error(_("internal error in do_dpq4"));
     }
@@ -806,6 +812,7 @@ SEXP do_dpq5(int code, SEXP args)
     switch (code)
     {
     case  1:  return DPQ5_1(args, levtrbeta);
+    case  2:  return DPQ5_1(args, levgenbeta);
     default:
 	error(_("internal error in do_dpq5"));
     }

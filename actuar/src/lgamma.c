@@ -21,7 +21,7 @@ double dlgamma(double x, double shapelog, double ratelog, int give_log)
 	return R_NaN;;
 
     if (!R_FINITE(x) || x < 1.0)
-	return R_D_d0;
+	return R_D__0;
 
     return R_D_exp(dgamma(log(x), shapelog, 1.0 / ratelog, 1) - log(x));
 }

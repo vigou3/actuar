@@ -22,7 +22,7 @@ double dpareto1(double x, double shape, double min, int give_log)
 	return R_NaN;
 
     if (!R_FINITE(x) || x < min)
-	return R_D_d0;
+	return R_D__0;
 
     return R_D_exp(log(shape) + shape * log(min) - (shape + 1.0) * log(x));
 }
