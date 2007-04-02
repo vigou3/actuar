@@ -9,7 +9,7 @@ bstraub <- function(ratios, weights,
                     heterogeneity = c("iterative", "unbiased"),
                     TOL = 1E-6, echo = FALSE)
 {
-    cl <- match.call()
+    Call <- match.call()
 
     ## If weights are not specified, use equal weights as in
     ## Bühlmann's model.
@@ -117,7 +117,7 @@ bstraub <- function(ratios, weights,
                    ncontracts = ncontracts,
                    s2 = s2,
                    cred = cred,
-                   call = cl,
+                   call = Call,
                    unbiased = ac,
                    iterative = at),
               class = "bstraub")
