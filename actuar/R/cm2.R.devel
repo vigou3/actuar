@@ -10,10 +10,13 @@
 ### AUTHORS: Louis-Philippe Pouliot,
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 
-cm2 <- function(formula, data, ratios, weights, subset, TOL = 1E-6, echo = FALSE)
+cm2 <- function(formula, data, ratios, weights, subset,
+                TOL = 1E-6, echo = FALSE)
 {
     Call <- match.call()
 
+    ## === MODEL ANALYSIS ===
+    ##
     ## Decompose the formula giving the portfolio structure. Attribute
     ## "order" gives the interaction level of each term in the
     ## formula. In hierarchical structures, each term should represent
@@ -25,11 +28,12 @@ cm2 <- function(formula, data, ratios, weights, subset, TOL = 1E-6, echo = FALSE
     ## Note that the very last level, the data, is not taken into
     ## account here.
     tf <- terms(formula)
-    level.numbers <- attr(tf, "order")  # level IDs
+    level.numbers <- attr(tf, "order")           # level IDs
     level.names <- rownames(attr(tf, "factors")) # level names
-    nlevels <- length(level.names)      # number of levels
+    nlevels <- length(level.names)               # number of levels
+    nlevels1p <- nlevels + 1                     # frequently used
 
-    ## Sanity checks:
+    ## Sanity checks
     ##
     ## 1. only hierarchical interactions are allowed in 'formula';
     ## 2. if 'ratios' is missing, all columns of 'data' are taken to
@@ -39,14 +43,16 @@ cm2 <- function(formula, data, ratios, weights, subset, TOL = 1E-6, echo = FALSE
     if (missing(ratios) & !missing(weights))
         stop("ratios have to be specified if weights are")
 
+    ## === DATA EXTRACTION ===
+    ##
     ## 'data' is split into three matrices: one for the portfolio
     ## structure, one for the ratios and one for the weights. They are
-    ## obtained via calls to 'subset' built from this function's
+    ## obtained via calls to subset() built from this function's
     ## call. That way, arguments 'ratios', 'weights' and 'subset' are
-    ## not evaluated before being passed to 'subset'. Argument
+    ## not evaluated before being passed to subset(). Argument
     ## matching is as follows:
     ##
-    ##   Argument of 'cm'     Argument of 'subset'
+    ##   Argument of cm()     Argument of subset()
     ##   ================     ====================
     ##     data                 x
     ##     ratios               select
@@ -57,7 +63,7 @@ cm2 <- function(formula, data, ratios, weights, subset, TOL = 1E-6, echo = FALSE
     m <- match(c("data", "ratios", "weights", "subset"), names(Call), 0)
 
     ## Extraction of the portfolio structure. Arguments 'data' and
-    ## 'subset' are passed to function 'subset'.
+    ## 'subset' are passed to subset().
     cl <- Call[c(1, m[c(1, 4)])]        # use data and subset only
     cl[[1]] <- as.name("subset")        # change function name
     names(cl)[2] <- "x"                 # argument matching
@@ -76,18 +82,6 @@ cm2 <- function(formula, data, ratios, weights, subset, TOL = 1E-6, echo = FALSE
     ## To symmetrize further calculations, bind a column of ones
     ## representing the affiliation to the global portfolio.
     levs <- cbind(pf = 1, levs)
-
-    ## For each interaction level, create a unique identifier for each
-    ## node using the same strategy as in 'simpf': the sequence of
-    ## subscripts is converted into factors by pasting the digits
-    ## together.
-    flevs <- vector("list", nlevels + 1)
-    for (i in seq_along(flevs))
-    {
-        s <- levs[, 1:i, drop = FALSE]              # subscripts
-        f <- apply(s, 1, paste, collapse = "")      # grouping IDs
-        flevs[[i]] <- factor(f, levels = unique(f)) # factors
-    }
 
     ## Extraction of the ratios. If argument 'ratios' is missing, then
     ## use all columns of 'data' except those of the portfolio
@@ -120,99 +114,191 @@ cm2 <- function(formula, data, ratios, weights, subset, TOL = 1E-6, echo = FALSE
     if(!identical(which(is.na(ratios)), which(is.na(weights))))
         stop("missing values are not in the same positions in weights and in ratios")
 
-    ##     ## Check if interactions are consistent with the data
-    ##     nstruct <- c(length(years), sapply(levs, function(x) length(unique(data[[x]]))), pf = 1)
-    ##     if (!all(sort(nstruct, decreasing = TRUE) == nstruct))
-    ##         stop("hierarchical interactions are inconsistent with the data")
+    ## === NUMBER OF NODES AND SPLITTING FACTORS ===
+    ##
+    ## Future computation of per level summaries will require a set of
+    ## factors based on the number of nodes in each level. An example
+    ## will best explain what is achieved here: suppose there are two
+    ## sectors; sector 1 has 3 units; sector 2 has 2 units. To make
+    ## per sector summaries, the following factors can be used to
+    ## split the unit data: 1 1 1 2 2.
+    ##
+    ## Generating such factors first requires to know the number of
+    ## nodes at each level in a format identical to the 'nodes'
+    ## argument of simpf(). [In the previous example, the number of
+    ## nodes would be 'list(2, c(3, 2))'.] Then, the factors are
+    ## obtained by repeating a sequence the same length as the number
+    ## of nodes at one level [2] according to the number of nodes at
+    ## the level below [c(3, 2)].
+    ##
+    ## 1. Calculation of the number of nodes: the main idea is to create
+    ## a unique ID for each node by pasting together the elements in
+    ## the rows of 'levs'. This is not required, though, for the
+    ## lowest level (the entities) since they are known to all be
+    ## different.
+    fx <- vector("list", nlevels1p)
+    fx[[nlevels1p]] <- factor(levs[, nlevels1p]) # entity level
 
-    ## Individual weighted averages. It could happen that a contract
+    nnodes <- vector("list", nlevels)
+
+    for (i in nlevels:1)
+    {
+        fx[[i]] <- factor(apply(levs[, seq.int(i), drop = FALSE], 1,
+                                paste, collapse = ""))
+        nnodes[[i]] <- sapply(split(fx[[i + 1]], fx[[i]]),
+                              function(x) length(unique(x)))
+    }
+
+    ## 2. Generation of the factors as per the rule described above;
+    ## trivial.
+    fnodes <- lapply(nnodes, function(x) rep(seq_along(x), x))
+
+    ## === PER ENTITY SUMMARIES ===
+    ##
+    ## Individual weighted averages. It could happen that an entity
     ## has no observations, for example when applying the model on
     ## claim amounts. In such a situation, put the total weight of the
-    ## contract and the weighted average both equal to zero. That way,
+    ## entity and the weighted average both equal to zero. That way,
     ## the premium will be equal to the credibility weighted average,
-    ## as it should, but the contract will have no contribution in the
-    ## calculations.
+    ## as it should, but the entity will otherwise have no
+    ## contribution in the calculations.
     weights.s <- rowSums(weights, na.rm = TRUE)
     ratios.w <- ifelse(weights.s > 0, rowSums(weights * ratios, na.rm = TRUE) / weights.s, 0)
 
-    ## Number of nodes at each of the levels, plus the total number of
-    ## data points. This could be as simple as
+    ## === EFFECTIVE NUMBER OF NODES ===
     ##
-    ##   c(apply(levs, 2, unique), sum(!is.na(weights)))
+    ## Given the possibility to have whole levels with no data, as
+    ## explained above, it is necessary to count the *effective*
+    ## number of nodes in each level, that is the number of nodes with
+    ## data. This comes this late since it relies on 'weights.s'.
     ##
-    ## if it weren't for the possibility to have whole levels with no
-    ## data, as explained above. It is thus necessary to count the
-    ## number of nodes with data in each level.
-    nnodes <- c(sapply(flevs, function(x) sum(tapply(weights.s, x, sum) > 0)),
-                sum(!is.na(weights)))
+    ## Where 'nnodes' is a list where each element is a vector of the
+    ## number of nodes for each classification of the level above,
+    ## object 'eff.nnodes' will be a simple vector of the total number
+    ## of non "empty" nodes at each level. That is, if it weren't for
+    ## entities with no data, the effective number of nodes would
+    ## simply be 'sapply(nnodes, sum)'.
+    eff.nnodes <- numeric(nlevels)
+    w <- weights.s
+    for (i in nlevels:1)
+    {
+        eff.nnodes[i] <- sum(w > 0)      # effective number of nodes
+        w <- tapply(w, fnodes[[i]], sum) # running totals
+    }
 
+    ## === DENOMINATORS OF VARIANCE ESTIMATORS ===
+    ##
     ## The denominators for all the variance estimators never
     ## change. The denominator at one level is equal to the total
     ## number of nodes at that level minus the total number of nodes
-    ## at the level above.
-    denoms <- diff(nnodes)
+    ## at the level above. At the lowest level (the denominator of
+    ## s^2), this is
+    ##
+    ##   number of (non NA) ratios - (effective) number of entities.
+    ##
+    ## The number of (non missing) ratios is not included in
+    ## 'eff.nnodes'.  For the portfolio level, the denominator is
+    ##
+    ##   (effective) number of "sectors" - 1
+    ##
+    ## The 1 neither is included in 'eff.nnodes'.
+    denoms <- diff(c(1, eff.nnodes, sum(!is.na(ratios))))
 
     ## Final sanity checks
-    if (any(denoms))
+    if (any(!denoms))
         stop("there must be at least two nodes at every level")
     if (ncol(ratios) < 2)
-        stop("there must be at least one contract with more than one year of experience")
+        stop("there must be at least one entity with more than one year of experience")
 
-    ## Estimation of s^2.
+    ## === ESTIMATION OF s^2 ===
     s2 <-  sum(weights * (ratios - ratios.w)^2, na.rm = TRUE) /
-        tail(denoms, 1)
+        denoms[nlevels1p]
 
-    ## Create vectors for values to be computed.
-    b <- rep(s2, nlevels)                    # variance estimators
-    cred <- vector("list", nlevels - 1)      # credibility factors
-    tweight <- vector("list", nlevels)       # total level weights
-    wmeans <- vector("list", nlevels)        # weighted averages
+    ## === ESTIMATION OF THE OTHER STRUCTURE PARAMETERS ===
+    ##
+    ## Create vectors to hold values to be computed at each level
+    ## (from portfolio to entity), namely: the total node weights, the
+    ## node weighted averages, the between variance and the node
+    ## credibility factors.
+    ##
+    ## Only credibility factors are not computed for the portfolio
+    ## level, hence this list is one shorter than the others.
+    ##
+    ## At the entity level: total weight is the sum of the natural
+    ## weights, weighted average uses the natural weights and between
+    ## variance is s^2.
+    ##
+    ## All upper levels: total weight is the sum of the credibility
+    ## factors of the level below, weighted average uses credibility
+    ## factors, between variance estimated recursively and credibility
+    ## factor use total weight of the level, between variance of the
+    ## level below (hence the within variance) and between variance of
+    ## the current level.
+    ##
+    ## The vector of variance is initialized with s^2 to provide
+    ## starting values for the iterative estimation procedure.
+    tweights <- vector("list", nlevels1p)       # total level weights
+    wmeans <- vector("list", nlevels1p)         # weighted averages
+    b <- rep(s2, nlevels1p)                     # variance estimators
+    cred <- vector("list", nlevels)             # credibility factors
+
+    ## Values already computed at the entity level.
+    tweights[[nlevels1p]] <- weights.s; # rm(weights.s)
+    wmeans[[nlevels1p]] <- ratios.w;    # rm(ratios.w)
 
     ## Avoid evaluating argument 'echo' at every iteration below
     if (echo)
-        exp <- expression(print(bt <- b))
+        expr <- expression(print(bt <- b))
     else
-        exp <- expression({bt <- b})
+        expr <- expression({bt <- b})
 
     ## Iterative estimation of the structure parameters
     repeat
     {
-        eval(exp)
+        eval(expr)
 
-##         ## Individual estimators are initialized at every iteration.
-##         weight <- ind.weight
-##         means <- ind.means
+        for (i in nlevels:1)
+        {
+            cred[[i]] <- 1/(1 + b[i + 1]/(b[i] * tweights[[i + 1]]))
+            tweights[[i]] <- tapply(cred[[i]],
+                                    fnodes[[i]],
+                                    sum)
+            wmeans[[i]] <- ifelse(tweights[[i]] > 0,
+                                  tapply(cred[[i]] * wmeans[[i + 1]],
+                                         fnodes[[i]],
+                                         sum) / tweights[[i]],
+                                  0)
+            b[i] <- sum(cred[[i]] *
+                        (wmeans[[i + 1]] - rep(wmeans[[i]], nnodes[[i]]))^2) /
+                            denoms[i]
+        }
 
-##         for (i in 1:(nLevels - 1))
-##         {
-##             cred[[i]] <- 1/(1 + b[i]/(b[i + 1] * weight))
-##             weight. <- tapply(cred[[i]], aff[[i]], sum)
-##             means. <- tapply(cred[[i]] * means, aff[[i]], sum) / weight.
-##             b[i + 1] <- sum(cred[[i]] *
-##                             (means - rep(means., table(aff[[i]]))[order(aff[[i]])])^2) / denoms[i + 1]
+        if (max(abs((b - bt)/bt)) < TOL)
+                break
+    }
 
-##             w.[[i]] <- weight
-##             weight <- weight.
-##             M[[i]] <- means
-##             means <- means.
-##         }
-##         p <- ifelse(any(b <= TOL), which(b > TOL), TRUE)
-##         if (max(abs((b[p] - bt[p])/bt[p])) < TOL)
-##                 break
-##     }
-##     w.[[nLevels]] <- weight. ## is it necessary?
-##     M[[nLevels]] <- means.
-##     res <- list(b = b,
-##                 weights = w., ## is it?
-##                 means = M,
-##                 cred = cred,
-##                 call = cl,
-##                 data = data,
-##                 levs = levs,
-##                 aff = aff)
-##     class(res) <- "cm2"
-##     res
-## }
+    ## Final credibility factors and weighted averages (computed with
+    ## the latest structure parameters.
+    for (i in nlevels:1)
+    {
+        cred[[i]] <- 1/(1 + b[i + 1]/(b[i] * tweights[[i + 1]]))
+        tweights[[i]] <- tapply(cred[[i]],
+                                fnodes[[i]],
+                                sum)
+        wmeans[[i]] <- ifelse(tweights[[i]] > 0,
+                              tapply(cred[[i]] * wmeans[[i + 1]],
+                                     fnodes[[i]],
+                                     sum) / tweights[[i]],
+                              0)
+    }
+
+    structure(list(variances = b,
+                   weights = tweights,
+                   means = wmeans,
+                   cred = cred,
+                   call = cl),
+              class = "cm2")
+}
 
 ## print.cm2 <- function(x, ...)
 ## {
