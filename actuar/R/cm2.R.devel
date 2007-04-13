@@ -150,20 +150,19 @@ cm2 <- function(formula, data, ratios, weights, subset,
     }
 
     ## 2. Generation of the factors. Following the rule described
-    ## above, this used to be simply
+    ## above, this could simply be
     ##
     ##   fnodes <- lapply(nnodes, function(x) rep(seq_along(x), x))
     ##
-    ## This will not work, however, if data is not sorted per
-    ## level. Reusing the example above, if the data of unit 3 of
-    ## sector 1 is at the bottom of the matrix of data, then the
-    ## factors need to be 1 1 2 2 1.
+    ## However, this will not work if rows of data are not sorted per
+    ## level. (In the example above, if the data of unit 3 of sector 1
+    ## is at the bottom of the matrix of data, then the factors need
+    ## to be 1 1 2 2 1.)
     ##
-    ## The solution is actually simple: converting the factors in
-    ## fx[[nlevels]] to integers will assign a "unit" number to each
-    ## entity and these units will then be ordered. This ordering
-    ## done, it is possible to use the command above for the upper
-    ## levels.
+    ## The solution is actually simple: converting the entity level
+    ## factors ('fx[[nlevels]]') to integers will assure that any
+    ## summary made using these factors will be sorted. This done, it
+    ## is possible to use the command above for the upper levels.
     fnodes[[nlevels]] <- as.integer(fx[[nlevels]])
     fnodes[-nlevels] <-
         lapply(nnodes[-nlevels], function(x) rep(seq_along(x), x))
@@ -275,13 +274,13 @@ cm2 <- function(formula, data, ratios, weights, subset,
         for (i in nlevels:1)
         {
             cred[[i]] <- 1/(1 + b[i + 1]/(b[i] * tweights[[i + 1]]))
-            tweights[[i]] <- tapply(cred[[i]],
-                                    fnodes[[i]],
-                                    sum)
+            tweights[[i]] <- as.vector(tapply(cred[[i]],
+                                              fnodes[[i]],
+                                              sum))
             wmeans[[i]] <- ifelse(tweights[[i]] > 0,
-                                  tapply(cred[[i]] * wmeans[[i + 1]],
-                                         fnodes[[i]],
-                                         sum) / tweights[[i]],
+                                  as.vector(tapply(cred[[i]] * wmeans[[i + 1]],
+                                                   fnodes[[i]],
+                                                   sum) / tweights[[i]]),
                                   0)
             b[i] <- sum(cred[[i]] *
                         (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2) /
@@ -297,22 +296,45 @@ cm2 <- function(formula, data, ratios, weights, subset,
     for (i in nlevels:1)
     {
         cred[[i]] <- 1/(1 + b[i + 1]/(b[i] * tweights[[i + 1]]))
-        tweights[[i]] <- tapply(cred[[i]],
-                                fnodes[[i]],
-                                sum)
+        tweights[[i]] <- as.vector(tapply(cred[[i]],
+                                          fnodes[[i]],
+                                          sum))
         wmeans[[i]] <- ifelse(tweights[[i]] > 0,
-                              tapply(cred[[i]] * wmeans[[i + 1]],
-                                     fnodes[[i]],
-                                     sum) / tweights[[i]],
+                              as.vector(tapply(cred[[i]] * wmeans[[i + 1]],
+                                               fnodes[[i]],
+                                               sum) / tweights[[i]]),
                               0)
     }
 
-    structure(list(variances = b,
+    ## Transfer level names to lists
+    names(tweights) <- names(wmeans) <- names(b) <-
+        c("portfolio", level.names)
+    names(cred) <- level.names
+
+    ## Results
+    structure(list(means = wmeans,
                    weights = tweights,
-                   means = wmeans,
+                   variances = b,
                    cred = cred,
+                   names = level.names,
+                   levels = levs,
+                   ordering = fnodes,
                    call = cl),
               class = "cm2")
+}
+
+print.cm2 <- function(x, ...)
+{
+    nlevels <- length(x$names)
+    cat("\nCall: ", deparse(x$call), "\n\n")
+    cat("Structure Parameters Estimators\n\n")
+    cat("  Collective premium:", x$means[[1]], "\n")
+    cat("  Within", x$names[nlevels], "variance:",
+        x$variances[nlevels + 1],"\n")
+    for (i in nlevels:1)
+        cat("  Between", x$names[i], "variance:",
+            x$variances[i], "\n")
+    cat("\n")
 }
 
 ## print.cm2 <- function(x, ...)
@@ -333,3 +355,30 @@ cm2 <- function(formula, data, ratios, weights, subset,
 ##         print(m)
 ##     }
 ## }
+
+predict.cm2 <- function(object, ...)
+{
+    ## The credibility premium of a node at one level is equal to
+    ##
+    ##   p + z * (m - p)
+    ##
+    ## where 'p' is the credibility premium of the level above (or the
+    ## collective premium for the portfolio), 'z' is the credibility
+    ## factor of the node, and 'm' is the weighted average of the
+    ## node.
+    fnodes <- object$ordering
+    cred <- object$cred
+    means <- object$means
+    res <- vector("list", length(cred))
+
+    ## First level credibility premiums
+    res[[1]] <- means[[1]] + cred[[1]] * (means[[2]] - means[[1]])
+
+    for (i in seq_along(res)[-1])
+    {
+        p <- res[[i - 1]][fnodes[[i]]]
+        res[[i]] <- p + cred[[i]] * (means[[i + 1]] - p)
+    }
+
+    structure(res, names = object$names)
+}
