@@ -131,15 +131,15 @@ cm2 <- function(formula, data, ratios, weights, subset,
     ## of nodes at one level [2] according to the number of nodes at
     ## the level below [c(3, 2)].
     ##
-    ## 1. Calculation of the number of nodes: the main idea is to create
-    ## a unique ID for each node by pasting together the elements in
-    ## the rows of 'levs'. This is not required, though, for the
-    ## lowest level (the entities) since they are known to all be
-    ## different.
+    ## 1. Calculation of the number of nodes: the main idea is to
+    ## create a unique ID for each node by pasting together the
+    ## elements in the rows of 'levs'. This is not required for the
+    ## lowest level (the entities), though, since they are known to
+    ## all be different.
     fx <- vector("list", nlevels1p)
     fx[[nlevels1p]] <- factor(levs[, nlevels1p]) # entity level
 
-    nnodes <- vector("list", nlevels)
+    fnodes <- nnodes <- vector("list", nlevels)
 
     for (i in nlevels:1)
     {
@@ -149,9 +149,24 @@ cm2 <- function(formula, data, ratios, weights, subset,
                               function(x) length(unique(x)))
     }
 
-    ## 2. Generation of the factors as per the rule described above;
-    ## trivial.
-    fnodes <- lapply(nnodes, function(x) rep(seq_along(x), x))
+    ## 2. Generation of the factors. Following the rule described
+    ## above, this used to be simply
+    ##
+    ##   fnodes <- lapply(nnodes, function(x) rep(seq_along(x), x))
+    ##
+    ## This will not work, however, if data is not sorted per
+    ## level. Reusing the example above, if the data of unit 3 of
+    ## sector 1 is at the bottom of the matrix of data, then the
+    ## factors need to be 1 1 2 2 1.
+    ##
+    ## The solution is actually simple: converting the factors in
+    ## fx[[nlevels]] to integers will assign a "unit" number to each
+    ## entity and these units will then be ordered. This ordering
+    ## done, it is possible to use the command above for the upper
+    ## levels.
+    fnodes[[nlevels]] <- as.integer(fx[[nlevels]])
+    fnodes[-nlevels] <-
+        lapply(nnodes[-nlevels], function(x) rep(seq_along(x), x))
 
     ## === PER ENTITY SUMMARIES ===
     ##
@@ -269,7 +284,7 @@ cm2 <- function(formula, data, ratios, weights, subset,
                                          sum) / tweights[[i]],
                                   0)
             b[i] <- sum(cred[[i]] *
-                        (wmeans[[i + 1]] - rep(wmeans[[i]], nnodes[[i]]))^2) /
+                        (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2) /
                             denoms[i]
         }
 
