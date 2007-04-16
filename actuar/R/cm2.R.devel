@@ -322,7 +322,7 @@ cm2 <- function(formula, data, ratios, weights, subset,
                    levels = levs,
                    nodes = nnodes,
                    ordering = fnodes,
-                   call = cl),
+                   call = Call),
               class = "cm2")
 }
 
@@ -367,7 +367,8 @@ predict.cm2 <- function(object, levels = NULL, ...)
             seq_along(level.names)
         else
             pmatch(levels, level.names)
-    plevs <- plevs[!is.na(plevs)]
+    if (any(is.na(plevs)))
+        stop("invalid level name")
     n <- max(plevs)
 
     res <- vector("list", n)
@@ -393,7 +394,8 @@ summary.cm2 <- function(object, levels = NULL, ...)
             seq_along(level.names)
         else
             pmatch(levels, level.names)
-    plevs <- plevs[!is.na(plevs)]
+    if (any(is.na(plevs)))
+        stop("invalid level name")
 
     structure(list(means = object$means[c(1, plevs + 1)],
                    weights = object$weights[c(1, plevs + 1)],
