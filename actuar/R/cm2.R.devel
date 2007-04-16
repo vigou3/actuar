@@ -70,18 +70,19 @@ cm2 <- function(formula, data, ratios, weights, subset,
     cl$select <- level.names            # add argument 'select'
     levs <- eval(cl, parent.frame())    # extraction
 
-    ## So far, 'levs' is a data frame or matrix with as many colums as
+    ## Object 'levs' is a data frame or matrix with as many colums as
     ## there are levels in the model (still notwithstanding the data
     ## level). Rows contain nodes identifiers which can be
-    ## anything. These identifiers will now be converted into simple
-    ## subscripts (i, j, k, ...) as used in mathematical notation.
+    ## anything. For calculations, these identifiers are converted
+    ## into simple subscripts (i, j, k, ...) as used in mathematical
+    ## notation.
     ##
     ## Note that 'apply' will coerce to a matrix.
-    levs <- apply(levs, 2, function(x) as.integer(factor(x)))
+    ilevs <- apply(levs, 2, function(x) as.integer(factor(x)))
 
     ## To symmetrize further calculations, bind a column of ones
     ## representing the affiliation to the global portfolio.
-    levs <- cbind(pf = 1, levs)
+    ilevs <- cbind(pf = 1, ilevs)
 
     ## Extraction of the ratios. If argument 'ratios' is missing, then
     ## use all columns of 'data' except those of the portfolio
@@ -133,20 +134,21 @@ cm2 <- function(formula, data, ratios, weights, subset,
     ##
     ## 1. Calculation of the number of nodes: the main idea is to
     ## create a unique ID for each node by pasting together the
-    ## elements in the rows of 'levs'. This is not required for the
+    ## elements in the rows of 'ilevs'. This is not required for the
     ## lowest level (the entities), though, since they are known to
     ## all be different.
     fx <- vector("list", nlevels1p)
-    fx[[nlevels1p]] <- factor(levs[, nlevels1p]) # entity level
+    fx[[nlevels1p]] <- factor(ilevs[, nlevels1p]) # entity level
 
     fnodes <- nnodes <- vector("list", nlevels)
 
     for (i in nlevels:1)
     {
-        fx[[i]] <- factor(apply(levs[, seq.int(i), drop = FALSE], 1,
+        fx[[i]] <- factor(apply(ilevs[, seq.int(i), drop = FALSE], 1,
                                 paste, collapse = ""))
-        nnodes[[i]] <- sapply(split(fx[[i + 1]], fx[[i]]),
-                              function(x) length(unique(x)))
+        ## 'as.vector' below is used to get rid of names
+        nnodes[[i]] <- as.vector(sapply(split(fx[[i + 1]], fx[[i]]),
+                                        function(x) length(unique(x))))
     }
 
     ## 2. Generation of the factors. Following the rule described
@@ -257,8 +259,8 @@ cm2 <- function(formula, data, ratios, weights, subset,
     cred <- vector("list", nlevels)             # credibility factors
 
     ## Values already computed at the entity level.
-    tweights[[nlevels1p]] <- weights.s; # rm(weights.s)
-    wmeans[[nlevels1p]] <- ratios.w;    # rm(ratios.w)
+    tweights[[nlevels1p]] <- as.vector(weights.s); # rm(weights.s)
+    wmeans[[nlevels1p]] <- as.vector(ratios.w);    # rm(ratios.w)
 
     ## Avoid evaluating argument 'echo' at every iteration below
     if (echo)
@@ -309,15 +311,16 @@ cm2 <- function(formula, data, ratios, weights, subset,
     ## Transfer level names to lists
     names(tweights) <- names(wmeans) <- names(b) <-
         c("portfolio", level.names)
-    names(cred) <- level.names
+    names(cred) <- names(nnodes) <- names(fnodes) <-
+        level.names
 
     ## Results
     structure(list(means = wmeans,
                    weights = tweights,
                    variances = b,
                    cred = cred,
-                   names = level.names,
                    levels = levs,
+                   nodes = nnodes,
                    ordering = fnodes,
                    call = cl),
               class = "cm2")
@@ -325,38 +328,26 @@ cm2 <- function(formula, data, ratios, weights, subset,
 
 print.cm2 <- function(x, ...)
 {
-    nlevels <- length(x$names)
+    nlevels <- length(x$nodes)
+    level.names <- names(x$nodes)
     cat("\nCall: ", deparse(x$call), "\n\n")
     cat("Structure Parameters Estimators\n\n")
     cat("  Collective premium:", x$means[[1]], "\n")
-    cat("  Within", x$names[nlevels], "variance:",
-        x$variances[nlevels + 1],"\n")
-    for (i in nlevels:1)
-        cat("  Between", x$names[i], "variance:",
-            x$variances[i], "\n")
-    cat("\n")
+    for (i in seq.int(nlevels))
+    {
+        if (i == 1)
+            cat("  Between", level.names[i], "variance:",
+                x$variances[i], "\n")
+        else
+            cat("  Within ", level.names[i - 1],
+                "/Between ", level.names[i], " variance: ",
+                x$variances[i], "\n", sep = "")
+    }
+    cat("  Within", level.names[nlevels], "variance:",
+        x$variances[nlevels + 1],"\n", fill = TRUE)
 }
 
-## print.cm2 <- function(x, ...)
-## {
-##     cat("\nCall: ", deparse(x$call), "\n\n")
-##     cat("Structure Parameters Estimators\n\n")
-##     cat("  Collective premium: ", x$means[[length(x$means)]], "\n")
-##     cat("  Expected variance: ", x$b[1],"\n")
-##     for (i in (l <- 2:length(x$b)))
-##         cat(" ", letters[i-1], " :", x$b[i], "\n")
-##     for (i in (l-1))
-##     {
-##         a <- sapply(x$aff[[i]], function(z) as.character(unique(x$data[x$levs][[i + 1]]))[z])
-##         cat("\nLevel: ", x$levs[i], "\n")
-##         m <- data.frame(x$mean[[i]], x$cred[[i]], a)
-##         dimnames(m) <- list(unique(unlist(x$data[[x$levs[i]]])),
-##                             c("ind. estimator", "cred. factor", paste(x$levs[i + 1], "affiliation")))
-##         print(m)
-##     }
-## }
-
-predict.cm2 <- function(object, ...)
+predict.cm2 <- function(object, levels = NULL, ...)
 {
     ## The credibility premium of a node at one level is equal to
     ##
@@ -369,16 +360,89 @@ predict.cm2 <- function(object, ...)
     fnodes <- object$ordering
     cred <- object$cred
     means <- object$means
-    res <- vector("list", length(cred))
+    level.names <- names(object$nodes)
+
+    plevs <-
+        if (is.null(levels))
+            seq_along(level.names)
+        else
+            pmatch(levels, level.names)
+    plevs <- plevs[!is.na(plevs)]
+    n <- max(plevs)
+
+    res <- vector("list", n)
 
     ## First level credibility premiums
     res[[1]] <- means[[1]] + cred[[1]] * (means[[2]] - means[[1]])
 
-    for (i in seq_along(res)[-1])
+    for (i in seq(2, length.out = n - 1))
     {
         p <- res[[i - 1]][fnodes[[i]]]
         res[[i]] <- p + cred[[i]] * (means[[i + 1]] - p)
     }
 
-    structure(res, names = object$names)
+    structure(res[plevs], names = level.names[plevs])
+}
+
+summary.cm2 <- function(object, levels = NULL, ...)
+{
+    level.names <- names(object$nodes)
+
+    plevs <-
+        if (is.null(levels))
+            seq_along(level.names)
+        else
+            pmatch(levels, level.names)
+    plevs <- plevs[!is.na(plevs)]
+
+    structure(list(means = object$means[c(1, plevs + 1)],
+                   weights = object$weights[c(1, plevs + 1)],
+                   variances = object$variances[sort(unique(c(plevs, plevs + 1)))],
+                   cred = object$cred[plevs],
+                   levels = object$levels[, seq.int(max(plevs)), drop = FALSE],
+                   nodes = object$nodes[plevs],
+                   call = object$call,
+                   premiums = predict(object, levels)),
+              class = c("summary.cm2", class(object)))
+}
+
+print.summary.cm2 <- function(x, ...)
+{
+    nlevels <- length(x$nodes)
+    level.names <- names(x$nodes)
+    cat("\nCall: ", deparse(x$call), "\n\n")
+    cat("Structure Parameters Estimators\n\n")
+    cat("  Collective premium:", x$means[[1]], "\n")
+    for (i in seq.int(nlevels))
+    {
+        if (i == 1)
+            cat("  Between", level.names[i], "variance:",
+                x$variances[i], "\n")
+        else
+            cat("  Within ", level.names[i - 1],
+                "/Between ", level.names[i], " variance: ",
+                x$variances[i], "\n", sep = "")
+    }
+    cat("  Within", level.names[nlevels], "variance:",
+        x$variances[nlevels + 1],"\n", fill = TRUE)
+    cat("Detailed premiums\n\n")
+    for (i in seq.int(nlevels))
+    {
+        cat("  Level:", level.names[i], "\n")
+        level.id <- match(level.names[i], colnames(x$levels))
+        levs <- x$levels[, seq.int(level.id), drop = FALSE]
+        m <- duplicated(apply(levs, 1, paste, collapse = ""))
+        y <- cbind(as.matrix(levs[!m, , drop = FALSE]),
+                   format(x$means[[i + 1]], ...),
+                   format(x$weights[[i + 1]], ...),
+                   format(x$cred[[i]], ...),
+                   format(x$premiums[[i]], ...))
+        colnames(y) <- c(colnames(levs),
+                         "Ind. premium", "Weight",
+                         "Cred. factor", "Cred. premium")
+        rownames(y) <- rep("   ", nrow(y))
+        print(y, quote = FALSE, right = TRUE, ...)
+        cat("\n")
+    }
+    invisible(x)
 }
