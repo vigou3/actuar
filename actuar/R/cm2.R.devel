@@ -10,7 +10,7 @@
 ### AUTHORS: Louis-Philippe Pouliot,
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 
-cm2 <- function(formula, data, ratios, weights, subset,
+cm <- function(formula, data, ratios, weights, subset,
                 TOL = 1E-6, echo = FALSE)
 {
     Call <- match.call()
@@ -323,10 +323,10 @@ cm2 <- function(formula, data, ratios, weights, subset,
                    nodes = nnodes,
                    ordering = fnodes,
                    call = Call),
-              class = "cm2")
+              class = "cm")
 }
 
-print.cm2 <- function(x, ...)
+print.cm <- function(x, ...)
 {
     nlevels <- length(x$nodes)
     level.names <- names(x$nodes)
@@ -347,7 +347,7 @@ print.cm2 <- function(x, ...)
         x$variances[nlevels + 1],"\n", fill = TRUE)
 }
 
-predict.cm2 <- function(object, levels = NULL, ...)
+predict.cm <- function(object, levels = NULL, ...)
 {
     ## The credibility premium of a node at one level is equal to
     ##
@@ -385,7 +385,7 @@ predict.cm2 <- function(object, levels = NULL, ...)
     structure(res[plevs], names = level.names[plevs])
 }
 
-summary.cm2 <- function(object, levels = NULL, ...)
+summary.cm <- function(object, levels = NULL, ...)
 {
     level.names <- names(object$nodes)
 
@@ -405,10 +405,10 @@ summary.cm2 <- function(object, levels = NULL, ...)
                    nodes = object$nodes[plevs],
                    call = object$call,
                    premiums = predict(object, levels)),
-              class = c("summary.cm2", class(object)))
+              class = c("summary.cm", class(object)))
 }
 
-print.summary.cm2 <- function(x, ...)
+print.summary.cm <- function(x, ...)
 {
     nlevels <- length(x$nodes)
     level.names <- names(x$nodes)
