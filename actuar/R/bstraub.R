@@ -139,7 +139,7 @@ predict.bstraub <- function(object, ...)
 
 
 summary.bstraub <- function(object, ...)
-    structure(object, class = c("summary.bstraub", class(object)))
+    structure(object, class = c("summary.bstraub", class(object)), ...)
 
 print.summary.bstraub <- function(x, ...)
 {
@@ -158,6 +158,6 @@ print.summary.bstraub <- function(x, ...)
     colnames(cred) <- c(" Contract", "Ind. premium", "Weight",
                         "Cred. factor", "Cred. premium")
     rownames(cred) <- rep("", x$ncontracts)
-    print(cred)
+    print(cred, ...)
     invisible(x)
 }

@@ -405,7 +405,7 @@ summary.cm <- function(object, levels = NULL, ...)
                    nodes = object$nodes[plevs],
                    call = object$call,
                    premiums = predict(object, levels)),
-              class = c("summary.cm", class(object)))
+              class = c("summary.cm", class(object)), ...)
 }
 
 print.summary.cm <- function(x, ...)
