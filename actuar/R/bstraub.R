@@ -137,7 +137,6 @@ print.bstraub <- function(x, ...)
 predict.bstraub <- function(object, ...)
     object$collective + object$cred * (object$individual - object$collective)
 
-
 summary.bstraub <- function(object, ...)
     structure(object, class = c("summary.bstraub", class(object)), ...)
 

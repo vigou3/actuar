@@ -33,6 +33,10 @@ bstraub(ratios, weights,
   \item{TOL}{maximum relative error in the iterative procedure.}
   \item{echo}{logical; whether to echo iterative procedure or not.}
   \item{x, object}{an object of class \code{"bstraub"}.} 
+  \item{\dots}{additional attributes to attach to the result for the
+    \code{summary} method; further arguments to
+    \code{\link[base]{print}} for the \code{print.summary} method;
+    unused for the \code{print} and \code{predict} methods.}
   \item{\dots}{potential further arguments required by generic.}
 }
 \details{
@@ -108,6 +112,9 @@ bstraub(ratios, weights,
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
   Sébastien Auclair and Louis-Philippe Pouliot
+}
+\seealso{
+  \code{\link{cm}} for more general credibility models.
 }
 \examples{
 data(hachemeister)
