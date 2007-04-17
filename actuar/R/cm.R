@@ -11,7 +11,7 @@
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 
 cm <- function(formula, data, ratios, weights, subset,
-                TOL = 1E-6, echo = FALSE)
+               TOL = 1E-6, echo = FALSE)
 {
     Call <- match.call()
 
@@ -382,7 +382,7 @@ predict.cm <- function(object, levels = NULL, ...)
         res[[i]] <- p + cred[[i]] * (means[[i + 1]] - p)
     }
 
-    structure(res[plevs], names = level.names[plevs])
+    structure(res[plevs], names = level.names[plevs], ...)
 }
 
 summary.cm <- function(object, levels = NULL, ...)
