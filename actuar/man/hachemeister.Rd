@@ -12,7 +12,7 @@
   A matrix with 5 rows and the following 25 columns:
   \describe{
     \item{\code{state}}{the state number;}
-    \item{\code{year.1}, \dots, \code{year.12}}{the average claim
+    \item{\code{ratio.1}, \dots, \code{ratio.12}}{the average claim
       amounts;}
     \item{\code{weight.1}, \dots, \code{weight.12}}{the 
       corresponding number of claims.}
