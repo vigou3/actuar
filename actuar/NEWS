@@ -1,5 +1,204 @@
 === actuar: an R package for Actuarial Science ===
 
+Version 0.9-1
+=============
+
+Major official update. This version is not backward compatible with
+the 0.1-x series. Feature of the package can be split in the following
+categories: loss distributions modeling, risk theory, credibility
+theory.
+
+NEW FEATURES -- LOSS DISTRIBUTIONS
+
+o Functions {d,p,q,r}foo to compute the density function, cumulative
+  distribution function, quantile function of, and to generate
+  variates from, all probability distributions of Appendix A of
+  Klugman et al. (2004), "Loss Models, Second Edition" (except the
+  inverse gaussian) not already in R. Namely, this adds the following
+  distributions (the root is what follows the 'd', 'p', 'q' or 'r' in
+  function names):
+  
+     Distribution name          Root        
+  ------------------------- --------------  
+   Burr			     burr		  
+   Generalized beta	     genbeta	  
+   Generalized Pareto	     genpareto	  
+   Inverse Burr		     invburr	  
+   Inverse exponential	     invexp	  
+   Inverse Pareto	     invpareto	  
+   Inverse paralogistic	     invparalogis	  
+   Inverse Weibull	     invweibull	  
+   Loggamma		     loggamma	  
+   Loglogistic		     llogis	  
+   Paralogistic		     paralogis	  
+   Pareto		     pareto	  
+   Single parameter Pareto   pareto1	  
+   Transformed beta	     trbeta	  
+   Transformed gamma	     trgamma	  
+
+  All functions are coded in C for efficiency purposes and should
+  behave exactly like the functions in base R. For all distributions
+  that have a scale parameter, the corresponding functions have 'rate
+  = 1' and 'scale = 1/rate' arguments.
+
+o Functions {m,lev}foo to compute the k-th raw (non-central) moment
+  and k-th limited moment for all the probability distributions
+  mentioned above, plus the following ones of base R: beta,
+  exponential, gamma, lognormal and Weibull.
+
+o Facilities to store and manipulate grouped data (stored in an
+  interval-frequency fashion). Function grouped.data() creates a
+  grouped data object similar to a data frame. Methods of "[", "[<-",
+  mean() and hist() created for objects of class "grouped.data".
+
+o Function ogive() --- with appropriate methods of knots(),
+  plot(), print() and summary() --- to compute the ogive of grouped
+  data. Usage is in every respect similar to ecdf().
+
+o Function elev() to compute the empirical limited expected value of a
+  sample of individual or grouped data.
+
+o Function emm() to compute the k-th empirical raw (non-central)
+  moment of a sample of individual or grouped data.
+
+o Function mde() to compute minimum distance estimators from a sample
+  of individual or grouped data using one of three distance measures:
+  Cramer-von Mises (CvM), chi-square, layer average severity
+  (LAS). Usage is similar to fitdistr() of package 'MASS'.
+
+o Function coverage() to obtain the pdf or cdf of the payment per
+  payment or payment per loss random variable under any combination of
+  the following coverage modifications: ordinary of franchise
+  deductible, policy limit, coinsurance, inflation. The result is a
+  function that can be used in fitting models to data subject to such
+  coverage modifications.
+
+o Individual dental claims data set 'dental' and grouped dental claims
+  data set 'gdental' of Klugman et al. (2004), "Loss Models, Second
+  Edition".
+
+NEW FEATURES -- RISK THEORY
+
+o Function aggregateDist() returns a function to compute the
+  cumulative distribution function of the total amount of claims
+  random variable for an insurance portfolio using any of the
+  following five methods:
+
+  1. exact calculation by convolutions (using function convolve() of
+     package 'stats';
+  2. recursive calculation using Panjer's algorithm;
+  3. normal approximation;
+  4. normal power approximation;
+  5. simulation.
+
+  The modular conception of aggregateDist() allows for easy inclusion
+  of additional methods. There are special methods of print(),
+  summary(), quantile() and mean() for objects of class
+  "aggregateDist".  The objects otherwise inherit from classes "ecdf"
+  (for methods 1, 2 and 3) and "function".
+
+  See also the "Deprecated, defunct or no backward compatibility"
+  section below.
+
+o Function discretize() to discretize a continuous distribution using
+  any of the following four methods:
+
+  1. upper discretization, where the discretized cdf is always above
+     the true cdf;
+  2. lower discretization, where the discretized cdf is always under
+     the true cdf;
+  3. rounding, where the true cdf passes through the midpoints of the
+     intervals of the discretized cdf;
+  4. first moment matching of the discretized and true distributions.
+
+  Usage is similar to curve() of package 'graphics'. Again, the
+  modular conception allows for easy inclusion of additional
+  discretization methods.
+
+NEW FEATURES -- CREDIBILITY THEORY
+
+o Function simpf() can now simulate data for hierarchical portfolios
+  of any number of levels. Model specification changed completely; see
+  the "Deprecated, defunct or no backward compatibility" below. The
+  function is also significantly (~10x) faster than the previous
+  version.
+
+o Generic function severity() defined mostly to provide a method for
+  objects of class "simpf"; see below.
+
+o Methods of aggregate(), frequency(), severity() and weights() to
+  extract information from objects of class "simpf":
+
+  1. aggregate() returns the matrix of aggregate claim amounts per
+     node;
+  2. frequency() returns the matrix of the number of claims per node;
+  3. severity() returns the matrix of individual claim amounts per
+     node;
+  4. weights() returns the matrix of weights corresponding to the
+     data.
+
+  Summaries can be done in various ways; see ?simpf.summaries
+
+o Function cm() (for "_c_redibility _m_odel") to compute structure
+  parameters estimators for hierarchical credibility models, including
+  the Bühlmann and Bühlmann-Straub models. Usage is similar to lm() of
+  packages 'stats' in that the hierarchical structure is specified by
+  means of a formula object and data is extracted from a matrix or
+  data frame. There are special methods of print(), summary() for
+  objects of class "cm". Credibility premiums are computed using a
+  method of predict(); see below.
+
+  For simple Bühlmann and Bühlmann-Straub models, bstraub() remains
+  simpler to use and faster.
+
+o Function bstraub() now returns an object of class "bstraub" for
+  which there exist print and summary methods. The function no longer
+  computes the credibility premiums; see the "Deprecated,
+  defunct or no backward compatibility" below.
+
+o Methods of predict() for objects of class "cm" and "bstraub" created
+  to actually compute the credibility premiums of credibility
+  models. Function predict.cm() can return the premiums for specific
+  levels of a hierarchical portfolio only.
+
+OTHER NEW FEATURES
+
+o Function unroll() to unlist a list with a "dim" attribute of length
+  0, 1 or 2 (that is, a vector or matrix of vectors) according
+  to a specific dimension. Currently identical to severity.default()
+  by lack of a better usage of the default method of severity().
+
+o Three new demos corresponding to the three main fields of actuarial
+  science covered by the package.
+
+o French translations of the error and warning messages.
+
+o The package now has a name space.
+
+DEPRECATED, DEFUNCT OR NO BACKWARD COMPATIBILITY
+
+o Function panjer(), although still present in the package, should no
+  longer be used directly. Recursive calculation of the aggregate
+  claim amount should be done with aggregateDist(). Further, the
+  function is not backward compatible: model specification has
+  changed, discretization of the claim amount distribution should now
+  be done with discretize(), and the function now returns a function
+  to compute the cdf instead of a simple vector of probabilities.
+
+o Model specification for simpf() changed completely and is not
+  backward compatible with previous versions of the package. The new
+  scheme allows for much more general models.
+
+o Function rearrangepf() is defunct and has been replaced by methods
+  of aggregate(), frequency() and severity().
+
+o Function bstraub() no longer computes the credibility premiums. One
+  should now instead use predict() for this.
+
+o The data set 'hachemeister' is no longer a list but rather a matrix
+  with a state specification.
+
+
 Version 0.1-3
 =============
 
