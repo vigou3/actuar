@@ -18,7 +18,5 @@ simS <- function(n, model.freq, model.sev)
                          model.freq = model.freq,
                          model.sev = model.sev))[-1]
 
-    FUN <- ecdf(x)
-    class(FUN) <- c("aggregateDist", class(FUN))
-    FUN
+    ecdf(x)
 }
