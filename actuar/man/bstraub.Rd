@@ -37,7 +37,6 @@ bstraub(ratios, weights,
     \code{summary} method; further arguments to
     \code{\link[base]{print}} for the \code{print.summary} method;
     unused for the \code{print} and \code{predict} methods.}
-  \item{\dots}{potential further arguments required by generic.}
 }
 \details{
   The credibility premium of contract \eqn{i} is given by
