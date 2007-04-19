@@ -4,7 +4,7 @@
 \title{Discretization of a Continuous Distribution}
 \description{
   Compute a discrete probability mass function from a continuous
-  cumulatve distribution function (cdf) with various methods.
+  cumulative distribution function (cdf) with various methods.
 
   \code{discretise} is an alias for \code{discretize}.
 }
