@@ -180,17 +180,17 @@ predict(fit)
 ##
 ## Same calculations as above. (Note that the unbiased between
 ## variance estimator is not available.)
-fit <- cm2(~state, hachemeister,
-           ratios = year.1:year.12, weights = weight.1:weight.12)
+fit <- cm(~state, hachemeister,
+          ratios = year.1:year.12, weights = weight.1:weight.12)
 summary(fit)
 
 ## Calculations for the four level hierarchical portfolio simulated
 ## above.
 DF <- data.frame(aggregate(pf), weight = weights(pf)[, -(1:3)])
 
-fit <- cm2(~sector + sector:unit + sector:unit:contract,
-           data = DF, ratios = year.1:year.6,
-           weights = weight.year.1:weight.year.6)
+fit <- cm(~sector + sector:unit + sector:unit:contract,
+          data = DF, ratios = year.1:year.6,
+          weights = weight.year.1:weight.year.6)
 fit
 predict(fit)                          # credibility premiums
 predict(fit, levels = "unit")         # unit credibility premiums only
