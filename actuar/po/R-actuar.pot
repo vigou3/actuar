@@ -1,0 +1,165 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: R 2.3.0\n"
+"Report-Msgid-Bugs-To: bugs@r-project.org\n"
+"POT-Creation-Date: 2007-04-20 00:04\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+
+msgid "rows extracted in increasing order"
+msgstr ""
+
+msgid "impossible to replace boundaries and frequencies simultaneously"
+msgstr ""
+
+msgid "only logical matrix subscripts are allowed in replacement"
+msgstr ""
+
+msgid "need 0, 1, or 2 subscripts"
+msgstr ""
+
+msgid "'moments' must supply the mean and variance of the distribution"
+msgstr ""
+
+msgid "'moments' must supply the mean, variance and skewness of the distribution"
+msgstr ""
+
+msgid "'nb.simul' must supply the number of simulations"
+msgstr ""
+
+msgid "expressions in 'model.freq' and 'model.sev' must be named"
+msgstr ""
+
+msgid "'model.sev' must be a vector of probabilities"
+msgstr ""
+
+msgid "frequency distribution must be supplied as a character string"
+msgstr ""
+
+msgid "'model.freq' must be a vector of probabilities"
+msgstr ""
+
+msgid "internal error"
+msgstr ""
+
+msgid "missing values are not allowed in the matrix of ratios when the matrix of weights is not specified"
+msgstr ""
+
+msgid "there must be at least one contract with at least two years of experience"
+msgstr ""
+
+msgid "there must be more than one contract"
+msgstr ""
+
+msgid "missing values are not in the same positions in the matrix of weights and the matrix of ratios"
+msgstr ""
+
+msgid "unsupported interactions in 'formula'"
+msgstr ""
+
+msgid "ratios have to be specified if weights are"
+msgstr ""
+
+msgid "missing ratios not allowed when the matrix of weights is not specified"
+msgstr ""
+
+msgid "missing values are not in the same positions in weights and in ratios"
+msgstr ""
+
+msgid "there must be at least two nodes at every level"
+msgstr ""
+
+msgid "there must be at least one entity with more than one year of experience"
+msgstr ""
+
+msgid "invalid level name"
+msgstr ""
+
+msgid "coverage modifications must be positive"
+msgstr ""
+
+msgid "deductible must be smaller than the limit"
+msgstr ""
+
+msgid "coinsurance must be between 0 and 1"
+msgstr ""
+
+msgid "'cdf' must be a function or an expression containing 'x'"
+msgstr ""
+
+msgid "argument 'lev' must be specified with method 'unbiased'"
+msgstr ""
+
+msgid "'lev' must be a function or an expression containing 'x'"
+msgstr ""
+
+msgid "order must be positive"
+msgstr ""
+
+msgid "incorrect number of group boundaries and frequencies"
+msgstr ""
+
+msgid "missing frequencies replaced by zeros"
+msgstr ""
+
+msgid "infinite class boundaries"
+msgstr ""
+
+msgid "'probability' is an alias for '!freq', however they differ."
+msgstr ""
+
+msgid "'start' must be a named list"
+msgstr ""
+
+msgid "'fun' must be supplied as a function"
+msgstr ""
+
+msgid "'x' must be a numeric vector or an object of class 'grouped.data'"
+msgstr ""
+
+msgid "'start' specifies names which are not arguments to 'fun'"
+msgstr ""
+
+msgid "'chi-square' measure requires an object of class 'grouped.data'"
+msgstr ""
+
+msgid "frequency must be larger than 0 in all groups"
+msgstr ""
+
+msgid "'LAS' measure requires an object of class 'grouped.data'"
+msgstr ""
+
+msgid "optimization failed"
+msgstr ""
+
+msgid "'p0' must be specified with the logarithmic distribution"
+msgstr ""
+
+msgid "frequency distribution not in the (a, b, 0) or (a, b, 1) families"
+msgstr ""
+
+msgid "Pr[S = 0] is numerically equal to 0; impossible to start the recursion"
+msgstr ""
+
+msgid "'nodes' must be a named list"
+msgstr ""
+
+msgid "one of 'model.freq' or 'model.sev' must be non-NULL"
+msgstr ""
+
+msgid "level names different in 'nodes', 'model.freq' and 'model.sev'"
+msgstr ""
+
+msgid "nothing to do"
+msgstr ""
+
+msgid "invalid 'by' specification"
+msgstr ""
+
+msgid "'x' must be a vector or a matrix"
+msgstr ""

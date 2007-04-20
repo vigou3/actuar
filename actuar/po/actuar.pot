@@ -1,14 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Vincent Goulet
-# This file is distributed under the same license as the actuar package.
+# Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
-"POT-Creation-Date: 2006-09-29 10:52-0400\n"
+"POT-Creation-Date: 2007-04-19 23:47-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,34 +14,34 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: dpq.c:62 dpq.c:185 dpq.c:357 dpq.c:536 dpq.c:703 random.c:61 random.c:68
-#: random.c:142 random.c:149 random.c:237 random.c:244 random.c:331
-#: random.c:338
+#: dpq.c:71 dpq.c:194 dpq.c:368 dpq.c:549 dpq.c:720 random.c:61 random.c:68
+#: random.c:142 random.c:149 random.c:236 random.c:243 random.c:330
+#: random.c:337
 msgid "invalid arguments"
 msgstr ""
 
-#: dpq.c:94 dpq.c:223 dpq.c:400 dpq.c:585 dpq.c:757 random.c:101 random.c:193
-#: random.c:285 random.c:377
+#: dpq.c:103 dpq.c:232 dpq.c:411 dpq.c:598 dpq.c:774 random.c:101 random.c:192
+#: random.c:284 random.c:377
 msgid "NAs produced"
 msgstr ""
 
-#: dpq.c:154
+#: dpq.c:163
 msgid "internal error in do_dpq1"
 msgstr ""
 
-#: dpq.c:324
+#: dpq.c:335
 msgid "internal error in do_dpq2"
 msgstr ""
 
-#: dpq.c:499
+#: dpq.c:512
 msgid "internal error in do_dpq3"
 msgstr ""
 
-#: dpq.c:667
+#: dpq.c:684
 msgid "internal error in do_dpq4"
 msgstr ""
 
-#: dpq.c:799
+#: dpq.c:817
 msgid "internal error in do_dpq5"
 msgstr ""
 
@@ -51,11 +49,11 @@ msgstr ""
 msgid "internal error in do_random1"
 msgstr ""
 
-#: random.c:190
+#: random.c:189
 msgid "internal error in do_random2"
 msgstr ""
 
-#: random.c:282
+#: random.c:281
 msgid "internal error in do_random3"
 msgstr ""
 
