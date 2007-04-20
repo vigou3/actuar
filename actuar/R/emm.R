@@ -12,7 +12,7 @@ emm <- function(x, order = 1, ...)
 emm.default <- function(x, order = 1, ...)
 {
     if (any(order < 0))
-      stop("order must be positive")
+      stop("'order' must be positive")
 
     colMeans(outer(x, order, "^"), ...)
 }
@@ -21,7 +21,7 @@ emm.grouped.data <- function(x, order = 1, ...)
 {
     ## Function does not work for negative moments
     if (any(order < 0))
-        stop("order must be positive")
+        stop("'order' must be positive")
 
     ## Extract group boundaries
     cj <- eval(expression(cj), env = environment(x))

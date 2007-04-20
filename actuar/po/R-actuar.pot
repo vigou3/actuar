@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: R 2.3.0\n"
 "Report-Msgid-Bugs-To: bugs@r-project.org\n"
-"POT-Creation-Date: 2007-04-20 00:04\n"
+"POT-Creation-Date: 2007-04-20 16:11\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -10,18 +10,6 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-
-msgid "rows extracted in increasing order"
-msgstr ""
-
-msgid "impossible to replace boundaries and frequencies simultaneously"
-msgstr ""
-
-msgid "only logical matrix subscripts are allowed in replacement"
-msgstr ""
-
-msgid "need 0, 1, or 2 subscripts"
-msgstr ""
 
 msgid "'moments' must supply the mean and variance of the distribution"
 msgstr ""
@@ -47,16 +35,16 @@ msgstr ""
 msgid "internal error"
 msgstr ""
 
-msgid "missing values are not allowed in the matrix of ratios when the matrix of weights is not specified"
+msgid "missing ratios not allowed when weights are not specified"
 msgstr ""
 
-msgid "there must be at least one contract with at least two years of experience"
+msgid "there must be at least one contract with more than one period of experience"
 msgstr ""
 
 msgid "there must be more than one contract"
 msgstr ""
 
-msgid "missing values are not in the same positions in the matrix of weights and the matrix of ratios"
+msgid "missing values are not in the same positions in weights and in ratios"
 msgstr ""
 
 msgid "unsupported interactions in 'formula'"
@@ -65,16 +53,10 @@ msgstr ""
 msgid "ratios have to be specified if weights are"
 msgstr ""
 
-msgid "missing ratios not allowed when the matrix of weights is not specified"
-msgstr ""
-
-msgid "missing values are not in the same positions in weights and in ratios"
-msgstr ""
-
 msgid "there must be at least two nodes at every level"
 msgstr ""
 
-msgid "there must be at least one entity with more than one year of experience"
+msgid "there must be at least one node with more than one period of experience"
 msgstr ""
 
 msgid "invalid level name"
@@ -92,22 +74,34 @@ msgstr ""
 msgid "'cdf' must be a function or an expression containing 'x'"
 msgstr ""
 
-msgid "argument 'lev' must be specified with method 'unbiased'"
+msgid "'lev' required with method \"unbiased\""
 msgstr ""
 
 msgid "'lev' must be a function or an expression containing 'x'"
 msgstr ""
 
-msgid "order must be positive"
+msgid "'order' must be positive"
 msgstr ""
 
-msgid "incorrect number of group boundaries and frequencies"
+msgid "rows extracted in increasing order"
+msgstr ""
+
+msgid "impossible to replace boundaries and frequencies simultaneously"
+msgstr ""
+
+msgid "only logical matrix subscripts are allowed in replacement"
+msgstr ""
+
+msgid "need 0, 1, or 2 subscripts"
+msgstr ""
+
+msgid "invalid number of group boundaries and frequencies"
 msgstr ""
 
 msgid "missing frequencies replaced by zeros"
 msgstr ""
 
-msgid "infinite class boundaries"
+msgid "infinite group boundaries"
 msgstr ""
 
 msgid "'probability' is an alias for '!freq', however they differ."
@@ -119,19 +113,19 @@ msgstr ""
 msgid "'fun' must be supplied as a function"
 msgstr ""
 
-msgid "'x' must be a numeric vector or an object of class 'grouped.data'"
+msgid "'x' must be a numeric vector or an object of class \"grouped.data\""
 msgstr ""
 
 msgid "'start' specifies names which are not arguments to 'fun'"
 msgstr ""
 
-msgid "'chi-square' measure requires an object of class 'grouped.data'"
+msgid "\"chi-square\" measure requires an object of class \"grouped.data\""
 msgstr ""
 
 msgid "frequency must be larger than 0 in all groups"
 msgstr ""
 
-msgid "'LAS' measure requires an object of class 'grouped.data'"
+msgid "\"LAS\" measure requires an object of class \"grouped.data\""
 msgstr ""
 
 msgid "optimization failed"

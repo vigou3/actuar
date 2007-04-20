@@ -72,7 +72,7 @@ discretize <- function (cdf, from, to, step = 1,
         ## which should be provided in argument 'lev'. The latter is
         ## specified just like 'cdf'.
         if (missing(lev))
-            stop("argument 'lev' must be specified with method 'unbiased'")
+            stop("'lev' required with method \"unbiased\"")
 
         slev <- substitute(lev)
         if (is.name(slev))

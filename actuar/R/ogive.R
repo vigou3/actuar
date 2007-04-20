@@ -21,7 +21,7 @@ ogive <- function(x, y = NULL, ...)
     else
     {
         if (length(x) - length(y) != 1)
-            stop("incorrect number of group boundaries and frequencies")
+            stop("invalid number of group boundaries and frequencies")
     }
 
     ## Create an object of class 'ogive'.

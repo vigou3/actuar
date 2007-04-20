@@ -16,7 +16,7 @@ bstraub <- function(ratios, weights,
     if (missing(weights))
     {
         if (any(is.na(ratios)))
-            stop("missing values are not allowed in the matrix of ratios when the matrix of weights is not specified")
+            stop("missing ratios not allowed when weights are not specified")
         weights <- array(1, dim(ratios))
         model <- "Buhlmann"
     }
@@ -25,11 +25,11 @@ bstraub <- function(ratios, weights,
 
     ## Check other bad arguments.
     if (ncol(ratios) < 2)
-        stop("there must be at least one contract with at least two years of experience")
+        stop("there must be at least one contract with more than one period of experience")
     if (nrow(ratios) < 2)
         stop("there must be more than one contract")
     if(!identical(which(is.na(ratios)), which(is.na(weights))))
-        stop("missing values are not in the same positions in the matrix of weights and the matrix of ratios")
+        stop("missing values are not in the same positions in weights and in ratios")
 
     ## Individual weighted averages. It could happen that a contract
     ## has no observations, for example when applying the model on

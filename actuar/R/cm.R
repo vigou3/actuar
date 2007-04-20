@@ -102,7 +102,7 @@ cm <- function(formula, data, ratios, weights, subset,
         if (missing(weights))
         {
             if (any(is.na(ratios)))
-                stop("missing ratios not allowed when the matrix of weights is not specified")
+                stop("missing ratios not allowed when weights are not specified")
             array(1, dim(ratios))       # matrix of ones
         }
         else
@@ -224,7 +224,7 @@ cm <- function(formula, data, ratios, weights, subset,
     if (any(!denoms))
         stop("there must be at least two nodes at every level")
     if (ncol(ratios) < 2)
-        stop("there must be at least one entity with more than one year of experience")
+        stop("there must be at least one node with more than one period of experience")
 
     ## === ESTIMATION OF s^2 ===
     s2 <-  sum(weights * (ratios - ratios.w)^2, na.rm = TRUE) /

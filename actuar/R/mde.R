@@ -24,7 +24,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
         stop("'fun' must be supplied as a function")
     grouped <- inherits(x, "grouped.data")
     if (!(is.numeric(x) || grouped))
-        stop("'x' must be a numeric vector or an object of class 'grouped.data'")
+        stop("'x' must be a numeric vector or an object of class \"grouped.data\"")
 
     ## Make sure that any argument of 'fun' specified in '...' is held
     ## fixed.
@@ -61,7 +61,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
     if (measure == "chi-square")
     {
         if (!grouped)
-            stop("'chi-square' measure requires an object of class 'grouped.data'")
+            stop("\"chi-square\" measure requires an object of class \"grouped.data\"")
         if (any((nj <- x[, 2]) == 0))
             stop("frequency must be larger than 0 in all groups")
         og <- ogive(x)
@@ -77,7 +77,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
     if (measure == "LAS")
     {
         if (!grouped)
-            stop("'LAS' measure requires an object of class 'grouped.data'")
+            stop("\"LAS\" measure requires an object of class \"grouped.data\"")
         e <- elev(x)
         x <- knots(e)
         G <- function(...) diff(fn(...))

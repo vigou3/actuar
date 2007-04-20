@@ -14,23 +14,23 @@ hist.grouped.data <-
              ylim = NULL, xlab = xname, ylab, axes = TRUE,
              plot = TRUE, labels = FALSE, ...)
 {
-    ## Class boundaries are in the environment of 'x'
+    ## Group boundaries are in the environment of 'x'
     cj <- eval(expression(cj), env = environment(x))
     nj <- x[, 2]
 
-    ## If any frequency is non finite, omit the class
+    ## If any frequency is non finite, omit the group
     keep <- which(is.finite(nj))
     nj <- nj[keep]
     cj <- cj[c(1, keep + 1)]
 
     ## Some useful values
     n <- sum(nj)                        # total number of observations
-    h <- diff(cj)                       # class widths
-    dens <- nj/(n * h)                  # class "densities"
+    h <- diff(cj)                       # group widths
+    dens <- nj/(n * h)                  # group "densities"
 
-    ## Cannot plot histogram with infinite class
+    ## Cannot plot histogram with infinite group
     if (any(is.infinite(cj)))
-        stop("infinite class boundaries")
+        stop("infinite group boundaries")
 
     ## The rest is taken from hist.default()
     xname <- paste(deparse(substitute(x), 500), collapse = "\n")

@@ -26,7 +26,7 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
 
     ## There must be exactly one group boundary more than frequencies.
     if (nx - ny != 1)
-        stop("incorrect number of group boundaries and frequencies")
+        stop("invalid number of group boundaries and frequencies")
 
     ## Replace missing frequencies by zeros.
     nax <- is.na(x)
