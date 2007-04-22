@@ -25,8 +25,8 @@ msgstr "arguments incorrects"
 
 #: dpq.c:103 dpq.c:232 dpq.c:411 dpq.c:598 dpq.c:774 random.c:101 random.c:192
 #: random.c:284 random.c:377
-msgid "NAs produced"
-msgstr "production de NAs"
+msgid "NaNs produced"
+msgstr "production de NaN"
 
 #: dpq.c:163
 msgid "internal error in do_dpq1"

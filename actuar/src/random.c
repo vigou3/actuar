@@ -98,7 +98,7 @@ SEXP do_random1(int code, SEXP args)
 	    error(_("internal error in do_random1"));
 	}
 	if (naflag)
-	    warning(_("NAs produced"));
+	    warning(R_MSG_NA);
 	PutRNGstate();
 	UNPROTECT(1);
     }
@@ -189,7 +189,7 @@ SEXP do_random2(int code, SEXP args)
 	    error(_("internal error in do_random2"));
 	}
 	if (naflag)
-	    warning(_("NAs produced"));
+	    warning(R_MSG_NA);
 	PutRNGstate();
 	UNPROTECT(2);
     }
@@ -281,7 +281,7 @@ SEXP do_random3(int code, SEXP args)
 	    error(_("internal error in do_random3"));
 	}
 	if (naflag)
-	    warning(_("NAs produced"));
+	    warning(R_MSG_NA);
 	PutRNGstate();
 	UNPROTECT(3);
     }
@@ -374,7 +374,7 @@ SEXP do_random4(int code, SEXP args)
 	    error(_("internal error in do_random4"));
 	}
 	if (naflag)
-	    warning(_("NAs produced"));
+	    warning(R_MSG_NA);
 	PutRNGstate();
 	UNPROTECT(4);
     }

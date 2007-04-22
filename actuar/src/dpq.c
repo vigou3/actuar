@@ -100,7 +100,7 @@ static SEXP dpq1_1(SEXP sx, SEXP sa, SEXP sI, double (*f)())
 
 #define FINISH_DPQ1				\
     if(naflag)					\
-	warning(_("NAs produced"));		\
+	warning(R_MSG_NA);			\
 						\
     if (n == nx) {				\
 	SET_ATTRIB(sy, duplicate(ATTRIB(sx)));	\
@@ -229,7 +229,7 @@ static SEXP dpq2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
 
 #define FINISH_DPQ2				\
     if(naflag)					\
-	warning(_("NAs produced"));		\
+	warning(R_MSG_NA);			\
 						\
     if (n == nx) {				\
 	SET_ATTRIB(sy, duplicate(ATTRIB(sx)));	\
@@ -408,7 +408,7 @@ static SEXP dpq3_1(SEXP sx, SEXP sa, SEXP sb, SEXP sc, SEXP sI, double (*f)())
 
 #define FINISH_DPQ3				\
     if(naflag)					\
-	warning(_("NAs produced"));		\
+	warning(R_MSG_NA);			\
 						\
     if (n == nx) {				\
 	SET_ATTRIB(sy, duplicate(ATTRIB(sx)));	\
@@ -595,7 +595,7 @@ static SEXP dpq4_1(SEXP sx, SEXP sa, SEXP sb, SEXP sc, SEXP sd, SEXP sI, double 
 
 #define FINISH_DPQ4				\
     if(naflag)					\
-	warning(_("NAs produced"));		\
+	warning(R_MSG_NA);			\
 						\
     if (n == nx) {				\
 	SET_ATTRIB(sy, duplicate(ATTRIB(sx)));	\
@@ -771,7 +771,7 @@ static SEXP dpq5_1(SEXP sx, SEXP sa, SEXP sb, SEXP sc, SEXP sd, SEXP se, SEXP sI
 
 #define FINISH_DPQ5				\
     if(naflag)					\
-	warning(_("NAs produced"));		\
+	warning(R_MSG_NA);			\
 						\
     if (n == nx) {				\
 	SET_ATTRIB(sy, duplicate(ATTRIB(sx)));	\

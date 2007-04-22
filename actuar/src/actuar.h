@@ -1,3 +1,6 @@
+/*Error messages */
+#define R_MSG_NA	_("NaNs produced")
+
 /* Functions accessed from .External() */
 SEXP do_dpq(SEXP args);
 SEXP do_dpq1(int code, SEXP args);
