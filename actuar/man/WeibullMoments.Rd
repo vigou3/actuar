@@ -43,6 +43,6 @@
 }
 \examples{
 mweibull(2, 3, 4) - mweibull(1, 3, 4)^2
-levweibull(10, 3, 4, 2)
+levweibull(10, 3, 4, order = 2)
 }
 \keyword{distribution}

@@ -96,6 +96,6 @@ exp(dburr(2, 3, 4, 5, log = TRUE))
 p <- (1:10)/10
 pburr(qburr(p, 2, 3, 1), 2, 3, 1)
 mburr(2, 1, 2, 3) - mburr(1, 1, 2, 3) ^ 2
-levburr(10, 1, 2, 3, 2)
+levburr(10, 1, 2, 3, order = 2)
 }
 \keyword{distribution}

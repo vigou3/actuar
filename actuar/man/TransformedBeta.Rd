@@ -121,6 +121,6 @@ p <- (1:10)/10
 ptrbeta(qtrbeta(p, 2, 3, 4, 5), 2, 3, 4, 5)
 qpearson6(0.3, 2, 3, 4, 5, lower.tail = FALSE)
 mtrbeta(2, 1, 2, 3, 4) - mtrbeta(1, 1, 2, 3, 4) ^ 2
-levtrbeta(10, 1, 2, 3, 4, 2)
+levtrbeta(10, 1, 2, 3, 4, order = 2)
 }
 \keyword{distribution}

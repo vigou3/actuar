@@ -58,6 +58,6 @@
 exp(dinvexp(2, 2, log = TRUE))
 p <- (1:10)/10
 pinvexp(qinvexp(p, 2), 2)
-minvexp(-2, 3)
+minvexp(-2, order = 3)
 }
 \keyword{distribution}

@@ -84,6 +84,6 @@ exp(dinvweibull(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 pinvweibull(qinvweibull(p, 2, 3), 2, 3)
 mlgompertz(-1, 3, 3)
-levinvweibull(10, 2, 3, 2)
+levinvweibull(10, 2, 3, order = 2)
 }
 \keyword{distribution}

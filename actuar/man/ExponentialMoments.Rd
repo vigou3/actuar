@@ -42,6 +42,6 @@
 }
 \examples{
 mexp(2, 3) - mexp(1, 3)^2
-levexp(10, 3, 2)
+levexp(10, 3, order = 2)
 }
 \keyword{distribution}

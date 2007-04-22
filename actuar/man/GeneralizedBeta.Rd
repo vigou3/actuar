@@ -50,9 +50,9 @@
     \frac{\tau}{x}}{%
       f(x) = Gamma(a + b)/(Gamma(a) * Gamma(b))
       (c (x/s)^(ac) [1 - (x/s)^c]^(b - 1))/x}
-  for \eqn{0 < x < s}, \eqn{\alpha > 0}{a > 0}, \eqn{\beta > 0}{b > 0},
-  \eqn{\tau > 0}{c > 0} and \eqn{\theta > 0}{s > 0}.
-  (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
+  for \eqn{0 < x < \theta}{0 < x < s}, \eqn{\alpha > 0}{a > 0},
+  \eqn{\beta > 0}{b > 0}, \eqn{\tau > 0}{c > 0} and \eqn{\theta > 0}{s >
+    0}. (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
   by \R's \code{\link{gamma}()} and defined in its help.)
 
   The Generalized Beta is the distribution of the random variable
@@ -90,11 +90,10 @@
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
 }
 \examples{
-exp(dgenbeta(2, 2, 3, 4, 5, log = TRUE))
+exp(dgenbeta(2, 2, 3, 4, 0.2, log = TRUE))
 p <- (1:10)/10
-pgenbeta(qgenbeta(p, 2, 3, 4, 5), 2, 3, 4, 5)
-qpearson6(0.3, 2, 3, 4, 5, lower.tail = FALSE)
-mgenbeta(2, 1, 2, 3, 4) - mgenbeta(1, 1, 2, 3, 4) ^ 2
-levgenbeta(10, 1, 2, 3, 4, 2)
+pgenbeta(qgenbeta(p, 2, 3, 4, 0.2), 2, 3, 4, 0.2)
+mgenbeta(2, 1, 2, 3, 0.25) - mgenbeta(1, 1, 2, 3, 0.25) ^ 2
+levgenbeta(10, 1, 2, 3, 0.25, order = 2)
 }
 \keyword{distribution}

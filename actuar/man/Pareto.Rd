@@ -77,6 +77,6 @@ exp(dpareto(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 ppareto(qpareto(p, 2, 3), 2, 3)
 mpareto(1, 2, 3)
-levpareto(10, 2, 3, 1)
+levpareto(10, 2, 3, order = 1)
 }
 \keyword{distribution}

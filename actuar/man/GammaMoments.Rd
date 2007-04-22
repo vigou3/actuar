@@ -44,6 +44,6 @@
 }
 \examples{
 mgamma(2, 3, 4) - mgamma(1, 3, 4)^2
-levgamma(10, 3, 4, 2)
+levgamma(10, 3, 4, order = 2)
 }
 \keyword{distribution}

@@ -35,7 +35,7 @@ double dgenbeta(double x, double shape1, double shape2, double shape3,
 	scale  <= 0.0)
 	return R_NaN;
 
-    if (x < 0 || x > 1)
+    if (x < 0 || x > scale)
 	return R_D__0;
     if (x == 0)
     {
@@ -52,7 +52,7 @@ double dgenbeta(double x, double shape1, double shape2, double shape3,
     }
 
     logu = shape3 * (log(x) - log(scale));
-    log1mu = log1p(-exp(tmp));
+    log1mu = log1p(-exp(logu));
 
     return R_D_exp(log(shape3) + shape1 * logu + (shape2 - 1.0) * log1mu
 		   - log(x) - lbeta(shape1, shape2));

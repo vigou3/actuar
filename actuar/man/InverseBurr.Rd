@@ -95,6 +95,6 @@ exp(dinvburr(2, 3, 4, 5, log = TRUE))
 p <- (1:10)/10
 pinvburr(qinvburr(p, 2, 3, 1), 2, 3, 1)
 minvburr(2, 1, 2, 3) - minvburr(1, 1, 2, 3) ^ 2
-levinvburr(10, 1, 2, 3, 2)
+levinvburr(10, 1, 2, 3, order = 2)
 }
 \keyword{distribution}

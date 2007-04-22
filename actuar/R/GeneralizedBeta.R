@@ -4,7 +4,7 @@
 ### characteristics of the Generalized Beta distribution. The version
 ### used in these functions has cumulative distribution function
 ###
-###   Pr[X <= x] = Pr[Y <= (x/scale)^shape3],
+###   Pr[X <= x] = Pr[Y <= (x/scale)^shape3], 0 < x < scale,
 ###
 ### where Y has a Beta distribution with parameters shape1 and shape2.
 ###
