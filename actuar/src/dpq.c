@@ -677,8 +677,8 @@ SEXP do_dpq4(int code, SEXP args)
     case  8:  return DPQ4_1(args, levinvtrgamma);
     case  9:  return DPQ4_1(args, levtrgamma);
     case 10:  return DPQ4_1(args, dgenbeta);
-    case 11:  return DPQ4_1(args, pgenbeta);
-    case 12:  return DPQ4_1(args, qgenbeta);
+    case 11:  return DPQ4_2(args, pgenbeta);
+    case 12:  return DPQ4_2(args, qgenbeta);
     case 13:  return DPQ4_1(args, mgenbeta);
     default:
 	error(_("internal error in do_dpq4"));
