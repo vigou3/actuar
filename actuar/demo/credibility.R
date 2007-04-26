@@ -28,8 +28,8 @@ require(actuar)
 ##     C ~ Lognormal(log(1500) - 1, 1)
 ##
 ## for t = 1, ..., 10. The name of the components below serves no
-## purpose. 'severity' allows to extract the individual claim amounts
-## separately for columns specified in argument 'splitcol'.
+## purpose. 'severity' can extract individual claim amounts separately
+## for columns specified in argument 'splitcol'.
 pf <- simpf(list(y = 10), model.freq = expression(y = rpois(10)),
             model.sev = expression(y = rlnorm(log(1500) - 1, 1)))
 pf                                      # print method

@@ -167,6 +167,9 @@ showgraphs("pareto1", list(shape = 5, min = 10))
 ## Loggamma distribution
 showgraphs("lgamma", list(shapelog = 2, ratelog = 5))
 
+## Generalized beta distribution
+showgraphs("genbeta", list(shape1 = 1, shape2 = 2, shape3 = 3, scale = 2))
+
 
 ###
 ### GROUPED DATA MANIPULATION
@@ -176,6 +179,7 @@ showgraphs("lgamma", list(shapelog = 2, ratelog = 5))
 x <- grouped.data(groups = c(0, 25, 50, 100, 150, 250, 500),
                   line1 = c(30, 31, 57, 42, 65, 84),
                   line2 = c(26, 33, 31, 19, 16, 11))
+x
 
 ## Extraction and replacement: only "[" and "[<-" are officially
 ## supported.

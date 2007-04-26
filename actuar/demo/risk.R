@@ -25,8 +25,8 @@ op <- par(ask = interactive() &&
 ###
 ### Currently, four discretization methods are supported: upper and
 ### lower discretization, rounding of the random variable (midpoint
-### method), and local matching of the first moment. Usage of is
-### similar to 'curve' of package 'graphics'.
+### method), and local matching of the first moment. Usage is similar
+### to 'curve' of package 'graphics'.
 
 ## Upper and lower discretization of a Gamma(2, 1) distribution with a
 ## step (or span, or lag) of 0.5. The value of 'to' is chosen to as to
@@ -126,7 +126,7 @@ quantile(Fs.b)                          # quantiles
 ## probabilities for the frequency model. This method can quickly
 ## become impractical for a large expected number of claims.
 pn <- dpois(0:qpois(1-1E-6, 10), 10)
-Fs <- aggregateDist("convolution", model.freq = pn, model.sev = fx,
+Fs <- aggregateDist("convolution", model.freq = pn, model.sev = fx.b,
                     x.scale = 0.5)
 summary(Fs)                             # summary method
 knots(Fs)                               # support of Fs (knots)
@@ -148,9 +148,10 @@ Fs.np <- aggregateDist("npower", moments = c(20, 60, 0.516398))
 summary(Fs.np)                          # summary method
 plot(Fs.np, xlim = c(0, 60))            # truncated graphic
 
-## Simulation method. Function 'simpf' is used to simulate the
-## data. The result is a step function, but with very small steps if
-## the number of simulations is large.
+## Simulation method. Function 'simpf' is used to simulate the data
+## (see the 'credibility' demo for examples). The result is a step
+## function, but with very small steps if the number of simulations is
+## large.
 Fs.s <- aggregateDist("simulation",
                       model.freq = expression(y = rpois(10)),
                       model.sev = expression(y = rgamma(2, 1)),

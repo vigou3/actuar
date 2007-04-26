@@ -79,6 +79,7 @@ S3method(print, ogive)
 S3method(print, simpf)
 S3method(print, summary.aggregateDist)
 S3method(print, summary.bstraub)
+S3method(print, summary.cm)
 
 S3method(quantile, aggregateDist)
 
@@ -87,6 +88,7 @@ S3method(severity, simpf)
 
 S3method(summary, aggregateDist)
 S3method(summary, bstraub)
+S3method(summary, cm)
 S3method(summary, elev)
 S3method(summary, ogive)
 
