@@ -49,8 +49,7 @@ This vignette presents the definitions of the above four random
 variables and their corresponding cdf and pdf for a deductible $d$, a
 limit $u$, a coinsurance level $\alpha$ and an inflation rate $r$. An
 illustrative plot of each cdf and pdf is also included. In these
-plots, a dot at the end of a vertical bar represents a probability
-mass at the given point.
+plots, a dot indicates a probability mass at the given point.
 
 In definitions below, $X$ is the nonnegative random variable of the
 losses with cdf $F_X(\cdot)$ and pdf $f_X(\cdot)$.
@@ -63,13 +62,12 @@ limit <- 13
 \section{Payment per payment, ordinary deductible}
 
 <<echo=FALSE>>=
-pgammaL <- coverage("gamma", deductible = deductible, limit = limit,
-                     per.loss = TRUE, cdf = TRUE)
-dgammaL <- coverage("gamma", deductible = deductible, limit = limit,
+pgammaL <- coverage(cdf = pgamma, deductible = deductible, limit = limit,
                      per.loss = TRUE)
-pgammaP <- coverage("gamma", deductible = deductible, limit = limit,
-                    cdf = TRUE)
-dgammaP <- coverage("gamma", deductible = deductible, limit = limit)
+dgammaL <- coverage(dgamma, pgamma, deductible = deductible, limit = limit,
+                     per.loss = TRUE)
+pgammaP <- coverage(cdf = pgamma, deductible = deductible, limit = limit)
+dgammaP <- coverage(dgamma, pgamma, deductible = deductible, limit = limit)
 
 formals(pgammaL)[c("shape", "rate")] <- c(5, 0.6)
 formals(dgammaL)[c("shape", "rate")] <- c(5, 0.6)
@@ -110,8 +108,8 @@ ylim <- c(0, dgammaL(0))
 par(mar = c(2, 3, 1, 1))
 curve(pgammaP(x), from = 0, to = u - e,
       xlim = c(0, limit), ylim = c(0, 1),
-      xlab = "", ylab = "", xaxt = "n")
-curve(pgammaP(x), from = u, add = TRUE)
+      xlab = "", ylab = "", xaxt = "n", lwd = 2)
+curve(pgammaP(x), from = u, add = TRUE, lwd = 2)
 axis(1, at = c(0, u), labels = c("0", "u - d"))
 @
   \end{minipage} \\
@@ -133,8 +131,7 @@ axis(1, at = c(0, u), labels = c("0", "u - d"))
 par(mar = c(2, 3, 1, 1))
 curve(dgammaP(x), from = 0 + e, to = u - e,
       xlim = c(0, limit), ylim = ylim,
-      xlab = "", ylab = "", xaxt = "n")
-points(u, dgammaP(u), type = "h", lwd = 2)
+      xlab = "", ylab = "", xaxt = "n", lwd = 2)
 points(u, dgammaP(u), pch = 16)
 axis(1, at = c(0, u), labels = c("0", "u - d"))
 @
@@ -170,8 +167,8 @@ axis(1, at = c(0, u), labels = c("0", "u - d"))
 par(mar = c(2, 3, 1, 1))
 curve(pgammaL(x), from = 0, to = u - e,
       xlim = c(0, limit), ylim = c(0, 1),
-      xlab = "", ylab = "", xaxt = "n")
-curve(pgammaL(x), from = u, add = TRUE)
+      xlab = "", ylab = "", xaxt = "n", lwd = 2)
+curve(pgammaL(x), from = u, add = TRUE, lwd = 2)
 axis(1, at = c(0, u), labels = c("0", "u - d"))
 @
   \end{minipage} \\
@@ -191,8 +188,7 @@ axis(1, at = c(0, u), labels = c("0", "u - d"))
 par(mar = c(2, 3, 1, 1))
 curve(dgammaL(x), from = 0 + e, to = u - e,
       xlim = c(0, limit), ylim = ylim,
-      xlab = "", ylab = "", xaxt = "n")
-points(c(0, u), dgammaL(c(0, u)), type = "h", lwd = 2)
+      xlab = "", ylab = "", xaxt = "n", lwd = 2)
 points(c(0, u), dgammaL(c(0, u)), pch = 16)
 axis(1, at = c(0, u), labels = c("0", "u - d"))
 @
@@ -203,13 +199,13 @@ axis(1, at = c(0, u), labels = c("0", "u - d"))
 \section{Payment per payment, franchise deductible}
 
 <<echo=FALSE>>=
-pgammaL <- coverage("gamma", deductible = deductible, limit = limit,
-                     per.loss = TRUE, franchise = TRUE, cdf = TRUE)
-dgammaL <- coverage("gamma", deductible = deductible, limit = limit,
+pgammaL <- coverage(cdf = pgamma, deductible = deductible, limit = limit,
                      per.loss = TRUE, franchise = TRUE)
-pgammaP <- coverage("gamma", deductible = deductible, limit = limit,
-                    cdf = TRUE, franchise = TRUE)
-dgammaP <- coverage("gamma", deductible = deductible, limit = limit,
+dgammaL <- coverage(dgamma, pgamma, deductible = deductible, limit = limit,
+                     per.loss = TRUE, franchise = TRUE)
+pgammaP <- coverage(cdf = pgamma, deductible = deductible, limit = limit,
+                    franchise = TRUE)
+dgammaP <- coverage(dgamma, pgamma, deductible = deductible, limit = limit,
                     franchise = TRUE)
 
 formals(pgammaL)[c("shape", "rate")] <- c(5, 0.6)
@@ -251,8 +247,8 @@ ylim <- c(0, dgammaL(0))
 par(mar = c(2, 3, 1, 1))
 curve(pgammaP(x), from = 0, to = u - e,
       xlim = c(0, limit + d), ylim = c(0, 1),
-      xlab = "", ylab = "", xaxt = "n")
-curve(pgammaP(x), from = u, add = TRUE)
+      xlab = "", ylab = "", xaxt = "n", lwd = 2)
+curve(pgammaP(x), from = u, add = TRUE, lwd = 2)
 axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 @
   \end{minipage} \\
@@ -274,9 +270,8 @@ axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 par(mar = c(2, 3, 1, 1))
 curve(dgammaP(x), from = d + e, to = u - e,
       xlim = c(0, limit + d), ylim = ylim,
-      xlab = "", ylab = "", xaxt = "n")
-curve(dgammaL(x), from = 0 + e, to = d, add = TRUE)
-points(u, dgammaP(u), type = "h", lwd = 2)
+      xlab = "", ylab = "", xaxt = "n", lwd = 2)
+curve(dgammaL(x), from = 0 + e, to = d, add = TRUE, lwd = 2)
 points(u, dgammaP(u), pch = 16)
 axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 @
@@ -312,8 +307,8 @@ axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 par(mar = c(2, 3, 1, 1))
 curve(pgammaL(x), from = 0, to = u - e,
       xlim = c(0, limit + d), ylim = c(0, 1),
-      xlab = "", ylab = "", xaxt = "n")
-curve(pgammaL(x), from = u, add = TRUE)
+      xlab = "", ylab = "", xaxt = "n", lwd = 2)
+curve(pgammaL(x), from = u, add = TRUE, lwd = 2)
 axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 @
   \end{minipage} \\
@@ -332,9 +327,8 @@ axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 par(mar = c(2, 3, 1, 1))
 curve(dgammaL(x), from = d + e, to = u - e,
       xlim = c(0, limit + d), ylim = ylim,
-      xlab = "", ylab = "", xaxt = "n")
-curve(dgammaL(x), from = 0 + e, to = d, add = TRUE)
-points(c(0, u), dgammaL(c(0, u)), type = "h", lwd = 2)
+      xlab = "", ylab = "", xaxt = "n", lwd = 2)
+curve(dgammaL(x), from = 0 + e, to = d, add = TRUE, lwd = 2)
 points(c(0, u), dgammaL(c(0, u)), pch = 16)
 axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 @

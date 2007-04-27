@@ -258,9 +258,18 @@ mde(gdental, levexp, start = list(rate = 1/200), measure = "LAS")
 ## modifications: ordinary or franchise deductible, policy limit,
 ## inflation, coinsurance. The function returned can then be used like
 ## any other pdf or cdf in modeling.
-f <- coverage("gamma", deductible = 1, limit = 7)
-curve(dgamma(x, 3, 1), xlim = c(0, 10), ylim = c(0, 0.3))    # original
-curve(f(x, 3, 1), xlim = c(0.01, 5.99), lty = 2, add = TRUE) # modified
+f <- coverage(dgamma, pgamma, deductible = 1, limit = 7)
+curve(dgamma(x, 3), xlim = c(0, 10), ylim = c(0, 0.3))    # original
+curve(f(x, 3), xlim = c(0.01, 5.99), col = 4, add = TRUE) # modified
 
+x <- rgamma(1000, 3, 1)                 # sample of claim amounts
+x <- pmin(x, 7)[x > 1] - 1              # deductible and limit
+
+library(MASS)                           # for ML estimation
+m <- mean(x)                            # empirical mean
+v <- var(x)                             # empirical variance
+(p <- fitdistr(x, f, start = list(shape = m^2/v, rate = m/v))$estimate ) # MLE
+hist(x + 1, breaks = 0:10, prob = TRUE)  # histogram of observed data
+curve(dgamma(x, p[1], p[2]), add = TRUE) # fit of underlying distribution
 
 par(op)

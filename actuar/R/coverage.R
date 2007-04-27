@@ -9,10 +9,12 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-coverage <- function(dist, deductible = 0, franchise = FALSE,
+coverage <- function(pdf, cdf, deductible = 0, franchise = FALSE,
                      limit = Inf, coinsurance = 1, inflation = 0,
-                     per.loss = FALSE, cdf = FALSE)
+                     per.loss = FALSE)
 {
+    Call <- match.call()
+
     ## Sanity check of arguments
     if (any(deductible < 0, limit < 0, coinsurance < 0, inflation < 0))
         stop("coverage modifications must be positive")
@@ -20,48 +22,66 @@ coverage <- function(dist, deductible = 0, franchise = FALSE,
       stop("deductible must be smaller than the limit")
     if (coinsurance > 1)
         stop("coinsurance must be between 0 and 1")
+    if (missing(cdf))
+        stop("'cdf' must be specified")
 
-    ## Function 'pdist'() is always needed. Get its argument list to
-    ## build function calls and, eventually, specify arguments of the
-    ## output function.
-    F <- paste("p", dist, sep = "")     # 'pdist'()
-    formalsF <- formals(F)              # arguments as list
-    argsF <- names(formalsF)            # arguments names as strings
+    ## Determine if the output function should compute the cdf or the
+    ## pdf of the modified random variable. It is the latter if 'pdf'
+    ## is missing or NULL. (It would make for sense to have a variable
+    ## 'has.pdf', but 'cdf' was a TRUE/FALSE at the time the rest of
+    ## the code was written.)
+    is.cdf <- missing(pdf) || is.null(pdf)
+
+    ## Arguments 'pdf' and 'cdf' can be character strings giving
+    ## function names or straight function objects. In the latter
+    ## case, 'pdf' and 'cdf' will contain function definitions and the
+    ## output function of coverage() will contain multiple function
+    ## definitions. Not nice. Instead, always treat 'pdf' and 'cdf' as
+    ## character strings.
+    ##
+    cdf <- as.character(Call$cdf)
+    if (!is.cdf)
+        pdf <- as.character(Call$pdf)
+
+    ## The cumulative distribution function is always needed. Get its
+    ## argument list to build function calls and, eventually, specify
+    ## arguments of the output function.
+    formalsCDF <- formals(cdf)          # arguments as list
+    argsCDF <- names(formalsCDF)        # arguments names as strings
 
     ## Remember if argument 'lower.tail' is available, so we can use
     ## it later. Then, drop unsupported arguments 'lower.tail' and
     ## 'log.p'.
-    has.lower <- if ("lower.tail" %in% argsF) TRUE else FALSE
-    argsF <- setdiff(argsF, c("lower.tail", "log.p"))
+    has.lower <- if ("lower.tail" %in% argsCDF) TRUE else FALSE
+    argsCDF <- setdiff(argsCDF, c("lower.tail", "log.p"))
 
     ## 1. Set arguments of the output function. Should be those of
-    ##    'pdist'() or 'ddist'() depending if 'cdf' is 'TRUE' or
-    ##    'FALSE', respectively.
+    ##    'cdf' or 'pdf' depending if 'pdf' is missing or not,
+    ##    respectively.
     ##
     ## 2. Set the symbol representing the variable in function
     ##    calls. Should be the first argument of the output
     ##    function.
     ##
-    ## 3. Drop unsupported argument 'log', if present, in 'ddist'().
+    ## 3. Drop unsupported argument 'log', if present, in 'pdf'.
     ##
-    ## 4. Drop the first argument of 'pdist'() and 'ddist'() which are
-    ##    no longer used after this block and prepare argument list
-    ##    for use in do.call().
-    if (cdf)
+    ## 4. Drop the first argument of 'cdf' and 'pdf' which are no
+    ##    longer used after this block and prepare argument list for
+    ##    use in do.call().
+    if (is.cdf)                # return cdf of the modified r.v.
     {
-        argsFUN <- formalsF[argsF]      # arguments of output function
-        x <- as.name(argsF[1])          # symbol
+        argsFUN <- formalsCDF[argsCDF]  # arguments of output function
+        x <- as.name(argsCDF[1])        # symbol
     }
     else
     {
-        f <- paste("d", dist, sep = "") # 'ddist'()
-        formalsf <- formals(f)          # arguments as list
-        argsf <- setdiff(names(formalsf), "log") # drop argument 'log'
-        argsFUN <- formalsf[argsf]      # arguments of output function
-        x <- as.name(argsf[1])          # symbol
-        argsf <- sapply(argsf[-1], as.name) # for use in do.call()
+        formalsPDF <- formals(pdf)      # arguments as list
+        argsPDF <- setdiff(names(formalsPDF), "log") # drop argument 'log'
+        argsFUN <- formalsPDF[argsPDF]  # arguments of output function
+        x <- as.name(argsPDF[1])        # symbol
+        argsPDF <- sapply(argsPDF[-1], as.name) # for use in do.call()
     }
-    argsF <- sapply(argsF[-1], as.name) # for use in do.call()
+    argsCDF <- sapply(argsCDF[-1], as.name) # for use in do.call()
 
     ## Quantites often used
     r <- 1 + inflation
@@ -84,7 +104,7 @@ coverage <- function(dist, deductible = 0, franchise = FALSE,
     {
         bound1 <- coinsurance * deductible
         bound2 <- coinsurance * limit
-        cond1 <- if (cdf)
+        cond1 <- if (is.cdf)
             substitute(0 <= x & x <= b1, list(x = x, b1 = bound1))
         else
             substitute(x == 0, list(x = x))
@@ -100,44 +120,45 @@ coverage <- function(dist, deductible = 0, franchise = FALSE,
     }
 
     ## Definitions of 1 - F(d) and 1 - F(u), using 'lower.tail =
-    ## FALSE' if available in 'pdist'().
+    ## FALSE' if available in 'cdf'.
     if (has.lower)
     {
         Sd <- substitute(do.call(F, a),
-                         list(F = F, a = c(d, argsF, lower.tail = FALSE)))
+                         list(F = cdf, a = c(d, argsCDF, lower.tail = FALSE)))
         Su <- substitute(do.call(F, a),
-                         list(F = F, a = c(u, argsF, lower.tail = FALSE)))
+                         list(F = cdf, a = c(u, argsCDF, lower.tail = FALSE)))
     }
     else
     {
         Sd <- substitute(1 - do.call(F, a),
-                         list(F = F, a = c(d, argsF)))
+                         list(F = cdf, a = c(d, argsCDF)))
         Su <- substitute(1 - do.call(F, a),
-                         list(F = F, a = c(u, argsF)))
+                         list(F = cdf, a = c(u, argsCDF)))
     }
 
     ## Function definition for the first branch.
     f1 <- if (per.loss & deductible)
-        substitute(do.call(F, a), list(F = F, a = c(d, argsF)))
+        substitute(do.call(F, a), list(F = cdf, a = c(d, argsCDF)))
     else 0
 
     ## Function definitions for the second and third branches. The
-    ## 'cdf = TRUE' and 'CDF = FALSE' must be treated separately.
-    if (cdf)
+    ## 'is.cdf = TRUE' and 'is.cdf = FALSE' cases must be treated
+    ## separately.
+    if (is.cdf)
     {
         cond3 <- substitute(x >= b, list(x = x, b = bound2))
         f2 <- substitute(do.call(F, a),
-                         list(F = F, a = c(x.mod, argsF)))
+                         list(F = cdf, a = c(x.mod, argsCDF)))
         f3 <- 1
         if (!per.loss & deductible)
             f2 <- substitute((f - do.call(F, d))/S,
-                             list(f = f2, F = F, S = Sd, d = c(d, argsF)))
+                             list(f = f2, F = cdf, S = Sd, d = c(d, argsCDF)))
     }
     else
     {
         cond3 <- substitute(x == b, list(x = x, b = bound2))
         f2 <- substitute(do.call(f, a),
-                         list(f = f, a = c(x.mod, argsf)))
+                         list(f = pdf, a = c(x.mod, argsPDF)))
         f3 <- if (is.finite(limit)) Su else 0
         if (!per.loss & deductible)
         {
