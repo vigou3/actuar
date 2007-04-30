@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: R 2.3.0\n"
 "Report-Msgid-Bugs-To: bugs@r-project.org\n"
-"POT-Creation-Date: 2007-04-20 16:11\n"
+"POT-Creation-Date: 2007-04-30 00:43\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -10,6 +10,18 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+
+msgid "rows extracted in increasing order"
+msgstr ""
+
+msgid "impossible to replace boundaries and frequencies simultaneously"
+msgstr ""
+
+msgid "only logical matrix subscripts are allowed in replacement"
+msgstr ""
+
+msgid "need 0, 1, or 2 subscripts"
+msgstr ""
 
 msgid "'moments' must supply the mean and variance of the distribution"
 msgstr ""
@@ -35,7 +47,7 @@ msgstr ""
 msgid "internal error"
 msgstr ""
 
-msgid "missing ratios not allowed when weights are not specified"
+msgid "missing ratios not allowed when weights are not supplied"
 msgstr ""
 
 msgid "there must be at least one contract with more than one period of experience"
@@ -50,7 +62,7 @@ msgstr ""
 msgid "unsupported interactions in 'formula'"
 msgstr ""
 
-msgid "ratios have to be specified if weights are"
+msgid "ratios have to be supplied if weights are"
 msgstr ""
 
 msgid "there must be at least two nodes at every level"
@@ -71,6 +83,9 @@ msgstr ""
 msgid "coinsurance must be between 0 and 1"
 msgstr ""
 
+msgid "'cdf' must be supplied"
+msgstr ""
+
 msgid "'cdf' must be a function or an expression containing 'x'"
 msgstr ""
 
@@ -81,18 +96,6 @@ msgid "'lev' must be a function or an expression containing 'x'"
 msgstr ""
 
 msgid "'order' must be positive"
-msgstr ""
-
-msgid "rows extracted in increasing order"
-msgstr ""
-
-msgid "impossible to replace boundaries and frequencies simultaneously"
-msgstr ""
-
-msgid "only logical matrix subscripts are allowed in replacement"
-msgstr ""
-
-msgid "need 0, 1, or 2 subscripts"
 msgstr ""
 
 msgid "invalid number of group boundaries and frequencies"

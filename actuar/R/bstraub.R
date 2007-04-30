@@ -16,7 +16,7 @@ bstraub <- function(ratios, weights,
     if (missing(weights))
     {
         if (any(is.na(ratios)))
-            stop("missing ratios not allowed when weights are not specified")
+            stop("missing ratios not allowed when weights are not supplied")
         weights <- array(1, dim(ratios))
         model <- "Buhlmann"
     }

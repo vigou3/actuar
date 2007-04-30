@@ -41,7 +41,7 @@ cm <- function(formula, data, ratios, weights, subset,
     if (any(duplicated(level.numbers)))
         stop("unsupported interactions in 'formula'")
     if (missing(ratios) & !missing(weights))
-        stop("ratios have to be specified if weights are")
+        stop("ratios have to be supplied if weights are")
 
     ## === DATA EXTRACTION ===
     ##
@@ -102,7 +102,7 @@ cm <- function(formula, data, ratios, weights, subset,
         if (missing(weights))
         {
             if (any(is.na(ratios)))
-                stop("missing ratios not allowed when weights are not specified")
+                stop("missing ratios not allowed when weights are not supplied")
             array(1, dim(ratios))       # matrix of ones
         }
         else

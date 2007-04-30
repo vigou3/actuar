@@ -23,7 +23,7 @@ coverage <- function(pdf, cdf, deductible = 0, franchise = FALSE,
     if (coinsurance > 1)
         stop("coinsurance must be between 0 and 1")
     if (missing(cdf))
-        stop("'cdf' must be specified")
+        stop("'cdf' must be supplied")
 
     ## Determine if the output function should compute the cdf or the
     ## pdf of the modified random variable. It is the latter if 'pdf'
