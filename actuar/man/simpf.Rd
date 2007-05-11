@@ -55,7 +55,7 @@ simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
   used.  Normally, there should be one weight per node at the lowest
   level of the model.
 
-  Data is generated is lexicographic order, that is by row in the output
+  Data is generated in lexicographic order, that is by row in the output
   matrix.
 }
 \value{

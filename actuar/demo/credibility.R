@@ -105,7 +105,7 @@ weights(pf)                             # extraction of weights
 ##
 ##     Sectors: 2
 ##       Units: 3 in sector 1
-##              4 in sector 1
+##              4 in sector 2
 ##   Contracts: 10 in unit 1 of sector 1
 ##               5 in unit 2 of sector 1
 ##               8 in unit 3 of sector 1
@@ -181,7 +181,7 @@ predict(fit)
 ## Same calculations as above. (Note that the unbiased between
 ## variance estimator is not available.)
 fit <- cm(~state, hachemeister,
-          ratios = year.1:year.12, weights = weight.1:weight.12)
+          ratios = ratio.1:ratio.12, weights = weight.1:weight.12)
 summary(fit)
 
 ## Calculations for the four level hierarchical portfolio simulated
