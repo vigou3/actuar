@@ -112,7 +112,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
                         temp <- 1
                         if (j == i - 1) after <- 1
                         else after <- for(k in (j + 1):(i - 1)) temp <- temp * nodes[[k]]
-                        eval(substitute(x <- rep(x, before, each=after),
+                        eval(substitute(x <- rep(x, before, each = after),
                                         list(x = as.name(params[[j]])))) 
                     }       
                 }
@@ -184,7 +184,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
                         temp <- 1
                         if (j == i - 1) after <- 1
                         else after <- for(k in (j + 1):(i - 1)) temp <- temp * nodes[[k]]
-                        eval(substitute(x <- rep(x, before, each=after),
+                        eval(substitute(x <- rep(x, before, each = after),
                                         list(x = as.name(params[[j]])))) 
                     }       
                 }
@@ -330,7 +330,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
             temp <- 1
             if (i == ncol) after <- 1
             else after <- for(k in (i + 1):ncol) temp <- temp * nodes[[k]]
-            x <- rep(seq_len(nodes[[i]]), before, each=after)
+            x <- rep(seq_len(nodes[[i]]), before, each = after)
             m[, i] <- x
         }
     }
