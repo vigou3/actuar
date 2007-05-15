@@ -111,6 +111,9 @@ severity.simpf <- function(x, by = head(names(x$node), -1),
     ## Utility function
     fun <- function(x) unlist(x[!is.na(x)])
 
+    ## Special case for crossed model.
+    if (x$model == "crossed") by = head(by, -1)
+    
     ## Split rows according to the 'by' argument.
     s <- x$classification[, by, drop = FALSE]   # subscripts
     f <- apply(s, 1, paste, collapse = "")      # grouping IDs
