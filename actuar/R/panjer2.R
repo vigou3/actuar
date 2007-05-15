@@ -33,7 +33,7 @@ panjer2 <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
         dist <- "negative binomial"
         par$size <- 1
     }
-
+    
     if (dist == "poisson")
     {
         lambda <- par$lambda
@@ -98,12 +98,10 @@ panjer2 <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
         stop("invalid parameters")
 
     ## We then use the function .External to do the recursive part of
-    ## the Panjer method in C.
+    ## the Panjer method in C. If p0 is NULL, we must first initialize p1
+    ## for it to be used in the call to .External.
     if (is.null(p0)) p1 = 0
-    if (is.null(p0)) p0 = -1
-
     fs <- .External("panjer", p0, p1, fs0, fx0, fx, a, b, TOL, echo)
-    fs <- fs[fs != 0]
     
     FUN <- stepfun((0:(length(fs) - 1)) * x.scale, c(0, cumsum(fs)))
     class(FUN) <- c("ecdf", class(FUN))

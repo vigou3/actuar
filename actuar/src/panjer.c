@@ -4,14 +4,12 @@
  *  to approximate the aggregate claim amount distribution of
  *  a portfolio over a period.
  *
- *  AUTHOR: Tommy Ouellet
+ *  AUTHOR: Tommy Ouellet, Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
 
 #include <R.h>
 #include <Rmath.h>
-#include <Rdefines.h>
-#include "locale.h"
-#include "dpq.h"
+#include <Rinternals.h>
 
 #define CAD5R(e) CAR(CDR(CDR(CDR(CDR(CDR(e))))))
 #define CAD6R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(e)))))))
@@ -21,108 +19,123 @@
 
 SEXP panjer(SEXP args)
 {
-    SEXP p0_1, p1_1, fs0_1, fx0_1, fx_1, a_1, b_1, TOL_1, echo_1, fs_1;
-    double *fs, *p0_2, *p1_2, *fs0_2, *fx0_2, *fx_2, *a_2, *b_2, *TOL_2, *fs_2, cumul, constante;
-    int *echo_2, r, m, k, x = 1, size=100;
-    
-    fs = malloc(size * sizeof(double));
+    SEXP sp0, sp1, sfs0, sfx0, sfx, sa, sb, sTOL, secho, sfs;
+    double *fs, *p0, *p1, *fs0, *fx0, *fx, *a, *b, *TOL, *fs2, cumul, constante;
+    int *echo, r, m, k, x = 1;
+
+    /*  Calloc allows us to allocate memory for the vector fs, which 
+     *  will be used to stock the values of the claim amount in the loop 
+     *  below. Since we don't know how many iterations will be needed, we 
+     *  first start by setting the size to 100, size that will increase 
+     *  progressively if needed.
+     */
+
+    int size = 100;
+    fs = Calloc(size, double);
     for (k = 0; k < size; k++) fs[k] = 0;
 
-    PROTECT(p0_1 = AS_NUMERIC(CADR(args)));
-    PROTECT(p1_1 = AS_NUMERIC(CADDR(args)));
-    PROTECT(fs0_1 = AS_NUMERIC(CADDDR(args)));
-    PROTECT(fx0_1 = AS_NUMERIC(CAD4R(args)));
-    PROTECT(fx_1 = AS_NUMERIC(CAD5R(args)));
-    PROTECT(a_1 = AS_NUMERIC(CAD6R(args)));
-    PROTECT(b_1 = AS_NUMERIC(CAD7R(args)));
-    PROTECT(TOL_1 = AS_NUMERIC(CAD8R(args)));
-    PROTECT(echo_1 = AS_LOGICAL(CAD9R(args)));
+    /*  All values received from R are then associated with a numeric
+     *  or logical pointer.
+     */
 
-    p0_2 = NUMERIC_POINTER(p0_1);
-    p1_2 = NUMERIC_POINTER(p1_1);
-    fs0_2 = NUMERIC_POINTER(fs0_1);
-    fx0_2 = NUMERIC_POINTER(fx0_1);
-    fx_2 = NUMERIC_POINTER(fx_1);
-    a_2 = NUMERIC_POINTER(a_1);
-    b_2 = NUMERIC_POINTER(b_1);
-    TOL_2 = NUMERIC_POINTER(TOL_1);
-    echo_2 = LOGICAL_POINTER(echo_1);
+    PROTECT(sp0 = coerceVector(CADR(args), REALSXP));
+    PROTECT(sp1 = coerceVector(CADDR(args), REALSXP));
+    PROTECT(sfs0 = coerceVector(CADDDR(args), REALSXP));
+    PROTECT(sfx0 = coerceVector(CAD4R(args), REALSXP));
+    PROTECT(sfx = coerceVector(CAD5R(args), REALSXP));
+    PROTECT(sa = coerceVector(CAD6R(args), REALSXP));
+    PROTECT(sb = coerceVector(CAD7R(args), REALSXP));
+    PROTECT(sTOL = coerceVector(CAD8R(args), REALSXP));
+    PROTECT(secho = coerceVector(CAD9R(args), LGLSXP));
 
-    fs[0] = *fs0_2;
-    cumul = *fs0_2;
-    r = length(fx_1);
+    p0 = REAL(sp0);    
+    p1 = REAL(sp1);
+    fs0 = REAL(sfs0);
+    fx0 = REAL(sfx0);
+    fx = REAL(sfx);
+    a = REAL(sa);
+    b = REAL(sb);
+    TOL = REAL(sTOL);
+    echo = LOGICAL(secho);
+
+    fs[0] = *fs0;
+    cumul = *fs0;
+    r = length(sfx);
 
 
-    /* Classe (a,b,0) */
+    /* (a, b, 0) case (if p0 is NULL) */
 
-    if (*p0_2 == -1)
+    if (isNull(CADR(args)))
     {	
-	while (*TOL_2 > cumul)
+	while (cumul < *TOL)
 	{
-	    if (*echo_2) Rprintf("%d - %.8f\n", x, cumul);
+	    if (*echo) Rprintf("%d - %.8g\n", x, cumul);
 	    
 	    if (x >= size) 
 	    {
 		size = 2 * size;
-		fs = realloc(fs, size * sizeof(double));
-		for (k = size/2; k < size; k++) fs[k] = 0;
+		fs = Realloc(fs, size, double);
+		for (k = size / 2; k < size; k++) fs[k] = 0;
 	    }
 	    
-	    if (x > r) m = r; else m = x;
+	    m = fmin2(x, r);
 	    
 	    for (k = 1; k <= m; k++)
 	    {
-		fs[x] = fs[x] + ( *a_2 + *b_2 * k / x ) * *(fx_2+k-1) * fs[x-k];
+		fs[x] += ( *a + *b * k / x ) * *(fx + k - 1) * fs[x - k];
 	    }
 	    
-	    fs[x] = fs[x] / (1 - *a_2 * *fx0_2);
-	    cumul = cumul + fs[x];
+	    fs[x] = fs[x] / (1 - *a * *fx0);
+	    cumul += fs[x];
 	    x++;
 	}
     }
     
     
-    /* Classe (a,b,1) */
+    /* (a, b, 1) case (if p0 is non-NULL) */
     
     else
     {
-	*(fx_2+r) = 0;
+	*(fx+r) = 0;
 	r++;
-	constante = (*p1_2 - (*a_2 + *b_2) * *p0_2);
+	constante = (*p1 - (*a + *b) * *p0);
 	
-	while (*TOL_2 > cumul)
+	while (cumul < *TOL)
 	{
-	    if (*echo_2) Rprintf("%d - %.8f\n", x, cumul);
+	    if (*echo) Rprintf("%d - %.8g\n", x, cumul);
 	    
 	    if (x >= size) 
 	    {
 		size = 2 * size;
-		fs = realloc(fs, size * sizeof(double));
-		for (k = size/2; k < size; k++) fs[k] = 0;
+		fs = Realloc(fs, size, double);
+		for (k = size / 2; k < size; k++) fs[k] = 0;
 	    }
 	    
-	    if (x > r) m= r; else m = x;
+	    m = fmin2(x, r);
 	    
 	    for (k = 1; k <= m; k++)
 	    {
-		fs[x] = fs[x] + ( *a_2 + *b_2 * k / x ) * *(fx_2+k-1) * fs[x-k];
+		fs[x] += ( *a + *b * k / x ) * *(fx + k - 1) * fs[x - k];
 	    }
 	    
-	    fs[x] = ( fs[x] + *(fx_2+m-1) * constante ) / (1 - *a_2 * *fx0_2);
-	    cumul = cumul + fs[x];
+	    fs[x] = ( fs[x] + *(fx + m - 1) * constante ) / (1 - *a * *fx0);
+	    cumul += fs[x];
 	    x++;
 	}
     }
     
-    PROTECT(fs_1 = NEW_NUMERIC(size));
-    fs_2 = NUMERIC_POINTER(fs_1);
+    /*  A new variable of the correct length, fs2, is created to get ride of
+     *  the zeros and the extra space that was accorded to fs. That new 
+     *  variable points towards a SEXP that will be returned to R.
+     */
+
+    PROTECT(sfs = allocVector(REALSXP,x));
+    fs2 = REAL(sfs);
     
-    for (k = 0; k < size; k++) *(fs_2+k) = fs[k];
+    for (k = 0; k < x; k++) *(fs2 + k) = fs[k];
     
-    free(fs);
-    fs = NULL;
+    Free(fs);
 
     UNPROTECT(10);
-    return(fs_1);
+    return(sfs);
 }
-
