@@ -96,7 +96,7 @@ SEXP panjer(SEXP args)
     
     else
     {
-	*(fx+r) = 0;
+	*(fx + r) = 0;
 	r++;
 	constante = (*p1 - (*a + *b) * *p0);
 	
@@ -124,7 +124,7 @@ SEXP panjer(SEXP args)
 	}
     }
     
-    /*  A new variable of the correct length, fs2, is created to get ride of
+    /*  A new variable of the correct length, fs2, is created to get rid of
      *  the zeros and the extra space that was accorded to fs. That new 
      *  variable points towards a SEXP that will be returned to R.
      */
