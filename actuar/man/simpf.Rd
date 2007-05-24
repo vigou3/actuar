@@ -50,7 +50,7 @@ simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
   of variates to simulate \strong{must} be named \code{n}.
 
   Weights will be used wherever the name \code{"weights"} appears in a
-  model.  It is the user's resposibility to ensure that the length of
+  model.  It is the user's responsibility to ensure that the length of
   \code{weights} will match the number of nodes when weights are to be
   used.  Normally, there should be one weight per node at the lowest
   level of the model.
