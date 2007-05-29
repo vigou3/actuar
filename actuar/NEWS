@@ -31,7 +31,7 @@ Version 0.9-2
 =============
 
 Major official update. This version is not backward compatible with
-the 0.1-x series. Feature of the package can be split in the following
+the 0.1-x series. Features of the package can be split in the following
 categories: loss distributions modeling, risk theory, credibility
 theory.
 
