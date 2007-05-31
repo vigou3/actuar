@@ -30,8 +30,9 @@ mde(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
 }
 \details{
   The Cramer-von Mises method (\code{"CvM"}) minimizes the squared
-  distance between the theoretical cdf and the empirical cdf (for
-  individual data) or the ogive (for grouped data).
+  difference between the theoretical cdf and the empirical cdf at the
+  data points (for individual data) or the ogive at the knots (for
+  grouped data).
 
   The modified chi-square method (\code{"chi-square"}) minimizes the
   modified chi-square statistic for grouped data, that is the squared
