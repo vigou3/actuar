@@ -1,5 +1,14 @@
 === actuar: an R package for Actuarial Science ===
 
+Version 0.9-4
+=============
+
+BUG FIXES
+
+  o The way weights had to be specified for the "chi-square" method of
+    mde() to give expected results was very unintuitive. The fix has
+    no effect when using the default weights.
+
 Version 0.9-3
 =============
 
@@ -41,9 +50,9 @@ NEW FEATURES -- LOSS DISTRIBUTIONS
     cumulative distribution function, quantile function of, and to
     generate variates from, all probability distributions of Appendix
     A of Klugman et al. (2004), "Loss Models, Second Edition" (except
-    the inverse gaussian) not already in R. Namely, this adds the
-    following distributions (the root is what follows the 'd', 'p',
-    'q' or 'r' in function names):
+    the inverse gaussian and log-t) not already in R. Namely, this
+    adds the following distributions (the root is what follows the
+    'd', 'p', 'q' or 'r' in function names):
   
        Distribution name          Root        
     ------------------------- --------------  

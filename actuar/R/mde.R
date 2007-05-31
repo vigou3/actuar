@@ -66,9 +66,10 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
             stop("frequency must be larger than 0 in all groups")
         og <- ogive(x)
         x <- knots(og)
-        G <- function(...) diff(fn(...))
-        Gn <- function(...) diff(og(...))
-        if (is.null(weights)) weights <- sum(nj)/Gn(x)
+        n <- sum(nj)
+        G <- function(...) n * diff(fn(...))
+        G <- function(...) n * diff(og(...))
+        if (is.null(weights)) weights <- 1/nj
         Call$x <- x
         Call$par <- start
     }
