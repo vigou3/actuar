@@ -5,14 +5,10 @@
 ### frequency and severity models can be mixtures of distributions.
 ###
 ### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>,
-### Sébastien Auclair, Louis-Philippe Pouliot and Tommy Ouellet
+### Sébastien Auclair and Louis-Philippe Pouliot
 
-simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, model = "hierarchical")
+simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 {
-    ## Model validation : hierarchical or crossed model.
-    if ((model != "hierarchical") && (model != "crossed"))
-        stop("model must be either a hierarchical model or a crossed model")
-    
     ## Sanity checks: 'nodes' must be a named list; at least either of
     ## 'model.freq' or 'model.sev' should be non-NULL; level names
     ## (and consequently the number of levels) should be the same
@@ -46,28 +42,13 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
     level.names <- names(nodes)         # level names
     nlevels <- length(nodes)            # number of levels
 
-    ## If it is a crossed model, we must ensure that every level, except the
-    ## last one (years) has only one single parameter. Also, the penultimate
-    ## level must equal the multiplication of all preceding levels.
-    if (model == "crossed")
-    {
-        for (i in 1:(nlevels - 1))
-            if (length(nodes[[i]]) != 1)
-                stop("invalid parameters for a crossed model; all node levels must have a length of one")
-        prec <- 1
-        for (i in 1:(nlevels-2)) prec <- prec * nodes[[i]]
-        if (nodes[nlevels-1] != prec)
-            stop("the penultimate level must equal the multiplication of all preceding levels")
-    }
-    
     ## Recycling of the number of nodes (if needed) must be done
     ## "manually". We do it here once and for all since in any case
     ## below we will need to know the total number of nodes in the
     ## portfolio. Furthermore, the recycled list 'nodes' will be
-    ## returned by the function (hierarchical model only).
-    if (model == "hierarchical")
-        for (i in 2:nlevels)       # first node doesn't need recycling
-            nodes[[i]] <- rep(nodes[[i]], length = sum(nodes[[i - 1]]))
+    ## returned by the function.
+    for (i in 2:nlevels)       # first node doesn't need recycling
+        nodes[[i]] <- rep(nodes[[i]], length = sum(nodes[[i - 1]]))
 
     ## Simulation of the frequency risk (or mixing) parameters for
     ## each level (e.g. class, contract) and, at the last level, the
@@ -93,59 +74,22 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
             ## Extract simulation model for the level.
             Call <- model.freq[[i]]
 
-            ## For a hierarchical model, we have to repeat the
-            ## mixing parameters of all levels above the
+            ## Repeat the mixing parameters of all levels above the
             ## current one that were simulated in the past.
-            if (model == "hierarchical")
-                for (j in seq_along(params))
-                    eval(substitute(x <- rep.int(x, n.current),
-                                    list(x = as.name(params[[j]]))))
+            for (j in seq_along(params))
+                eval(substitute(x <- rep.int(x, n.current),
+                                list(x = as.name(params[[j]]))))
 
-            ## For a crossed model, this has to be done only for the
-            ## two last levels. Since all first levels will be used to
-            ## define the parameters of the penultimate level (which
-            ## represents a single contract), these parameters are
-            ## replicated here in a correct pattern for them to be
-            ## used with the right contract. For the last level, we
-            ## replicate the parameters of the contracts according to
-            ## the number of years wanted for each contract.
-            if (model == "crossed")
-            {
-                if (i == nlevels - 1)
-                {
-                    for (j in seq_len(i - 1))
-                    {
-                        temp <- 1
-                        if (j == 1) before <- 1
-                        else before <- for (k in 1:(j - 1)) temp <- temp * nodes[[k]]
-                        temp <- 1
-                        if (j == i - 1) after <- 1
-                        else after <- for(k in (j + 1):(i - 1)) temp <- temp * nodes[[k]]
-                        eval(substitute(x <- rep(x, before, each = after),
-                                        list(x = as.name(params[[j]])))) 
-                    }       
-                } 
-                else if (i == nlevels)
-                    eval(substitute(x <- rep(x, each = nodes[[i]]),
-                                    list(x = as.name(params[[i - 1]])))) 
-            }
-            
             ## Simulate data only if there is a model at the current
             ## level.
             if (!is.null(Call))
             {
-                ## Add the number of variates to the call. Differs whether
-                ## it is a hierarchical model or a crossed model.
-                if (model == "hierarchical") Call$n <- sum(n.current)
-                if (model == "crossed")
-                {
-                    if (i == nlevels) Call$n <- nodes[[i-1]] * nodes[[i]]
-                    else Call$n <- nodes[[i]]
-                }
+                ## Add the number of variates to the call.
+                Call$n <- sum(n.current)
 
                 ## Simulation of the mixing parameters or the data. In
                 ## the latter case, store the results in a fixed
-                ## variable name. Same for both models.
+                ## variable name.
                 if (i < nlevels)
                 {
                     assign(level.names[[i]], eval(Call))
@@ -153,7 +97,6 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
                 }
                 else
                     frequencies <- eval(Call)
-               
             }
         }
     }
@@ -176,32 +119,9 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
             n.current <- nodes[[i]]
             Call <- model.sev[[i]]
 
-            if (model == "hierarchical")
-                for (j in seq_along(params))
-                    eval(substitute(x <- rep.int(x, n.current),
-                                    list(x = as.name(params[[j]]))))
-
-            if (model == "crossed")
-            {
-                if (i == nlevels - 1)
-                {
-                    for (j in seq_len(i - 1))
-                    {
-                        temp <- 1
-                        if (j == 1) before <- 1
-                        else before <- for (k in 1:(j - 1)) temp <- temp * nodes[[k]]
-                        temp <- 1
-                        if (j == i - 1) after <- 1
-                        else after <- for(k in (j + 1):(i - 1)) temp <- temp * nodes[[k]]
-                        eval(substitute(x <- rep(x, before, each = after),
-                                        list(x = as.name(params[[j]])))) 
-                    }       
-                }
-                
-                else if (i == nlevels)
-                    eval(substitute(x <- rep(x, each = nodes[[i]]),
-                                    list(x = as.name(params[[i - 1]])))) 
-            }
+            for (j in seq_along(params))
+                eval(substitute(x <- rep.int(x, n.current),
+                                list(x = as.name(params[[j]]))))
 
             if (!is.null(Call))
             {
@@ -212,8 +132,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
                 {
                     ## Simulation of mixing parameters is identical to the
                     ## simulation of frequencies.
-                    if (model == "hierarchical") Call$n <- sum(n.current)
-                    if (model == "crossed") Call$n <- nodes[[i]]
+                    Call$n <- sum(n.current)
                     assign(level.names[[i]], eval(Call))
                     params[i] <- level.names[[i]]
                 }
@@ -223,17 +142,12 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
                     ## of variates is rather given by the
                     ## 'frequencies' object. Furthermore, the mixing
                     ## parameters must be recycled once more to match
-                    ## the vector of frequencies. Method differs slightly
-                    ## depending on which model is used.
-                    if (model == "hierarchical")                        
-                        for (p in intersect(all.vars(Call), params))
-                            eval(substitute(x <- rep.int(x, frequencies),
-                                            list(x = as.name(p))))
-                    if (model == "crossed")
+                    ## the vector of frequencies.
+                    for (p in intersect(all.vars(Call), params))
                         eval(substitute(x <- rep.int(x, frequencies),
-                                        list(x = as.name(params[[i - 1]]))))
+                                        list(x = as.name(p))))
                     Call$n <- sum(frequencies)
-                    severities <- eval(Call)  
+                    severities <-eval(Call)
                 }
             }
         }
@@ -253,16 +167,10 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
     ## one of) the above loops.
     ##
     ## Assign a unique ID to each node, leaving gaps for nodes without
-    ## observations. Slightly different for each model.
-    if (model == "hierarchical")
-        ind <- unlist(mapply(seq,
-                             from = seq(by = max(n.current), along = n.current),
-                             length = n.current))
-    if (model == "crossed")
-        ind <- unlist(mapply(seq,
-                             from = seq(by = max(n.current),
-                             along = seq_len(nodes[[nlevels - 1]])),
-                             length = n.current))
+    ## observations.
+    ind <- unlist(mapply(seq,
+                         from = seq(by = max(n.current), along = n.current),
+                         length = n.current))
 
     ## Repeating the vector of IDs according to the frequencies
     ## effectively assigns a node ID to each claim amount. The vector
@@ -270,7 +178,7 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
     ## each element corresponds to a node with claims.
     f <- rep.int(ind, frequencies)
     severities <- split(severities, f)
-    
+
     ## Identify nodes with frequency equal to 0, which is different
     ## from having no observation (NA).
     freq0 <- ind[which(frequencies == 0)]
@@ -278,16 +186,14 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
     ## Rearrange the list of claim amounts in a matrix;
     ##
     ##      number of rows: number of nodes at the penultimate level
-    ##                      (number of entities). That value is not found
-    ##                      the same way depending on the model.
+    ##                      (number of entities)
     ##   number of columns: maximum number of nodes at the last level
     ##                      (number of years of observation).
     ##
     ## Moreover, assign a value of 'numeric(0)' to nodes with a
     ## frequency of 0.
-    if (model == "hierarchical") nrow <- length(n.current)     # number of entities
-    if (model == "crossed") nrow <- nodes[[nlevels - 1]]       # number of entities
-    ncol <- max(n.current)                                     # number of years
+    nrow <- length(n.current)           # number of entities
+    ncol <- max(n.current)              # number of years
     res <- as.list(rep.int(NA, nrow * ncol))
     res[unique(f)] <- severities
     res[freq0] <- lapply(rep.int(0, length(freq0)), numeric)
@@ -300,48 +206,24 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
     ## is denoted X_{ijkt}, one line of the matrix will contain
     ## subscripts i, j and k. As we move from right to left in the
     ## columns of 'm', the subcripts are increasingly repeated.
-    if (model == "hierarchical") ncol <- nlevels - 1
-    if (model == "crossed") ncol <- nlevels - 2
-    
+    ncol <- nlevels - 1
     m <- matrix(1, nrow, ncol,
                 dimnames = list(NULL, head(level.names, ncol)))
-
-    
-    if (model == "hierarchical")
+    for (i in seq_len(ncol - 1))    # all but the last column
     {
-        for (i in seq_len(ncol - 1))    # all but the last column
-        {
-            ## Vector 'x' will originally contain all subscripts for one
-            ## level. These subscripts are then repeated as needed to give
-            ## the desired result. To avoid another explicit loop, I use a
-            ## 'lapply' with a direct assignment in the current
-            ## frame. Somewhat unusual, but this is the simplest procedure
-            ## I managed to come up with.
-            x <- unlist(lapply(nodes[[i]], seq))
-            lapply(nodes[(i + 1):(nlevels - 1)],
-                   function(v) assign("x", rep.int(x, v), envir = parent.frame(2)))
-            m[, i] <- x
-        }
-        m[, ncol] <- unlist(lapply(nodes[[ncol]], seq)) # last column
+        ## Vector 'x' will originally contain all subscripts for one
+        ## level. These subscripts are then repeated as needed to give
+        ## the desired result. To avoid another explicit loop, I use a
+        ## 'lapply' with a direct assignment in the current
+        ## frame. Somewhat unusual, but this is the simplest procedure
+        ## I managed to come up with.
+        x <- unlist(lapply(nodes[[i]], seq))
+        lapply(nodes[(i + 1):(nlevels - 1)],
+               function(v) assign("x", rep.int(x, v), envir = parent.frame(2)))
+        m[, i] <- x
     }
+    m[, ncol] <- unlist(lapply(nodes[[ncol]], seq)) # last column
 
-    if (model == "crossed")
-    {
-        for (i in seq_len(ncol))
-        {
-            ## Same method as before to generate the matrix m with the
-            ## different possible values of the first (n - 2) levels. 
-            temp <- 1
-            if (i == 1) before <- 1
-            else before <- for (k in 1:(i - 1)) temp <- temp * nodes[[k]]
-            temp <- 1
-            if (i == ncol) after <- 1
-            else after <- for(k in (i + 1):ncol) temp <- temp * nodes[[k]]
-            x <- rep(seq_len(nodes[[i]]), before, each = after)
-            m[, i] <- x
-        }
-    }
-    
     ## Reshape weights as a matrix, if necessary.
     weights <- if (is.null(weights))
         NULL
@@ -352,15 +234,14 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL, mo
         w[ind] <- weights
         matrix(w, nrow = nrow, byrow = TRUE, dimnames = dimnames(res))
     }
-    
+
     ## Return object of class 'simpf'
     structure(list(data = res,
                    weights = weights,
                    classification = m,
                    nodes = nodes,
                    model.freq = model.freq,
-                   model.sev = model.sev,
-                   model = model),
+                   model.sev = model.sev),
               class = "simpf")
 }
 
