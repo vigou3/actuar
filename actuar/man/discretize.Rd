@@ -51,7 +51,7 @@ discretise(cdf, from, to, step = 1,
   \deqn{p_x = F(x) - F(x - h)}{p[x] = F(x) - F(x - h)} for \eqn{x = a +
     h, \dots, b} and \eqn{p_a = F(a)}{p[a] = F(a)}.
   
-  Method \code{"rounding"} has the discretized cdf pass through the
+  Method \code{"rounding"} has the true cdf pass through the
   midpoints of the intervals \eqn{[x - h/2, x + h/2)}:
   \deqn{p_x = F(x + h/2) - F(x - h/2)}{p[x] = F(x + h/2) - F(x - h/2)}
   for \eqn{x = a + h, \dots, b - step} and \eqn{p_a = F(a + h/2)}{p[a] =

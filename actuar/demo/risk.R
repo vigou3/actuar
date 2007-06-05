@@ -29,7 +29,7 @@ op <- par(ask = interactive() &&
 ### to 'curve' of package 'graphics'.
 
 ## Upper and lower discretization of a Gamma(2, 1) distribution with a
-## step (or span, or lag) of 0.5. The value of 'to' is chosen to as to
+## step (or span, or lag) of 0.5. The value of 'to' is chosen so as to
 ## cover most of the distribution.
 x <- seq(0, qgamma(1 - 1E-6, 2, 1), by = 0.5)
 xu <- tail(x, 1)
@@ -180,10 +180,12 @@ par(col = "green")
 plot(Fs.s, do.points = FALSE, verticals = TRUE, add = TRUE, sub = "")
 par(col = "magenta")
 plot(Fs.n, add = TRUE, sub = "")
-legend(40, 0.2, c("unbiased", "upper", "lower", "simulation", "normal"),
+legend(40, 0.2,
+       legend = c("recursive + unbiased", "recursive + upper",
+                  "recursive + lower", "simulation",
+                  "normal approximation"),
        col = c("black", "blue", "red", "green", "magenta"),
-       lty = 1, text.col = "black")
-par(col = "black")
+       lty = 1, text.col = "black", cex = 1.2)
 
 ## Table of quantiles for the same methods as graphic above.
 x <- knots(Fs.l)

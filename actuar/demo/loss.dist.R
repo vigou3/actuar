@@ -88,8 +88,8 @@ data(gdental); gdental
 ## The package provides "d", "p", "q" and "r" functions for all the
 ## probability laws useful for loss severity modeling found in
 ## Appendix A of Klugman, Panjer & Willmot (2004) and not already
-## present in base R, plus the loggamma distribution. (The generalized
-## beta, inverse gaussian and log-t are not included.)
+## present in base R, plus the loggamma distribution. (The inverse
+## gaussian and log-t are not included.)
 ##
 ## In addition, the package provides "m" functions to compute
 ## theoretical raw moments and "lev" functions to compute limited
@@ -212,7 +212,7 @@ plot(Fnt)                               # plot of the ogive
 ### EMPIRICAL MOMENTS CALCULATION
 ###
 
-## Function 'emm' compute the k-th empirical moment of a sample,
+## Function 'emm' computes the k-th empirical moment of a sample,
 ## whether it is individual or grouped data.
 emm(dental)                             # == mean(dental)
 emm(gdental)                            # == mean(gdental)
