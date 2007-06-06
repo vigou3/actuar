@@ -4,7 +4,7 @@
  *  to approximate the aggregate claim amount distribution of
  *  a portfolio over a period.
  *
- *  AUTHOR: Tommy Ouellet, Vincent Goulet <vincent.goulet@act.ulaval.ca>
+ *  AUTHORS: Tommy Ouellet, Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
 
 #include <R.h>
