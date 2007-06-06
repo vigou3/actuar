@@ -68,7 +68,7 @@ mde <- function(x, fun, start, measure = c("CvM", "chi-square", "LAS"),
         x <- knots(og)
         n <- sum(nj)
         G <- function(...) n * diff(fn(...))
-        G <- function(...) n * diff(og(...))
+        Gn <- function(...) n * diff(og(...))
         if (is.null(weights)) weights <- 1/nj
         Call$x <- x
         Call$par <- start
