@@ -3,9 +3,10 @@
 \alias{hachemeister}
 \title{Hachemeister data set}
 \description{
-  Hachemeister (1975) data set giving quarterly average claim amounts in
-  automobile liability insurance in five U.S. states between July 1970
-  and June 1973 and the corresponding number of claims.
+  Hachemeister (1975) data set giving average claim amounts in private
+  passenger bodily injury insurance in five U.S. states over 12 quarters
+  between July 1970 and June 1973 and the corresponding number of
+  claims.
 }
 \usage{hachemeister}
 \format{
