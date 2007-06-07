@@ -19,9 +19,9 @@
 
 SEXP panjer(SEXP args)
 {
-    SEXP sp0, sp1, sfs0, sfx0, sfx, sa, sb, sTOL, secho, sfs;
-    double *fs, *p0, *p1, *fs0, *fx0, *fx, *a, *b, *TOL, cumul, constante;
-    int *echo, r, m, k, x = 1;
+    SEXP p0, p1, fs0, fx0, sfx, a, b, TOL, echo, sfs;
+    double *fs, *fx, cumul, constante;
+    int r, m, k, x = 1;
 
     /*  S_alloc allows us to allocate memory for the vector fs, which 
      *  will be used to stock the values of the claim amount in the loop 
@@ -34,42 +34,30 @@ SEXP panjer(SEXP args)
     fs = (double *) S_alloc(size, sizeof(double));
     for (k = 0; k < size; k++) fs[k] = 0;
 
-    /*  All values received from R are then associated with a numeric
-     *  or logical pointer.
-     */
+    /*  All values received from R are then protectect. */
 
-    PROTECT(sp0 = coerceVector(CADR(args), REALSXP));
-    PROTECT(sp1 = coerceVector(CADDR(args), REALSXP));
-    PROTECT(sfs0 = coerceVector(CADDDR(args), REALSXP));
-    PROTECT(sfx0 = coerceVector(CAD4R(args), REALSXP));
+    PROTECT(p0 = coerceVector(CADR(args), REALSXP));
+    PROTECT(p1 = coerceVector(CADDR(args), REALSXP));
+    PROTECT(fs0 = coerceVector(CADDDR(args), REALSXP));
+    PROTECT(fx0 = coerceVector(CAD4R(args), REALSXP));
     PROTECT(sfx = coerceVector(CAD5R(args), REALSXP));
-    PROTECT(sa = coerceVector(CAD6R(args), REALSXP));
-    PROTECT(sb = coerceVector(CAD7R(args), REALSXP));
-    PROTECT(sTOL = coerceVector(CAD8R(args), REALSXP));
-    PROTECT(secho = coerceVector(CAD9R(args), LGLSXP));
+    PROTECT(a = coerceVector(CAD6R(args), REALSXP));
+    PROTECT(b = coerceVector(CAD7R(args), REALSXP));
+    PROTECT(TOL = coerceVector(CAD8R(args), REALSXP));
+    PROTECT(echo = coerceVector(CAD9R(args), LGLSXP));
 
-    p0 = REAL(sp0);    
-    p1 = REAL(sp1);
-    fs0 = REAL(sfs0);
-    fx0 = REAL(sfx0);
     fx = REAL(sfx);
-    a = REAL(sa);
-    b = REAL(sb);
-    TOL = REAL(sTOL);
-    echo = LOGICAL(secho);
-
-    fs[0] = *fs0;
-    cumul = *fs0;
+    fs[0] = REAL(fs0)[0];
+    cumul = REAL(fs0)[0];
     r = length(sfx);
-
 
     /* (a, b, 0) case (if p0 is NULL) */
 
     if (isNull(CADR(args)))
     {	
-	while (cumul < *TOL)
+	while (cumul < REAL(TOL)[0])
 	{
-	    if (*echo) Rprintf("%d - %.8g\n", x, cumul);
+	    if (LOGICAL(echo)[0]) Rprintf("%d - %.8g\n", x, cumul);
 	    
 	    if (x >= size) 
 	    {
@@ -82,27 +70,26 @@ SEXP panjer(SEXP args)
 	    
 	    for (k = 1; k <= m; k++)
 	    {
-		fs[x] += ( *a + *b * k / x ) * *(fx + k - 1) * fs[x - k];
+		fs[x] += ( REAL(a)[0] + REAL(b)[0] * k / x ) * fx[k - 1] * fs[x - k];
 	    }
 	    
-	    fs[x] = fs[x] / (1 - *a * *fx0);
+	    fs[x] = fs[x] / (1 - REAL(a)[0] * REAL(fx0)[0]);
 	    cumul += fs[x];
 	    x++;
 	}
     }
     
-    
     /* (a, b, 1) case (if p0 is non-NULL) */
     
     else
     {
-	*(fx + r) = 0;
+	fx[r] = 0;
 	r++;
-	constante = (*p1 - (*a + *b) * *p0);
+	constante = (REAL(p1)[0] - (REAL(a)[0] + REAL(b)[0]) * REAL(p0)[0]);
 	
-	while (cumul < *TOL)
+	while (cumul < REAL(TOL)[0])
 	{
-	    if (*echo) Rprintf("%d - %.8g\n", x, cumul);
+	    if (LOGICAL(echo)[0]) Rprintf("%d - %.8g\n", x, cumul);
 	    
 	    if (x >= size) 
 	    {
@@ -115,17 +102,17 @@ SEXP panjer(SEXP args)
 	    
 	    for (k = 1; k <= m; k++)
 	    {
-		fs[x] += ( *a + *b * k / x ) * *(fx + k - 1) * fs[x - k];
+		fs[x] += ( REAL(a)[0] + REAL(b)[0] * k / x ) * fx[k - 1] * fs[x - k];
 	    }
 	    
-	    fs[x] = ( fs[x] + *(fx + m - 1) * constante ) / (1 - *a * *fx0);
+	    fs[x] = ( fs[x] + fx[m - 1] * constante ) / (1 - REAL(a)[0] * REAL(fx0)[0]);
 	    cumul += fs[x];
 	    x++;
 	}
     }
     
     /*  Copy of the values to a SEXP which will be returned to R. */
-    PROTECT(sfs = allocVector(REALSXP,x));
+    PROTECT(sfs = allocVector(REALSXP, x));
     memcpy(REAL(sfs), sfs, x * sizeof(double));
     
     UNPROTECT(10);
