@@ -59,8 +59,8 @@ SEXP cm(SEXP args)
 	fnodes[i] = (int *) S_alloc(size[i + 1], sizeof(int));
     }
 
-    tweights[0] = calloc(size[0], sizeof(double));
-    wmeans[0] = calloc(size[0], sizeof(double));
+    tweights[0] = (double *) S_alloc(size[0], sizeof(double));
+    wmeans[0] = (double *) S_alloc(size[0], sizeof(double));
     
     /* Get values of fnodes, tweights and wmeans from R lists. */
     
@@ -126,10 +126,10 @@ SEXP cm(SEXP args)
 	for (i = 0; i < nlevels; i++)
 	{
 	    /* We first determine the absolute value of (b - bt) / bt. */
-	    abs = fmax2( ( REAL(b)[i] - bt[i] ) / bt[i], ( bt[i] - REAL(b)[i] ) / bt[i] );
+	    abs = sign((REAL(b)[i] - bt[i]) / bt[i]) * (REAL(b)[i] - bt[i]) / bt[i];
 
 	    /* Then we check whether or not this one value is the maximum. */
-	    max = fmax2( abs, max );
+	    max = fmax2(abs, max);
 	}
     }
     
