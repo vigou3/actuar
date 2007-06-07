@@ -20,10 +20,10 @@
 SEXP panjer(SEXP args)
 {
     SEXP sp0, sp1, sfs0, sfx0, sfx, sa, sb, sTOL, secho, sfs;
-    double *fs, *p0, *p1, *fs0, *fx0, *fx, *a, *b, *TOL, *fs2, cumul, constante;
+    double *fs, *p0, *p1, *fs0, *fx0, *fx, *a, *b, *TOL, cumul, constante;
     int *echo, r, m, k, x = 1;
 
-    /*  Calloc allows us to allocate memory for the vector fs, which 
+    /*  S_alloc allows us to allocate memory for the vector fs, which 
      *  will be used to stock the values of the claim amount in the loop 
      *  below. Since we don't know how many iterations will be needed, we 
      *  first start by setting the size to 100, size that will increase 
@@ -31,7 +31,7 @@ SEXP panjer(SEXP args)
      */
 
     int size = 100;
-    fs = Calloc(size, double);
+    fs = (double *) S_alloc(size, sizeof(double));
     for (k = 0; k < size; k++) fs[k] = 0;
 
     /*  All values received from R are then associated with a numeric
@@ -73,9 +73,9 @@ SEXP panjer(SEXP args)
 	    
 	    if (x >= size) 
 	    {
+		fs = (double *) S_realloc((char *) fs, 2 * size, size, sizeof(double));
+		for (k = size; k < 2 * size; k++) fs[k] = 0;
 		size = 2 * size;
-		fs = Realloc(fs, size, double);
-		for (k = size / 2; k < size; k++) fs[k] = 0;
 	    }
 	    
 	    m = fmin2(x, r);
@@ -106,9 +106,9 @@ SEXP panjer(SEXP args)
 	    
 	    if (x >= size) 
 	    {
+		fs = (double *) S_realloc((char *) fs, 2 * size, size, sizeof(double));
+		for (k = size; k < 2 * size; k++) fs[k] = 0;
 		size = 2 * size;
-		fs = Realloc(fs, size, double);
-		for (k = size / 2; k < size; k++) fs[k] = 0;
 	    }
 	    
 	    m = fmin2(x, r);
@@ -124,18 +124,10 @@ SEXP panjer(SEXP args)
 	}
     }
     
-    /*  A new variable of the correct length, fs2, is created to get rid of
-     *  the zeros and the extra space that was accorded to fs. That new 
-     *  variable points towards a SEXP that will be returned to R.
-     */
-
+    /*  Copy of the values to a SEXP which will be returned to R. */
     PROTECT(sfs = allocVector(REALSXP,x));
-    fs2 = REAL(sfs);
+    memcpy(REAL(sfs), sfs, x * sizeof(double));
     
-    for (k = 0; k < x; k++) *(fs2 + k) = fs[k];
-    
-    Free(fs);
-
     UNPROTECT(10);
     return(sfs);
 }
