@@ -23,18 +23,16 @@ SEXP panjer(SEXP args)
     double *fs, *fx, cumul, constante;
     int r, m, k, x = 1;
 
-    /*  S_alloc allows us to allocate memory for the vector fs, which 
-     *  will be used to stock the values of the claim amount in the loop 
-     *  below. Since we don't know how many iterations will be needed, we 
-     *  first start by setting the size to 100, size that will increase 
-     *  progressively if needed.
+    /*  Since we don't know yet what will be the size of the vector fs, 
+     *  we'll start by allocating memory for a vector of size 100 with 
+     *  S_alloc. That memory space will increase progressively if needed.
      */
 
     int size = 100;
     fs = (double *) S_alloc(size, sizeof(double));
     for (k = 0; k < size; k++) fs[k] = 0;
 
-    /*  All values received from R are then protectect. */
+    /*  All values received from R are then protected. */
 
     PROTECT(p0 = coerceVector(CADR(args), REALSXP));
     PROTECT(p1 = coerceVector(CADDR(args), REALSXP));
@@ -113,7 +111,7 @@ SEXP panjer(SEXP args)
     
     /*  Copy of the values to a SEXP which will be returned to R. */
     PROTECT(sfs = allocVector(REALSXP, x));
-    memcpy(REAL(sfs), sfs, x * sizeof(double));
+    memcpy(REAL(sfs), fs, x * sizeof(double));
     
     UNPROTECT(10);
     return(sfs);
