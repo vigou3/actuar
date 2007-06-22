@@ -266,20 +266,23 @@ cm2 <- function(formula, data, ratios, weights, subset,
     .External("cm", cred, tweights, wmeans, fnodes, denoms, b, TOL, echo)
 
     ## Final credibility factors and weighted averages (computed with
-    ## the latest structure parameters.
+    ## the latest structure parameters). If a variance estimator is equal
+    ## to (or tends towards) zero then we estimate the means with the
+    ## total level weights instead of the credibility factors.
     for (i in nlevels:1)
     {
-        cred[[i]] <- 1/(1 + b[i + 1]/(b[i] * tweights[[i + 1]]))
-        tweights[[i]] <- as.vector(tapply(cred[[i]],
+        cred[[i]] <- 1/(1 + ifelse(is.na(b[i + 1]), 0, b[i + 1])/(b[i] * tweights[[i + 1]]))
+        tweights[[i]] <- as.vector(tapply(ifelse(cred[[i]] > 0, cred[[i]], tweights[[i + 1]]),
                                           fnodes[[i]],
                                           sum))
         wmeans[[i]] <- ifelse(tweights[[i]] > 0,
-                              as.vector(tapply(cred[[i]] * wmeans[[i + 1]],
+                              as.vector(tapply(ifelse(cred[[i]] > 0, cred[[i]], tweights[[i + 1]]) * wmeans[[i + 1]],
                                                fnodes[[i]],
                                                sum) / tweights[[i]]),
                               0)
+        if (!b[i]) b[i] <- NA
     }
-
+    
     ## Transfer level names to lists
     names(tweights) <- names(wmeans) <- names(b) <-
         c("portfolio", level.names)

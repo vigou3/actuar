@@ -15,6 +15,8 @@
 #define CAD7R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(e))))))))
 #define CAD8R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(e)))))))))
 
+#define abs(x) (x >= 0) ?(x) : (-x)
+
 SEXP toSEXP(double *x, int size)
 {
     SEXP ans = allocVector(REALSXP, size);
@@ -25,7 +27,7 @@ SEXP toSEXP(double *x, int size)
 SEXP cm(SEXP args)
 {
     SEXP s_cred, s_tweights, s_wmeans, s_fnodes, denoms, b, TOL, echo;
-    double **cred, **tweights, **wmeans, abs, max = 1;
+    double **cred, **tweights, **wmeans, max = 1;
     int **fnodes, nlevels, i, j, k, count = 0;
     
     PROTECT(s_cred = coerceVector(CADR(args), VECSXP));
@@ -116,23 +118,20 @@ SEXP cm(SEXP args)
 		REAL(b)[i - 1] += cred[i - 1][j] * R_pow_di( (wmeans[i][j] - wmeans[i - 1][k - 1]), 2);
 	    }
 	    REAL(b)[i - 1] = REAL(b)[i - 1] / REAL(denoms)[i - 1];
-	}
 
-	/*  Computation of the maximum absolute value of (b - bt) / bt. */
+	    if (REAL(b)[i - 1] < R_pow_di(REAL(TOL)[0], 2)) 
+	    {
+		REAL(b)[i - 1] = 0;
+		goto next;
+	    }
+	}
 	
-	/* Reset. */
-	max = 0; 
-	
+    next: /*  Computation of the maximum absolute value of (b - bt) / bt. */
+	max = 0; /* Reset */
 	for (i = 0; i < nlevels; i++)
-	{
-	    /* We first determine the absolute value of (b - bt) / bt. */
-	    abs = sign((REAL(b)[i] - bt[i]) / bt[i]) * (REAL(b)[i] - bt[i]) / bt[i];
-
-	    /* Then we check whether or not this one value is the maximum. */
-	    max = fmax2(abs, max);
-	}
+	    max = fmax2( abs( (REAL(b)[i] - bt[i]) / bt[i] ), max );
     }
-    
+
     /* Copy the final values to R lists. */
     SET_VECTOR_ELT(s_tweights, 0, toSEXP(tweights[0], size[0]));
     SET_VECTOR_ELT(s_wmeans, 0, toSEXP(wmeans[0], size[0]));
