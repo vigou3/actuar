@@ -15,7 +15,8 @@
 #define CAD7R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(e))))))))
 #define CAD8R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(e)))))))))
 
-#define abs(x) (x >= 0) ?(x) : (-x)
+#define abs(x) (x >= 0 ? x : -x)
+#define tozero(x) (x > R_pow_di(REAL(TOL)[0], 2) ? x : 0)
 
 SEXP toSEXP(double *x, int size)
 {
@@ -118,21 +119,21 @@ SEXP cm(SEXP args)
 		REAL(b)[i - 1] += cred[i - 1][j] * R_pow_di( (wmeans[i][j] - wmeans[i - 1][k - 1]), 2);
 	    }
 	    REAL(b)[i - 1] = REAL(b)[i - 1] / REAL(denoms)[i - 1];
-
-	    if (REAL(b)[i - 1] < R_pow_di(REAL(TOL)[0], 2)) 
-	    {
-		REAL(b)[i - 1] = 0;
-		goto next;
-	    }
 	}
 	
-    next: /*  Computation of the maximum absolute value of (b - bt) / bt. */
-	max = 0; /* Reset */
+	/*  Computation of the maximum absolute value of (b - bt) /
+	 *  bt. If "b" or "bt" converges toward zero, it will be changed
+	 *  to zero to stop the recursion for this level. Total level
+	 *  weights will be used instead of the credibility factors
+	 *  (for this level) to estimate the final means in R.
+	 */
+
+	max = 0; /* Reset. */
 	for (i = 0; i < nlevels; i++)
-	    max = fmax2( abs( (REAL(b)[i] - bt[i]) / bt[i] ), max );
+	    max = fmax2( abs( ( tozero(REAL(b)[i]) - tozero(bt[i]) )  / bt[i] ), max );
     }
 
-    /* Copy the final values to R lists. */
+    /* Copying of the final values to R lists. */
     SET_VECTOR_ELT(s_tweights, 0, toSEXP(tweights[0], size[0]));
     SET_VECTOR_ELT(s_wmeans, 0, toSEXP(wmeans[0], size[0]));
     SET_VECTOR_ELT(s_cred, nlevels - 1, toSEXP(cred[nlevels - 1], size[nlevels]));

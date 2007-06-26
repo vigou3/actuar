@@ -267,7 +267,7 @@ cm2 <- function(formula, data, ratios, weights, subset,
 
     ## Final credibility factors and weighted averages (computed with
     ## the latest structure parameters). If a variance estimator is equal
-    ## to (or tends towards) zero then we estimate the means with the
+    ## to (or tends toward) zero then we estimate the means with the
     ## total level weights instead of the credibility factors.
     for (i in nlevels:1)
     {
@@ -280,7 +280,7 @@ cm2 <- function(formula, data, ratios, weights, subset,
                                                fnodes[[i]],
                                                sum) / tweights[[i]]),
                               0)
-        if (!b[i]) b[i] <- NA
+        if (b[i] < TOL^2) b[i] <- NA
     }
     
     ## Transfer level names to lists
