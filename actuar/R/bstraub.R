@@ -147,7 +147,7 @@ print.summary.bstraub <- function(x, ...)
     cat("  Collective premium:        ", x$collective, "\n")
     cat("  Within contract variance: ", x$s2, "\n")
     cat("  Portfolio heterogeneity:   ", x$unbiased, " (unbiased)\n")
-    cat("                             ", x$iterative, " (iterative)\n")
+    cat("                             ", if (!is.null(x$iterative)) x$iterative else NA, " (iterative)\n")
     cat("  Credibility constant:      ",
         x$s2 / if (is.null(x$iterative)) x$unbiased else x$iterative,
         "\n\n")
