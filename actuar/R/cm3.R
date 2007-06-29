@@ -294,7 +294,7 @@ cm3 <- function(formula, data, ratios, weights, subset,
     
     if (heterogeneity == "iterative")
     {
-        bi <- bu
+        bi <- as.vector(bu)
         .External("cm", cred, tweights, wmeans, fnodes, denoms, bi, TOL, echo)
         
         ## Final credibility factors and weighted averages (computed with
