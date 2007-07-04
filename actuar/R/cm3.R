@@ -256,7 +256,7 @@ cm3 <- function(formula, data, ratios, weights, subset,
     ## be used as starting values for the iterative part below.
     tweights <- vector("list", nlevels1p)       # total level weights
     wmeans <- vector("list", nlevels1p)         # weighted averages
-    bu <- c(rep(0, nlevels), s2)                # unbiased variance estimators
+    bu <- c(rep(NA, nlevels), s2)                # unbiased variance estimators
     cred <- vector("list", nlevels)             # credibility factors
 
     ## Values already computed at the entity level.
@@ -277,9 +277,11 @@ cm3 <- function(formula, data, ratios, weights, subset,
                                                fnodes[[i]],
                                                sum) / tweights[[i]]),
                               0)
-        B <- tweights[[i]] * (as.vector(tapply(tweights[[i + 1]] * (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2,
-                                               fnodes[[i]],
-                                               sum)) - (nnodes[[i]] - 1) * bu[i + 1]) / (tweights[[i]]^2 - sum2)
+        B <- ifelse(tweights[[i]] != 0,
+                    tweights[[i]] * (as.vector(tapply(tweights[[i + 1]] * (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2,
+                                                      fnodes[[i]],
+                                                      sum)) - (nnodes[[i]] - 1) * bu[i + 1]) / (tweights[[i]]^2 - sum2),
+                    0)       
         bu[i] <- sum(max(B, 0)) / length(B)
         
         cred[[i]] <- 1/(1 + bu[i + 1]/(bu[i] * tweights[[i + 1]]))
@@ -287,6 +289,7 @@ cm3 <- function(formula, data, ratios, weights, subset,
         tweights[[i]] <- as.vector(tapply(cred[[i]],
                                           fnodes[[i]],
                                           sum))
+        if (!bu[i]) break
     }
 
     ## Iterative estimation of the structure parameters
@@ -294,8 +297,9 @@ cm3 <- function(formula, data, ratios, weights, subset,
     
     if (heterogeneity == "iterative")
     {
-        bi <- as.vector(bu)
-        .External("cm", cred, tweights, wmeans, fnodes, denoms, bi, TOL, echo)
+        bi <- as.vector(bu)     # Unbiased estimators are used as starting values
+        bi[is.na(bi)] <- s2     # Unavailable starting values are replaced with s2
+        .External("cm3", cred, tweights, wmeans, fnodes, denoms, bi, TOL, echo)
         
         ## Final credibility factors and weighted averages (computed with
         ## the latest structure parameters). If a variance estimator is equal
@@ -303,16 +307,17 @@ cm3 <- function(formula, data, ratios, weights, subset,
         ## total level weights instead of the credibility factors.
         for (i in nlevels:1)
         {
-            cred[[i]] <- 1/(1 + ifelse(is.na(bi[i + 1]), 0, bi[i + 1])/(bi[i] * tweights[[i + 1]]))
-            tweights[[i]] <- as.vector(tapply(ifelse(cred[[i]] > 0, cred[[i]], tweights[[i + 1]]),
-                                              fnodes[[i]],
-                                              sum))
+            cred[[i]] <- 1/(1 + bi[i + 1]/(bi[i] * tweights[[i + 1]]))
+            
+            if (bi[i]) weights <- expression({cred[[i]]}) else weights <- expression({tweights[[i + 1]]})
+            
+            tweights[[i]] <- as.vector(tapply(eval(weights), fnodes[[i]], sum))
+            
             wmeans[[i]] <- ifelse(tweights[[i]] > 0,
-                                  as.vector(tapply(ifelse(cred[[i]] > 0, cred[[i]], tweights[[i + 1]]) * wmeans[[i + 1]],
-                                                   fnodes[[i]],
-                                                   sum) / tweights[[i]]),
+                                  as.vector(tapply(eval(weights), fnodes[[i]], sum) / tweights[[i]]),
                                   0)
-            if (bi[i] < TOL^2) bi[i] <- NA
+            
+            if (bi[i] < TOL^2) bi[i] <- 0
         }
     }
     else
@@ -347,21 +352,37 @@ print.cm <- function(x, ...)
     level.names <- names(x$nodes)
     cat("\nCall: ", deparse(x$call), "\n\n")
     cat("Structure Parameters Estimators\n\n")
-    cat("  Collective premium:", x$means[[1]], "\n")
+    cat("  Collective premium:", x$means[[1]], "\n\n")
     for (i in seq.int(nlevels))
     {
         if (i == 1)
-            cat("  Between", level.names[i], "variance:",
-                x$variances[i], "\n")
+            cat("  Unbiased Between", level.names[i], "variance:",
+                x$unbiased[i], "\n")
         else
-            cat("  Within ", level.names[i - 1],
+            cat("  Unbiased Within ", level.names[i - 1],
                 "/Between ", level.names[i], " variance: ",
-                x$variances[i], "\n", sep = "")
+                x$unbiased[i], "\n", sep = "")
     }
-    cat("  Within", level.names[nlevels], "variance:",
-        x$variances[nlevels + 1],"\n", fill = TRUE)
+    cat("  Unbiased Within", level.names[nlevels], "variance:",
+        x$unbiased[nlevels + 1],"\n", fill = TRUE)
+    
+    if (!is.null(x$iterative))
+    {
+        for (i in seq.int(nlevels))
+        {
+            if (i == 1)
+                cat("  Iterative Between", level.names[i], "variance:",
+                    x$iterative[i], "\n")
+            else
+                cat("  Iterative Within ", level.names[i - 1],
+                    "/Between ", level.names[i], " variance: ",
+                    x$iterative[i], "\n", sep = "")
+        }
+        cat("  Iterative Within", level.names[nlevels], "variance:",
+            x$iterative[nlevels + 1],"\n", fill = TRUE)
+    }
 }
-
+    
 predict.cm <- function(object, levels = NULL, ...)
 {
     ## The credibility premium of a node at one level is equal to
@@ -414,7 +435,8 @@ summary.cm <- function(object, levels = NULL, ...)
 
     structure(list(means = object$means[c(1, plevs + 1)],
                    weights = object$weights[c(1, plevs + 1)],
-                   variances = object$variances[sort(unique(c(plevs, plevs + 1)))],
+                   unbiased = object$unbiased[sort(unique(c(plevs, plevs + 1)))],
+                   iterative = object$iterative[sort(unique(c(plevs, plevs + 1)))],
                    cred = object$cred[plevs],
                    levels = object$levels[, seq.int(max(plevs)), drop = FALSE],
                    nodes = object$nodes[plevs],
@@ -433,15 +455,30 @@ print.summary.cm <- function(x, ...)
     for (i in seq.int(nlevels))
     {
         if (i == 1)
-            cat("  Between", level.names[i], "variance:",
-                x$variances[i], "\n")
+            cat("  Unbiased Between", level.names[i], "variance:",
+                x$unbiased[i], "\n")
         else
-            cat("  Within ", level.names[i - 1],
+            cat("  Unbiased Within ", level.names[i - 1],
                 "/Between ", level.names[i], " variance: ",
-                x$variances[i], "\n", sep = "")
+                x$unbiased[i], "\n", sep = "")
     }
-    cat("  Within", level.names[nlevels], "variance:",
-        x$variances[nlevels + 1],"\n", fill = TRUE)
+    cat("  Unbiased Within", level.names[nlevels], "variance:",
+        x$unbiased[nlevels + 1],"\n", fill = TRUE)
+    if (!is.null(x$iterative))
+    {
+        for (i in seq.int(nlevels))
+        {
+            if (i == 1)
+                cat("  Iterative Between", level.names[i], "variance:",
+                    x$iterative[i], "\n")
+            else
+                cat("  Iterative Within ", level.names[i - 1],
+                    "/Between ", level.names[i], " variance: ",
+                    x$iterative[i], "\n", sep = "")
+        }
+        cat("  Iterative Within", level.names[nlevels], "variance:",
+            x$iterative[nlevels + 1],"\n", fill = TRUE)
+    }
     cat("Detailed premiums\n\n")
     for (i in seq.int(nlevels))
     {
