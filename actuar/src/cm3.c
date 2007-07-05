@@ -17,7 +17,7 @@
 
 #define abs(x) (x >= 0 ? x : -x)
 #define tozero(x) (x > R_pow_di(REAL(TOL)[0], 2) ? x : 0)
-#define weights(i, j) (REAL(b)[i - 1] != 0 ? cred[i - 1][j] : tweights[i][j])
+#define weights(i, j) ( cred[i - 1][j] != 0 ? cred[i - 1][j] : tweights[i][j] )
 
 SEXP toSEXP(double *x, int size)
 {

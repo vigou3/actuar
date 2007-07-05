@@ -256,7 +256,7 @@ cm3 <- function(formula, data, ratios, weights, subset,
     ## be used as starting values for the iterative part below.
     tweights <- vector("list", nlevels1p)       # total level weights
     wmeans <- vector("list", nlevels1p)         # weighted averages
-    bu <- c(rep(NA, nlevels), s2)                # unbiased variance estimators
+    bu <- c(rep(NA, nlevels), s2)               # unbiased variance estimators
     cred <- vector("list", nlevels)             # credibility factors
 
     ## Values already computed at the entity level.
@@ -314,7 +314,7 @@ cm3 <- function(formula, data, ratios, weights, subset,
             tweights[[i]] <- as.vector(tapply(eval(weights), fnodes[[i]], sum))
             
             wmeans[[i]] <- ifelse(tweights[[i]] > 0,
-                                  as.vector(tapply(eval(weights), fnodes[[i]], sum) / tweights[[i]]),
+                                  as.vector(tapply(eval(weights) * wmeans[[i + 1]], fnodes[[i]], sum) / tweights[[i]]),
                                   0)
             
             if (bi[i] < TOL^2) bi[i] <- 0
@@ -329,9 +329,6 @@ cm3 <- function(formula, data, ratios, weights, subset,
     if (!is.null(bi)) names(bi) <- names(bu)
     names(cred) <- names(nnodes) <- names(fnodes) <-
         level.names
-
-    print(bu)
-    print(bi)
     
     ## Results
     structure(list(means = wmeans,
