@@ -2,7 +2,7 @@
  *
  *  Fonctions to compute density, cumulative distribution and quantile
  *  fonctions, raw and limited moments and to simulate random variates
- *  for the inverse Pareto distribution. See ../R/invpareto.R for
+ *  for the inverse Pareto distribution. See ../R/InversePareto.R for
  *  details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>

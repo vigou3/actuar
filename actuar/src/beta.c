@@ -1,7 +1,7 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Functions to calculate raw and limited moments for the Beta
- *  distribution.
+ *  distribution. See ../R/BetaMoments.R for details.
  *
  *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */

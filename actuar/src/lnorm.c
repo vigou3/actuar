@@ -1,7 +1,7 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to calculate raw and limited moments for the lognormal
- *  distribution. See ../R/lnorm.R for details.
+ *  distribution. See ../R/LognormalMoments.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */

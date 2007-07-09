@@ -2,8 +2,8 @@
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, raw and limited moments and to simulate random variates
- *  for the transformed gamma distribution. See ../R/trgamma.R for
- *  details.
+ *  for the transformed gamma distribution. See ../R/TransformedGamma.R
+ *  for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */

@@ -2,7 +2,7 @@
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, and to simulate random variates for the loggamma
- *  distribution. See ../R/lgamma.R for details.
+ *  distribution. See ../R/Loggamma.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */

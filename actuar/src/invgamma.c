@@ -2,7 +2,7 @@
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, raw and limited moments and to simulate random variates
- *  for the Inverse Gamma distribution. See ../R/invgamma.R for
+ *  for the Inverse Gamma distribution. See ../R/InverseGamma.R for
  *  details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>

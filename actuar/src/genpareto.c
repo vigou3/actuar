@@ -2,8 +2,8 @@
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, raw and limited moments and to simulate random variates
- *  for the Generalized Pareto distribution.. See ../R/genpareto.R for
- *  details.
+ *  for the Generalized Pareto distribution.. See ../R/GeneralizedPareto.R
+ *  for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */

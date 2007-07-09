@@ -2,7 +2,7 @@
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, raw and limited moments and to simulate random variates
- *  for the Pareto distribution. See ../R/pareto.R for details.
+ *  for the Pareto distribution. See ../R/Pareto.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */

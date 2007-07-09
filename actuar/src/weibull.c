@@ -1,7 +1,7 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Fonctions to calculate raw and limited moments for the Weibull
- *  distribution. See ../R/weibull.R for details.
+ *  distribution. See ../R/WeibullMoments.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
