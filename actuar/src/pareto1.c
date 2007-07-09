@@ -2,8 +2,8 @@
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, raw and limited moments and to simulate random variates
- *  for the single-parameter Pareto distribution. See ../R/pareto1.R
- *  for details.
+ *  for the single-parameter Pareto distribution. See 
+ *  ../R/SingleParameterPareto.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
