@@ -20,7 +20,7 @@ double dgenpareto(double x, double shape1, double shape2, double scale,
      *
      *  u^shape2 * (1 - u)^shape1 / (x * beta(shape1, shape2))
      *
-     *  with u = v/(1 + v) = 1/(1 = 1/v), v = x/scale.
+     *  with u = v/(1 + v) = 1/(1 + 1/v), v = x/scale.
      */
 
     double tmp, logu, log1mu;
