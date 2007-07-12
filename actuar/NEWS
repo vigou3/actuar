@@ -3,6 +3,10 @@
 Version 0.9-4
 =============
 
+USER-VISIBLE CHANGES
+
+  o Argument 'approx.lin' of quantile.aggregateDist() renames 'smooth'.
+
 BUG FIXES
 
   o The way weights had to be specified for the "chi-square" method of

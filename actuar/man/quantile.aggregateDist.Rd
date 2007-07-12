@@ -7,15 +7,15 @@
 \usage{
 \method{quantile}{aggregateDist}(x, 
          probs = c(0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99, 0.995),
-         approx.lin = FALSE, names = TRUE, \dots)
+         smooth = FALSE, names = TRUE, \dots)
 }  
 \arguments{
   \item{x}{an object of class \code{"aggregateDist"}.}
   \item{probs}{numeric vector of probabilities with values in \eqn{[0, 1)}.}
-  \item{approx.lin}{logical; when \code{TRUE} and \code{x} is a step
+  \item{smooth}{logical; when \code{TRUE} and \code{x} is a step
     function, quantiles are linearly interpolated between knots.}
-  \item{names}{logical; if true, the result has a 'names' attribute.  Set to
-    'FALSE' for speedup with many 'probs'.}
+  \item{names}{logical; if true, the result has a \code{names}
+    attribute.  Set to \code{FALSE} for speedup with many \code{probs}.}
   \item{\dots}{further arguments passed to or from other methods.}
 }
 \details{
