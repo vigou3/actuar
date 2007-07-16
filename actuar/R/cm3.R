@@ -305,7 +305,7 @@ cm3 <- function(formula, data, ratios, weights, subset,
     if (heterogeneity == "iterative")
     {
         bi <- as.vector(bu)     # unbiased estimators are used as starting values
-        .External("cm3", cred, tweights, wmeans, fnodes, denoms, bi, TOL, echo)
+        .External("cm", cred, tweights, wmeans, fnodes, denoms, bi, TOL, echo)
         
         ## Final credibility factors and weighted averages (computed with
         ## the latest structure parameters). If a variance estimator is equal
