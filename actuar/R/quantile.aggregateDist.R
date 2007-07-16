@@ -20,7 +20,7 @@ quantile.aggregateDist <-
                      sqrt(get("variance", environment(x))))
     else if (label == "Normal Power approximation")
     {
-        mean <- get("mean" ,environment(x))
+        mean <- get("mean", environment(x))
         variance <- get("variance", environment(x))
         skewness <- get("skewness", environment(x))
         ## Calling qnorm() and inverting the Normal Power 'standardization'
