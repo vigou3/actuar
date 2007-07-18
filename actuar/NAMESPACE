@@ -5,7 +5,7 @@ useDynLib(actuar, .registration = TRUE)
 export(## Credibility theory
        bstraub, cm, severity, simpf, unroll,
        ## Risk theory
-       aggregateDist, discretize, discretise,
+       aggregateDist, CTE, discretize, discretise, VaR,
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        mexp, levexp,
@@ -47,13 +47,15 @@ S3method("[<-", grouped.data)
 
 S3method(aggregate, simpf)
 
-S3method(frequency, simpf)
+S3method(CTE, aggregateDist)
 
 S3method(elev, default)
 S3method(elev, grouped.data)
 
 S3method(emm, default)
 S3method(emm, grouped.data)
+
+S3method(frequency, simpf)
 
 S3method(hist, grouped.data)
 
@@ -91,5 +93,7 @@ S3method(summary, bstraub)
 S3method(summary, cm)
 S3method(summary, elev)
 S3method(summary, ogive)
+
+S3method(VaR, aggregateDist)
 
 S3method(weights, simpf)
