@@ -14,7 +14,7 @@
   \item{\dots}{further arguments passed to or from other methods.}
 }
 \details{
-  The Value at Risk is taken directly from the quantile metehod for
+  The Value at Risk is taken directly from the quantile method for
   \code{"aggregateDist"} objects, which uses the cumulative distribution
   function defined in \code{x}. Linear interpolation is available for
   step functions.
