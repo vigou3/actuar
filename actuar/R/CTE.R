@@ -11,7 +11,7 @@ CTE.aggregateDist <- function(x, conf.level = 0.99, ...)
 {
     label <- comment(x)
 
-    ## The Normal approximation
+    ## Normal approximation;
     if (label == "Normal approximation")
     {
         mean <- get("mean", environment(x))
@@ -20,7 +20,7 @@ CTE.aggregateDist <- function(x, conf.level = 0.99, ...)
         CTE <- CTEnorm * sqrt(variance) + mean
     }
 
-    ## The Normal Power approximation
+    ## Normal Power approximation;
     else if (label == "Normal Power approximation")
     {
         mean <- get("mean", environment(x))
@@ -29,16 +29,20 @@ CTE.aggregateDist <- function(x, conf.level = 0.99, ...)
         CTEnorm <- exp(-(qnorm(conf.level))^2 / 2) / ( (1 - conf.level) * sqrt(2 * pi) )
         CTE <- ((CTEnorm + 3/skewness)^2 - 9/(skewness^2) - 1) * sqrt(variance) * skewness/6 + mean
     }
-
-    ## The simulation method
-    else if (label == "Approximation by simulation")
-        CTE = NA
     
-    ## The recursive or convolution methods
+    ## Approximation by simulation;
+    ## Recursive method approximation;
+    ## Exact calculations (convolutions).
     else
     {
-        pos <- get("x", env = environment(x)) > VaR(x, conf.level)
-        CTE <- sum(get("x", env = environment(x))[pos] * get("fs", env = environment(x))[pos]) / (1 - conf.level)
+        val <- get("x", env = environment(x))
+        prob <-
+            if (label == "Approximation by simulation")
+                c(0, diff(get("y", environment(x))))
+            else
+                get("fs", environment(x))
+        pos <- val > VaR(x, conf.level)
+        CTE <- drop(crossprod(val[pos], prob[pos])) / (1 - conf.level)
     }
     
     CTE
