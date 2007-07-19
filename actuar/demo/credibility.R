@@ -187,7 +187,7 @@ summary(fit)
 
 ## Calculations for the four level hierarchical portfolio simulated
 ## above.
-DF <- data.frame(aggregate(pf), weight = weights(pf)[, -(1:3)])
+DF <- data.frame(ratios(pf), weight = weights(pf)[, -(1:3)])
 
 fit <- cm(~sector + sector:unit + sector:unit:contract,
           data = DF, ratios = year.1:year.6,
