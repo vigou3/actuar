@@ -2,6 +2,8 @@
 \alias{simpf.summaries}
 \alias{aggregate.simpf}
 \alias{frequency.simpf}
+\alias{ratios}
+\alias{ratios.simpf}
 \alias{severity.simpf}
 \alias{weights.simpf}
 \title{Summary Statistics of a Portfolio}
@@ -13,6 +15,9 @@
 
   \code{frequency} computes the frequency of claims for subsets of
   portfolio data.
+
+  \code{ratios} evaluates the ratios of the aggregate claim amounts
+  to natural weights.
   
   \code{severity} extracts the individual claim amounts.
 
@@ -22,6 +27,8 @@
 \method{aggregate}{simpf}(x, by = names(x$nodes), FUN = sum, \dots)
 
 \method{frequency}{simpf}(x, by = names(x$nodes), \dots)
+
+\method{ratios}{simpf}(object, \dots)
 
 \method{severity}{simpf}(x, by = head(names(x$node), -1), splitcol = NULL, \dots)
 
@@ -38,13 +45,17 @@
   \item{\dots}{optional arguments to \code{FUN}.}
 }
 \details{
-  By default, \code{aggregate.simpf} computes the aggregate claim amount
+  By default, \code{aggregate.simpf} computes the aggregate claim amounts
   for the grouping specified in \code{by}. Any other statistic based on
   the individual claim amounts can be used through argument \code{FUN}.
 
   \code{frequency.simpf} is equivalent to using \code{aggregate.simpf}
   with argument \code{FUN} equal to \code{if (identical(x, NA)) NA else
     length(x)}.
+
+  \code{ratios.simpf} evaluates the ratios of the aggregate claim amounts
+  to natural weights. The resulting matrix is of great use when
+  calling function \code{cm}.
 
   \code{severity.simpf} extracts individual claim amounts of a portfolio
   by groupings using the default method of
@@ -65,19 +76,20 @@
   by the deparsed name of \code{FUN}.  If only the last level is used
   (column summaries), a named vector is returned.
 
+  For the \code{ratios} method: a matrix of the ratios with node identifiers.
+  
   For the \code{severity} method: a list of two elements:
   \item{first}{\code{NULL} or a matrix of claim amounts for the
     columns not specified in \code{splitcol} with the appropriate node
     identifiers extracted from \code{x$classification};}
   \item{last}{same as above, but for the columns specified in
     \code{splitcol}.}
-
   For the \code{weights} method: the weight matrix of the portfolio with
   node identifiers.
 }
 \author{
-  Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
-  Louis-Philippe Pouliot
+  Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
+  Louis-Philippe Pouliot and Tommy Ouellet
 }
 \seealso{
   \code{\link{simpf}}
@@ -101,6 +113,8 @@ aggregate(pf, by = "y")		      # by year
 aggregate(pf, by = c("s", "u"), mean) # average claim amount
 
 frequency(pf)			      # number of claims
+
+ratios(pf)                                  # ratios
 
 severity(pf)			      # claim amounts by row
 severity(pf, by = "year")	      # by column
