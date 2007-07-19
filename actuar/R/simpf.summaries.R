@@ -1,9 +1,9 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
 ### Computing summary statistics and accessing components of a
-### portfolio
+### portfolio.
 ###
-### AUTHORS: Louis-Philippe Pouliot,
+### AUTHORS: Louis-Philippe Pouliot, Tommy Ouellet, 
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 aggregate.simpf <- function(x, by = names(x$nodes), FUN = sum, ...)
@@ -68,6 +68,17 @@ frequency.simpf <- function(x, by = names(x$nodes), ...)
 {
     freq <- function(x) if (identical(x, NA)) NA else length(x)
     aggregate(x, by, freq)
+}
+
+ratios.simpf <- function(object, ...)
+{
+    if (is.null(weights(object)))
+        aggregate(object)
+    else
+    {
+        col <- ncol(object$classification)
+        cbind(object$classification, aggregate(object)[, -(1:col)] / weights(object)[, -(1:col)])
+    }
 }
 
 severity.simpf <- function(x, by = head(names(x$node), -1),
@@ -161,4 +172,9 @@ severity.simpf <- function(x, by = head(names(x$node), -1),
 }
 
 weights.simpf <- function(object, ...)
-    cbind(object$classification, object$weights)
+{
+    if (is.null(object$weights))
+        NULL
+    else
+        cbind(object$classification, object$weights)
+}
