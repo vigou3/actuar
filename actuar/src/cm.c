@@ -26,7 +26,7 @@ SEXP toSEXP(double *x, int size)
     return ans;
 }
 
-SEXP cm3(SEXP args)
+SEXP cm(SEXP args)
 {
     SEXP s_cred, s_tweights, s_wmeans, s_fnodes, denoms, b, TOL, echo;
     double **cred, **tweights, **wmeans, max = 1;
