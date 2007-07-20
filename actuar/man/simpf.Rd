@@ -38,7 +38,7 @@ simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
   \code{model.freq} and \code{model.sev} specify the simulation models
   for claim numbers and claim amounts, respectively.  A model is
   expressed in a semi-symbolic fashion using an object of mode
-  \code{\link[expression]{"expression"}}.  Each element of the object
+  \code{\link[base]{expression}}.  Each element of the object
   must be named and should be a complete call to a random number
   generation function, with the number of variates omitted.  Hierarchical
   (or mixtures of) models are achieved by replacing one or more
@@ -75,7 +75,7 @@ simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     (e.g. integers \eqn{i}, \eqn{j} and \eqn{k} for data
     \eqn{X_{ijkt}}{X[ijkt]});}
   \item{nodes}{the \code{nodes} argument, appropriately recycled;}
-  \item{model.freq}{the frequency model as given in argument}
+  \item{model.freq}{the frequency model as given in argument;}
   \item{model.sev}{the severity model as given in argument.}
 
   It is recommended to manipulate objects of class \code{"simpf"} by
