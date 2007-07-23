@@ -1,38 +1,28 @@
 \name{VaR}
 \alias{VaR}
-\alias{VaR.aggregateDist}
 \title{Value at Risk}
 \description{
-  Value at Risk (VaR) for objects of class \code{"aggregateDist"}.
+  Value at Risk.
 }
 \usage{
-\method{VaR}{aggregateDist}(x, conf.level = 0.99, \dots)
+VaR(x, \dots)
 }  
 \arguments{
-  \item{x}{an object of class \code{"aggregateDist"}.}
-  \item{conf.level}{level of confidence, with values from 0 to 1.}
+  \item{x}{an \R object.}
   \item{\dots}{further arguments passed to or from other methods.}
 }
 \details{
-  The Value at Risk is taken directly from the quantile method for
-  \code{"aggregateDist"} objects, which uses the cumulative distribution
-  function defined in \code{x}. Linear interpolation is available for
-  step functions.
+  This is a generic function with, currently, only a method for objects
+  of class \code{"aggregateDist"}.
 }
 \value{
   An object of class \code{numeric}.
 }
 \seealso{
-  \code{\link{aggregateDist}}; \code{\link{quantile.aggregateDist}}
+  \code{\link{quantile.aggregateDist}}, \code{\link{aggregateDist}}
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and 
   Tommy Ouellet
-}
-\examples{
-model.freq <- expression(data = rpois(7))
-model.sev <- expression(data = rnorm(9, 2))
-Fs <- aggregateDist("simulation", model.freq, model.sev, nb.simul = 1000)
-VaR(Fs, conf.level = 0.95)
 }
 \keyword{univar}
