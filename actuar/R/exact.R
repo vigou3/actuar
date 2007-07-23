@@ -27,9 +27,11 @@ exact <- function(fx, pn, x.scale = 1)
         fs[pos] <- fs[pos] + fxc * pn[i + 1]
     }
 
-    FUN <- stepfun((0:(length(fs) - 1)) * x.scale, c(0, cumsum(fs)))
-    class(FUN) <- c("ecdf", class(FUN))
-    assign("fs", fs, environment(FUN))
-    assign("x.scale", x.scale, environment(FUN))
+    FUN <- approxfun((0:(length(fs) - 1)) * x.scale, cumsum(fs),
+                     method = "constant", yleft = 0, yright = 1, f = 0,
+                     ties = "ordered")
+    class(FUN) <- c("ecdf", "stepfun", class(FUN))
+    assign("fs", fs, envir = environment(FUN))
+    assign("x.scale", x.scale, envir = environment(FUN))
     FUN
 }

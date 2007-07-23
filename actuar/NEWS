@@ -3,15 +3,27 @@
 Version 0.9-4
 =============
 
+NEW FEATURES -- RISK THEORY
+
+  o Function VaR() with a method for objects of class "aggregateDist"
+    to compute the Value at Risk of a distribution. 
+
+  o Function CTE() with a method for objects of class "aggregateDist"
+    to compute the Conditional Tail Expectation of a distribution. 
+
 USER-VISIBLE CHANGES
 
-  o Argument 'approx.lin' of quantile.aggregateDist() renames 'smooth'.
+  o Argument 'approx.lin' of quantile.aggregateDist() renamed 'smooth'.
 
 BUG FIXES
 
   o The way weights had to be specified for the "chi-square" method of
     mde() to give expected results was very unintuitive. The fix has
     no effect when using the default weights.
+
+  o The empirical step function returned by the "recursive" and
+    "convolution" methods of aggregateDist() now correctly returns 1
+    when evaluated past its largest knot.
 
 Version 0.9-3
 =============
@@ -60,21 +72,21 @@ NEW FEATURES -- LOSS DISTRIBUTIONS
   
        Distribution name          Root        
     ------------------------- --------------  
-     Burr			     burr		  
-     Generalized beta	     genbeta	  
-     Generalized Pareto	     genpareto	  
-     Inverse Burr		     invburr	  
-     Inverse exponential	     invexp	  
-     Inverse Pareto	     invpareto	  
-     Inverse paralogistic	     invparalogis	  
-     Inverse Weibull	     invweibull	  
-     Loggamma		     loggamma	  
-     Loglogistic		     llogis	  
-     Paralogistic		     paralogis	  
-     Pareto		     pareto	  
+     Burr                      burr		  
+     Generalized beta          genbeta	  
+     Generalized Pareto        genpareto	  
+     Inverse Burr              invburr	  
+     Inverse exponential       invexp	  
+     Inverse Pareto            invpareto	  
+     Inverse paralogistic      invparalogis	  
+     Inverse Weibull           invweibull	  
+     Loggamma                  loggamma	  
+     Loglogistic               llogis	  
+     Paralogistic              paralogis	  
+     Pareto                    pareto	  
      Single parameter Pareto   pareto1	  
-     Transformed beta	     trbeta	  
-     Transformed gamma	     trgamma	  
+     Transformed beta          trbeta	  
+     Transformed gamma         trgamma	  
   
     All functions are coded in C for efficiency purposes and should
     behave exactly like the functions in base R. For all distributions

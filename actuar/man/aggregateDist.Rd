@@ -148,7 +148,12 @@ aggregateDist(method = c("recursive", "convolution", "normal",
 }
 \seealso{
   \code{\link{discretize}} to discretize a severity distribution;
-  \code{\link{quantile.aggregateDist}} for the \code{quantile} method;
+  \code{\link{mean.aggregateDist}} to compute the mean of the
+  distribution;
+  \code{\link{quantile.aggregateDist}} to compute the quantiles or the
+  Value at Risk;
+  \code{\link{CTE.aggregateDist}} to compute the Conditional Tail
+  Expectation;
   \code{\link{simpf}}.
 }
 \references{

@@ -18,5 +18,15 @@ simS <- function(n, model.freq, model.sev)
                          model.freq = model.freq,
                          model.sev = model.sev))[-1]
 
-    ecdf(x)
+    ## Compute the empirical cdf of the sample. Done manually instead
+    ## of calling stats:::ecdf() to keep a copy of the empirical pmf
+    ## in the environment without computing it twice.
+    x <- sort(x)
+    vals <- unique(x)
+    fs <- tabulate(match(x, vals))/length(x)
+    FUN <- approxfun(vals, cumsum(fs), method = "constant",
+                     yleft = 0, yright = 1, f = 0, ties = "ordered")
+    class(FUN) <- c("ecdf", "stepfun", class(FUN))
+    assign("fs", fs, envir = environment(FUN))
+    FUN
 }

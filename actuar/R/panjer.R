@@ -141,9 +141,11 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
         }
     }
 
-    FUN <- stepfun((0:(length(fs) - 1)) * x.scale, c(0, cumsum(fs)))
-    class(FUN) <- c("ecdf", class(FUN))
-    assign("fs", fs, env = environment(FUN))
-    assign("x.scale", x.scale, env = environment(FUN))
+    FUN <- approxfun((0:(length(fs) - 1)) * x.scale, cumsum(fs),
+                     method = "constant", yleft = 0, yright = 1, f = 0,
+                     ties = "ordered")
+    class(FUN) <- c("ecdf", "stepfun", class(FUN))
+    assign("fs", fs, envir = environment(FUN))
+    assign("x.scale", x.scale, envir = environment(FUN))
     FUN
 }

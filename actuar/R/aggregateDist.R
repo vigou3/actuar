@@ -85,7 +85,7 @@ aggregateDist <-
 
     ## Return cumulative distribution function
     class(FUN) <- c("aggregateDist", class(FUN))
-    assign("Call", Call, environment(FUN))
+    attr(FUN, "call") <- Call
     FUN
 }
 
@@ -95,21 +95,21 @@ print.aggregateDist <- function(x, ...)
     cat("  ", label <- comment(x), "\n\n", sep = "")
 
     cat("Call:\n")
-    print(get("Call", envir = environment(x)))
+    print(attr(x, "call"))
     cat("\n")
 
     if (label %in% c("Exact calculation (convolutions)",
                      "Recursive method approximation",
                      "Approximation by simulation"))
     {
-        n <- length(get("x", environment(x)))
+        n <- length(get("x", envir = environment(x)))
         cat("Data:  (", n, "obs. )\n")
         numform <- function(x) paste(formatC(x, dig = 4, width = 5), collapse = ", ")
         i1 <- 1:min(3, n)
         i2 <- if (n >= 4)
             max(4, n - 1):n
         else integer(0)
-        xx <- eval(expression(x), env = environment(x))
+        xx <- eval(expression(x), envir = environment(x))
         cat(" x[1:", n, "] = ", numform(xx[i1]), if (n > 3)
         ", ", if (n > 5)
         " ..., ", numform(xx[i2]), "\n", sep = "")
@@ -141,8 +141,8 @@ plot.aggregateDist <- function(x, xlim,
         ## in argument.
         if (missing(xlim))
         {
-            mean <- get("mean", environment(x))
-            sd <- sqrt(get("variance", environment(x)))
+            mean <- get("mean", envir = environment(x))
+            sd <- sqrt(get("variance", envir = environment(x)))
             xlim <- c(mean - 3 * sd, mean + 3 * sd)
         }
         curve(x, main = main, ylab = ylab, xlim = xlim, ylim = c(0, 1), ...)
@@ -185,16 +185,11 @@ mean.aggregateDist <- function(x, ...)
     ## the case of the Normal and Normal Power approximations.
     if (label %in%
         c("Normal approximation", "Normal Power approximation"))
-        return(get("mean", environment(x)))
+        return(get("mean", envir = environment(x)))
 
     ## For the recursive, exact and simulation methods, compute the
-    ## mean from the stepwise cdf. For the first two, use the pmf
-    ## saved in the environment of the object.
-    val <- get("x", environment(x))
-    prob <-
-        if (label == "Approximation by simulation")
-            c(val[1], diff(get("y", environment(x))))
-        else
-            get("fs", environment(x))
-    drop(crossprod(val, prob))
+    ## mean from the stepwise cdf using the pmf saved in the
+    ## environment of the object.
+    drop(crossprod(get("x", envir = environment(x)),
+                   get("fs", envir = environment(x))))
 }

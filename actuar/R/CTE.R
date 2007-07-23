@@ -4,46 +4,61 @@
 ###
 ### AUTHORS: Tommy Ouellet, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-CTE <- function(...)
+CTE <- function(x, ...)
     UseMethod("CTE")
 
-CTE.aggregateDist <- function(x, conf.level = 0.99, ...)
+CTE.aggregateDist <- function(x, conf.level = c(0.9, 0.95, 0.99),
+                              names = TRUE, ...)
 {
     label <- comment(x)
 
-    ## Normal approximation;
+    ## Normal approximation; an exact formula is available
     if (label == "Normal approximation")
     {
-        mean <- get("mean", environment(x))
-        variance <- get("variance", environment(x))
-        CTEnorm <- exp(-(qnorm(conf.level))^2 / 2) / ( (1 - conf.level) * sqrt(2 * pi) )
-        CTE <- CTEnorm * sqrt(variance) + mean
+        m <- get("mean", environment(x))
+        sd <- sqrt(get("variance", environment(x)))
+        res <- m + sd * exp(-(qnorm(conf.level))^2 / 2) /
+            ((1 - conf.level) * sqrt(2 * pi))
     }
 
-    ## Normal Power approximation;
+    ## Normal Power approximation; no explicit formula so revert to
+    ## numerical integration.
     else if (label == "Normal Power approximation")
     {
-        mean <- get("mean", environment(x))
-        variance <- get("variance", environment(x))
-        skewness <- get("skewness", environment(x))
-        CTEnorm <- exp(-(qnorm(conf.level))^2 / 2) / ( (1 - conf.level) * sqrt(2 * pi) )
-        CTE <- ((CTEnorm + 3/skewness)^2 - 9/(skewness^2) - 1) * sqrt(variance) * skewness/6 + mean
+        m <- get("mean", envir = environment(x))
+        sd <- sqrt(get("variance", envir = environment(x)))
+        sk <- get("skewness", envir = environment(x))
+
+        f <- function(x)
+        {
+            y <- sqrt(1 + 9/sk^2 + 6 * (x - m)/(sd * sk))
+            3 * x * dnorm(y - 3/sk) / (sd * sk * y)
+        }
+
+        res <- sapply(quantile(x, conf.level),
+                      function(x) integrate(f, x, Inf)$value) /
+                          (1 - conf.level)
     }
-    
-    ## Approximation by simulation;
-    ## Recursive method approximation;
-    ## Exact calculations (convolutions).
+
+    ## Recursive method, simulation and convolutions; each yield a
+    ## step function that can be used to make calculations.
     else
     {
-        val <- get("x", env = environment(x))
-        prob <-
-            if (label == "Approximation by simulation")
-                c(0, diff(get("y", environment(x))))
-            else
-                get("fs", environment(x))
-        pos <- val > VaR(x, conf.level)
-        CTE <- drop(crossprod(val[pos], prob[pos])) / (1 - conf.level)
+        val <- get("x", envir = environment(x))
+        prob <- get("fs", envir = environment(x))
+        f <- function(a)
+        {
+            pos <- val > VaR(x, a)
+            drop(crossprod(val[pos], prob[pos])) / (1 - a)
+        }
+        res <- sapply(conf.level, f)
     }
-    
-    CTE
+
+    if (names)
+    {
+        dig <- max(2, getOption("digits"))
+        names(res) <- formatC(paste(100 * conf.level, "%", sep = ""),
+                              format = "fg", wid = 1, digits = dig)
+    }
+    res
 }
