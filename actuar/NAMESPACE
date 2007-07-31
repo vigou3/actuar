@@ -3,7 +3,7 @@ useDynLib(actuar, .registration = TRUE)
 
 ### Exports
 export(## Credibility theory
-       bstraub, cm, ratios, severity, simpf, unroll,
+       bstraub, cm, ratios, severity, simpf, unroll, cm3,
        ## Risk theory
        aggregateDist, CTE, discretize, discretise, VaR,
        ## One parameter distributions
