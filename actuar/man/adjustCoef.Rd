@@ -128,12 +128,13 @@ Actuarial Mathematics????
     
     premium <- -sum(weight %*% solve(matrixT,diag(6)))*2*1.1
 
-    res <- adjustCoef("CramerLundberg","phasetype",list(lambda=2,pi=weight, T=matrixT,m=6),premium)
+    adjustCoef("CramerLundberg","phasetype",list(lambda=2,pi=weight, T=matrixT,m=6),premium)
+
 ## NB. we could have just the other parametrization with 'marginal' argument equals to 'mixgamma'
 
 ## Sparre Andersen - both claim sizes and arrival times are gamma distributed
 ## respectively G(2,2) and G(3,1)
-    res <- adjustCoef("SparreAndersen", "gammagamma", list(lambda=1,eta=3,beta=2,alpha=2), 2/2*1/3*1.1)
+    adjustCoef("SparreAndersen", "gammagamma", list(lambda=1,eta=3,beta=2,alpha=2), 2/2*1/3*1.1)
 
 ## Sparre Andersen - claim size is a mixture of exponential and inter-occurence time is erlang
 ## respectively a mixture of exponential E(1), E(2) and E(3) with weight 1/3 and an erlang distribution
@@ -155,11 +156,29 @@ Actuarial Mathematics????
     expX <- -sum(probpi%*%solve(matT,diag(3)))
     expW <- -sum(probnu%*%solve(matS,diag(6)))
 
-    res <- adjustCoef("SparreAndersen", "phasetype", 
+    adjustCoef("SparreAndersen", "phasetype", 
     	list(nu=probnu,S=matS, n=6, pi=probpi, T=matT, m=3), 1.1*expX/expW)
 
 
-## model conditional Etienne Marceau
-## TODO
+## the "conditional" model based Boudreault et al (2006)
+## as usual, if X are claim sizes, and W are inter-occurence times,
+## we suppose in this model, that X and W are dependent:
+## M_X/W=t (x) = exp(-alpha t) M_Y1(x) + (1-exp(-alpha t)) M_Y2(x)
+## where Y1, Y2 are independent
+   
+    lambda <- 1.5
+    beta1 <- 1
+    beta2 <- 2
+    alpha <- 1/2
+    expX <- lambda/(lambda+alpha)/beta1 + (1-lambda/(lambda+alpha))/beta2
+    prem <- expX*lambda*1.1    
+
+    theHfunction <- function(r)
+    		 beta1/(beta1-r)*lambda/(lambda+r*prem) + beta2/(beta2-r)*(lambda/(lambda+r*prem) -lambda/(lambda+r*prem+alpha)
+		 
+    adjustCoef(theHfunction, "", list(RBound=min(beta1,beta2)), prem)
+
+## see Boudreault et al (2006) page 269, complete reference: Boudreault, M., Cossette, H., Landriault, D. and Marceau, E. (2006).
+## On a risk model with dependence between interclaim arrivals and claim sizes. Scandinavian Actuarial Journal, 2006(5):265-285
 }
 \keywords{models}
