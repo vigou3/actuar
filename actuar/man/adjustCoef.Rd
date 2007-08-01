@@ -174,7 +174,7 @@ Actuarial Mathematics????
     prem <- expX*lambda*1.1    
 
     theHfunction <- function(r)
-    		 beta1/(beta1-r)*lambda/(lambda+r*prem) + beta2/(beta2-r)*(lambda/(lambda+r*prem) -lambda/(lambda+r*prem+alpha)
+    		 beta1/(beta1-r)*lambda/(lambda+r*prem) + beta2/(beta2-r)*(lambda/(lambda+r*prem) -lambda/(lambda+r*prem+alpha))
 		 
     adjustCoef(theHfunction, "", list(RBound=min(beta1,beta2)), prem)
 
