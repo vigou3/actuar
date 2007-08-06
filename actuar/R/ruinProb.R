@@ -68,21 +68,23 @@ ruinProb <-function(model="CramerLundberg",param,premRate)
             Q <- resQPiplus$Q
             piplus <- resQPiplus$piplus
 
-            resDiagPsi <- calcMatrixExp(resQPiplus)
-            resDiag <- resDiagPsi(1)
-            
-            resPackageMatrix <- piplus %*% as.matrix(expm(Matrix(Q))) %*% rep(1,length(piplus))
-            
-            error <- max(rowSums(abs(resDiag-resPackageMatrix)))
+            #Q <- cbind(c(1,0),c(1,1))
+            #m <- 2
 
             
-            if(error < 10^-6)
-            {
+            options(show.error.messages = FALSE)
+            #test the diagonalisation of Q
+            #if failed, testDiag is an invisible object of class 'try-error'
+            testDiag <- try( solve(eigen(Q)$vectors,diag(m)) )
+            options(show.error.messages = TRUE) #revert to default
+            
+            if(class(testDiag) == "try-error")          
+                stop("\n\t*** actuar internal error : Q is non diagonalisable ***\n\t",geterrmessage()) #stop execution of ruinProb            
+            else
                 ## compute matrix exponential through diagonalisation of Q                
                 return(calcMatrixExp(resQPiplus))
-            }
-            else            
-                return( function(u) piplus %*% as.matrix(expm(Matrix(Q)*u)) %*% rep(1,length(piplus)) )                        
+                             
+                                    
         }
     }
 
@@ -104,19 +106,18 @@ ruinProb <-function(model="CramerLundberg",param,premRate)
         Q <- resQPiplus$Q
         piplus <- resQPiplus$piplus
 
-        resDiagPsi <- calcMatrixExp(resQPiplus)
-        resDiag <- resDiagPsi(1)
+        
+        
+        options(show.error.messages = FALSE)
+            #test the diagonalisation of Q
+            #if failed, testDiag is an invisible object of class 'try-error'
+        testDiag <- try( solve(eigen(Q)$vectors,diag(m)) )
+        options(show.error.messages = TRUE) #revert to default
             
-        resPackageMatrix <- piplus %*% as.matrix(expm(Matrix(Q))) %*% rep(1,length(piplus))
-        
-        error <- max(rowSums(abs(resDiag-resPackageMatrix)))
-        
-        if(error < 10^-6)
-        {
-            ## compute matrix exponential through diagonalisation of Q            
-            return(calcMatrixExp(resQPiplus))
-        }
+        if(class(testDiag) == "try-error")          
+            stop("\n\t*** actuar internal error : Q is non diagonalisable ***\n\t",geterrmessage()) #stop execution of ruinProb            
         else
-            return( function(u) piplus %*% as.matrix(expm(Matrix(Q)*u)) %*% rep(1,length(piplus)) )                                
+                ## compute matrix exponential through diagonalisation of Q                
+            return(calcMatrixExp(resQPiplus))                              
     }
 }
