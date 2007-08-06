@@ -1,41 +1,43 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Functions to compute probability density, cumulative probability
- *  and quantile functions, raw moments and limited moments for some
- *  probability laws not in base R. Function .External() calls
- *  do_dpq() with arguments:
+ *  quantile functions and moment generating functions, raw moments
+ *  and limited moments for some probability laws not in base R (or
+ *  those quantities not provided in base R). Function .External()
+ *  calls do_dpq() with arguments:
  *
- *       1. the name of the distribution from which to simulate, with
- *          a "d", a "p" or "q" prepended to it (e.g. "dpareto",
- *          "pburr");
+ *       1. the name of the distribution, with a "d", a "p" or "q"
+ *          prepended to it (e.g. "dpareto", "pburr");
  *       2. the value(s) where the function is to be evaluated;
  *     3:x. the parameters of the distribution (including the order of
  *          the limited moment for lev*);
  *     x+1. whether to return the lower or upper tail probability or
  *          quantile (p* and q* only); see note below for m* and lev*
  *          functions;
- *     x+2. whether to return probability in log scale (d*, p* and q*
- *          only).
+ *     x+2. whether to return probability in log scale or the cumulant
+ *          generating function (d*, p*, q* and mgf* only).
  *
  *  Function do_dpq() will extract the name of the distribution, look
  *  up in table fun_tab defined in names.c which of do_dpq{1,2,3,4}
- *  should take care of the calculation and dispatch to this
- *  function. In turn, functions do_dpq{1,2,3,4} call function
- *  {d,p,q,m,lev}dist() to get actual values from distribution "dist".
+ *  should take care of the calculation and dispatch to this function.
+ *  In turn, functions do_dpq{1,2,3,4} call function
+ *  {d,p,q,m,lev,mgf}dist() to get actual values from distribution
+ *  "dist".
  *
  *  Note: the m* and lev* functions came later in the process. In
  *  order to easily fit them into this system, I have decided to leave
  *  an unused 'give_log' argument in the C definitions of these
- *  functions. Otherwise, this would require defining functions
+ *  functions. Otherwise, this would have required defining functions
  *  dpq{1,2,3,4,5}_0() below.
  *
  *  Functions therein are essentially identical to those found in
  *  .../src/main/arithmetic.c of R sources with a different naming
  *  scheme.
  *
- *  To add a new distribution: write a {d,p,q,m,lev}dist() function,
- *  add an entry in names.c and in the definition of the corresponding
- *  do_dpq{1,2,3,4} function, declare the function in actuar.h.
+ *  To add a new distribution: write a {d,p,q,m,lev,mgf}dist()
+ *  function, add an entry in names.c and in the definition of the
+ *  corresponding do_dpq{1,2,3,4} function, declare the function in
+ *  actuar.h.
  *
  *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
  *          with much indirect help from the R Core Team
