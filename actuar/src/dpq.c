@@ -510,6 +510,7 @@ SEXP do_dpq3(int code, SEXP args)
     case 31:  return DPQ3_1(args, levpareto1);
     case 32:  return DPQ3_1(args, levweibull);
     case 33:  return DPQ3_1(args, levbeta);
+	case 34:  return DPQ3_1(args, mgfgamma);
     default:
 	error(_("internal error in do_dpq3"));
     }

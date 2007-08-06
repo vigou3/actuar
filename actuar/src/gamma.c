@@ -48,3 +48,20 @@ double levgamma(double limit, double shape, double scale, double order,
 	pgamma(u, tmp, 1.0, 1, 0) / gammafn(shape) +
 	R_VG__0(limit, order) * pgamma(u, shape, 1.0, 0, 0);
 }
+
+double mgfgamma(double t, double shape, double scale, int log_p)
+{
+	//check arguments
+	if (!R_FINITE(shape) ||
+	!R_FINITE(scale) ||
+	shape <= 0.0 ||
+	scale <= 0.0 ||
+	scale * t >= 1)
+		return R_NaN;
+	
+	if(t == 0.0)
+		return R_D_exp(0);
+		
+	return	R_D_exp( -shape * log(1 - scale * t) ) ;
+	
+}

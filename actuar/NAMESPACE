@@ -5,13 +5,13 @@ useDynLib(actuar, .registration = TRUE)
 export(## Credibility theory
        bstraub, cm, ratios, severity, simpf, unroll,
        ## Risk theory
-       aggregateDist, CTE, discretize, discretise, VaR,
+       aggregateDist, CTE, discretize, discretise, VaR, adjustCoef, ruinProb,
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        mexp, levexp,
        ## Two parameter distributions
        mbeta, levbeta,
-       mgamma, levgamma,
+       mgamma, levgamma, mgfgamma,
        dinvgamma, pinvgamma, qinvgamma, rinvgamma, minvgamma, levinvgamma,
        dinvparalogis, pinvparalogis, qinvparalogis, rinvparalogis, minvparalogis, levinvparalogis,
        dinvpareto, pinvpareto, qinvpareto, rinvpareto, minvpareto, levinvpareto,

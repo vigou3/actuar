@@ -1,4 +1,5 @@
 \name{ruinProb}
+\alias{ruinProb}
 \title{Ruin Theory}
 \description{
 	Compute the infinite time ruin probability in the model
@@ -37,6 +38,7 @@ of ruin}. Astin Bull., 19(1):71-90
   and Christophe Dutang
 }
 \examples{
+\dontrun{
 ## Cramer Lundberg - exponential claim sizes
     resExpPsi <- ruinProb("CramerLundberg", list( lambda=3 ,pi=1, T=2, m=1),  1.1*3/2)
 
@@ -70,4 +72,5 @@ of ruin}. Astin Bull., 19(1):71-90
     gridU <- seq(0,5*16/15,length.out=100)
     resErlang <- resErlangPsi(gridU)
 }
-\keywords{models}
+}
+\keyword{models}

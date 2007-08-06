@@ -33,6 +33,7 @@ double levbeta(double limit, double shape1, double shape2, double order, int giv
 
 double mgamma(double order, double shape, double scale, int give_log);
 double levgamma(double limit, double shape, double scale, double order, int give_log);
+double mgfgamma(double t, double shape, double scale, int log_p);
 
 double dinvgamma(double x, double scale, double shape, int give_log);
 double pinvgamma(double q, double scale, double shape, int lower_tail, int log_p);
