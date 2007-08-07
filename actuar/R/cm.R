@@ -10,7 +10,7 @@
 ### AUTHORS: Louis-Philippe Pouliot,
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 
-cm <- function(formula, data, ratios, weights, subset,
+cm2 <- function(formula, data, ratios, weights, subset,
                TOL = 1E-6, echo = FALSE)
 {
     Call <- match.call()
@@ -262,52 +262,27 @@ cm <- function(formula, data, ratios, weights, subset,
     tweights[[nlevels1p]] <- as.vector(weights.s); # rm(weights.s)
     wmeans[[nlevels1p]] <- as.vector(ratios.w);    # rm(ratios.w)
 
-    ## Avoid evaluating argument 'echo' at every iteration below
-    if (echo)
-        expr <- expression(print(bt <- b))
-    else
-        expr <- expression({bt <- b})
-
     ## Iterative estimation of the structure parameters
-    repeat
-    {
-        eval(expr)
-
-        for (i in nlevels:1)
-        {
-            cred[[i]] <- 1/(1 + b[i + 1]/(b[i] * tweights[[i + 1]]))
-            tweights[[i]] <- as.vector(tapply(cred[[i]],
-                                              fnodes[[i]],
-                                              sum))
-            wmeans[[i]] <- ifelse(tweights[[i]] > 0,
-                                  as.vector(tapply(cred[[i]] * wmeans[[i + 1]],
-                                                   fnodes[[i]],
-                                                   sum) / tweights[[i]]),
-                                  0)
-            b[i] <- sum(cred[[i]] *
-                        (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2) /
-                            denoms[i]
-        }
-
-        if (max(abs((b - bt)/bt)) < TOL)
-                break
-    }
+    .External("cm", cred, tweights, wmeans, fnodes, denoms, b, TOL, echo)
 
     ## Final credibility factors and weighted averages (computed with
-    ## the latest structure parameters.
+    ## the latest structure parameters). If a variance estimator is equal
+    ## to (or tends toward) zero then we estimate the means with the
+    ## total level weights instead of the credibility factors.
     for (i in nlevels:1)
     {
-        cred[[i]] <- 1/(1 + b[i + 1]/(b[i] * tweights[[i + 1]]))
-        tweights[[i]] <- as.vector(tapply(cred[[i]],
+        cred[[i]] <- 1/(1 + ifelse(is.na(b[i + 1]), 0, b[i + 1])/(b[i] * tweights[[i + 1]]))
+        tweights[[i]] <- as.vector(tapply(ifelse(cred[[i]] > 0, cred[[i]], tweights[[i + 1]]),
                                           fnodes[[i]],
                                           sum))
         wmeans[[i]] <- ifelse(tweights[[i]] > 0,
-                              as.vector(tapply(cred[[i]] * wmeans[[i + 1]],
+                              as.vector(tapply(ifelse(cred[[i]] > 0, cred[[i]], tweights[[i + 1]]) * wmeans[[i + 1]],
                                                fnodes[[i]],
                                                sum) / tweights[[i]]),
                               0)
+        if (b[i] < TOL^2) b[i] <- NA
     }
-
+    
     ## Transfer level names to lists
     names(tweights) <- names(wmeans) <- names(b) <-
         c("portfolio", level.names)
