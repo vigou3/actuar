@@ -10,7 +10,7 @@
 ### AUTHORS: Louis-Philippe Pouliot,
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 
-cm2 <- function(formula, data, ratios, weights, subset,
+cm <- function(formula, data, ratios, weights, subset,
                TOL = 1E-6, echo = FALSE)
 {
     Call <- match.call()
