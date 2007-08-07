@@ -1,16 +1,20 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Panjer recursion formula to compute the approximate aggreagte
+### Panjer recursion formula to compute the approximate aggregate
 ### claim amount distribution of a portfolio over a period.
 ###
 ### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>,
-### Sébastien Auclair and Louis-Philippe Pouliot
+### Sébastien Auclair, Louis-Philippe Pouliot and Tommy Ouellet
 
 panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
                    TOL = 1e-8, echo = FALSE)
 {
     ## Express TOL as a value close to 1.
     TOL <- 1 - TOL
+
+    ## Check whether p0 is a valid probability or not.
+    if ( !is.null(p0) ) if ( (p0 < 0) | (p0 > 1) )
+        stop("'p0' must be a valid probability (between 0 and 1)")
 
     ## f_X(0) is no longer needed after the calculation of f_S(0).
     fx0 <- fx[1]
@@ -90,56 +94,14 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     ## and let the user do the work by hand.
     if (identical(fs0, 0))
         stop("Pr[S = 0] is numerically equal to 0; impossible to start the recursion")
+    if (length(fs0) == 0)
+        stop("invalid parameters")
 
-    ## The recursion formula is slightly different for the (a, b, 0)
-    ## and (a, b, 1) cases. We do the split here to avoid repeatedly
-    ## testing in which case we're in.
-    ##
-    ## Vector 'fs' will hold the probabilities and will be expanded as
-    ## needed. We are not supposed to do that in S, but assigning a
-    ## longer than needed vector of NAs proved cumbersome and slower.
-    fs <- fs0
-    cumul <- sum(fs)
-
-    ## (a, b, 0) case
-    if (is.null(p0))
-    {
-        ## See in the (a, b, 1) case why this is defined here.
-        r <- length(fx)
-
-        repeat
-        {
-            if (echo)  print(tail(cumul, 1))
-
-            x <- length(fs)
-            m <- min(x, r)
-            fs <- c(fs, sum((a + b * 1:m / x) * head(fx, m) * rev(tail(fs, m)))/(1 - a * fx0))
-            if (TOL < (cumul <- cumul + tail(fs, 1)))
-                break
-        }
-    }
-    ## (a, b, 1) case
-    else
-    {
-        ## Line below is a hack to reproduce the fact that the
-        ## distribution of claim amounts is 0 past its maximum
-        ## value. Only needed in the (a, b, 1) case for the additional
-        ## term in the recursion formula.
-        fx <- c(fx, 0)
-        r <- length(fx)
-        const <- p1 - (a + b) * p0
-
-        repeat
-        {
-            if (echo) print(tail(cumul, 1))
-
-            x <- length(fs)
-            m <- min(x, r)
-            fs <- c(fs, (const * fx[m] + sum((a + b * 1:m / x) * head(fx, m) * rev(tail(fs, m))))/(1 - a * fx0))
-            if (TOL < (cumul <- cumul + tail(fs, 1)))
-                break
-        }
-    }
+    ## We then use the function .External to do the recursive part of
+    ## the Panjer method in C. If p0 is NULL, we must first initialize p1
+    ## for it to be used in the call to .External.
+    if (is.null(p0)) p1 = 0
+    fs <- .External("panjer", p0, p1, fs0, fx0, fx, a, b, TOL, echo)
 
     FUN <- approxfun((0:(length(fs) - 1)) * x.scale, cumsum(fs),
                      method = "constant", yleft = 0, yright = 1, f = 0,
