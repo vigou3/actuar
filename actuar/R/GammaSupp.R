@@ -6,7 +6,7 @@
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
 ### Edition, Wiley, 2004.
-### See ??? Loss Distributions
+### See Chapter 17 of Johnson & Kotz, Loss Distributions, Wiley, 1970
 ###
 ### AUTHORS:  Mathieu Pigeon, Christophe Dutang,
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>
@@ -17,5 +17,5 @@ mgamma <- function(order, shape, rate = 1, scale = 1/rate)
 levgamma <- function(limit, shape, rate = 1, scale = 1/rate, order = 1)
     .External("do_dpq", "levgamma", limit, shape, scale, order, FALSE)
 
-mgfgamma <- function(x, shape, rate = 1, scale = 1/rate, log = FALSE)
-    .External("do_dpq", "mgfgamma", t, shape, scale, order, log)
+mgfgamma <- function(x, shape, rate = 1, scale = 1/rate, log= FALSE)
+    .External("do_dpq", "mgfgamma", x, shape, scale, log)

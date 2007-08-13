@@ -1,7 +1,7 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Functions to calculate raw and limited moments for the Gamma
- *  distribution. See ../R/GammaMoments.R for details.
+ *  distribution. See ../R/GammaSupp.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -49,19 +49,19 @@ double levgamma(double limit, double shape, double scale, double order,
 	R_VG__0(limit, order) * pgamma(u, shape, 1.0, 0, 0);
 }
 
-double mgfgamma(double t, double shape, double scale, int log_p)
+double mgfgamma(double x, double shape, double scale, int give_log)
 {
-	//check arguments
+	/*check arguments */
 	if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	shape <= 0.0 ||
-	scale <= 0.0 ||
-	scale * t >= 1)
-		return R_NaN;
+	    !R_FINITE(scale) ||
+	    shape <= 0.0 ||
+	    scale <= 0.0 ||
+	    scale * x > 1.)
+	  return R_NaN;
+	  
 	
-	if(t == 0.0)
-		return R_D_exp(0);
-		
-	return	R_D_exp( -shape * log(1 - scale * t) ) ;
+	if(x == 0.0)
+	  return R_D_exp(0.0);	
 	
+	return	R_D_exp( -shape * log(1. - scale * x) ) ;
 }

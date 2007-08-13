@@ -161,6 +161,7 @@ SEXP do_dpq1(int code, SEXP args)
     case  3:  return DPQ1_2(args, pinvexp);
     case  4:  return DPQ1_2(args, qinvexp);
     case  5:  return DPQ1_1(args, minvexp);
+	case  6:  return DPQ1_1(args, mgfexp);
     default:
 	error(_("internal error in do_dpq1"));
     }
@@ -190,6 +191,7 @@ static SEXP dpq2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
     double xi, ai, bi, *x, *a, *b, *y;
     int i_1;
     Rboolean naflag = FALSE;
+	
 
 #define SETUP_DPQ2						\
     if (!isNumeric(sx) || !isNumeric(sa) || !isNumeric(sb))	\
@@ -213,9 +215,9 @@ static SEXP dpq2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
     y = REAL(sy)
 
     SETUP_DPQ2;
-
+	
     i_1 = asInteger(sI);
-
+	
     mod_iterate2(nx, na, nb, ix, ia, ib)
     {
 	xi = x[ix];
@@ -289,6 +291,7 @@ static SEXP dpq2_2(SEXP sx, SEXP sa, SEXP sb, SEXP sI, SEXP sJ, double (*f)())
 
 SEXP do_dpq2(int code, SEXP args)
 {
+	
     switch (code)
     {
     case  1:  return DPQ2_1(args, mgamma);
@@ -333,6 +336,9 @@ SEXP do_dpq2(int code, SEXP args)
     case 40:  return DPQ2_1(args, levexp);
     case 41:  return DPQ2_1(args, levinvexp);
     case 42:  return DPQ2_1(args, mbeta);
+	case 43:  return DPQ2_1(args, mgfgamma);
+	case 44:  return DPQ2_1(args, mgfnorm);
+	case 45:  return DPQ2_1(args, mgfunif);
     default:
 	error(_("internal error in do_dpq2"));
     }
@@ -510,7 +516,6 @@ SEXP do_dpq3(int code, SEXP args)
     case 31:  return DPQ3_1(args, levpareto1);
     case 32:  return DPQ3_1(args, levweibull);
     case 33:  return DPQ3_1(args, levbeta);
-	case 34:  return DPQ3_1(args, mgfgamma);
     default:
 	error(_("internal error in do_dpq3"));
     }

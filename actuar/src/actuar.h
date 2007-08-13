@@ -16,9 +16,10 @@ SEXP do_random3(int code, SEXP args);
 SEXP do_random4(int code, SEXP args);
 
 /* Utility functions */
-/*   One parameter distributions */
+/*   One parameter distributions , hence associated with dpq1 */
 double mexp(double order, double scale, int give_log);
 double levexp(double limit, double scale, double order, int give_log);
+double mgfexp(double x, double scale, int give_log);
 
 double dinvexp(double x, double scale, int give_log);
 double pinvexp(double q, double scale, int lower_tail, int log_p);
@@ -27,13 +28,17 @@ double rinvexp(double scale);
 double minvexp(double order, double scale, int give_log);
 double levinvexp(double limit, double scale, double order, int give_log);
 
-/*   Two parameter distributions */
+/*   Two parameter distributions , hence associated with dpq2 */
+double mgfunif(double x, double min, double max, int give_log);
+
+double mgfnorm(double x, double mean, double sd, int give_log);
+
 double mbeta(double order, double shape1, double shape2, int give_log);
 double levbeta(double limit, double shape1, double shape2, double order, int give_log);
 
 double mgamma(double order, double shape, double scale, int give_log);
 double levgamma(double limit, double shape, double scale, double order, int give_log);
-double mgfgamma(double t, double shape, double scale, int log_p);
+double mgfgamma(double x, double shape, double scale, int give_log);
 
 double dinvgamma(double x, double scale, double shape, int give_log);
 double pinvgamma(double q, double scale, double shape, int lower_tail, int log_p);
@@ -104,7 +109,7 @@ double levpareto1(double limit, double shape, double scale, double order, int gi
 double mweibull(double order, double scale, double shape, int give_log);
 double levweibull(double limit, double scale, double shape, double order, int give_log);
 
-/*   Three parameter distributions */
+/*   Three parameter distributions , hence associated with dpq3 */
 double dburr(double x, double shape1, double shape2, double scale, int give_log);
 double pburr(double q, double shape1, double shape2, double scale, int lower_tail, int log_p);
 double qburr(double p, double shape1, double shape2, double scale, int lower_tail, int log_p);
@@ -140,7 +145,7 @@ double rtrgamma(double shape1, double shape2, double scale);
 double mtrgamma(double order, double shape1, double shape2, double scale, int give_log);
 double levtrgamma(double limit, double shape1, double shape2, double scale, double order, int give_log);
 
-/*   Four parameter distributions */
+/*   Four parameter distributions , hence associated with dpq4 */
 double dgenbeta(double x, double shape1, double shape2, double shape3, double scale, int give_log);
 double pgenbeta(double q, double shape1, double shape2, double shape3, double scale, int lower_tail, int log_p);
 double qgenbeta(double p, double shape1, double shape2, double shape3, double scale, int lower_tail, int log_p);

@@ -8,8 +8,10 @@ export(## Credibility theory
        aggregateDist, CTE, discretize, discretise, VaR, adjustCoef, ruinProb,
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
-       mexp, levexp,
+       mexp, levexp, mgfexp,
        ## Two parameter distributions
+       mgfunif,
+       mgfnorm,
        mbeta, levbeta,
        mgamma, levgamma, mgfgamma,
        dinvgamma, pinvgamma, qinvgamma, rinvgamma, minvgamma, levinvgamma,
