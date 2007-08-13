@@ -27,7 +27,7 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE, ...)
         diff <- X[k, ] - Y %*% beta[k, ]
         s2 <- s2 + t(diff) %*% solve(diag(weights[k, ])) %*% diff
     }
-    s2 = as.vector( s2 / (I * (T - N)) )
+    s2 <- as.vector( s2 / (I * (T - N)) )
 
     ## Diagonal matrices filled with diagonal elements one are used
     ## as starting values for the Zi matrices. The matrix of each
@@ -62,6 +62,9 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE, ...)
         }
         A <- A / (I - 1)
 
+        ## Matrix A being symmetrical, A is replaced by ( A + t(A) ) / 2.
+        A <-  ( A + t(A) ) / 2
+
         ## Estimation of the Zi matrices.
         for (k in 1:I) Z[, , k] <- A %*% solve( ( A + s2 * solve( t(Y) %*% solve(diag(weights[k, ])) %*% Y ) ) )
 
@@ -78,7 +81,7 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE, ...)
         if (max(abs( (betaTotal - betaTotal2) / betaTotal2 ) ) < TOL) break
     }
 
-    ## Final estimation of A and Z with the final EspB.
+    ## Final estimation of A and Z with the final betaTotal.
     A <- 0
     for (k in 1:I)
     {
@@ -86,6 +89,7 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE, ...)
         A <- A + Z[, , k] %*% diff %*% t(diff)
     }
     A <- A / (I - 1)
+    A <-  ( A + t(A) ) / 2
 
     for (k in 1:I) Z[, , k] <- A %*% solve( ( A + s2 * solve( t(Y) %*% solve(diag(weights[k, ])) %*% Y ) ) )
 
