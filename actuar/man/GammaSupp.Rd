@@ -19,7 +19,8 @@
   \item{rate}{an alternative way to specify the scale.}
   \item{shape, scale}{shape and scale parameters. Must be strictly
     positive.}
-  \item{log}{if you want the log?}
+  \item{x}{a real}
+  \item{log}{logical, if \code{TRUE}, the log of the m.g.f. is returned}
 }
 \details{
   The \eqn{k}th raw moment of the random variable \eqn{X} is

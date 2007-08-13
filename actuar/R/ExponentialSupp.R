@@ -1,6 +1,6 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {m,lev}exp functions to compute raw and limited
+### Definition of the {m,lev,mgf}exp functions to compute raw and limited
 ### moments,  and the moment generating function
 ### for the Exponential distribution (as defined in R).
 ###
