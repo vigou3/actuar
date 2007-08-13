@@ -113,7 +113,7 @@ cm3 <- function(formula, data, ratios, weights, subset,
         }
 
     ## Sanity check if weights and ratios correspond.
-    if(!identical(which(is.na(ratios)), which(is.na(weights))))
+    if (!identical(which(is.na(ratios)), which(is.na(weights))))
         stop("missing values are not in the same positions in weights and in ratios")
 
     ## === NUMBER OF NODES AND SPLITTING FACTORS ===
@@ -240,20 +240,6 @@ cm3 <- function(formula, data, ratios, weights, subset,
     ##
     ## Only credibility factors are not computed for the portfolio
     ## level, hence this list is one shorter than the others.
-    ##
-    ## At the entity level: total weight is the sum of the natural
-    ## weights, weighted average uses the natural weights and between
-    ## variance is s^2.
-    ##
-    ## All upper levels: total weight is the sum of the credibility
-    ## factors of the level below, weighted average uses credibility
-    ## factors, between variance estimated recursively and credibility
-    ## factor use total weight of the level, between variance of the
-    ## level below (hence the within variance) and between variance of
-    ## the current level.
-    ##
-    ## The unbiased variance estimators are evaluated first as they will
-    ## be used as starting values for the iterative part below.
     tweights <- vector("list", nlevels1p)       # total level weights
     wmeans <- vector("list", nlevels1p)         # weighted averages
     bu <- c(rep(0, nlevels), s2)                # unbiased variance estimators
@@ -262,36 +248,59 @@ cm3 <- function(formula, data, ratios, weights, subset,
     ## Values already computed at the entity level.
     tweights[[nlevels1p]] <- as.vector(weights.s); # rm(weights.s)
     wmeans[[nlevels1p]] <- as.vector(ratios.w);    # rm(ratios.w)
-    
-    ## Unbiased estimation of the structure parameters.
+
+    ## The unbiased variance estimators are evaluated first as they will
+    ## be used as starting values for the iterative part below.
+    ##
+    ## At the entity level: node weight is given by the natural
+    ## weight, weighted averages use the natural weights.
+    ##
+    ## Level above the entity: node weight is the sum of the natural
+    ## weights at the level below, weighted averages use the natural
+    ## weights.
+    ##
+    ## All upper levels: node weight is the sum of the credibility
+    ## factors at the level below, weighted averages use credibility
+    ## factors from previous level.
     for (i in nlevels:1)
     {
+        ## Total weight of the level as per the rule above.
         tweights[[i]] <- as.vector(tapply(tweights[[i + 1]], fnodes[[i]], sum))
+
+        ## Related auxiliary sum to be used below.
         sum2 <- as.vector(tapply(tweights[[i + 1]]^2, fnodes[[i]], sum))
-        
-        ## Calculation of the weighted averages. If the last level estimator
-        ## is null (zero) then the new weighted average will simply be the
-        ## unweighted average of the last level weighted averages.
-        if (bu[i + 1]) wmeans[[i]] <- as.vector(tapply(tweights[[i + 1]] * wmeans[[i + 1]],
-                                                       fnodes[[i]],
-                                                       sum) / tweights[[i]])
-        else wmeans[[i]] <- as.vector(tapply(wmeans[[i + 1]], fnodes[[i]], mean))
 
-        ## Calculation of the unbiased variance for one particular sector or
-        ## unit of the level. The expression bu[bu != 0][1] is used to
-        ## express the highest non-zero estimator calculated so far. If one
-        ## estimator is equal to zero, the preceding estimator will be used
-        ## instead of that one for the following level, and so on.
-        B <- tweights[[i]] * (as.vector(tapply(tweights[[i + 1]] * (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2,
+        ## Calculation of the weighted averages. If the previous level
+        ## between variance estimate is zero then the level average is
+        ## simply the arithmetic average of the previous level's
+        ## weighted averages.
+        wmeans[[i]] <-
+            if (bu[i + 1])
+                as.vector(tapply(tweights[[i + 1]] * wmeans[[i + 1]],
+                                 fnodes[[i]],
+                                 sum) / tweights[[i]])
+            else
+                as.vector(tapply(wmeans[[i + 1]], fnodes[[i]], mean))
+
+        ## Calculation of the per node variance estimate. The estimate
+        ## is unbiased provided a multiple (well, not necessarily
+        ## integer) of the latest non-zero variance estimate is
+        ## subtracted from the sum of squares. This is what the
+        ## expression 'bu[bu != 0][1]' is used for, below.
+        bui <- tweights[[i]] * (as.vector(tapply(tweights[[i + 1]] *
+                                               (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2,
                                                fnodes[[i]],
-                                               sum)) - (nnodes[[i]] - 1) * bu[bu != 0][1]) / (tweights[[i]]^2 - sum2)
+                                               sum)) -
+                              (nnodes[[i]] - 1) * bu[bu != 0][1]) /
+                                  (tweights[[i]]^2 - sum2)
 
-        ## Average of the estimators of all units or sectors, which will
-        ## express the true variance estimator for that level.
-        bu[i] <- mean(pmax(B, 0))
-        
-        ## If the estimator is different from zero, credibility factors will
-        ## be used for the next level. Otherwise, it will be the natural weights.
+        ## The final estimate is the average of all the per node estimates.
+        bu[i] <- mean(pmax(bui, 0), na.rm = TRUE)
+
+        ## For the calculation of the next variance estimator, the
+        ## total weights for the current level are replaced by the sum
+        ## of the credibility factors -- provided the variance
+        ## estimate is non-zero.
         if (bu[i])
         {
             cred[[i]] <- 1/(1 + bu[i + 1]/(bu[i] * tweights[[i + 1]]))
@@ -300,17 +309,29 @@ cm3 <- function(formula, data, ratios, weights, subset,
     }
 
     ## Iterative estimation of the structure parameters.
+    ##
+    ## At the entity level: total weight is the sum of the natural
+    ## weights, weighted averages use the natural weights and between
+    ## variance is s^2.
+    ##
+    ## All upper levels: total weight is the sum of the credibility
+    ## factors of the level below, weighted averages use credibility
+    ## factors, between variance estimated recursively and credibility
+    ## factor use total weight of the level, between variance of the
+    ## level below (hence the within variance) and between variance of
+    ## the current level.
     heterogeneity <- match.arg(heterogeneity)
-    
+
     if (heterogeneity == "iterative")
     {
-        bi <- as.vector(bu)     # unbiased estimators are used as starting values
+        bi <- as.vector(bu)             # starting values
         .External("cm", cred, tweights, wmeans, fnodes, denoms, bi, TOL, echo)
-        
-        ## Final credibility factors and weighted averages (computed with
-        ## the latest structure parameters). If a variance estimator is equal
-        ## to (or tends toward) zero then we estimate the means with the
-        ## total level weights instead of the credibility factors.
+
+        ## Final credibility factors and weighted averages (computed
+        ## with the latest structure parameters). If a variance
+        ## estimator is equal to (or tends toward) zero then we
+        ## estimate the means with the total level weights instead of
+        ## the credibility factors.
         for (i in nlevels:1)
         {
             cred[[i]] <- 1/(1 + bi[i + 1]/(bi[i] * tweights[[i + 1]]))
@@ -318,26 +339,26 @@ cm3 <- function(formula, data, ratios, weights, subset,
             ## If the variance estimator is null (zero), natural weights
             ## will be used instead of the credibility factors.
             if (bi[i]) weights <- expression({cred[[i]]}) else weights <- expression({tweights[[i + 1]]})
-            
+
             tweights[[i]] <- as.vector(tapply(eval(weights), fnodes[[i]], sum))
-            
+
             wmeans[[i]] <- ifelse(tweights[[i]] > 0,
                                   as.vector(tapply(eval(weights) * wmeans[[i + 1]], fnodes[[i]], sum) / tweights[[i]]),
                                   0)
-            
+
             if (bi[i] < TOL^2) bi[i] <- 0
         }
     }
     else
         bi <- NULL
-    
+
     ## Transfer level names to lists
-    names(tweights) <- names(wmeans) <- names(bu) <- 
+    names(tweights) <- names(wmeans) <- names(bu) <-
         c("portfolio", level.names)
     if (!is.null(bi)) names(bi) <- names(bu)
     names(cred) <- names(nnodes) <- names(fnodes) <-
         level.names
-    
+
     ## Results
     structure(list(means = wmeans,
                    weights = tweights,
@@ -370,7 +391,7 @@ print.cm <- function(x, ...)
     }
     cat("  Unbiased Within", level.names[nlevels], "variance:",
         x$unbiased[nlevels + 1],"\n", fill = TRUE)
-    
+
     if (!is.null(x$iterative))
     {
         for (i in seq.int(nlevels))
@@ -387,7 +408,7 @@ print.cm <- function(x, ...)
             x$iterative[nlevels + 1],"\n", fill = TRUE)
     }
 }
-    
+
 predict.cm <- function(object, levels = NULL, ...)
 {
     ## The credibility premium of a node at one level is equal to
