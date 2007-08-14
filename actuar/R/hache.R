@@ -2,7 +2,7 @@
 ###
 ### Credibility in the Regression Case
 ###
-### Regression models...
+### The Hachemeister Regression Model (1975).
 ###
 ### AUTHORS: Tommy Ouellet, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
@@ -25,7 +25,7 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE, ...)
     for (k in 1:I)
     {
         diff <- X[k, ] - Y %*% beta[k, ]
-        s2 <- s2 + t(diff) %*% solve(diag(weights[k, ])) %*% diff
+        s2 <- s2 + t(diff) %*% diag(weights[k, ]) %*% diff
     }
     s2 <- as.vector( s2 / (I * (T - N)) )
 
@@ -66,7 +66,7 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE, ...)
         A <-  ( A + t(A) ) / 2
 
         ## Estimation of the Zi matrices.
-        for (k in 1:I) Z[, , k] <- A %*% solve( ( A + s2 * solve( t(Y) %*% solve(diag(weights[k, ])) %*% Y ) ) )
+        for (k in 1:I) Z[, , k] <- A %*% solve( ( A + s2 * solve( t(Y) %*% diag(weights[k, ]) %*% Y ) ) )
 
         ## New estimation of betaTotal.
         t1 = t2 = 0
@@ -91,7 +91,7 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE, ...)
     A <- A / (I - 1)
     A <-  ( A + t(A) ) / 2
 
-    for (k in 1:I) Z[, , k] <- A %*% solve( ( A + s2 * solve( t(Y) %*% solve(diag(weights[k, ])) %*% Y ) ) )
+    for (k in 1:I) Z[, , k] <- A %*% solve( ( A + s2 * solve( t(Y) %*% diag(weights[k, ]) %*% Y ) ) )
 
     ## Credibility-adjusted estimator for beta.
     betaAdj <- matrix(0, nrow = I, ncol = N)
