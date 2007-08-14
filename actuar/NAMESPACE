@@ -3,7 +3,7 @@ useDynLib(actuar, .registration = TRUE)
 
 ### Exports
 export(## Credibility theory
-       bstraub, cm, ratios, severity, simpf, unroll,
+       bstraub, cm, hache, ratios, severity, simpf, unroll,
        ## Risk theory
        aggregateDist, CTE, discretize, discretise, VaR, adjustCoef, ruinProb,
        ## One parameter distributions
@@ -78,6 +78,7 @@ S3method(print, aggregateDist)
 S3method(print, bstraub)
 S3method(print, elev)
 S3method(print, cm)
+S3method(print, hache)
 S3method(print, mde)
 S3method(print, ogive)
 S3method(print, simpf)

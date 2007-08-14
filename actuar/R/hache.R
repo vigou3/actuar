@@ -6,7 +6,7 @@
 ###
 ### AUTHORS: Tommy Ouellet, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE, ...)
+hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE)
 {
     Call <- match.call()
 
@@ -112,3 +112,22 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE, ...)
                    call = Call),
               class = "hache")
 }
+
+print.hache <- function(x, ...)
+{
+    I <- nrow(x$beta)
+    res <- matrix(NA, I + 1, 4)
+    res[, 1:2] <- rbind(x$beta, t(x$betaTotal))
+    res[, 3:4] <- rbind(x$betaAdj, NA)
+    colnames(res) <- c("Intercept", "Slope", "Adj. intercept", "Adj. slope")
+    rownames(res) <- c(1:I, "Total")
+
+    cat("\nCall: ", deparse(x$call), "\n\n")
+
+    print(res)
+
+    cat("\nWithin contract variance: ", x$s2, "\n\n")
+    cat("Between contract variance:\n")
+    print(x$a)
+}
+    
