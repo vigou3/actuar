@@ -69,6 +69,8 @@ FUNTAB fun_tab[] = {
 	{"mgfgamma",	do_dpq2,	43},
 	{"mgfnorm",		do_dpq2,	44},
 	{"mgfunif",		do_dpq2,	45},
+	{"mgfinvgamma",	do_dpq2,	46},
+	{"mnorm",		do_dpq2,	47},
     /* Three parameter distributions */
     {"dburr",   	do_dpq3,	 1},
     {"pburr",		do_dpq3,	 2},

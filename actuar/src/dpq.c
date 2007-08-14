@@ -339,6 +339,8 @@ SEXP do_dpq2(int code, SEXP args)
 	case 43:  return DPQ2_1(args, mgfgamma);
 	case 44:  return DPQ2_1(args, mgfnorm);
 	case 45:  return DPQ2_1(args, mgfunif);
+	case 46:  return DPQ2_1(args, mgfinvgamma);
+	case 47:  return DPQ2_1(args, mnorm);
     default:
 	error(_("internal error in do_dpq2"));
     }

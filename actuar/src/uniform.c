@@ -12,18 +12,18 @@
 #include "dpq.h"
 
 
-double mgfunif(double x, double min, double max, int give_log)
+double mgfunif(double t, double min, double max, int give_log)
 {
 	/*check arguments */
 	if (!R_FINITE(min) || !R_FINITE(max) || min > max)
 		return R_NaN;
 	  
 	
-	if(x == 0.0)
+	if(t == 0.0)
 		return R_D_exp(0.0);	
 	
-	double tmp1 = exp(x*max)-exp(x*min);
-	double tmp2 = x*(max-min);
+	double tmp1 = exp(t*max)-exp(t*min);
+	double tmp2 = t*(max-min);
 	
 	return	R_D_exp( log(tmp1) - log(tmp2) ) ;
 }

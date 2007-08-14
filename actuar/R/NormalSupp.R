@@ -11,6 +11,8 @@
 ###
 ### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
+mnorm <- function(order, mean = 0, sd = 1)
+    .External("do_dpq", "mnorm", order, mean, sd, FALSE)
 
-mgfnorm <- function(x, mean = 0, sd = 1, log = FALSE)
-    .External("do_dpq", "mgfnorm", x, mean, sd, log)
+mgfnorm <- function(t, mean = 0, sd = 1, log = FALSE)
+    .External("do_dpq", "mgfnorm", t, mean, sd, log)

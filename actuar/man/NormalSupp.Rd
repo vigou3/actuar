@@ -7,19 +7,19 @@
   parameters \code{min} and \code{max}.
 }
 \usage{
-  mgfnorm(x, mean = 0, sd = 1, log = FALSE)
+  mgfnorm(t, mean = 0, sd = 1, log = FALSE)
 }
 \arguments{
   \item{mean}{mean of the Normal distribution}
   \item{sd}{standard deviation of the Normal distribution}
-  \item{x}{a real}
+  \item{t}{a real}
   \item{log}{logical, if \code{TRUE}, the log of the m.g.f. is returned}
 }
 \details{
-  The moment generating function is given by \eqn{E[e^{xX}]}.
+  The moment generating function is given by \eqn{E[e^{tX}]}.
 }
 \value{
-  \code{mgfnorm} gives the moment generating function in \code{x}
+  \code{mgfnorm} gives the moment generating function in \code{t}
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{

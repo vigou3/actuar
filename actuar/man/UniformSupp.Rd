@@ -7,19 +7,19 @@
   parameters \code{min} and \code{max}.
 }
 \usage{
-  mgfunif(x, min = 0, max = 1, log = FALSE)
+  mgfunif(t, min = 0, max = 1, log = FALSE)
 }
 \arguments{
   \item{min}{first parameter of the uniform distribution}
   \item{max}{second parameter of the uniform distribution}
-  \item{x}{a real}
+  \item{t}{a real}
   \item{log}{logical, if \code{TRUE}, the log of the m.g.f. is returned}
 }
 \details{
-  The moment generating function is given by \eqn{E[e^{xX}]}.
+  The moment generating function is given by \eqn{E[e^{tX}]}.
 }
 \value{
-  \code{mgfunif} gives the moment generating function in \code{x}
+  \code{mgfunif} gives the moment generating function in \code{t}
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{

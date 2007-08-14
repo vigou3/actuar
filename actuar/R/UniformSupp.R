@@ -12,5 +12,5 @@
 ### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 
-mgfunif <- function(x, min = 0, max = 1, log = FALSE)
-    .External("do_dpq", "mgfunif", x, min, max, log)
+mgfunif <- function(t, min = 0, max = 1, log = FALSE)
+    .External("do_dpq", "mgfunif", t, min, max, log)

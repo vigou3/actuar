@@ -18,5 +18,5 @@ mexp <- function(order, rate = 1)
 levexp <- function(limit, rate = 1, order = 1)
     .External("do_dpq", "levexp", limit, 1/rate, order, FALSE)
 
-mgfexp <- function(x, rate = 1, log = FALSE)
-    .External("do_dpq", "mgfexp", x, 1/rate, log)
+mgfexp <- function(t, rate = 1, log = FALSE)
+    .External("do_dpq", "mgfexp", t, 1/rate, log)

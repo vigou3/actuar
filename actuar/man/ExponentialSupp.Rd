@@ -11,26 +11,26 @@
 \usage{
   mexp(order, rate = 1)
   levexp(limit, rate = 1, order = 1)
-  mgfexp(x, rate = 1, log = FALSE)
+  mgfexp(t, rate = 1, log = FALSE)
 }
 \arguments{
   \item{order}{order of the moment.}
   \item{limit}{limit of the loss variable.}
   \item{rate}{vector of rates.}
-  \item{x}{a real}
+  \item{t}{a real}
   \item{log}{logical, if \code{TRUE}, the log of the m.g.f. is returned}
 }
 \details{
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}.
-  The moment generating function is given by \eqn{E[e^{xX}]}.
+  The moment generating function is given by \eqn{E[e^{tX}]}.
 }
 \value{
   \code{mexp} gives the \eqn{k}th raw moment and
   \code{levexp} gives the \eqn{k}th moment of the limited loss
   variable.
-  \code{mgfexp} gives the moment generating function in \code{x}
+  \code{mgfexp} gives the moment generating function in \code{t}
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{

@@ -15,11 +15,13 @@ SEXP do_random2(int code, SEXP args);
 SEXP do_random3(int code, SEXP args);
 SEXP do_random4(int code, SEXP args);
 
+SEXP dgeMatrix_exp(SEXP x);
+
 /* Utility functions */
 /*   One parameter distributions , hence associated with dpq1 */
 double mexp(double order, double scale, int give_log);
 double levexp(double limit, double scale, double order, int give_log);
-double mgfexp(double x, double scale, int give_log);
+double mgfexp(double t, double scale, int give_log);
 
 double dinvexp(double x, double scale, int give_log);
 double pinvexp(double q, double scale, int lower_tail, int log_p);
@@ -31,14 +33,15 @@ double levinvexp(double limit, double scale, double order, int give_log);
 /*   Two parameter distributions , hence associated with dpq2 */
 double mgfunif(double x, double min, double max, int give_log);
 
-double mgfnorm(double x, double mean, double sd, int give_log);
+double mnorm(int order, double mean, double sd, int give_log);
+double mgfnorm(double t, double mean, double sd, int give_log);
 
 double mbeta(double order, double shape1, double shape2, int give_log);
 double levbeta(double limit, double shape1, double shape2, double order, int give_log);
 
 double mgamma(double order, double shape, double scale, int give_log);
 double levgamma(double limit, double shape, double scale, double order, int give_log);
-double mgfgamma(double x, double shape, double scale, int give_log);
+double mgfgamma(double t, double shape, double scale, int give_log);
 
 double dinvgamma(double x, double scale, double shape, int give_log);
 double pinvgamma(double q, double scale, double shape, int lower_tail, int log_p);
@@ -46,6 +49,7 @@ double qinvgamma(double p, double scale, double shape, int lower_tail, int log_p
 double rinvgamma(double scale, double shape);
 double minvgamma(double order, double scale, double shape, int give_log);
 double levinvgamma(double limit, double scale, double shape, double order, int give_log);
+double mgfinvgamma(double t, double shape, double scale, int give_log);
 
 double dinvparalogis(double x, double shape, double scale, int give_log);
 double pinvparalogis(double q, double shape, double scale, int lower_tail, int log_p);

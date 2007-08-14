@@ -6,15 +6,16 @@ export(## Credibility theory
        bstraub, cm, hache, ratios, severity, simpf, unroll,
        ## Risk theory
        aggregateDist, CTE, discretize, discretise, VaR, adjustCoef, ruinProb,
+       calcMatExp, calcMatrixExp,
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        mexp, levexp, mgfexp,
        ## Two parameter distributions
        mgfunif,
-       mgfnorm,
+       mnorm, mgfnorm,
        mbeta, levbeta,
        mgamma, levgamma, mgfgamma,
-       dinvgamma, pinvgamma, qinvgamma, rinvgamma, minvgamma, levinvgamma,
+       dinvgamma, pinvgamma, qinvgamma, rinvgamma, minvgamma, levinvgamma, mgfinvgamma,
        dinvparalogis, pinvparalogis, qinvparalogis, rinvparalogis, minvparalogis, levinvparalogis,
        dinvpareto, pinvpareto, qinvpareto, rinvpareto, minvpareto, levinvpareto,
        dinvweibull, pinvweibull, qinvweibull, rinvweibull, minvweibull, levinvweibull,
