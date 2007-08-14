@@ -264,6 +264,10 @@ cm3 <- function(formula, data, ratios, weights, subset,
     ## factors from previous level.
     for (i in nlevels:1)
     {
+        ## Nodes that will be used below.
+        nodes <- tapply(weights.s, fnodes[[i]], function(x) sum(x > 0))
+        weights.s <- tapply(weights.s, fnodes[[i]], sum)
+
         ## Total weight of the level as per the rule above.
         tweights[[i]] <- as.vector(tapply(tweights[[i + 1]], fnodes[[i]], sum))
 
@@ -276,23 +280,26 @@ cm3 <- function(formula, data, ratios, weights, subset,
         ## weighted averages.
         wmeans[[i]] <-
             if (bu[i + 1])
-                as.vector(tapply(tweights[[i + 1]] * wmeans[[i + 1]],
-                                 fnodes[[i]],
-                                 sum) / tweights[[i]])
+                ifelse(tweights[[i]] > 0,
+                       as.vector(tapply(tweights[[i + 1]] * wmeans[[i + 1]],
+                                        fnodes[[i]],
+                                        sum) / tweights[[i]]),
+                       0)
             else
                 as.vector(tapply(wmeans[[i + 1]], fnodes[[i]], mean))
-
         ## Calculation of the per node variance estimate. The estimate
         ## is unbiased provided a multiple (well, not necessarily
         ## integer) of the latest non-zero variance estimate is
         ## subtracted from the sum of squares. This is what the
         ## expression 'bu[bu != 0][1]' is used for, below.
-        bui <- tweights[[i]] * (as.vector(tapply(tweights[[i + 1]] *
-                                               (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2,
-                                               fnodes[[i]],
-                                               sum)) -
-                              (nnodes[[i]] - 1) * bu[bu != 0][1]) /
-                                  (tweights[[i]]^2 - sum2)
+        bui <- ifelse(tweights[[i]]^2 - sum2 != 0,
+                      tweights[[i]] * (as.vector(tapply(tweights[[i + 1]] *
+                                                        (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2,
+                                                        fnodes[[i]],
+                                                        sum)) -
+                                       (nodes - 1) * bu[bu != 0][1]) /
+                      (tweights[[i]]^2 - sum2),
+                      0)
 
         ## The final estimate is the average of all the per node estimates.
         bu[i] <- mean(pmax(bui, 0), na.rm = TRUE)
@@ -326,31 +333,32 @@ cm3 <- function(formula, data, ratios, weights, subset,
     {
         bi <- as.vector(bu)             # starting values
         .External("cm", cred, tweights, wmeans, fnodes, denoms, bi, TOL, echo)
-
-        ## Final credibility factors and weighted averages (computed
-        ## with the latest structure parameters). If a variance
-        ## estimator is equal to (or tends toward) zero then we
-        ## estimate the means with the total level weights instead of
-        ## the credibility factors.
-        for (i in nlevels:1)
-        {
-            cred[[i]] <- 1/(1 + bi[i + 1]/(bi[i] * tweights[[i + 1]]))
-
-            ## If the variance estimator is null (zero), natural weights
-            ## will be used instead of the credibility factors.
-            if (bi[i]) weights <- expression({cred[[i]]}) else weights <- expression({tweights[[i + 1]]})
-
-            tweights[[i]] <- as.vector(tapply(eval(weights), fnodes[[i]], sum))
-
-            wmeans[[i]] <- ifelse(tweights[[i]] > 0,
-                                  as.vector(tapply(eval(weights) * wmeans[[i + 1]], fnodes[[i]], sum) / tweights[[i]]),
-                                  0)
-
-            if (bi[i] < TOL^2) bi[i] <- 0
-        }
     }
     else
         bi <- NULL
+
+    ## Final credibility factors and weighted averages (computed
+    ## with the latest structure parameters). If a variance
+    ## estimator is equal to (or tends toward) zero then we
+    ## estimate the means with the total level weights instead of
+    ## the credibility factors.
+    if (is.null(bi)) b <- bu else b <- bi
+    for (i in nlevels:1)
+    {
+        cred[[i]] <- 1/(1 + b[i + 1]/(b[i] * tweights[[i + 1]]))
+        
+        ## If the variance estimator is null (zero), natural weights
+        ## will be used instead of the credibility factors.
+        if (b[i]) weights <- expression({cred[[i]]}) else weights <- expression({tweights[[i + 1]]})
+        
+        tweights[[i]] <- as.vector(tapply(eval(weights), fnodes[[i]], sum))
+        
+        wmeans[[i]] <- ifelse(tweights[[i]] > 0,
+                              as.vector(tapply(eval(weights) * wmeans[[i + 1]], fnodes[[i]], sum) / tweights[[i]]),
+                              0)
+        
+        if (b[i] < TOL^2) b[i] <- 0
+    }
 
     ## Transfer level names to lists
     names(tweights) <- names(wmeans) <- names(bu) <-
