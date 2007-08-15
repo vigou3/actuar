@@ -1,6 +1,9 @@
 ### C code
 useDynLib(actuar, .registration = TRUE)
 
+### import code
+ImportFrom(Matrix, expm)
+
 ### Exports
 export(## Credibility theory
        bstraub, cm, hache, ratios, severity, simpf, unroll,
@@ -15,6 +18,7 @@ export(## Credibility theory
        mnorm, mgfnorm,
        mbeta, levbeta,
        mgamma, levgamma, mgfgamma,
+       mchisq, levchisq, mgfchisq,
        dinvgamma, pinvgamma, qinvgamma, rinvgamma, minvgamma, levinvgamma, mgfinvgamma,
        dinvparalogis, pinvparalogis, qinvparalogis, rinvparalogis, minvparalogis, levinvparalogis,
        dinvpareto, pinvpareto, qinvpareto, rinvpareto, minvpareto, levinvpareto,
@@ -28,6 +32,7 @@ export(## Credibility theory
        dpareto2, ppareto2, qpareto2, rpareto2, mpareto2, levpareto2, # aliases
        dpareto1, ppareto1, qpareto1, rpareto1, mpareto1, levpareto1,
        mweibull, levweibull,
+       minvGauss, levinvGauss, mgfinvGauss, #notation from SuppDists package
        ## Three parameter distributions
        dburr, pburr, qburr, rburr, mburr, levburr,
        dgenpareto, pgenpareto, qgenpareto, rgenpareto, mgenpareto, levgenpareto,

@@ -341,6 +341,10 @@ SEXP do_dpq2(int code, SEXP args)
 	case 45:  return DPQ2_1(args, mgfunif);
 	case 46:  return DPQ2_1(args, mgfinvgamma);
 	case 47:  return DPQ2_1(args, mnorm);
+	case 48:  return DPQ2_1(args, mchisq);
+	case 49:  return DPQ2_1(args, mgfchisq);
+	case 50:  return DPQ2_1(args, minvGauss); //notation from SuppDists package
+	case 51:  return DPQ2_1(args, mgfinvGauss);
     default:
 	error(_("internal error in do_dpq2"));
     }
@@ -518,6 +522,8 @@ SEXP do_dpq3(int code, SEXP args)
     case 31:  return DPQ3_1(args, levpareto1);
     case 32:  return DPQ3_1(args, levweibull);
     case 33:  return DPQ3_1(args, levbeta);
+	case 34:  return DPQ3_1(args, levchisq);
+	case 35:  return DPQ3_1(args, levinvGauss); //notation from SuppDists package
     default:
 	error(_("internal error in do_dpq3"));
     }

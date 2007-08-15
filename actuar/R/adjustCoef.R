@@ -11,198 +11,75 @@
 ### E[X-cW]<0, R does not exist, the function returns 0,
 ### otherwise, it returns R>0.
 ###
-### AUTHORS: Christophe Dutang,
-### Vincent Goulet <vincent.goulet@act.ulaval.ca>,
+### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
+###
 
-adjustCoef <- function(model="CramerLundberg",marginal="exp",param,premRate,toplot=FALSE)
+adjustCoef <- function(mgfClaim=NULL, mgfWaitTime=NULL, premRate=NULL, upper, h=NULL, toplot=FALSE)
 {
-    #the user specifies directly the 'h' function
-    if(is.function(model))
-    {
-        RBound <- param$RBound
-        h <- model
-        findRoot <- TRUE
-    }
-    else
-    {
-    #creation of the 'h' function
-        if(model == "CramerLundberg")
-        {
-            findRoot <- FALSE
-        #exponential claim sizes E(beta)
-            if(marginal == "exp")
-            {
-                beta <- param$beta
-                lambda <- param$lambda
-                return( beta-lambda/premRate )
-            }
-        #gamma claim sizes G(alpha,beta)
-            else if(marginal == "gamma")
-            {
-                lambda <- param$lambda
-                alpha <- param$alpha
-                beta <- param$beta
-                
-                if(length(beta) != 1) return()
-                
-                h<-function(r) (beta/(beta-r))^alpha*lambda/(lambda+r*premRate)
-                RBound <- beta
-                findRoot <- TRUE
-            }
-        #claim sizes are a mixture of exponential MixExp(weight,beta)
-            else if(marginal == "mixexp")
-            {
-                lambda <- param$lambda
-                weight <- param$weight
-                beta <- param$beta
-                
-                if(length(beta) != length(weight)) return()
-                
-                h<-function(r)
-                    sum(weight*beta/(beta-r)) * lambda/(lambda+r*premRate)
-                
-                RBound <- min(beta)
-                findRoot <- TRUE            
-            }
-        #claim sizes are a mixture of gamma MixGam(weight,alpha,beta)
-            else if(marginal == "mixgamma")
-            {
-                lambda <- param$lambda
-                weight <- param$weight
-                beta <- param$beta
-                alpha <- param$alpha
-                
-                if(length(beta) != length(weight) || length(beta) != length(alpha)) return()
+    if(is.null(mgfClaim) && is.null(h))
+        stop("missing argument: 'adjustCoef' needs either 'mgfClaim' or 'h' arguments")
 
-                h<-function(r)
-                    sum( weight*(beta/(beta-r))^alpha ) * lambda/(lambda+r*premRate)
-                
-                RBound <- min(beta)
-                findRoot <- TRUE
-            }
-        #otherwise phase type claim size PH(pi,T,m)
-            else if(marginal == "phasetype")
-            {
-                lambda <- param$lambda
-                probpi <- param$pi
-                matT <- param$T
-                m <- param$m
+    if(!is.null(mgfClaim) && !is.null(h))
+        stop("too many arguments: 'adjustCoef' needs either 'mgfClaim' or 'h' arguments")
 
-                ones <- rep(1,m)       
-                tzero <- -matT %*% ones
-                idM <- diag(m)
-                                
-                mgfClaimSize<-function(s)                          
-                    probpi %*% solve(-s*idM - matT,idM) %*% tzero
-                
+    if(is.null(upper))
+        stop("missing argument 'upper', the upper bound of the m.g.f. of claim size distribution")
 
-                h<-function(r)
-                    mgfClaimSize(r) * lambda/(lambda+r*premRate)
-                
-                RBound <- min(-diag(matT))
-                findRoot <- TRUE
-                
-            }
-        }
-    #creation of the 'h' function
-        else if(model == "SparreAndersen")
-        {
-        #exponential claim sizes E(beta)
-        #gamma inter-occurence times G(eta,lambda)
-            if(marginal == "expgamma")
-            {
-                beta <- param$beta
-                lambda <- param$lambda
-                eta <- param$eta
+    if(!is.function(mgfClaim) && !is.null(mgfClaim) )
+        stop("wrong argument 'mgfClaim', which must be a function")
 
-                h <- function(r)
-                    beta/(beta-r)*(lambda/(lambda+r*premRate))^eta
-                
-                findRoot <- TRUE
-                RBound <- beta
-            }
-        #gamma claim sizes G(eta,beta)
-        #gamma inter-occurence times G(eta,lambda)
-            else if(marginal == "gammagamma")
-            {
-                beta <- param$beta
-                alpha <- param$alpha
-                lambda <- param$lambda
-                eta <- param$eta
-                            
-                h <- function(r)
-                    (beta/(beta-r))^alpha*(lambda/(lambda+r*premRate))^eta
-            
-                findRoot <- TRUE
-                RBound <- beta
-            }
-        #phase type claim sizes PH(pi,T,m)
-        #phase type inter-occurence times PH(nu,S,n)
-            else if (marginal == "phasetype")
-            {
-                nu <- param$nu
-                matS <- param$S
-                n <- param$n
-                
-                probpi <- param$pi
-                matT <- param$T
-                m <- param$m
-                
-                onesM <- rep(1,m)       
-                tzero <- -matT %*% onesM
-                idM <- diag(m)
-                
-                onesN <- rep(1,n)       
-                szero <- -matS %*% onesN
-                idN <- diag(n)
-                
-                mgfClaimSize<-function(s)             
-                    probpi %*% solve(-s*idM - matT,idM) %*% tzero
-                
-                mgfInterOccurTime<-function(s)           
-                    nu %*% solve(-s*idN - matS,idN) %*% szero
-                
-                h<-function(r)
-                    mgfClaimSize(r) *mgfInterOccurTime(-r*premRate)
-                                
-                RBound <- min(-diag(matT))
-                findRoot <- TRUE
-            }
+    if(!is.function(mgfWaitTime) && !is.null(mgfWaitTime))
+        stop("wrong argument 'mgfWaitTime', which must be a function")
+              
+    if(!is.function(h) && !is.null(h))
+        stop("wrong argument 'h', which must be a function")
 
-        
-        }
-        else return()
-    }
+    if(!is.numeric(upper))
+        stop("wrong argument 'h', which must be a 'numeric'")
+
+    if(is.null(premRate) && !is.null(mgfClaim))
+        stop("missing argument 'premRate', the premium rate")
+   
     
-    
+    if(!is.null(mgfClaim))
+    {
+        if(!is.null(mgfWaitTime))
+            h <- function(r) mgfClaim(r)*mgfWaitTime(-r*premRate)
+        else
+            h <- function(r) mgfClaim(r)*ratePoissonProcess/(ratePoissonProcess+r*premRate)
+    }
+           
 
     #compute the adjustment coefficient the unique positive root of h(r)=1
     #with h(r) = M_X(r) * M_W(-r*premRate) in the case of independence
     #where M_ stands for the moment generating function
-    if(findRoot)
-    {
-        eqLundberg <-function(r)
-            (h(r) - 1)^2
 
-        interval <- c( 0, .9*RBound )
-        
-        res <- optimize( eqLundberg ,interval)
-        
-
-        if(toplot)
+    eqLundberg <-function(r)
         {
-            if(eqLundberg(.3*RBound) >1)
-                x<-seq(0,.3*RBound,length.out=100)
-            else
-                x<-seq(0,.6*RBound,length.out=100)
-            
-            plot(x,sapply(x,h),type="l",col="blue",main="h",xlab="r",ylab="h(r)")
-            lines(x,x*0+1,type="l")
+            cat("h ",h(r),"r ",r,"\n")
+            ( h(r) - 1 )^2
         }
+
+    interval <- c( 0, .9*upper )
+
+    #minimisation through 'optimize'
+    res <- optimize( eqLundberg, interval, tol = min(.Machine$double.eps^0.25, 10^-6))
+
+    print(res)
+
+    print(eqLundberg(.3*upper))
+    
+    if(toplot)
+    {
+        if(eqLundberg(.3*upper) >1)
+            x<-seq(0,.3*upper,length.out=100)
+        else
+            x<-seq(0,.6*upper,length.out=100)
         
-        return(res$minimum)
+        plot(x,sapply(x,h),type="l",col="blue",main="h",xlab="r",ylab="h(r)")
+        lines(x,x*0+1,type="l")
     }
-    else
-        return()
+        
+    return(res$minimum)
 }
 

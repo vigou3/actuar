@@ -71,6 +71,10 @@ FUNTAB fun_tab[] = {
 	{"mgfunif",		do_dpq2,	45},
 	{"mgfinvgamma",	do_dpq2,	46},
 	{"mnorm",		do_dpq2,	47},
+	{"mchisq",		do_dpq2,	48},
+	{"mgfchisq",	do_dpq2,	49},
+	{"minvGauss",		do_dpq2,		50}, //notation from SuppDists package
+	{"mgfinvGauss",		do_dpq2,		51},
     /* Three parameter distributions */
     {"dburr",   	do_dpq3,	 1},
     {"pburr",		do_dpq3,	 2},
@@ -105,6 +109,7 @@ FUNTAB fun_tab[] = {
     {"levpareto1",	do_dpq3,	31},
     {"levweibull",	do_dpq3,	32},
     {"levbeta",	        do_dpq3,	33},
+	{"levchisq",		do_dpq3,	34},
     /* Four parameter distributions */
     {"dtrbeta",		do_dpq4,	1},
     {"ptrbeta",		do_dpq4,	2},

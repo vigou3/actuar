@@ -43,6 +43,10 @@ double mgamma(double order, double shape, double scale, int give_log);
 double levgamma(double limit, double shape, double scale, double order, int give_log);
 double mgfgamma(double t, double shape, double scale, int give_log);
 
+double mchisq(double order, double df, double ncp, int give_log);
+double levchisq(double limit, double df, double ncp, double order, int give_log);
+double mgfchisq(double t, double df, double ncp, int give_log);
+
 double dinvgamma(double x, double scale, double shape, int give_log);
 double pinvgamma(double q, double scale, double shape, int lower_tail, int log_p);
 double qinvgamma(double p, double scale, double shape, int lower_tail, int log_p);
@@ -112,6 +116,10 @@ double levpareto1(double limit, double shape, double scale, double order, int gi
 
 double mweibull(double order, double scale, double shape, int give_log);
 double levweibull(double limit, double scale, double shape, double order, int give_log);
+
+double minvGauss(double order, double nu, double lambda, int give_log);
+double levinvGauss(double limit, double nu, double lambda, double order, int give_log);
+double mgfinvGauss(double t, double nu, double lambda, int give_log);
 
 /*   Three parameter distributions , hence associated with dpq3 */
 double dburr(double x, double shape1, double shape2, double scale, int give_log);

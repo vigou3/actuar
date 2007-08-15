@@ -23,15 +23,15 @@ double mnorm(int order, double mean, double sd, int give_log)
 		return 1.0;
 		
 	int i = 0; //loop index	
-	int length = order;
+	int n = order;
 
-	double Fact[length+1];//array with 0!, 1!, 2!, ... n!
+	double Fact[n+1];//array with 0!, 1!, 2!, ... n!
 	/* init */ 
 	Fact[0] = 1;       
-	for( i=1; i< length+1 ; i++) Fact[i]= i * Fact[i-1];		
+	for( i=1; i< n+1 ; i++) Fact[i]= i * Fact[i-1];		
 		
 	double res = 0;
-	for( i=0; i< length/2+1; i++) res += Fact[length] / (pow(2,i) * Fact[i] * Fact[length-2*i] ) * pow(sd,2*i) * pow(mean,order-2*i);
+	for( i=0; i< n/2+1; i++) res += Fact[n] / (pow(2,i) * Fact[i] * Fact[n-2*i] ) * pow(sd,2*i) * pow(mean,n-2*i);
 						
 	return res;													
 }
