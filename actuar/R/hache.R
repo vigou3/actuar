@@ -15,11 +15,11 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE)
     I <- nrow(X)     # number of contracts
     T <- ncol(X)     # number of years
     N <- ncol(Y)     # dimension of design matrix
-    
+
     ## Coefficients for each contract
     beta <- matrix(0, nrow = I, ncol = N)
     for (k in 1:I) beta[k, ] = coef(lm(X[k, ] ~ Y[, -1], weights = weights[k, ]))
-    
+
     ## Estimation of s^2.
     s2 <- 0
     for (k in 1:I)
@@ -35,7 +35,7 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE)
     ## stocked in an array of length N x N x I where I is the
     ## number of contracts.
     Z <- array(as.vector(diag(N)), dim = c(N, N, I))
-    
+
     ## First estimation of betaTotal.
     t1 = t2 = 0
     for (k in 1:I)
@@ -44,7 +44,7 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE)
         t2 = t2 + Z[, , k] %*% beta[k, ]
     }
     betaTotal <- solve(t1) %*% t2
-    
+
     ## Iterative estimation of the parameters.
     repeat
     {
@@ -65,7 +65,7 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE)
         ## Matrix A being symmetrical, A is replaced by ( A + t(A) ) / 2.
         A <-  ( A + t(A) ) / 2
 
-        ## Estimation of the Zi matrices.
+        ## Estimation of the new Zi matrices.
         for (k in 1:I) Z[, , k] <- A %*% solve( ( A + s2 * solve( t(Y) %*% diag(weights[k, ]) %*% Y ) ) )
 
         ## New estimation of betaTotal.
@@ -76,7 +76,7 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE)
             t2 = t2 + Z[, , k] %*% beta[k, ]
         }
         betaTotal <- solve(t1) %*% t2
-        
+
         ## Stop-criterion.
         if (max(abs( (betaTotal - betaTotal2) / betaTotal2 ) ) < TOL) break
     }
@@ -130,4 +130,3 @@ print.hache <- function(x, ...)
     cat("Between contract variance:\n")
     print(x$a)
 }
-    

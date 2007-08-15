@@ -1,4 +1,4 @@
-\name{Hachemeister}
+\name{hache}
 \alias{hache}
 \title{Hachemeister Regression Model (1975)}
 \description{
