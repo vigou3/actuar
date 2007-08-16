@@ -12,5 +12,8 @@
 munif <- function(order, min = 0, max = 1)
     .External("do_dpq", "munif", order, min, max, FALSE)
 
+levunif <- function(limit, min = 0, max =1, order = 1)
+    .External("do_dpq", "levunif", limit, min, max, order, FALSE)
+
 mgfunif <- function(t, min = 0, max = 1, log = FALSE)
     .External("do_dpq", "mgfunif", t, min, max, log)

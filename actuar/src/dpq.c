@@ -525,6 +525,7 @@ SEXP do_dpq3(int code, SEXP args)
     case 33:  return DPQ3_1(args, levbeta);
 	case 34:  return DPQ3_1(args, levchisq);
 	case 35:  return DPQ3_1(args, levinvGauss); //notation from SuppDists package
+	case 36:  return DPQ3_1(args, levunif);
     default:
 	error(_("internal error in do_dpq3"));
     }

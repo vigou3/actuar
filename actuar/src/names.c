@@ -109,9 +109,10 @@ FUNTAB fun_tab[] = {
     {"levpareto",	do_dpq3,	30},
     {"levpareto1",	do_dpq3,	31},
     {"levweibull",	do_dpq3,	32},
-    {"levbeta",	        do_dpq3,	33},
+    {"levbeta",		do_dpq3,	33},
 	{"levchisq",		do_dpq3,	34},
 	{"levinvGauss",		do_dpq3,	35},
+	{"levunif",		do_dpq3,	36},
     /* Four parameter distributions */
     {"dtrbeta",		do_dpq4,	1},
     {"ptrbeta",		do_dpq4,	2},

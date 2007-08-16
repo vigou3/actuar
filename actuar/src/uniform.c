@@ -23,6 +23,32 @@ double munif(double order, double min, double max, int give_log)
 		return (pow(max,order+1) - pow(min,order+1)) /( (max - min)*(order+1) );		
 }
 
+double levunif(double limit, double min, double max, double order, int give_log)
+{
+	/*check arguments */
+	if (!R_FINITE(min) || !R_FINITE(max) || min >= max)
+		return R_NaN;
+	
+	double tmp, res;
+	
+	if(limit <= min)
+		return pow(limit,order);
+		
+	if(limit >= max)
+		return munif(order, min, max, give_log);
+	
+	if(order == -1.0)
+	{
+		tmp = (log(abs(limit)) - log(abs(min))) / (max - min);		
+		res = tmp + (max - limit) / (limit*(max - min));
+	}
+	else
+	{
+		tmp = (pow(limit,order+1) - pow(min,order+1)) /( (max - min)*(order+1) );
+		res = tmp + pow(limit, order)*(max - limit)/(max - min);
+	}
+	return res;			
+}
 
 double mgfunif(double t, double min, double max, int give_log)
 {	

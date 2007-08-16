@@ -32,6 +32,7 @@ double levinvexp(double limit, double scale, double order, int give_log);
 
 /*   Two parameter distributions , hence associated with dpq2 */
 double munif(double order, double min, double max, int give_log);
+double levunif(double limit, double min, double max, double order, int give_log);
 double mgfunif(double x, double min, double max, int give_log);
 
 double mnorm(double order, double mean, double sd, int give_log);

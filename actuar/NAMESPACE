@@ -14,7 +14,7 @@ export(## Credibility theory
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        mexp, levexp, mgfexp,
        ## Two parameter distributions
-       munif, mgfunif,
+       munif, levunif, mgfunif,
        mnorm, mgfnorm,
        mbeta, levbeta,
        mgamma, levgamma, mgfgamma,
