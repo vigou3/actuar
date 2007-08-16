@@ -38,4 +38,13 @@ hache(X, Y, weights, TOL = 1E-6, echo = FALSE)
 \author{
   Tommy Ouellet and Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
 }
+\examples{
+data(hachemeister)
+
+X <- hachemeister[, 2:13]
+W <- hachemeister[, 14:25]
+Y <- matrix(c(rep(1,12),12:1), 12)
+
+hache(X, Y, weights = W, TOL = 0.000001)
+}
 \keyword{models}
