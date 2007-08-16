@@ -111,6 +111,7 @@ FUNTAB fun_tab[] = {
     {"levweibull",	do_dpq3,	32},
     {"levbeta",	        do_dpq3,	33},
 	{"levchisq",		do_dpq3,	34},
+	{"levinvGauss",		do_dpq3,	35},
     /* Four parameter distributions */
     {"dtrbeta",		do_dpq4,	1},
     {"ptrbeta",		do_dpq4,	2},
