@@ -11,8 +11,10 @@
 #include "locale.h"
 #include "dpq.h"
 
-double mnorm(int order, double mean, double sd, int give_log)
+double mnorm(double order, double mean, double sd, int give_log)
 {
+	printf("param %f,%f,%f\n",order,mean,sd);
+	
 	if (!R_FINITE(mean) || 
 		!R_FINITE(sd) ||	
 		!R_FINITE(order) ||
@@ -31,7 +33,8 @@ double mnorm(int order, double mean, double sd, int give_log)
 	for( i=1; i< n+1 ; i++) Fact[i]= i * Fact[i-1];		
 		
 	double res = 0;
-	for( i=0; i< n/2+1; i++) res += Fact[n] / (pow(2,i) * Fact[i] * Fact[n-2*i] ) * pow(sd,2*i) * pow(mean,n-2*i);
+	for( i=0; i< n/2+1; i++) 
+		res += Fact[n] / (pow(2,i) * Fact[i] * Fact[n-2*i] ) * pow(sd,2*i) * pow(mean,n-2*i);
 						
 	return res;													
 }

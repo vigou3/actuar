@@ -4,9 +4,10 @@
 ### limited moments, and the moment generating function for 
 ### the Gamma distribution (as defined in package SuppDists) 
 ###
-### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
-### See Wikipedia, Inverse Gaussian for the "mgf"
+### See Part 2 of Chhikara & Folks, The inverse Gaussian distribution:
+### theory, methodology and application, Decker, 1989.
+### See Part 1 of Seshadri, The inverse Gaussian distribution:
+### statistical theory and applications, Springer, 1989
 ###
 ### AUTHORS: Christophe Dutang,
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>

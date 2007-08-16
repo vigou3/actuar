@@ -20,9 +20,23 @@ double minvGauss(double order, double nu, double lambda, int give_log)
 	lambda <= 0.0 )
 	return R_NaN;
 
-	//TODO
+	int n = order;
+	int i = 0; //loop index
 	
-	return 0.0;		
+	if(n == 0)
+		return 0.0;		
+	
+	double Fact[2*n-1];//array with 0!, 1!, 2!, ... n!	
+	/* init */ 
+	Fact[0] = 1; //0!      
+	for( i=1; i< 2*n+1 ; i++) Fact[i]= i * Fact[i-1];
+	
+	double res = 0;
+	
+	for(i=0; i < n; i++) 
+		res += pow(nu,n) * Fact[n-1+i] / (Fact[i]*Fact[n-1-i]) * pow(2*lambda/nu, -i);
+						
+	return res;		
 }
 
 double levinvGauss(double limit, double nu, double lambda, double order, int give_log)

@@ -33,7 +33,7 @@ double levinvexp(double limit, double scale, double order, int give_log);
 /*   Two parameter distributions , hence associated with dpq2 */
 double mgfunif(double x, double min, double max, int give_log);
 
-double mnorm(int order, double mean, double sd, int give_log);
+double mnorm(double order, double mean, double sd, int give_log);
 double mgfnorm(double t, double mean, double sd, int give_log);
 
 double mbeta(double order, double shape1, double shape2, int give_log);

@@ -1,12 +1,14 @@
 \name{NormalSupp}
 \alias{NormalSupp}
+\alias{mnorm}
 \alias{mgfnorm}
-\title{Moment generating function of the Normal Distribution}
+\title{Moments and Moment generating function of the Normal Distribution}
 \description{
-  moment generating function for the Uniform distribution with
-  parameters \code{min} and \code{max}.
+  moments and the moment generating function for the Normal distribution with
+  parameters \code{mean} and \code{sd}.
 }
 \usage{
+  mnorm(order, mean = 0, sd = 1)
   mgfnorm(t, mean = 0, sd = 1, log = FALSE)
 }
 \arguments{
@@ -14,11 +16,14 @@
   \item{sd}{standard deviation of the Normal distribution}
   \item{t}{a real}
   \item{log}{logical, if \code{TRUE}, the log of the m.g.f. is returned}
+  \item{order}{integer, the order of the moment}
 }
 \details{
+  The moment is given by \eqn{E[X^n]}, where \eqn{n} denotes the order.
   The moment generating function is given by \eqn{E[e^{tX}]}.
 }
 \value{
+  \code{mnorm} gives the moment.
   \code{mgfnorm} gives the moment generating function in \code{t}
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
@@ -35,5 +40,6 @@
 }
 \examples{
 mgfnorm(0:4,1,2)
+mnorm(3)
 }
 \keyword{distribution}
