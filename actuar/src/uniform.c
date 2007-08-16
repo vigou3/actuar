@@ -11,6 +11,18 @@
 #include "locale.h"
 #include "dpq.h"
 
+double munif(double order, double min, double max, int give_log)
+{
+	/*check arguments */
+	if (!R_FINITE(min) || !R_FINITE(max) || min >= max)
+		return R_NaN;
+	
+	if(order == -1.0)
+		return (log(abs(max)) - log(abs(min))) / (max - min);
+	else
+		return (pow(max,order+1) - pow(min,order+1)) /( (max - min)*(order+1) );		
+}
+
 
 double mgfunif(double t, double min, double max, int give_log)
 {	

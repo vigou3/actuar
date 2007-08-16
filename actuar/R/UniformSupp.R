@@ -4,13 +4,13 @@
 ### moments, and the moment generating function
 ### for the Uniform distribution (as defined in R).
 ###
-### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
-### See Chapter ?? of Johnson & Kotz, Loss Distributions, Wiley, 1970
+### Wikipedia, The uniform distribution (continuous)
 ###
 ###
 ### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
+munif <- function(order, min = 0, max = 1)
+    .External("do_dpq", "munif", order, min, max, FALSE)
 
 mgfunif <- function(t, min = 0, max = 1, log = FALSE)
     .External("do_dpq", "mgfunif", t, min, max, log)

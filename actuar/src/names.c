@@ -75,6 +75,7 @@ FUNTAB fun_tab[] = {
 	{"mgfchisq",	do_dpq2,	49},
 	{"minvGauss",		do_dpq2,		50}, //notation from SuppDists package
 	{"mgfinvGauss",		do_dpq2,		51},
+	{"munif",		do_dpq2,		52},
     /* Three parameter distributions */
     {"dburr",   	do_dpq3,	 1},
     {"pburr",		do_dpq3,	 2},

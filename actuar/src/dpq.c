@@ -345,6 +345,7 @@ SEXP do_dpq2(int code, SEXP args)
 	case 49:  return DPQ2_1(args, mgfchisq);
 	case 50:  return DPQ2_1(args, minvGauss); //notation from SuppDists package
 	case 51:  return DPQ2_1(args, mgfinvGauss);
+	case 52:  return DPQ2_1(args, munif);
     default:
 	error(_("internal error in do_dpq2"));
     }
