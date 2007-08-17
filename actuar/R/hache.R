@@ -108,7 +108,7 @@ hache <- function(X, Y, weights, TOL = 1E-6, echo = FALSE)
                    cred = Z,
                    s2 = s2,
                    a = A,
-                   p = p,
+                   premiums = p,
                    call = Call),
               class = "hache")
 }
@@ -119,8 +119,8 @@ print.hache <- function(x, ...)
     res <- matrix(NA, I + 1, 4)
     res[, 1:2] <- rbind(x$beta, t(x$betaTotal))
     res[, 3:4] <- rbind(x$betaAdj, NA)
-    colnames(res) <- c("Intercept", "Slope", "Adj. intercept", "Adj. slope")
-    rownames(res) <- c(1:I, "Total")
+    colnames(res) <- c(" Intercept", " Slope", " Adj. intercept", " Adj. slope")
+    rownames(res) <- c(rownames(res, do.NULL = FALSE, prefix = "Contract.")[-1], "Total")
 
     cat("\nCall: ", deparse(x$call), "\n\n")
 
@@ -129,4 +129,12 @@ print.hache <- function(x, ...)
     cat("\nWithin contract variance: ", x$s2, "\n\n")
     cat("Between contract variance:\n")
     print(x$a)
+}
+
+predict.hache <- function(object, ...)
+{
+    premiums <- object$premiums
+    rownames(premiums) <- rownames(premiums, do.NULL = FALSE, prefix = "Contract.")
+    colnames(premiums) <- colnames(premiums, do.NULL = FALSE, prefix = "Time.")
+    print(premiums)
 }
