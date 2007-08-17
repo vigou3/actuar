@@ -79,6 +79,7 @@ S3method(plot, elev)
 
 S3method(predict, bstraub)
 S3method(predict, cm)
+S3method(predict, hache)
 
 S3method(print, aggregateDist)
 S3method(print, bstraub)

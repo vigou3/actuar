@@ -120,7 +120,7 @@ print.hache <- function(x, ...)
     res[, 1:2] <- rbind(x$beta, t(x$betaTotal))
     res[, 3:4] <- rbind(x$betaAdj, NA)
     colnames(res) <- c(" Intercept", " Slope", " Adj. intercept", " Adj. slope")
-    rownames(res) <- c(rownames(res, do.NULL = FALSE, prefix = "Contract.")[-1], "Total")
+    rownames(res) <- c(rownames(res, do.NULL = FALSE, prefix = "Contract.")[-(I + 1)], "Total")
 
     cat("\nCall: ", deparse(x$call), "\n\n")
 
