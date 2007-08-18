@@ -24,7 +24,7 @@ ruinProb <-function(model="CramerLundberg",param,premRate)
         ## exponential claim size
         if(m == 1)
         {            
-            beta <- T
+            beta <- -T
             return( function(u) lambda / (beta*premRate) *exp(-(beta-lambda/premRate)*u) )
         }
 
