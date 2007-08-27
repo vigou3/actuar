@@ -34,7 +34,7 @@ double minvGauss(double order, double nu, double lambda, int give_log)
 	double res = 0;
 	
 	for(i=0; i < n; i++) 
-		res += pow(nu,n) * Fact[n-1+i] / (Fact[i]*Fact[n-1-i]) * pow(2*lambda/nu, -i);
+		res += R_pow(nu,n) * Fact[n-1+i] / (Fact[i]*Fact[n-1-i]) * R_pow(2*lambda/nu, -i);
 						
 	return res;		
 }
@@ -62,19 +62,19 @@ double levinvGauss(double limit, double nu, double lambda, double order, int giv
 	return limit - nu * z * tmpZ - nu * y * exp( 2*lambda/nu ) * tmpY;
 }
 
-double mgfinvGauss(double t, double nu, double lambda, int give_log)
+double mgfinvGauss(double x, double nu, double lambda, int give_log)
 {
 	/*check arguments */
 	if (!R_FINITE(nu) ||
 	    !R_FINITE(lambda) ||
 	    nu <= 0.0 ||
 	    lambda < 0.0 ||
-		t > lambda/(2*nu*nu) )
+		x > lambda/(2*nu*nu) )
 	  return R_NaN;
 	  
 	
-	if(t == 0.0)
+	if(x == 0.0)
 	  return R_D_exp(0.0);	
 	
-	return	R_D_exp( lambda / nu *( 1 - sqrt( 1-2*nu*nu*t/lambda ) ) ) ;
+	return	R_D_exp( lambda / nu *( 1 - sqrt( 1-2*nu*nu*x/lambda ) ) ) ;
 }

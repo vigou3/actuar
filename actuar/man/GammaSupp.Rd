@@ -11,7 +11,7 @@
 \usage{
   mgamma(order, shape, rate = 1, scale = 1/rate)
   levgamma(limit, shape, rate = 1, scale = 1/rate, order = 1)
-  mgfgamma(t, shape, rate = 1, scale = 1/rate, log = FALSE)
+  mgfgamma(x, shape, rate = 1, scale = 1/rate, log = FALSE)
 }
 \arguments{
   \item{order}{order of the moment.}
@@ -19,20 +19,20 @@
   \item{rate}{an alternative way to specify the scale.}
   \item{shape, scale}{shape and scale parameters. Must be strictly
     positive.}
-  \item{t}{a real}
+  \item{x}{a real}
   \item{log}{logical, if \code{TRUE}, the log of the m.g.f. is returned}
 }
 \details{
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}. 
-  The moment generating function is given by \eqn{E[e^{tX}]}.
+  The moment generating function is given by \eqn{E[e^{xX}]}.
 }
 \value{
   \code{mgamma} gives the \eqn{k}th raw moment and
   \code{levgamma} gives the \eqn{k}th moment of the limited loss
   variable.
-  \code{mgfgamma} gives the moment generating function in \code{t}
+  \code{mgfgamma} gives the moment generating function in \code{x}
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{

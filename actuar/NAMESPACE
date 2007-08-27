@@ -33,6 +33,7 @@ export(## Credibility theory
        dpareto1, ppareto1, qpareto1, rpareto1, mpareto1, levpareto1,
        mweibull, levweibull,
        minvGauss, levinvGauss, mgfinvGauss, #notation from SuppDists package
+       minvgauss, levinvgauss, mgfinvgauss, 
        ## Three parameter distributions
        dburr, pburr, qburr, rburr, mburr, levburr,
        dgenpareto, pgenpareto, qgenpareto, rgenpareto, mgenpareto, levgenpareto,

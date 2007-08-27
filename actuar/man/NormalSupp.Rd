@@ -9,22 +9,23 @@
 }
 \usage{
   mnorm(order, mean = 0, sd = 1)
-  mgfnorm(t, mean = 0, sd = 1, log = FALSE)
+  mgfnorm(x, mean = 0, sd = 1, log = FALSE)
 }
 \arguments{
   \item{mean}{mean of the Normal distribution}
   \item{sd}{standard deviation of the Normal distribution}
-  \item{t}{a real}
+  \item{x}{a real}
   \item{log}{logical, if \code{TRUE}, the log of the m.g.f. is returned}
   \item{order}{integer, the order of the moment}
 }
 \details{
-  The moment is given by \eqn{E[X^n]}, where \eqn{n} denotes the order.
-  The moment generating function is given by \eqn{E[e^{tX}]}.
+  The moment is given by \eqn{E[X^k]}, where \eqn{k} denotes the order.
+  The moment generating function is given by \eqn{E[e^{xX}]}.
+  Only integer order is supported for the \eqn{k}th moment.
 }
 \value{
   \code{mnorm} gives the moment.
-  \code{mgfnorm} gives the moment generating function in \code{t}
+  \code{mgfnorm} gives the moment generating function in \code{x}.
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{

@@ -121,20 +121,20 @@ double levinvgamma(double limit, double shape, double scale, double order,
 	+ R_VG__0(limit, order) * pgamma(u, shape, 1.0, 1, 0);
 }
 
-double mgfinvgamma(double t, double shape, double scale, int give_log)
+double mgfinvgamma(double x, double shape, double scale, int give_log)
 {
 	if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	shape <= 0.0 ||
 	scale <= 0.0 ||
-	t > 0.0 )
+	x > 0.0 )
 	return R_NaN;
 	
-	if( t == 0.0)
+	if( x == 0.0)
 	return	R_D_exp(0.0);
 	
-	double tmp = log(2) + shape/2.0*log(-scale*t) ;
-	double tmp2 = log(bessel_k(sqrt(-4*scale*t),shape,1)) - log(gammafn(shape));
+	double tmp = log(2) + shape / 2.0 * log(-scale*x) ;
+	double tmp2 = log( bessel_k( sqrt( -4*scale*x ), shape, 1 ) ) - log( gammafn(shape) );
 	
 	return	R_D_exp(tmp+tmp2);	
 }

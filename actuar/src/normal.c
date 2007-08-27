@@ -34,12 +34,12 @@ double mnorm(double order, double mean, double sd, int give_log)
 		
 	double res = 0;
 	for( i=0; i< n/2+1; i++) 
-		res += Fact[n] / (pow(2,i) * Fact[i] * Fact[n-2*i] ) * pow(sd,2*i) * pow(mean,n-2*i);
+		res += Fact[n] / (R_pow(2,i) * Fact[i] * Fact[n-2*i] ) * R_pow(sd,2*i) * R_pow(mean,n-2*i);
 						
 	return res;													
 }
 
-double mgfnorm(double t, double mean, double sd, int give_log)
+double mgfnorm(double x, double mean, double sd, int give_log)
 {
 	/*check arguments */
 	if (!R_FINITE(mean) ||
@@ -48,8 +48,8 @@ double mgfnorm(double t, double mean, double sd, int give_log)
 	  return R_NaN;
 	  
 	
-	if(t == 0.0)
+	if(x == 0.0)
 	  return R_D_exp(0.0);	
 	
-	return	R_D_exp( t*mean + 0.5*t*t*sd*sd ) ;
+	return	R_D_exp( x*mean + 0.5*x*x*sd*sd ) ;
 }

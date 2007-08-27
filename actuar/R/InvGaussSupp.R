@@ -1,6 +1,6 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {m,lev,mgf}gamma functions to compute raw and
+### Definition of the {m,lev,mgf}invgauss functions to compute raw and
 ### limited moments, and the moment generating function for 
 ### the Gamma distribution (as defined in package SuppDists) 
 ###
@@ -13,10 +13,26 @@
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 minvGauss <- function(order, nu, lambda )
-    .External("do_dpq", "minvGauss", order, nu, lambda, FALSE)
+{
+    if( as.integer(order) == order )
+        .External("do_dpq", "minvGauss", order, nu, lambda, FALSE)
+    else
+        stop("non integer order is not supported")
+}    
+
+minvgauss <- minvGauss
 
 levinvGauss <- function(limit, nu, lambda, order = 1)
-    .External("do_dpq", "levinvGauss", limit,  nu, lambda, order, FALSE)
+{
+    if( order == 1)
+        .External("do_dpq", "levinvGauss", limit,  nu, lambda, order, FALSE)
+    else
+        stop("orders different to 1 are not supported")
+}
 
-mgfinvGauss <- function(t, nu, lambda, log= FALSE)
-    .External("do_dpq", "mgfinvGauss", t, nu, lambda, log)
+levinvgauss <- levinvGauss
+
+mgfinvGauss <- function(x, nu, lambda, log= FALSE)
+    .External("do_dpq", "mgfinvGauss", x, nu, lambda, log)
+
+mgfinvgauss <- mgfinvGauss

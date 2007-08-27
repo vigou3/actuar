@@ -17,5 +17,5 @@ mgamma <- function(order, shape, rate = 1, scale = 1/rate)
 levgamma <- function(limit, shape, rate = 1, scale = 1/rate, order = 1)
     .External("do_dpq", "levgamma", limit, shape, scale, order, FALSE)
 
-mgfgamma <- function(t, shape, rate = 1, scale = 1/rate, log= FALSE)
-    .External("do_dpq", "mgfgamma", t, shape, scale, log)
+mgfgamma <- function(x, shape, rate = 1, scale = 1/rate, log= FALSE)
+    .External("do_dpq", "mgfgamma", x, shape, scale, log)

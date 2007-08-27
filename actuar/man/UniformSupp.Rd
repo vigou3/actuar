@@ -10,12 +10,12 @@
 \usage{
   munif(order, min = 0, max = 1)
   levunif(limit, min = 0, max =1, order = 1)
-  mgfunif(t, min = 0, max = 1, log = FALSE)
+  mgfunif(x, min = 0, max = 1, log = FALSE)
 }
 \arguments{
   \item{min}{first parameter of the uniform distribution.}
   \item{max}{second parameter of the uniform distribution.}
-  \item{t}{a real}
+  \item{x}{a real}
   \item{log}{logical, if \code{TRUE}, the log of the m.g.f. is returned.}
   \item{order}{order of the moment.}
   \item{limit}{limit of the random variable.}
@@ -24,13 +24,13 @@
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}. 
-  The moment generating function is given by \eqn{E[e^{tX}]}.
+  The moment generating function is given by \eqn{E[e^{xX}]}.
 }
 \value{
   \code{munif} gives the \eqn{k}th raw moment. 
   \code{levunif} gives the \eqn{k}th moment of the limited random
   variable.
-  \code{mgfunif} gives the moment generating function in \code{t}.
+  \code{mgfunif} gives the moment generating function in \code{x}.
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{

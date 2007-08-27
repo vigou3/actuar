@@ -6,6 +6,7 @@
 \alias{rinvgamma}
 \alias{minvgamma}
 \alias{levinvgamma}
+\alias{mgfinvgamma}
 \title{The Inverse Gamma Distribution}
 \description{
   Density, distribution function, quantile function, random generation,
@@ -22,6 +23,7 @@
   minvgamma(order, shape, rate = 1, scale = 1/rate)
   levinvgamma(limit, shape, rate = 1, scale = 1/rate,
               order = 1)
+  mgfinvgamma(x, shape, rate =1, scale = 1/rate, log =FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
@@ -53,6 +55,8 @@
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+
+  The moment generating function is given by \eqn{E[e^{xX}]}.
 }
 \value{
   \code{dinvgamma} gives the density,
@@ -61,7 +65,8 @@
   \code{rinvgamma} generates random deviates,
   \code{minvgamma} gives the \eqn{k}th raw moment, and
   \code{levinvgamma} gives the \eqn{k}th moment of the limited loss
-  variable.
+  variable,
+  \code{mgfinvgamma} gives the moment generating function in \code{x}.
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
@@ -82,5 +87,6 @@ p <- (1:10)/10
 pinvgamma(qinvgamma(p, 2, 3), 2, 3)
 minvgamma(-1, 2, 2) ^ 2
 levinvgamma(10, 2, 2, order = 1)
+mgfinvgamma(1,3,2)
 }
 \keyword{distribution}
