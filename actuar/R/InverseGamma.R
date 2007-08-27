@@ -38,7 +38,7 @@ levinvgamma <- function(limit, shape, rate = 1, scale = 1/rate,
                         order = 1)
      .External("do_dpq", "levinvgamma", limit, shape, scale, order, FALSE)
 
-mgfinvgamma <- function(t, shape, rate = 1, scale = 1/rate, log = FALSE)
-    .External("do_dpq", "mgfinvgamma", t, shape, scale, log)
+mgfinvgamma <- function(x, shape, rate = 1, scale = 1/rate, log = FALSE)
+    .External("do_dpq", "mgfinvgamma", x, shape, scale, log)
     
 
