@@ -194,6 +194,51 @@ Fs <- aggregateDist("simulation", nb.simul = 1000,
                     model.freq, model.sev)
 mean(Fs)
 plot(Fs)
+
+## Beekman's convolution formula
+## the aggregate loss L is a geometric compound random variable
+## L ~ GeomComp( phi(0), F_Z), with F_Z(x) = 1/E[X] \int_0^x (1-F_X(y))dy
+## and phi(0)= 1-psi(0)=1-E[X]/(cE[W]) is the survival prob., where X
+## stands for the claim size, W the inter-occurence time (assumed to be exponential
+## i.e. Cramer-Lundberg risk model) and c the premium rate.
+
+## Exponential claim sizes
+## X~Exp(1) => Z~Exp(1)
+lambda <- 1
+
+mpfDisLower <- discretize(pexp(x,lambda), 
+			from = 0, to = 100, step = 1, method = "lower")
+
+phiZero <- .2/1.2 #premium rate is calculated according to expected value principle
+
+Phi <- aggregateDist(method = "recursive", 
+		model.freq = "geometric", model.sev = mpfDisLower, prob = phiZero)
+
+#ruin probability approximation by Beekman's formula
+psi <- function(u) 1-Phi(u)
+
+#plot the ruin probability w.r.t. the initial capital
+plot(x<-seq(0,100,length.out=100), psi(x), type="l", main="ruin probability")
+
+## Pareto claim sizes
+## X~Par(5,4) => Z~Par(4,4)
+alpha <- 5
+lambda <- 4
+
+mpfDisLower <- discretize(ppareto(x,alpha-1,lambda), 
+			from = 0, to = 200 , step = 10, method = "lower")
+
+phiZero <- .2/1.2 #premium rate is calculated according to expected value principle
+
+Phi <- aggregateDist(method = "recursive", model.freq = "geometric", model.sev = mpfDisLower, prob = phiZero)
+
+
+#ruin probability approximation by Beekman's formula
+psi <- function(u) 1-Phi(u)
+
+#plot the ruin probability w.r.t. the initial capital
+plot(x<-seq(0,100,length.out=100), psi(x), type="l", main="ruin probability")
+
 }
 \keyword{distribution}
 \keyword{models}

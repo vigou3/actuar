@@ -8,8 +8,8 @@ ImportFrom(Matrix, expm)
 export(## Credibility theory
        bstraub, cm, hache, ratios, severity, simpf, unroll,
        ## Risk theory
-       aggregateDist, CTE, discretize, discretise, VaR, adjustCoef, ruinProb,
-       calcMatrixExp,
+       aggregateDist, CTE, discretize, discretise, VaR, adjCoef, ruinProb,
+       calcMatrixExp, calcMatrixExp2,
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        mexp, levexp, mgfexp,
@@ -71,12 +71,15 @@ S3method(hist, grouped.data)
 S3method(knots, ogive)
 S3method(knots, elev)
 
+S3method(lines, adjCoef)
+
 S3method(mean, aggregateDist)
 S3method(mean, grouped.data)
 
 S3method(plot, aggregateDist)
 S3method(plot, ogive)
 S3method(plot, elev)
+S3method(plot, adjCoef)
 
 S3method(predict, bstraub)
 S3method(predict, cm)
@@ -93,6 +96,7 @@ S3method(print, simpf)
 S3method(print, summary.aggregateDist)
 S3method(print, summary.bstraub)
 S3method(print, summary.cm)
+S3method(print, adjCoef)
 
 S3method(quantile, aggregateDist)
 
