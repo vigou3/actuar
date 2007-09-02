@@ -57,6 +57,7 @@ theHfunction <- function(x,a) mgfexp(a*x)*mgfexp(-x*premium(a))
 res <- adjCoef(h=theHfunction, upper=1, p=premium, r="proportional", from=0, to =1, n=11)
 
 ## plot the result
+## see the impact of point number 'n'
 lines(res, type="l", col="green")
 
 ##

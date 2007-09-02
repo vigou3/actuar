@@ -15,7 +15,7 @@ SEXP do_random2(int code, SEXP args);
 SEXP do_random3(int code, SEXP args);
 SEXP do_random4(int code, SEXP args);
 
-SEXP dgeMatrix_exp(SEXP x);
+SEXP calcMatExp2 (SEXP x, SEXP u, SEXP T, SEXP v);
 
 /* Utility functions */
 /*   One parameter distributions , hence associated with dpq1 */

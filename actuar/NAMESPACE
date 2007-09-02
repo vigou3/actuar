@@ -8,8 +8,8 @@ ImportFrom(Matrix, expm)
 export(## Credibility theory
        bstraub, cm, hache, ratios, severity, simpf, unroll,
        ## Risk theory
-       aggregateDist, CTE, discretize, discretise, VaR, adjCoef, ruinProb,
-       calcMatrixExp, calcMatrixExp2,
+       aggregateDist, CTE, discretize, discretise, VaR, adjCoef, ruin,
+       calcMatrixExpDiag, calcMatrixExpGen,
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        mexp, levexp, mgfexp,
@@ -30,7 +30,7 @@ export(## Credibility theory
        dparalogis, pparalogis, qparalogis, rparalogis, mparalogis, levparalogis,
        dpareto, ppareto, qpareto, rpareto, mpareto, levpareto, # aliases
        dpareto2, ppareto2, qpareto2, rpareto2, mpareto2, levpareto2, # aliases
-       dpareto1, ppareto1, qpareto1, rpareto1, mpareto1, levpareto1,
+       #dpareto1, ppareto1, qpareto1, rpareto1, mpareto1, levpareto1,
        mweibull, levweibull,
        minvGauss, levinvGauss, mgfinvGauss, #notation from SuppDists package
        minvgauss, levinvgauss, mgfinvgauss, 
@@ -40,6 +40,7 @@ export(## Credibility theory
        dinvburr, pinvburr, qinvburr, rinvburr, minvburr, levinvburr,
        dinvtrgamma, pinvtrgamma, qinvtrgamma, rinvtrgamma, minvtrgamma, levinvtrgamma,
        dtrgamma, ptrgamma, qtrgamma, rtrgamma, mtrgamma, levtrgamma,
+       dphasetype, pphasetype, qphasetype, rphasetype, mphasetype, mgfphasetype,
        ## Four parameter distributions
        dgenbeta, pgenbeta, qgenbeta, rgenbeta, mgenbeta, levgenbeta,
        dtrbeta, ptrbeta, qtrbeta, rtrbeta, mtrbeta, levtrbeta,
@@ -96,7 +97,7 @@ S3method(print, simpf)
 S3method(print, summary.aggregateDist)
 S3method(print, summary.bstraub)
 S3method(print, summary.cm)
-S3method(print, adjCoef)
+
 
 S3method(quantile, aggregateDist)
 

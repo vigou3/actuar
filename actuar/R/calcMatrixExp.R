@@ -7,7 +7,7 @@
 ### where Pi_plus is the initial probability vector, Q the
 ### subintensity matrix and 1_m the one vector of R^m
 ###
-### function used by ruinProb
+### function used by ruin
 ###
 ### AUTHORS: Christophe Dutang,
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>,
@@ -19,32 +19,29 @@ calcMatrixExp <- function(param)
     piplus <- param$piplus
     m <- length(piplus)
     ones <- rep(1,m)
-    
-    #compute the constant Ci through diagonalisation of Q
-    resDiagQ <- eigen(Q)
-    
-    eigenValueQ <- resDiagQ$values
-    P <- resDiagQ$vectors
-    Pinv <- solve(P,diag(m))
 
-    fctAux <- function(i) 
+    # try diagonalisation of Q
+    options(show.error.messages = FALSE)
+    #test the diagonalisation of Q
+    #if failed, testDiag is an invisible object of class 'try-error'
+    testDiag <- try( solve( eigen(Q)$vectors , diag(m) ) )
+    options(show.error.messages = TRUE) #revert to default
+            
+    if(class(testDiag) == "try-error")
     {
-        M<-array(0,c(m,m))
-        M[i,i]<-1
-        return(piplus %*% P %*% M %*% Pinv %*% ones)
-    }
-	
-    Cste<-sapply(1:m,fctAux)
+        ## compute matrix exponential in the general case
 
-    psi <- function(u)
-    {   
-        sizeU <- length(u)
-        t<-array(u,c(sizeU,1)) %*% array(eigenValueQ,c(1,m))
-    
-        # if there is a complex eigenvalue of Q, then there will be its conjugate in the spectrum of Q, so the terms
-        # associated with this eigenvalue, and its conjugate in the ruin probability are real numbers
-        c( Re( exp( t )  %*%  Cste ) )
+        #old error
+                                        #stop("\n\t*** actuar internal error : Q is non diagonalisable ***\n\t",geterrmessage()) #stop execution of ruinProb
+        psi <- function(u)
+            .Call("calcMatExpGen", piplus, u, Q, ones)
+
+        return( psi )
     }
-    
-    return( psi )
+    else
+    {
+        ## compute matrix exponential through diagonalisation of Q
+        return( calcMatrixExpDiag(param) )
+    }
 }
+
