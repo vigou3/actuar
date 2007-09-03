@@ -9,7 +9,7 @@ export(## Credibility theory
        bstraub, cm, hache, ratios, severity, simpf, unroll,
        ## Risk theory
        aggregateDist, CTE, discretize, discretise, VaR, adjCoef, ruin,
-       calcMatrixExpDiag, calcMatrixExpGen,
+       calcMatrixExpDiag, calcMatrixExpGen, 
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        mexp, levexp, mgfexp,
