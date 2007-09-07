@@ -12,7 +12,7 @@
 
 cm3 <- function(formula, data, ratios, weights, subset,
                 heterogeneity = c("iterative", "unbiased"),
-                TOL = 1E-6, echo = FALSE)
+                tol = 1E-6, echo = FALSE)
 {
     Call <- match.call()
 
@@ -332,7 +332,7 @@ cm3 <- function(formula, data, ratios, weights, subset,
     if (heterogeneity == "iterative")
     {
         bi <- as.vector(bu)             # starting values
-        .External("cm", cred, tweights, wmeans, fnodes, denoms, bi, TOL, echo)
+        .External("cm", cred, tweights, wmeans, fnodes, denoms, bi, tol, echo)
     }
     else
         bi <- NULL
@@ -346,18 +346,18 @@ cm3 <- function(formula, data, ratios, weights, subset,
     for (i in nlevels:1)
     {
         cred[[i]] <- 1/(1 + b[i + 1]/(b[i] * tweights[[i + 1]]))
-        
+
         ## If the variance estimator is null (zero), natural weights
         ## will be used instead of the credibility factors.
         if (b[i]) weights <- expression({cred[[i]]}) else weights <- expression({tweights[[i + 1]]})
-        
+
         tweights[[i]] <- as.vector(tapply(eval(weights), fnodes[[i]], sum))
-        
+
         wmeans[[i]] <- ifelse(tweights[[i]] > 0,
                               as.vector(tapply(eval(weights) * wmeans[[i + 1]], fnodes[[i]], sum) / tweights[[i]]),
                               0)
-        
-        if (b[i] < TOL^2) b[i] <- 0
+
+        if (b[i] < tol^2) b[i] <- 0
     }
 
     ## Transfer level names to lists

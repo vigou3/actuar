@@ -6,13 +6,13 @@
   introducing a regression technique.
 }
 \usage{
-hache(X, Y, weights, TOL = 1E-6, echo = FALSE)
+hache(X, Y, weights, tol = 1E-6, echo = FALSE)
 }  
 \arguments{
   \item{X}{a matrix of ratios (contracts in lines, years in columns);}
   \item{Y}{a chosen design matrix;}
   \item{weights}{a matrix of weights corresponding to ratios;}
-  \item{TOL}{maximum relative error in the iterative procedure;}
+  \item{tol}{maximum relative error in the iterative procedure;}
   \item{echo}{logical; whether to echo iterative procedure or not.}
 }
 \details{
@@ -45,6 +45,6 @@ X <- hachemeister[, 2:13]
 W <- hachemeister[, 14:25]
 Y <- matrix(c(rep(1,12),12:1), 12)
 
-hache(X, Y, weights = W, TOL = 0.000001)
+hache(X, Y, weights = W, tol = 0.000001)
 }
 \keyword{models}

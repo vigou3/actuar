@@ -13,7 +13,7 @@
 \usage{
 bstraub(ratios, weights,
         heterogeneity = c("iterative", "unbiased"),
-        TOL = 1e-06, echo = FALSE)
+        tol = 1e-06, echo = FALSE)
 
 \method{print}{bstraub}(x, \dots)
 
@@ -30,7 +30,7 @@ bstraub(ratios, weights,
     parameter used in premium calculation; \code{"iterative"} for the
     Bischel-Straub estimator; \code{"unbiased"} for the usual
     Bühlmann-Straub estimator (see below).}
-  \item{TOL}{maximum relative error in the iterative procedure.}
+  \item{tol}{maximum relative error in the iterative procedure.}
   \item{echo}{logical; whether to echo iterative procedure or not.}
   \item{x, object}{an object of class \code{"bstraub"}.} 
   \item{\dots}{additional attributes to attach to the result for the
@@ -77,7 +77,7 @@ bstraub(ratios, weights,
   \deqn{%
     \hat{a} = \frac{1}{I - 1} \sum_{i=1}^I z_i (X_{iw} - X_{zw})^2.}{%
     a = 1/(I - 1) sum(z[i] * (X[iw] - X[zw])^2).}
-  The fixed point algorithm is used with a relative error of \code{TOL}
+  The fixed point algorithm is used with a relative error of \code{tol}
   as stopping criteria.
 }
 \value{

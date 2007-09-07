@@ -7,7 +7,7 @@
 
 bstraub <- function(ratios, weights,
                     heterogeneity = c("iterative", "unbiased"),
-                    TOL = 1E-6, echo = FALSE)
+                    tol = 1E-6, echo = FALSE)
 {
     Call <- match.call()
 
@@ -81,7 +81,7 @@ bstraub <- function(ratios, weights,
                     ratios.zw <- sum(cred * ratios.w) / sum(cred)
                     at <- sum(cred * (ratios.w - ratios.zw)^2) / (ncontracts - 1)
 
-                    if (abs((at - at1)/at1) < TOL)
+                    if (abs((at - at1)/at1) < tol)
                         break
                 }
             }

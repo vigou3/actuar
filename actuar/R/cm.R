@@ -11,7 +11,7 @@
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 
 cm <- function(formula, data, ratios, weights, subset,
-               TOL = 1E-6, echo = FALSE)
+               tol = 1E-6, echo = FALSE)
 {
     Call <- match.call()
 
@@ -263,7 +263,7 @@ cm <- function(formula, data, ratios, weights, subset,
     wmeans[[nlevels1p]] <- as.vector(ratios.w);    # rm(ratios.w)
 
     ## Iterative estimation of the structure parameters
-    .External("cm", cred, tweights, wmeans, fnodes, denoms, b, TOL, echo)
+    .External("cm", cred, tweights, wmeans, fnodes, denoms, b, tol, echo)
 
     ## Final credibility factors and weighted averages (computed with
     ## the latest structure parameters). If a variance estimator is equal
@@ -280,9 +280,9 @@ cm <- function(formula, data, ratios, weights, subset,
                                                fnodes[[i]],
                                                sum) / tweights[[i]]),
                               0)
-        if (b[i] < TOL^2) b[i] <- NA
+        if (b[i] < tol^2) b[i] <- NA
     }
-    
+
     ## Transfer level names to lists
     names(tweights) <- names(wmeans) <- names(b) <-
         c("portfolio", level.names)

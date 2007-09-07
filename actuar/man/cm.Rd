@@ -12,7 +12,7 @@
   introduced in Dannenburg (1995).
 }
 \usage{
-cm(formula, data, ratios, weights, subset, TOL = 1E-6, echo = FALSE)
+cm(formula, data, ratios, weights, subset, tol = 1E-6, echo = FALSE)
 
 \method{print}{cm}(x, \dots)
 
@@ -35,7 +35,7 @@ cm(formula, data, ratios, weights, subset, TOL = 1E-6, echo = FALSE)
   \item{subset}{an optional logical expression indicating a subset of
     observations to be used in the modeling process. All observations
     are included by default.}
-  \item{TOL}{maximum absolute error in the iterative calculation of the
+  \item{tol}{maximum absolute error in the iterative calculation of the
     variance estimators.}
   \item{echo}{logical; whether to echo the iterative procedure or not}
   \item{x, object}{an object of class \code{"cm"}}
