@@ -14,7 +14,7 @@ aggregateDist(method = c("recursive", "convolution", "normal",
                          "npower", "simulation"),
               model.freq = NULL, model.sev = NULL, p0 = NULL,
               x.scale = 1, moments, nb.simul, \dots,
-              TOL = 1e-06, echo = FALSE)
+              tol = 1e-06, maxit = 500, echo = FALSE)
 
 \method{print}{aggregateDist}(x, \dots)
 
@@ -54,8 +54,10 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   \item{\dots}{parameters of the frequency distribution for the
     \code{"recursive"} method; further arguments to be passed to or
     from other methods otherwise.}
-  \item{TOL}{the recursion in the \code{"recursive"} method stops when the
-    cumulative distribution function is less than \code{TOL} away from 1.}
+  \item{tol}{the recursion in the \code{"recursive"} method stops when the
+    cumulative distribution function is less than \code{tol} away from 1.}
+  \item{maxit}{maximum number of recursions in the \code{"recursive"}
+    method.}
   \item{echo}{logical; echo the recursions to screen in the
     \code{"recursive"} method.}
   \item{x, object}{an object of class \code{"aggregateDist"}.}
@@ -90,8 +92,8 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   negative binomial distribution with size parameter equal to 0.)
 
   \code{model.sev} is a vector of the (discretized) claim amount
-  distribution; the first element \strong{must} be \eqn{f_X(0) = \Pr[X =
-    0]}{fx(0) = Pr[X = 0]}.
+  distribution \eqn{X}; the first element \strong{must} be \eqn{f_X(0) =
+  \Pr[X = 0]}{fx(0) = Pr[X = 0]}.
 }
 \section{Convolution method}{
   The cumulative distribution function (cdf) \eqn{F_S(x)}{Fs(x)} of the

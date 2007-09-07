@@ -10,7 +10,7 @@
 aggregateDist <-
     function(method = c("recursive", "convolution", "normal", "npower", "simulation"),
              model.freq = NULL, model.sev = NULL, p0 = NULL, x.scale = 1,
-             moments, nb.simul, ..., TOL = 1e-06, echo = FALSE)
+             moments, nb.simul, ..., tol = 1e-06, maxit = 500, echo = FALSE)
 {
     Call <- match.call()
 
@@ -66,7 +66,8 @@ aggregateDist <-
                               c("poisson", "geometric", "negative binomial",
                                 "binomial", "logarithmic"))
             FUN <- panjer(fx = model.sev, dist = dist, p0 = p0,
-                          x.scale = x.scale, ..., echo = echo, TOL = TOL)
+                          x.scale = x.scale, ...,
+                          tol = tol, maxit = maxit, echo = echo)
             comment(FUN) <- "Recursive method approximation"
         }
 
