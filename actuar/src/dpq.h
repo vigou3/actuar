@@ -1,6 +1,6 @@
 /* Utilities for `dpq' handling (density/probability/quantile) */
 
-/* give_log in "d";  log_p in "p" & "q" : */
+/* give_log in "d" & "mgf";  log_p in "p" & "q" : */
 #define give_log log_p
 
 #define R_D__0	(log_p ? R_NegInf : 0.)
