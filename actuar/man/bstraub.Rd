@@ -96,8 +96,10 @@ bstraub(ratios, weights,
   \item{unbiased}{unbiased estimator of the between contract
     heterogeneity parameter;}
   \item{iterative}{iterative estimator of the between contract
-    heterogeneity parameter.}
-
+    heterogeneity parameter;}
+  \item{cred}{vector of credibility factors;}
+  \item{call}{the function call.}
+  
   For \code{predict.bstraub}, a vector of credibility premiums.
 }
 \references{

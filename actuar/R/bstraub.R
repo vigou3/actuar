@@ -114,12 +114,11 @@ bstraub <- function(ratios, weights,
                    individual = ratios.w,
                    collective = ratios.zw,
                    weights = weights.s,
-                   ncontracts = ncontracts,
                    s2 = s2,
-                   cred = cred,
-                   call = Call,
                    unbiased = ac,
-                   iterative = at),
+                   iterative = at,
+                   cred = cred,
+                   call = Call),
               class = "bstraub")
 }
 
@@ -142,6 +141,7 @@ summary.bstraub <- function(object, ...)
 
 print.summary.bstraub <- function(x, ...)
 {
+    nc <- length(x$individual)
     cat("\nCredibility model:", x$model, "\n\n")
     cat("Structure Parameters Estimators\n\n")
     cat("  Collective premium:        ", x$collective, "\n")
@@ -152,11 +152,11 @@ print.summary.bstraub <- function(x, ...)
         x$s2 / if (is.null(x$iterative)) x$unbiased else x$iterative,
         "\n\n")
     cat("Detailed premiums\n\n")
-    cred <- cbind(1:x$ncontracts, x$individual, x$weights,
+    cred <- cbind(seq_len(nc), x$individual, x$weights,
                   x$cred, predict(x))
     colnames(cred) <- c(" Contract", "Ind. premium", "Weight",
                         "Cred. factor", "Cred. premium")
-    rownames(cred) <- rep("", x$ncontracts)
+    rownames(cred) <- rep("", nc)
     print(cred, ...)
     invisible(x)
 }
