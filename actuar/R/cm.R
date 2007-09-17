@@ -7,11 +7,13 @@
 ### supported are part of a generalized hierarchical credibility
 ### theory as introduced in Dannenburg (1995).
 ###
-### AUTHORS: Louis-Philippe Pouliot,
+### AUTHORS: Louis-Philippe Pouliot, Tommy Ouellet,
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 
 cm <- function(formula, data, ratios, weights, subset,
-               tol = 1E-6, echo = FALSE)
+               method = c("iterative", "unbiased"),
+               tol = sqrt(.Machine$double.eps), maxit = 100,
+               echo = FALSE)
 {
     Call <- match.call()
 
@@ -112,7 +114,7 @@ cm <- function(formula, data, ratios, weights, subset,
         }
 
     ## Sanity check if weights and ratios correspond.
-    if(!identical(which(is.na(ratios)), which(is.na(weights))))
+    if (!identical(which(is.na(ratios)), which(is.na(weights))))
         stop("missing values are not in the same positions in weights and in ratios")
 
     ## === NUMBER OF NODES AND SPLITTING FACTORS ===
@@ -188,17 +190,15 @@ cm <- function(formula, data, ratios, weights, subset,
     ## number of nodes in each level, that is the number of nodes with
     ## data. This comes this late since it relies on 'weights.s'.
     ##
-    ## Where 'nnodes' is a list where each element is a vector of the
-    ## number of nodes for each classification of the level above,
-    ## object 'eff.nnodes' will be a simple vector of the total number
-    ## of non "empty" nodes at each level. That is, if it weren't for
-    ## entities with no data, the effective number of nodes would
-    ## simply be 'sapply(nnodes, sum)'.
-    eff.nnodes <- numeric(nlevels)
+    ## Object 'eff.nnodes' is in every respect equivalent to 'nnodes'
+    ## except that each element of the list is a vector of the number of
+    ## non "empty" nodes for each classification of the level
+    ## above.
+    eff.nnodes <- vector("list", nlevels)
     w <- weights.s
     for (i in nlevels:1)
     {
-        eff.nnodes[i] <- sum(w > 0)      # effective number of nodes
+        eff.nnodes[[i]] <- tapply(w, fnodes[[i]], function(x) sum(x > 0))
         w <- tapply(w, fnodes[[i]], sum) # running totals
     }
 
@@ -218,7 +218,7 @@ cm <- function(formula, data, ratios, weights, subset,
     ##   (effective) number of "sectors" - 1
     ##
     ## The 1 neither is included in 'eff.nnodes'.
-    denoms <- diff(c(1, eff.nnodes, sum(!is.na(ratios))))
+    denoms <- diff(c(1, sapply(eff.nnodes, sum), sum(!is.na(ratios))))
 
     ## Final sanity checks
     if (any(!denoms))
@@ -239,60 +239,135 @@ cm <- function(formula, data, ratios, weights, subset,
     ##
     ## Only credibility factors are not computed for the portfolio
     ## level, hence this list is one shorter than the others.
+    tweights <- vector("list", nlevels1p)       # total level weights
+    wmeans <- vector("list", nlevels1p)         # weighted averages
+    bu <- c(rep(0, nlevels), s2)                # unbiased variance estimators
+    cred <- vector("list", nlevels)             # credibility factors
+
+    ## Values already computed at the entity level.
+    tweights[[nlevels1p]] <- as.vector(weights.s);
+    wmeans[[nlevels1p]] <- as.vector(ratios.w);
+
+    ## The unbiased variance estimators are evaluated first as they will
+    ## be used as starting values for the iterative part below.
+    ##
+    ## At the entity level: node weight is given by the natural
+    ## weight, weighted averages use the natural weights.
+    ##
+    ## Level above the entity: node weight is the sum of the natural
+    ## weights at the level below, weighted averages use the natural
+    ## weights.
+    ##
+    ## All upper levels: node weight is the sum of the credibility
+    ## factors at the level below, weighted averages use credibility
+    ## factors from previous level.
+    for (i in nlevels:1)
+    {
+        ## Total weight of the level as per the rule above.
+        tweights[[i]] <- as.vector(tapply(tweights[[i + 1]], fnodes[[i]], sum))
+
+        ## Related auxiliary sum to be used below.
+        sum2 <- as.vector(tapply(tweights[[i + 1]]^2, fnodes[[i]], sum))
+
+        ## Calculation of the weighted averages. If the previous level
+        ## between variance estimate is zero then the level average is
+        ## simply the arithmetic average of the previous level's
+        ## weighted averages.
+        wmeans[[i]] <-
+            if (bu[i + 1])
+                ifelse(tweights[[i]] > 0,
+                       as.vector(tapply(tweights[[i + 1]] * wmeans[[i + 1]],
+                                        fnodes[[i]],
+                                        sum) / tweights[[i]]),
+                       0)
+            else
+                as.vector(tapply(wmeans[[i + 1]], fnodes[[i]], mean))
+
+        ## Calculation of the per node variance estimate. The estimate
+        ## is unbiased provided a multiple (well, not necessarily
+        ## integer) of the latest non-zero variance estimate is
+        ## subtracted from the sum of squares. This is what the
+        ## expression 'bu[bu != 0][1]' is used for, below.
+        bui <- ifelse(tweights[[i]]^2 - sum2 != 0,
+                      tweights[[i]] * (as.vector(tapply(tweights[[i + 1]] *
+                                                        (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2,
+                                                        fnodes[[i]],
+                                                        sum)) -
+                                       (eff.nnodes[[i]] - 1) * bu[bu != 0][1]) /
+                      (tweights[[i]]^2 - sum2),
+                      0)
+
+        ## The final estimate is the average of all the per node estimates.
+        bu[i] <- mean(pmax(bui, 0), na.rm = TRUE)
+
+        ## For the calculation of the next variance estimator, the
+        ## total weights for the current level are replaced by the sum
+        ## of the credibility factors -- provided the variance
+        ## estimate is non-zero.
+        if (bu[i])
+        {
+            cred[[i]] <- 1/(1 + bu[i + 1]/(bu[i] * tweights[[i + 1]]))
+            tweights[[i]] <- as.vector(tapply(cred[[i]], fnodes[[i]], sum))
+        }
+        else
+            cred[[i]] <- numeric(sum(nnodes[[i]]))
+    }
+
+    #print(cred)
+    #print(tweights)
+
+    ## Iterative estimation of the structure parameters.
     ##
     ## At the entity level: total weight is the sum of the natural
-    ## weights, weighted average uses the natural weights and between
+    ## weights, weighted averages use the natural weights and between
     ## variance is s^2.
     ##
     ## All upper levels: total weight is the sum of the credibility
-    ## factors of the level below, weighted average uses credibility
+    ## factors of the level below, weighted averages use credibility
     ## factors, between variance estimated recursively and credibility
     ## factor use total weight of the level, between variance of the
     ## level below (hence the within variance) and between variance of
     ## the current level.
-    ##
-    ## The vector of variance is initialized with s^2 to provide
-    ## starting values for the iterative estimation procedure.
-    tweights <- vector("list", nlevels1p)       # total level weights
-    wmeans <- vector("list", nlevels1p)         # weighted averages
-    b <- rep(s2, nlevels1p)                     # variance estimators
-    cred <- vector("list", nlevels)             # credibility factors
+    method <- match.arg(method)
 
-    ## Values already computed at the entity level.
-    tweights[[nlevels1p]] <- as.vector(weights.s); # rm(weights.s)
-    wmeans[[nlevels1p]] <- as.vector(ratios.w);    # rm(ratios.w)
-
-    ## Iterative estimation of the structure parameters
-    .External("cm", cred, tweights, wmeans, fnodes, denoms, b, tol, echo)
-
-    ## Final credibility factors and weighted averages (computed with
-    ## the latest structure parameters). If a variance estimator is equal
-    ## to (or tends toward) zero then we estimate the means with the
-    ## total level weights instead of the credibility factors.
-    for (i in nlevels:1)
+    if (method == "iterative")
     {
-        cred[[i]] <- 1/(1 + ifelse(is.na(b[i + 1]), 0, b[i + 1])/(b[i] * tweights[[i + 1]]))
-        tweights[[i]] <- as.vector(tapply(ifelse(cred[[i]] > 0, cred[[i]], tweights[[i + 1]]),
-                                          fnodes[[i]],
-                                          sum))
-        wmeans[[i]] <- ifelse(tweights[[i]] > 0,
-                              as.vector(tapply(ifelse(cred[[i]] > 0, cred[[i]], tweights[[i + 1]]) * wmeans[[i + 1]],
-                                               fnodes[[i]],
-                                               sum) / tweights[[i]]),
-                              0)
-        if (b[i] < tol^2) b[i] <- NA
+        #bi <- as.vector(bu)             # starting values
+        bi <- c(rep(s2, nlevels), s2)             # starting values
+        .External("cm", cred, tweights, wmeans, fnodes, denoms, bi, tol, maxit, echo)
+    }
+    else
+    {
+        bi <- NULL
+
+        ## === ESTIMATION OF THE COLLECTIVE MEAN ===
+        ##
+        ## This is required only for the "unbiased" estimation of the
+        ## variance components since the weighted averages calculated
+        ## earlier with this method are not the correct sufficient
+        ## statistics for each level. For the "iterative" method, the
+        ## calculations were done in C.
+        for (i in nlevels:1)
+        {
+            weights <- if (bu[i]) cred[[i]] else tweights[[i + 1]]
+            wmeans[[i]] <- ifelse(tweights[[i]] > 0,
+                                  as.vector(tapply(weights * wmeans[[i + 1]], fnodes[[i]], sum) / tweights[[i]]),
+                                  0)
+        }
     }
 
     ## Transfer level names to lists
-    names(tweights) <- names(wmeans) <- names(b) <-
+    names(tweights) <- names(wmeans) <- names(bu) <-
         c("portfolio", level.names)
+    names(bi) <- if (!is.null(bi)) names(bu)
     names(cred) <- names(nnodes) <- names(fnodes) <-
         level.names
 
     ## Results
     structure(list(means = wmeans,
                    weights = tweights,
-                   variances = b,
+                   unbiased = bu,
+                   iterative = bi,
                    cred = cred,
                    levels = levs,
                    nodes = nnodes,
@@ -305,21 +380,22 @@ print.cm <- function(x, ...)
 {
     nlevels <- length(x$nodes)
     level.names <- names(x$nodes)
+    b <- if (is.null(x$iterative)) x$unbiased else x$iterative
     cat("\nCall: ", deparse(x$call), "\n\n")
     cat("Structure Parameters Estimators\n\n")
-    cat("  Collective premium:", x$means[[1]], "\n")
+    cat("  Collective premium:", x$means[[1]], "\n\n")
     for (i in seq.int(nlevels))
     {
         if (i == 1)
             cat("  Between", level.names[i], "variance:",
-                x$variances[i], "\n")
+                b[i], "\n")
         else
             cat("  Within ", level.names[i - 1],
                 "/Between ", level.names[i], " variance: ",
-                x$variances[i], "\n", sep = "")
+                b[i], "\n", sep = "")
     }
     cat("  Within", level.names[nlevels], "variance:",
-        x$variances[nlevels + 1],"\n", fill = TRUE)
+        b[nlevels + 1],"\n", fill = TRUE)
 }
 
 predict.cm <- function(object, levels = NULL, ...)
@@ -374,7 +450,8 @@ summary.cm <- function(object, levels = NULL, ...)
 
     structure(list(means = object$means[c(1, plevs + 1)],
                    weights = object$weights[c(1, plevs + 1)],
-                   variances = object$variances[sort(unique(c(plevs, plevs + 1)))],
+                   unbiased = object$unbiased[sort(unique(c(plevs, plevs + 1)))],
+                   iterative = object$iterative[sort(unique(c(plevs, plevs + 1)))],
                    cred = object$cred[plevs],
                    levels = object$levels[, seq.int(max(plevs)), drop = FALSE],
                    nodes = object$nodes[plevs],
@@ -387,21 +464,7 @@ print.summary.cm <- function(x, ...)
 {
     nlevels <- length(x$nodes)
     level.names <- names(x$nodes)
-    cat("\nCall: ", deparse(x$call), "\n\n")
-    cat("Structure Parameters Estimators\n\n")
-    cat("  Collective premium:", x$means[[1]], "\n")
-    for (i in seq.int(nlevels))
-    {
-        if (i == 1)
-            cat("  Between", level.names[i], "variance:",
-                x$variances[i], "\n")
-        else
-            cat("  Within ", level.names[i - 1],
-                "/Between ", level.names[i], " variance: ",
-                x$variances[i], "\n", sep = "")
-    }
-    cat("  Within", level.names[nlevels], "variance:",
-        x$variances[nlevels + 1],"\n", fill = TRUE)
+    NextMethod()                        # print.cm()
     cat("Detailed premiums\n\n")
     for (i in seq.int(nlevels))
     {
@@ -415,7 +478,7 @@ print.summary.cm <- function(x, ...)
                    format(x$cred[[i]], ...),
                    format(x$premiums[[i]], ...))
         colnames(y) <- c(colnames(levs),
-                         "Ind. premium", "Weight",
+                         "Indiv. mean", "Weight",
                          "Cred. factor", "Cred. premium")
         rownames(y) <- rep("   ", nrow(y))
         print(y, quote = FALSE, right = TRUE, ...)

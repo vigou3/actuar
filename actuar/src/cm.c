@@ -9,15 +9,16 @@
 #include <R.h>
 #include <Rmath.h>
 #include <Rinternals.h>
+#include "locale.h"
 
 #define CAD5R(e) CAR(CDR(CDR(CDR(CDR(CDR(e))))))
 #define CAD6R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(e)))))))
 #define CAD7R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(e))))))))
 #define CAD8R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(e)))))))))
+#define CAD9R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(e))))))))))
 
-#define abs(x) (x >= 0 ? x : -x)
-#define tozero(x) (x > R_pow_di(REAL(tol)[0], 2) ? x : 0)
-#define weights(i, j) ( cred[i - 1][j] != 0 ? cred[i - 1][j] : tweights[i][j] )
+#define abs(x) ((x) >= 0 ? (x) : -(x))
+#define weights(i, j) (cred[i][j] != 0 ? cred[i][j] : tweights[i + 1][j])
 
 SEXP toSEXP(double *x, int size)
 {
@@ -28,10 +29,11 @@ SEXP toSEXP(double *x, int size)
 
 SEXP cm(SEXP args)
 {
-    SEXP s_cred, s_tweights, s_wmeans, s_fnodes, denoms, b, tol, echo;
-    double **cred, **tweights, **wmeans, max = 1;
+    SEXP s_cred, s_tweights, s_wmeans, s_fnodes, denoms, b, tol, maxit, echo;
+    double **cred, **tweights, **wmeans, diff;
     int **fnodes, nlevels, i, j, k, count = 0;
 
+    /*  All values received from R are protected. */
     PROTECT(s_cred = coerceVector(CADR(args), VECSXP));
     PROTECT(s_tweights = coerceVector(CADDR(args), VECSXP));
     PROTECT(s_wmeans = coerceVector(CADDDR(args), VECSXP));
@@ -39,116 +41,173 @@ SEXP cm(SEXP args)
     PROTECT(denoms = coerceVector(CAD5R(args), REALSXP));
     PROTECT(b = coerceVector(CAD6R(args), REALSXP));
     PROTECT(tol = coerceVector(CAD7R(args), REALSXP));
-    PROTECT(echo = coerceVector(CAD8R(args), LGLSXP));
+    PROTECT(maxit = coerceVector(CAD8R(args), INTSXP));
+    PROTECT(echo = coerceVector(CAD9R(args), LGLSXP));
 
-    double bt[length(b)];
-    nlevels = length(b) - 1;
-
-    int size[nlevels]; size[0] = 1;
+    /* Initialization of some variables */
+    double bt[length(b)];	/* previous values of 'b' */
+    nlevels = length(b) - 1;	/* number of levels in the model */
+    bt[nlevels] = REAL(b)[nlevels]; /* within entity variance, never
+				     * changes. */
+    int size[nlevels + 1];      /* total number of nodes at each
+				 * level, including the portfolio level */
+    size[0] = 1;
     for (i = 1; i <= nlevels; i++)
 	size[i] = length(VECTOR_ELT(s_fnodes, i - 1));
 
-    /* Allocation of the memory space that will be needed below. */
-
-    cred = (double **) S_alloc(nlevels, sizeof(double));
+    /* Allocation of arrays that will be needed below. */
+    cred     = (double **) S_alloc(nlevels,     sizeof(double));
     tweights = (double **) S_alloc(nlevels + 1, sizeof(double));
-    wmeans = (double **) S_alloc(nlevels + 1, sizeof(double));
-    fnodes = (int **) S_alloc(nlevels, sizeof(int));
-
-    for (i = 0; i < nlevels; i++)
+    wmeans   = (double **) S_alloc(nlevels + 1, sizeof(double));
+    fnodes   = (int **)    S_alloc(nlevels,     sizeof(int));
+    tweights[0] = (double *) S_alloc(size[0], sizeof(double));
+    wmeans[0]   = (double *) S_alloc(size[0], sizeof(double));
+    for (i = 1; i <= nlevels; i++)
     {
-	cred[i] = (double *) S_alloc(size[i + 1], sizeof(double));
-	tweights[i + 1] = (double *) S_alloc(size[i + 1], sizeof(double));
-	wmeans[i + 1] = (double *) S_alloc(size[i + 1], sizeof(double));
-	fnodes[i] = (int *) S_alloc(size[i + 1], sizeof(int));
+	cred[i - 1]   = (double *) S_alloc(size[i], sizeof(double));
+	tweights[i]   = (double *) S_alloc(size[i], sizeof(double));
+	wmeans[i]     = (double *) S_alloc(size[i], sizeof(double));
+	fnodes[i - 1] = (int *)    S_alloc(size[i], sizeof(int));
     }
 
-    tweights[0] = (double *) S_alloc(size[0], sizeof(double));
-    wmeans[0] = (double *) S_alloc(size[0], sizeof(double));
-
-    /* Get values of fnodes, tweights and wmeans from R lists. */
-
+    /* Get values of fnodes, tweights and wmeans from R lists. For
+     * the latter two, only the entity level values are initialized
+     * in R or meaningful. */
     for (i = 0; i < nlevels; i++)
-	memcpy(fnodes[i], INTEGER(VECTOR_ELT(s_fnodes, i)), size[i + 1] * sizeof(int));
-    memcpy(tweights[nlevels], REAL(VECTOR_ELT(s_tweights, nlevels)), size[nlevels] * sizeof(double));
-    memcpy(wmeans[nlevels], REAL(VECTOR_ELT(s_wmeans, nlevels)), size[nlevels] * sizeof(double));
+	memcpy(fnodes[i], INTEGER(VECTOR_ELT(s_fnodes, i)),
+	       size[i + 1] * sizeof(int));
+    memcpy(tweights[nlevels], REAL(VECTOR_ELT(s_tweights, nlevels)),
+	   size[nlevels] * sizeof(double));
+    memcpy(wmeans[nlevels], REAL(VECTOR_ELT(s_wmeans, nlevels)),
+	   size[nlevels] * sizeof(double));
+
+    /* If printing of iterations was asked for, start by printing a
+     * header and the starting values. */
+    if (LOGICAL(echo)[0])
+    {
+	Rprintf("Iteration\tVariance estimates\n %d\t\t", count);
+	for (i = 0; i < nlevels; i++)
+	    Rprintf("%.8g  ", REAL(b)[i]);
+	Rprintf("\n");
+    }
 
     /* Iterative part. */
-
-    while (max >= REAL(tol)[0])
+    do
     {
-	for (i = 0; i <= nlevels; i++) bt[i] = REAL(b)[i];
+	/* Stop after 'maxit' iterations and issue warning. */
+	if (++count > INTEGER(maxit)[0])
+	{
+	    warning(_("maximum number of iterations reached before obtaining convergence"));
+	    break;
+	}
+
+	/* Copy the previous values of 'b'. */
+	for (i = 0; i < nlevels; i++)
+	    bt[i] = REAL(b)[i];
+
+	/* Run through all levels from lowest to highest. */
+	for (i = nlevels - 1; i >= 0; i--)
+	{
+	    /* Reset the total weights and weighted averages. */
+	    for (j = 0; j < size[i]; j++)
+	    {
+		tweights[i][j] = 0.;
+		wmeans[i][j] = 0.;
+	    }
+
+	    /* Calculation of the new credibility factors, total
+	     * weights and (numerators of) weighted averages. */
+	    for (j = 0; j < size[i + 1]; j++)
+	    {
+		cred[i][j] = 1 / (1 + REAL(b)[i + 1] / (REAL(b)[i] * tweights[i + 1][j]));
+		k = fnodes[i][j] - 1; /* C version of tapply(). */
+		tweights[i][k] += weights(i, j);
+		wmeans[i][k] += weights(i, j) * wmeans[i + 1][j];
+	    }
+
+	    /* Final calculation of weighted averages with the
+	     * division by the total weight. */
+	    for (j = 0; j < size[i]; j++)
+	    {
+		if (tweights[i][j] > 0)
+		    wmeans[i][j] = wmeans[i][j] / tweights[i][j];
+		else
+		    wmeans[i][j] = 0.;
+	    }
+
+	    /* Calculation of the new current level variance estimator
+	     * only if the previous one is strictly positive. */
+	    if (bt[i] > 0)
+	    {
+		REAL(b)[i] = 0.;
+		for (j = 0; j < size[i + 1]; j++)
+		{
+		    k = fnodes[i][j];
+		    REAL(b)[i] += weights(i, j) * R_pow_di(wmeans[i + 1][j] - wmeans[i][k - 1], 2);
+		}
+		REAL(b)[i] = REAL(b)[i] / REAL(denoms)[i];
+
+		/* Set the estimator to 0 if it is close enough to 0
+		 * and henceforth stop iterations on this
+		 * parameter. */
+		if (REAL(b)[i] <= R_pow_di(REAL(tol)[0], 2))
+		    REAL(b)[i] = 0.;
+	    }
+	}
 
 	if (LOGICAL(echo)[0])
 	{
-	    count++;
-	    Rprintf("%d - ", count);
-	    for (i = 0; i < nlevels; i++) Rprintf("%.8g ", bt[i]);
-	    Rprintf("%.8g\n", bt[nlevels]);
+	    Rprintf(" %d\t\t", count);
+	    for (i = 0; i < nlevels; i++)
+		Rprintf("%.8g  ", REAL(b)[i]);
+	    Rprintf("\n");
 	}
 
-	for (i = nlevels; i >= 1; i--)
+	/*  Computation of the largest difference between two
+	 *  iterations. Estimators set to 0 are not taken into
+	 *  account. */
+	diff = 0.;
+	for (i = 0; i < nlevels; i++)
+	    if (REAL(b)[i] > 0)
+		diff = fmax2(abs(REAL(b)[i] - bt[i])/bt[i], diff);
+    }
+    while (diff >= REAL(tol)[0]);
+
+    /* Compute the credibility factors, total weights and weighted
+     * averages with the latest variance estimators. */
+    for (i = nlevels - 1; i >= 0; i--)
+    {
+	for (j = 0; j < size[i]; j++)
 	{
-	    /* We reset the values of tweights and wmeans. */
-	    for (j = 0; j < size[i - 1]; j++)
-	    {
-		tweights[i - 1][j] = 0;
-		wmeans[i - 1][j] = 0;
-	    }
-
-	    for (j = 0; j < size[i]; j++)
-	    {
-		cred[i - 1][j] = 1 / ( 1 + REAL(b)[i] / ( REAL(b)[i - 1] * tweights[i][j] ) );
-
-		/* Here is a C version of R function tapply(). */
-		k = fnodes[i - 1][j];
-		tweights[i - 1][k - 1] += weights(i, j);
-		wmeans[i - 1][k - 1] += weights(i, j) * wmeans[i][j];
-	    }
-
-	    for (j = 0; j < size[i - 1]; j++)
-	    {
-		if (tweights[i - 1][j] > 0)
-		    wmeans [i - 1][j] = wmeans[i - 1][j] / tweights[i - 1][j];
-		else wmeans [i - 1][j] = 0;
-	    }
-
-	    if (REAL(b)[i - 1])
-	    {
-		REAL(b)[i - 1] = 0;
-		for (j = 0; j < size[i]; j++)
-		{
-		    k = fnodes[i - 1][j];
-		    REAL(b)[i - 1] += weights(i, j) * R_pow_di( (wmeans[i][j] - wmeans[i - 1][k - 1]), 2);
-		}
-		REAL(b)[i - 1] = REAL(b)[i - 1] / REAL(denoms)[i - 1];
-	    }
+	    tweights[i][j] = 0.;
+	    wmeans[i][j] = 0.;
 	}
-
-	/*  Computation of the maximum absolute value of (b - bt) /
-	 *  bt. If "b" or "bt" converges toward zero, it will be changed
-	 *  to zero to stop the recursion for this level. Total level
-	 *  weights will be used instead of the credibility factors
-	 *  (for this level) to estimate the final means in R.
-	 */
-
-	max = 0; /* Reset. */
-	for (i = 0; i < nlevels; i++) if (bt[i])
-	    max = fmax2( abs( ( tozero(REAL(b)[i]) - tozero(bt[i]) )  / bt[i] ), max );
+	for (j = 0; j < size[i + 1]; j++)
+	{
+	    cred[i][j] = 1 / (1 + REAL(b)[i + 1] / (REAL(b)[i] * tweights[i + 1][j]));
+	    k = fnodes[i][j] - 1;
+	    tweights[i][k] += weights(i, j);
+	    wmeans[i][k] += weights(i, j) * wmeans[i + 1][j];
+	}
+	for (j = 0; j < size[i]; j++)
+	{
+	    if (tweights[i][j] > 0)
+		wmeans[i][j] = wmeans[i][j] / tweights[i][j];
+	    else
+		wmeans[i][j] = 0.;
+	}
     }
 
     /* Copying of the final values to R lists. */
     SET_VECTOR_ELT(s_tweights, 0, toSEXP(tweights[0], size[0]));
-    SET_VECTOR_ELT(s_wmeans, 0, toSEXP(wmeans[0], size[0]));
-    SET_VECTOR_ELT(s_cred, nlevels - 1, toSEXP(cred[nlevels - 1], size[nlevels]));
-
-    for (i = 1; i > nlevels; i++)
+    SET_VECTOR_ELT(s_wmeans,   0, toSEXP(wmeans[0], size[0]));
+    for (i = 1; i <= nlevels; i++)
     {
-	SET_VECTOR_ELT(s_cred, i - 1, toSEXP(cred[i - 1], size[i - 1]));
-	SET_VECTOR_ELT(s_tweights, i, toSEXP(tweights[i], size[i]));
-	SET_VECTOR_ELT(s_wmeans, i, toSEXP(wmeans[i], size[i]));
+	SET_VECTOR_ELT(s_cred,     i - 1, toSEXP(cred[i - 1], size[i]));
+	SET_VECTOR_ELT(s_tweights, i,     toSEXP(tweights[i], size[i]));
+	SET_VECTOR_ELT(s_wmeans,   i,     toSEXP(wmeans[i],   size[i]));
     }
 
-    UNPROTECT(8);
+    UNPROTECT(9);
     return(R_NilValue);
 }
