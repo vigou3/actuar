@@ -30,7 +30,7 @@ SEXP toSEXP(double *x, int size)
 SEXP cm(SEXP args)
 {
     SEXP s_cred, s_tweights, s_wmeans, s_fnodes, denoms, b, tol, maxit, echo;
-    double **cred, **tweights, **wmeans, diff;
+    double **cred, **tweights, **wmeans, diff, bw;
     int **fnodes, nlevels, i, j, k, count = 0;
 
     /*  All values received from R are protected. */
@@ -87,7 +87,7 @@ SEXP cm(SEXP args)
     {
 	Rprintf("Iteration\tVariance estimates\n %d\t\t", count);
 	for (i = 0; i < nlevels; i++)
-	    Rprintf("%.8g  ", REAL(b)[i]);
+	    Rprintf(" %.8g  ", REAL(b)[i]);
 	Rprintf("\n");
     }
 
@@ -111,15 +111,19 @@ SEXP cm(SEXP args)
 	    /* Reset the total weights and weighted averages. */
 	    for (j = 0; j < size[i]; j++)
 	    {
-		tweights[i][j] = 0.;
-		wmeans[i][j] = 0.;
+		tweights[i][j] = 0;
+		wmeans[i][j] = 0;
 	    }
+
+	    /* Find the first non-zero within variance estimator. */
+	    for (j = 1; REAL(b)[i + j] == 0; j++);
+	    bw = REAL(b)[i + j];
 
 	    /* Calculation of the new credibility factors, total
 	     * weights and (numerators of) weighted averages. */
 	    for (j = 0; j < size[i + 1]; j++)
 	    {
-		cred[i][j] = 1 / (1 + REAL(b)[i + 1] / (REAL(b)[i] * tweights[i + 1][j]));
+		cred[i][j] = 1 / (1 + bw / (REAL(b)[i] * tweights[i + 1][j]));
 		k = fnodes[i][j] - 1; /* C version of tapply(). */
 		tweights[i][k] += weights(i, j);
 		wmeans[i][k] += weights(i, j) * wmeans[i + 1][j];
@@ -132,14 +136,14 @@ SEXP cm(SEXP args)
 		if (tweights[i][j] > 0)
 		    wmeans[i][j] = wmeans[i][j] / tweights[i][j];
 		else
-		    wmeans[i][j] = 0.;
+		    wmeans[i][j] = 0;
 	    }
 
 	    /* Calculation of the new current level variance estimator
 	     * only if the previous one is strictly positive. */
 	    if (bt[i] > 0)
 	    {
-		REAL(b)[i] = 0.;
+		REAL(b)[i] = 0;
 		for (j = 0; j < size[i + 1]; j++)
 		{
 		    k = fnodes[i][j];
@@ -151,54 +155,53 @@ SEXP cm(SEXP args)
 		 * and henceforth stop iterations on this
 		 * parameter. */
 		if (REAL(b)[i] <= R_pow_di(REAL(tol)[0], 2))
-		    REAL(b)[i] = 0.;
+		    REAL(b)[i] = 0;
+	    }
+
+	    /* Recompute the credibility factors, total weights and
+	     * weighted means with the latest between variance
+	     * estimator. */
+	    for (j = 0; j < size[i]; j++)
+	    {
+		tweights[i][j] = 0;
+		wmeans[i][j] = 0;
+	    }
+	    for (j = 0; j < size[i + 1]; j++)
+	    {
+		cred[i][j] = 1 / (1 + bw / (REAL(b)[i] * tweights[i + 1][j]));
+		k = fnodes[i][j] - 1;
+		tweights[i][k] += weights(i, j);
+		wmeans[i][k] += weights(i, j) * wmeans[i + 1][j];
+	    }
+	    for (j = 0; j < size[i]; j++)
+	    {
+		if (tweights[i][j] > 0)
+		    wmeans[i][j] = wmeans[i][j] / tweights[i][j];
+		else
+		    wmeans[i][j] = 0;
 	    }
 	}
 
+	/* Trace */
 	if (LOGICAL(echo)[0])
 	{
 	    Rprintf(" %d\t\t", count);
 	    for (i = 0; i < nlevels; i++)
-		Rprintf("%.8g  ", REAL(b)[i]);
-	    Rprintf("\n");
+		Rprintf(" %.8g  ", REAL(b)[i]);
+ 	    Rprintf("\n");
 	}
 
 	/*  Computation of the largest difference between two
 	 *  iterations. Estimators set to 0 are not taken into
 	 *  account. */
-	diff = 0.;
+	diff = 0;
 	for (i = 0; i < nlevels; i++)
 	    if (REAL(b)[i] > 0)
 		diff = fmax2(abs(REAL(b)[i] - bt[i])/bt[i], diff);
     }
     while (diff >= REAL(tol)[0]);
 
-    /* Compute the credibility factors, total weights and weighted
-     * averages with the latest variance estimators. */
-    for (i = nlevels - 1; i >= 0; i--)
-    {
-	for (j = 0; j < size[i]; j++)
-	{
-	    tweights[i][j] = 0.;
-	    wmeans[i][j] = 0.;
-	}
-	for (j = 0; j < size[i + 1]; j++)
-	{
-	    cred[i][j] = 1 / (1 + REAL(b)[i + 1] / (REAL(b)[i] * tweights[i + 1][j]));
-	    k = fnodes[i][j] - 1;
-	    tweights[i][k] += weights(i, j);
-	    wmeans[i][k] += weights(i, j) * wmeans[i + 1][j];
-	}
-	for (j = 0; j < size[i]; j++)
-	{
-	    if (tweights[i][j] > 0)
-		wmeans[i][j] = wmeans[i][j] / tweights[i][j];
-	    else
-		wmeans[i][j] = 0.;
-	}
-    }
-
-    /* Copying of the final values to R lists. */
+    /* Copy the final values to R lists. */
     SET_VECTOR_ELT(s_tweights, 0, toSEXP(tweights[0], size[0]));
     SET_VECTOR_ELT(s_wmeans,   0, toSEXP(wmeans[0], size[0]));
     for (i = 1; i <= nlevels; i++)

@@ -234,14 +234,14 @@ cm <- function(formula, data, ratios, weights, subset,
     ##
     ## Create vectors to hold values to be computed at each level
     ## (from portfolio to entity), namely: the total node weights, the
-    ## node weighted averages, the between variance and the node
+    ## node weighted averages, the between variances and the node
     ## credibility factors.
     ##
     ## Only credibility factors are not computed for the portfolio
     ## level, hence this list is one shorter than the others.
     tweights <- vector("list", nlevels1p)       # total level weights
     wmeans <- vector("list", nlevels1p)         # weighted averages
-    bu <- c(rep(0, nlevels), s2)                # unbiased variance estimators
+    bu <- bi <- c(numeric(nlevels), s2)          # variance estimators
     cred <- vector("list", nlevels)             # credibility factors
 
     ## Values already computed at the entity level.
@@ -300,6 +300,11 @@ cm <- function(formula, data, ratios, weights, subset,
         ## The final estimate is the average of all the per node estimates.
         bu[i] <- mean(pmax(bui, 0), na.rm = TRUE)
 
+        ## For the iterative estimation method, convergence towards 0
+        ## depends on estimators with a truncation at 0 *after* taking
+        ## the mean, not before as above.
+        bi[i] <- max(mean(bui, na.rm = TRUE), 0)
+
         ## For the calculation of the next variance estimator, the
         ## total weights for the current level are replaced by the sum
         ## of the credibility factors -- provided the variance
@@ -312,9 +317,6 @@ cm <- function(formula, data, ratios, weights, subset,
         else
             cred[[i]] <- numeric(sum(nnodes[[i]]))
     }
-
-    #print(cred)
-    #print(tweights)
 
     ## Iterative estimation of the structure parameters.
     ##
@@ -332,9 +334,8 @@ cm <- function(formula, data, ratios, weights, subset,
 
     if (method == "iterative")
     {
-        #bi <- as.vector(bu)             # starting values
-        bi <- c(rep(s2, nlevels), s2)             # starting values
-        .External("cm", cred, tweights, wmeans, fnodes, denoms, bi, tol, maxit, echo)
+        if (any(head(bi, -1)))    # require at least one non-zero starting value
+            .External("cm", cred, tweights, wmeans, fnodes, denoms, bi, tol, maxit, echo)
     }
     else
     {
