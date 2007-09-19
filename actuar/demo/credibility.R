@@ -187,10 +187,11 @@ summary(fit)
 
 ## Calculations for the four level hierarchical portfolio simulated
 ## above.
-DF <- data.frame(ratios(pf), weight = weights(pf)[, -(1:3)])
+DB <- cbind(weights(pf, prefix = "weight."),
+            aggregate(pf, classif = FALSE) / weights(pf, classif = FALSE))
 
 fit <- cm(~sector + sector:unit + sector:unit:contract,
-          data = DF, ratios = year.1:year.6,
+          data = DB, ratios = year.1:year.6,
           weights = weight.year.1:weight.year.6)
 fit
 predict(fit)                          # credibility premiums

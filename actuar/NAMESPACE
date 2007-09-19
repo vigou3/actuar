@@ -6,10 +6,10 @@ ImportFrom(Matrix, expm)
 
 ### Exports
 export(## Credibility theory
-       bstraub, cm, hache, ratios, severity, simpf, unroll,
+       bstraub, cm, hache, severity, simpf, unroll,
        ## Risk theory
        aggregateDist, CTE, discretize, discretise, VaR, adjCoef, ruin,
-       calcMatrixExpDiag, calcMatrixExpGen, 
+       calcMatrixExpDiag, calcMatrixExpGen,
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        mexp, levexp, mgfexp,
@@ -33,7 +33,7 @@ export(## Credibility theory
        #dpareto1, ppareto1, qpareto1, rpareto1, mpareto1, levpareto1,
        mweibull, levweibull,
        minvGauss, levinvGauss, mgfinvGauss, #notation from SuppDists package
-       minvgauss, levinvgauss, mgfinvgauss, 
+       minvgauss, levinvgauss, mgfinvgauss,
        ## Three parameter distributions
        dburr, pburr, qburr, rburr, mburr, levburr,
        dgenpareto, pgenpareto, qgenpareto, rgenpareto, mgenpareto, levgenpareto,
@@ -98,10 +98,7 @@ S3method(print, summary.aggregateDist)
 S3method(print, summary.bstraub)
 S3method(print, summary.cm)
 
-
 S3method(quantile, aggregateDist)
-
-S3method(ratios, simpf)
 
 S3method(severity, default)
 S3method(severity, simpf)

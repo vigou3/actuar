@@ -3,10 +3,11 @@
 ### Computing summary statistics and accessing components of a
 ### portfolio.
 ###
-### AUTHORS: Louis-Philippe Pouliot, Tommy Ouellet, 
+### AUTHORS: Louis-Philippe Pouliot, Tommy Ouellet,
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-aggregate.simpf <- function(x, by = names(x$nodes), FUN = sum, ...)
+aggregate.simpf <- function(x, by = names(x$nodes), FUN = sum,
+                            classification = TRUE, prefix = NULL, ...)
 {
     level.names <- names(x$nodes)       # level names
     nlevels <- length(level.names)      # number of levels
@@ -21,13 +22,17 @@ aggregate.simpf <- function(x, by = names(x$nodes), FUN = sum, ...)
     ## The most common case should be to aggregate claim amounts by
     ## node. This case being very simple, it is treated separately.
     if (identical(by, level.names))
-        return(cbind(x$classification,
+        return(cbind(if (classification) x$classification,
                      array(sapply(x$data, FUN, ...), dim(x$data),
-                           dimnames = dimnames(x$data))))
+                           dimnames = list(NULL, paste(prefix, colnames(x$data), sep = "")))))
 
     ## Summaries only by last level (years) are also simple to handle.
     if (identical(by, years))
-        return(apply(x$data, 2, fun, ...))
+    {
+        res <- apply(x$data, 2, fun, ...)
+        names(res) <- paste(prefix, colnames(x$data), sep = "")
+        return(res)
+    }
 
     ## The other possibilities require to split the data in groups as
     ## specified in argument 'by'. If the last level (years) is in
@@ -60,29 +65,19 @@ aggregate.simpf <- function(x, by = names(x$nodes), FUN = sum, ...)
     }
 
     ## Return results as a matrix
-    structure(cbind(s, res),
-              dimnames = list(NULL, c(rows, cols)))
+    structure(cbind(if (classification) s, res),
+              dimnames = list(NULL, c(if (classification) rows, paste(prefix, colnames(x$data), sep = ""))))
 }
 
-frequency.simpf <- function(x, by = names(x$nodes), ...)
+frequency.simpf <- function(x, by = names(x$nodes),
+                            classification = TRUE, prefix = NULL, ...)
 {
     freq <- function(x) if (identical(x, NA)) NA else length(x)
-    aggregate(x, by, freq)
+    aggregate(x, by, freq, classification, prefix)
 }
 
-ratios.simpf <- function(object, ...)
-{
-    if (is.null(weights(object)))
-        aggregate(object)
-    else
-    {
-        col <- ncol(object$classification)
-        cbind(object$classification, aggregate(object)[, -(1:col)] / weights(object)[, -(1:col)])
-    }
-}
-
-severity.simpf <- function(x, by = head(names(x$node), -1),
-                           splitcol = NULL, ...)
+severity.simpf <- function(x, by = head(names(x$node), -1), splitcol = NULL,
+                           classification = TRUE, prefix = NULL, ...)
 {
     level.names <- names(x$nodes)       # level names
     ci <- seq_len(ncol(x$data))         # column indexes
@@ -111,6 +106,7 @@ severity.simpf <- function(x, by = head(names(x$node), -1),
             stop("invalid 'by' specification")
         x <- x$data
         res <- NextMethod(bycol = TRUE, drop = FALSE)
+        colnames(res) <- paste(prefix, colnames(x$data), sep = "")
         return(list(first = res[, !splitcol],
                     last = if (all(!splitcol)) NULL else res[, splitcol]))
     }
@@ -131,6 +127,11 @@ severity.simpf <- function(x, by = head(names(x$node), -1),
     ## Keep the 'splitcol' columns for later use.
     x.last <- x$data[, splitcol]
 
+    ## If a prefix is not specified, use "claim." as a sensible
+    ## choice.
+    if (is.null(prefix))
+        prefix <- "claim."
+
     ## Unroll the "main" block of columns.
     if (all(splitcol))
         res.first <- NULL
@@ -142,8 +143,8 @@ severity.simpf <- function(x, by = head(names(x$node), -1),
             if (0 < (nc <- ncol(res.first)))
             {
                 dimnames(res.first) <-
-                    list(NULL, paste("claim", seq_len(nc), sep = "."))
-                cbind(s, res.first)
+                    list(NULL, paste(prefix, colnames(x$data), sep = ""))
+                cbind(if (classification) s, res.first)
             }
             else
                 NULL
@@ -160,8 +161,8 @@ severity.simpf <- function(x, by = head(names(x$node), -1),
             if (0 < (nc <- ncol(res.last)))
             {
                 dimnames(res.last) <-
-                    list(NULL, paste("claim", seq_len(nc), sep = "."))
-                cbind(s, res.last)
+                    list(NULL, paste(prefix, colnames(x$data), sep = ""))
+                cbind(if (classification) s, res.last)
             }
             else
                 NULL
@@ -171,10 +172,14 @@ severity.simpf <- function(x, by = head(names(x$node), -1),
     list(first = res.first, last = res.last)
 }
 
-weights.simpf <- function(object, ...)
+weights.simpf <- function(object, classification = TRUE, prefix = NULL, ...)
 {
     if (is.null(object$weights))
         NULL
     else
-        cbind(object$classification, object$weights)
+    {
+        w <- object$weights
+        colnames(w) <- paste(prefix, colnames(w), sep = "")
+        cbind(if (classification) object$classification, w)
+    }
 }
