@@ -15,7 +15,15 @@ SEXP do_random2(int code, SEXP args);
 SEXP do_random3(int code, SEXP args);
 SEXP do_random4(int code, SEXP args);
 
+//compute the matrix exponential in the general case
 SEXP calcMatExpGen (SEXP x, SEXP u, SEXP T, SEXP v);
+
+//phase-type random generator
+SEXP randphasetype( SEXP n, SEXP pi, SEXP T, SEXP m);
+//utility function of phase-type random generator
+double genDiscretVariable(int dim, double *prob, double *value );
+double genErlangVariable(int n, double rate);
+
 
 /* Utility functions */
 /*   One parameter distributions , hence associated with dpq1 */

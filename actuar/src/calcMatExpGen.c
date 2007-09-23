@@ -69,21 +69,21 @@ SEXP calcMatExpGen (SEXP x, SEXP u, SEXP T, SEXP v)
 	int traceshiftT = 0;
 	int iloperm, ihiperm; //arguments for dgebal permutation
 	int iloscal, ihiscal; //arguments for dgebal scaling	
-	double * perm = (double *) R_alloc(ncolT, sizeof(double)); //permutation array
-	double * scale = (double *) R_alloc(ncolT, sizeof(double)); //scale array
+	double *perm = (double *) R_alloc(ncolT, sizeof(double)); //permutation array
+	double *scale = (double *) R_alloc(ncolT, sizeof(double)); //scale array
 	int exitcode; //exitcode used for different fortran routine
-	double * work = (double *) R_alloc(ncolTsqr, sizeof(double)); //workspace array
+	double *work = (double *) R_alloc(ncolTsqr, sizeof(double)); //workspace array
 	double infnormT; //infinite norm of matrix T
 	int sqrpowscal ; //the square power used for scaling T
-	double * npp = (double *) R_alloc(ncolTsqr, sizeof(double)); //numerator power Pade'
-	double * dpp = (double *) R_alloc(ncolTsqr, sizeof(double)); //denominator power Pade'
+	double *npp = (double *) R_alloc(ncolTsqr, sizeof(double)); //numerator power Pade'
+	double *dpp = (double *) R_alloc(ncolTsqr, sizeof(double)); //denominator power Pade'
 	double minus1powj = -1; // (-1)^j 
 	double one = 1.0; //useful for fortran routine dgemm
 	double zero = 0.0;
-	int * pivot = (int *) R_alloc(ncolT, sizeof(int)); // pivot vector
-	int * invperm = (int *) R_alloc(ncolT, sizeof(int)); // inverse permutation vector
+	int *pivot = (int *) R_alloc(ncolT, sizeof(int)); // pivot vector
+	int *invperm = (int *) R_alloc(ncolT, sizeof(int)); // inverse permutation vector
 	
-	double * result = (double *) R_alloc(lenX, sizeof(double)); // vector of results
+	double *result = (double *) R_alloc(lenX, sizeof(double)); // vector of results
 	SEXP resultinR;	// result in R type
 	PROTECT(resultinR = allocVector(REALSXP, lenX)); // allocate a real vector of length x
 	result = REAL( resultinR ); // plug the C pointer 'result' on the R type 'resultinR'
@@ -129,9 +129,10 @@ SEXP calcMatExpGen (SEXP x, SEXP u, SEXP T, SEXP v)
 	/* check if matrix T is upper triangular */
 	// time cost O(m^2)
 	isUpperTriangular = 1;
+	//i row index and j column index
 	for(j = 0; j < ncolT-1; j++)
 		for(i = j+1; i < nrowT; i++) 
-			isUpperTriangular  *= valT[i + j* ncolT] == 0;
+			isUpperTriangular  *= valT[i + j* ncolT] == 0; //T is stored column by column
 					
 				
 			
@@ -145,6 +146,7 @@ SEXP calcMatExpGen (SEXP x, SEXP u, SEXP T, SEXP v)
 		valT = REAL( duplicateT );
 		
 		/* multiply matrix T by x[k] */
+		//i row index and j column index	
 		for(i = 0; i < nrowT; i++) 
 			for(j = 0; j < ncolT; j++) 
 				valT[i + j* ncolT]  *= valX[k];
@@ -392,7 +394,7 @@ SEXP calcMatExpGen (SEXP x, SEXP u, SEXP T, SEXP v)
 		
 		
 		//inverse permuation if T is not upper triangular and 'perm' is not the identity permutation
-		if(iloperm != 1 && ihiperm != ncolT && !isUpperTriangular)
+		if( (iloperm != 1 || ihiperm != ncolT) && !isUpperTriangular)
 		{
 			// construct balancing permutation vector 
 			for(i = 0; i < ncolT; i++)

@@ -59,8 +59,8 @@ qphasetype <- function(p, pi, T, m, lower.tail = TRUE, log.p = FALSE)
 #???
     
 rphasetype <- function(n, pi, T, m)
-    return (NULL)
-#http://portal.acm.org/citation.cfm?id=802607&coll=portal&dl=ACM
+    .Call("randphasetype", n, pi, T, -T %*% rep(1,m) )
+
 
 mphasetype <- function(order, pi, T, m)
 {
