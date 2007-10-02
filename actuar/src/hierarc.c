@@ -27,7 +27,7 @@ SEXP toSEXP(double *x, int size)
     return ans;
 }
 
-SEXP cm(SEXP args)
+SEXP hierarc(SEXP args)
 {
     SEXP s_cred, s_tweights, s_wmeans, s_fnodes, denoms, b, tol, maxit, echo;
     double **cred, **tweights, **wmeans, diff, bw;

@@ -5,12 +5,10 @@
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 ### Sébastien Auclair, and Louis-Philippe Pouliot
 
-bstraub <- function(ratios, weights,
-                    heterogeneity = c("iterative", "unbiased"),
-                    tol = 1E-6, echo = FALSE)
+bstraub <- function(ratios, weights, method = c("iterative", "unbiased"),
+                    maxit = 100, tol = sqrt(.Machine$double.eps),
+                    echo = FALSE, old.format = TRUE)
 {
-    Call <- match.call()
-
     ## If weights are not specified, use equal weights as in
     ## Bühlmann's model.
     if (missing(weights))
@@ -18,18 +16,17 @@ bstraub <- function(ratios, weights,
         if (any(is.na(ratios)))
             stop("missing ratios not allowed when weights are not supplied")
         weights <- array(1, dim(ratios))
-        model <- "Buhlmann"
     }
-    else
-        model <- "Buhlmann-Straub"
 
     ## Check other bad arguments.
     if (ncol(ratios) < 2)
-        stop("there must be at least one contract with more than one period of experience")
+        stop("there must be at least one node with more than one period of experience")
     if (nrow(ratios) < 2)
-        stop("there must be more than one contract")
-    if(!identical(which(is.na(ratios)), which(is.na(weights))))
+        stop("there must be more than one node")
+    if (!identical(which(is.na(ratios)), which(is.na(weights))))
         stop("missing values are not in the same positions in weights and in ratios")
+    if (all(!weights, na.rm = TRUE))
+        stop("no available data to fit model")
 
     ## Individual weighted averages. It could happen that a contract
     ## has no observations, for example when applying the model on
@@ -59,23 +56,34 @@ bstraub <- function(ratios, weights,
     ## 1. asked to in argument;
     ## 2. the unbiased estimator is > 0;
     ## 3. weights are not all equal (Bühlmann model).
-    heterogeneity <- match.arg(heterogeneity)
+    method <- match.arg(method)
 
-    if (heterogeneity == "iterative")
+    if (method == "iterative")
     {
         if (ac > 0)
         {
             if (diff(range(weights, na.rm = TRUE)) > .Machine$double.eps^0.5)
             {
                 if (echo)
-                    exp <- expression(print(at1 <-  at))
+                {
+                    cat("Iteration\tBetween variance estimator\n")
+                    exp <- expression(cat(" ", count, "\t\t ", at1 <- at,
+                                          fill = TRUE))
+                }
                 else
                     exp <- expression(at1 <-  at)
 
                 at <- ac
+                count <- 0
                 repeat
                 {
                     eval(exp)
+
+                    if (maxit < (count <- count + 1))
+                    {
+                        warning("maximum number of iterations reached before obtaining convergence")
+                        break
+                    }
 
                     cred <- 1 / (1 + s2/(weights.s * at))
                     ratios.zw <- sum(cred * ratios.w) / sum(cred)
@@ -106,57 +114,34 @@ bstraub <- function(ratios, weights,
     }
     else
     {
-        cred <- 0
+        cred <- numeric(length(weights.s))
         ratios.zw <- ratios.ww
     }
 
-    structure(list(model = model,
-                   individual = ratios.w,
-                   collective = ratios.zw,
-                   weights = weights.s,
-                   s2 = s2,
-                   unbiased = ac,
-                   iterative = at,
-                   cred = cred,
-                   call = Call),
-              class = "bstraub")
+    if (old.format)
+    {
+        warning("this output format is deprecated")
+        structure(list(individual = ratios.w,
+                       collective = ratios.zw,
+                       weights = weights.s,
+                       s2 = s2,
+                       unbiased = ac,
+                       iterative = at,
+                       cred = cred),
+                  class = "bstraub.old")
+    }
+    else
+        structure(list(means = list(ratios.zw, ratios.w),
+                       weights = list(if (a > 0) sum(cred) else weights.ss, weights.s),
+                       unbiased = c(ac, s2),
+                       iterative = if (!is.null(at)) c(at, s2),
+                       cred = cred,
+                       nodes = list(nrow(weights))),
+                  class = "bstraub")
 }
 
-print.bstraub <- function(x, ...)
-{
-    cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
-    cat("Structure Parameters Estimators\n\n")
-    cat("  Collective premium:       ", x$collective, "\n")
-    cat("  Within contract variance: ", x$s2, "\n")
-    cat("  Portfolio heterogeneity:  ",
-        if (is.null(x$iterative)) x$unbiased else x$iterative, "\n\n")
-    invisible(x)
-}
-
-predict.bstraub <- function(object, ...)
+predict.bstraub.old <- function(object, levels = NULL, ...)
     object$collective + object$cred * (object$individual - object$collective)
 
-summary.bstraub <- function(object, ...)
-    structure(object, class = c("summary.bstraub", class(object)), ...)
-
-print.summary.bstraub <- function(x, ...)
-{
-    nc <- length(x$individual)
-    cat("\nCredibility model:", x$model, "\n\n")
-    cat("Structure Parameters Estimators\n\n")
-    cat("  Collective premium:        ", x$collective, "\n")
-    cat("  Within contract variance:  ", x$s2, "\n")
-    cat("  Portfolio heterogeneity:   ", x$unbiased, " (unbiased)\n")
-    cat("                             ", if (!is.null(x$iterative)) x$iterative else NA, " (iterative)\n")
-    cat("  Credibility constant:      ",
-        x$s2 / if (is.null(x$iterative)) x$unbiased else x$iterative,
-        "\n\n")
-    cat("Detailed premiums\n\n")
-    cred <- cbind(seq_len(nc), x$individual, x$weights,
-                  x$cred, predict(x))
-    colnames(cred) <- c(" Contract", "Ind. premium", "Weight",
-                        "Cred. factor", "Cred. premium")
-    rownames(cred) <- rep("", nc)
-    print(cred, ...)
-    invisible(x)
-}
+predict.bstraub <- function(object, levels = NULL, ...)
+    object$means[[1]] + object$cred * (object$means[[2]] - object$means[[1]])
