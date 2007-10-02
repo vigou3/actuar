@@ -191,7 +191,7 @@ static SEXP dpq2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
     double xi, ai, bi, *x, *a, *b, *y;
     int i_1;
     Rboolean naflag = FALSE;
-	
+
 
 #define SETUP_DPQ2						\
     if (!isNumeric(sx) || !isNumeric(sa) || !isNumeric(sb))	\
@@ -215,9 +215,9 @@ static SEXP dpq2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
     y = REAL(sy)
 
     SETUP_DPQ2;
-	
+
     i_1 = asInteger(sI);
-	
+
     mod_iterate2(nx, na, nb, ix, ia, ib)
     {
 	xi = x[ix];
@@ -291,7 +291,7 @@ static SEXP dpq2_2(SEXP sx, SEXP sa, SEXP sb, SEXP sI, SEXP sJ, double (*f)())
 
 SEXP do_dpq2(int code, SEXP args)
 {
-	
+
     switch (code)
     {
     case  1:  return DPQ2_1(args, mgamma);
@@ -843,7 +843,7 @@ SEXP do_dpq5(int code, SEXP args)
 SEXP do_dpq(SEXP args)
 {
     int i;
-    char *name;
+    const char *name;
 
     /* Extract distribution name */
     args = CDR(args);

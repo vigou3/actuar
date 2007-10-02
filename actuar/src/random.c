@@ -388,7 +388,7 @@ SEXP do_random4(int code, SEXP args)
 SEXP do_random(SEXP args)
 {
     int i;
-    char *name;
+    const char *name;
 
     /* Extract distribution name */
     args = CDR(args);
