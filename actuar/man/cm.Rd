@@ -12,13 +12,15 @@
   introduced in Dannenburg (1995).
 }
 \usage{
-cm(formula, data, ratios, weights, subset, tol = 1E-6, echo = FALSE)
+cm(formula, data, ratios, weights, subset, xreg = NULL,
+   method = c("Buhlmann-Gisler", "Ohlsson", "iterative"),
+   tol = sqrt(.Machine$double.eps), maxit = 100, echo = FALSE)
 
 \method{print}{cm}(x, \dots)
 
-\method{predict}{cm}(object, levels = NULL, \dots)
+\method{predict}{cm}(object, levels = NULL, newdata, \dots)
 
-\method{summary}{cm}(object, levels = NULL, \dots)
+\method{summary}{cm}(object, levels = NULL, newdata, \dots)
 
 \method{print}{summary.cm}(x, \dots)
 }
@@ -35,91 +37,180 @@ cm(formula, data, ratios, weights, subset, tol = 1E-6, echo = FALSE)
   \item{subset}{an optional logical expression indicating a subset of
     observations to be used in the modeling process. All observations
     are included by default.}
-  \item{tol}{maximum absolute error in the iterative calculation of the
-    variance estimators.}
+  \item{xreg}{an optional vector or matrix of regressors.}
+  \item{method}{estimation method for the variance components of the
+    model; see details below.}
+  \item{tol}{tolerance level for the stopping criteria for iterative
+    estimation method.}
+  \item{maxit}{maximum number of iterations in iterative estimation
+    method.}
   \item{echo}{logical; whether to echo the iterative procedure or not}
   \item{x, object}{an object of class \code{"cm"}}
   \item{levels}{character vector indicating the levels to predict or to
     include in the summary; if \code{NULL} all levels are included.}
+  \item{newdata}{vector or data frame containing the variables used to
+    predict credibility regression models.}
   \item{\dots}{additional attributes to attach to the result for the
     \code{predict} and \code{summary} methods; further arguments to
     \code{\link[base]{format}} for the \code{print.summary} method;
     unused for the \code{print} method.}
 }
 \details{
+  \code{cm} is the unified front end for credibility models fitting.
+  Currently, the function supports hierarchical models with any number
+  of levels (with Bühlmann and Bühlmann-Straub models as special cases)
+  and the regression model of Hachemeister. Usage of \code{cm} is
+  similar to \code{\link[stats]{lm}}.
+  
   The \code{formula} argument symbolically describes the structure of
   the portfolio in the form \eqn{~ terms}. Each term is an interaction
   between risk factors contributing to the total variance of the
-  portfolio data. At the moment, \code{cm} can only handle hierarchical
-  interactions, with any given number of levels.  The Bühlmann-Straub
-  model is a special case with only one level.
+  portfolio data. Terms are separated by \code{+} operators and
+  interactions within each term by \code{:}. For a portfolio divided
+  first into sectors, then units and finally contracts, \code{formula}
+  would be \eqn{~ sector + sector:unit + sector:unit:contract}, where
+  \code{sector}, \code{unit} and \code{contract} are column names in
+  \code{data}. In general, the formula should be of the form \eqn{~ a +
+  a:b + a:b:c + a:b:c:d + ...}.
 
-  Terms are separated by \code{+} operators and interactions within each
-  term by \code{:}. For a portfolio divided first into sectors, then
-  units and finally contracts, \code{formula} would be \eqn{~ sector +
-  sector:unit + sector:unit:contract}, where \code{sector}, \code{unit}
-  and \code{contract} are column names in \code{data}. In general, the
-  formula should be of the form \eqn{~ a + a:b + a:b:c + a:b:c:d +
-    ...}.
+  If argument \code{xreg} is not \code{NULL}, the regression model of
+  Hachemeister will be fit to data. Hierarchical classification
+  structures are not supported with this model. Regression models
+  fitting is currently less robust than hierarchical models fitting. In
+  particular, one should avoid nodes with no data.
 
   Arguments \code{ratios}, \code{weights} and \code{subset} are used
-  like arguments \code{select}, \code{select} and \code{subset} of
-  function \code{\link[base]{subset}}.
+  like arguments \code{select}, \code{select} and \code{subset},
+  respectively, of function \code{\link[base]{subset}}.
 
   Data does not have to be sorted by level. Nodes with no data (complete
-  lines of \code{NA} except for the portfolio structure) are allowed.
-  
+  lines of \code{NA} except for the portfolio structure) are allowed,
+  with the restriction mentioned above.
+}
+\section{Hierarchical models}{
   The credibility premium at one level is a convex combination between
   the linearly sufficient statistic of a node and the credibility
   premium of the level above. (For the first level, the complement of
-  the credibility is given to the collective premium.) The linearly
-  sufficient statistic one node is the credibility weighted average of
+  credibility is given to the collective premium.) The linearly
+  sufficient statistic of a node is the credibility weighted average of
   the data of the node, except at the last level, where natural weights
   are used. The credibility factor of node \eqn{i} is equal to
-  \deqn{\frac{w_i}{w_i + B/W},}{w[i]/(w[i] + B/W),}
+  \deqn{\frac{w_i}{w_i + a/b},}{w[i]/(w[i] + a/b),}
   where \eqn{w_i}{w[i]} is the weight of the node used in the linearly
-  sufficient statistic, \eqn{B} is the average between node variance and
-  \eqn{W} is the average within node variance.
+  sufficient statistic, \eqn{a} is the average within node variance and
+  \eqn{b} is the average between node variance.
+}
+\section{Regression models}{
+  The credibility premium of node \eqn{i} is equal to
+  \deqn{y^\prime b_i^a,}{y' ba[i],}
+  where \eqn{y} is a matrix created from \code{newdata} and
+  \eqn{b_i^a}{ba[i]} is the vector of credibility adjusted regression
+  coefficients of node \eqn{i}. The latter is given by
+  \deqn{b_i^a = Z_i b_i + (I - Z_I) m,}{
+    ba[i] = Z[i] b[i] + (I - Z[i]) m,}
+  where \eqn{b_i}{b[i]} is the vector of regression coefficients based
+  on data of node \eqn{i} only, \eqn{m} is the vector of collective
+  regression coefficients, \eqn{Z_i}{Z[i]} is the credibility matrix and
+  \eqn{I} is the identity matrix. The credibility matrix of node \eqn{i}
+  is equal to
+  \deqn{\frac{W_i}{W_i + s^2/A},}{W[i]/(W[i] + s2/A),}
+  where \eqn{W_i}{W[i]} is the unscaled regression covariance matrix of
+  the node, \eqn{s^2}{s2} is the average within node variance and
+  \eqn{A} is the within node covariance matrix.
 
-  Estimators of the variance structure parameters are pseudo-estimators
+  If argument \code{xreg} is a matrix, it is strongly recommended to
+  name the columns.
+
+  Argument \code{newdata} provides the \dQuote{future} value of the
+  regressors for prediction purposes. It is either as defined in
+  \code{\link[stats]{predict.lm}} or else a vector of length one for
+  regression models with a single regressor.
+}
+\section{Variance components estimation}{
+  For hierarchical models, two sets of estimators of the variance
+  components (other than the within node variance) are available:
+  unbiased estimators and iterative estimators.
+
+  Unbiased estimators are based on sums of squares of the form
+  \deqn{b_i = \frac{w_i}{w_i^2 - \sum_j w_{ij}^2}
+    \left( \sum_j w_{ij} (X_{ij} - \bar{X}_i)^2 - (J - 1) a \right),}{
+    b[i] = w[i] * (sum(j; w[ij] (X[ij] - Xb[i])^2 - (J - 1) a)) /
+    (w[i]^2 - sum(j; w[ij]^2))}
+  where \eqn{X_{ij}}{X[ij]} is the linearly sufficient statistic of
+  level \eqn{(ij)}, \eqn{\bar{X_{i}}}{Xb[i]} is the weighted average of
+  the latter using weights \eqn{w_{ij}}{w[ij]}, \eqn{w_i = \sum_j
+  w_{ij}}{w[i] = sum(j; w[ij])}, \eqn{J} is the effective number of
+  nodes at level \eqn{(ij)} and \eqn{a} is the within variance of this
+  level. Weights \eqn{w_{ij}}{w[ij]} are the natural weights at the
+  lowest level, the sum of the natural weights the next level and the
+  sum of the credibility factors for all upper levels.
+
+  The Bühlmann-Gisler estimators (\code{method =
+    "Buhlmann-Gisler"}) are given by
+  \deqn{b = \frac{1}{I} \sum_i \max(b_i, 0),}{b = mean(max(b[i], 0)),}
+  that is the average of the per node variance estimators truncated at
+  0.
+
+  The Ohlsson estimators (\code{method = "Ohlsson"}) are given by
+  \deqn{b = \frac{1}{I} \sum_i b_i,}{b = mean(b[i]),}
+  that is the average of the per node variance estimators without any
+  truncation. Note that negative estimates will be truncated to zero for
+  credibility factor calculations.
+
+  In the Bühlmann-Straub model, these estimators are equivalent.
+  
+  Iterative estimators \code{method = "iterative"} are pseudo-estimators
   of the form
-  \deqn{\frac{1}{d} \sum_i w_i (X_i - \bar{X})^2,}{%
-    sum(i; w[i] * (X[i] - Xb)^2)/d,}
+  \deqn{b = \frac{1}{d} \sum_i w_i (X_i - \bar{X})^2,}{%
+    b = sum(i; w[i] * (X[i] - Xb)^2)/d,}
   where \eqn{X_i}{X[i]} is the linearly sufficient statistic of one
   level, \eqn{\bar{X}}{Xb} is the linearly sufficient statistic of
   the level above and \eqn{d} is the effective number of nodes at one
-  level minus the effective number of nodes of the level above.
+  level minus the effective number of nodes of the level above. The
+  Ohlsson estimators are used as starting values.
+
+  For regression models, only iterative estimators are available, hence
+  argument \code{method} is not taken into account.
 }
 \value{
   Function \code{cm} computes the structure parameters estimators of the
   model specified in \code{formula}. The value returned is an object of
   class \code{cm}.
 
-  An object of class \code{"cm"} is a list with the following
+  An object of class \code{"cm"} is a list with at least the following
   components:
   \item{means}{a list containing, for each level, the vector of linearly
     sufficient statistics.}
   \item{weights}{a list containing, for each level, the vector of total
     weights.}
-  \item{variances}{a vector containing the variance structure parameters
-    estimators.}
-  \item{cred}{a list containining, for each level, the vector of
-    credibility factors.}
-  \item{levels}{the columns of \code{data} containing the portfolio
-    structure.}
+  \item{unbiased}{a vector containing the unbiased variance components
+    estimators, or \code{NULL}.}
+  \item{iterative}{a vector containing the iterative variance components
+    estimators, or \code{NULL}.}
+  \item{cred}{for multi-level hierarchical models: a list containing,
+    the vector of credibility factors for each level. For one-level
+    models: an array or vector of credibility factors.}
   \item{nodes}{a list containing, for each level, the vector of the
     number of nodes in the level.}
+  \item{classification}{the columns of \code{data} containing the
+    portfolio classification structure.}
   \item{ordering}{a list containing, for each level, the affiliation of
     a node to the node of the level above.}
-  \item{call}{the function call.}
 
+  Regression fits have in addition the following component:
+  \item{adj.models}{a list containing, for each node, the credibility
+    adjusted regression model as obtained with \code{\link[stats]{lm}}.}
+  
   The method of \code{predict} for objects of class \code{"cm"} computes
   the credibility premiums for the nodes of every level included in
-  argument \code{levels} (all by default). Result is always a list the
-  same length as \code{levels} or the number of levels in
-  \code{formula}.
+  argument \code{levels} (all by default). Result is a list the same
+  length as \code{levels} or the number of levels in \code{formula}, or
+  an atomic vector for one-level models.  
 }
 \references{
+  Bühlmann, H. and Gisler, A. (2005), \emph{A course in credibility
+  theory and its applications}, Springer.
+
   Goulet, V. (1998), \emph{Principles and Application of Credibility
     Theory}, Journal of Actuarial Practice, Volume 6, ISSN 1064-6647.
   
@@ -128,27 +219,37 @@ cm(formula, data, ratios, weights, subset, tol = 1E-6, echo = FALSE)
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
-  and Louis-Philippe Pouliot
+  Tommy Ouellet, Louis-Philippe Pouliot
 }
 \seealso{
-  \code{\link{bstraub}} for faster calculations of simple Bühlmann or
-  Bühlmann-Straub models; \code{\link[base]{subset}},
-  \code{\link[base]{formula}}.
+  \code{\link[base]{subset}}, \code{\link[base]{formula}},
+  \code{\link[stats]{lm}}, \code{\link[stats]{predict.lm}}.
 }
 \examples{
 data(hachemeister)
 
-## Simple Bühlmann-Straub model
-cm(~state, hachemeister,
-   ratios = ratio.1:ratio.12, weights = weight.1:weight.12)
-bstraub(hachemeister[, 2:13], hachemeister[, 14:25]) # same, faster
+## Bühlmann-Straub model
+fit <- cm(~state, hachemeister,
+          ratios = ratio.1:ratio.12, weights = weight.1:weight.12)
+fit				# print method
+predict(fit)			# credibility premiums
+summary(fit)			# more details
 
 ## Two-level hierarchical model. Notice that data does not have
 ## to be sorted by level
 X <- cbind(unit = c(1, 2, 1, 2, 2), hachemeister)
 fit <- cm(~unit + unit:state, X, ratio.1:ratio.12, weight.1:weight.12)
-fit				# print method
-summary(fit)			# more details
-predict(fit)			# credibility premiums
+predict(fit)
+predict(fit, levels = "unit")	# unit credibility premiums only
+summary(fit)
+summary(fit, levels = "unit")	# unit summaries only
+
+## Regression model
+fit <- cm(~state, hachemeister, xreg = 12:1,
+          ratios = ratio.1:ratio.12, weights = weight.1:weight.12)
+fit
+predict(fit, newdata = 0)	# future value of regressor
+summary(fit, newdata = 0)
+
 }
 \keyword{models}

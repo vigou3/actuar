@@ -6,7 +6,7 @@ ImportFrom(Matrix, expm)
 
 ### Exports
 export(## Credibility theory
-       bstraub, cm, hache, severity, simpf, unroll,
+       bstraub, cm, severity, simpf, unroll,
        ## Risk theory
        aggregateDist, CTE, discretize, discretise, VaR, adjCoef, ruin,
        calcMatrixExpDiag, calcMatrixExpGen,
@@ -30,7 +30,7 @@ export(## Credibility theory
        dparalogis, pparalogis, qparalogis, rparalogis, mparalogis, levparalogis,
        dpareto, ppareto, qpareto, rpareto, mpareto, levpareto, # aliases
        dpareto2, ppareto2, qpareto2, rpareto2, mpareto2, levpareto2, # aliases
-       #dpareto1, ppareto1, qpareto1, rpareto1, mpareto1, levpareto1,
+       dpareto1, ppareto1, qpareto1, rpareto1, mpareto1, levpareto1,
        mweibull, levweibull,
        minvGauss, levinvGauss, mgfinvGauss, #notation from SuppDists package
        minvgauss, levinvgauss, mgfinvgauss,

@@ -5,7 +5,10 @@
 ### AUTHORS: Louis-Philippe Pouliot, Tommy Ouellet,
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>.
 
-cm <- function(formula, data, ratios, weights, subset, design, ...)
+cm <- function(formula, data, ratios, weights, subset, xreg = NULL,
+               method = c("Buhlmann-Gisler", "Ohlsson", "iterative"),
+               tol = sqrt(.Machine$double.eps), maxit = 100,
+               echo = FALSE)
 {
     Call <- match.call()
 
@@ -35,8 +38,8 @@ cm <- function(formula, data, ratios, weights, subset, design, ...)
     ##
     if (any(duplicated(level.numbers)))
         stop("unsupported interactions in 'formula'")
-    if (nlevels > 1 && !missing(design))
-        stop("hierarchical regression models are not supported")
+    if (nlevels > 1 && !is.null(xreg))
+        stop("hierarchical regression models not supported")
     if (missing(ratios) & !missing(weights))
         stop("ratios have to be supplied if weights are")
 
@@ -105,27 +108,41 @@ cm <- function(formula, data, ratios, weights, subset, design, ...)
         }
 
     ## Dispatch to appropriate calculation function
-    if (nlevels < 2)
+    if (nlevels < 2)                    # one-dimensional model
     {
-        if (missing(design))
+        if (is.null(xreg))              # Bühlmann-Straub
         {
+            ## bstraub() accepts only "unbiased" and "iterative" for
+            ## argument 'method'.
+            method <- match.arg(method)
+            if (method == "Buhlmann-Gisler" || method == "Ohlsson")
+                method <- "unbiased"
+
             ## *** The 'old.format = FALSE' argument is necessary in
-            ## *** the deprecation phase of the output format of
-            ## *** bstraub(). Delete once phase is over.
-            res <- bstraub(ratios, weights, ..., old.format = FALSE)
-            res$classification <- levs
-            res$ordering <- list(seq_along(levs))
+            ## *** the deprecation phase of the output format of ***
+            ## bstraub(). To delete later.
+            res <- bstraub(ratios, weights, method = method,
+                           tol = tol, maxit = maxit, echo = echo,
+                           old.format = FALSE)
         }
-        else
-            res <- hache(ratios, weights, design, ...)
+        else                            # Hachemeister
+            res <- hache(ratios, weights, xreg, tol = tol,
+                         maxit = maxit, echo = echo)
+
+        ## Add quantities not taken into account in calculation
+        ## functions to results list.
+        res$classification <- levs
+        res$ordering <- list(seq_along(levs))
     }
-    else
-        res <- hierarc(ratios, weights, ilevs, ...)
+    else                                # hierarchical model
+        res <- hierarc(ratios, weights, classification = ilevs,
+                       method = method, tol = tol, maxit = maxit,
+                       echo = echo)
 
     ## Transfer level names to lists
-    names(res$weights) <- names(res$means) <- names(res$unbiased) <-
-        c("portfolio", level.names)
-    names(res$iterative) <- if (!is.null(res$iterative)) names(res$unbiased)
+    names(res$means) <- names(res$weights) <- c("portfolio", level.names)
+    names(res$unbiased) <- if (!is.null(res$unbiased)) names(res$means)
+    names(res$iterative) <- if (!is.null(res$iterative)) names(res$means)
     names(res$nodes) <- names(res$ordering) <- level.names
     if (is.list(res$cred))
         names(res$cred) <- level.names
@@ -136,35 +153,9 @@ cm <- function(formula, data, ratios, weights, subset, design, ...)
     res
 }
 
-print.cm <- function(x, ...)
+predict.cm <- function(object, levels = NULL, newdata, ...)
 {
-    nlevels <- length(x$nodes)
-    level.names <- names(x$nodes)
-    b <- if (is.null(x$iterative)) x$unbiased else x$iterative
-
-    cat("Call:\n")
-    print(attr(x, "call"))
-    cat("\n")
-
-    cat("Structure Parameters Estimators\n\n")
-    cat("  Collective premium:", x$means[[1]], "\n\n")
-    for (i in seq.int(nlevels))
-    {
-        if (i == 1)
-            cat("  Between", level.names[i], "variance:",
-                b[i], "\n")
-        else
-            cat("  Within ", level.names[i - 1],
-                "/Between ", level.names[i], " variance: ",
-                b[i], "\n", sep = "")
-    }
-    cat("  Within", level.names[nlevels], "variance:",
-        b[nlevels + 1],"\n", fill = TRUE)
-}
-
-predict.cm <- function(object, levels = NULL, ...)
-{
-    ## Convert the character 'levels' argument into numeric and defer
+    ## Convert the character 'levels' argument into numeric and pass
     ## to next method.
     level.names <- names(object$nodes)
 
@@ -178,7 +169,45 @@ predict.cm <- function(object, levels = NULL, ...)
     NextMethod()
 }
 
-summary.cm <- function(object, levels = NULL, ...)
+print.cm <- function(x, ...)
+{
+    nlevels <- length(x$nodes)
+    level.names <- names(x$nodes)
+    b <- if (is.null(x$iterative)) x$unbiased else x$iterative
+
+    cat("Call:\n")
+    print(attr(x, "call"))
+    cat("\n")
+
+    cat("Structure Parameters Estimators\n\n")
+    cat("  Collective premium:", x$means[[1]], "\n")
+    for (i in seq.int(nlevels))
+    {
+        if (i == 1)
+        {
+            ## Treat the Hachemeister and no regression models
+            ## separately since for the former the variance components
+            ## vector is a list, with the first element a matrix.
+            s <- paste("  Between", level.names[i], "variance:", sep = " ")
+            if (attr(x, "model") == "regression")
+            {
+                m <- b[[1]]
+                dimnames(m) <- list(c(s, ""), rep("", ncol(m)))
+                print(m)
+            }
+            else
+                cat("\n", s, b[i], "\n")
+        }
+        else
+            cat("  Within ", level.names[i - 1],
+                "/Between ", level.names[i], " variance: ",
+                b[i], "\n", sep = "")
+    }
+    cat("  Within", level.names[nlevels], "variance:",
+        b[[nlevels + 1]], "\n", fill = TRUE)
+}
+
+summary.cm <- function(object, levels = NULL, newdata, ...)
 {
     level.names <- names(object$nodes)
 
@@ -188,7 +217,7 @@ summary.cm <- function(object, levels = NULL, ...)
         ## return the object with the following modifications: put
         ## credibility factors into a list and add a list of the
         ## credibility premiums.
-        object$premiums <- list(predict(object))
+        object$premiums <- list(predict(object, newdata = newdata))
         object$cred <- list(object$cred)
         class(object) = c("summary.cm", class(object))
     }
@@ -229,14 +258,34 @@ print.summary.cm <- function(x, ...)
         level.id <- match(level.names[i], colnames(x$classification))
         levs <- x$classification[, seq.int(level.id), drop = FALSE]
         m <- duplicated(apply(levs, 1, paste, collapse = ""))
-        y <- cbind(as.matrix(levs[!m, , drop = FALSE]),
-                   format(x$means[[i + 1]], ...),
-                   format(x$weights[[i + 1]], ...),
-                   format(x$cred[[i]], ...),
-                   format(x$premiums[[i]], ...))
-        colnames(y) <- c(colnames(levs),
-                         "Indiv. mean", "Weight",
-                         "Cred. factor", "Cred. premium")
+
+        ## Treat the Hachemeister and no regression models
+        ## separately.
+        if (attr(x, "model") == "regression")
+        {
+            y <- cbind(" ",
+                       as.vector(format(x$means[[i + 1]], ...)),
+                       as.vector(apply(format(x$cred[[i]], ...), c(1, 3),
+                                       paste, collapse = " ")),
+                       as.vector(format(sapply(x$adj.models, coef), ...)),
+                       " ")
+            y[seq(1, nrow(y), 2), c(1, 5)] <-
+                c(levs[!m, , drop = FALSE], format(x$premiums[[i]]), ...)
+            colnames(y) <- c(colnames(levs),
+                             "Indiv. coef.", "Credibility matrix",
+                             "Adj. coef.", "Cred. premium")
+        }
+        else
+        {
+            y <- cbind(as.matrix(levs[!m, , drop = FALSE]),
+                       format(x$means[[i + 1]], ...),
+                       format(x$weights[[i + 1]], ...),
+                       format(x$cred[[i]], ...),
+                       format(x$premiums[[i]], ...))
+            colnames(y) <- c(colnames(levs),
+                             "Indiv. mean", "Weight",
+                             "Cred. factor", "Cred. premium")
+        }
         rownames(y) <- rep("   ", nrow(y))
         print(y, quote = FALSE, right = TRUE, ...)
         cat("\n")

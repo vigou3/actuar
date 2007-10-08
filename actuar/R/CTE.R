@@ -20,7 +20,6 @@ CTE.aggregateDist <- function(x, conf.level = c(0.9, 0.95, 0.99),
         res <- m + sd * exp(-(qnorm(conf.level))^2 / 2) /
             ((1 - conf.level) * sqrt(2 * pi))
     }
-
     ## Normal Power approximation; no explicit formula so revert to
     ## numerical integration.
     else if (label == "Normal Power approximation")
@@ -39,7 +38,6 @@ CTE.aggregateDist <- function(x, conf.level = c(0.9, 0.95, 0.99),
                       function(x) integrate(f, x, Inf)$value) /
                           (1 - conf.level)
     }
-
     ## Recursive method, simulation and convolutions; each yield a
     ## step function that can be used to make calculations.
     else

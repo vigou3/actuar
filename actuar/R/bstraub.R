@@ -5,8 +5,8 @@
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 ### Sébastien Auclair, and Louis-Philippe Pouliot
 
-bstraub <- function(ratios, weights, method = c("iterative", "unbiased"),
-                    maxit = 100, tol = sqrt(.Machine$double.eps),
+bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
+                    tol = sqrt(.Machine$double.eps), maxit = 100,
                     echo = FALSE, old.format = TRUE)
 {
     ## If weights are not specified, use equal weights as in
@@ -128,7 +128,8 @@ bstraub <- function(ratios, weights, method = c("iterative", "unbiased"),
                        unbiased = ac,
                        iterative = at,
                        cred = cred),
-                  class = "bstraub.old")
+                  class = "bstraub.old",
+                  model = "Buhlmann-Straub")
     }
     else
         structure(list(means = list(ratios.zw, ratios.w),
@@ -137,11 +138,12 @@ bstraub <- function(ratios, weights, method = c("iterative", "unbiased"),
                        iterative = if (!is.null(at)) c(at, s2),
                        cred = cred,
                        nodes = list(nrow(weights))),
-                  class = "bstraub")
+                  class = "bstraub",
+                  model = "Buhlmann-Straub")
 }
 
-predict.bstraub.old <- function(object, levels = NULL, ...)
+predict.bstraub.old <- function(object, ...)
     object$collective + object$cred * (object$individual - object$collective)
 
-predict.bstraub <- function(object, levels = NULL, ...)
+predict.bstraub <- function(object, levels = NULL, newdata, ...)
     object$means[[1]] + object$cred * (object$means[[2]] - object$means[[1]])

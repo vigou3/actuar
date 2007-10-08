@@ -6,7 +6,7 @@
 ### Louis-Philippe Pouliot, Tommy Ouellet.
 
 hierarc <- function(ratios, weights, classification,
-                    method = c("iterative", "unbiased"),
+                    method = c("Buhlmann-Gisler", "Ohlsson", "iterative"),
                     tol = sqrt(.Machine$double.eps), maxit = 100,
                     echo = FALSE)
 {
@@ -147,7 +147,7 @@ hierarc <- function(ratios, weights, classification,
     s2 <-  sum(weights * (ratios - ratios.w)^2, na.rm = TRUE) /
         denoms[nlevels1p]
 
-    ## === ESTIMATION OF THE OTHER STRUCTURE PARAMETERS ===
+    ## === ESTIMATION OF THE OTHER VARIANCE COMPONENTS ===
     ##
     ## Create vectors to hold values to be computed at each level
     ## (from portfolio to entity), namely: the total node weights, the
@@ -178,6 +178,17 @@ hierarc <- function(ratios, weights, classification,
     ## All upper levels: node weight is the sum of the credibility
     ## factors at the level below, weighted averages use credibility
     ## factors from previous level.
+    ##
+    ## Bühlmann-Gisler estimators truncate the per node variance
+    ## estimates to 0 before taking the mean, whereas the Ohlsson
+    ## estimators do not make any truncation.
+    method <- match.arg(method)
+
+    if (method == "Buhlmann-Gisler")
+        bexp <- expression(bu[i] <- mean(pmax(bui, 0), na.rm = TRUE))
+    else
+        bexp <- expression(bu[i] <- mean(bui, na.rm = TRUE))
+
     for (i in nlevels:1)
     {
         ## Total weight of the level as per the rule above.
@@ -215,12 +226,7 @@ hierarc <- function(ratios, weights, classification,
                       0)
 
         ## The final estimate is the average of all the per node estimates.
-        bu[i] <- mean(pmax(bui, 0), na.rm = TRUE)
-
-        ## For the iterative estimation method, convergence towards 0
-        ## depends on estimators with a truncation at 0 *after* taking
-        ## the mean, not before as above.
-        bi[i] <- max(mean(bui, na.rm = TRUE), 0)
+        eval(bexp)
 
         ## For the calculation of the next variance estimator, the
         ## total weights for the current level are replaced by the sum
@@ -247,11 +253,10 @@ hierarc <- function(ratios, weights, classification,
     ## factor use total weight of the level, between variance of the
     ## level below (hence the within variance) and between variance of
     ## the current level.
-    method <- match.arg(method)
-
     if (method == "iterative")
     {
-        if (any(head(bi, -1)))    # require at least one non-zero starting value
+        bi <- pmax(bu, 0)       # truncation for starting values
+        if (any(head(bi, -1)))  # at least one non-zero starting value
             .External("hierarc", cred, tweights, wmeans, fnodes, denoms, bi, tol, maxit, echo)
     }
     else
@@ -283,10 +288,11 @@ hierarc <- function(ratios, weights, classification,
                    nodes = nnodes,
                    classification = classification[, -1],
                    ordering = fnodes),
-              class = "hierarc")
+              class = "hierarc",
+              model = "hierarchical")
 }
 
-predict.hierarc <- function(object, levels = NULL, ...)
+predict.hierarc <- function(object, levels = NULL, newdata, ...)
 {
     ## The credibility premium of a node at one level is equal to
     ##
