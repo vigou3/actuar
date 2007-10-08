@@ -7,20 +7,18 @@
   Extract or replace subsets of grouped data objects.
 }
 \usage{
-x[i]
-x[i] <- value
-x[i, j]
-x[i, j] <- value
+\method{[}{grouped.data}(x, i, j)
+\method{[}{grouped.data}(x, i, j) <- value
 }
 \arguments{
   \item{x}{an object of class \code{grouped.data}.}
 
   \item{i, j}{elements to extract or replace. \code{i, j} are
     \code{numeric} or \code{character} or, for \code{[} only, empty.
-    Numeric values are coerced to integer as if by \code{\link{as.integer}}.
-    For replacement by \code{[}, a logical matrix is allowed, but not
-    replacement in the group boundaries and group frequencies
-    simultaneously.}
+    Numeric values are coerced to integer as if by
+    \code{\link{as.integer}}. For replacement by \code{[}, a logical
+    matrix is allowed, but not replacement in the group boundaries and
+    group frequencies simultaneously.}
 
   \item{value}{a suitable replacement value.}
 }
@@ -78,7 +76,6 @@ gdental[c(1, 3, 5),]      # avoid this
 gdental[1:2, 1] <- c(0, 30, 60) # modified boundaries
 gdental[, 2] <- 10              # modified frequencies
 \dontrun{gdental[1, ] <- 2}   # not allowed
-
 }
 \keyword{manip}
 \keyword{array}
