@@ -7,7 +7,7 @@
 	\deqn{ h(r) = E[ e^(r X - r c W) ] = 1}
 }
 \usage{
-adjCoef (mgfClaim, mgfWaitTime, premRate, upper, h, retRate=1, retLimit=Inf, toplot=FALSE,...)
+adjCoef(mgf.claim, mgf.wait, premium, upper, h, reinsurance=c("none","proportional","excess-of-loss"), from, to, n=101, toplot=FALSE)
 }
 \arguments{
 	TODO

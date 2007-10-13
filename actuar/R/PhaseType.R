@@ -3,7 +3,7 @@
 ### Definition of the {d,p,q,r,m,mgf}phasetype functions to compute
 ### characteristics of the Phase-type distribution. Its distribution function
 ### is 
-###       P(X <= x) = 1-pi %*% exp(T) %*% 1m
+###       P(X <= x) = 1-pi %*% exp(Tx) %*% 1m
 ### where pi is the initial probability vector, T the subintensity matrix and
 ### 1m is 1-vector of R^m
 ###
@@ -96,38 +96,39 @@ mphasetype <- function(order, pi, T, m)
     }    
     
     onesM <- rep(1,m)
-    
-    if(order == 0)
-        return(1)
-    if(order >= 1)
+
+    routine <- function(x)
     {
+        if(x == 0)
+            return(1)
+        if(x >= 1)
+        {
         #integer order
-        if(as.integer(order) == order)
-        {
-            TpowN <- T
+            if(as.integer(x) == x)
+            {
+                TpowN <- T
             
-            factN <- 1
-            if(order > 1)
-            { #prod(T==diag(diag(T)))
-                for(k in 2:order)
-                {
-                    
-                    
-                    factN <- factN * k
-                    TpowN <- TpowN %*% T
-                    cat("-",k)
-                    print(TpowN)
+                factN <- 1
+                if(x > 1)
+                { #prod(T==diag(diag(T)))
+                    for(k in 2:x)
+                    {                                        
+                        factN <- factN * k
+                        TpowN <- TpowN %*% T
+                        #cat("-",k)
+                        #print(TpowN)
+                    }
+                #cat("\nn!",factN,"\n")
                 }
-                cat("\nn!",factN,"\n")
+                return( factN * (-1)^x * pi %*% solve(TpowN, diag(m)) %*% onesM )
             }
-            return( factN * (-1)^order * pi %*% solve(TpowN, diag(m)) %*% onesM )
-        }
-        else
-        {
-            stop("non integer orders are not supported")
+            else
+            {
+                stop("non integer orders are not supported")
+            }
         }
     }
-    
+    return(sapply(order, routine))
 }
 
 mgfphasetype <- function(x, pi, T, m, log = FALSE)
