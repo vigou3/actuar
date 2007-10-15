@@ -9,4 +9,5 @@ Description: Collection of functions and data sets related to
   actuarial science applications, mostly loss distributions,
   credibility theory and risk theory, for the moment.
 Depends: R (>= 2.4.0)
-License: GPL version 2 or newer
+License: GPL (>= 2)
+Encoding: latin1
