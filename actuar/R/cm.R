@@ -205,6 +205,7 @@ print.cm <- function(x, ...)
     }
     cat("  Within", level.names[nlevels], "variance:",
         b[[nlevels + 1]], "\n", fill = TRUE)
+    invisible(x)
 }
 
 summary.cm <- function(object, levels = NULL, newdata, ...)

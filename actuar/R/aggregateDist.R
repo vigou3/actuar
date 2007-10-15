@@ -119,9 +119,7 @@ print.aggregateDist <- function(x, ...)
     if (label %in% c("Normal approximation",
                      "Normal Power approximation"))
         cat(attr(x, "source"), "\n")
-    print(environment(x))
-    cat("Class attribute:\n")
-    print(attr(x, "class"))
+    invisible(x)
 }
 
 plot.aggregateDist <- function(x, xlim,
@@ -176,6 +174,7 @@ print.summary.aggregateDist <- function(x, ...)
     res <- c(min, q[c(1, 2)], expectation, q[3], max)
     names(res) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
     print(res)
+    invisible(x)
 }
 
 mean.aggregateDist <- function(x, ...)

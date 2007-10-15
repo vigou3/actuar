@@ -135,5 +135,5 @@ print.mde <- function(x, digits = getOption("digits"), ...)
     print(ans1, quote = FALSE)
     cat("\n")
     print(ans2, quote = FALSE)
-    x
+    invisible(x)
 }
