@@ -20,7 +20,6 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     ## Argument '...' should contain the values of the parameters of
     ## 'dist'.
     par <- list(...)
-    parnames <- names(par)
 
     ## Distributions are expressed as a member of the (a, b, 0) or (a,
     ## b, 1) families of distributions. Assign parameters 'a' and 'b'
@@ -34,7 +33,7 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
 
     if (dist == "poisson")
     {
-        if (!"lambda" %in% parnames)
+        if (!"lambda" %in% names(par))
             stop("value of 'lambda' missing")
         lambda <- par$lambda
         a <- 0
@@ -49,7 +48,7 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     }
     else if (dist == "negative binomial")
     {
-        if (!all(c("prob", "size") %in% parnames))
+        if (!all(c("prob", "size") %in% names(par)))
             stop("value of 'prob' or 'size' missing")
         beta <- 1/(par$prob) - 1
         r <- par$size
@@ -65,7 +64,7 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     }
     else if (dist == "binomial")
     {
-        if (!all(c("prob", "size") %in% parnames))
+        if (!all(c("prob", "size") %in% names(par)))
             stop("value of 'prob' or 'size' missing")
         m <- par$size
         q <- par$prob
@@ -83,7 +82,7 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     {
         if (is.null(p0))
             stop("'p0' must be specified with the logarithmic distribution")
-        if (!"prob" %in% parnames)
+        if (!"prob" %in% names(par))
             stop("value of 'prob' missing")
         beta <- (1/par$prob) - 1
         a <- beta/(1 + beta)
