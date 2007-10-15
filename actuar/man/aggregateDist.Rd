@@ -94,6 +94,10 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   \code{model.sev} is a vector of the (discretized) claim amount
   distribution \eqn{X}; the first element \strong{must} be \eqn{f_X(0) =
   \Pr[X = 0]}{fx(0) = Pr[X = 0]}.
+
+  Failure to obtain a cumulative distribution function less than
+  \code{tol} away from 1 within \code{maxit} iterations is often due
+  to a too coarse discretization of the severity distribution.
 }
 \section{Convolution method}{
   The cumulative distribution function (cdf) \eqn{F_S(x)}{Fs(x)} of the
@@ -197,50 +201,16 @@ Fs <- aggregateDist("simulation", nb.simul = 1000,
 mean(Fs)
 plot(Fs)
 
-## Beekman's convolution formula
-## the aggregate loss L is a geometric compound random variable
-## L ~ GeomComp( phi(0), F_Z), with F_Z(x) = 1/E[X] \int_0^x (1-F_X(y))dy
-## and phi(0)= 1-psi(0)=1-E[X]/(cE[W]) is the survival prob., where X
-## stands for the claim size, W the inter-occurence time (assumed to be exponential
-## i.e. Cramer-Lundberg risk model) and c the premium rate.
-
-## Exponential claim sizes
-## X~Exp(1) => Z~Exp(1)
-lambda <- 1
-
-mpfDisLower <- discretize(pexp(x,lambda), 
-			from = 0, to = 100, step = 1, method = "lower")
-
-phiZero <- .2/1.2 #premium rate is calculated according to expected value principle
-
-Phi <- aggregateDist(method = "recursive", 
-		model.freq = "geometric", model.sev = mpfDisLower, prob = phiZero)
-
-#ruin probability approximation by Beekman's formula
-psi <- function(u) 1-Phi(u)
-
-#plot the ruin probability w.r.t. the initial capital
-plot(x<-seq(0,100,length.out=100), psi(x), type="l", main="ruin probability")
-
-## Pareto claim sizes
-## X~Par(5,4) => Z~Par(4,4)
-alpha <- 5
-lambda <- 4
-
-mpfDisLower <- discretize(ppareto(x,alpha-1,lambda), 
-			from = 0, to = 200 , step = 10, method = "lower")
-
-phiZero <- .2/1.2 #premium rate is calculated according to expected value principle
-
-Phi <- aggregateDist(method = "recursive", model.freq = "geometric", model.sev = mpfDisLower, prob = phiZero)
-
-
-#ruin probability approximation by Beekman's formula
-psi <- function(u) 1-Phi(u)
-
-#plot the ruin probability w.r.t. the initial capital
-plot(x<-seq(0,100,length.out=100), psi(x), type="l", main="ruin probability")
-
+## Evaluation of ruin probabilities using Beekman's formula with
+## Exponential(1) claim severity, Poisson(1) frequency and premium rate
+## c = 1.2.
+fx <- discretize(pexp(x, 1), from = 0, to = 100, method = "lower")
+phi0 <- 0.2/1.2
+Fs <- aggregateDist(method = "recursive", model.freq = "geometric",
+                    model.sev = fx, prob = phi0)
+1 - Fs(400)			# approximate ruin probability
+u <- 0:100
+plot(u, 1 - Fs(u), type = "l", main = "Ruin probability")
 }
 \keyword{distribution}
 \keyword{models}
