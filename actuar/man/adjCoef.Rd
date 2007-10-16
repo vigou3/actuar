@@ -34,7 +34,8 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
     \code{x} and \code{y}, or alternatively the name of a function,
     giving function \eqn{h} in the Lundberg equation (see below);
     ignored if \code{mgf.claim} is provided.}
-  \item{reinsurance}{the type of reinsurance for the portfolio.}
+  \item{reinsurance}{the type of reinsurance for the portfolio; this can
+     be abbreviated.}
   \item{from, to}{the range over which the adjustment coefficient will
     be calculated.}
   \item{n}{integer; the number of values at which to evaluate the
@@ -62,13 +63,13 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
 
   With \code{reinsurance = "proportional"}, the equation becomes
   \deqn{h(x, y) = E[e^{x y B - x c(y) W}] = 1,}{
-    h(x) = E[exp(x y B - x c(y) W)] = 1,}
+    h(x, y) = E[exp(x y B - x c(y) W)] = 1,}
   where \eqn{y} is the retention rate \eqn{c(y)} is the premium rate
   function.
 
   With \code{reinsurance = "excess-of-loss"}, the equation becomes
   \deqn{h(x, y) = E[e^{x \min(B, y) - x c(y) W}] = 1,}{
-    h(x) = E[exp(x min(B, y) - x c(y) W)] = 1,}
+    h(x, y) = E[exp(x min(B, y) - x c(y) W)] = 1,}
   where \eqn{y} is the retention rate \eqn{c(y)} is the premium rate
   function.
 
@@ -103,7 +104,7 @@ p <- function(x) 1.3 * x - 0.1
 h <- function(x, a) 1/((1 - a * x) * (1 + x * p(a)))
 R1 <- adjCoef(mgfx, premium = p, upper = 1, reins = "proportional",
               from = 0, to = 1, n = 11)
-R2 <- adjCoef(h = h, upper = 1, reins = "proportional",
+R2 <- adjCoef(h = h, upper = 1, reins = "p",
              from = 0, to = 1, n = 101)
 R1(seq(0, 1, length = 10))	# evaluation for various retention rates 
 R2(seq(0, 1, length = 10))	# same
@@ -118,7 +119,7 @@ mgfx <- function(x, l)
 h <- function(x, l) mgfx(x, l) * mgfexp(-x * p(l))
 R1 <- adjCoef(mgfx, upper = 1, premium = p, reins = "excess-of-loss",
              from = 0, to = 10, n = 11)
-R2 <- adjCoef(h = h, upper = 1, reins = "excess-of-loss",
+R2 <- adjCoef(h = h, upper = 1, reins = "e",
              from = 0, to = 10, n = 101)
 plot(R1)
 plot(R2, col = "green", add = TRUE)
