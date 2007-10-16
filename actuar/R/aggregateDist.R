@@ -146,7 +146,7 @@ plot.aggregateDist <- function(x, xlim,
         }
         curve(x, main = main, ylab = ylab, xlim = xlim, ylim = c(0, 1), ...)
     }
-    mtext(sub)
+    mtext(sub, line = 0.5)
 }
 
 summary.aggregateDist <- function(object, ...)
