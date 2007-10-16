@@ -1,81 +1,127 @@
 \name{adjCoef}
 \alias{adjCoef}
-\title{Ruin Theory}
+\alias{plot.adjCoef}
+\title{Adjustment coefficient}
 \description{
-	Compute the adjustment coefficient R, the (strictly) positive
-	root of the Lundberg equation :
-	\deqn{ h(r) = E[ e^(r X - r c W) ] = 1}
+  Compute the adjustment coefficient in ruin theory, or return a
+  function to compute the adjustment coefficient for various reinsurance
+  retentions.
 }
 \usage{
-adjCoef(mgf.claim, mgf.wait, premium, upper, h, reinsurance=c("none","proportional","excess-of-loss"), from, to, n=101, toplot=FALSE)
+adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
+        reinsurance = c("none", "proportional", "excess-of-loss"),
+        from, to, n = 101)
+
+\method{plot}{adjCoef}(x, xlab = "x", ylab = "R(x)",
+     main = "Adjustment Coefficient", sub = comment(x),
+     type = "l", add = FALSE, \dots)
 }
 \arguments{
-	TODO
+  \item{mgf.claim}{an expression written as a function of \code{x} or of
+    \code{x} and \code{y}, or alternatively the name of a function,
+    giving the moment generating function (mgf) of the claim severity
+    distribution.}
+  \item{mgf.wait}{an expression written as a function of \code{x}, or
+    alternatively the name of a function, giving the mgf of the
+    claim inter-occurence time distribution.}
+  \item{premium}{if \code{reinsurance = "none"}, a numeric value of the
+    premium rate; otherwise, an expression written as a function of
+    \code{y}, or alternatively the name of a function, giving the
+    premium rate function.}
+  \item{upper.bound}{numeric; upper bound of the support of the claim
+    severity mgf.}
+  \item{h}{an expression written as a function of \code{x} or of
+    \code{x} and \code{y}, or alternatively the name of a function,
+    giving function \eqn{h} in the Lundberg equation (see below);
+    ignored if \code{mgf.claim} is provided.}
+  \item{reinsurance}{the type of reinsurance for the portfolio.}
+  \item{from, to}{the range over which the adjustment coefficient will
+    be calculated.}
+  \item{n}{integer; the number of values at which to evaluate the
+    adjustment coefficient.}
+  \item{x}{an object of class \code{"adjCoef"}.}
+  \item{xlab, ylab}{label of the x and y axes, respectively.}
+  \item{main}{main title.}
+  \item{sub}{subtitle, defaulting to the type of reinsurance.}
+  \item{type}{1-character string giving the type of plot desired; see
+    \code{\link[graphics]{plot}} for details.}
+  \item{add}{logical; if \code{TRUE} add to already existing plot.}
+  \item{\dots}{further graphical parameters accepted by
+    \code{\link[graphics]{plot}} or \code{\link[graphics]{lines}}.}
 }
 \details{
-We want to solve the equation 
-\deqn{ \underbrace{E[ e^{r X - r c W} ]}_{h(r)} = 1}
-on \eqn{[0, upper]} where \eqn{X} stands for the claim size distribution, \eqn{W} the inter-occurence times
-and \eqn{c} the premium rate, which must satisfy the positive safety loading constraint \eqn{E[X-cW]<0}. The
-moment generating function of \eqn{X} on \eqn{[0, upper]}.
+  In the typical case \code{reinsurance = "none"}, the coefficient of
+  determination is the smallest (strictly) positive root of the Lundberg
+  equation
+  \deqn{h(x) = E[e^{x B - x c W}] = 1}{h(x) = E[exp(x B - x c W)] = 1}
+  on \eqn{[0, m)}, where \eqn{m =} \code{upper.bound}, \eqn{B} is the
+  claim severity random variable, \eqn{W} is the claim inter-occurence
+  time random variable and \eqn{c =} \code{premium} is the premium rate.
+  The premium rate must satisfy the positive safety loading constraint
+  \eqn{E[B - c W] < 0}.
 
+  With \code{reinsurance = "proportional"}, the equation becomes
+  \deqn{h(x, y) = E[e^{x y B - x c(y) W}] = 1,}{
+    h(x) = E[exp(x y B - x c(y) W)] = 1,}
+  where \eqn{y} is the retention rate \eqn{c(y)} is the premium rate
+  function.
 
+  With \code{reinsurance = "excess-of-loss"}, the equation becomes
+  \deqn{h(x, y) = E[e^{x \min(B, y) - x c(y) W}] = 1,}{
+    h(x) = E[exp(x min(B, y) - x c(y) W)] = 1,}
+  where \eqn{y} is the retention rate \eqn{c(y)} is the premium rate
+  function.
+
+  One can use argument \code{h} as an alternative way to provide
+  function \eqn{h(x)} or \eqn{h(x, y)}. This is necessary in cases where
+  random variables \eqn{B} and \eqn{W} are not independent.
 }
 \value{
-Function \code{adjustCoef} returns the adjustment coefficient. If the return value is \eqn{0}, then the premium
-rate \eqn{c} supplied does not satisfy the positive safety loading constraint. 
+  If \code{reinsurance = "none"}, a numeric vector of lenght one.
+  Otherwise, a function of class \code{"adjCoef"} inheriting from the
+  \code{"function"} class.
 }
 \references{
-	Actuarial Mathematics????	
+  !!! TODO !!!
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
   and Christophe Dutang
 }
 \examples{
+## Basic example: no reinsurance, exponential claim severity and wait
+## times.
+adjCoef(mgfexp, premium = 1.2, upper = 1)
 
-## no reinsurance, exponentially claim sizes and wait times
-res <- adjCoef(function(x) mgfexp(x), function(x) mgfexp(x), 1.2, 1)
+## Same thing, giving function h.
+h <- function(x) 1/((1 - x) * (1 + 1.2 * x))
+adjCoef(h = h, upper = 1)
 
-## proportional reinsurance,  exponentially claim sizes and wait times
-res <- adjCoef(function(x,y)mgfexp(x*y) , function(x)mgfexp(x), function(x)-.1+x*1.3, 1, r="proportional", from=0, to=1, n=6)
+## Proportional reinsurance, exponential claim sizes and wait times.
+mgfx <- function(x, y) mgfexp(x * y)
+p <- function(x) 1.3 * x - 0.1
+h <- function(x, a) 1/((1 - a * x) * (1 + x * p(a)))
+R1 <- adjCoef(mgfx, premium = p, upper = 1, reins = "proportional",
+              from = 0, to = 1, n = 11)
+R2 <- adjCoef(h = h, upper = 1, reins = "proportional",
+             from = 0, to = 1, n = 101)
+R1(seq(0, 1, length = 10))	# evaluation for various retention rates 
+R2(seq(0, 1, length = 10))	# same
+plot(R1)		        # graphical representation
+plot(R2, col = "green", add = TRUE) # smoother function
 
-##
-## R(1) i.e. no reinsurance
-res(1)
-
-## plot result
-plot(res)
-
-## increase the point number of the retention rate grid
-res <- adjCoef(function(x,y)mgfexp(x*y) , function(x)mgfexp(x), function(x)-.1+x*1.3, 1, r="proportional", from=0, to=1, n=101)
-lines(res, type="l", col="blue")
-
-## use the other parametrization with argument 'h' 
-premium <-function(x)-.1+x*1.3
-theHfunction <- function(x,a) mgfexp(a*x)*mgfexp(-x*premium(a))
-res <- adjCoef(h=theHfunction, upper=1, p=premium, r="proportional", from=0, to =1, n=11)
-
-## plot the result
-## see the impact of point number 'n'
-lines(res, type="l", col="green")
-
-##
-## excess of loss reinsurance
-
-premium <- function(L) -.1+levgamma(L,2,2)*1.3
-mgfClaimSize <- function(x,L) mgfgamma(x,2,2)*pgamma(L,2,2-x)+exp(x*L)*(1-pgamma(L,2,2))
-theHfunction <- function(x,L) mgfClaimSize(x,L)*mgfexp(-x*premium(L))
-
-## different grid of retention limits
-res1 <- adjCoef(h=theHfunction, upper=1, p=premium, r="excess-of-loss", from=0, to=10, n=11)
-res2 <- adjCoef(h=theHfunction, upper=1, p=premium, r="excess-of-loss", from=0, to=10, n=101)
-
-L<-seq(0,10,length.out=100)
-
-## plot the result
-plot(res1, type="l", ylim=c(0,max(res1(L),res2(L))))
-lines(res2, type="l", col="blue")
-
+## Excess-of-loss reinsurance
+p <- function(x) 1.3 * levgamma(x, 2, 2) - 0.1
+mgfx <- function(x, l)
+    mgfgamma(x, 2, 2) * pgamma(l, 2, 2 - x) +
+    exp(x * l) * pgamma(l, 2, 2, lower = FALSE)
+h <- function(x, l) mgfx(x, l) * mgfexp(-x * p(l))
+R1 <- adjCoef(mgfx, upper = 1, premium = p, reins = "excess-of-loss",
+             from = 0, to = 10, n = 11)
+R2 <- adjCoef(h = h, upper = 1, reins = "excess-of-loss",
+             from = 0, to = 10, n = 101)
+plot(R1)
+plot(R2, col = "green", add = TRUE)
 }
-\keyword{models}
+\keyword{optimize}
+\keyword{univar}

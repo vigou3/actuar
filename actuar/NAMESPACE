@@ -72,8 +72,6 @@ S3method(hist, grouped.data)
 S3method(knots, ogive)
 S3method(knots, elev)
 
-S3method(lines, adjCoef)
-
 S3method(mean, aggregateDist)
 S3method(mean, grouped.data)
 
