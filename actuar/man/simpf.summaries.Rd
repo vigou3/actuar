@@ -67,12 +67,12 @@
   For the \code{aggregate} and \code{frequency} methods: if at least one
   level other than the last one is used for grouping, the result is a
   matrix obtained by binding the appropriate node identifiers extracted
-  from \code{x$classification} if \code{classification = TRUE}, and the summaries
-  per grouping. If the last level is used for grouping, the column names
-  of \code{x$data} are retained; if the last level is used for grouping,
-  the column name is replaced by the deparsed name of \code{FUN}. If
-  only the last level is used (column summaries), a named vector is
-  returned.
+  from \code{x$classification} if \code{classification = TRUE}, and the
+  summaries per grouping. If the last level is used for grouping, the
+  column names of \code{x$data} are retained; if the last level is not
+  used for grouping, the column name is replaced by the deparsed name of
+  \code{FUN}. If only the last level is used (column summaries), a named
+  vector is returned.
 
   For the \code{severity} method: a list of two elements:
   \item{first}{\code{NULL} or a matrix of claim amounts for the
@@ -81,6 +81,7 @@
     \code{classification = TRUE};}
   \item{last}{same as above, but for the columns specified in
     \code{splitcol}.}
+  
   For the \code{weights} method: the weight matrix of the portfolio with
   node identifiers if \code{classification = TRUE}.
 }

@@ -66,7 +66,7 @@ aggregate.simpf <- function(x, by = names(x$nodes), FUN = sum,
 
     ## Return results as a matrix
     structure(cbind(if (classification) s, res),
-              dimnames = list(NULL, c(if (classification) rows, paste(prefix, colnames(x$data), sep = ""))))
+              dimnames = list(NULL, c(if (classification) rows, paste(prefix, cols, sep = ""))))
 }
 
 frequency.simpf <- function(x, by = names(x$nodes),
@@ -106,7 +106,7 @@ severity.simpf <- function(x, by = head(names(x$node), -1), splitcol = NULL,
             stop("invalid 'by' specification")
         x <- x$data
         res <- NextMethod(bycol = TRUE, drop = FALSE)
-        colnames(res) <- paste(prefix, colnames(x$data), sep = "")
+        colnames(res) <- paste(prefix, colnames(res), sep = "")
         return(list(first = res[, !splitcol],
                     last = if (all(!splitcol)) NULL else res[, splitcol]))
     }
@@ -143,7 +143,7 @@ severity.simpf <- function(x, by = head(names(x$node), -1), splitcol = NULL,
             if (0 < (nc <- ncol(res.first)))
             {
                 dimnames(res.first) <-
-                    list(NULL, paste(prefix, colnames(x$data), sep = ""))
+                    list(NULL, paste(prefix, seq_len(nc), sep = ""))
                 cbind(if (classification) s, res.first)
             }
             else
@@ -161,7 +161,7 @@ severity.simpf <- function(x, by = head(names(x$node), -1), splitcol = NULL,
             if (0 < (nc <- ncol(res.last)))
             {
                 dimnames(res.last) <-
-                    list(NULL, paste(prefix, colnames(x$data), sep = ""))
+                    list(NULL, paste(prefix, seq_len(nc), sep = ""))
                 cbind(if (classification) s, res.last)
             }
             else
