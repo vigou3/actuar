@@ -65,7 +65,7 @@ summary.ogive <- function (object, ...)
 ### Identical to stats::knots.stepfun().
 knots.ogive <- stats:::knots.stepfun
 
-plot.ogive <- function(x, ..., main = NULL, xlab = "x", ylab = "F(x)")
+plot.ogive <- function(x, main = NULL, xlab = "x", ylab = "F(x)", ...)
 {
     if (missing(main))
         main <- {

@@ -17,7 +17,7 @@ ogive(x, y = NULL, \dots)
 
 \method{knots}{ogive}(Fn, \dots)
 
-\method{plot}{ogive}(x, \dots, main = NULL, xlab = "x", ylab = "F(x)")
+\method{plot}{ogive}(x, main = NULL, xlab = "x", ylab = "F(x)", \dots)
 }
 \arguments{
   \item{x}{an object of class \code{"grouped.data"} or a vector of group
