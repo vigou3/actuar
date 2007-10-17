@@ -23,7 +23,8 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
     distribution.}
   \item{mgf.wait}{an expression written as a function of \code{x}, or
     alternatively the name of a function, giving the mgf of the
-    claim inter-occurence time distribution.}
+    claim inter-occurence time distribution. Defaults to an exponential
+    distribution with parameter 1.}
   \item{premium}{if \code{reinsurance = "none"}, a numeric value of the
     premium rate; otherwise, an expression written as a function of
     \code{y}, or alternatively the name of a function, giving the
@@ -34,7 +35,7 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
     \code{x} and \code{y}, or alternatively the name of a function,
     giving function \eqn{h} in the Lundberg equation (see below);
     ignored if \code{mgf.claim} is provided.}
-  \item{reinsurance}{the type of reinsurance for the portfolio; this can
+  \item{reinsurance}{the type of reinsurance for the portfolio; can
      be abbreviated.}
   \item{from, to}{the range over which the adjustment coefficient will
     be calculated.}
@@ -57,20 +58,20 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
   \deqn{h(x) = E[e^{x B - x c W}] = 1}{h(x) = E[exp(x B - x c W)] = 1}
   on \eqn{[0, m)}, where \eqn{m =} \code{upper.bound}, \eqn{B} is the
   claim severity random variable, \eqn{W} is the claim inter-occurence
-  time random variable and \eqn{c =} \code{premium} is the premium rate.
-  The premium rate must satisfy the positive safety loading constraint
-  \eqn{E[B - c W] < 0}.
+  (or wait) time random variable and \eqn{c =} \code{premium} is the
+  premium rate. The premium rate must satisfy the positive safety
+  loading constraint \eqn{E[B - c W] < 0}.
 
   With \code{reinsurance = "proportional"}, the equation becomes
-  \deqn{h(x, y) = E[e^{x y B - x c(y) W}] = 1,}{
+  \deqn{h(x, y) = E[e^{x y B - x c(y) W}] = 1,}{%
     h(x, y) = E[exp(x y B - x c(y) W)] = 1,}
-  where \eqn{y} is the retention rate \eqn{c(y)} is the premium rate
+  where \eqn{y} is the retention rate and \eqn{c(y)} is the premium rate
   function.
 
   With \code{reinsurance = "excess-of-loss"}, the equation becomes
-  \deqn{h(x, y) = E[e^{x \min(B, y) - x c(y) W}] = 1,}{
+  \deqn{h(x, y) = E[e^{x \min(B, y) - x c(y) W}] = 1,}{%
     h(x, y) = E[exp(x min(B, y) - x c(y) W)] = 1,}
-  where \eqn{y} is the retention rate \eqn{c(y)} is the premium rate
+  where \eqn{y} is the retention limit and \eqn{c(y)} is the premium rate
   function.
 
   One can use argument \code{h} as an alternative way to provide
@@ -83,22 +84,31 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
   \code{"function"} class.
 }
 \references{
-  !!! TODO !!!
+  Bowers, N. J. J., Gerber, H. U., Hickman, J., Jones, D. and Nesbitt, C.
+  (1986), \emph{Actuarial Mathematics}, Society of Actuaries, Itasca IL.
+
+  Gerber, H. U. (1979), \emph{An Introduction to Mathematical Risk
+    Theory}, Philadelphia: Huebner Foundation.
+
+  Centeno, M. d. L. (2002), Measuring the effects of reinsurance by the
+  adjustment coefficient in the Sparre-Anderson model, \emph{Insurance:
+  Mathematics and Economics} \bold{30}, 37-–49.
 }
 \author{
-  Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
-  and Christophe Dutang
+  Christophe Dutang, Vincent Goulet \email{vincent.goulet@act.ulaval.ca}  
 }
 \examples{
 ## Basic example: no reinsurance, exponential claim severity and wait
-## times.
+## times, premium rate computed with expected value principle and
+## safety loading of 20\%.
 adjCoef(mgfexp, premium = 1.2, upper = 1)
 
 ## Same thing, giving function h.
 h <- function(x) 1/((1 - x) * (1 + 1.2 * x))
 adjCoef(h = h, upper = 1)
 
-## Proportional reinsurance, exponential claim sizes and wait times.
+## Proportional reinsurance, same assumptions as above, reinsurer's
+## safety loading of 30\%.
 mgfx <- function(x, y) mgfexp(x * y)
 p <- function(x) 1.3 * x - 0.1
 h <- function(x, a) 1/((1 - a * x) * (1 + x * p(a)))

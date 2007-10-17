@@ -162,6 +162,14 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
     ## Compute the adjustment coefficient for each retention level.
     ## The output of 'sapply' is a matrix with minima in the first
     ## line.
+    ##
+    ## The sapply() below passes the retention levels (argument 'y' of
+    ## function 'f') to optimize(). Since the first two arguments ('f'
+    ## and 'interval') of the latter function are specified, the
+    ## retention levels end up in '...' and hence are considered as
+    ## second argument of 'f'. *This requires R >= 2.6.0 to work since
+    ## argument '...' comes much earlier in the definition of
+    ## optimize().
     coef <- sapply(retention, optimize, f = f,
                    interval = c(0, upper.bound-.Machine$double.eps),
                    tol = sqrt(.Machine$double.eps))[1,]
