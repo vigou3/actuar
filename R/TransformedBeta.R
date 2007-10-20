@@ -42,7 +42,7 @@ levtrbeta <-
     function (limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
               order = 1)
     .External("do_dpq", "levtrbeta", limit, shape1, shape2, shape3, scale,
-              order, log)
+              order, FALSE)
 
 ## Aliases
 dpearson6 <- dtrbeta

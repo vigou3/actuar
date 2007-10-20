@@ -34,4 +34,4 @@ minvburr <- function(order, shape1, shape2, rate = 1, scale = 1/rate)
 levinvburr <- function(limit, shape1, shape2, rate = 1, scale = 1/rate,
                        order = 1)
     .External("do_dpq", "levinvburr", limit, shape1, shape2, scale,
-              order, log)
+              order, FALSE)

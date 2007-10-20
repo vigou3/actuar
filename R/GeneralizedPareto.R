@@ -36,4 +36,4 @@ mgenpareto <- function(order, shape1, shape2, rate = 1, scale = 1/rate)
 levgenpareto <- function(limit, shape1, shape2, rate = 1, scale = 1/rate,
                          order = 1)
      .External("do_dpq", "levgenpareto", limit, shape1, shape2, scale,
-               order, log)
+               order, FALSE)
