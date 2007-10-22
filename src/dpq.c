@@ -101,7 +101,7 @@ static SEXP dpq1_1(SEXP sx, SEXP sa, SEXP sI, double (*f)())
     }
 
 #define FINISH_DPQ1				\
-    if(naflag)					\
+    if (naflag)					\
 	warning(R_MSG_NA);			\
 						\
     if (n == nx) {				\
@@ -232,7 +232,7 @@ static SEXP dpq2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
     }
 
 #define FINISH_DPQ2				\
-    if(naflag)					\
+    if (naflag)					\
 	warning(R_MSG_NA);			\
 						\
     if (n == nx) {				\
@@ -422,7 +422,7 @@ static SEXP dpq3_1(SEXP sx, SEXP sa, SEXP sb, SEXP sc, SEXP sI, double (*f)())
     }
 
 #define FINISH_DPQ3				\
-    if(naflag)					\
+    if (naflag)					\
 	warning(R_MSG_NA);			\
 						\
     if (n == nx) {				\
@@ -612,7 +612,7 @@ static SEXP dpq4_1(SEXP sx, SEXP sa, SEXP sb, SEXP sc, SEXP sd, SEXP sI, double 
     }
 
 #define FINISH_DPQ4				\
-    if(naflag)					\
+    if (naflag)					\
 	warning(R_MSG_NA);			\
 						\
     if (n == nx) {				\
@@ -788,7 +788,7 @@ static SEXP dpq5_1(SEXP sx, SEXP sa, SEXP sb, SEXP sc, SEXP sd, SEXP se, SEXP sI
     }
 
 #define FINISH_DPQ5				\
-    if(naflag)					\
+    if (naflag)					\
 	warning(R_MSG_NA);			\
 						\
     if (n == nx) {				\
@@ -849,7 +849,7 @@ SEXP do_dpq(SEXP args)
     args = CDR(args);
     name = CHAR(STRING_ELT(CAR(args), 0));
 
-    /* Dispatch to do_random{1,2,3,4,5} */
+    /* Dispatch to do_dpq{1,2,3,4,5} */
     for (i = 0; fun_tab[i].name; i++)
     {
 	if (!strcmp(fun_tab[i].name, name))
