@@ -46,15 +46,13 @@ double levexp(double limit, double scale, double order, int give_log)
 
 double mgfexp(double x, double scale, int give_log)
 {
-	/*check arguments */
-	if (!R_FINITE(scale) ||
-	    scale <= 0.0 ||
-	    scale * x > 1.)
-	  return R_NaN;
-	  
-	
-	if(x == 0.0)
-	  return R_D_exp(0.0);	
-	
-	return	R_D_exp( -log(1. - scale * x) ) ;
+    if (!R_FINITE(scale) ||
+	scale <= 0.0 ||
+	scale * x > 1.0)
+	return R_NaN;
+
+    if (x == 0.0)
+	return R_D_exp(0.0);
+
+    return R_D_exp(-log1p(-scale * x));
 }

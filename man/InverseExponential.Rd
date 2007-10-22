@@ -8,7 +8,7 @@
 \alias{levinvexp}
 \title{The Inverse Exponential Distribution}
 \description{
-  Density, distribution function, quantile function, random generation
+  Density function, distribution function, quantile function, random generation
   raw moments and limited moments for the Inverse Exponential
   distribution with parameter \code{scale}.
 }
@@ -43,7 +43,7 @@
   Invalid arguments will result in return value \code{NaN}, with a warning.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
+  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
 }
 \references{

@@ -8,7 +8,7 @@
 \alias{levgenbeta}
 \title{The Generalized Beta Distribution}
 \description{
-  Density, distribution function, quantile function, random generation,
+  Density function, distribution function, quantile function, random generation,
   raw moments and limited moments for the Generalized Beta distribution
   with parameters \code{shape1}, \code{shape2}, \code{shape3} and
   \code{scale}.

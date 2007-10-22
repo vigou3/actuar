@@ -29,8 +29,8 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
     premium rate; otherwise, an expression written as a function of
     \code{y}, or alternatively the name of a function, giving the
     premium rate function.}
-  \item{upper.bound}{numeric; upper bound of the support of the claim
-    severity mgf.}
+  \item{upper.bound}{numeric; an upper bound for the coefficient,
+    usually the upper bound of the support of the claim severity mgf.}
   \item{h}{an expression written as a function of \code{x} or of
     \code{x} and \code{y}, or alternatively the name of a function,
     giving function \eqn{h} in the Lundberg equation (see below);
@@ -77,6 +77,8 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
   One can use argument \code{h} as an alternative way to provide
   function \eqn{h(x)} or \eqn{h(x, y)}. This is necessary in cases where
   random variables \eqn{B} and \eqn{W} are not independent.
+
+  The root of \eqn{h(x) = 1} is found my minimizing \eqn{(h(x) - 1)^2}.
 }
 \value{
   If \code{reinsurance = "none"}, a numeric vector of lenght one.
@@ -87,12 +89,15 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
   Bowers, N. J. J., Gerber, H. U., Hickman, J., Jones, D. and Nesbitt, C.
   (1986), \emph{Actuarial Mathematics}, Society of Actuaries, Itasca IL.
 
-  Gerber, H. U. (1979), \emph{An Introduction to Mathematical Risk
-    Theory}, Philadelphia: Huebner Foundation.
-
   Centeno, M. d. L. (2002), Measuring the effects of reinsurance by the
   adjustment coefficient in the Sparre-Anderson model, \emph{Insurance:
   Mathematics and Economics} \bold{30}, 37-–49.
+
+  Gerber, H. U. (1979), \emph{An Introduction to Mathematical Risk
+    Theory}, Philadelphia: Huebner Foundation.
+
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
+  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
 }
 \author{
   Christophe Dutang, Vincent Goulet \email{vincent.goulet@act.ulaval.ca}  
@@ -106,6 +111,10 @@ adjCoef(mgfexp, premium = 1.2, upper = 1)
 ## Same thing, giving function h.
 h <- function(x) 1/((1 - x) * (1 + 1.2 * x))
 adjCoef(h = h, upper = 1)
+
+## Example 8.7, Klugman et al. (2004)
+mgfx <- function(x) 0.6 * exp(x) + 0.4 * exp(2 * x)
+adjCoef(mgfx(x), mgfexp(x, 4), prem = 7, upper = 0.3182)
 
 ## Proportional reinsurance, same assumptions as above, reinsurer's
 ## safety loading of 30\%.

@@ -1,11 +1,10 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {m,lev,mgf}unif functions to compute raw and limited
-### moments, and the moment generating function
-### for the Uniform distribution (as defined in R).
+### Definition of the {m,lev,mgf}unif functions to compute raw and
+### limited moments, and the moment generating function for the
+### Uniform distribution (as defined in R).
 ###
-### Wikipedia, The uniform distribution (continuous)
-###
+### <http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29>
 ###
 ### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 

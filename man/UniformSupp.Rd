@@ -3,9 +3,10 @@
 \alias{munif}
 \alias{levunif}
 \alias{mgfunif}
-\title{Moments, Limited Moments and Moment generating function of the Uniform Distribution}
+\title{Moments and Moment Generating Function of the Uniform Distribution}
 \description{
-  Raw moments, limited moments and moment generating function for the Uniform distribution with parameters \code{min} and \code{max}.
+  Raw moments, limited moments and moment generating function for the
+  Uniform distribution from \code{min} to \code{max}.
 }
 \usage{
   munif(order, min = 0, max = 1)
@@ -13,32 +14,32 @@
   mgfunif(x, min = 0, max = 1, log = FALSE)
 }
 \arguments{
-  \item{min}{first parameter of the uniform distribution.}
-  \item{max}{second parameter of the uniform distribution.}
-  \item{x}{a real}
-  \item{log}{logical, if \code{TRUE}, the log of the m.g.f. is returned.}
   \item{order}{order of the moment.}
+  \item{min, max}{lower and upper limits of the distribution. Must be finite.}
   \item{limit}{limit of the random variable.}
+  \item{x}{numeric vector.}
+  \item{log}{logical; if \code{TRUE}, the cumulant generating function
+    is returned.}
 }
 \details{
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}. 
-  The moment generating function is given by \eqn{E[e^{xX}]}.
+  \eqn{E[X^k]}{E[X^k]}, the \eqn{k}th limited moment at some limit
+  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]} and the moment
+  generating function is \eqn{E[e^{xX}]}.
 }
 \value{
-  \code{munif} gives the \eqn{k}th raw moment. 
+  \code{munif} gives the \eqn{k}th raw moment,
   \code{levunif} gives the \eqn{k}th moment of the limited random
-  variable.
+  variable, and
   \code{mgfunif} gives the moment generating function in \code{x}.
+  
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{
-  \code{\link{Uniform}} for details on the Uniform distribution and
-  functions \code{{d,p,q,r}unif}.
+  \code{\link{Uniform}}.
 }
 \references{
-  Wikipedia, The uniform distribution (continuous)
+  \url{http://en.wikipedia.org/wiki/Uniform_distribution_\%28continuous\%29}
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},

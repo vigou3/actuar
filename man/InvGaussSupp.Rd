@@ -6,50 +6,55 @@
 \alias{minvgauss}
 \alias{levinvgauss}
 \alias{mgfinvgauss}
-\title{Raw, Limited Moments and Moment generating function of the inverse Gaussian Distribution}
+\title{Moments and Moment Generating Function of the Inverse Gaussian Distribution}
 \description{
-  Raw moments, limited moments, and moment generating function for the inverse Gaussian distribution with parameters \code{nu} and \code{lambda}.
+  Raw moments, limited moments and moment generating function for the
+  Inverse Gaussian distribution with parameters \code{nu} and
+  \code{lambda}.
 }
 \usage{
-  minvGauss(order, nu, lambda )
+  minvGauss(order, nu, lambda)
   levinvGauss(limit, nu, lambda, order = 1)
   mgfinvGauss(x, nu, lambda, log= FALSE)
-  minvgauss(order, nu, lambda )
+
+  minvgauss(order, nu, lambda)
   levinvgauss(limit, nu, lambda, order = 1)
   mgfinvgauss(x, nu, lambda, log= FALSE)
 }
 \arguments{
-  \item{order}{order of the moment.}
+  \item{order}{order of the moment. Only \code{order = 1} is
+    supported by \code{levinvGauss}.}
   \item{limit}{limit of the loss variable.}
-  \item{nu}{the mean of the inverse Gaussian distribution. Must be strictly positive}
-  \item{lambda}{the scale paramter. Must be strictly positive}
-  \item{x}{a real}
-  \item{log}{logical, if \code{TRUE}, the log of the m.g.f. is returned}
+  \item{nu, lambda}{parameters. Must be strictly positive.}
+  \item{x}{numeric vector.}
+  \item{log}{logical; if \code{TRUE}, the cumulant generating function
+    is returned.}
 }
 \details{
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}. 
-  The moment generating function is given by \eqn{E[e^{xX}]}.
-  
+  \eqn{E[X^k]}{E[X^k]}, the \eqn{k}th limited moment at some limit
+  \eqn{d} is \eqn{E[\min(X, d)^k]} and the moment generating function is
+  \eqn{E[e^{xX}]}.  
 }
 \value{
-  \code{minvGauss} gives the \eqn{k}th raw moment and
+  \code{minvGauss} gives the \eqn{k}th raw moment,
   \code{levinvGauss} gives the \eqn{k}th moment of the limited loss
-  variable. Only \eqn{k=1} is supported.
-  \code{mgfinvGauss} gives the moment generating function in \code{t}
+  variable, and
+  \code{mgfinvGauss} gives the moment generating function in \code{x}.
+  
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{
-  Details on the inverse Gaussian distribution can be found in the 2 references below. For the density, the distribution fuction, the quantile and the random generator of the inverse Gaussian distribution, use the package SuppDists, and the functions \code{{d,p,q,r}invGauss}.
+  \code{\link[SuppDists]{invGauss}} in package \pkg{SuppDists} for the
+  density function, distribution function, quantile function and random
+  number generator.
 }
 \references{
-  Chhikara & Folk (1989), 
- \emph{The inverse Gaussian distribution: theory, methodology and application}, Decker
+  Chhikara, R. S. and Folk, T. L. (1989), \emph{The Inverse Gaussian
+    Distribution: Theory, Methodology and Applications}, Decker.
 
-  Seshadri (1989), 
-  \emph{The inverse Gaussian distribution: statistical theory and applications}, Springer
-
+  Seshadri, D. N. (1989), \emph{The Inverse Gaussian Distribution:
+  Statistical Theory and Applications}, Springer.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
@@ -59,8 +64,5 @@
 minvGauss(2, 3, 4) 
 levinvGauss(10, 3, 4)
 mgfinvGauss(1,3,2)
-minvgauss(2, 3, 4) 
-levinvgauss(10, 3, 4)
-mgfinvgauss(1,3,2)
 }
 \keyword{distribution}

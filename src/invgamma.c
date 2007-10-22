@@ -123,18 +123,21 @@ double levinvgamma(double limit, double shape, double scale, double order,
 
 double mgfinvgamma(double x, double shape, double scale, int give_log)
 {
-	if (!R_FINITE(shape) ||
+    double tmp;
+
+    if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	shape <= 0.0 ||
 	scale <= 0.0 ||
 	x > 0.0 )
 	return R_NaN;
-	
-	if( x == 0.0)
-	return	R_D_exp(0.0);
-	
-	double tmp = log(2) + shape / 2.0 * log(-scale*x) ;
-	double tmp2 = log( bessel_k( sqrt( -4*scale*x ), shape, 1 ) ) - log( gammafn(shape) );
-	
-	return	R_D_exp(tmp+tmp2);	
+
+    if (x == 0.0)
+	return R_D_exp(0.0);
+
+    tmp = -scale * x;
+
+    return R_D_exp(log(2.0) + shape * log(tmp)/2.0 +
+		   log(bessel_k(sqrt(4 * tmp), shape, 1)) -
+		   lgammafn(shape));
 }

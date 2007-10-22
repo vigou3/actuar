@@ -8,7 +8,7 @@
 \alias{levgenpareto}
 \title{The Generalized Pareto Distribution}
 \description{
-  Density, distribution function, quantile function, random generation,
+  Density function, distribution function, quantile function, random generation,
   raw moments and limited moments for the Generalized Pareto
   distribution with parameters \code{shape1}, \code{shape2} and
   \code{scale}.

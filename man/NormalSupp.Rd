@@ -4,36 +4,40 @@
 \alias{mgfnorm}
 \title{Moments and Moment generating function of the Normal Distribution}
 \description{
-  moments and the moment generating function for the Normal distribution with
-  parameters \code{mean} and \code{sd}.
+  Raw moments and moment generating function for the normal distribution with
+  mean equal to \code{mean} and standard deviation equal to \code{sd}.
 }
 \usage{
   mnorm(order, mean = 0, sd = 1)
   mgfnorm(x, mean = 0, sd = 1, log = FALSE)
 }
 \arguments{
-  \item{mean}{mean of the Normal distribution}
-  \item{sd}{standard deviation of the Normal distribution}
-  \item{x}{a real}
-  \item{log}{logical, if \code{TRUE}, the log of the m.g.f. is returned}
-  \item{order}{integer, the order of the moment}
+  \item{order}{vector of integers; order of the moment.}
+  \item{mean}{vector of means.}
+  \item{sd}{vector of standard deviations.}
+  \item{x}{numeric vector.}
+  \item{log}{logical; if \code{TRUE}, the cumulant generating function
+    is returned.}
 }
 \details{
-  The moment is given by \eqn{E[X^k]}, where \eqn{k} denotes the order.
-  The moment generating function is given by \eqn{E[e^{xX}]}.
-  Only integer order is supported for the \eqn{k}th moment.
+  The \eqn{k}th raw moment of the random variable \eqn{X} is
+  \eqn{E[X^k]}{E[X^k]} and the moment generating function is
+  \eqn{E[e^{xX}]}.
+
+  Only integer moments are supported.
 }
 \value{
-  \code{mnorm} gives the moment.
+  \code{mnorm} gives the \eqn{k}th raw moment and
   \code{mgfnorm} gives the moment generating function in \code{x}.
+  
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{
-  \code{\link{Normal}} for details on the Normal distribution and
-  functions \code{{d,p,q,r}norm}.
+  \code{\link{Normal}}
 }
 \references{
-  Johnson & Kotz, Loss Distributions, Wiley, 1970
+  Johnson, N. L. and Kotz, S. (1970), \emph{Continuous univariate
+    distributions, Volume 1}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},

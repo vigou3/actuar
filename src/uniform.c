@@ -1,6 +1,6 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
- *  Functions to calculate raw and limited moments for the Gamma
+ *  Functions to calculate raw and limited moments for the Uniform
  *  distribution. See ../R/UniformSupp.R for details.
  *
  *  AUTHORS: Christophe Dutang and Vincent Goulet <vincent.goulet@act.ulaval.ca>
@@ -13,59 +13,60 @@
 
 double munif(double order, double min, double max, int give_log)
 {
-	/*check arguments */
-	if (!R_FINITE(min) || !R_FINITE(max) || min >= max)
-		return R_NaN;
-	
-	if(order == -1.0)
-		return (log(abs(max)) - log(abs(min))) / (max - min);
-	else
-		return (R_pow(max,order+1) - R_pow(min,order+1)) /( (max - min)*(order+1) );		
+    double tmp;
+
+    if (!R_FINITE(min) ||
+	!R_FINITE(max) ||
+	min >= max)
+	return R_NaN;
+
+    if (order == -1.0)
+	return (log(abs(max)) - log(abs(min))) / (max - min);
+
+    tmp = order + 1;
+
+    return (R_pow(max, tmp) - R_pow(min, tmp)) / ((max - min) * tmp);
 }
 
 double levunif(double limit, double min, double max, double order, int give_log)
 {
-	/*check arguments */
-	if (!R_FINITE(min) || !R_FINITE(max) || min >= max)
-		return R_NaN;
-	
-	double tmp, res;
-	
-	if(limit <= min)
-		return R_pow(limit,order);
-		
-	if(limit >= max)
-		return munif(order, min, max, give_log);
-	
-	if(order == -1.0)
-	{
-		tmp = (log(abs(limit)) - log(abs(min))) / (max - min);		
-		res = tmp + (max - limit) / (limit*(max - min));
-	}
-	else
-	{
-		tmp = (R_pow(limit,order+1) - R_pow(min,order+1)) /( (max - min)*(order+1) );
-		res = tmp + R_pow(limit, order)*(max - limit)/(max - min);
-	}
-	return res;			
+    double tmp;
+
+    if (!R_FINITE(min) ||
+	!R_FINITE(max) ||
+	min >= max)
+	return R_NaN;
+
+    if (limit <= min)
+	return R_pow(limit, order);
+
+    if (limit >= max)
+	return munif(order, min, max, give_log);
+
+    if (order == -1.0)
+	return (log(abs(limit)) - log(abs(min))) / (max - min) +
+	    (max - limit) / (limit * (max - min));
+
+    tmp = order + 1;
+
+    return (R_pow(limit, tmp) - R_pow(min, tmp)) / ((max - min) * tmp) +
+	R_pow(limit, order) * (max - limit) / (max - min);
 }
 
 double mgfunif(double x, double min, double max, int give_log)
-{	
-	/*check arguments */
-	if (!R_FINITE(min) || !R_FINITE(max) || min >= max)
-		return R_NaN;	  
-	
-	if(x == 0.0)
-		return R_D_exp(0.0);	
-	
-	double tmp1 = exp(x*max)-exp(x*min);
-	double tmp2 = x*(max-min);
-	
-	//we can't use the macro R_D_exp since the log
-	//of the mgf never exists for t<0
-	if(give_log)
-		return	log(tmp1) - log(tmp2) ;
-	else
-		return tmp1/tmp2 ;
+{
+    double tmp1, tmp2;
+
+    if (!R_FINITE(min) ||
+	!R_FINITE(max) ||
+	min >= max)
+	return R_NaN;
+
+    if (x == 0.0)
+	return R_D_exp(0.0);
+
+    tmp1 = exp(x * max) - exp(x * min);
+    tmp2 = x * (max - min);
+
+    return R_D_exp(log(tmp1) - log(tmp2));
 }

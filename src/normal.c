@@ -1,7 +1,8 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
- *  Functions to calculate raw and limited moments for the Gamma
- *  distribution. See ../R/NormalSupp.R for details.
+ *  Functions to calculate raw moments and the moment generating
+ *  function for the normal distribution. See ../R/NormalSupp.R for
+ *  details.
  *
  *  AUTHORS: Christophe Dutang and Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
@@ -13,43 +14,39 @@
 
 double mnorm(double order, double mean, double sd, int give_log)
 {
-	printf("param %f,%f,%f\n",order,mean,sd);
-	
-	if (!R_FINITE(mean) || 
-		!R_FINITE(sd) ||	
-		!R_FINITE(order) ||
-		sd <= 0.0)
-		return R_NaN;
-		
-	if(order == 0.0)
-		return 1.0;
-		
-	int i = 0; //loop index	
-	int n = order;
+    if (!R_FINITE(mean) ||
+	!R_FINITE(sd) ||
+	!R_FINITE(order) ||
+	sd <= 0.0)
+	return R_NaN;
 
-	double Fact[n+1];//array with 0!, 1!, 2!, ... n!
-	/* init */ 
-	Fact[0] = 1;       
-	for( i=1; i< n+1 ; i++) Fact[i]= i * Fact[i-1];		
-		
-	double res = 0;
-	for( i=0; i< n/2+1; i++) 
-		res += Fact[n] / (R_pow(2,i) * Fact[i] * Fact[n-2*i] ) * R_pow(sd,2*i) * R_pow(mean,n-2*i);
-						
-	return res;													
+    /* Trivial case */
+    if (order == 0.0)
+	return 1.0;
+
+    /* Odd moments about 0 are equal to 0 */
+    if ((int) order % 2 == 1 && mean == 0.0)
+	return 0.0;
+
+    int i, n = order;
+    double res = 0;
+
+    for (i = 0; i <= n/2; i++)
+	res += R_pow_di(sd, 2 * i) * R_pow_di(mean, n - 2 * i) /
+	    (R_pow_di(2, i) * gammafn(i + 1) * gammafn(order - 2 * i + 1));
+
+    return gammafn(order + 1) * res;
 }
 
 double mgfnorm(double x, double mean, double sd, int give_log)
 {
-	/*check arguments */
-	if (!R_FINITE(mean) ||
-	    !R_FINITE(sd) ||
-	    sd <= 0.0 )
-	  return R_NaN;
-	  
-	
-	if(x == 0.0)
-	  return R_D_exp(0.0);	
-	
-	return	R_D_exp( x*mean + 0.5*x*x*sd*sd ) ;
+    if (!R_FINITE(mean) ||
+	!R_FINITE(sd) ||
+	sd <= 0.0)
+	return R_NaN;
+
+    if (x == 0.0)
+	return R_D_exp(0.0);
+
+    return R_D_exp(x * mean + 0.5 * x * x * sd * sd) ;
 }

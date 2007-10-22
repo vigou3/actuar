@@ -8,7 +8,7 @@
 \alias{levburr}
 \title{The Burr Distribution}
 \description{
-  Density, distribution function, quantile function, random generation,
+  Density function, distribution function, quantile function, random generation,
   raw moments and limited moments for the Burr distribution with
   parameters \code{shape1}, \code{shape2} and \code{scale}.
 }
@@ -65,7 +65,7 @@
   }    
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
+  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}.
 }
 \value{

@@ -51,17 +51,15 @@ double levgamma(double limit, double shape, double scale, double order,
 
 double mgfgamma(double x, double shape, double scale, int give_log)
 {
-	/*check arguments */
-	if (!R_FINITE(shape) ||
-	    !R_FINITE(scale) ||
-	    shape <= 0.0 ||
-	    scale <= 0.0 ||
-	    scale * x > 1.)
-	  return R_NaN;
-	  
-	
-	if(x == 0.0)
-	  return R_D_exp(0.0);	
-	
-	return	R_D_exp( -shape * log(1. - scale * x) ) ;
+    if (!R_FINITE(shape) ||
+	!R_FINITE(scale) ||
+	shape <= 0.0 ||
+	scale <= 0.0 ||
+	scale * x > 1.)
+	return R_NaN;
+
+    if (x == 0.0)
+	return R_D_exp(0.0);
+
+    return R_D_exp(-shape * log1p(-scale * x));
 }

@@ -8,9 +8,10 @@
 \alias{levinvburr}
 \title{The Inverse Burr Distribution}
 \description{
-  Density, distribution function, quantile function, random generation,
-  raw moments and limited moments for the Inverse Burr distribution with
-  parameters \code{shape1}, \code{shape2} and \code{scale}.
+  Density function, distribution function, quantile function, random
+  generation, raw moments and limited moments for the Inverse Burr
+  distribution with parameters \code{shape1}, \code{shape2} and
+  \code{scale}.
 }
 \usage{
   dinvburr(x, shape1, shape2, rate = 1, scale = 1/rate,
@@ -65,7 +66,7 @@
   }
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k} limited moment at some limit
+  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
 }
 \value{

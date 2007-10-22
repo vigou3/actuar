@@ -11,8 +11,8 @@
 ###   Pr[X <= x] = 1 - pgamma(1/x, shape1, scale = 1/scale).
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
-### Wikipedia, Inverse gamma distribution
+### Edition, Wiley, 2004 and
+### <http://en.wikipedia.org/wiki/Inverse-gamma_distribution>
 ###
 ### AUTHORS:  Mathieu Pigeon, Christophe Dutang and
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>
@@ -40,5 +40,3 @@ levinvgamma <- function(limit, shape, rate = 1, scale = 1/rate,
 
 mgfinvgamma <- function(x, shape, rate = 1, scale = 1/rate, log = FALSE)
     .External("do_dpq", "mgfinvgamma", x, shape, scale, log)
-    
-
