@@ -1,17 +1,33 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
-### Definition of the {d,p,q,r,m,mgf}phasetype functions to compute
-### characteristics of the Phase-type distribution. Its distribution function
-### is 
-###       P(X <= x) = 1-pi %*% exp(Tx) %*% 1m
-### where pi is the initial probability vector, T the subintensity matrix and
-### 1m is 1-vector of R^m
+### Definition of the {d,p,r,m,mgf}ph functions to compute
+### characteristics of Phase-type distributions with cumulative
+### distribution function
 ###
-### See Bladt(2005).
-### 
+###       Pr[X <= x] = 1 - pi %*% exp(Tx) %*% 1m,
 ###
-### AUTHORS:  Mathieu Pigeon, Christophe Dutang and
-### Vincent Goulet <vincent.goulet@act.ulaval.ca>
+### where 'pi' is the initial probability vector, 'T' is the
+### subintensity matrix and 1m is 1-vector of R^m.
+###
+### See Bladt (2005).
+###
+### AUTHORS: Christophe Dutang and Vincent Goulet <vincent.goulet@act.ulaval.ca>
+
+dph <- function (x, prob, transition, log = FALSE)
+    .External("do_dpqph", "dph", x, prob, transition, log)
+
+pph <- function (x, prob, transition, lower.tail = TRUE, log.p = FALSE)
+    .External("do_dpqph", "pph", x, prob, transition, lower.tail, log.p)
+
+rph <- function (n, prob, transition, log.p = FALSE)
+    .External("do_randomph", "rph", x, prob, transition)
+
+mph <- function (x, prob, transition)
+    .External("do_dpqph", "mph", x, prob, transition, FALSE)
+
+mgfph <- function (x, prob, transition, log = FALSE)
+    .External("do_dpqph", "mgfph", x, prob, transition, log)
+
 
 dphasetype <- function (x, pi, T, m, log = FALSE)
 {
@@ -22,8 +38,8 @@ dphasetype <- function (x, pi, T, m, log = FALSE)
     if(dim(T)[1] != dim(T)[2])
     {
         stop("T is not a 'mxm' matrix")
-    }    
-    
+    }
+
     onesM <- rep(1,m)
     tzero <- c(-T %*% onesM)
 
@@ -42,14 +58,14 @@ pphasetype <- function(q, pi, T, m, lower.tail = TRUE, log.p = FALSE)
     if(dim(T)[1] != dim(T)[2])
     {
         stop("T is not a 'mxm' matrix")
-    }    
-    
+    }
+
     onesM <- rep(1,m)
 
     survivalProb <- .Call("calcMatExpGen", q, pi, T, onesM)
 
     if(!log.p)
-    { 
+    {
         if(lower.tail)
             return(1 - survivalProb)
         else
@@ -67,7 +83,7 @@ pphasetype <- function(q, pi, T, m, lower.tail = TRUE, log.p = FALSE)
 qphasetype <- function(p, pi, T, m, lower.tail = TRUE, log.p = FALSE)
     return (NULL)
 #???
-    
+
 rphasetype <- function(n, pi, T, m)
 {
     if(length( dim(T) ) != 2)
@@ -77,11 +93,11 @@ rphasetype <- function(n, pi, T, m)
     if(dim(T)[1] != dim(T)[2])
     {
         stop("T is not a 'mxm' matrix")
-    }    
-    
-    tzero <- c(-T %*% rep(1,m))    
+    }
+
+    tzero <- c(-T %*% rep(1,m))
     .Call("randphasetype", n, pi, T, tzero )
-}    
+}
 
 
 mphasetype <- function(order, pi, T, m)
@@ -93,8 +109,8 @@ mphasetype <- function(order, pi, T, m)
     if(dim(T)[1] != dim(T)[2])
     {
         stop("T is not a 'mxm' matrix")
-    }    
-    
+    }
+
     onesM <- rep(1,m)
 
     routine <- function(x)
@@ -107,12 +123,12 @@ mphasetype <- function(order, pi, T, m)
             if(as.integer(x) == x)
             {
                 TpowN <- T
-            
+
                 factN <- 1
                 if(x > 1)
                 { #prod(T==diag(diag(T)))
                     for(k in 2:x)
-                    {                                        
+                    {
                         factN <- factN * k
                         TpowN <- TpowN %*% T
                         #cat("-",k)
@@ -140,8 +156,8 @@ mgfphasetype <- function(x, pi, T, m, log = FALSE)
      if(dim(T)[1] != dim(T)[2])
      {
          stop("T is not a 'mxm' matrix")
-     }    
-     
+     }
+
      onesM <- rep(1,m)
      tzero <- c(-T %*% onesM)
 
@@ -152,18 +168,16 @@ mgfphasetype <- function(x, pi, T, m, log = FALSE)
          #if failed, testDiag is an invisible object of class 'try-error'
          testDiag <- try( solve(-x*diag(m) - T , diag(m) ) )
          options(show.error.messages = TRUE) #revert to default
-            
-         if(class(testDiag) == "try-error")          
+
+         if(class(testDiag) == "try-error")
              return( NaN )
-         else             
+         else
              return( pi %*% solve(-x*diag(m) - T , diag(m) ) %*% tzero )
      }
-     
-     
+
+
      if(!log)
          return( sapply(x, routine) )
      else
          return( log( sapply(x, routine) ) )
 }
-    
-
