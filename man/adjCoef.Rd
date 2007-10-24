@@ -87,11 +87,11 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
 }
 \references{
   Bowers, N. J. J., Gerber, H. U., Hickman, J., Jones, D. and Nesbitt, C.
-  (1986), \emph{Actuarial Mathematics}, Society of Actuaries, Itasca IL.
+  (1986), \emph{Actuarial Mathematics}, Itasca IL: Society of Actuaries.
 
   Centeno, M. d. L. (2002), Measuring the effects of reinsurance by the
   adjustment coefficient in the Sparre-Anderson model, \emph{Insurance:
-  Mathematics and Economics} \bold{30}, 37-–49.
+    Mathematics and Economics} \bold{30}, 37--49.
 
   Gerber, H. U. (1979), \emph{An Introduction to Mathematical Risk
     Theory}, Philadelphia: Huebner Foundation.
