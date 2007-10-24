@@ -131,10 +131,10 @@ FUNTAB fun_tab[] = {
     {"levtrbeta",	do_dpq5,	1},
     {"levgenbeta",	do_dpq5,	2},
     /* Phase-type distributions */
-    {"dph",		do_dpqph2,	1},
-    {"pph",		do_dpqph2,	2},
-    {"mph",		do_dpqph2,	3},
-    {"mgfph",		do_dpqph2,	4},
+    {"dphtype",		do_dpqphtype2,	1},
+    {"pphtype",		do_dpqphtype2,	2},
+    {"mphtype",		do_dpqphtype2,	3},
+    {"mgfphtype",	do_dpqphtype2,	4},
 
     /* RANDOM NUMBERS FUNCTIONS */
     /* One parameter distributions */
@@ -159,6 +159,6 @@ FUNTAB fun_tab[] = {
     {"rtrbeta", 	do_random4,	1},
     {"rgenbeta", 	do_random4,	2},
     /* Phase-type distributions */
-    {"rph",		do_randomph2,	1},
+    {"rphtype",		do_randomphtype2, 1},
     {0, 0, 0}
 };

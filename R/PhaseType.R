@@ -11,21 +11,21 @@
 ###
 ### See Bladt (2005).
 ###
-### AUTHORS: Christophe Dutang and Vincent Goulet <vincent.goulet@act.ulaval.ca>
+### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dph <- function (x, prob, transition, log = FALSE)
+dphtype <- function (x, prob, transition, log = FALSE)
     .External("do_dpqph", "dph", x, prob, transition, log)
 
-pph <- function (x, prob, transition, lower.tail = TRUE, log.p = FALSE)
+pphtype <- function (x, prob, transition, lower.tail = TRUE, log.p = FALSE)
     .External("do_dpqph", "pph", x, prob, transition, lower.tail, log.p)
 
-rph <- function (n, prob, transition, log.p = FALSE)
+rphtype <- function (n, prob, transition, log.p = FALSE)
     .External("do_randomph", "rph", x, prob, transition)
 
-mph <- function (x, prob, transition)
+mphtype <- function (x, prob, transition)
     .External("do_dpqph", "mph", x, prob, transition, FALSE)
 
-mgfph <- function (x, prob, transition, log = FALSE)
+mgfphtype <- function (x, prob, transition, log = FALSE)
     .External("do_dpqph", "mgfph", x, prob, transition, log)
 
 

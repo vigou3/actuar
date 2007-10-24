@@ -1,3 +1,5 @@
+#include <Rinternals.h>
+
 /*Error messages */
 #define R_MSG_NA	_("NaNs produced")
 
@@ -15,6 +17,13 @@ SEXP do_random2(int code, SEXP args);
 SEXP do_random3(int code, SEXP args);
 SEXP do_random4(int code, SEXP args);
 
+SEXP do_dpqphtype(SEXP args);
+SEXP do_dpqphtype2(int code, SEXP args);
+
+SEXP do_randomphtype(SEXP args);
+SEXP do_randomphtype2(int code, SEXP args);
+
+
 //compute the matrix exponential in the general case
 SEXP calcMatExpGen (SEXP x, SEXP u, SEXP T, SEXP v);
 
@@ -26,7 +35,13 @@ double genErlangVariable(int n, double rate);
 
 
 /* Utility functions */
-/*   One parameter distributions , hence associated with dpq1 */
+/*   Matrix algebra */
+void expm(double *x, int n, double *z);
+double expmprod(double *x, double *M, double *y, int n);
+void matpow(double *x, int n, int k, double *z);
+void solve(double *A, double *B, int n, int p, double *z);
+
+/*   One parameter distributions, hence associated with dpq1 */
 double mexp(double order, double scale, int give_log);
 double levexp(double limit, double scale, double order, int give_log);
 double mgfexp(double t, double scale, int give_log);
@@ -38,7 +53,7 @@ double rinvexp(double scale);
 double minvexp(double order, double scale, int give_log);
 double levinvexp(double limit, double scale, double order, int give_log);
 
-/*   Two parameter distributions , hence associated with dpq2 */
+/*   Two parameter distributions, hence associated with dpq2 */
 double munif(double order, double min, double max, int give_log);
 double levunif(double limit, double min, double max, double order, int give_log);
 double mgfunif(double x, double min, double max, int give_log);
@@ -131,7 +146,7 @@ double minvGauss(double order, double nu, double lambda, int give_log);
 double levinvGauss(double limit, double nu, double lambda, double order, int give_log);
 double mgfinvGauss(double t, double nu, double lambda, int give_log);
 
-/*   Three parameter distributions , hence associated with dpq3 */
+/*   Three parameter distributions, hence associated with dpq3 */
 double dburr(double x, double shape1, double shape2, double scale, int give_log);
 double pburr(double q, double shape1, double shape2, double scale, int lower_tail, int log_p);
 double qburr(double p, double shape1, double shape2, double scale, int lower_tail, int log_p);
@@ -167,7 +182,7 @@ double rtrgamma(double shape1, double shape2, double scale);
 double mtrgamma(double order, double shape1, double shape2, double scale, int give_log);
 double levtrgamma(double limit, double shape1, double shape2, double scale, double order, int give_log);
 
-/*   Four parameter distributions , hence associated with dpq4 */
+/*   Four parameter distributions, hence associated with dpq4 */
 double dgenbeta(double x, double shape1, double shape2, double shape3, double scale, int give_log);
 double pgenbeta(double q, double shape1, double shape2, double shape3, double scale, int lower_tail, int log_p);
 double qgenbeta(double p, double shape1, double shape2, double shape3, double scale, int lower_tail, int log_p);
@@ -181,6 +196,13 @@ double qtrbeta(double p, double shape1, double shape2, double shape3, double sca
 double rtrbeta(double shape1, double shape2, double shape3, double scale);
 double mtrbeta(double order, double shape1, double shape2, double shape3, double scale, int give_log);
 double levtrbeta(double limit, double shape1, double shape2, double shape3, double scale, double order, int give_log);
+
+/*   Phase-type distributions */
+double dphtype(double x, double *alpha, double *S, int m, int give_log);
+double pphtype(double x, double *alpha, double *S, int m, int lower_tail, int log_p);
+double rphtype(double *alpha, double *S, int m);
+double mphtype(double order, double *alpha, double *S, int m, int give_log);
+double mgfphtype(double x, double *alpha, double *S, int m, int give_log);
 
 
 /* Definitions for the table linking the first group of functions to

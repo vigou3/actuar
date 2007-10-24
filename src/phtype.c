@@ -9,6 +9,7 @@
 
 #include <R.h>
 #include <Rmath.h>
+#include "actuar.h"
 #include "locale.h"
 #include "dpq.h"
 
@@ -19,40 +20,38 @@ double dphtype(double x, double *alpha, double *S, int m, int give_log)
      *	alpha   * exp(x * S) * s
      *  (1 x m)   (m x m)      (m x 1)
      *
-     *  with s = S * e and e is a 1-vector.
+     *  with s = -S * e and e is a 1-vector.
      */
 
     if (!R_FINITE(x) || x < 0.0)
 	return R_D__0;
 
-    int i, j, im;
-    double *s[m], *z;
+    int i, j, jm;
+    double *s, *Stmp;
 
-    /* Build vector s --- equal to the row sums of matrix S --- and
-     * multiply each element of S by x.  */
+    /* Build vector s (equal to minux the row sums of matrix S) and
+     * matrix Stmp = x * S. Matrix S is stored in column major
+     * order! */
     for (i = 0; i < m; i++)
     {
 	s[i] = 0.0;
-	im = i * m;
 	for (j = 0; j < m; j++)
 	{
-	    s[i] += S[im + j];
-	    S[im + j] *= x;
+	    jm = j * m;
+	    s[i] -= S[i + jm];
+	    Stmp[i + jm] = x * S[i + jm];
 	}
     }
 
-    /* Compute alpha * exp(x * S) * s */
-    expmprod(alpha, S, s, m, z)
-
-    return R_D_val(z);
+    return R_D_val(expmprod(alpha, Stmp, s, m));
 }
 
-double pphtype(double x, double *alpha, double *S, int m, int lower_tail,
+double pphtype(double q, double *alpha, double *S, int m, int lower_tail,
 	       int log_p)
 {
     /*  Cumulative distribution function is
      *
-     *	1 - alpha   * exp(x * S) * e
+     *	1 - alpha   * exp(q * S) * e
      *      (1 x m)   (m x m)      (m x 1)
      *
      *  where e is a 1-vector.
@@ -62,22 +61,20 @@ double pphtype(double x, double *alpha, double *S, int m, int lower_tail,
 	return R_DT_0;
 
     int i;
-    double *e[m], *z;
+    double *e, *tmp;
 
-    /* Create the 1-vector and multiply each element of S by x. */
+    /* Create the 1-vector and multiply each element of S by q. */
     for (i = 0; i < m; i++)
 	e[i] = 1;
     for (i = 0; i < m * m; i++)
-	S[i] *= x;
+	tmp[i] = q * S[i];
 
-    /* Compute alpha * exp(x * S) * 1 */
-    expmprod(alpha, S, e, m, z)
-
-    return R_DT_Cval(z);
+    return R_DT_Cval(expmprod(alpha, tmp, e, m));
 }
 
 double rphtype(double *alpha, double *S, int m)
 {
+    return 0.0;
 }
 
 double mphtype(double order, double *alpha, double *S, int m, int give_log)
@@ -92,65 +89,11 @@ double mphtype(double order, double *alpha, double *S, int m, int give_log)
 	ftrunc(order) != order)	/* non-integer moment */
 	return R_NaN;
 
-    int i, j, im;
-    double *s[m], *z;
-
-    /* Build vector s --- equal to the row sums of matrix S --- and
-     * multiply each element of S by x.  */
-    for (i = 0; i < m; i++)
-    {
-	s[i] = 0.0;
-	im = i * m;
-	for (j = 0; j < m; j++)
-	{
-	    s[i] += S[im + j];
-	    S[im + j] *= x;
-	}
-    }
-
-    /* Compute alpha * exp(x * S) * s */
-    expmprod(alpha, S, s, m, z)
-
-    return R_D_val(z);
+    /* return R_D_val(matpow(S, m, (int) order)); */
+    return order;
 }
 
-
-double mpareto(double order, double shape, double scale, int give_log)
+double mgfphtype(double x, double *alpha, double *S, int m, int give_log)
 {
-    if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(order) ||
-	shape <= 0.0 ||
-	scale <= 0.0 ||
-	order <= -1.0 ||
-	order >= shape)
-	return R_NaN;
-
-    return R_pow(scale, order) * gammafn(1.0 + order) * gammafn(shape - order)
-	/ gammafn(shape);
-}
-
-double levpareto(double limit, double shape, double scale, double order,
-		 int give_log)
-{
-    double u, tmp1, tmp2;
-
-    if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(order) ||
-	shape <= 0.0 ||
-	scale <= 0.0)
-	return R_NaN;
-
-    if (limit <= 0.0)
-	return 0;
-
-    tmp1 = 1.0 + order;
-    tmp2 = shape - order;
-
-    u = exp(-log1p(exp(log(limit) - log(scale))));
-
-    return R_pow(scale, order) * gammafn(tmp1) * gammafn(tmp2)
-	* pbeta(0.5 - u + 0.5, tmp1, tmp2, 1, 0) / gammafn(shape)
-	+ R_VG__0(limit, order) * R_pow(u, shape);
+    return x;
 }

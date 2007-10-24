@@ -45,9 +45,12 @@ export(## Credibility theory
        dgenbeta, pgenbeta, qgenbeta, rgenbeta, mgenbeta, levgenbeta,
        dtrbeta, ptrbeta, qtrbeta, rtrbeta, mtrbeta, levtrbeta,
        dpearson6, ppearson6, qpearson6, rpearson6, mpearson6, levpearson6, #aliases
+       ## Phase-type distributions
+       dphtype, pphtype, rphtype, mphtype, mgfphtype,
        ## Loss distributions
        grouped.data, ogive, emm, mde, elev, coverage
        )
+
 ### Imports
 import(stats, graphics)
 
