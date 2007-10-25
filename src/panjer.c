@@ -20,7 +20,7 @@
 
 SEXP panjer(SEXP args)
 {
-    SEXP p0, p1, fs0, fx0, sfx, a, b, tol, maxit, echo, sfs;
+    SEXP p0, p1, fs0, sfx, a, b, tol, maxit, echo, sfs;
     double *fs, *fx, cumul;
     int upper, m, k, x = 1;
     double norm;		/* normalizing constant */
@@ -100,10 +100,10 @@ SEXP panjer(SEXP args)
 	 * Only needed in the (a, b, 1) case for the additional term
 	 * in the recursion formula. */
 	fx[++upper] = 0;
-	
+
 	/* Constant term in the (a, b, 1) case. */
 	term = (REAL(p1)[0] - (REAL(a)[0] + REAL(b)[0]) * REAL(p0)[0]);
-	
+
 	do
 	{
 	    /* Stop after 'maxit' recursions and issue warning. */
@@ -116,23 +116,23 @@ SEXP panjer(SEXP args)
 	    if (x >= size)
 	    {
 		fs = (double *) S_realloc((char *) fs, 2 * size, size, sizeof(double));
-		for (k = size; k < 2 * size; k++) 
+		for (k = size; k < 2 * size; k++)
 		    fs[k] = 0;
 		size = 2 * size;
 	    }
-	    
+
 	    m = fmin2(x, upper);
-	    
+
 	    for (k = 1; k <= m; k++)
 		fs[x] += (REAL(a)[0] + REAL(b)[0] * k / x) * fx[k] * fs[x - k];
 	    fs[x] = (fs[x] + fx[m] * term) / norm;
 	    cumul += fs[x];
-	    
+
 	    if (LOGICAL(echo)[0])
 		Rprintf("%d\t%.8g\t%.8g\n", x, fs[x], cumul);
-	    
+
 	    x++;
-	} 
+	}
 	while (cumul < REAL(tol)[0]);
     }
 
