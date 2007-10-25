@@ -297,7 +297,7 @@ void matpow(double *x, int n, int k, double *z)
     else
     {
 	char *transa = "N";
-	double one = 1.0, zero = 0.0, *xtmp;
+	double one = 1.0, zero = 0.0, *tmp, *xtmp;
 
 	xtmp = (double *) R_alloc(n * n, sizeof(double));
 
@@ -326,17 +326,24 @@ void matpow(double *x, int n, int k, double *z)
 	Memcpy(z, xtmp, (size_t) (n * n));
 
 	k--;
+	tmp = (double *) R_alloc(n * n, sizeof(double));
 	while (k > 0)
 	{
 	    if (k & 1)		/* z = z * xtmp */
+	    {
 		F77_CALL(dgemm)(transa, transa, &n, &n, &n, &one,
-				z, &n, xtmp, &n, &zero, z, &n);
+				z, &n, xtmp, &n, &zero, tmp, &n);
+		Memcpy(z, tmp, (size_t) (n * n));
+	    }
 
 	    k >>= 1;		/* efficient division by 2 */
 
 	    if (k > 0)		/* xtmp = xtmp * xtmp */
+	    {
 		F77_CALL(dgemm)(transa, transa, &n, &n, &n, &one,
-				xtmp, &n, xtmp, &n, &zero, xtmp, &n);
+				xtmp, &n, xtmp, &n, &zero, tmp, &n);
+		Memcpy(xtmp, tmp, (size_t) (n * n));
+	    }
 	}
     }
 }

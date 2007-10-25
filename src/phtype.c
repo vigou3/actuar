@@ -17,7 +17,7 @@ double dphtype(double x, double *pi, double *T, int m, int give_log)
 {
     /*  Density function is
      *
-     *	pi   * exp(x * T) * t
+     *	pi      * exp(x * T) * t
      *  (1 x m)   (m x m)      (m x 1)
      *
      *  with t = -T * e and e is a 1-vector.
@@ -31,18 +31,15 @@ double dphtype(double x, double *pi, double *T, int m, int give_log)
 
     /* Build vector t (equal to minux the row sums of matrix T) and
      * matrix tmp = x * T. */
-    t = (double *) R_alloc(m, sizeof(double));
+    t = (double *) S_alloc(m, sizeof(double)); /* initialized to 0 */
     tmp = (double *) R_alloc(m * m, sizeof(double));
     for (i = 0; i < m; i++)
-    {
-	t[i] = 0.0;
 	for (j = 0; j < m; j++)
 	{
 	    jm = j * m;
 	    t[i] -= T[i + jm];
 	    tmp[i + jm] = x * T[i + jm];
 	}
-    }
 
     return R_D_val(expmprod(pi, tmp, t, m));
 }
@@ -66,9 +63,9 @@ double pphtype(double q, double *pi, double *T, int m, int lower_tail,
 
     /* Create the 1-vector and multiply each element of T by q. */
     e = (double *) R_alloc(m, sizeof(double));
-    tmp = (double *) R_alloc(m * m, sizeof(double));
     for (i = 0; i < m; i++)
 	e[i] = 1;
+    tmp = (double *) R_alloc(m * m, sizeof(double));
     for (i = 0; i < m * m; i++)
 	tmp[i] = q * T[i];
 
@@ -84,16 +81,32 @@ double mphtype(double order, double *pi, double *T, int m, int give_log)
 {
     /*  Raw moment is
      *
-     *	order!  * pi   * (-T)^(-order) * 1
+     *	order!  * pi      * (-T)^(-order) * e
      *  (1 x 1)   (1 x m)   (m x m)         (m x 1)
+     *
+     * where e is a 1-vector. Below, the moment is computed as
+     * (-1)^order * order! * sum(pi * T^(-order))
      */
 
-    if (order < 0.0 || 		/* negative moment */
-	ftrunc(order) != order)	/* non-integer moment */
+    if (order < 0.0 || (int) order != order)
 	return R_NaN;
 
-    /* return R_D_val(matpow(T, m, (int) order)); */
-    return order;
+    int i, j;
+    double tmp = 0.0, *Tpow;
+
+    /* Compute the power of T */
+    Tpow = (double *) R_alloc(m * m, sizeof(double));
+    matpow(T, m, (int) -order, Tpow);
+
+    /* Compute vector tmp = sum(pi * Tpow) */
+    for (i = 0; i < m; i++)
+	for (j = 0; j < m; j++)
+	    tmp += pi[j] * Tpow[i * m + j];
+
+    /* Multiply by -1 if order is odd */
+    return R_D_val((int) order % 2 ?
+		   -gammafn(order + 1.0) * tmp :
+		   gammafn(order + 1.0) * tmp);
 }
 
 double mgfphtype(double x, double *pi, double *T, int m, int give_log)
