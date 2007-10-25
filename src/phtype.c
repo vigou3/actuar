@@ -13,45 +13,46 @@
 #include "locale.h"
 #include "dpq.h"
 
-double dphtype(double x, double *alpha, double *S, int m, int give_log)
+double dphtype(double x, double *pi, double *T, int m, int give_log)
 {
     /*  Density function is
      *
-     *	alpha   * exp(x * S) * s
+     *	pi   * exp(x * T) * t
      *  (1 x m)   (m x m)      (m x 1)
      *
-     *  with s = -S * e and e is a 1-vector.
+     *  with t = -T * e and e is a 1-vector.
      */
 
     if (!R_FINITE(x) || x < 0.0)
 	return R_D__0;
 
     int i, j, jm;
-    double *s, *Stmp;
+    double *t, *tmp;
 
-    /* Build vector s (equal to minux the row sums of matrix S) and
-     * matrix Stmp = x * S. Matrix S is stored in column major
-     * order! */
+    /* Build vector t (equal to minux the row sums of matrix T) and
+     * matrix tmp = x * T. */
+    t = (double *) R_alloc(m, sizeof(double));
+    tmp = (double *) R_alloc(m * m, sizeof(double));
     for (i = 0; i < m; i++)
     {
-	s[i] = 0.0;
+	t[i] = 0.0;
 	for (j = 0; j < m; j++)
 	{
 	    jm = j * m;
-	    s[i] -= S[i + jm];
-	    Stmp[i + jm] = x * S[i + jm];
+	    t[i] -= T[i + jm];
+	    tmp[i + jm] = x * T[i + jm];
 	}
     }
 
-    return R_D_val(expmprod(alpha, Stmp, s, m));
+    return R_D_val(expmprod(pi, tmp, t, m));
 }
 
-double pphtype(double q, double *alpha, double *S, int m, int lower_tail,
+double pphtype(double q, double *pi, double *T, int m, int lower_tail,
 	       int log_p)
 {
     /*  Cumulative distribution function is
      *
-     *	1 - alpha   * exp(q * S) * e
+     *	1 - pi      * exp(q * T) * e
      *      (1 x m)   (m x m)      (m x 1)
      *
      *  where e is a 1-vector.
@@ -63,25 +64,27 @@ double pphtype(double q, double *alpha, double *S, int m, int lower_tail,
     int i;
     double *e, *tmp;
 
-    /* Create the 1-vector and multiply each element of S by q. */
+    /* Create the 1-vector and multiply each element of T by q. */
+    e = (double *) R_alloc(m, sizeof(double));
+    tmp = (double *) R_alloc(m * m, sizeof(double));
     for (i = 0; i < m; i++)
 	e[i] = 1;
     for (i = 0; i < m * m; i++)
-	tmp[i] = q * S[i];
+	tmp[i] = q * T[i];
 
-    return R_DT_Cval(expmprod(alpha, tmp, e, m));
+    return R_DT_Cval(expmprod(pi, tmp, e, m));
 }
 
-double rphtype(double *alpha, double *S, int m)
+double rphtype(double *pi, double *T, int m)
 {
     return 0.0;
 }
 
-double mphtype(double order, double *alpha, double *S, int m, int give_log)
+double mphtype(double order, double *pi, double *T, int m, int give_log)
 {
     /*  Raw moment is
      *
-     *	order!  * alpha   * (-S)^(-order) * 1
+     *	order!  * pi   * (-T)^(-order) * 1
      *  (1 x 1)   (1 x m)   (m x m)         (m x 1)
      */
 
@@ -89,11 +92,11 @@ double mphtype(double order, double *alpha, double *S, int m, int give_log)
 	ftrunc(order) != order)	/* non-integer moment */
 	return R_NaN;
 
-    /* return R_D_val(matpow(S, m, (int) order)); */
+    /* return R_D_val(matpow(T, m, (int) order)); */
     return order;
 }
 
-double mgfphtype(double x, double *alpha, double *S, int m, int give_log)
+double mgfphtype(double x, double *pi, double *T, int m, int give_log)
 {
     return x;
 }

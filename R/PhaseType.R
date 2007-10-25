@@ -14,19 +14,19 @@
 ### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dphtype <- function (x, prob, transition, log = FALSE)
-    .External("do_dpqph", "dph", x, prob, transition, log)
+    .External("do_dpqphtype", "dphtype", x, prob, transition, log)
 
 pphtype <- function (x, prob, transition, lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpqph", "pph", x, prob, transition, lower.tail, log.p)
+    .External("do_dpqphtype", "pphtype", x, prob, transition, lower.tail, log.p)
 
 rphtype <- function (n, prob, transition, log.p = FALSE)
-    .External("do_randomph", "rph", x, prob, transition)
+    .External("do_randomphtype", "rphtype", x, prob, transition)
 
 mphtype <- function (x, prob, transition)
-    .External("do_dpqph", "mph", x, prob, transition, FALSE)
+    .External("do_dpqphtype", "mphtype", x, prob, transition, FALSE)
 
 mgfphtype <- function (x, prob, transition, log = FALSE)
-    .External("do_dpqph", "mgfph", x, prob, transition, log)
+    .External("do_dpqphtype", "mgfphtype", x, prob, transition, log)
 
 
 dphasetype <- function (x, pi, T, m, log = FALSE)

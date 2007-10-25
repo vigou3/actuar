@@ -17,6 +17,17 @@
 #include <R_ext/BLAS.h>
 #include "locale.h"
 
+
+/* For matrix exponential calculations. Pade constants
+ *
+ *   n_{pqj} = [(p + q - j)! p!]/[(p + q)! j! (p - j)!]
+ *
+ * and
+ *
+ *   d_{pqj} = [(p + q - j)! q!]/[(p + q)! j! (q - j)!]
+ *
+ * for p = q = 8 and j = 1, ..., 8.
+ */
 const static double padec88 [] =
 {
     5.0000000000000000e-1,
@@ -33,43 +44,31 @@ const static double padec88 [] =
 /* Matrix exponential exp(x), where x is an (n x n) matrix. Result z
  * is an (n x n) matrix. Mostly lifted from the core of fonction
  * expm() of package Matrix, which is itself based on the function of
- * the same name in Octave. */
+ * the same name in Octave.
+ */
 void expm(double *x, int n, double *z)
 {
     if (n == 1)
 	z[0] = exp(x[0]);		/* scalar exponential */
     else
     {
-	int i, j, k;
-	int nsqr = n * n, np1 = n + 1;
-	int is_uppertri = TRUE;
-	int iloperm, ihiperm;	/* arguments for dgebal permutation */
-	int iloscal, ihiscal;	/* arguments for dgebal scaling */
-	int info;		/* used for Fortran routines */
-	int sqrpowscal;		/* used for scaling x */
-	double infnorm, trshift;
-	double one = 1.0, zero = 0.0, m1pj = -1;
+	/* Constants */
+	int i, j;
+	int nsqr = n * n, np1 = n + 1, is_uppertri = TRUE;
+	int iloperm, ihiperm, iloscal, ihiscal, info, sqrpowscal;
+	double infnorm, trshift, one = 1.0, zero = 0.0, m1pj = -1;
 
-	int *pivot = (int *) R_alloc(n, sizeof(int));   /* pivot vector */
-	int *invperm = (int *) R_alloc(n, sizeof(int)); /* inverse permutation vector */
-	double *perm = (double *) R_alloc(n, sizeof(double)); /* permutation array */
+	/* Arrays */
+	int *pivot    = (int *) R_alloc(n, sizeof(int)); /* pivot vector */
+	int *invperm  = (int *) R_alloc(n, sizeof(int)); /* inverse permutation vector */
+	double *perm  = (double *) R_alloc(n, sizeof(double)); /* permutation array */
 	double *scale = (double *) R_alloc(n, sizeof(double)); /* scale array */
-	double *work = (double *) R_alloc(nsqr, sizeof(double)); /* workspace array */
-	double *npp = (double *) R_alloc(nsqr, sizeof(double)); /* numerator power Pade' */
-	double *dpp = (double *) R_alloc(nsqr, sizeof(double)); /* denominator power Pade' */
+	double *work  = (double *) R_alloc(nsqr, sizeof(double)); /* workspace array */
+	double *npp   = (double *) R_alloc(nsqr, sizeof(double)); /* num. power Pade */
+	double *dpp   = (double *) R_alloc(nsqr, sizeof(double)); /* denom. power Pade */
+	R_CheckStack();
 
-	z = x;
-
-	/* debug */
-	Rprintf("matrix z\n");
-	for (i = 0; i < n; i++)
-	{
-	    for (j = 0; j < n; j++)
-		Rprintf("%f\t", z[i + j* n] );
-	    Rprintf("\n");
-	}
-	Rprintf("\n");
-
+	Memcpy(z, x, nsqr);
 
 	/* Check if matrix x is upper triangular; stop checking as
 	 * soon as a non-zero value is found below the diagonal. */
@@ -77,9 +76,6 @@ void expm(double *x, int n, double *z)
 	    for (j = i + 1; j < n; j++)
 		if (!(is_uppertri = x[i * n + j] == 0.0))
 		    break;
-
-	/* debug */
-	Rprintf("%d\n",is_uppertri);
 
 	/* Step 1 of preconditioning: shift diagonal by average
 	 * diagonal if positive. */
@@ -100,7 +96,6 @@ void expm(double *x, int n, double *z)
 	}
 	else
 	{
-	    printf("blii\n");
 	    F77_CALL(dgebal)("P", &n, z, &n, &iloperm, &ihiperm, perm, &info);
 	    if (info)
 		error(_("LAPACK routine dgebal returned info code %d when permuting"), info);
@@ -120,7 +115,7 @@ void expm(double *x, int n, double *z)
 		z[i] /= scalefactor;
 	}
 
-	/* Pade' approximation (p = q = 8): compute x^8, x^7, x^6,
+	/* Pade approximation (p = q = 8): compute x^8, x^7, x^6,
 	 * ..., x^1 */
 	for (i = 0; i < nsqr; i++)
 	{
@@ -151,21 +146,22 @@ void expm(double *x, int n, double *z)
 	    dpp[j * np1] += 1.0;
 	}
 
-	/* Pade' approximation is (dpp)^-1 * npp. */
+	/* Pade approximation is (dpp)^-1 * npp. */
 	F77_CALL(dgetrf) (&n, &n, dpp, &n, pivot, &info);
 	if (info)
 	    error(_("LAPACK routine dgetrf returned info code %d"), info);
 	F77_CALL(dgetrs) ("N", &n, &n, dpp, &n, pivot, npp, &n, &info);
 	if (info)
 	    error(_("LAPACK routine dgetrs returned info code %d"), info);
+
 	Memcpy(z, npp, nsqr);
 
 	/* Now undo all of the preconditioning */
 	/* Preconditioning 3: square the result for every power of 2 */
-	while(sqrpowscal --)
+	while (sqrpowscal--)
 	{
-	    F77_CALL(dgemm) ("N", "N", &n, &n, &n, &one, z, &n,
-			     z, &n, &zero, work, &n);
+	    F77_CALL(dgemm)("N", "N", &n, &n, &n, &one, z, &n,
+			    z, &n, &zero, work, &n);
 	    Memcpy(z, work, nsqr);
 	}
 	/* Preconditioning 2: apply inverse scaling */
@@ -217,46 +213,34 @@ void expm(double *x, int n, double *z)
 	    for (i = 0; i < nsqr; i++)
 		z[i] *= mult;
 	}
-
-	/* debug */
-	Rprintf("matrix exp(x) -\n");
-	for (i = 0; i < n; i++)
-	{
-	    for (j = 0; j < n; j++)
-		Rprintf("%f\t", z[i + j * n] );
-
-	    Rprintf("\n");
-	}
-	Rprintf("\n");
     }
 }
 
 
 
 /* Product x * exp(M) * y, where x is an (1 x n) vector, M is an (n x
- * n) matrix and y is an (n x 1) vector. Result z is a scalar. */
+ * n) matrix and y is an (n x 1) vector. Result z is a scalar.
+ */
 double expmprod(double *x, double *M, double *y, int n)
 {
     char *transa = "N";
-    int i, p = 1;
-    double *tmp, *eM, one = 1.0, zero = 0.0, z;
+    int p = 1;
+    double one = 1.0, zero = 0.0, *tmp, *expM;
+
+    tmp = (double *) R_alloc(n, sizeof(double)); /* intermediate vector */
+    expM  = (double *) R_alloc(n * n, sizeof(double)); /* matrix exponential */
 
     /* Compute exp(M) */
-    expm(M, n, eM);
+    expm(M, n, expM);
 
     /* Product      tmp   := x     * exp(M)
      * (Dimensions: 1 x n    1 x n   n x n) */
     F77_CALL(dgemm)(transa, transa, &p, &n, &n, &one,
-		    x, &p, eM, &n, &zero, tmp, &p);
+		    x, &p, expM, &n, &zero, tmp, &p);
 
     /* Product      z     := tmp   * y
      * (Dimensions: 1 x 1    1 x n   n x 1) */
-    z = 0.0;
-    for (i = 0; i < n; i++)
-	z += tmp[i] * y[i];
-
-    /* Or compare with BLAS function ddot: */
-    /* z = F77_CALL(ddot)(&n, tmp, &one, y, &one); */
+    return F77_CALL(ddot)(&n, tmp, &p, y, &p);
 }
 
 
@@ -266,7 +250,8 @@ double expmprod(double *x, double *M, double *y, int n)
  * interface to the LAPACK routine DGESV based on modLa_dgesv() in
  * file .../modules/lapack/laphack.c of R sources. Very little error
  * checking (e.g. no check that A is square) since it is currently
- * used in a very narrow and already controlled context. */
+ * used in a very narrow and already controlled context.
+ */
 void solve(double *A, double *B, int n, int p, double *z)
 {
     int info, *ipiv;
@@ -281,7 +266,6 @@ void solve(double *A, double *B, int n, int p, double *z)
 
     /* Work on copies of A and B since they are overwritten by DGESV. */
     Avals = (double *) R_alloc(n * n, sizeof(double));
-    z = (double *) R_alloc(n * n, sizeof(double));
     Memcpy(Avals, A, (size_t) (n * n));
     Memcpy(z, B, (size_t) (n * n));
 
@@ -298,7 +282,8 @@ void solve(double *A, double *B, int n, int p, double *z)
 /* Power of a matrix x^k := x x ... x, where x in an (n x n) matrix
  * and k is an *integer* (including -1). This function is fairly naive
  * with little error checking since it is currently used in a very
- * narrow and already controlled context. */
+ * narrow and already controlled context.
+ */
 void matpow(double *x, int n, int k, double *z)
 {
     if (k == 0)
@@ -312,7 +297,9 @@ void matpow(double *x, int n, int k, double *z)
     else
     {
 	char *transa = "N";
-	double *xtmp, one = 1.0, zero = 0.0;
+	double one = 1.0, zero = 0.0, *xtmp;
+
+	xtmp = (double *) R_alloc(n * n, sizeof(double));
 
 	/* If k is negative, invert matrix first. */
 	if (k < 0)
@@ -321,7 +308,7 @@ void matpow(double *x, int n, int k, double *z)
 
 	    /*  Create identity matrix for use in solve() */
 	    int i, j;
-	    double *y;
+	    double *y = (double *) R_alloc(n * n, sizeof(double));
 	    for (i = 0; i < n; i++)
 		for (j = 0; j < n; j++)
 		    y[i * n + j] = (i == j) ? 1.0 : 0.0;
@@ -330,16 +317,12 @@ void matpow(double *x, int n, int k, double *z)
 	    solve(x, y, n, n, xtmp);
 	}
 	else
-	{
-	    xtmp = (double *) R_alloc(n * n, sizeof(double));
 	    Memcpy(xtmp, x, (size_t) (n * n));
-	}
 
 	/* Take powers in multiples of 2 until there is only one
 	 * product left to make. That is, if k = 5, compute (x * x),
 	 * then ((x * x) * (x * x)) and finally ((x * x) * (x * x)) *
 	 * x. Idea taken from Octave in file .../src/xpow.cc. */
-	z = (double *) R_alloc(n * n, sizeof(double));
 	Memcpy(z, xtmp, (size_t) (n * n));
 
 	k--;
