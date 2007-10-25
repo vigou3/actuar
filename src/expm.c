@@ -264,10 +264,10 @@ void solve(double *A, double *B, int n, int p, double *z)
 
     ipiv = (int *) R_alloc(n, sizeof(int));
 
-    /* Work on copies of A and B since they are overwritten by DGESV. */
+    /* Work on copies of A and B since they are overwritten by dgesv. */
     Avals = (double *) R_alloc(n * n, sizeof(double));
     Memcpy(Avals, A, (size_t) (n * n));
-    Memcpy(z, B, (size_t) (n * n));
+    Memcpy(z, B, (size_t) (n * p));
 
     F77_CALL(dgesv)(&n, &p, Avals, &n, ipiv, z, &n, &info);
     if (info < 0)

@@ -111,5 +111,39 @@ double mphtype(double order, double *pi, double *T, int m, int give_log)
 
 double mgfphtype(double x, double *pi, double *T, int m, int give_log)
 {
-    return x;
+    /*  Moment generating function is
+     *
+     *	pi      * (-x * I - T)^(-1) * t
+     *  (1 x m)   (m x m)             (m x 1)
+     *
+     *  with t = -T * e, e a 1-vector and I the identity matrix.
+     */
+
+    if (!R_FINITE(x) || x < 0.0)
+	return R_D__0;
+
+    int i, j, jm;
+    double z = 0.0, *t, *tmp1, *tmp2;
+
+    /* Build vector t (equal to minux the row sums of matrix T) and
+     * matrix tmp1 = -x * I - T. */
+    t = (double *) S_alloc(m, sizeof(double)); /* initialized to 0 */
+    tmp1 = (double *) R_alloc(m * m, sizeof(double));
+    for (i = 0; i < m; i++)
+	for (j = 0; j < m; j++)
+	{
+	    jm = j * m;
+	    t[i] -= T[i + jm];
+	    tmp1[i + jm] = (i == j) ? -x - T[i + jm] : -T[i + jm];
+	}
+
+    /* Compute tmp2 = tmp1^(-1) * t */
+    tmp2 = (double *) R_alloc(m, sizeof(double));
+    solve(tmp1, t, m, 1, tmp2);
+
+    /* Compute z = pi * tmp2*/
+    for (i = 0; i < m; i++)
+	z += pi[i] * tmp2[i];
+
+    return R_D_val(z);
 }
