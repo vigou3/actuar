@@ -19,7 +19,7 @@ VaR(x, \dots)
   An object of class \code{numeric}.
 }
 \seealso{
-  \code{\link{quantile.aggregateDist}}, \code{\link{aggregateDist}}
+  \code{\link{VaR.aggregateDist}}, \code{\link{aggregateDist}}
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and 
