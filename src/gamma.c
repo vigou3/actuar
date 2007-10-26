@@ -27,8 +27,6 @@ double mgamma(double order, double shape, double scale, int give_log)
 double levgamma(double limit, double shape, double scale, double order,
 		int give_log)
 {
-    double u, tmp;
-
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	!R_FINITE(order) ||
@@ -38,10 +36,11 @@ double levgamma(double limit, double shape, double scale, double order,
 	return R_NaN;
 
     if (limit <= 0.0)
-	return 0;
+	return 0.0;
+
+    double u, tmp;
 
     tmp = order + shape;
-
     u = exp(log(limit) - log(scale));
 
     return R_pow(scale, order) * gammafn(tmp) *

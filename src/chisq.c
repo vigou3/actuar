@@ -26,19 +26,19 @@ double mchisq(double order, double df, double ncp, int give_log)
 	return 1.0;
 
     /* Centered chi-square distribution */
-    if (ncp == 0)
+    if (ncp == 0.0)
 	return R_pow(2, order) * gammafn(order + df/2) / gammafn(df/2);
 
     /* Non centered chi-square distribution */
-    if (order >= 1.0)
+    if (order >= 1.0 & (int) order == order)
     {
-	int i, j = 0;
-	int n = order;
-	double res[n + 1]; /* array with 1, E[X], E[X^2], ..., E[X^n] */
+	int i, j = 0, n = order;
+	double *res;
 
+	/* Array with 1, E[X], E[X^2], ..., E[X^n] */
+	res = (double *) R_alloc(n + 1, sizeof(double));
 	res[0] = 1.0;
 	res[1] = df + ncp; 	/* E[X] */
-
 	for (i = 2; i <= n; i++)
 	{
 	    res[i] = R_pow_di(2, i - 1) * (df + i * ncp);
@@ -49,13 +49,11 @@ double mchisq(double order, double df, double ncp, int give_log)
 	return res[n];
     }
     else
-	return R_NaN;		/* should never happen */
+	return R_NaN;
 }
 
 double levchisq(double limit, double df, double ncp, double order, int give_log)
 {
-    double u, tmp;
-
     if (!R_FINITE(df) ||
 	!R_FINITE(ncp) ||
 	!R_FINITE(order) ||
@@ -67,8 +65,10 @@ double levchisq(double limit, double df, double ncp, double order, int give_log)
     if (limit <= 0.0)
 	return 0;
 
-    if (ncp == 0)
+    if (ncp == 0.0)
     {
+	double u, tmp;
+
 	tmp = order + df/2;
 	u = exp(log(limit) - log(2));
 
@@ -77,7 +77,7 @@ double levchisq(double limit, double df, double ncp, double order, int give_log)
 	    R_VG__0(limit, order) * pgamma(u, df/2, 1.0, 0, 0);
     }
     else
-	return 0.0;
+	return R_NaN;
 }
 
 double mgfchisq(double x, double df, double ncp, int give_log)

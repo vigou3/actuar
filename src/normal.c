@@ -17,7 +17,8 @@ double mnorm(double order, double mean, double sd, int give_log)
     if (!R_FINITE(mean) ||
 	!R_FINITE(sd) ||
 	!R_FINITE(order) ||
-	sd <= 0.0)
+	sd <= 0.0 ||
+	(int) order != order)
 	return R_NaN;
 
     /* Trivial case */
@@ -29,7 +30,7 @@ double mnorm(double order, double mean, double sd, int give_log)
 	return 0.0;
 
     int i, n = order;
-    double res = 0;
+    double res = 0.0;
 
     for (i = 0; i <= n/2; i++)
 	res += R_pow_di(sd, 2 * i) * R_pow_di(mean, n - 2 * i) /

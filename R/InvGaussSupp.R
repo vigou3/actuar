@@ -13,22 +13,12 @@
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 minvGauss <- function(order, nu, lambda)
-{
-    if (all(as.integer(order) == order))
-        .External("do_dpq", "minvGauss", order, nu, lambda, FALSE)
-    else
-        stop("'order' must be integers")
-}
+    .External("do_dpq", "minvGauss", order, nu, lambda, FALSE)
 
 levinvGauss <- function(limit, nu, lambda, order = 1)
-{
-    if (order == 1)
-        .External("do_dpq", "levinvGauss", limit,  nu, lambda, order, FALSE)
-    else
-        stop("orders other than 1 are not supported")
-}
+    .External("do_dpq", "levinvGauss", limit,  nu, lambda, order, FALSE)
 
-mgfinvGauss <- function(x, nu, lambda, log= FALSE)
+mgfinvGauss <- function(x, nu, lambda, log = FALSE)
     .External("do_dpq", "mgfinvGauss", x, nu, lambda, log)
 
 ## Aliases

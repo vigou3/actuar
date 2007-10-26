@@ -10,12 +10,7 @@
 ### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 mnorm <- function(order, mean = 0, sd = 1)
-{
-    if (all(as.integer(order) == order))
-        .External("do_dpq", "mnorm", order, mean, sd, FALSE)
-    else
-        stop("'order' must be integers")
-}
+    .External("do_dpq", "mnorm", order, mean, sd, FALSE)
 
 mgfnorm <- function(x, mean = 0, sd = 1, log = FALSE)
     .External("do_dpq", "mgfnorm", x, mean, sd, log)

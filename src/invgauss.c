@@ -17,7 +17,8 @@ double minvGauss(double order, double nu, double lambda, int give_log)
 	!R_FINITE(lambda) ||
 	!R_FINITE(order) ||
 	nu <= 0.0 ||
-	lambda <= 0.0)
+	lambda <= 0.0 ||
+	(int) order != order)
 	return R_NaN;
 
     /* Trivial case */
@@ -25,16 +26,17 @@ double minvGauss(double order, double nu, double lambda, int give_log)
 	return 0.0;
 
     int i, n = order;
-    double res = 0;
+    double z = 0.0;
 
     for (i = 0; i < n; i++)
-	res += R_pow_di(nu, n) * gammafn(n + i) *
+	z += R_pow_di(nu, n) * gammafn(n + i) *
 	    R_pow_di(2 * lambda/nu, -i) /
 	    (gammafn(i + 1) * gammafn(n - i));
-    return res;
+    return z;
 }
 
-double levinvGauss(double limit, double nu, double lambda, double order, int give_log)
+double levinvGauss(double limit, double nu, double lambda, double order,
+		   int give_log)
 {
     double tmp, y, z;
 
@@ -42,7 +44,8 @@ double levinvGauss(double limit, double nu, double lambda, double order, int giv
 	!R_FINITE(lambda) ||
 	!R_FINITE(order) ||
 	nu <= 0.0 ||
-	lambda < 0.0)
+	lambda < 0.0 ||
+	order != 1.0)
 	return R_NaN;
 
     if (limit <= 0.0)

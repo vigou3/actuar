@@ -24,8 +24,6 @@ double mexp(double order, double scale, int give_log)
 
 double levexp(double limit, double scale, double order, int give_log)
 {
-    double u, tmp;
-
     if (!R_FINITE(scale) ||
 	!R_FINITE(order) ||
 	scale <= 0.0 ||
@@ -33,10 +31,11 @@ double levexp(double limit, double scale, double order, int give_log)
 	return R_NaN;
 
     if (limit <= 0.0)
-	return 0;
+	return 0.0;
+
+    double u, tmp;
 
     tmp = 1.0 + order;
-
     u = exp(log(limit) - log(scale));
 
     return R_pow(scale, order) * gammafn(tmp) *

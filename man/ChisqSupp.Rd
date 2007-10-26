@@ -32,7 +32,7 @@
   Only integer moments are supported for the non central Chi-square
   distribution (\code{ncp > 0}).
   
-  The limited expected value is supported for centered Chi-square
+  The limited expected value is supported for the centered Chi-square
   distribution (\code{ncp = 0}).
 }
 \value{
