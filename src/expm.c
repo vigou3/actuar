@@ -104,10 +104,11 @@ void expm(double *x, int n, double *z)
 	for (i = 0; i < n; i++)
 	    for (j = 0; j < n; j++)
 			eigvectinv[i * n + j] = (i == j) ? 1.0 : 0.0;
-	F77_CALL(cgesv)(&n, &n, eigvect, &n, ipiv, eigvectinv, &n, &info);
+	/* cgesv unknown in lapack
+	F77_CALL(cgesv)(&n, &n, eigvect, &n, ipiv, eigvectinv, &n, &info); 
     if (info < 0)
 	error(_("argument %d of Lapack routine dgesv had invalid value"), -info);
-	//TO CONTINUE
+	//TO CONTINUE */
 
 
 	/* Step 1 of preconditioning: shift diagonal by average
