@@ -9,6 +9,9 @@
 
 #include <R.h>
 #include <Rmath.h>
+#include <R_ext/Random.h>
+#include <Rinternals.h>
+#include <Rdefines.h>
 #include "actuar.h"
 #include "locale.h"
 #include "dpq.h"
@@ -328,9 +331,13 @@ double mgfphtype(double x, double *pi, double *T, int m, int give_log)
      *
      *  with t = -T * e, e a 1-vector and I the identity matrix.
      */
+	 
 
-    if (!R_FINITE(x) || x < 0.0)
+    if (!R_FINITE(x))
 	return R_D__0;
+	
+	if (x == 0) /* by definition, it is E[exp(0*X)] where X is a phase-type random variable */
+	return R_D_val(1.0);
 
     int i, j, jm;
     double z = 0.0, *t, *tmp1, *tmp2;

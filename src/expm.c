@@ -55,8 +55,10 @@ void expm(double *x, int n, double *z)
 	/* Constants */
 	int i, j;
 	int nsqr = n * n, np1 = n + 1, is_uppertri = TRUE;
-	int iloperm, ihiperm, iloscal, ihiscal, info, sqrpowscal;
-	double infnorm, trshift, one = 1.0, zero = 0.0, m1pj = -1;
+	int iloperm, ihiperm, iloscal, ihiscal, info, sqrpowscal, lwork;
+	double infnorm, trshift, tmp, one = 1.0, zero = 0.0, m1pj = -1;
+	char jobVL[1], jobVR[1];
+	int *ipiv;
 
 	/* Arrays */
 	int *pivot    = (int *) R_alloc(n, sizeof(int)); /* pivot vector */
@@ -66,6 +68,11 @@ void expm(double *x, int n, double *z)
 	double *work  = (double *) R_alloc(nsqr, sizeof(double)); /* workspace array */
 	double *npp   = (double *) R_alloc(nsqr, sizeof(double)); /* num. power Pade */
 	double *dpp   = (double *) R_alloc(nsqr, sizeof(double)); /* denom. power Pade */
+	double *left, *workdiag; /* left eigenvectors and workspace for diagonalisation */
+	double *wR = (double *) R_alloc(n, sizeof(double)); /* real part of eigenvalues */
+    double *wI = (double *) R_alloc(n, sizeof(double)); /* imaginary part of eigenvalues */
+	double *eigvect = (double *) R_alloc(nsqr, sizeof(double)); /* (right) eigenvectors matrix */
+	double *eigvectinv = (double *) R_alloc(nsqr, sizeof(double)); /* its inverse */
 	R_CheckStack();
 
 	Memcpy(z, x, nsqr);
@@ -76,6 +83,32 @@ void expm(double *x, int n, double *z)
 	    for (j = i + 1; j < n; j++)
 		if (!(is_uppertri = x[i * n + j] == 0.0))
 		    break;
+	
+	/* Test if x is diagonalisable by computing its eigenvalues and (right) eigenvectors */
+	jobVL[0] = 'N';
+    left = (double *) 0;
+	jobVR[0] = 'V';
+	eigvect = (double *) R_alloc(nsqr, sizeof(double));
+	/* ask for optimal size of work array */
+    lwork = -1;
+    F77_CALL(dgeev)(jobVL, jobVR, &n, z, &n, wR, wI, left, &n, eigvect, &n, &tmp, &lwork, &info);
+	if (info != 0)
+		error(_("error code %d from Lapack routine dgeev"), info); 
+    lwork = (int) tmp;
+    workdiag = (double *) R_alloc(lwork, sizeof(double)); 
+	/* compute eigenvalues and (right) eigenvectors */
+	F77_CALL(dgeev)(jobVL, jobVR, &n, z, &n, wR, wI, left, &n, eigvect, &n, workdiag, &lwork, &info); 
+    if (info != 0)
+		error(_("error code %d from Lapack routine dgeev"), info);
+	/* try to invert the eigenvectors matrix */	
+	for (i = 0; i < n; i++)
+	    for (j = 0; j < n; j++)
+			eigvectinv[i * n + j] = (i == j) ? 1.0 : 0.0;
+	F77_CALL(cgesv)(&n, &n, eigvect, &n, ipiv, eigvectinv, &n, &info);
+    if (info < 0)
+	error(_("argument %d of Lapack routine dgesv had invalid value"), -info);
+	//TO CONTINUE
+
 
 	/* Step 1 of preconditioning: shift diagonal by average
 	 * diagonal if positive. */
@@ -268,13 +301,25 @@ void solve(double *A, double *B, int n, int p, double *z)
     Avals = (double *) R_alloc(n * n, sizeof(double));
     Memcpy(Avals, A, (size_t) (n * n));
     Memcpy(z, B, (size_t) (n * p));
-
+	
+	
+	
     F77_CALL(dgesv)(&n, &p, Avals, &n, ipiv, z, &n, &info);
     if (info < 0)
 	error(_("argument %d of Lapack routine dgesv had invalid value"),
 	      -info);
     if (info > 0)
+	{
+	for(int i=0; i<n ;i++)
+	{	for(int j=0; j<n; j++)
+		{
+			Rprintf("%f\t", Avals[i+j*n]);
+		}	
+		Rprintf("\n");
+	}
 	error(_("Lapack routine dgesv: system is exactly singular"));
+	
+	}
 }
 
 

@@ -197,7 +197,6 @@ SEXP calcMatExpGen (SEXP x, SEXP u, SEXP T, SEXP v)
 		//no need to permute T if T is upper triangular
 		if(!isUpperTriangular)
 		{			
-			printf("blii\n");
 			F77_CALL(dgebal) ("P", &ncolT, valT, &ncolT, &iloperm, &ihiperm, perm, &exitcode);
 			if(exitcode) 
 				error(_("LAPACK routine dgebal returned info code %d when permuting T"), exitcode);
