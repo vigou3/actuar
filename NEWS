@@ -11,9 +11,76 @@ NEW FEATURES -- RISK THEORY
   o Function CTE() with a method for objects of class "aggregateDist"
     to compute the Conditional Tail Expectation of a distribution. 
 
+  o Function adjCoef() to compute the adjustment coefficient in ruin
+    theory. If proportional or excess-of-loss reinsurance is included
+    in the model, adjCoef() returns a function to compute the
+    adjustment coefficient for any limit. A plot method is also
+    included.
+
+  o Recursive calculations using Panjer's algorithm are now done in C
+    and hence are much faster than in previous versions of the
+    package.
+
+NEW FEATURES -- LOSS DISTRIBUTIONS
+
+  o Functions mgffoo() to compute the moment (or cumulant, if 'log =
+    TRUE') generating function of the following distributions:
+    chi-square, exponential, gamma, inverse gaussian, inverse gamma,
+    normal, uniform and phase-type (see below). These functions are
+    useful in conjunction with adjCoef().
+
+  o Functions mfoo() to compute the raw moments of all the probability
+    distributions supported in the package and the following of base
+    R: chi-square, exponential, gamma, inverse gamma, normal, uniform.
+    Moments of the inverse gaussian are also supported; see package
+    SuppDists for other functions related to this distribution.
+
+  o Functions {d,p,mgf,m,r}phtype() to compute the density function,
+    cumulative distribution function, moment generating function, raw
+    moments of, and to generate variates from, phase-type
+    distributions. All calculations (including the matrix exponential
+    required by dphtype() and pphtype()) are done in C, just like for
+    all other probability distributions. These functions are useful
+    for exact probability or ruin calculations.
+
+NEW FEATURES -- CREDIBILITY THEORY
+
+  o Basic support for the regression model of Hachemeister in function
+    cm().
+
+  o Three new sets of unbiased structure parameters estimators for
+    hierarchical models. They are all based on the estimators of
+    Bühlmann and Gisler (2005), but with various possibilities for
+    truncation of negative variance estimates.
+
+  o Calculations of pseudo (iterative) estimators in hierarchical
+    credibility are much faster now that they are done in C.
+
+
 USER-VISIBLE CHANGES
 
-  o Argument 'approx.lin' of quantile.aggregateDist() renamed 'smooth'.
+  o Argument 'approx.lin' of quantile.aggregateDist() renamed
+    'smooth'.
+
+  o Function aggregateDist() gains a 'maxit' argument for the maximum
+    number of recursions when using Panjer's algorithm. This is to
+    avoid infinite recursion when the cumulative distribution
+    function does not converge to 1.
+
+  o Function cm() gains a 'maxit' argument for the maximum number of
+    iterations in pseudo-estimators calculations.
+
+  o Methods of aggregate(), frequency(), severity() and weights() for
+    objects of class "simpf" gain two new arguments:
+
+    1. 'classification'; when TRUE, the columns giving the
+       classification structure of the portfolio are excluded from the
+       result. This eases calculation of loss ratios (aggregate claim
+       amounts divided by the weights);
+
+    2. 'prefix'; specifies a prefix to use in column names, with
+        sensible defaults to avoid name clashes for data and weight
+        columns.
 
 BUG FIXES
 
@@ -24,6 +91,14 @@ BUG FIXES
   o The empirical step function returned by the "recursive" and
     "convolution" methods of aggregateDist() now correctly returns 1
     when evaluated past its largest knot.
+
+DEPRECATED
+
+  o Direct usage of bstraub() is now deprecated in favor of cm(). The
+    function will remain in the package since it is used internally by
+    cm(), but it will not be exported in future releases of the
+    package. The current format of the results is also deprecated.
+
 
 Version 0.9-3
 =============
