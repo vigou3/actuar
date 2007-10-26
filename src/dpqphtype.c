@@ -23,6 +23,9 @@
 #include "actuar.h"
 #include "locale.h"
 
+#define if_NA_dpqphtype2_set(y, x)			        \
+    if      (ISNA (x) || naargs) y = NA_REAL;			\
+    else if (ISNAN(x) || nanargs) y = R_NaN;
 
 static SEXP dpqphtype2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
 {
@@ -30,32 +33,29 @@ static SEXP dpqphtype2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
     int i, n, na, nb, nrow, ncol, sxo = OBJECT(sx);
     double *x, *a, *b, *y;
     int i_1;
-    Rboolean naflag = FALSE;
+    Rboolean naflag = FALSE, naargs = FALSE, nanargs = FALSE;
 
 
 #define SETUP_DPQPHTYPE2					\
     if (!isNumeric(sx) || !isNumeric(sa) || !isMatrix(sb))	\
 	error(_("invalid arguments"));                          \
                                                                 \
-    bdims = getAttrib(sb, R_DimSymbol);                         \
-    nrow = INTEGER(bdims)[0];                                   \
-    ncol = INTEGER(bdims)[1];					\
-                                                                \
-    if (nrow != ncol)                                           \
-	error(_("non-square transition matrix"));               \
-								\
     n  = LENGTH(sx);						\
     na = LENGTH(sa);						\
     nb = LENGTH(sb);						\
-								\
+    if (n == 0)							\
+	return(allocVector(REALSXP, 0));			\
+    bdims = getAttrib(sb, R_DimSymbol);                         \
+    nrow = INTEGER(bdims)[0];                                   \
+    ncol = INTEGER(bdims)[1];					\
+    if (nrow != ncol)                                           \
+	error(_("non-square transition matrix"));               \
     if (na != nrow)                                             \
 	error(_("non-conformable arguments"));			\
-    if ((n == 0) || (na == 0) || (nb == 0))			\
-	return(allocVector(REALSXP, 0));			\
 								\
     PROTECT(sx = coerceVector(sx, REALSXP));			\
     PROTECT(sa = coerceVector(sa, REALSXP));			\
-    PROTECT(sb = duplicate(sb));				\
+    PROTECT(sb = coerceVector(sb, REALSXP));			\
     PROTECT(sy = allocVector(REALSXP, n));			\
     x = REAL(sx);						\
     a = REAL(sa);						\
@@ -63,21 +63,20 @@ static SEXP dpqphtype2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
     y = REAL(sy);						\
 								\
     if (na == 1)						\
-	if (ISNA(a[0]) || ISNAN(a[0]))				\
-	    naflag = TRUE;					\
-    if (nb == 1)						\
-	if (ISNA(b[0]) || ISNAN(b[0]))				\
-	    naflag = TRUE
+    {								\
+	if (ISNA(a[0]) || ISNA(b[0]))				\
+	    naargs = TRUE;					\
+	else if (ISNAN(a[0]) || ISNAN(b[0]))			\
+	    nanargs = TRUE;					\
+    }
 
     SETUP_DPQPHTYPE2;
 
-    if (naflag)
-	for (i = 0; i < n; i++)
-	    y[i] = a[0] + b[0];
-    else
+    i_1 = asInteger(sI);
+    for (i = 0; i < n; i++)
     {
-	i_1 = asInteger(sI);
-	for (i = 0; i < n; i++)
+	if_NA_dpqphtype2_set(y[i], x[i])
+	else
 	{
 	    y[i] = f(x[i], a, b, na, i_1);
 	    if (ISNAN(y[i])) naflag = TRUE;
@@ -104,18 +103,16 @@ static SEXP dpqphtype2_2(SEXP sx, SEXP sa, SEXP sb, SEXP sI, SEXP sJ, double (*f
     int i, n, na, nb, nrow, ncol, sxo = OBJECT(sx);
     double *x, *a, *b, *y;
     int i_1, i_2;
-    Rboolean naflag = FALSE;
+    Rboolean naflag = FALSE, naargs = FALSE, nanargs = FALSE;
 
     SETUP_DPQPHTYPE2;
 
-    if (naflag)
-	for (i = 0; i < n; i++)
-	    y[i] = a[0] + b[0];
-    else
+    i_1 = asInteger(sI);
+    i_2 = asInteger(sJ);
+    for (i = 0; i < n; i++)
     {
-	i_1 = asInteger(sI);
-	i_2 = asInteger(sJ);
-	for (i = 0; i < n; i++)
+	if_NA_dpqphtype2_set(y[i], x[i])
+	else
 	{
 	    y[i] = f(x[i], a, b, na, i_1, i_2);
 	    if (ISNAN(y[i])) naflag = TRUE;
@@ -157,12 +154,8 @@ SEXP do_dpqphtype(SEXP args)
 
     /* Dispatch to do_dpqphtype{1,2,3,4,5} */
     for (i = 0; fun_tab[i].name; i++)
-    {
 	if (!strcmp(fun_tab[i].name, name))
-	{
 	    return fun_tab[i].cfun(fun_tab[i].code, CDR(args));
-	}
-    }
 
     /* No dispatch is an error */
     error("internal error in do_dpqphtype");
