@@ -29,7 +29,13 @@ ruinSparreAndersen <- function(probpi,T,m,premRate,probnu,S,n)
 
     
     
-    #the contractant (?) function phi, such that S verifies the point fixed equation Q=phi(Q)
+    # the contractant* (?) function phi, such that S verifies the point fixed equation Q=phi(Q)
+	# the contractancy ensures (1) point fixed algorithm will converge to the (unique) solution
+	# and from any starting value, (2) the convergence speed is exponential.
+	# TODO : search in Berman & Plemmons (1979)** if phi is constractant.
+	#* if contractant, we have it exists 0<k<1 such that |phi(x)-phi(y)| < k*|x-y|. 
+	#** A. Berman & J. Plemmons (1979), Nonnegative matrices in the mathematical sciences, 
+	#Academic Press, NY
     phi<-function(K)
     {
         # K "+" S with the rule for the kronecker sum for square matrix
