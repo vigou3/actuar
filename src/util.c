@@ -1,6 +1,7 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
- *  Various utility functions for matrix algebra.
+ *  Various utility functions for matrix algebra and sampling from
+ *  discrete distributions.
  *
  *  The functions therein use LAPACK and BLAS routines. Nicely
  *  formatted man pages for these can be found at
@@ -346,4 +347,23 @@ void matpow(double *x, int n, int k, double *z)
 	    }
 	}
     }
+}
+
+/* Simple function to sample one value from a discrete distribution on
+ * 0, 1, ..., n - 1, n using probabilities p[0], ..., p[n - 1], 1 -
+ * (p[0] + ... + p[n - 1]).
+ */
+int SampleSingleValue(int n, double *p)
+{
+    int i;
+    double pcum = p[0], u = unif_rand();
+
+    /* Return i such that p[0] + ... + p[i - 1] < u <= p[0] + ... +
+     * p[i] */
+    for (i = 0; i < n; i++, pcum += p[i])
+	if (u <= pcum)
+	    return i;
+
+    /* Case u > p[0] + ... + p[n - 1] */
+    return n;
 }
