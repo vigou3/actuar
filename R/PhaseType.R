@@ -20,7 +20,7 @@ pphtype <- function (x, prob, transition, lower.tail = TRUE, log.p = FALSE)
     .External("do_dpqphtype", "pphtype", x, prob, transition, lower.tail, log.p)
 
 rphtype <- function (n, prob, transition, log.p = FALSE)
-    .External("do_randomphtype", "rphtype", x, prob, transition)
+    .External("do_randomphtype", "rphtype", n, prob, transition)
 
 mphtype <- function (x, prob, transition)
     .External("do_dpqphtype", "mphtype", x, prob, transition, FALSE)

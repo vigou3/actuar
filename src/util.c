@@ -358,12 +358,9 @@ int SampleSingleValue(int n, double *p)
     int i;
     double pcum = p[0], u = unif_rand();
 
-    /* Return i such that p[0] + ... + p[i - 1] < u <= p[0] + ... +
-     * p[i] */
-    for (i = 0; i < n; i++, pcum += p[i])
-	if (u <= pcum)
-	    return i;
+    for (i = 0; u > pcum && i < n; i++)
+	if (i < n - 1)
+	    pcum += p[i + 1];
 
-    /* Case u > p[0] + ... + p[n - 1] */
-    return n;
+    return i;
 }
