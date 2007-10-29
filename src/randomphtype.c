@@ -1,7 +1,7 @@
 /*  ===== actuar: an R package for Actuarial Science =====
  *
  *  Functions to generate variates of phase-type distributions. This
- *  file is based on dpq.c with the following modifications:
+ *  file is based on random.c with the following modifications:
  *
  *     1. support for a matrix argument;
  *     2. no iteration over the parameters;
@@ -17,22 +17,15 @@
 #include "actuar.h"
 #include "locale.h"
 
-/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * THESE FUNCTIONS ARE NOT YET ADAPTED FOR PHASE-TYPE DISTRIBUTIONS
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- */
 
-static Rboolean randomphtype2(double (*f)(), double *a, int na,
-			      double *b, int nb, double *x, int n)
+static Rboolean randomphtype2(double (*f)(), double *a, double *b,
+			      int na, double *x, int n)
 {
-    double ai, bi;
     int i;
     Rboolean naflag = FALSE;
     for (i = 0; i < n; i++)
     {
-	ai = a[i % na];
-	bi = b[i % nb];
-	x[i] = f(ai, bi);
+	x[i] = f(a, b, na);
 	if (!R_FINITE(x[i])) naflag = TRUE;
     }
     return(naflag);
@@ -40,19 +33,19 @@ static Rboolean randomphtype2(double (*f)(), double *a, int na,
 
 #define RANDPHTYPE2(num, fun) \
 	case num: \
-	    random2(fun, REAL(a), na, REAL(b), nb, REAL(x), n); \
+	    randomphtype2(fun, REAL(a), REAL(b), na, REAL(x), n); \
 	    break
 
 SEXP do_randomphtype2(int code, SEXP args)
 {
-    SEXP x, a, b;
-    int i, n, na, nb;
+    SEXP x, a, b, bdims;
+    int i, n, na, nb, nrow, ncol;
     Rboolean naflag = FALSE;
 
     /* Check validity of arguments */
     if (!isVector(CAR(args)) ||
 	!isNumeric(CADR(args)) ||
-	!isNumeric(CADDR(args)))
+	!isMatrix(CADDR(args)))
 	error(_("invalid arguments"));
 
     /* Number of variates to generate */
@@ -73,10 +66,21 @@ SEXP do_randomphtype2(int code, SEXP args)
 	return(x);
     }
 
-    /* If length of parameters < 1, return NaN */
+    /* Sanity checks of arguments. */
+    bdims = getAttrib(CADDR(args), R_DimSymbol);
+    nrow = INTEGER(bdims)[0];
+    ncol = INTEGER(bdims)[1];
+    if (nrow != ncol)
+	error(_("non-square transition matrix"));
     na = LENGTH(CADR(args));
     nb = LENGTH(CADDR(args));
-    if (na < 1 || nb < 1)
+    if (na != nrow)
+	error(_("non-conformable arguments"));
+
+    /*  If length of parameters < 1, or either of the two parameters
+     *  is NA return NA. */
+    if (na < 1 ||
+	(na == 1 && !(R_FINITE(CADR(args)[0]) && R_FINITE(CADDR(args)[0]))))
     {
 	for (i = 0; i < n; i++)
 	    REAL(x)[i] = NA_REAL;
@@ -90,7 +94,7 @@ SEXP do_randomphtype2(int code, SEXP args)
 	GetRNGstate();
 	switch (code)
 	{
-	    RAND2(1, rphtype);
+	    RANDPHTYPE2(1, rphtype);
 	default:
 	    error(_("internal error in do_randomphtype2"));
 	}
@@ -116,10 +120,8 @@ SEXP do_randomphtype(SEXP args)
 
     /* Dispatch to do_random{1,2,3,4} */
     for (i = 0; fun_tab[i].name; i++)
-    {
 	if (!strcmp(fun_tab[i].name, name))
 	    return fun_tab[i].cfun(fun_tab[i].code, CDR(args));
-    }
 
     /* No dispatch is an error */
     error(_("internal error in do_randomphtype"));
