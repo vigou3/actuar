@@ -7,7 +7,10 @@
  *
  *     1. support for a matrix argument;
  *     2. no iteration over the parameters;
- *     3. support for two parameter distributions only.
+ *     3. support for two parameter distributions only;
+ *     4. many sanity checks on the arguments that are done in the
+ *        {d,p,r,m,mgf} functions for other probability laws are done
+ *        here because of item 2 above.
  *
  *  Note that the "q" in the functions and file names was retained for
  *  symmetry reasons only, since the quantile function is not
@@ -23,14 +26,16 @@
 #include "actuar.h"
 #include "locale.h"
 
-#define if_NA_dpqphtype2_set(y, x)			        \
+#define if_NA_dpqphtype2_set(y, x)				\
     if      (ISNA (x) || naargs) y = NA_REAL;			\
-    else if (ISNAN(x) || nanargs) y = R_NaN;
+    else if (ISNAN(x) || nanargs) y = R_NaN;			\
+    else if (naflag) y = R_NaN;
+
 
 static SEXP dpqphtype2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
 {
     SEXP sy, bdims;
-    int i, n, na, nb, nrow, ncol, sxo = OBJECT(sx);
+    int i, j, ij, n, m, sxo = OBJECT(sx);
     double *x, *a, *b, *y;
     int i_1;
     Rboolean naflag = FALSE, naargs = FALSE, nanargs = FALSE;
@@ -41,17 +46,14 @@ static SEXP dpqphtype2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
 	error(_("invalid arguments"));                          \
                                                                 \
     n  = LENGTH(sx);						\
-    na = LENGTH(sa);						\
-    nb = LENGTH(sb);						\
     if (n == 0)							\
 	return(allocVector(REALSXP, 0));			\
+								\
+    m = LENGTH(sa);						\
     bdims = getAttrib(sb, R_DimSymbol);                         \
-    nrow = INTEGER(bdims)[0];                                   \
-    ncol = INTEGER(bdims)[1];					\
-    if (nrow != ncol)                                           \
-	error(_("non-square transition matrix"));               \
-    if (na != nrow)                                             \
-	error(_("non-conformable arguments"));			\
+    if (INTEGER(bdims)[0] != INTEGER(bdims)[1] ||		\
+	INTEGER(bdims)[0] != m)					\
+	naflag = TRUE;						\
 								\
     PROTECT(sx = coerceVector(sx, REALSXP));			\
     PROTECT(sa = coerceVector(sa, REALSXP));			\
@@ -62,12 +64,24 @@ static SEXP dpqphtype2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
     b = REAL(sb);						\
     y = REAL(sy);						\
 								\
-    if (na == 1)						\
+    for (i = 0; i < m && !naargs && !nanargs && !naflag; i++)	\
     {								\
-	if (ISNA(a[0]) || ISNA(b[0]))				\
-	    naargs = TRUE;					\
-	else if (ISNAN(a[0]) || ISNAN(b[0]))			\
-	    nanargs = TRUE;					\
+	if ((naargs = ISNA(a[i])))				\
+	    break;						\
+	if ((nanargs = ISNAN(a[i])))				\
+	    break;						\
+	for (j = 0; j < m; j++)					\
+	{							\
+	    ij = i * m + j;					\
+	    if ((naargs = ISNA(b[ij])))				\
+		break;						\
+	    if ((nanargs = ISNAN(b[ij])))			\
+		break;						\
+	    if (i == j && (naflag = b[ij] >= 0))		\
+		break;						\
+	    if (i != j && (naflag = b[ij] < 0))			\
+		break;						\
+	}							\
     }
 
     SETUP_DPQPHTYPE2;
@@ -78,7 +92,7 @@ static SEXP dpqphtype2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
 	if_NA_dpqphtype2_set(y[i], x[i])
 	else
 	{
-	    y[i] = f(x[i], a, b, na, i_1);
+	    y[i] = f(x[i], a, b, m, i_1);
 	    if (ISNAN(y[i])) naflag = TRUE;
 	}
     }
@@ -100,7 +114,7 @@ static SEXP dpqphtype2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
 static SEXP dpqphtype2_2(SEXP sx, SEXP sa, SEXP sb, SEXP sI, SEXP sJ, double (*f)())
 {
     SEXP sy, bdims;
-    int i, n, na, nb, nrow, ncol, sxo = OBJECT(sx);
+    int i, j, ij, n, m, sxo = OBJECT(sx);
     double *x, *a, *b, *y;
     int i_1, i_2;
     Rboolean naflag = FALSE, naargs = FALSE, nanargs = FALSE;
@@ -114,7 +128,7 @@ static SEXP dpqphtype2_2(SEXP sx, SEXP sa, SEXP sb, SEXP sI, SEXP sJ, double (*f
 	if_NA_dpqphtype2_set(y[i], x[i])
 	else
 	{
-	    y[i] = f(x[i], a, b, na, i_1, i_2);
+	    y[i] = f(x[i], a, b, m, i_1, i_2);
 	    if (ISNAN(y[i])) naflag = TRUE;
 	}
     }
