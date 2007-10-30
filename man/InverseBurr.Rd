@@ -14,16 +14,16 @@
   \code{scale}.
 }
 \usage{
-  dinvburr(x, shape1, shape2, rate = 1, scale = 1/rate,
-           log = FALSE)
-  pinvburr(q, shape1, shape2, rate = 1, scale = 1/rate,
-           lower.tail = TRUE, log.p = FALSE)
-  qinvburr(p, shape1, shape2, rate = 1, scale = 1/rate,
-           lower.tail = TRUE, log.p = FALSE)
-  rinvburr(n, shape1, shape2, rate = 1, scale = 1/rate)
-  minvburr(order, shape1, shape2, rate = 1, scale = 1/rate)
-  levinvburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
-             order = 1)
+dinvburr(x, shape1, shape2, rate = 1, scale = 1/rate,
+         log = FALSE)
+pinvburr(q, shape1, shape2, rate = 1, scale = 1/rate,
+         lower.tail = TRUE, log.p = FALSE)
+qinvburr(p, shape1, shape2, rate = 1, scale = 1/rate,
+         lower.tail = TRUE, log.p = FALSE)
+rinvburr(n, shape1, shape2, rate = 1, scale = 1/rate)
+minvburr(order, shape1, shape2, rate = 1, scale = 1/rate)
+levinvburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
+           order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}

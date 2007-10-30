@@ -13,12 +13,12 @@
   with parameters \code{shape} and \code{scale}.
 }
 \usage{
-  dinvpareto(x, shape, scale, log = FALSE)
-  pinvpareto(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
-  qinvpareto(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
-  rinvpareto(n, shape, scale)
-  minvpareto(order, shape, scale)
-  levinvpareto(limit, shape, scale, order = 1)
+dinvpareto(x, shape, scale, log = FALSE)
+pinvpareto(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
+qinvpareto(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
+rinvpareto(n, shape, scale)
+minvpareto(order, shape, scale)
+levinvpareto(limit, shape, scale, order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}

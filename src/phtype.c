@@ -22,13 +22,25 @@ double dphtype(double x, double *pi, double *T, int m, int give_log)
      *	pi      * exp(x * T) * t
      *  (1 x m)   (m x m)      (m x 1)
      *
-     *  with t = -T * e and e is a 1-vector.
+     *  for x > 0, with t = -T * e and e a 1-vector, and 1 - pi * e
+     *  for x = 0.
      */
 
     if (!R_FINITE(x) || x < 0.0)
 	return R_D__0;
 
-    int i, j, jm;
+    if (x == 0.0)
+    {
+	int i;
+	double z = 0.0;
+
+	for (i = 0; i < m; i++)
+	    z += pi[i];
+
+	return R_D_Clog(z);
+    }
+
+    int i, j, ij;
     double *t, *tmp;
 
     /* Build vector t (equal to minus the row sums of matrix T) and
@@ -38,9 +50,9 @@ double dphtype(double x, double *pi, double *T, int m, int give_log)
     for (i = 0; i < m; i++)
 	for (j = 0; j < m; j++)
 	{
-	    jm = j * m;
-	    t[i] -= T[i + jm];
-	    tmp[i + jm] = x * T[i + jm];
+	    ij = i + j * m;
+	    t[i] -= T[ij];
+	    tmp[ij] = x * T[ij];
 	}
 
     return R_D_val(expmprod(pi, tmp, t, m));
@@ -54,11 +66,22 @@ double pphtype(double q, double *pi, double *T, int m, int lower_tail,
      *	1 - pi      * exp(q * T) * e
      *      (1 x m)   (m x m)      (m x 1)
      *
-     *  where e is a 1-vector.
+     *  for x > 0, where e a 1-vector, and 1 - pi * e for x = 0.
      */
 
-    if (q <= 0)
+    if (q <= 0.0)
 	return R_DT_0;
+
+    if (q == 0.0)
+    {
+	int i;
+	double z = 0.0;
+
+	for (i = 0; i < m; i++)
+	    z += pi[i];
+
+	return R_DT_Cval(z);
+    }
 
     int i;
     double *e, *tmp;
@@ -93,8 +116,8 @@ double rphtype(double *pi, double **Q, double *rates, int m)
      * works fine here and below. */
     state = SampleSingleValue(m, pi);
 
-    /* Simulate the Markov chain using transition matrix Q while
-     * counting the number of visits in each transient state.  */
+    /* Simulate the underlying Markov chain using transition matrix Q
+     * while counting the number of visits in each transient state. */
     while (state != m)
     {
 	nvisits[state]++;
@@ -147,37 +170,38 @@ double mgfphtype(double x, double *pi, double *T, int m, int give_log)
 {
     /*  Moment generating function is
      *
-     *	pi      * (-x * I - T)^(-1) * t
-     *  (1 x m)   (m x m)             (m x 1)
+     *	pi      * (-x * I - T)^(-1) * t       + (1 - pi      * e)
+     *  (1 x m)   (m x m)             (m x 1)        (1 x m)   (m x 1)
      *
      *  with t = -T * e, e a 1-vector and I the identity matrix.
+     *  Below, the mgf is computed as 1 - pi * (e + (x * I + T)^(-1) * t.
      */
 
     if (x == 0.0)
 	return R_D_exp(0.0);
 
-    int i, j, jm;
+    int i, j, ij;
     double z = 0.0, *t, *tmp1, *tmp2;
 
     /* Build vector t (equal to minux the row sums of matrix T) and
-     * matrix tmp1 = -x * I - T. */
+     * matrix tmp1 = x * I + T. */
     t = (double *) S_alloc(m, sizeof(double)); /* initialized to 0 */
     tmp1 = (double *) R_alloc(m * m, sizeof(double));
     for (i = 0; i < m; i++)
 	for (j = 0; j < m; j++)
 	{
-	    jm = j * m;
-	    t[i] -= T[i + jm];
-	    tmp1[i + jm] = (i == j) ? -x - T[i + jm] : -T[i + jm];
+	    ij = i + j * m;
+	    t[i] -= T[ij];
+	    tmp1[ij] = (i == j) ? x + T[ij] : T[ij];
 	}
 
     /* Compute tmp2 = tmp1^(-1) * t */
     tmp2 = (double *) R_alloc(m, sizeof(double));
     solve(tmp1, t, m, 1, tmp2);
 
-    /* Compute z = pi * tmp2*/
+    /* Compute z = pi * (e + tmp2) */
     for (i = 0; i < m; i++)
-	z += pi[i] * tmp2[i];
+	z += pi[i] * (1 + tmp2[i]);
 
-    return R_D_val(z);
+    return R_D_Clog(z);
 }

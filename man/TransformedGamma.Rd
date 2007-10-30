@@ -13,16 +13,16 @@
   with parameters \code{shape1}, \code{shape2} and \code{scale}.
 }
 \usage{
-  dtrgamma(x, shape1, shape2, rate = 1, scale = 1/rate,
-           log = FALSE)
-  ptrgamma(q, shape1, shape2, rate = 1, scale = 1/rate,
-           lower.tail = TRUE, log.p = FALSE)
-  qtrgamma(p, shape1, shape2, rate = 1, scale = 1/rate,
-           lower.tail = TRUE, log.p = FALSE)
-  rtrgamma(n, shape1, shape2, rate = 1, scale = 1/rate)
-  mtrgamma(order, shape1, shape2, rate = 1, scale = 1/rate)
-  levtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
-             order = 1)
+dtrgamma(x, shape1, shape2, rate = 1, scale = 1/rate,
+         log = FALSE)
+ptrgamma(q, shape1, shape2, rate = 1, scale = 1/rate,
+         lower.tail = TRUE, log.p = FALSE)
+qtrgamma(p, shape1, shape2, rate = 1, scale = 1/rate,
+         lower.tail = TRUE, log.p = FALSE)
+rtrgamma(n, shape1, shape2, rate = 1, scale = 1/rate)
+mtrgamma(order, shape1, shape2, rate = 1, scale = 1/rate)
+levtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
+           order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}

@@ -8,8 +8,8 @@
   parameters \code{shape} and \code{scale}.
 }
 \usage{
-  mweibull(order, shape, scale = 1)
-  levweibull(limit, shape, scale = 1, order = 1)
+mweibull(order, shape, scale = 1)
+levweibull(limit, shape, scale = 1, order = 1)
 }
 \arguments{
   \item{order}{order of the moment.}

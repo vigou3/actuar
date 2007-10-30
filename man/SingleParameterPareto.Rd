@@ -13,12 +13,12 @@
   distribution with parameter \code{shape}.
 } 
 \usage{
-  dpareto1(x, shape, min, log = FALSE)
-  ppareto1(q, shape, min, lower.tail = TRUE, log.p = FALSE)
-  qpareto1(p, shape, min, lower.tail = TRUE, log.p = FALSE)
-  rpareto1(n, shape, min)
-  mpareto1(order, shape, min)
-  levpareto1(limit, shape, min, order = 1)
+dpareto1(x, shape, min, log = FALSE)
+ppareto1(q, shape, min, lower.tail = TRUE, log.p = FALSE)
+qpareto1(p, shape, min, lower.tail = TRUE, log.p = FALSE)
+rpareto1(n, shape, min)
+mpareto1(order, shape, min)
+levpareto1(limit, shape, min, order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}

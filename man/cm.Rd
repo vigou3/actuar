@@ -58,9 +58,10 @@ cm(formula, data, ratios, weights, subset, xreg = NULL,
 \details{
   \code{cm} is the unified front end for credibility models fitting.
   Currently, the function supports hierarchical models with any number
-  of levels (with Bühlmann and Bühlmann-Straub models as special cases)
-  and the regression model of Hachemeister. Usage of \code{cm} is
-  similar to \code{\link[stats]{lm}}.
+  of levels (with \enc{Bühlmann}{Buhlmann} and
+  \enc{Bühlmann}{Buhlmann}-Straub models as special cases) and the
+  regression model of Hachemeister. Usage of \code{cm} is similar to
+  \code{\link[stats]{lm}}.
   
   The \code{formula} argument symbolically describes the structure of
   the portfolio in the form \eqn{~ terms}. Each term is an interaction
@@ -145,9 +146,9 @@ cm(formula, data, ratios, weights, subset, xreg = NULL,
   lowest level, the sum of the natural weights the next level and the
   sum of the credibility factors for all upper levels.
 
-  The Bühlmann-Gisler estimators (\code{method =
-    "Buhlmann-Gisler"}) are given by
-  \deqn{b = \frac{1}{I} \sum_i \max(b_i, 0),}{b = mean(max(b[i], 0)),}
+  The \enc{Bühlmann}{Buhlmann}-Gisler estimators (\code{method =
+    "Buhlmann-Gisler"}) are given by%
+  \deqn{b = \frac{1}{I} \sum_i \max(b_i, 0),}{b = mean(max(b[i], 0)),}%
   that is the average of the per node variance estimators truncated at
   0.
 
@@ -157,7 +158,8 @@ cm(formula, data, ratios, weights, subset, xreg = NULL,
   truncation. Note that negative estimates will be truncated to zero for
   credibility factor calculations.
 
-  In the Bühlmann-Straub model, these estimators are equivalent.
+  In the \enc{Bühlmann}{Buhlmann}-Straub model, these estimators are
+  equivalent.
   
   Iterative estimators \code{method = "iterative"} are pseudo-estimators
   of the form
@@ -208,8 +210,8 @@ cm(formula, data, ratios, weights, subset, xreg = NULL,
   an atomic vector for one-level models.  
 }
 \references{
-  Bühlmann, H. and Gisler, A. (2005), \emph{A course in credibility
-  theory and its applications}, Springer.
+  \enc{Bühlmann}{Buhlmann}, H. and Gisler, A. (2005), \emph{A course in
+  credibility theory and its applications}, Springer.
 
   Goulet, V. (1998), \emph{Principles and Application of Credibility
     Theory}, Journal of Actuarial Practice, Volume 6, ISSN 1064-6647.
@@ -228,7 +230,7 @@ cm(formula, data, ratios, weights, subset, xreg = NULL,
 \examples{
 data(hachemeister)
 
-## Bühlmann-Straub model
+## Buhlmann-Straub model
 fit <- cm(~state, hachemeister,
           ratios = ratio.1:ratio.12, weights = weight.1:weight.12)
 fit				# print method

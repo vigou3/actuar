@@ -13,15 +13,15 @@
   distribution with parameters \code{shape} and \code{scale}.
 }
 \usage{
-  dinvparalogis(x, shape, rate = 1, scale = 1/rate, log = FALSE)
-  pinvparalogis(q, shape, rate = 1, scale = 1/rate,
-                lower.tail = TRUE, log.p = FALSE)
-  qinvparalogis(p, shape, rate = 1, scale = 1/rate,
-                lower.tail = TRUE, log.p = FALSE)
-  rinvparalogis(n, shape, rate = 1, scale = 1/rate)
-  minvparalogis(order, shape, rate = 1, scale = 1/rate)
-  levinvparalogis(limit, shape, rate = 1, scale = 1/rate,
-                  order = 1)
+dinvparalogis(x, shape, rate = 1, scale = 1/rate, log = FALSE)
+pinvparalogis(q, shape, rate = 1, scale = 1/rate,
+              lower.tail = TRUE, log.p = FALSE)
+qinvparalogis(p, shape, rate = 1, scale = 1/rate,
+              lower.tail = TRUE, log.p = FALSE)
+rinvparalogis(n, shape, rate = 1, scale = 1/rate)
+minvparalogis(order, shape, rate = 1, scale = 1/rate)
+levinvparalogis(limit, shape, rate = 1, scale = 1/rate,
+                order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}

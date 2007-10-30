@@ -30,7 +30,7 @@ double mchisq(double order, double df, double ncp, int give_log)
 	return R_pow(2, order) * gammafn(order + df/2) / gammafn(df/2);
 
     /* Non centered chi-square distribution */
-    if (order >= 1.0 & (int) order == order)
+    if (order >= 1.0 && (int) order == order)
     {
 	int i, j = 0, n = order;
 	double *res;

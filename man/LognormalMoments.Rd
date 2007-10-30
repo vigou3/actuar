@@ -9,8 +9,8 @@
   equal to \code{sdlog}.
 }
 \usage{
-  mlnorm(order, meanlog = 0, sdlog = 1)
-  levlnorm(limit, meanlog = 0, sdlog = 1, order = 1)
+mlnorm(order, meanlog = 0, sdlog = 1)
+levlnorm(limit, meanlog = 0, sdlog = 1, order = 1)
 }
 \arguments{
   \item{order}{order of the moment.}

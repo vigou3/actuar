@@ -1,31 +1,31 @@
 \name{PhaseType}
-\alias{dphasetype}
-\alias{pphasetype}
-\alias{qphasetype}
-\alias{rphasetype}
-\alias{mphasetype}
-\alias{mgfphasetype}
+\alias{dphtype}
+\alias{pphtype}
+\alias{rphtype}
+\alias{mphtype}
+\alias{mgfphtype}
 \title{The Phase-type Distribution}
 \description{
-  Density, distribution function, quantile function, random generation,
-  raw moments and moment generating function for the Phase-type 
-  distribution with parameters \code{pi}, \code{T} and
-  \code{m}.
+  Density, distribution function, random generation, raw moments and
+  moment generating function for the (continuous) Phase-type
+  distribution with parameters \code{prob} and \code{rates}.
 }
 \usage{
-  dphasetype(x, pi, T, m, log = FALSE)
-  pphasetype(q, pi, T, m, lower.tail = TRUE, log.p = FALSE)
-  qphasetype(p, pi, T, m, lower.tail = TRUE, log.p = FALSE)
-  rphasetype(n, pi, T, m)
-  mphasetype(order, pi, T, m)
-  mgfphasetype(x, pi, T, m, log = FALSE)
+dphtype(x, prob, rates, log = FALSE)
+pphtype(q, prob, rates, lower.tail = TRUE, log.p = FALSE)
+rphtype(n, prob, rates)
+mphtype(order, prob, rates)
+mgfphtype(x, prob, rates, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
-  \item{p}{vector of probabilities.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
-  \item{pi, T, m}{parameters of the Phase-type distribution. Must be a vector, a square matrix and an integer respectively}
+  \item{prob}{vector of initial probabilities for each of the transient
+    states of of the underlying Markov chain. The initial probability of
+    the absorbing state is \code{1 - sum(prob)}.} 
+  \item{rates}{square matrix of the rates of transition among the states
+    of the underlying Markov chain.}
   \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities
     \eqn{p} are returned as \eqn{\log(p)}{log(p)}.}
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
@@ -33,65 +33,65 @@
   \item{order}{order of the moment.}
 }
 \details{
-  The Phase-type distribution with parameters \code{pi}, \code{T} and \code{m}
-  has density:
-\deqn{f(x) = pi * exp(Tx) * t_0}
-  and a distribution function 
-\deqn{F(x) = 1-pi * exp(Tx) * 1_m}
-where \code{pi} is the initial probability vector (of length \code{m}),
-\code{T} the \eqn{m\times m} subintensity matrix and \eqn{1_m} 
-the one vector of \eqn{R^m}, \eqn{t_0} the exit rates vector
-defined as \eqn{-T * 1_m}. Warning in the previous expression, 
-\eqn{exp(Tx)} denotes the matrix exponential defined as the Taylor series
-\eqn{\sum_{i=0}^{+\infty} (Tx)^i/i!}.
-More details can be found in Bladt(2005).
+  The phase-type distribution with parameters \code{prob} \eqn{= \pi}{=
+    pi} and \code{rates} \eqn{= T} has density:%
+  \deqn{f(x) = \pi e^{T x} t}{f(x) = pi \%*\% exp(T * x) \%*\% t}% 
+  for \eqn{x > 0} and \eqn{f(0) = 1 - \pi e}{f(0) = 1 - pi \%*\% e},
+  where \eqn{e} is a column vector with all components equal to one,
+  \eqn{t = -T e}{t = -T \%*\% e} is the exit rates vector and
+  \eqn{e^{Tx}}{exp(T * x)} denotes the matrix exponential of \eqn{Tx}{T
+    * x}. The parameters must satisfy \eqn{\pi e \leq 1}{pi \%*\% e <=
+    1}, \eqn{T_{ii} < 0}{T[i, i] < 0}, \eqn{T_{ij} \geq 0}{T[i, j] >= 0}
+  and \eqn{Te \leq 0}{T \%*\% e <= 0}.
+
+  If the value of \code{prob} do no sum to one, the distribution is
+  mixed with an atom of \code{1 - sum(prob)} at \code{x = 0}.
+
+  The matrix exponential of a matrix \eqn{M} is defined as the
+  Taylor series%
+  \deqn{e^M = \sum_{n = 0}^{\infty} \frac{M^n}{n!}.}{%
+    exp(M) = sum(n = 0:Inf; (M^n)/(n!)).}
+
+  The \eqn{k}th raw moment of the random variable \eqn{X} is
+  \eqn{E[X^k]}{E[X^k]} and the moment generating function is
+  \eqn{E[e^{xX}]}.
 }
 \value{
   \code{dphasetype} gives the density,
   \code{pphasetype} gives the distribution function,
-  \code{qphasetype} gives the quantile function,
   \code{rphasetype} generates random deviates,
   \code{mphasetype} gives the \eqn{k}th raw moment, and
-  \code{mgfphasetype} gives the moment generating function.
+  \code{mgfphasetype} gives the moment generating function in \code{x}.
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 
 \references{
-  Bladt, M. (2005),
-  \emph{A review on phase-type distribution and their use
-in risk theory}, ASTIN Bul.
+  \url{http://en.wikipedia.org/wiki/Phase-type_distribution}
+  
+  Neuts, M. F. (1981), \emph{Generating random variates from a
+    distribution of phase type}, WSC '81: Proceedings of the 13th
+  conference on Winter simulation, IEEE Press.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Christophe Dutang
 }
 \examples{
-#erlang distribution Er(3,2)
- T <- cbind(c(-2,0,0),c(2,-2,0),c(0,2,-2))
- m <- 3
- pi <- c(1,0,0)
- x<- 0:10
-#density
- dphasetype(x,pi,T,m)
-#comparison with dgamma
- dgamma(x,3,2)
-#cumulative distribution
- pphasetype(x,pi,T,m)
-#comparison with pgamma
- pgamma(x,3,2)
-#random generator
- rphasetype(10, pi, T, m) 
-#comparison with rgamma
- rgamma(10,3,2) 
-#moment function
- mphasetype(0:10, pi, T, m)
-#comparison with mgamma
- mgamma(0:10, 3, 2)
-#moment generating function
- x <- -10:2
- mgfphasetype(x, pi, T, m)
-#comparison with mgamma
- mgfgamma(x, 3, 2)
+## Erlang(3, 2) distribution
+T <- cbind(c(-2, 0, 0), c(2, -2, 0), c(0, 2, -2))
+pi <- c(1,0,0)
+x <- 0:10
+
+dphtype(x, pi, T)		# density
+dgamma(x, 3, 2)			# same
+pphtype(x, pi, T)		# cdf
+pgamma(x, 3, 2)			# same
+
+rphtype(10, pi, T)		# random values
+
+mphtype(1, pi, T)		# expected value
+
+curve(mgfphtype(x, pi, T), from = -10, to = 1)
 }
 \keyword{distribution}

@@ -13,15 +13,15 @@
   parameters \code{shape} and \code{scale}.
 }
 \usage{
-  dllogis(x, shape, rate = 1, scale = 1/rate, log = FALSE)
-  pllogis(q, shape, rate = 1, scale = 1/rate,
-          lower.tail = TRUE, log.p = FALSE)
-  qllogis(p, shape, rate = 1, scale = 1/rate,
-          lower.tail = TRUE, log.p = FALSE)
-  rllogis(n, shape, rate = 1, scale = 1/rate)
-  mllogis(order, shape, rate = 1, scale = 1/rate)
-  levllogis(limit, shape, rate = 1, scale = 1/rate,
-            order = 1)
+dllogis(x, shape, rate = 1, scale = 1/rate, log = FALSE)
+pllogis(q, shape, rate = 1, scale = 1/rate,
+        lower.tail = TRUE, log.p = FALSE)
+qllogis(p, shape, rate = 1, scale = 1/rate,
+        lower.tail = TRUE, log.p = FALSE)
+rllogis(n, shape, rate = 1, scale = 1/rate)
+mllogis(order, shape, rate = 1, scale = 1/rate)
+levllogis(limit, shape, rate = 1, scale = 1/rate,
+          order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}

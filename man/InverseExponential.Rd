@@ -13,12 +13,12 @@
   distribution with parameter \code{scale}.
 }
 \usage{
-  dinvexp(x, rate = 1, scale = 1/rate, log = FALSE)
-  pinvexp(q, rate = 1, scale = 1/rate, lower.tail = TRUE, log.p = FALSE)
-  qinvexp(p, rate = 1, scale = 1/rate, lower.tail = TRUE, log.p = FALSE)
-  rinvexp(n, rate = 1, scale = 1/rate)
-  minvexp(order, rate = 1, scale = 1/rate)
-  levinvexp(limit, rate = 1, scale = 1/rate, order = 1)
+dinvexp(x, rate = 1, scale = 1/rate, log = FALSE)
+pinvexp(q, rate = 1, scale = 1/rate, lower.tail = TRUE, log.p = FALSE)
+qinvexp(p, rate = 1, scale = 1/rate, lower.tail = TRUE, log.p = FALSE)
+rinvexp(n, rate = 1, scale = 1/rate)
+minvexp(order, rate = 1, scale = 1/rate)
+levinvexp(limit, rate = 1, scale = 1/rate, order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}

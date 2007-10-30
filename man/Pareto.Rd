@@ -20,12 +20,12 @@
   parameters \code{shape} and \code{scale}.
 }
 \usage{
-  dpareto(x, shape, scale, log = FALSE)
-  ppareto(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
-  qpareto(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
-  rpareto(n, shape, scale)
-  mpareto(order, shape, scale)
-  levpareto(limit, shape, scale, order = 1)
+dpareto(x, shape, scale, log = FALSE)
+ppareto(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
+qpareto(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
+rpareto(n, shape, scale)
+mpareto(order, shape, scale)
+levpareto(limit, shape, scale, order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}

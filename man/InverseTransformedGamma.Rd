@@ -14,16 +14,16 @@
   \code{scale}.
 }
 \usage{
-  dinvtrgamma(x, shape1, shape2, rate = 1, scale = 1/rate,
-              log = FALSE)
-  pinvtrgamma(q, shape1, shape2, rate = 1, scale = 1/rate,
-              lower.tail = TRUE, log.p = FALSE)
-  qinvtrgamma(p, shape1, shape2, rate = 1, scale = 1/rate,
-              lower.tail = TRUE, log.p = FALSE)
-  rinvtrgamma(n, shape1, shape2, rate = 1, scale = 1/rate)
-  minvtrgamma(order, shape1, shape2, rate = 1, scale = 1/rate)
-  levinvtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
-                order = 1)
+dinvtrgamma(x, shape1, shape2, rate = 1, scale = 1/rate,
+            log = FALSE)
+pinvtrgamma(q, shape1, shape2, rate = 1, scale = 1/rate,
+            lower.tail = TRUE, log.p = FALSE)
+qinvtrgamma(p, shape1, shape2, rate = 1, scale = 1/rate,
+            lower.tail = TRUE, log.p = FALSE)
+rinvtrgamma(n, shape1, shape2, rate = 1, scale = 1/rate)
+minvtrgamma(order, shape1, shape2, rate = 1, scale = 1/rate)
+levinvtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
+              order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}

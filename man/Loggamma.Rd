@@ -13,12 +13,12 @@
   parameters \code{shapelog} and \code{ratelog}.
 }
 \usage{
-  dlgamma(x, shapelog, ratelog, log = FALSE)
-  plgamma(q, shapelog, ratelog, lower.tail = TRUE, log.p = FALSE)
-  qlgamma(p, shapelog, ratelog, lower.tail = TRUE, log.p = FALSE)
-  rlgamma(n, shapelog, ratelog)
-  mlgamma(order, shapelog, ratelog)
-  levlgamma(limit, shapelog, ratelog, order = 1)
+dlgamma(x, shapelog, ratelog, log = FALSE)
+plgamma(q, shapelog, ratelog, lower.tail = TRUE, log.p = FALSE)
+qlgamma(p, shapelog, ratelog, lower.tail = TRUE, log.p = FALSE)
+rlgamma(n, shapelog, ratelog)
+mlgamma(order, shapelog, ratelog)
+levlgamma(limit, shapelog, ratelog, order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}

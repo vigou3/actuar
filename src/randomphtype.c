@@ -26,10 +26,11 @@ static Rboolean randomphtype2(double (*f)(), double *a, double *b,
     Rboolean naflag = FALSE;
 
     /* The sub-intensity matrix and initial probability vector never
-     * change, so compute the transition matrix of the Markov chain
-     * and the vector of rate parameters before looping. */
+     * change, so compute the transition matrix of the underlying
+     * Markov chain and the vector of rate parameters before
+     * looping. */
     rates = (double *) R_alloc(na, sizeof(double));
-    Q = (double *) R_alloc(na, sizeof(double));
+    Q = (double **) R_alloc(na, sizeof(double));
     for (i = 0; i < na; i++)
     {
 	Q[i] = (double *) S_alloc(na, sizeof(double));
@@ -89,7 +90,7 @@ SEXP do_randomphtype2(int code, SEXP args)
     nrow = INTEGER(bdims)[0];
     ncol = INTEGER(bdims)[1];
     if (nrow != ncol)
-	error(_("non-square transition matrix"));
+	error(_("non-square sub-intensity matrix"));
     na = LENGTH(a);
     nb = LENGTH(b);
     if (na != nrow)

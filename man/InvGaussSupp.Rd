@@ -13,13 +13,13 @@
   \code{lambda}.
 }
 \usage{
-  minvGauss(order, nu, lambda)
-  levinvGauss(limit, nu, lambda, order = 1)
-  mgfinvGauss(x, nu, lambda, log= FALSE)
+minvGauss(order, nu, lambda)
+levinvGauss(limit, nu, lambda, order = 1)
+mgfinvGauss(x, nu, lambda, log= FALSE)
 
-  minvgauss(order, nu, lambda)
-  levinvgauss(limit, nu, lambda, order = 1)
-  mgfinvgauss(x, nu, lambda, log= FALSE)
+minvgauss(order, nu, lambda)
+levinvgauss(limit, nu, lambda, order = 1)
+mgfinvgauss(x, nu, lambda, log= FALSE)
 }
 \arguments{
   \item{order}{order of the moment. Only \code{order = 1} is

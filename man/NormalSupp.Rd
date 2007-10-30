@@ -8,8 +8,8 @@
   mean equal to \code{mean} and standard deviation equal to \code{sd}.
 }
 \usage{
-  mnorm(order, mean = 0, sd = 1)
-  mgfnorm(x, mean = 0, sd = 1, log = FALSE)
+mnorm(order, mean = 0, sd = 1)
+mgfnorm(x, mean = 0, sd = 1, log = FALSE)
 }
 \arguments{
   \item{order}{vector of integers; order of the moment.}

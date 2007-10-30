@@ -36,9 +36,12 @@ static SEXP dpqphtype2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
 {
     SEXP sy, bdims;
     int i, j, ij, n, m, sxo = OBJECT(sx);
-    double *x, *a, *b, *y;
+    double tmp1, tmp2, *x, *a, *b, *y;
     int i_1;
-    Rboolean naflag = FALSE, naargs = FALSE, nanargs = FALSE;
+
+    /* Flags used in sanity check of arguments. Listed from highest to
+     * lowest priority. */
+    Rboolean naargs = FALSE, nanargs = FALSE, naflag = FALSE;
 
 
 #define SETUP_DPQPHTYPE2					\
@@ -64,15 +67,18 @@ static SEXP dpqphtype2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
     b = REAL(sb);						\
     y = REAL(sy);						\
 								\
+    tmp1 = 0.0;							\
     for (i = 0; i < m && !naargs && !nanargs && !naflag; i++)	\
     {								\
 	if ((naargs = ISNA(a[i])))				\
 	    break;						\
 	if ((nanargs = ISNAN(a[i])))				\
 	    break;						\
+	tmp1 += a[i];						\
+	tmp2 = 0.0;						\
 	for (j = 0; j < m; j++)					\
 	{							\
-	    ij = i * m + j;					\
+	    ij = i + j * m;					\
 	    if ((naargs = ISNA(b[ij])))				\
 		break;						\
 	    if ((nanargs = ISNAN(b[ij])))			\
@@ -81,8 +87,14 @@ static SEXP dpqphtype2_1(SEXP sx, SEXP sa, SEXP sb, SEXP sI, double (*f)())
 		break;						\
 	    if (i != j && (naflag = b[ij] < 0))			\
 		break;						\
+	    tmp2 += b[ij];					\
 	}							\
-    }
+	if (!(naargs || nanargs))				\
+	    naflag = tmp2 > 0;					\
+    }								\
+    if (!(naargs || nanargs))					\
+	naflag = tmp1 > 1
+
 
     SETUP_DPQPHTYPE2;
 
@@ -115,9 +127,12 @@ static SEXP dpqphtype2_2(SEXP sx, SEXP sa, SEXP sb, SEXP sI, SEXP sJ, double (*f
 {
     SEXP sy, bdims;
     int i, j, ij, n, m, sxo = OBJECT(sx);
-    double *x, *a, *b, *y;
+    double tmp1, tmp2, *x, *a, *b, *y;
     int i_1, i_2;
-    Rboolean naflag = FALSE, naargs = FALSE, nanargs = FALSE;
+
+    /* Flags used in sanity check of arguments. Listed from highest to
+     * lowest priority. */
+    Rboolean naargs = FALSE, nanargs = FALSE, naflag = FALSE;
 
     SETUP_DPQPHTYPE2;
 

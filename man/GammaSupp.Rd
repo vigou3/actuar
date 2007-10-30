@@ -9,9 +9,9 @@
   Gamma distribution with parameters \code{shape} and \code{scale}.
 }
 \usage{
-  mgamma(order, shape, rate = 1, scale = 1/rate)
-  levgamma(limit, shape, rate = 1, scale = 1/rate, order = 1)
-  mgfgamma(x, shape, rate = 1, scale = 1/rate, log = FALSE)
+mgamma(order, shape, rate = 1, scale = 1/rate)
+levgamma(limit, shape, rate = 1, scale = 1/rate, order = 1)
+mgfgamma(x, shape, rate = 1, scale = 1/rate, log = FALSE)
 }
 \arguments{
   \item{order}{order of the moment.}

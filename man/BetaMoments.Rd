@@ -8,8 +8,8 @@
   with parameters \code{shape1} and \code{shape2}.
 }
 \usage{
-  mbeta(order, shape1, shape2)
-  levbeta(limit, shape1, shape2, order = 1)
+mbeta(order, shape1, shape2)
+levbeta(limit, shape1, shape2, order = 1)
 }
 \arguments{
   \item{order}{order of the moment.}

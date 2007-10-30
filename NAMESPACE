@@ -9,7 +9,6 @@ export(## Credibility theory
        bstraub, cm, severity, simpf, unroll,
        ## Risk theory
        aggregateDist, CTE, discretize, discretise, VaR, adjCoef, ruin,
-       calcMatrixExpDiag, calcMatrixExpGen,
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        mexp, levexp, mgfexp,
@@ -40,7 +39,6 @@ export(## Credibility theory
        dinvburr, pinvburr, qinvburr, rinvburr, minvburr, levinvburr,
        dinvtrgamma, pinvtrgamma, qinvtrgamma, rinvtrgamma, minvtrgamma, levinvtrgamma,
        dtrgamma, ptrgamma, qtrgamma, rtrgamma, mtrgamma, levtrgamma,
-       dphasetype, pphasetype, qphasetype, rphasetype, mphasetype, mgfphasetype,
        ## Four parameter distributions
        dgenbeta, pgenbeta, qgenbeta, rgenbeta, mgenbeta, levgenbeta,
        dtrbeta, ptrbeta, qtrbeta, rtrbeta, mtrbeta, levtrbeta,

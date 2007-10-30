@@ -19,15 +19,15 @@
   with parameters \code{shape} and \code{scale}.
 }
 \usage{
-  dinvweibull(x, shape, rate = 1, scale = 1/rate, log = FALSE)
-  pinvweibull(q, shape, rate = 1, scale = 1/rate,
-              lower.tail = TRUE, log.p = FALSE)
-  qinvweibull(p, shape, rate = 1, scale = 1/rate,
-              lower.tail = TRUE, log.p = FALSE)
-  rinvweibull(n, shape, rate = 1, scale = 1/rate)
-  minvweibull(order, shape, rate = 1, scale = 1/rate)
-  levinvweibull(limit, shape, rate = 1, scale = 1/rate,
-                order = 1)
+dinvweibull(x, shape, rate = 1, scale = 1/rate, log = FALSE)
+pinvweibull(q, shape, rate = 1, scale = 1/rate,
+            lower.tail = TRUE, log.p = FALSE)
+qinvweibull(p, shape, rate = 1, scale = 1/rate,
+            lower.tail = TRUE, log.p = FALSE)
+rinvweibull(n, shape, rate = 1, scale = 1/rate)
+minvweibull(order, shape, rate = 1, scale = 1/rate)
+levinvweibull(limit, shape, rate = 1, scale = 1/rate,
+              order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}

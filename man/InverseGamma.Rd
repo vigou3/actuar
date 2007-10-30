@@ -14,16 +14,16 @@
   with parameters \code{shape} and \code{scale}.
 }
 \usage{
-  dinvgamma(x, shape, rate = 1, scale = 1/rate, log = FALSE)
-  pinvgamma(q, shape, rate = 1, scale = 1/rate,
-            lower.tail = TRUE, log.p = FALSE)
-  qinvgamma(p, shape, rate = 1, scale = 1/rate,
-            lower.tail = TRUE, log.p = FALSE)
-  rinvgamma(n, shape, rate = 1, scale = 1/rate)
-  minvgamma(order, shape, rate = 1, scale = 1/rate)
-  levinvgamma(limit, shape, rate = 1, scale = 1/rate,
-              order = 1)
-  mgfinvgamma(x, shape, rate =1, scale = 1/rate, log =FALSE)
+dinvgamma(x, shape, rate = 1, scale = 1/rate, log = FALSE)
+pinvgamma(q, shape, rate = 1, scale = 1/rate,
+          lower.tail = TRUE, log.p = FALSE)
+qinvgamma(p, shape, rate = 1, scale = 1/rate,
+          lower.tail = TRUE, log.p = FALSE)
+rinvgamma(n, shape, rate = 1, scale = 1/rate)
+minvgamma(order, shape, rate = 1, scale = 1/rate)
+levinvgamma(limit, shape, rate = 1, scale = 1/rate,
+            order = 1)
+mgfinvgamma(x, shape, rate =1, scale = 1/rate, log =FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}

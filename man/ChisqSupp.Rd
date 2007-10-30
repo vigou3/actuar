@@ -10,9 +10,9 @@
   of freedom and optional non-centrality parameter \code{ncp}.
 }
 \usage{
-  mchisq(order, df, ncp = 0)
-  levchisq(limit, df, ncp = 0, order = 1)
-  mgfchisq(x, df, ncp = 0, log= FALSE)
+mchisq(order, df, ncp = 0)
+levchisq(limit, df, ncp = 0, order = 1)
+mgfchisq(x, df, ncp = 0, log= FALSE)
 }
 \arguments{
   \item{order}{order of the moment.}
