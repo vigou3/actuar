@@ -14,18 +14,34 @@
 
 #include <R.h>
 #include <Rinternals.h>
+#include <R_ext/Memory.h>
 #include "actuar.h"
 #include "locale.h"
-
 
 static Rboolean randomphtype2(double (*f)(), double *a, double *b,
 			      int na, double *x, int n)
 {
-    int i;
+    int i, j;
+    double *rates, **Q;
     Rboolean naflag = FALSE;
+
+    /* The sub-intensity matrix and initial probability vector never
+     * change, so compute the transition matrix of the Markov chain
+     * and the vector of rate parameters before looping. */
+    rates = (double *) R_alloc(na, sizeof(double));
+    Q = (double *) R_alloc(na, sizeof(double));
+    for (i = 0; i < na; i++)
+    {
+	Q[i] = (double *) S_alloc(na, sizeof(double));
+	rates[i] = -b[i * (na + 1)];
+	for (j = 0; j < na; j++)
+	    if (i != j)
+		Q[i][j] = b[i + j * na] / rates[i];
+    }
+
     for (i = 0; i < n; i++)
     {
-	x[i] = f(a, b, na);
+	x[i] = f(a, Q, rates, na);
 	if (!R_FINITE(x[i])) naflag = TRUE;
     }
     return(naflag);
@@ -67,20 +83,22 @@ SEXP do_randomphtype2(int code, SEXP args)
     }
 
     /* Sanity checks of arguments. */
-    bdims = getAttrib(CADDR(args), R_DimSymbol);
+    PROTECT(a = coerceVector(CADR(args), REALSXP));
+    PROTECT(b = coerceVector(CADDR(args), REALSXP));
+    bdims = getAttrib(b, R_DimSymbol);
     nrow = INTEGER(bdims)[0];
     ncol = INTEGER(bdims)[1];
     if (nrow != ncol)
 	error(_("non-square transition matrix"));
-    na = LENGTH(CADR(args));
-    nb = LENGTH(CADDR(args));
+    na = LENGTH(a);
+    nb = LENGTH(b);
     if (na != nrow)
 	error(_("non-conformable arguments"));
 
     /*  If length of parameters < 1, or either of the two parameters
      *  is NA return NA. */
     if (na < 1 ||
-	(na == 1 && !(R_FINITE(CADR(args)[0]) && R_FINITE(CADDR(args)[0]))))
+	(na == 1 && !(R_FINITE(REAL(a)[0]) && R_FINITE(REAL(b)[0]))))
     {
 	for (i = 0; i < n; i++)
 	    REAL(x)[i] = NA_REAL;
@@ -88,8 +106,6 @@ SEXP do_randomphtype2(int code, SEXP args)
     /* Otherwise, dispatch to appropriate r* function */
     else
     {
-	PROTECT(a = coerceVector(CADR(args), REALSXP));
-	PROTECT(b = coerceVector(CADDR(args), REALSXP));
 	naflag = FALSE;
 	GetRNGstate();
 	switch (code)
@@ -101,9 +117,8 @@ SEXP do_randomphtype2(int code, SEXP args)
 	if (naflag)
 	    warning(R_MSG_NA);
 	PutRNGstate();
-	UNPROTECT(2);
     }
-    UNPROTECT(1);
+    UNPROTECT(3);
     return x;
 }
 

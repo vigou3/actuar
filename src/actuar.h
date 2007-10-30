@@ -24,22 +24,15 @@ SEXP do_randomphtype(SEXP args);
 SEXP do_randomphtype2(int code, SEXP args);
 
 
-//compute the matrix exponential in the general case
-SEXP calcMatExpGen (SEXP x, SEXP u, SEXP T, SEXP v);
-
-//phase-type random generator
-SEXP randphasetype( SEXP n, SEXP pi, SEXP T, SEXP m);
-//utility function of phase-type random generator
-double genDiscretVariable(int dim, double *prob, double *value );
-double genErlangVariable(int n, double rate);
-
-
 /* Utility functions */
 /*   Matrix algebra */
 void expm(double *x, int n, double *z);
 double expmprod(double *x, double *M, double *y, int n);
 void matpow(double *x, int n, int k, double *z);
 void solve(double *A, double *B, int n, int p, double *z);
+
+/*   Sampling */
+int SampleSingleValue(int n, double *p);
 
 /*   One parameter distributions, hence associated with dpq1 */
 double mexp(double order, double scale, int give_log);
@@ -198,11 +191,11 @@ double mtrbeta(double order, double shape1, double shape2, double shape3, double
 double levtrbeta(double limit, double shape1, double shape2, double shape3, double scale, double order, int give_log);
 
 /*   Phase-type distributions */
-double dphtype(double x, double *alpha, double *S, int m, int give_log);
-double pphtype(double x, double *alpha, double *S, int m, int lower_tail, int log_p);
-double rphtype(double *alpha, double *S, int m);
-double mphtype(double order, double *alpha, double *S, int m, int give_log);
-double mgfphtype(double x, double *alpha, double *S, int m, int give_log);
+double dphtype(double x, double *pi, double *T, int m, int give_log);
+double pphtype(double x, double *pi, double *T, int m, int lower_tail, int log_p);
+double rphtype(double *pi, double **Q, double *rates, int m);
+double mphtype(double order, double *pi, double *T, int m, int give_log);
+double mgfphtype(double x, double *pi, double *T, int m, int give_log);
 
 
 /* Definitions for the table linking the first group of functions to

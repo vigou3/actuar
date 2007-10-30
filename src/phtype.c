@@ -10,7 +10,7 @@
 #include <R.h>
 #include <Rmath.h>
 #include <Rinternals.h>
-#include <Rdefines.h>
+#include <R_ext/Memory.h>
 #include "actuar.h"
 #include "locale.h"
 #include "dpq.h"
@@ -74,212 +74,42 @@ double pphtype(double q, double *pi, double *T, int m, int lower_tail,
     return R_DT_Cval(expmprod(pi, tmp, e, m));
 }
 
-double rphtype(double *pi, double *T, int m)
+double rphtype(double *pi, double **Q, double *rates, int m)
 {
-    int i, j, currentState, state, nbjump;
-    int is2ptdistr = 0;		/* is two point distribution */
-    int indexmassvalue = 0; /* index such that probstate[indexmassvalue]=1 */
-    int mplus1 = m + 1;
-    double currentrowsum = 0.0;
-    double z;
+    /* Algorithm based on Neuts, M. F. (1981), "Generating random
+     * variates from a distribution of phase type", WSC '81:
+     * Proceedings of the 13th conference on Winter simulation, IEEE
+     * Press, <http://portal.acm.org/citation.cfm?id=802607&coll=portal&dl=ACM#>
+     */
 
-    /* arrays */
-    double *t = (double *) S_alloc(m, sizeof(double)); /* initialized to 0 */
-    int *nbvisit = (int *) R_alloc(mplus1, sizeof(int)); /*vector of visit number of the Markov chain*/
-    double *probstate = (double *) R_alloc(m, sizeof(double)); /*associated probability vector of state 'state'*/
-    double *valstate = (double *) R_alloc(m, sizeof(double)); /*associated value vector of state 'state'*/
-    /* transition matrix Qhat (a (m+1)x(m+1) matrix) and its associated temporary variables */
-    double *Qhat = (double *) R_alloc(mplus1 * mplus1, sizeof(double)); /*transition matrix Q^*/
-    double *exitrate = (double *) R_alloc(mplus1, sizeof(double)); /* exit rates */
+    int i, j, state, *nvisits;
+    double z = 0.0;
 
-    /* Build vector t (equal to minus the row sums of matrix T) */
+    nvisits = (int *) S_alloc(m, sizeof(int));
+
+    /* Simulate initial state according to vector pi (transient states
+     * are numbered 0, ..., m - 1 and absorbing state is numbered
+     * m. See the definition of SampleSingleValue() to see why this
+     * works fine here and below. */
+    state = SampleSingleValue(m, pi);
+
+    /* Simulate the Markov chain using transition matrix Q while
+     * counting the number of visits in each transient state.  */
+    while (state != m)
+    {
+	nvisits[state]++;
+	state = SampleSingleValue(m, Q[state]);
+    }
+
+    /* Variate is the sum of as many exponential variates as there are
+     * visits in each state, with the rate parameter varying per
+     * state. */
     for (i = 0; i < m; i++)
-	for (j = 0; j < m; j++)
-	    t[i] -= T[i + j * m];
-
-    /* special case where T is 1x1 matrix */
-    if(m == 1)
-    {
-	double rate = -T[0];
-	return exp_rand() / rate;
-    }
-
-    /* initialize Qhat :
-     * i row index, j column index */
-    for(i = 0; i < mplus1; i++)
-    {
-	exitrate[i] = 0.0; //reset
-
-	/* compute the ith row of intensity matrix Q */
-	for(j = 0; j < mplus1; j++)
-	{
-	    if(i == 0)
-		Qhat[j + i * mplus1] = 0.0;
-	    if(i > 0 && j == 0)
-		Qhat[j + i * mplus1] = t[i-1];
-	    if(i > 0 && j > 0)
-		Qhat[j + i * mplus1] = T[i-1 + (j-1) * m]; /* warning: T is stored column by column */
-	    if(i != j)
-		exitrate[i] += Qhat[j + i * mplus1];
-	}
-
-	if(exitrate[i] + Qhat[i + i * mplus1] != 0)
-	    error(_("T must be a sub intensity matrix"));
-
-	/* compute the ith row of transition matrix Qhat */
-	if(i > 0)
-	{
-	    if(exitrate[i] == 0)
-		error(_("T must be a sub intensity matrix"));
-
-	    currentrowsum = 0;
-	    for(j = 0; j < mplus1; j++)
-	    {
-		/* divide the non diagonal term by the exitrate of
-		   state i and set to 0 the diagonal term */
-		if(j < mplus1-1 && i < mplus1-1)
-		{
-		    if(i != j)
-			Qhat[j + i * mplus1] /= exitrate[i];
-		    else
-			Qhat[j + i * mplus1] = 0.0;
-		}
-		/* to avoide numerical errors, set the last term of each
-		   column such that the rowsum is equal to 1 */
-		if(j == mplus1-1 && i < mplus1-1)
-		{
-		    Qhat[j + i * mplus1] = 1 - currentrowsum;
-		}
-		/* special case of the last line */
-		if(i == mplus1-1)
-		{
-		    if(j < mplus1-2)
-			Qhat[j + i * mplus1] /= exitrate[i];
-		    if(j == mplus1-2)
-			Qhat[j + i * mplus1] = 1 - currentrowsum;
-		    if(j == mplus1-1)
-			Qhat[j + i * mplus1] = 0.0;
-		}
-
-		currentrowsum += Qhat[j + i * mplus1];
-	    }
-	}
-    }
-
-    nbjump = 0;
-
-    /* phase type simulation algorithm simulates the underlying
-     * markov chain on space {0,1,...,m}, with 0 the absorbing
-     * state and Qhat the transition matrix */
-
-    z = 0.0;
-
-    /* init the vector nbvisit counting the number of visits of
-     * the markov chain. nbvisit[j] is defined as the visit
-     * number in state 'j' */
-    for(j = 0; j < mplus1; j++)
-	nbvisit[j] = 0;
-
-    /* choose the initial state in {1,...,m} according to vector Pi */
-    /* init the probstate vector */
-    for(j = 0; j < m; j++)
-	probstate[j] = pi[j];
-    /* cumsum vector probstate */
-    for(j = 1; j < m; j++)
-	probstate[j] += probstate[j-1];
-    /* set the last mass prob value to 1 */
-    if(probstate[m-1] != 1)
-	probstate[m-1] = 1;
-    /* set valstate vector to {1,...,m} */
-    for(j = 0; j < m; j++)
-	valstate[j] = j+1;
-
-    /* check if probstate is a two point distribution and set
-     * indexmassvalue such that probstate[indexmassvalue] = 1.
-     * typically, two point distribution appears with Erlang
-     * distribution */
-    is2ptdistr = (probstate[0] == 1) || (probstate[0] == 0);
-    indexmassvalue = 0;
-    for(j = 0; j < m; j++)
-    {
-	if(probstate[j] == 1 )
-	{
-	    indexmassvalue = j;
-	    break;
-	}
-	else
-	    is2ptdistr *= (probstate[j] == 0);
-    }
-    /* simulate the initial state */
-    if(is2ptdistr)
-	currentState = (int) genDiscretVariable(1, probstate+indexmassvalue, valstate+indexmassvalue);
-    else
-	currentState = (int) genDiscretVariable(m, probstate, valstate );
-
-    /* simulate the Markov chain */
-    while(currentState != 0)
-    {
-	/* increment the visit number */
-	nbvisit[currentState]++;
-
-	/* extract the probability vector associated with 'currentState'.
-	 * currentState is the row index, j the column index of transition
-	 * matrix Qhat */
-	for(j = 0; j < mplus1; j++)
-	{
-	    if(currentState > j)
-	    {
-		valstate[j] = j;
-		probstate[j] = Qhat[j + currentState * mplus1];
-		if(j > 0)
-		    probstate[j] += probstate[j-1];
-	    }
-	    if(currentState < j)
-	    {
-		valstate[j-1] = j;
-		probstate[j-1] = Qhat[j + currentState * mplus1];
-		if(j > 1)
-		    probstate[j-1] += probstate[j-2];
-	    }
-	}
-
-
-	/* check if probstate is a two point distribution */
-	is2ptdistr = (probstate[0] == 1) || (probstate[0] == 0);
-	indexmassvalue = 1;
-	for(j = 0; j < m; j++)
-	{
-	    if(probstate[j] == 1 )
-	    {
-		indexmassvalue = j;
-		break;
-	    }
-	    else
-		is2ptdistr *= (probstate[j] == 0);
-	}
-
-	/* change state */
-	if(is2ptdistr)
-	    currentState = (int) genDiscretVariable(1, probstate+indexmassvalue, valstate+indexmassvalue );
-	else
-	    currentState = (int) genDiscretVariable(m, probstate, valstate );
-
-	nbjump++;
-    }
-
-
-    /* simulate the visit duration of the markov process in the
-     * visited states of space {1,...,m} (0 is excluded since it
-     * is the absorbing state). */
-    for(state = 1; state < mplus1; state++)
-    {
-	if(nbvisit[state] > 0)
-	    z += genErlangVariable(nbvisit[state], exitrate[state]);
-    }
+	for (j = 0; j < nvisits[i]; j++)
+	    z += exp_rand() / rates[i];
 
     return z;
 }
-
 
 double mphtype(double order, double *pi, double *T, int m, int give_log)
 {
