@@ -69,7 +69,7 @@ double pphtype(double q, double *pi, double *T, int m, int lower_tail,
      *  for x > 0, where e a 1-vector, and 1 - pi * e for x = 0.
      */
 
-    if (q <= 0.0)
+    if (q < 0.0)
 	return R_DT_0;
 
     if (q == 0.0)
