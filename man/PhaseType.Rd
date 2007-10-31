@@ -34,23 +34,24 @@ mgfphtype(x, prob, rates, log = FALSE)
 }
 \details{
   The phase-type distribution with parameters \code{prob} \eqn{= \pi}{=
-    pi} and \code{rates} \eqn{= T} has density:%
-  \deqn{f(x) = \pi e^{T x} t}{f(x) = pi \%*\% exp(T * x) \%*\% t}% 
-  for \eqn{x > 0} and \eqn{f(0) = 1 - \pi e}{f(0) = 1 - pi \%*\% e},
-  where \eqn{e} is a column vector with all components equal to one,
-  \eqn{t = -T e}{t = -T \%*\% e} is the exit rates vector and
-  \eqn{e^{Tx}}{exp(T * x)} denotes the matrix exponential of \eqn{Tx}{T
-    * x}. The parameters must satisfy \eqn{\pi e \leq 1}{pi \%*\% e <=
-    1}, \eqn{T_{ii} < 0}{T[i, i] < 0}, \eqn{T_{ij} \geq 0}{T[i, j] >= 0}
-  and \eqn{Te \leq 0}{T \%*\% e <= 0}.
+    pi} and \code{rates} \eqn{= \mathbf{T}}{= T} has density:%
+  \deqn{f(x) = \pi e^{\mathbf{T} x} \mathbf{t}}{%
+    f(x) = pi \%*\% exp(T * x) \%*\% t}% 
 
-  If the value of \code{prob} do no sum to one, the distribution is
-  mixed with an atom of \code{1 - sum(prob)} at \code{x = 0}.
-
-  The matrix exponential of a matrix \eqn{M} is defined as the
-  Taylor series%
-  \deqn{e^M = \sum_{n = 0}^{\infty} \frac{M^n}{n!}.}{%
+  for \eqn{x > 0} and \eqn{f(0) = 1 - \pi \mathbf{e}}{f(0) = 1 - pi
+    \%*\% e}, where \eqn{\mathbf{e}}{e} is a column vector with all
+    components equal to one, \eqn{\mathbf{t} = -\mathbf{T} \mathbf{e}}{t
+    = -T \%*\% e} is the exit rates vector and
+  \eqn{e^{\mathbf{T}x}}{exp(T * x)} denotes the matrix exponential of
+  \eqn{\mathbf{T}x}{T * x}. The matrix exponential of a matrix
+  \eqn{\mathbf{M}}{M} is defined as the Taylor series%
+  \deqn{e^\mathbf{M} = \sum_{n = 0}^{\infty} \frac{\mathbf{M}^n}{n!}.}{%
     exp(M) = sum(n = 0:Inf; (M^n)/(n!)).}
+
+  The parameters of the distribution must satisfy \eqn{\pi \mathbf{e}
+    \leq 1}{pi \%*\% e <= 1}, \eqn{\mathbf{T}_{ii} < 0}{T[i, i] < 0},
+  \eqn{\mathbf{T}_{ij} \geq 0}{T[i, j] >= 0} and \eqn{\mathbf{T}
+    \mathbf{e} \leq 0}{T \%*\% e <= 0}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the moment generating function is
