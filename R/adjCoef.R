@@ -10,8 +10,8 @@
 ###
 ### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
-                    reinsurance = c("none", "proportional", "excess-of-loss"),
+adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
+                    h, reinsurance = c("none", "proportional", "excess-of-loss"),
                     from, to, n = 101)
 {
     reinsurance <- match.arg(reinsurance)
@@ -75,7 +75,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
                     stop("'mgf.wait' must be a function or an expression containing 'x'")
                 mgfw <- smgfw
             }
-            h <- function(x) eval(mgfx) * eval(mgfw, list(x = -x * premium))
+            h <- function(x) eval(mgfx) * eval(mgfw, list(x = -x * premium.rate))
         }
 
         f <- function(r) (h(r) - 1)^2
@@ -113,8 +113,8 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
     }
     else
     {
-        if (!is.function(premium))
-            stop("'premium' must be a function when using reinsurance")
+        if (!is.function(premium.rate))
+            stop("'premium.rate' must be a function when using reinsurance")
 
         smgfx <- substitute(mgf.claim)
         if (is.name(smgfx))
@@ -140,20 +140,20 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
                 stop("'mgf.wait' must be a function or an expression containing 'x'")
             mgfw <- smgfw
         }
-        spremium <- substitute(premium)
+        spremium <- substitute(premium.rate)
         if (is.name(spremium))
         {
             fcall <- paste(spremium, "(y)")
-            premium <- parse(text = fcall)
+            premium.rate <- parse(text = fcall)
         }
         else
         {
             if (!(is.call(spremium) && match("y", all.vars(spremium), nomatch = 0)))
-                stop("'premium' must be a function or an expression containing 'y'")
-            premium <- spremium
+                stop("'premium.rate' must be a function or an expression containing 'y'")
+            premium.rate <- spremium
         }
 
-        h <- function(x, y) eval(mgfx) * eval(mgfw, list(x = -x * eval(premium)))
+        h <- function(x, y) eval(mgfx) * eval(mgfw, list(x = -x * eval(premium.rate)))
     }
 
     f <- function(x, y) (h(x, y) - 1)^2

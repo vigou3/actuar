@@ -213,8 +213,9 @@ cm(formula, data, ratios, weights, subset, xreg = NULL,
   \enc{Bühlmann}{Buhlmann}, H. and Gisler, A. (2005), \emph{A course in
   credibility theory and its applications}, Springer.
 
-  Goulet, V. (1998), \emph{Principles and Application of Credibility
-    Theory}, Journal of Actuarial Practice, Volume 6, ISSN 1064-6647.
+  Goulet, V. (1998), Principles and Application of Credibility
+  Theory, \emph{Journal of Actuarial Practice} \bold{6}, ISSN
+  1064-6647.
   
   Goovaerts, M. J. and Hoogstad, W. J. (1987), \emph{Credibility Theory},
   Surveys of Actuarial Studies, NO.4, Nationale-Nederlanden N.V.

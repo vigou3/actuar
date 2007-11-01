@@ -8,8 +8,8 @@
   retentions.
 }
 \usage{
-adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
-        reinsurance = c("none", "proportional", "excess-of-loss"),
+adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
+        h, reinsurance = c("none", "proportional", "excess-of-loss"),
         from, to, n = 101)
 
 \method{plot}{adjCoef}(x, xlab = "x", ylab = "R(x)",
@@ -23,10 +23,10 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
     distribution.}
   \item{mgf.wait}{an expression written as a function of \code{x}, or
     alternatively the name of a function, giving the mgf of the
-    claim inter-occurence time distribution. Defaults to an exponential
+    claims interarrival time distribution. Defaults to an exponential
     distribution with parameter 1.}
-  \item{premium}{if \code{reinsurance = "none"}, a numeric value of the
-    premium rate; otherwise, an expression written as a function of
+  \item{premium.rate}{if \code{reinsurance = "none"}, a numeric value of
+    the premium rate; otherwise, an expression written as a function of
     \code{y}, or alternatively the name of a function, giving the
     premium rate function.}
   \item{upper.bound}{numeric; an upper bound for the coefficient,
@@ -54,13 +54,13 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium, upper.bound, h,
 \details{
   In the typical case \code{reinsurance = "none"}, the coefficient of
   determination is the smallest (strictly) positive root of the Lundberg
-  equation
-  \deqn{h(x) = E[e^{x B - x c W}] = 1}{h(x) = E[exp(x B - x c W)] = 1}
+  equation%
+  \deqn{h(x) = E[e^{x B - x c W}] = 1}{h(x) = E[exp(x B - x c W)] = 1}%
   on \eqn{[0, m)}, where \eqn{m =} \code{upper.bound}, \eqn{B} is the
-  claim severity random variable, \eqn{W} is the claim inter-occurence
-  (or wait) time random variable and \eqn{c =} \code{premium} is the
-  premium rate. The premium rate must satisfy the positive safety
-  loading constraint \eqn{E[B - c W] < 0}.
+  claim severity random variable, \eqn{W} is the claim interarrival
+  (or wait) time random variable and \eqn{c =} \code{premium.rate}. The
+  premium rate must satisfy the positive safety loading constraint
+  \eqn{E[B - c W] < 0}.
 
   With \code{reinsurance = "proportional"}, the equation becomes
   \deqn{h(x, y) = E[e^{x y B - x c(y) W}] = 1,}{%

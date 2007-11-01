@@ -1,76 +1,131 @@
 \name{ruin}
 \alias{ruin}
-\title{Ruin Theory}
+\title{Probability of Ruin}
 \description{
-	Compute the infinite time ruin probability in the model
-	of Cramér-Lundberg or Sparre Andersen, using the results
-	of Gerber-Dufresnes (1988) and Asmussen-Rolski (1991).
+  Calulation of infinite time probability of ruin in the models of
+  \enc{Cramér}{Cramer}-Lundberg and Sparre Andersen, that is with
+  exponential or phase-type (including mixtures of exponentials, Erlang
+  and mixture of Erlang) claims interarrival time.
 }
 \usage{
-ruin(model="CramerLundberg",param,premRate)
+ruin(claims = c("exponential", "Erlang", "phase-type"), par.claims,
+     wait = c("exponential", "Erlang", "phase-type"), par.wait,
+     premium.rate = 1, tol = sqrt(.Machine$double.eps),
+     maxit = 200, echo = FALSE)
 }
 \arguments{
-	\item{model}{a string indicating the model used, either Cramér-Lundberg (default value) or
-	Sparre Andersen}
-	\item{param}{a list with the following components: either \code{lambda}, \code{pi}, \code{T} and
-	 \code{m} in the Cramér-Lundberg model or \code{nu}, \code{S}, \code{n}, \code{pi}, \code{T}, 
-	 \code{m} in the Sparre Andersen model; where \code{lambda} is the Poisson process parameter
-	 (of the claim arrival process), \code{pi,T,m} the parameters of the claim size phase-type distribution and
-	 \code{nu,S,n} the parameters of the inter-occurence times phase-type distribution}
-	 \item{premRate}{the premium rate (which must respect the positive safety loading constraint)}
+  \item{claims}{character; the type of claim severity distribution.}
+  \item{wait}{character; the type of claim interarrival (wait) time
+    distribution.}
+  \item{par.claims, par.wait}{named list containing the parameters of
+    the distribution (see details).}
+  \item{premium.rate}{numeric vector of length 1; the premium rate.}
+  \item{tol, maxit, echo}{respectively the tolerance level of the
+    stopping criteria, the maximum number of iterations and whether or
+    not to echo the procedure when the transition rates matrix is
+    determined iteratively. Ignored if \code{wait = "exponential"}.}
 }
 \details{
-TODO
+  The names of the parameters in \code{par.claims} and \code{par.wait}
+  must the same as in \code{\link[stats]{dexp}},
+  \code{\link[stats]{dgamma}} or \code{\link{dphtype}}, as appropriate.
+  A model will be a mixture of exponential or Erlang distributions (but
+  not phase-type) when the parameters are vectors of length \eqn{> 1}
+  and the parameter list contains a vector \code{weights} of the
+  coefficients of the mixture.
+
+  Parameters are recycled when needed. Their names can be abbreviated.
+
+  Combinations of exponentials as defined in Dufresne and Gerber (1988)
+  are \emph{not} supported.
+  
+  There is an explicit formula for the probability of ruin only when
+  both distributions are exponential. All other cases are evaluated
+  using \code{\link{pphtype}}.
+  
+  When \code{wait != "exponential"}, the transition rate matrix of the
+  distribution of the probability of ruin is determined iteratively
+  using a fixed point-like algorithm. The stopping criteria used is%
+  \deqn{\max \left\{\sum_{j = 1}^n |Q_{ij} - Q_{ij}^\prime| \right\} < \code{tol},}{%
+    max(rowSum(|Q - Q'|)) < tol,}%
+  where \eqn{Q} and \eqn{Q^\prime}{Q'} are two successive values of the
+  matrix.
 }
 \value{
-Function \code{ruinProb} computes the ruin probability and returns the ruin probability
-as a function of one parameter, the initial capital.
+  A function to compute the probability of ruin given initial surplus
+  levels. The function has arguments:
+  \item{u}{numeric vector of initial surplus levels;}
+  \item{survival}{logical; if \code{FALSE} (default), probabilities are
+    \eqn{\psi(u)}{psi(u)}, otherwise, \eqn{\phi(u) = 1 - \psi(u)}{phi(u)
+      = 1 - psi(u)};}
+  \item{lower.tail}{an alias for \code{!survival}.}
 }
 \references{
-Asmussen, S. and Rolski, T. (1991). \emph{Computational methods in risk theory:
-A matrix algorithmic approach}. Insurance: Mathematics and Economics, 10:259-274
+  Asmussen, S. and Rolski, T. (1991), Computational methods in risk theory:
+  A matrix algorithmic approach, \emph{Insurance: Mathematics and
+    Economics} \bold{10}, 259--274.
 
-Gerber, H. U. and Dufresnes, F. (1991). \emph{Three methods to calculate the probability
-of ruin}. Astin Bull., 19(1):71-90	
+  Dufresne, F. and Gerber, H. U. (1988), Three methods to calculate
+  the probability of ruin, \emph{Astin Bulletin} \bold{19}, 71--90.
+
+  Gerber, H. U. (1979), \emph{An Introduction to Mathematical Risk
+    Theory}, Huebner Foundation.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
   and Christophe Dutang
 }
 \examples{
-\dontrun{
-## Cramer Lundberg - exponential claim sizes
-    resExpPsi <- ruin("CramerLundberg", list( lambda=3 ,pi=1, T=-2, m=1),  1.1*3/2)
+## Case with an explicit formula: exponential claims and exponential
+## interarrival times.
+psi <- ruin(claims = "e", par.claims = list(rate = 5),
+            wait   = "e", par.wait   = list(rate = 3))
+psi
+psi(0:10)
+curve(psi(x), xlim = c(0, 10))
 
-    gridU <- seq(0,5/2,length.out=100) #vector of initial capitals
-    resExp <- resExpPsi(gridU)
+## Example of Gerber (1979): mixture of two exponentials for claims,
+## exponential interarrival times
+psi <- ruin(claims = "e", par.claims = list(rate = c(3, 7), w = 0.5),
+            wait   = "e", par.wait   = list(rate = 3), pre = 1)
+u <- 0:10
+psi(u)
+(24 * exp(-u) + exp(-6 * u))/35	# same
 
-## Cramer Lundberg - mixture of 3 exponential or hyper-exponential claim sizes
-## E(1), E(3) and E(6) with respective weights 1/3, 1/2, 1/6
-    Lambda <- 3
-    matT <- array(c(-1,0,0,0,-3,0,0,0,-6),c(3,3))
-    weight <- c(1/3,1/2,1/6)
-    beta <- c(1,3,6)
-    premiumRate <- sum(weight/beta)*Lambda*1.1
-        
-    resMixExpPsi <- ruin("CramerLundberg", list( lambda=Lambda ,pi=weight, T=matT, m=3), premiumRate)
+## Figure 3 of Asmussen & Rolski (1992) - Phase-type claims
+## and exponential interarrival times
+##
+## (Small differences within numerical error margin)
+prob.B1 <- c(0.5614, 0.4386)
+rates.B1 <- matrix(c(-8.64, 0.101, 1.997, -1.095), 2, 2)
+lambda1 <- 1/(1.1 * mphtype(1, prob.B1, rates.B1))
 
-    gridU <- seq(0,5*sum(weight/beta),length.out=100)#vector of initial capitals
-    resMixExp <- resMixExpPsi(gridU)
+prob.B2 <- c(0.9731, 0.0152, 0.0106, 0.001)
+rates.B2 <- matrix(c(-28.648,  0.102,  0.113,  0.100,
+                      28.532, -8.255,  0.107,  0.102,
+                       0.089,  8.063, -5.807,  0.111,
+                       0.027,  0.086,  5.296, -2.176), 4, 4)
+lambda2 <- 1/(1.1 * mphtype(1, prob.B2, rates.B2))
 
-## Sparre Andersen - Dickson (1992) numerical applications
-## Dickson, D. (1992). On the distribution of surplus prior to ruin. North American Actuarial Journal
-    S <-array(c(-1,0,0,1,-1,0,0,1,-1),c(3,3))
-    probnu <- c(.4,.2,.4)
-    
-    matT <- array(c(-1,0,0,0,1,-3,0,0,0,3,-2,0,0,0,2,-4),c(4,4))
-    probpi <- c(.2,.3,.4,.1)    
+f0 <- ruin(claims = "e", par.claims = list(rate = 1),
+           wait   = "e", par.wait   = list(rate = 1/1.1))
+f1 <- ruin(claims = "p", par.claims = list(prob = prob.B1, rates = rates.B1),
+           wait   = "e", par.wait   = list(rate = lambda1))
+f2 <- ruin(claims = "p", par.claims = list(prob = prob.B2, rates = rates.B2),
+           wait   = "e", par.wait   = list(rate = lambda2))
 
-    resErlangPsi <- ruin("SparreAndersen", 
-    		 list( pi=probpi,T=matT,m=length(probpi),nu=probnu,S=S,n=length(probnu) ), 1)
-    
-    gridU <- seq(0,5*16/15,length.out=100)
-    resErlang <- resErlangPsi(gridU)
-}
+curve(f0, xlim = c(0, 50), ylim = c(1E-4, 1), log = "y")
+curve(f1, add = TRUE, col = "blue")
+curve(f2, add = TRUE, col = "orange")
+
+## Example of p. 266 of Asmussen & Rolski (1992) - Phase-type claims
+## and mixture of two exponentials for interarrival times
+##
+## (Somewhat larger differences than above, but still reasonable to
+## point at different numerical methods)
+ruin(claims = "p", par.claims = list(prob = prob.B1, rates = rates.B1),
+     wait   = "e", par.wait   = list(rate = c(5, 1), weights = c(0.4, 0.6)), pre = 1)
+
+
 }
 \keyword{models}
