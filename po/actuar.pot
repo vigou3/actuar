@@ -1,12 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2007-04-19 23:47-0400\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-11-04 22:30-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,35 +16,44 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: dpq.c:71 dpq.c:194 dpq.c:368 dpq.c:549 dpq.c:720 random.c:61 random.c:68
-#: random.c:142 random.c:149 random.c:236 random.c:243 random.c:330
-#: random.c:337
+#: dpq.c:73 dpq.c:198 dpq.c:383 dpq.c:567 dpq.c:738 dpqphtype.c:49 random.c:61
+#: random.c:68 random.c:142 random.c:149 random.c:236 random.c:243
+#: random.c:330 random.c:337 randomphtype.c:66 randomphtype.c:73
 msgid "invalid arguments"
 msgstr ""
 
-#: dpq.c:103 dpq.c:232 dpq.c:411 dpq.c:598 dpq.c:774 random.c:101 random.c:192
-#: random.c:284 random.c:377
-msgid "NAs produced"
-msgstr ""
-
-#: dpq.c:163
+#: dpq.c:166
 msgid "internal error in do_dpq1"
 msgstr ""
 
-#: dpq.c:335
+#: dpq.c:350
 msgid "internal error in do_dpq2"
 msgstr ""
 
-#: dpq.c:512
+#: dpq.c:530
 msgid "internal error in do_dpq3"
 msgstr ""
 
-#: dpq.c:684
+#: dpq.c:702
 msgid "internal error in do_dpq4"
 msgstr ""
 
-#: dpq.c:817
+#: dpq.c:835
 msgid "internal error in do_dpq5"
+msgstr ""
+
+#: dpqphtype.c:168
+msgid "internal error in do_dpqphtype2"
+msgstr ""
+
+#: hierarc.c:100
+msgid "maximum number of iterations reached before obtaining convergence"
+msgstr ""
+
+#: panjer.c:69 panjer.c:112
+msgid ""
+"maximum number of recursions reached before the probability distribution was "
+"complete"
 msgstr ""
 
 #: random.c:98
@@ -63,4 +74,57 @@ msgstr ""
 
 #: random.c:405
 msgid "internal error in do_random"
+msgstr ""
+
+#: randomphtype.c:93
+msgid "non-square sub-intensity matrix"
+msgstr ""
+
+#: randomphtype.c:97
+msgid "non-conformable arguments"
+msgstr ""
+
+#: randomphtype.c:116
+msgid "internal error in do_randomphtype2"
+msgstr ""
+
+#: randomphtype.c:143
+msgid "internal error in do_randomphtype"
+msgstr ""
+
+#: util.c:102
+#, c-format
+msgid "LAPACK routine dgebal returned info code %d when permuting"
+msgstr ""
+
+#: util.c:106
+#, c-format
+msgid "LAPACK routine dgebal returned info code %d when scaling"
+msgstr ""
+
+#: util.c:153
+#, c-format
+msgid "LAPACK routine dgetrf returned info code %d"
+msgstr ""
+
+#: util.c:156
+#, c-format
+msgid "LAPACK routine dgetrs returned info code %d"
+msgstr ""
+
+#: util.c:262
+msgid "'A' is 0-diml"
+msgstr ""
+
+#: util.c:264
+msgid "no right-hand side in 'B'"
+msgstr ""
+
+#: util.c:275
+#, c-format
+msgid "argument %d of Lapack routine dgesv had invalid value"
+msgstr ""
+
+#: util.c:278
+msgid "Lapack routine dgesv: system is exactly singular"
 msgstr ""

@@ -4,12 +4,13 @@
 # This file is distributed under the same license as the actuar package.
 # Vincent Goulet <vincent@vgoulet.act.ulaval.ca>, 2007.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: actuar 0.9-1\n"
+"Project-Id-Version: actuar 0.9-4\n"
 "Report-Msgid-Bugs-To: bugs@r-project.org\n"
-"POT-Creation-Date: 2007-04-30 00:43\n"
-"PO-Revision-Date: 2007-04-30 00:45-0400\n"
+"POT-Creation-Date: 2007-11-04 23:30\n"
+"PO-Revision-Date: 2007-11-04 23:34-0500\n"
 "Last-Translator: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
 "Language-Team: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
 "MIME-Version: 1.0\n"
@@ -27,6 +28,31 @@ msgstr "seuls les indices logiques sont permis pour le remplacement"
 
 msgid "need 0, 1, or 2 subscripts"
 msgstr "il faut 0, 1 ou 2 indices"
+
+msgid "one of 'mgf.claim' or 'h' is needed"
+msgstr "l'une ou l'autre de 'mgf.claim' ou 'h' est requise"
+
+msgid "'h' must be a function or an expression containing 'x'"
+msgstr "'h' doit être une fonction ou une expression contenant 'x'"
+
+msgid "'mgf.claim' must be a function or an expression containing 'x'"
+msgstr "'mgf.claim' doit être une fonction ou une expression contenant 'x'"
+
+msgid "'mgf.wait' must be a function or an expression containing 'x'"
+msgstr "'mgf.wait' doit être une fonction ou une expression contenant 'x'"
+
+msgid "'h' must be a function or an expression containing 'x' and 'y'"
+msgstr "'h' doit être une fonction ou une expression contenant 'x'"
+
+msgid "'premium.rate' must be a function when using reinsurance"
+msgstr "'premium.rate' doit être une fonction en présence de réassurance"
+
+msgid "'mgf.claim' must be a function or an expression containing 'x' and 'y'"
+msgstr ""
+"'mgf.claim' doit être une fonction ou une expression contenant 'x' et 'y'"
+
+msgid "'premium.rate' must be a function or an expression containing 'y'"
+msgstr "'premium.rate' doit être une fonction ou une expression contenant 'y'"
 
 msgid "'moments' must supply the mean and variance of the distribution"
 msgstr "'moments' doit contenir la moyenne et la variance de la distribution"
@@ -52,7 +78,7 @@ msgstr ""
 "caractères"
 
 msgid "'model.freq' must be a vector of probabilities"
-msgstr "'model.freq doit être un vecteur de probabilités"
+msgstr "'model.freq' doit être un vecteur de probabilités"
 
 msgid "internal error"
 msgstr "erreur interne"
@@ -60,31 +86,35 @@ msgstr "erreur interne"
 msgid "missing ratios not allowed when weights are not supplied"
 msgstr "ratios manquants non permis lorsque les poids ne sont pas fournis"
 
-msgid ""
-"there must be at least one contract with more than one period of experience"
+msgid "there must be at least one node with more than one period of experience"
 msgstr ""
-"il y doit y avoir au moins un contrat avec plus d'une période d'expérience"
+"il y doit y avoir au moins un noeud avec plus d'une période d'expérience"
 
-msgid "there must be more than one contract"
-msgstr "il doit y avoir plus d'un contrat"
+msgid "there must be more than one node"
+msgstr "il doit y avoir plus d'un noeud"
 
 msgid "missing values are not in the same positions in weights and in ratios"
 msgstr ""
 "les données manquantes ne sont pas aux mêmes positions dans les poids et "
 "dans les ratios"
 
+msgid "no available data to fit model"
+msgstr "aucune donnée disponible pour la modélisation"
+
+msgid "maximum number of iterations reached before obtaining convergence"
+msgstr "nombre d'itérations maximal atteint avant obtention de la convergence"
+
+msgid "this output format is deprecated"
+msgstr "cette présentation des résultats est obsolète"
+
 msgid "unsupported interactions in 'formula'"
 msgstr "interactions non supportées dans 'formula'"
 
+msgid "hierarchical regression models not supported"
+msgstr "modèles de régression hiérarchiques non supportés"
+
 msgid "ratios have to be supplied if weights are"
 msgstr "ratios requis s'il y a des poids"
-
-msgid "there must be at least two nodes at every level"
-msgstr "il doit y avoir au moins deux noeuds à chaque niveau"
-
-msgid "there must be at least one node with more than one period of experience"
-msgstr ""
-"il y doit y avoir au moins un noeud avec plus d'une période d'expérience"
 
 msgid "invalid level name"
 msgstr "nom de niveau incorrect"
@@ -119,6 +149,12 @@ msgstr "nombre de bornes de groupe et de fréquences incorrect"
 msgid "missing frequencies replaced by zeros"
 msgstr "fréquences manquantes remplacées par des zéros"
 
+msgid "there must be at least two nodes at every level"
+msgstr "il doit y avoir au moins deux noeuds à chaque niveau"
+
+msgid "invalid level number"
+msgstr "numéro de niveau incorrect"
+
 msgid "infinite group boundaries"
 msgstr "bornes de groupe infinies"
 
@@ -150,8 +186,20 @@ msgstr "mesure \"LAS\" requiert un objet de classe \"grouped.data\""
 msgid "optimization failed"
 msgstr "l'optimisation a échoué"
 
+msgid "'p0' must be a valid probability (between 0 and 1)"
+msgstr "'p0' doit être une probabilité (entre 0 et 1)"
+
+msgid "value of 'lambda' missing"
+msgstr "valeur de 'lambda' manquante"
+
+msgid "value of 'prob' or 'size' missing"
+msgstr "valeur de 'prob' ou 'size' manquante"
+
 msgid "'p0' must be specified with the logarithmic distribution"
 msgstr "valeur de 'p0' requise pour la distribution logarithmique"
+
+msgid "value of 'prob' missing"
+msgstr "valeur de 'prob' manquante"
 
 msgid "frequency distribution not in the (a, b, 0) or (a, b, 1) families"
 msgstr ""
@@ -162,6 +210,60 @@ msgid "Pr[S = 0] is numerically equal to 0; impossible to start the recursion"
 msgstr ""
 "valeur de Pr[S = 0] numériquement nulle; impossible de démarrer le calcul "
 "récursif"
+
+msgid "'par.claims' must be a named list"
+msgstr "'par.claims' doit être une liste nommée"
+
+msgid "'par.wait' must be a named list"
+msgstr "'par.wait' doit être une liste nommée"
+
+msgid "parameters %s missing in 'par.claims'"
+msgstr "paramètres %s manquants dans 'par.claims'"
+
+msgid "parameter \"rate\" missing in 'par.claims'"
+msgstr "paramètre \"rate\" manquant dans 'par.claims'"
+
+msgid "parameter \"weights\" missing in 'par.claims'"
+msgstr "paramètre \"weights\" manquant dans 'par.claims'"
+
+msgid "parameter \"shape\" missing in 'par.claims'"
+msgstr "paramètre \"shape\" manquant dans 'par.claims'"
+
+msgid "parameter \"rate\" or \"scale\" missing in 'par.claims'"
+msgstr "paramètre \"rate\" ou \"scale\" manquant dans 'par.claims'"
+
+msgid "parameter \"prob\" missing in 'par.claims'"
+msgstr "paramètre \"prob\" manquant dans 'par.claims'"
+
+msgid "parameter \"rates\" missing in 'par.claims'"
+msgstr "paramètre \"rates\" manquant dans 'par.claims'"
+
+msgid "invalid parameters in 'par.claims'"
+msgstr "paramètres incorrects dans 'par.claims'"
+
+msgid "parameters %s missing in 'par.wait'"
+msgstr "paramètres %s manquants dans 'par.wait'"
+
+msgid "parameter \"rate\" missing in 'par.wait'"
+msgstr "paramètre \"rate\" manquant dans 'par.claims'"
+
+msgid "parameter \"weights\" missing in 'par.wait'"
+msgstr "paramètre \"weights\" manquant dans 'par.wait'"
+
+msgid "parameter \"shape\" missing in 'par.wait'"
+msgstr "paramètre \"shape\" manquant dans 'par.wait'"
+
+msgid "parameter \"rate\" or \"scale\" missing in 'par.wait'"
+msgstr "paramètre \"rate\" ou \"scale\" manquant dans 'par.wait'"
+
+msgid "parameter \"prob\" missing in 'par.wait'"
+msgstr "paramètre \"prob\" manquant dans 'par.wait'"
+
+msgid "parameter \"rates\" missing in 'par.wait'"
+msgstr "paramètre \"rates\" manquant dans 'par.wait'"
+
+msgid "invalid parameters in 'par.wait'"
+msgstr "paramètres incorrects dans 'par.wait'"
 
 msgid "'nodes' must be a named list"
 msgstr "'nodes' doit être une liste nommée"
@@ -180,3 +282,12 @@ msgstr "valeur de 'by' incorrecte"
 
 msgid "'x' must be a vector or a matrix"
 msgstr "'x' doit être un vecteur ou une matrice"
+
+#~ msgid "*** actuar internal error : Q is non diagonalisable ***"
+#~ msgstr " "
+
+#~ msgid ""
+#~ "there must be at least one contract with more than one period of "
+#~ "experience"
+#~ msgstr ""
+#~ "il y doit y avoir au moins un contrat avec plus d'une période d'expérience"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: R 2.3.0\n"
 "Report-Msgid-Bugs-To: bugs@r-project.org\n"
-"POT-Creation-Date: 2007-04-30 00:43\n"
+"POT-Creation-Date: 2007-11-04 23:30\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,30 @@ msgid "only logical matrix subscripts are allowed in replacement"
 msgstr ""
 
 msgid "need 0, 1, or 2 subscripts"
+msgstr ""
+
+msgid "one of 'mgf.claim' or 'h' is needed"
+msgstr ""
+
+msgid "'h' must be a function or an expression containing 'x'"
+msgstr ""
+
+msgid "'mgf.claim' must be a function or an expression containing 'x'"
+msgstr ""
+
+msgid "'mgf.wait' must be a function or an expression containing 'x'"
+msgstr ""
+
+msgid "'h' must be a function or an expression containing 'x' and 'y'"
+msgstr ""
+
+msgid "'premium.rate' must be a function when using reinsurance"
+msgstr ""
+
+msgid "'mgf.claim' must be a function or an expression containing 'x' and 'y'"
+msgstr ""
+
+msgid "'premium.rate' must be a function or an expression containing 'y'"
 msgstr ""
 
 msgid "'moments' must supply the mean and variance of the distribution"
@@ -50,25 +74,31 @@ msgstr ""
 msgid "missing ratios not allowed when weights are not supplied"
 msgstr ""
 
-msgid "there must be at least one contract with more than one period of experience"
+msgid "there must be at least one node with more than one period of experience"
 msgstr ""
 
-msgid "there must be more than one contract"
+msgid "there must be more than one node"
 msgstr ""
 
 msgid "missing values are not in the same positions in weights and in ratios"
 msgstr ""
 
+msgid "no available data to fit model"
+msgstr ""
+
+msgid "maximum number of iterations reached before obtaining convergence"
+msgstr ""
+
+msgid "this output format is deprecated"
+msgstr ""
+
 msgid "unsupported interactions in 'formula'"
 msgstr ""
 
+msgid "hierarchical regression models not supported"
+msgstr ""
+
 msgid "ratios have to be supplied if weights are"
-msgstr ""
-
-msgid "there must be at least two nodes at every level"
-msgstr ""
-
-msgid "there must be at least one node with more than one period of experience"
 msgstr ""
 
 msgid "invalid level name"
@@ -104,6 +134,12 @@ msgstr ""
 msgid "missing frequencies replaced by zeros"
 msgstr ""
 
+msgid "there must be at least two nodes at every level"
+msgstr ""
+
+msgid "invalid level number"
+msgstr ""
+
 msgid "infinite group boundaries"
 msgstr ""
 
@@ -134,13 +170,79 @@ msgstr ""
 msgid "optimization failed"
 msgstr ""
 
+msgid "'p0' must be a valid probability (between 0 and 1)"
+msgstr ""
+
+msgid "value of 'lambda' missing"
+msgstr ""
+
+msgid "value of 'prob' or 'size' missing"
+msgstr ""
+
 msgid "'p0' must be specified with the logarithmic distribution"
+msgstr ""
+
+msgid "value of 'prob' missing"
 msgstr ""
 
 msgid "frequency distribution not in the (a, b, 0) or (a, b, 1) families"
 msgstr ""
 
 msgid "Pr[S = 0] is numerically equal to 0; impossible to start the recursion"
+msgstr ""
+
+msgid "'par.claims' must be a named list"
+msgstr ""
+
+msgid "'par.wait' must be a named list"
+msgstr ""
+
+msgid "parameters %s missing in 'par.claims'"
+msgstr ""
+
+msgid "parameter \"rate\" missing in 'par.claims'"
+msgstr ""
+
+msgid "parameter \"weights\" missing in 'par.claims'"
+msgstr ""
+
+msgid "parameter \"shape\" missing in 'par.claims'"
+msgstr ""
+
+msgid "parameter \"rate\" or \"scale\" missing in 'par.claims'"
+msgstr ""
+
+msgid "parameter \"prob\" missing in 'par.claims'"
+msgstr ""
+
+msgid "parameter \"rates\" missing in 'par.claims'"
+msgstr ""
+
+msgid "invalid parameters in 'par.claims'"
+msgstr ""
+
+msgid "parameters %s missing in 'par.wait'"
+msgstr ""
+
+msgid "parameter \"rate\" missing in 'par.wait'"
+msgstr ""
+
+msgid "parameter \"weights\" missing in 'par.wait'"
+msgstr ""
+
+msgid "parameter \"shape\" missing in 'par.wait'"
+msgstr ""
+
+msgid "parameter \"rate\" or \"scale\" missing in 'par.wait'"
+msgstr ""
+
+msgid "parameter \"prob\" missing in 'par.wait'"
+msgstr ""
+
+msgid "parameter \"rates\" missing in 'par.wait'"
+msgstr ""
+
+msgid "invalid parameters in 'par.wait'"
 msgstr ""
 
 msgid "'nodes' must be a named list"
