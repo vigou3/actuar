@@ -37,7 +37,6 @@ mgfphtype(x, prob, rates, log = FALSE)
     pi} and \code{rates} \eqn{= \mathbf{T}}{= T} has density:%
   \deqn{f(x) = \pi e^{\mathbf{T} x} \mathbf{t}}{%
     f(x) = pi \%*\% exp(T * x) \%*\% t}% 
-
   for \eqn{x > 0} and \eqn{f(0) = 1 - \pi \mathbf{e}}{f(0) = 1 - pi
     \%*\% e}, where \eqn{\mathbf{e}}{e} is a column vector with all
     components equal to one, \eqn{\mathbf{t} = -\mathbf{T} \mathbf{e}}{t

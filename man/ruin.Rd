@@ -39,17 +39,21 @@ ruin(claims = c("exponential", "Erlang", "phase-type"), par.claims,
   Combinations of exponentials as defined in Dufresne and Gerber (1988)
   are \emph{not} supported.
   
-  There is an explicit formula for the probability of ruin only when
-  both distributions are exponential. All other cases are evaluated
-  using \code{\link{pphtype}}.
+  Ruin probabilities are evaluated using \code{\link{pphtype}} except
+  when both distributions are exponential, in which case an explicit
+  formula is used.
   
-  When \code{wait != "exponential"}, the transition rate matrix of the
-  distribution of the probability of ruin is determined iteratively
-  using a fixed point-like algorithm. The stopping criteria used is%
-  \deqn{\max \left\{\sum_{j = 1}^n |Q_{ij} - Q_{ij}^\prime| \right\} < \code{tol},}{%
+  When \code{wait != "exponential"} (Sparre Andersen model), the
+  transition rate matrix \eqn{\mathbf{Q}}{Q} of the distribution of the
+  probability of ruin is determined iteratively using a fixed point-like
+  algorithm. The stopping criteria used is%
+  \deqn{\max \left\{
+    \sum_{j = 1}^n |\mathbf{Q}_{ij} - \mathbf{Q}_{ij}^\prime|
+    \right\} < \code{tol},}{%
     max(rowSum(|Q - Q'|)) < tol,}%
-  where \eqn{Q} and \eqn{Q^\prime}{Q'} are two successive values of the
-  matrix.
+
+  where \eqn{\matbf{Q}}{Q} and \eqn{\mathbf{Q}^\prime}{Q'} are two
+  successive values of the matrix.
 }
 \value{
   A function to compute the probability of ruin given initial surplus
