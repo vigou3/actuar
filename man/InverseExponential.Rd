@@ -18,7 +18,7 @@ pinvexp(q, rate = 1, scale = 1/rate, lower.tail = TRUE, log.p = FALSE)
 qinvexp(p, rate = 1, scale = 1/rate, lower.tail = TRUE, log.p = FALSE)
 rinvexp(n, rate = 1, scale = 1/rate)
 minvexp(order, rate = 1, scale = 1/rate)
-levinvexp(limit, rate = 1, scale = 1/rate, order = 1)
+levinvexp(limit, rate = 1, scale = 1/rate, order)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
@@ -40,11 +40,22 @@ levinvexp(limit, rate = 1, scale = 1/rate, order = 1)
   \deqn{f(x) = \frac{s e^{-s/x}}{x^2}}{f(x) = s exp(-s/x)/x^2}
   for \eqn{x > 0} and \eqn{\theta > 0}{s > 0}.
 
-  Invalid arguments will result in return value \code{NaN}, with a warning.
-
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+
+  For numerical evaluation purposes, \code{levinvexp} requires that
+  \code{order < 1}.
+}
+\value{
+  \code{dinvexp} gives the density,
+  \code{pinvexp} gives the distribution function,
+  \code{qinvexp} gives the quantile function,
+  \code{rinvexp} generates random deviates,
+  \code{minvexp} gives the \eqn{k}th raw moment, and
+  \code{levinvexp} calculates the \eqn{k}th limited moment.
+
+  Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
@@ -58,6 +69,6 @@ levinvexp(limit, rate = 1, scale = 1/rate, order = 1)
 exp(dinvexp(2, 2, log = TRUE))
 p <- (1:10)/10
 pinvexp(qinvexp(p, 2), 2)
-minvexp(-2, order = 3)
+minvexp(0.5, 2)
 }
 \keyword{distribution}

@@ -70,6 +70,6 @@ levinvpareto(limit, shape, scale, order)
 exp(dinvpareto(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 pinvpareto(qinvpareto(p, 2, 3), 2, 3)
-minvpareto(-1, 2, order = 2)
+minvpareto(0.5, 1, 2)
 }
 \keyword{distribution}

@@ -87,7 +87,6 @@ double levinvexp(double limit, double scale, double order, int give_log)
     if (!R_FINITE(scale) ||
 	R_FINITE(order) ||
 	scale <= 0.0 ||
-	order <= 0.0 ||
 	order >= 1.0)
 	return R_NaN;
 
