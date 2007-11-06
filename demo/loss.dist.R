@@ -8,10 +8,10 @@ require(actuar)
 if(dev.cur() <= 1) get(getOption("device"))()
 
 op <- par(ask = interactive() &&
-          (.Device %in% c("X11", "GTK", "gnome", "windows","quartz")))
+          (.Device %in% c("X11", "GTK", "gnome", "windows", "quartz")))
 
 ### A utility function to create graphs for probability laws
-showgraphs <- function(fun, par, mfrow = c(2, 2))
+showgraphs <- function(fun, par, what = c("d", "p", "m", "lev"), xlim)
 {
     dist <- switch(fun,
                    trbeta = "TRANSFORMED BETA DISTRIBUTION",
@@ -25,48 +25,56 @@ showgraphs <- function(fun, par, mfrow = c(2, 2))
                    invparalogis = "INVERSE PARALOGISTIC DISTRIBUTION",
                    trgamma = "TRANSFORMED GAMMA DISTRIBUTION",
                    invtrgamma = "INVERSE TRANSFORMED GAMMA DISTRIBUTION",
-                   gamma = "GAMMA DISTRIBUTION",
                    invgamma = "INVERSE GAMMA DISTRIBUTION",
                    weibull = "WEIBULL DISTRIBUTION",
                    invweibull = "INVERSE WEIBULL DISTRIBUTION",
-                   exp = "EXPONENTIAL DISTRIBUTION",
                    invexp = "INVERSE EXPONENTIAL DISTRIBUTION",
-                   lnorm= "LOGNORMAL DISTRIBUTION",
                    pareto1 = "SINGLE PARAMETER PARETO DISTRIBUTION",
-                   lgamma = "LOGGAMMA DISTRIBUTION")
+                   lgamma = "LOGGAMMA DISTRIBUTION",
+                   genbeta = "GENERALIZED BETA DISTRIBUTION",
+                   phtype = "PHASE-TYPE DISTRIBUTION",
+                   gamma = "GAMMA DISTRIBUTION",
+                   exp = "EXPONENTIAL DISTRIBUTION",
+                   chisq = "CHI-SQUARE DISTRIBUTION",
+                   lnorm = "LOGNORMAL DISTRIBUTION",
+                   invgauss = "INVERSE GAUSSIAN DISTRIBUTION",
+                   norm = "NORMAL DISTRIBUTION",
+                   beta = "BETA DISTRIBUTION",
+                   unif = "UNIFORM DISTRIBUTION")
 
-    df   <- match.fun(paste("d", fun, sep = ""))
-    pf   <- match.fun(paste("p", fun, sep = ""))
-    rf   <- match.fun(paste("r", fun, sep = ""))
-    mf   <- match.fun(paste("m", fun, sep = ""))
-    levf <- match.fun(paste("lev", fun, sep = ""))
-
-    formals(df)[names(par)]   <- par
-    formals(pf)[names(par)]   <- par
-    formals(rf)[names(par)]   <- par
-    formals(mf)[names(par)]   <- par
-    formals(levf)[names(par)] <- par
-
-    x <- rf(5000)
-    limit <- seq(floor(min(x)), max(x), length = 10)
-    k <- seq(1, 3, length = 6)
-
+    if (missing(xlim))
+    {
+        qf <- match.fun(paste("q", fun, sep = ""))
+        formals(qf)[names(par)] <- par
+        xlim <- c(0, qf(0.999))
+    }
+    k <- seq.int(4)
+    limit <- seq(0, xlim[2], len = 10)
+    mfrow = c(ceiling(length(what) / 2), 2)
     op <- par(mfrow = mfrow, oma = c(0, 0, 2, 0))
 
-    hist(x, prob = TRUE, xlim = c(0, max(x)),
-         main = "Density")
-    curve(df(x), add = TRUE, col = "blue", lwd = 2, lty = 2)
-    plot(ecdf(x), xlim = c(0, max(x)), pch = "",
-         main = "Distribution function", lwd = 2)
-    curve(pf(x), add = TRUE, col = "blue", lwd = 2, lty = 2)
-    plot(k, emm(x, k), type = "l", lwd = 2,
-         main = "Raw moments")
-    lines(k, mf(k), col = "blue", lwd = 2, lty = 2)
-    plot(limit, elev(x)(limit), type = "l", lwd = 2,
-         main = "Limited expected value")
-    lines(limit, levf(limit), col = "blue", lwd = 2, lty = 2)
-    title(main = dist, outer = TRUE)
+    for (t in what)
+    {
+        f   <- match.fun(paste(t, fun, sep = ""))
+        formals(f)[names(par)] <- par
 
+        main <- switch(t,
+                       "d" = "Probability Density Function",
+                       "p" = "Cumulative Distribution Function",
+                       "m" = "Raw Moments",
+                       "lev" = "Limited Expected Value Function",
+                       "mgf" = "Moment Generating Function")
+
+        if (t == "m")
+            plot(k, f(k), type = "l", col = 4, lwd = 2, main = main)
+        else if (t == "lev")
+            plot(limit, f(limit), type = "l", col = 4, lwd = 2, main = main)
+        else if (t == "mgf")
+            curve(f(x), xlim = c(0, 2), col = 4, lwd = 2, main = main)
+        else
+            curve(f(x), xlim = xlim, col = 4, lwd = 2, main = main)
+        title(main = dist, outer = TRUE)
+    }
     par(op)
 }
 
@@ -85,21 +93,8 @@ data(gdental); gdental
 ### PROBABILITY LAWS
 ###
 
-## The package provides "d", "p", "q" and "r" functions for all the
-## probability laws useful for loss severity modeling found in
-## Appendix A of Klugman, Panjer & Willmot (2004) and not already
-## present in base R, plus the loggamma distribution. (The inverse
-## gaussian and log-t are not included.)
-##
-## In addition, the package provides "m" functions to compute
-## theoretical raw moments and "lev" functions to compute limited
-## moments for all the above probability laws, plus the following
-## already in R: exponential, gamma, lognormal and Weibull.
-##
-## We illustrate the various distributions by plotting for each four
-## graphs combining empirical and theoretical quantities: the pdf, the
-## cdf, the first few raw moments, the limited expected value at a
-## few limits.
+## Illustration of the new probability laws functions provided by the
+## package.
 
 ## TRANSFORMED BETA FAMILY
 
@@ -116,10 +111,10 @@ showgraphs("burr", list(shape1 = 3, shape2 = 4, scale = 10))
 showgraphs("invburr", list(shape1 = 3, shape2 = 6, scale = 10))
 
 ## Pareto distribution
-showgraphs("pareto", list(shape = 6, scale = 10))
+showgraphs("pareto", list(shape = 10, scale = 10))
 
 ## Inverse Pareto distribution
-showgraphs("invpareto", list(shape = 1, scale = 1))
+showgraphs("invpareto", list(shape = 4, scale = 1), what = c("d", "p"))
 
 ## Loglogistic distribution
 showgraphs("llogis", list(shape = 6, scale = 10))
@@ -138,9 +133,6 @@ showgraphs("trgamma", list(shape1 = 3, shape2 = 1, scale = 10))
 ## Inverse transformed gamma distribution
 showgraphs("invtrgamma", list(shape1 = 3, shape2 = 2, scale = 10))
 
-## Gamma distribution ('mgamma' and 'levgamma')
-showgraphs("gamma", list(shape = 3, scale = 10))
-
 ## Inverse gamma distribution
 showgraphs("invgamma", list(shape = 6, scale = 10))
 
@@ -150,25 +142,48 @@ showgraphs("weibull", list(shape = 1.5, scale = 10))
 ## Inverse Weibull distribution
 showgraphs("invweibull", list(shape = 6, scale = 10))
 
-## Exponential distribution ('mexp' and 'levexp')
-showgraphs("exp", list(rate = 0.1))
-
 ## Inverse exponential distribution
-showgraphs("invexp", list(rate = 1))
+showgraphs("invexp", list(rate = 1), what = c("d", "p"))
 
 ## OTHER DISTRIBUTIONS
 
-## Lognormal distribution ('mlnorm' and 'levlnorm')
-showgraphs("lnorm", list(meanlog = 1, sdlog = 1))
-
 ## Single parameter Pareto distribution
-showgraphs("pareto1", list(shape = 5, min = 10))
+showgraphs("pareto1", list(shape = 5, min = 10), xlim = c(0, 50))
 
 ## Loggamma distribution
 showgraphs("lgamma", list(shapelog = 2, ratelog = 5))
 
 ## Generalized beta distribution
 showgraphs("genbeta", list(shape1 = 1, shape2 = 2, shape3 = 3, scale = 2))
+
+## Phase-type distribution
+showgraphs("phtype", list(prob = c(0.5614, 0.4386), rates = matrix(c(-8.64, 0.101, 1.997, -1.095), 2, 2)), what = c("d", "p", "m", "mgf"), xlim = c(0.001, 5))
+
+## DISTRIBUTIONS ALREADY IN R
+
+## Gamma distribution
+showgraphs("gamma", list(shape = 3, rate = 5), what = c("m", "lev", "mgf"))
+
+## Chi-square distribution
+showgraphs("chisq", list(df = 3), what = c("m", "lev", "mgf"))
+
+## Exponential distribution
+showgraphs("exp", list(rate = 5), what = c("m", "lev", "mgf"))
+
+## Lognormal distribution
+showgraphs("lnorm", list(meanlog = 1, sdlog = 1), what = c("m", "lev"))
+
+## Inverse gaussian distribution (from package SuppDists)
+showgraphs("invgauss", list(nu = 1, lambda = 10), what = c("m", "lev", "mgf"), xlim = c(0, 10))
+
+## Normal distribution
+showgraphs("norm", list(mean = 0, sd = 1), what = c("m", "mgf"))
+
+## Beta distribution
+showgraphs("beta", list(shape1 = 1, shape2 = 2), what = c("m", "lev"))
+
+## Uniform distribution
+showgraphs("unif", list(min = 0, max = 1), what = c("m", "lev", "mgf"))
 
 
 ###
@@ -254,10 +269,7 @@ mde(gdental, levexp, start = list(rate = 1/200), measure = "LAS")
 
 ## Function 'coverage' is useful to obtain the probability density
 ## function (pdf) or cumulative distribution function (cdf) of a loss
-## random variable under any combination of the following coverage
-## modifications: ordinary or franchise deductible, policy limit,
-## inflation, coinsurance. The function returned can then be used like
-## any other pdf or cdf in modeling.
+## random variable under coverage modifications.
 f <- coverage(dgamma, pgamma, deductible = 1, limit = 7)
 curve(dgamma(x, 3), xlim = c(0, 10), ylim = c(0, 0.3))    # original
 curve(f(x, 3), xlim = c(0.01, 5.99), col = 4, add = TRUE) # modified
