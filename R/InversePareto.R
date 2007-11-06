@@ -26,5 +26,5 @@ rinvpareto <- function(n, shape, scale)
 minvpareto <- function(order, shape, scale)
      .External("do_dpq", "minvpareto", order, shape, scale, FALSE)
 
-levinvpareto <- function(limit, shape, scale, order = 1)
+levinvpareto <- function(limit, shape, scale, order)
      .External("do_dpq", "levinvpareto", limit, shape, scale, order, FALSE)

@@ -110,7 +110,8 @@ double levinvpareto(double limit, double shape, double scale, double order,
 	!R_FINITE(order) ||
 	shape <= 0.0 ||
 	scale <= 0.0 ||
-	order <= -shape)
+	order <= -shape ||
+	order >= 1.0)
 	return R_NaN;;
 
     if (limit <= 0.0)
