@@ -19,11 +19,12 @@ hache <- function(ratios, weights, xreg, tol = sqrt(.Machine$double.eps),
 
     ## Fit linear model to each contract and make summary of each
     ## model for later extraction of key quantities.
+    xreg <- cbind(xreg)                 # force dims and colnames
+    fo <- as.formula(paste("y ~ ", paste(colnames(xreg), collapse = "+")))
     f <- function(i)
     {
-        y <- ratios[i, ]
-        w <- weights[i, ]
-        lm(y ~ xreg, weights = w)
+        DF <- data.frame(y = ratios[i, ], xreg, w = weights[i, ])
+        lm(fo, data = DF, weights = w)
     }
     fits <- lapply(s, f)
     sfits <- lapply(fits, summary)
@@ -132,8 +133,8 @@ hache <- function(ratios, weights, xreg, tol = sqrt(.Machine$double.eps),
 predict.hache <- function(object, levels = NULL, newdata, ...)
 {
     ## Predictors can be given as a simple vector for one dimensional
-    ## models. For use in predict.lm(), these must be tranformed into
-    ## a data frame.
+    ## models. For use in predict.lm(), these must be converted into a
+    ## data frame.
     if (is.null(dim(newdata)))
         newdata <- data.frame(xreg = newdata)
 
@@ -144,25 +145,3 @@ predict.hache <- function(object, levels = NULL, newdata, ...)
 
 print.hache <- function(x, ...)
     print.default(x)
-
-## print.hache <- function(x, ...)
-## {
-##     ncontracts <- nrow(x$beta)
-##     res <- matrix(NA, ncontracts + 1, 4)
-##     res[, 1:2] <- rbind(x$beta, t(x$betaTotal))
-##     res[, 3:4] <- rbind(x$betaAdj, NA)
-##     colnames(res) <- c(" Intercept", " Slope", " Adj. intercept", " Adj. slope")
-##     rownames(res) <- c(rownames(res, do.NULL = FALSE, prefix = "Contract.")[-(ncontracts + 1)], "Total")
-
-##     cat("\nCall: ", deparse(x$call), "\n\n")
-
-##     print(res)
-
-##     cat("\nWithin contract variance: ", x$s2, "\n\n")
-##     cat("Between contract variance:\n")
-##     print(x$a)
-## }
-
-##     rownames(premiums) <- rownames(premiums, do.NULL = FALSE, prefix = "Contract.")
-##     colnames(premiums) <- colnames(premiums, do.NULL = FALSE, prefix = "Time.")
-##     print(premiums)

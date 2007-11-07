@@ -188,15 +188,15 @@ print.cm <- function(x, ...)
             ## Treat the Hachemeister and no regression models
             ## separately since for the former the variance components
             ## vector is a list, with the first element a matrix.
-            s <- paste("  Between", level.names[i], "variance:", sep = " ")
+            s <- paste("  Between", level.names[i], "variance: ", sep = " ")
             if (attr(x, "model") == "regression")
             {
                 m <- b[[1]]
-                dimnames(m) <- list(c(s, ""), rep("", ncol(m)))
+                dimnames(m) <- list(c(s, rep("", nrow(m) - 1)), rep("", ncol(m)))
                 print(m)
             }
             else
-                cat("\n", s, b[i], "\n")
+                cat("\n", s, b[i], "\n", sep = "")
         }
         else
             cat("  Within ", level.names[i - 1],
@@ -270,8 +270,8 @@ print.summary.cm <- function(x, ...)
                                        paste, collapse = " ")),
                        as.vector(format(sapply(x$adj.models, coef), ...)),
                        " ")
-            y[seq(1, nrow(y), 2), c(1, 5)] <-
-                c(levs[!m, , drop = FALSE], format(x$premiums[[i]]), ...)
+            y[seq(1, nrow(y), dim(x$cred[[i]])[1]), c(1, 5)] <-
+                c(levs[!m, , drop = FALSE], format(x$premiums[[i]], ...))
             colnames(y) <- c(colnames(levs),
                              "Indiv. coef.", "Credibility matrix",
                              "Adj. coef.", "Cred. premium")
@@ -288,7 +288,7 @@ print.summary.cm <- function(x, ...)
                              "Cred. factor", "Cred. premium")
         }
         rownames(y) <- rep("   ", nrow(y))
-        print(y, quote = FALSE, right = TRUE, ...)
+        print(y, quote = FALSE, right = FALSE, ...)
         cat("\n")
     }
     invisible(x)

@@ -4,6 +4,10 @@
 ### claim amounts in any given node are simulated independently. Both
 ### frequency and severity models can be mixtures of distributions.
 ###
+### In the code here, numbering of levels starts at 1 at the data
+### level, whereas in common discussion of hierarchical models the
+### data level is not counted.
+###
 ### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 ### Sébastien Auclair and Louis-Philippe Pouliot
 
