@@ -258,7 +258,7 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
             }
 
             Q1 <- Q
-            Q <- rates + t0pi %*% A %*% solve(-(Q %x% Im + B), C)
+            Q <- rates - t0pi %*% A %*% solve(Q %x% Im + B, C)
 
             if (max(rowSums(abs(Q - Q1))) < tol)
                 break
