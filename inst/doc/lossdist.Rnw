@@ -1,40 +1,53 @@
 \documentclass{article}
-  \usepackage{amsmath,natbib}
+  \usepackage{amsmath,color,hyperref}
+  \usepackage[round]{natbib}
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage[english]{babel}
+  \usepackage{lucidabr}
   \usepackage{booktabs,tabularx,threeparttable}
   \usepackage{paralist}
   \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Loss distributions modeling features}
   %\VignettePackage{actuar}
-  %% need no \usepackage{Sweave.sty}
 
-  \author{Christophe Dutang \and
-    Vincent Goulet \and
-    Mathieu Pigeon}
   \title{Loss distributions modeling features of \pkg{actuar}}
+  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
+    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
+    Mathieu Pigeon \\ École d'actuariat, Université Laval}
+  \date{}
 
   %% Some new commands. Commands \E and \VAR redefined to fit within
   %% the author's writing habits...
   \newcommand{\E}[1]{\mathrm{E}[ #1 ]}
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
   \newcommand{\LAS}{\mathrm{LAS}}
-  \newcommand{\VaR}{\mathrm{VaR}}
-  \newcommand{\CTE}{\mathrm{CTE}}
   \newcommand{\mat}[1]{\boldsymbol{#1}}
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
 
-  \bibliographystyle{plain}
+  \bibliographystyle{plainnat}
 
-  \SweaveOpts{prefix.string=loss_dist}
+  \definecolor{Red}{rgb}{0.7,0,0}
+  \definecolor{Blue}{rgb}{0,0,0.8}
+  \hypersetup{%
+    hyperindex = {true},
+    colorlinks = {true},
+    linktocpage = {true},
+    plainpages = {false},
+    linkcolor = {Blue},
+    citecolor = {Blue},
+    urlcolor = {Red},
+    pdfstartview = {Fit},
+    pdfpagemode = {UseOutlines},
+    pdfview = {XYZ null null null}
+  }
 
 <<echo=FALSE>>=
 library(actuar)
-options(width = 78, digits = 4)
+options(width = 62, digits = 4)
 @
 
 \begin{document}
@@ -254,7 +267,7 @@ functions are especially useful with estimation methods based on the
 matching of raw or limited moments; see Subsection
 \ref{sec:empirical-moments} for their empirical counterparts. The
 \code{mgf} functions come in handy to compute the adjustment
-coefficient in ruin theory; see the \texttt{"risk"} vignette.
+coefficient in ruin theory; see the \code{"risk"} vignette.
 
 In addition to the 17 distributions of Tables %
 \ref{tab:distributions:trbeta_family}--\ref{tab:distributions:other}, %
@@ -302,7 +315,7 @@ The package provides \code{d}, \code{p}, \code{r}, \code{m} and
 \code{phtype} and parameters $\mat{\pi}$ and $\mat{T}$ are named
 \code{prob} and \code{rates}, respectively. For the package, function
 \code{pphtype} is central to the evaluation of the probability of
-ruin; see \code{?ruin} and the \texttt{"risk"} vignette.
+ruin; see \code{?ruin} and the \code{"risk"} vignette.
 
 The core of all the functions presented in this subsection is written
 in \proglang{C} for speed. In almost every respect, they behave just
@@ -617,6 +630,7 @@ out <- try(mde(gdental, ppareto, start = list(shape = 3, scale = 600),
         measure = "CvM"))
 cat(sub(", measure", ",\n             measure", out))
 @
+
 Working in the log of the parameters often solves the problem since
 the optimization routine can then flawlessly work with negative
 parameter values:
@@ -630,7 +644,7 @@ The actual estimators of the parameters are obtained with
 <<echo=TRUE>>=
 exp(p$estimate)
 @
-%$
+This procedure may introduce additional bias in the estimators, though.
 
 
 

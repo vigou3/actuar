@@ -1,0 +1,513 @@
+\documentclass{article}
+  \usepackage{amsmath,color,hyperref}
+  \usepackage[round]{natbib}
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage[english]{babel}
+  \usepackage{lucidabr}
+  \usepackage{paralist}
+  \usepackage[noae]{Sweave}
+
+  %\VignetteIndexEntry{Risk theory features}
+  %\VignettePackage{actuar}
+
+  \title{Credibility theory features of \pkg{actuar}}
+  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
+    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
+    Mathieu Pigeon \\ École d'actuariat, Université Laval}
+  \date{}
+
+  %% Some new commands. Commands \E and \VAR redefined to fit within
+  %% the author's writing habits...
+  \newcommand{\E}[1]{\mathrm{E}[ #1 ]}
+  \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
+  \newcommand{\proglang}[1]{\textsf{#1}}
+  \newcommand{\pkg}[1]{\textbf{#1}}
+  \newcommand{\code}[1]{\texttt{#1}}
+  \newcommand{\pt}{{\scriptscriptstyle \Sigma}}
+
+  \bibliographystyle{plainnat}
+
+  \definecolor{Red}{rgb}{0.7,0,0}
+  \definecolor{Blue}{rgb}{0,0,0.8}
+  \hypersetup{%
+    hyperindex = {true},
+    colorlinks = {true},
+    linktocpage = {true},
+    plainpages = {false},
+    linkcolor = {Blue},
+    citecolor = {Blue},
+    urlcolor = {Red},
+    pdfstartview = {Fit},
+    pdfpagemode = {UseOutlines},
+    pdfview = {XYZ null null null}
+  }
+
+<<echo=FALSE>>=
+library(actuar)
+options(width = 62, digits = 4)
+@
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+\label{sec:introduction}
+
+Credibility models are actuarial tools to distribute premiums fairly
+among an heterogeneous group of policyholders (henceforth called
+\emph{entities}). More generally, they can be seen as prediction methods
+applicable in any setting where repeated measures are made for
+subjects with different risk levels.
+
+The credibility theory facilities of \pkg{actuar} consist of one
+data set and two main functions:
+\begin{enumerate}
+\item matrix \code{hachemeister} containing the famous data set of
+  \cite{Hachemeister_75};
+\item function \code{simpf} to simulate data from compound
+  hierarchical models;
+\item function \code{cm} to fit hierarchical and regression
+  credibility models.
+\end{enumerate}
+
+
+\section{Hachemeister data set}
+\label{sec:hachemeister}
+
+The data set of \cite{Hachemeister_75} consists of private passenger
+bodily injury insurance average claim amounts, and the corresponding
+number of claims, for five U.S.\ states over 12 quarters between July
+1970 and June 1973. The data set is included in the package in the
+form of a matrix with 5 rows and 25 columns. The first column contains
+a state index, columns 2--13 contain the claim averages and columns
+14--25 contain the claim numbers:
+<<echo=TRUE>>=
+data(hachemeister)
+hachemeister
+@
+
+\section{Portfolio simulation}
+\label{sec:simulation}
+
+Function \code{simpf} simulates portfolios of data following compound
+models of the form
+\begin{equation}
+  \label{eq:definition-S}
+  S = C_1 + \dots + C_N,
+\end{equation}
+where $C_1, C_2, \dots$ are mutually independent and identically
+distributed random variables each independent from $N$. Both the
+frequency and the severity components can have a hierarchical
+structure. The main characteristic of hierarchical models is to have
+the probability law at some level in the classification structure be
+conditional on the outcome in previous levels. For example, consider
+the following compound hierarchical model:
+\begin{equation}
+  \label{eq:hierarchical-model:1}
+  S_{ijt} = C_{ijt1} + \dots + C_{ijt N_{ijt}},
+\end{equation}
+for
+$i = 1, \dots, I$,
+$j = 1, \dots, J_i$,
+$t = 1, \dots, n_{ij}$
+and with
+\begin{align}
+  \label{eq:hierarchical-model:2}
+  N_{ijt}|\Lambda_{ij}, \Phi_i &\sim \text{Poisson}(w_{ijt} \Lambda_{ij}) &
+  C_{ijtu}|\Theta_{ij}, \Psi_i &\sim \text{Lognormal}(\Theta_{ij}, 1)
+  \notag \\
+  \Lambda_{ij}|\Phi_i &\sim \text{Gamma}(\Phi_i, 1) &
+  \Theta_{ij}|\Psi_i     &\sim N(\Psi_i, 1) \\
+  \Phi_i &\sim \text{Exponential}(2) &
+  \Psi_i &\sim N(2, 0.1). \notag
+\end{align}
+The random variables $\Phi_i$, $\Lambda_{ij}$, $\Psi_i$ and
+$\Theta_{ij}$ are generally seen as risk parameters in the actuarial
+literature. The $w_{ijt}$s are known weights, or volumes. Using as
+convention to number the data level 0, the above is a two-level
+hierarchical model.
+
+Function \code{simpf} is presented in the credibility theory section
+because it was originally written in this context, but it has much
+wider applications. For instance, it is used by \code{aggregateDist}
+for the simulation of the aggregate claim amount random variable.
+
+\cite{simpf} describe in detail the model specification method used in
+\code{simpf}. For the sake of completeness, we briefly outline this
+method here.
+
+A hierarchical model is completely specified by the number of nodes at
+each level ($I$, $J_1, \dots, J_I$ and $n_{11}, \dots, n_{IJ}$, above)
+and by the probability laws at each level. The number of nodes is
+passed to \code{simpf} by means of a named list where each element is
+a vector of the number of nodes at a given level. Vectors are recycled
+when the number of nodes is the same throughout a level. Probability
+models are expressed in a semi-symbolic fashion using an object of
+mode \code{"expression"}. Each element of the object must be named ---
+with names matching those of the number of nodes list --- and should
+be a complete call to an existing random number generation function,
+with the number of variates omitted. Hierarchical models are achieved
+by replacing one or more parameters of a distribution at a given level
+by any combination of the names of the levels above. If no mixing is
+to take place at a level, the model for this level can be \code{NULL}.
+
+Function \code{simpf} also supports usage of weights in models. These
+usually modify the frequency parameters to take into account the
+``size'' of an entity. Weights are used in simulation wherever the
+name \code{weights} appears in a model.
+
+Hence, function \code{simpf} has four main arguments:
+\begin{inparaenum}[1)]
+\item \code{nodes} for the number of nodes list;
+\item \code{model.freq} for the frequency model;
+\item \code{model.sev} for the severity model;
+\item \code{weights} for the vector of weights in lexicographic
+  order, that is all weights of entity 1, then all weights of
+  entity 2, and so on.
+\end{inparaenum}
+
+For example, assuming that $I = 2$, $J_1 = 4$, $J_2 = 3$, $n_{11} =
+\dots = n_{14} = 4$ and $n_{21} = n_{22} = n_{23} = 5$ in model
+\eqref{eq:hierarchical-model:2} above, and that weights are simply
+simulated from a uniform distribution on $(0.5, 2.5)$, then simulation
+of a data set with \code{simpf} is achieved with:
+<<echo=FALSE>>=
+set.seed(3)
+@
+<<echo=TRUE>>=
+wijt <- runif(31, 0.5, 2.5)
+nodes <- list(cohort = 2,
+              contract = c(4, 3),
+              year = c(4, 4, 4, 4, 5, 5, 5))
+mf <- expression(cohort = rexp(2),
+                 contract = rgamma(cohort, 1),
+                 year = rpois(weights * contract))
+ms <- expression(cohort = rnorm(2, sqrt(0.1)),
+                 contract = rnorm(cohort, 1),
+                 year = rlnorm(contract, 1))
+pf <- simpf(nodes = nodes, model.freq = mf, model.sev = ms, weights = wijt)
+@
+
+The function returns the variates in a two-dimension list of class
+\code{"simpf"} containing all the individual claim amounts for each
+entity. Such an object can be seen as a three-dimension array with a
+third dimension of potentially varying length. The function also
+returns a matrix of integers giving the classification indexes of each
+entity in the portfolio (subscripts $i$ and $j$ in the notation
+above). Displaying the complete content of the object returned by
+\code{simpf} can be impractical. For this reason, the \code{print}
+method for this class only prints the simulation model and the number
+of claims in each node:
+<<echo=TRUE>>=
+pf
+@
+
+The package defines methods for four generic functions to easily
+access key quantities of the simulated portfolio.
+\begin{enumerate}
+\item By default, the method of \code{aggregate} returns the values of
+  aggregate claim amounts $S_{ijt}$ in a regular matrix (subscripts
+  $i$ and $j$ in the rows, subscript $t$ in the columns). The method
+  has a \code{by} argument to get statistics for other groupings and
+  a \code{FUN} argument to get statistics other than the sum:
+<<echo=TRUE>>=
+aggregate(pf)
+aggregate(pf, by = c("cohort", "year"), FUN = mean)
+@
+
+\item The method of \code{frequency} returns the number of claims
+  $N_{ijt}$. It is a wrapper for \code{aggregate} with the default
+  \code{sum} statistic replaced by \code{length}. Hence, arguments
+  \code{by} and \code{FUN} remain available:
+<<echo=TRUE>>=
+frequency(pf)
+frequency(pf, by = "cohort")
+@
+
+\item The method of \code{severity} (a generic function introduced by
+  the package) returns the individual claim amounts $C_{ijtu}$ in a
+  matrix similar to those above, but with a number of columns equal to
+  the maximum number of observations per entity,
+  \begin{displaymath}
+    \max_{i, j} \sum_{t = 1}^{n_{ij}} N_{ijt}.
+  \end{displaymath}
+  Thus, the original period of observation (subscript $t$) and the
+  identifier of the severity within the period (subscript $u$) are
+  lost and each variate now constitute a ``period'' of observation.
+  For this reason, the method provides an argument \code{splitcol} in
+  case one would like to extract separately the individual severities
+  of one or more periods:
+<<echo=TRUE>>=
+severity(pf)
+severity(pf, splitcol = 1)
+@
+
+\item The method of \code{weights} extracts the weights matrix from
+  a simulated data set:
+<<echo=TRUE>>=
+weights(pf)
+@
+\end{enumerate}
+
+In addition, all methods have a \code{classification} and a
+\code{prefix} argument. When the first is \code{FALSE}, the
+classification index columns are omitted from the result. The second
+argument overrides the default column name prefix; see the
+\code{simpf.summaries} help page for details.
+
+Function \code{simpf} was used to simulate the data in
+\cite{Goulet_cfs}.
+
+
+\section{Hierarchical credibility model}
+\label{sec:hierarchical}
+
+The linear model fitting function of \proglang{R} is named \code{lm}.
+Since credibility models are very close in many respects to linear
+models, and since the credibility model fitting function of
+\pkg{actuar} borrows much of its interface from \code{lm}, we named
+the credibility function \code{cm}.
+
+Function \code{cm} acts as a unified interface for all credibility
+models supported by the package. Currently, these are the
+unidimensional models of \cite{Buhlmann_69} and \cite{BS_70}, the
+hierarchical model of \cite{Jewell_75} (of which the first two are
+special cases) and the regression model of \cite{Hachemeister_75}. The
+modular design of \code{cm} makes it easy to add new models if
+desired.
+
+This subsection concentrates on usage of \code{cm} for hierarchical
+models.
+
+There are some variations in the formulas of the hierarchical model in
+the literature. We compute the credibility premiums as given in
+\cite{BJ_87} or \cite{Buhlmann_Gisler}. We support three types of
+estimators of the between variance structure parameters: the unbiased
+estimators of \cite{Buhlmann_Gisler} (the default), the slightly
+different version of \cite{Ohlsson} and the iterative
+pseudo-estimators as found in \cite{LivreVert} or \cite{Goulet_JAP}.
+For instance, for a two-level hierarchical model like
+\eqref{eq:hierarchical-model:2}, the best linear prediction for year
+$n + 1$ based on ratios $X_{ijt} = S_{ijt}/w_{ijt}$ is
+\begin{equation}
+  \label{eq:hierarchical:premiums}
+  \begin{split}
+    \hat{\pi}_{ij} &= z_{ij} X_{ijw} + (1 - z_{ij}) \hat{\pi}_i \\
+    \hat{\pi}_i    &= z_i X_{izw} + (1 - z_i) m \\
+  \end{split}
+\end{equation}
+with
+\begin{align*}
+  z_{ij}
+  &= \frac{w_{ij\pt}}{w_{ij\pt} + s^2/a}, &
+  X_{ijw}
+  &= \sum_{t = 1}^{n_{ij}} \frac{w_{ijt}}{w_{ij\pt}}\, X_{ijt} \\
+  z_i
+  &= \frac{z_{i\pt}}{z_{i\pt} + a/b}, &
+  X_{izw}
+  &= \sum_{j = 1}^{J_i} \frac{z_{ij}}{z_{i\pt}}\, X_{ijw}.
+\end{align*}
+
+The estimator of $s^2$ is
+\begin{equation}
+  \label{eq:s2}
+  \hat{s}^2 = \frac{1}{\sum_{i = 1}^I \sum_{j = 1}^{J_i} (n_{ij} - 1)}
+  \sum_{i = 1}^I \sum_{j = 1}^{J_i} \sum_{t = 1}^{n_{ij}}
+  w_{ijt} (X_{ijt} - X_{ijw})^2.
+\end{equation}
+
+The three types of estimators for parameters $a$ and $b$ are the
+following. First, let
+\begin{align*}
+  A_i
+  &= \sum_{j = 1}^{J_i} w_{ij\pt} (X_{ijw} - X_{iww})^2 -
+  (J_i - 1) s^2 &
+  c_i
+  &= w_{i\pt\pt} - \sum_{j = 1}^{J_i} \frac{w_{ij\pt}^2}{w_{i\pt\pt}} \\
+  B
+  &= \sum_{i = 1}^I z_{i.} (X_{izw} - \bar{X}_{zzw})^2 - (I - 1) a &
+  d
+  &= z_{\pt\pt} - \sum_{i = 1}^I \frac{z_{i\pt}^2}{z_{\pt\pt}},
+\end{align*}
+with
+\begin{equation}
+  \label{eq:Xbzzw}
+  \bar{X}_{zzw} = \sum_{i = 1}^I \frac{z_{i\pt}}{z_{\pt\pt}}\, X_{izw}.
+\end{equation}
+(Hence, $\E{A_i} = c_i a$ and $\E{B} = d b$.) Then, the
+Bühlmann--Gisler estimators are
+\begin{align}
+  \label{eq:ac-BG}
+  \hat{a}
+  &= \frac{1}{I} \sum_{i = 1}^I \max \left( \frac{A_i}{c_i}, 0 \right) \\
+  \label{eq:bc-BG}
+  \hat{b}
+  &= \max \left( \frac{B}{d}, 0 \right),
+\end{align}
+the Ohlsson estimators are
+\begin{align}
+  \label{eq:ac-Ohl}
+  \hat{a}^\prime
+  &= \frac{\sum_{i = 1}^I A_i}{\sum_{i = 1}^I c_i} \\
+  \label{eq:ac-Ohl}
+  \hat{b}^\prime
+  &= \frac{B}{d}
+\end{align}
+and the iterative (pseudo-)estimators are
+\begin{align}
+  \label{eq:at}
+  \tilde{a}
+  &= \frac{1}{\sum_{i = 1}^I (J_i - 1)}
+  \sum_{i = 1}^I \sum_{j = 1}^{J_i} z_{ij} (X_{ijw} - X_{izw})^2 \\
+  \label{eq:bt}
+  \tilde{b}
+  &= \frac{1}{I - 1}
+  \sum_{i = 1}^I z_i (X_{izw} - X_{zzw})^2,
+\end{align}
+where
+\begin{equation}
+  \label{eq:Xzzw}
+  X_{zzw} = \sum_{i = 1}^I \frac{z_i}{z_\pt}\, X_{izw}.
+\end{equation}
+Note the difference between the two weighted averages \eqref{eq:Xbzzw}
+and \eqref{eq:Xzzw}. See \cite{cm} for further discussion on this
+topic.
+
+Finally, the estimator of the collective mean $m$ is $\hat{m} =
+X_{zzw}$.
+
+The credibility modeling function \code{cm} assumes that data is available in
+the format most practical applications would use, namely a rectangular
+array (matrix or data frame) with entity observations in the rows and
+with one or more classification index columns (numeric or character).
+One will recognize the output format of \code{simpf} and its summary
+methods.
+
+Then, function \code{cm} works much the same as \code{lm}. It takes in
+argument a formula of the form \code{\~{} terms} describing the
+hierarchical interactions in a data set; the data set containing the
+variables referenced in the formula; the names of the columns
+where the ratios and the weights are to be found in the data set. The
+latter should contain at least two nodes in each level and more than
+one period of experience for at least one entity. Missing values are
+represented by \code{NA}s. There can be entities with no experience
+(complete lines of \code{NA}s).
+
+In order to give an easily reproducible example, we group states 1 and
+3 of the Hachemeister data set into one cohort and states 2, 4 and 5
+into another. This shows that data does not have to be sorted by
+level. The fitted model using the iterative estimators is:
+<<echo=TRUE>>=
+X <- cbind(cohort = c(1, 2, 1, 2, 2), hachemeister)
+fit <- cm(~cohort + cohort:state, data = X, ratios = ratio.1:ratio.12,
+          weights = weight.1:weight.12, method = "iterative")
+fit
+@
+
+The function returns a fitted model object of class \code{"cm"}
+containing the estimators of the structure parameters. To compute the
+credibility premiums, one calls a method of \code{predict} for this
+class:
+<<echo=TRUE>>=
+predict(fit)
+@
+
+One can also obtain a nicely formatted view of the most important
+results with a call to \code{summary}:
+<<echo=TRUE>>=
+summary(fit)
+@
+
+The methods of \code{predict} and \code{summary} can both report for a
+subset of the levels by means of an argument \code{levels}. For
+example:
+<<echo=TRUE>>=
+summary(fit, levels = "cohort")
+predict(fit, levels = "cohort")
+@
+
+The results above differ from those of \cite{LivreVert} for the same
+example because the formulas for the credibility premiums are
+different.
+
+
+\section{Bühlmann and Bühlmann--Straub models}
+\label{sec:buhlmann}
+
+As mentioned above, the Bühlmann and Bühlmann--Straub models are
+simply one-level hierarchical models. In this case, the
+Bühlmann--Gisler and Ohlsson estimators of the between variance
+parameters are both identical to the usual \cite{BS_70} estimator
+\begin{equation}
+  \label{eq:a-hat}
+  \hat{a} = \frac{w_{\pt\pt}}{w_{\pt\pt}^2 - \sum_{i=1}^I
+    w_{i\pt}^2}
+  \left(
+    \sum_{i=1}^I w_{i\pt} (X_{iw} - X_{ww})^2 - (I - 1) \hat{s}^2
+  \right),
+\end{equation}
+and the iterative estimator
+\begin{equation}
+  \label{eq:a-tilde}
+  \tilde{a} = \frac{1}{I - 1} \sum_{i = 1}^I z_i (X_{iw} - X_{zw})^2
+\end{equation}
+is better known as the Bichsel--Straub estimator.
+
+To fit the Bühlmann model using \code{cm}, one simply does not
+specify any weights:
+<<echo=TRUE>>=
+cm(~state, hachemeister, ratios = ratio.1:ratio.12)
+@
+
+In comparison, the results for the Bühlmann--Straub model using the
+Bichsel--Straub estimator are:
+<<echo=TRUE>>=
+cm(~state, hachemeister, ratios = ratio.1:ratio.12,
+   weights = weight.1:weight.12)
+@
+
+
+\section{Regression model of Hachemeister}
+\label{sec:regression}
+
+The regression model of \cite{Hachemeister_75} is a generalization of
+the Bühlmann--Straub model. If data shows a systematic trend, the
+latter model will typically under- or over-estimate the true premium
+of an entity. The idea of \citeauthor{Hachemeister_75} was to fit to
+the data a regression model where the parameters are a credibility
+weighted average of an entity's regression parameters and the group's
+parameters.
+
+In order to use \code{cm} to fit a credibility regression model to a
+data set, one has to specify a vector or matrix of regressors by means
+of argument \code{xreg}. For example, fitting the model
+\begin{displaymath}
+  X_{it} = \beta_0 + \beta_1 (12 - t) + \varepsilon_t, \quad
+  t = 1, \dots, 12
+\end{displaymath}
+to the original data set of \citeauthor{Hachemeister_75} is done with
+<<echo=TRUE>>=
+fit <- cm(~state, hachemeister, xreg = 12:1,
+          ratios = ratio.1:ratio.12, weights = weight.1:weight.12)
+fit
+@
+
+Computing the credibility premiums requires to give the ``future''
+values of the regressors as in \code{predict.lm}, although with a
+simplified syntax for the one regressor case:
+<<echo=TRUE>>=
+predict(fit, newdata = 0)	# future value of regressor
+@
+
+\bibliography{actuar}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% coding: utf-8
+%%% ispell-local-dictionary: american
+%%% End:

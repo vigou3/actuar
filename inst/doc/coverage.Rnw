@@ -1,35 +1,61 @@
 \documentclass{article}
-  \usepackage{amsmath}
-  \usepackage{Sweave}
+  \usepackage{amsmath,color,hyperref}
+  \usepackage[round]{natbib}
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage[english]{babel}
+  \usepackage{lucidabr}
+  \usepackage{paralist}
+  \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Complete formulas used by coverage}
   %\VignettePackage{actuar}
 
+  \title{Complete formulas used by \code{coverage}}
+  \author{Vincent Goulet \\ École d'actuariat, Université Laval}
+  \date{}
+
+  %% Some new commands
+  \newcommand{\proglang}[1]{\textsf{#1}}
+  \newcommand{\pkg}[1]{\textbf{#1}}
+  \newcommand{\code}[1]{\texttt{#1}}
   \newcommand{\D}{\displaystyle}
-  \newcommand{\coverage}{\texttt{coverage}}
 
-  \title{Complete formulas used by \coverage}
-  \author{Vincent Goulet}
+  \bibliographystyle{plainnat}
 
-\begin{document}
+  \definecolor{Red}{rgb}{0.7,0,0}
+  \definecolor{Blue}{rgb}{0,0,0.8}
+  \hypersetup{%
+    hyperindex = {true},
+    colorlinks = {true},
+    linktocpage = {true},
+    plainpages = {false},
+    linkcolor = {Blue},
+    citecolor = {Blue},
+    urlcolor = {Red},
+    pdfstartview = {Fit},
+    pdfpagemode = {UseOutlines},
+    pdfview = {XYZ null null null}
+  }
 
 <<echo=FALSE>>=
 library(actuar)
 @
 
+\begin{document}
+
 \maketitle
 
-The {\coverage} function is used to define a new function to compute
-the probability density function (pdf) of cumulative distribution
-function (cdf) of any probability law%
-\footnote{Provided functions \texttt{pfoo} and \texttt{dfoo} exist in
-  the current \textsf{R} frame for probability law \texttt{foo}.} %
-under the following insurance coverage modifications: ordinary or
-franchise deductible, limit, coinsurance, inflation. In addition, the
-function can return the distribution of either the payment per loss or
-the payment per payment random variable. For the exact definitions of
-these terms as used by {\coverage}, see Chapter~5 of
-\cite{LossModels2e}.
+Function \code{coverage} of \pkg{actuar} defines a new function to
+compute the probability density function (pdf) of cumulative
+distribution function (cdf) of any probability law under the following
+insurance coverage modifications: ordinary or franchise deductible,
+limit, coinsurance, inflation.
+
+In addition, the function can return the distribution of either the
+payment per loss or the payment per payment random variable. For the
+exact definitions of these terms as used by \code{coverage}, see
+Chapter~5 of \cite{LossModels2e}.
 
 In the presence of a deductible, four random variables can be defined:
 \begin{enumerate}
@@ -41,11 +67,11 @@ In the presence of a deductible, four random variables can be defined:
 \end{enumerate}
 The most common case in insurance applications is the distribution of
 the amount paid per payment with an ordinary deductible, $Y^P$.
-Hence, it is the default in {\coverage}.
+Hence, it is the default in \code{coverage}.
 
 When there is no deductible, all four random variables are equivalent.
 
-This vignette presents the definitions of the above four random
+This document presents the definitions of the above four random
 variables and their corresponding cdf and pdf for a deductible $d$, a
 limit $u$, a coinsurance level $\alpha$ and an inflation rate $r$. An
 illustrative plot of each cdf and pdf is also included. In these
@@ -53,6 +79,9 @@ plots, a dot indicates a probability mass at the given point.
 
 In definitions below, $X$ is the nonnegative random variable of the
 losses with cdf $F_X(\cdot)$ and pdf $f_X(\cdot)$.
+
+\bibliography{actuar}
+
 
 <<echo=FALSE>>=
 deductible <- 5
@@ -334,9 +363,6 @@ axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 @
   \end{minipage}
 \end{align*}
-
-\bibliographystyle{plain}
-\bibliography{actuar}
 
 \end{document}
 
