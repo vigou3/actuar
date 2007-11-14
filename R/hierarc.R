@@ -185,17 +185,14 @@ hierarc <- function(ratios, weights, classification,
     method <- match.arg(method)
 
     if (method == "Buhlmann-Gisler")
-        bexp <- expression(bu[i] <- mean(pmax(bui, 0), na.rm = TRUE))
-    else
-        bexp <- expression(bu[i] <- mean(bui, na.rm = TRUE))
+        bexp <- expression(bu[i] <- mean(pmax(ifelse(ci != 0, bui/ci, 0), 0), na.rm = TRUE))
+    else                                # Ohlsson
+        bexp <- expression(bu[i] <- sum(bui, na.rm = TRUE) / sum(ci, na.rm = TRUE))
 
     for (i in nlevels:1)
     {
         ## Total weight of the level as per the rule above.
         tweights[[i]] <- as.vector(tapply(tweights[[i + 1]], fnodes[[i]], sum))
-
-        ## Related auxiliary sum to be used below.
-        sum2 <- as.vector(tapply(tweights[[i + 1]]^2, fnodes[[i]], sum))
 
         ## Calculation of the weighted averages. If the previous level
         ## between variance estimate is zero then the level average is
@@ -216,14 +213,13 @@ hierarc <- function(ratios, weights, classification,
         ## integer) of the latest non-zero variance estimate is
         ## subtracted from the sum of squares. This is what the
         ## expression 'bu[bu != 0][1]' is used for, below.
-        bui <- ifelse(tweights[[i]]^2 - sum2 != 0,
-                      tweights[[i]] * (as.vector(tapply(tweights[[i + 1]] *
-                                                        (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2,
-                                                        fnodes[[i]],
-                                                        sum)) -
-                                       (eff.nnodes[[i]] - 1) * bu[bu != 0][1]) /
-                      (tweights[[i]]^2 - sum2),
-                      0)
+        bui <- as.vector(tapply(tweights[[i + 1]] *
+                                (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2,
+                                fnodes[[i]],
+                                sum)) -
+                                    (eff.nnodes[[i]] - 1) * bu[bu != 0][1]
+        ci <- tweights[[i]] -
+            as.vector(tapply(tweights[[i + 1]]^2, fnodes[[i]], sum)) / tweights[[i]]
 
         ## The final estimate is the average of all the per node estimates.
         eval(bexp)

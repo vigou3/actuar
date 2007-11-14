@@ -62,7 +62,7 @@ cm(formula, data, ratios, weights, subset, xreg = NULL,
   \enc{Bühlmann}{Buhlmann}-Straub models as special cases) and the
   regression model of Hachemeister. Usage of \code{cm} is similar to
   \code{\link[stats]{lm}}.
-  
+
   The \code{formula} argument symbolically describes the structure of
   the portfolio in the form \eqn{~ terms}. Each term is an interaction
   between risk factors contributing to the total variance of the
@@ -133,34 +133,38 @@ cm(formula, data, ratios, weights, subset, xreg = NULL,
   unbiased estimators and iterative estimators.
 
   Unbiased estimators are based on sums of squares of the form
-  \deqn{b_i = \frac{w_i}{w_i^2 - \sum_j w_{ij}^2}
-    \left( \sum_j w_{ij} (X_{ij} - \bar{X}_i)^2 - (J - 1) a \right),}{
-    b[i] = w[i] * (sum(j; w[ij] (X[ij] - Xb[i])^2 - (J - 1) a)) /
-    (w[i]^2 - sum(j; w[ij]^2))}
+  \deqn{B_i = \sum_j w_{ij} (X_{ij} - \bar{X}_i)^2 - (J - 1) a}{%
+    B[i] =  sum(j; w[ij] (X[ij] - Xb[i])^2 - (J - 1) a)}%
+  and constants of the form
+  \deqn{c_i = w_i - \sum_j \frac{w_{ij}^2}{w_i},}{%
+    c[i] = w[i] - sum(j; w[ij]^2)/w[i],}%
   where \eqn{X_{ij}}{X[ij]} is the linearly sufficient statistic of
-  level \eqn{(ij)}, \eqn{\bar{X_{i}}}{Xb[i]} is the weighted average of
-  the latter using weights \eqn{w_{ij}}{w[ij]}, \eqn{w_i = \sum_j
-  w_{ij}}{w[i] = sum(j; w[ij])}, \eqn{J} is the effective number of
-  nodes at level \eqn{(ij)} and \eqn{a} is the within variance of this
+  level \eqn{(ij)}; \eqn{\bar{X_{i}}}{Xb[i]} is the weighted average of
+  the latter using weights \eqn{w_{ij}}{w[ij]}; \eqn{w_i = \sum_j
+  w_{ij}}{w[i] = sum(j; w[ij])}; \eqn{J} is the effective number of
+  nodes at level \eqn{(ij)}; \eqn{a} is the within variance of this
   level. Weights \eqn{w_{ij}}{w[ij]} are the natural weights at the
   lowest level, the sum of the natural weights the next level and the
   sum of the credibility factors for all upper levels.
 
   The \enc{Bühlmann}{Buhlmann}-Gisler estimators (\code{method =
     "Buhlmann-Gisler"}) are given by%
-  \deqn{b = \frac{1}{I} \sum_i \max(b_i, 0),}{b = mean(max(b[i], 0)),}%
+  \deqn{b = \frac{1}{I} \sum_i \max \left( \frac{B_i}{c_i}, 0
+    \right),}{%
+    b = mean(max(B[i]/c[i], 0)),}%
   that is the average of the per node variance estimators truncated at
   0.
 
   The Ohlsson estimators (\code{method = "Ohlsson"}) are given by
-  \deqn{b = \frac{1}{I} \sum_i b_i,}{b = mean(b[i]),}
-  that is the average of the per node variance estimators without any
-  truncation. Note that negative estimates will be truncated to zero for
-  credibility factor calculations.
+  \deqn{b = \frac{\sum_i B_i}{\sum_i c_i},}{%
+    b = sum(i; B[i]) / sum(i; c[i]),}%
+  that is the weighted average of the per node variance estimators
+  without any truncation. Note that negative estimates will be truncated
+  to zero for credibility factor calculations.
 
   In the \enc{Bühlmann}{Buhlmann}-Straub model, these estimators are
   equivalent.
-  
+
   Iterative estimators \code{method = "iterative"} are pseudo-estimators
   of the form
   \deqn{b = \frac{1}{d} \sum_i w_i (X_i - \bar{X})^2,}{%
@@ -202,12 +206,12 @@ cm(formula, data, ratios, weights, subset, xreg = NULL,
   Regression fits have in addition the following component:
   \item{adj.models}{a list containing, for each node, the credibility
     adjusted regression model as obtained with \code{\link[stats]{lm}}.}
-  
+
   The method of \code{predict} for objects of class \code{"cm"} computes
   the credibility premiums for the nodes of every level included in
   argument \code{levels} (all by default). Result is a list the same
   length as \code{levels} or the number of levels in \code{formula}, or
-  an atomic vector for one-level models.  
+  an atomic vector for one-level models.
 }
 \references{
   \enc{Bühlmann}{Buhlmann}, H. and Gisler, A. (2005), \emph{A course in
@@ -216,7 +220,7 @@ cm(formula, data, ratios, weights, subset, xreg = NULL,
   Goulet, V. (1998), Principles and Application of Credibility
   Theory, \emph{Journal of Actuarial Practice} \bold{6}, ISSN
   1064-6647.
-  
+
   Goovaerts, M. J. and Hoogstad, W. J. (1987), \emph{Credibility Theory},
   Surveys of Actuarial Studies, NO.4, Nationale-Nederlanden N.V.
 }
