@@ -44,16 +44,15 @@ ruin(claims = c("exponential", "Erlang", "phase-type"), par.claims,
   formula is used.
   
   When \code{wait != "exponential"} (Sparre Andersen model), the
-  transition rate matrix \eqn{\mathbf{Q}}{Q} of the distribution of the
-  probability of ruin is determined iteratively using a fixed point-like
-  algorithm. The stopping criteria used is%
+  transition rate matrix \eqn{\boldsymbol{Q}}{Q} of the distribution of
+  the probability of ruin is determined iteratively using a fixed
+  point-like algorithm. The stopping criteria used is%
   \deqn{\max \left\{
-    \sum_{j = 1}^n |\mathbf{Q}_{ij} - \mathbf{Q}_{ij}^\prime|
+    \sum_{j = 1}^n |\boldsymbol{Q}_{ij} - \boldsymbol{Q}_{ij}^\prime|
     \right\} < \code{tol},}{%
     max(rowSum(|Q - Q'|)) < tol,}%
-
-  where \eqn{\matbf{Q}}{Q} and \eqn{\mathbf{Q}^\prime}{Q'} are two
-  successive values of the matrix.
+  where \eqn{\boldsymbol{Q}}{Q} and \eqn{\boldsymbol{Q}^\prime}{Q'} are
+  two successive values of the matrix.
 }
 \value{
   A function to compute the probability of ruin given initial surplus
@@ -127,9 +126,9 @@ curve(f2, add = TRUE, col = "orange")
 ##
 ## (Somewhat larger differences than above, but still reasonable to
 ## point at different numerical methods)
+a <- (0.4/5 + 0.6) * lambda1
 ruin(claims = "p", par.claims = list(prob = prob.B1, rates = rates.B1),
-     wait   = "e", par.wait   = list(rate = c(5, 1), weights = c(0.4, 0.6)), pre = 1)
-
-
+     wait   = "e", par.wait   = list(rate = c(5 * a, a), weights =
+c(0.4, 0.6)), p = 1, maxit = 300, echo = TRUE)
 }
 \keyword{models}

@@ -34,23 +34,29 @@ mgfphtype(x, prob, rates, log = FALSE)
 }
 \details{
   The phase-type distribution with parameters \code{prob} \eqn{= \pi}{=
-    pi} and \code{rates} \eqn{= \mathbf{T}}{= T} has density:%
-  \deqn{f(x) = \pi e^{\mathbf{T} x} \mathbf{t}}{%
+    pi} and \code{rates} \eqn{= \boldsymbol{T}}{= T} has density:%
+  \deqn{f(x) = \pi e^{\boldsymbol{T} x} \boldsymbol{t}}{%
     f(x) = pi \%*\% exp(T * x) \%*\% t}% 
-  for \eqn{x > 0} and \eqn{f(0) = 1 - \pi \mathbf{e}}{f(0) = 1 - pi
-    \%*\% e}, where \eqn{\mathbf{e}}{e} is a column vector with all
-    components equal to one, \eqn{\mathbf{t} = -\mathbf{T} \mathbf{e}}{t
-    = -T \%*\% e} is the exit rates vector and
-  \eqn{e^{\mathbf{T}x}}{exp(T * x)} denotes the matrix exponential of
-  \eqn{\mathbf{T}x}{T * x}. The matrix exponential of a matrix
-  \eqn{\mathbf{M}}{M} is defined as the Taylor series%
-  \deqn{e^\mathbf{M} = \sum_{n = 0}^{\infty} \frac{\mathbf{M}^n}{n!}.}{%
+  for \eqn{x > 0} and \eqn{f(0) = 1 - \pi \boldsymbol{e}}{f(0) = 1 - pi
+    \%*\% e}, where %
+  \eqn{\boldsymbol{e}}{e} %
+  is a column vector with all components equal to one, %
+  \eqn{\boldsymbol{t} = -\boldsymbol{T} \boldsymbol{e}}{%
+    t = -T \%*\% e} %
+  is the exit rates vector and %
+  \eqn{e^{\boldsymbol{T}x}}{exp(T * x)} %
+  denotes the matrix exponential of \eqn{\boldsymbol{T}x}{T * x}. The
+  matrix exponential of a matrix \eqn{\boldsymbol{M}}{M} is defined as
+  the Taylor series%
+  \deqn{e^{\boldsymbol{M}} = \sum_{n = 0}^{\infty}
+    \frac{\boldsymbol{M}^n}{n!}.}{%
     exp(M) = sum(n = 0:Inf; (M^n)/(n!)).}
 
-  The parameters of the distribution must satisfy \eqn{\pi \mathbf{e}
-    \leq 1}{pi \%*\% e <= 1}, \eqn{\mathbf{T}_{ii} < 0}{T[i, i] < 0},
-  \eqn{\mathbf{T}_{ij} \geq 0}{T[i, j] >= 0} and \eqn{\mathbf{T}
-    \mathbf{e} \leq 0}{T \%*\% e <= 0}.
+  The parameters of the distribution must satisfy 
+  \eqn{\pi \boldsymbol{e} \leq 1}{pi \%*\% e <= 1}, 
+  \eqn{\boldsymbol{T}_{ii} < 0}{T[i, i] < 0}, 
+  \eqn{\boldsymbol{T}_{ij} \geq 0}{T[i, j] >= 0} and 
+  \eqn{\boldsymbol{T} \boldsymbol{e} \leq 0}{T \%*\% e <= 0}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the moment generating function is
