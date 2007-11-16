@@ -38,11 +38,11 @@ ruin(claims = c("exponential", "Erlang", "phase-type"), par.claims,
 
   Combinations of exponentials as defined in Dufresne and Gerber (1988)
   are \emph{not} supported.
-  
+
   Ruin probabilities are evaluated using \code{\link{pphtype}} except
   when both distributions are exponential, in which case an explicit
   formula is used.
-  
+
   When \code{wait != "exponential"} (Sparre Andersen model), the
   transition rate matrix \eqn{\boldsymbol{Q}}{Q} of the distribution of
   the probability of ruin is determined iteratively using a fixed
@@ -87,48 +87,29 @@ psi
 psi(0:10)
 curve(psi(x), xlim = c(0, 10))
 
-## Example of Gerber (1979): mixture of two exponentials for claims,
-## exponential interarrival times
+## Mixture of two exponentials for claims, exponential interarrival
+## times (Gerber 1979)
 psi <- ruin(claims = "e", par.claims = list(rate = c(3, 7), w = 0.5),
             wait   = "e", par.wait   = list(rate = 3), pre = 1)
 u <- 0:10
 psi(u)
 (24 * exp(-u) + exp(-6 * u))/35	# same
 
-## Figure 3 of Asmussen & Rolski (1992) - Phase-type claims
-## and exponential interarrival times
-##
-## (Small differences within numerical error margin)
+## Phase-type claims, exponential interarrival times (Asmussen and
+## Rolski 1991)
 prob.B1 <- c(0.5614, 0.4386)
 rates.B1 <- matrix(c(-8.64, 0.101, 1.997, -1.095), 2, 2)
-lambda1 <- 1/(1.1 * mphtype(1, prob.B1, rates.B1))
+lambda <- 1/(1.1 * mphtype(1, prob.B1, rates.B1))
+psi <- ruin(claims = "p", par.claims = list(prob = prob.B1, rates = rates.B1),
+            wait   = "e", par.wait   = list(rate = lambda))
+psi
+curve(psi, xlim = c(0, 50), xlab = "u", ylab = expression(psi(u)))
 
-prob.B2 <- c(0.9731, 0.0152, 0.0106, 0.001)
-rates.B2 <- matrix(c(-28.648,  0.102,  0.113,  0.100,
-                      28.532, -8.255,  0.107,  0.102,
-                       0.089,  8.063, -5.807,  0.111,
-                       0.027,  0.086,  5.296, -2.176), 4, 4)
-lambda2 <- 1/(1.1 * mphtype(1, prob.B2, rates.B2))
-
-f0 <- ruin(claims = "e", par.claims = list(rate = 1),
-           wait   = "e", par.wait   = list(rate = 1/1.1))
-f1 <- ruin(claims = "p", par.claims = list(prob = prob.B1, rates = rates.B1),
-           wait   = "e", par.wait   = list(rate = lambda1))
-f2 <- ruin(claims = "p", par.claims = list(prob = prob.B2, rates = rates.B2),
-           wait   = "e", par.wait   = list(rate = lambda2))
-
-curve(f0, xlim = c(0, 50), ylim = c(1E-4, 1), log = "y")
-curve(f1, add = TRUE, col = "blue")
-curve(f2, add = TRUE, col = "orange")
-
-## Example of p. 266 of Asmussen & Rolski (1992) - Phase-type claims
-## and mixture of two exponentials for interarrival times
-##
-## (Somewhat larger differences than above, but still reasonable to
-## point at different numerical methods)
-a <- (0.4/5 + 0.6) * lambda1
+## Phase-type claims, mixture of two exponentials for interarrival times
+## (Asmussen and Rolski 1991)
+a <- (0.4/5 + 0.6) * lambda
 ruin(claims = "p", par.claims = list(prob = prob.B1, rates = rates.B1),
      wait   = "e", par.wait   = list(rate = c(5 * a, a), weights =
-c(0.4, 0.6)), p = 1, maxit = 300, echo = TRUE)
+                                     c(0.4, 0.6)), p = 1, maxit = 225)
 }
 \keyword{models}
