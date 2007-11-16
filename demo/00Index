@@ -1,4 +1,4 @@
 credibility		credibility theory facilities
-loss.dist		loss distributions modeling facilities
+lossdist		loss distributions modeling facilities
 risk			risk theory facilities
 simulation		portfolio simulation facilities

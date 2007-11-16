@@ -3,59 +3,73 @@
 Version 0.9-4
 =============
 
+Maintenance and new features release.
+
+NEW FEATURES -- LOSS DISTRIBUTIONS
+
+  o Functions mgffoo() to compute the moment (or cumulant if 'log =
+    TRUE') generating function of the following distributions:
+    chi-square, exponential, gamma, inverse gaussian (from package
+    SuppDists), inverse gamma, normal, uniform and phase-type (see
+    below).
+
+  o Functions mfoo() to compute the raw moments of all the probability
+    distributions supported in the package and the following of base
+    R: chi-square, exponential, gamma, inverse gaussian (from package
+    SuppDists), inverse gamma, normal, uniform.
+
+  o Functions {d,p,mgf,m,r}phtype() to compute the probability density
+    function, cumulative distribution function, moment generating
+    function, raw moments of, and to generate variates from,
+    phase-type distributions.
+
 NEW FEATURES -- RISK THEORY
 
   o Function VaR() with a method for objects of class "aggregateDist"
-    to compute the Value at Risk of a distribution. 
+    to compute the Value at Risk of a distribution.
 
   o Function CTE() with a method for objects of class "aggregateDist"
-    to compute the Conditional Tail Expectation of a distribution. 
+    to compute the Conditional Tail Expectation of a distribution.
 
   o Function adjCoef() to compute the adjustment coefficient in ruin
     theory. If proportional or excess-of-loss reinsurance is included
     in the model, adjCoef() returns a function to compute the
-    adjustment coefficient for any limit. A plot method is also
+    adjustment coefficient for given limits. A plot method is also
     included.
 
-  o Recursive calculations using Panjer's algorithm are now done in C
-    and hence are much faster than in previous versions of the
-    package.
+  o Function ruin() returns a function to compute the infinite time
+    probability of ruin for given initial surpluses in the
+    Cramér-Lundberg and Sparre Andersen models. Most calculations are
+    done using the cdf of phase-type distributions as per Asmussen and
+    Rolski (1991).
 
-NEW FEATURES -- LOSS DISTRIBUTIONS
-
-  o Functions mgffoo() to compute the moment (or cumulant, if 'log =
-    TRUE') generating function of the following distributions:
-    chi-square, exponential, gamma, inverse gaussian, inverse gamma,
-    normal, uniform and phase-type (see below). These functions are
-    useful in conjunction with adjCoef().
-
-  o Functions mfoo() to compute the raw moments of all the probability
-    distributions supported in the package and the following of base
-    R: chi-square, exponential, gamma, inverse gamma, normal, uniform.
-    Moments of the inverse gaussian are also supported; see package
-    SuppDists for other functions related to this distribution.
-
-  o Functions {d,p,mgf,m,r}phtype() to compute the density function,
-    cumulative distribution function, moment generating function, raw
-    moments of, and to generate variates from, phase-type
-    distributions. All calculations (including the matrix exponential
-    required by dphtype() and pphtype()) are done in C, just like for
-    all other probability distributions. These functions are useful
-    for exact probability or ruin calculations.
+  o Calculations of the aggregate claim distribution using the
+    recursive method much faster now that recursions are done in C.
 
 NEW FEATURES -- CREDIBILITY THEORY
+
+  o Modular rewrite of cm(): the function now calls internal functions
+    to carry calculations for each supported credibility model. This
+    is more efficient.
 
   o Basic support for the regression model of Hachemeister in function
     cm().
 
-  o Three new sets of unbiased structure parameters estimators for
-    hierarchical models. They are all based on the estimators of
-    Bühlmann and Gisler (2005), but with various possibilities for
-    truncation of negative variance estimates.
+  o For the hierarchical credibility model: support for the variance
+    components estimators of Bühlmann and Gisler (2005) and Ohlsson
+    (2005). Support remains for iterative pseudo-estimators.
 
-  o Calculations of pseudo (iterative) estimators in hierarchical
+  o Calculations of iterative pseudo-estimators in hierarchical
     credibility are much faster now that they are done in C.
 
+OTHER NEW FEATURES
+
+  o Four new vignettes: introduction to the package and presentation
+    of the features in loss distributions, risk theory and credibility
+    theory.
+
+  o Portfolio simulation material of the "credibility" demo moved to
+    demo "simulation".
 
 USER-VISIBLE CHANGES
 
@@ -144,25 +158,25 @@ NEW FEATURES -- LOSS DISTRIBUTIONS
     the inverse gaussian and log-t) not already in R. Namely, this
     adds the following distributions (the root is what follows the
     'd', 'p', 'q' or 'r' in function names):
-  
-       Distribution name          Root        
-    ------------------------- --------------  
-     Burr                      burr		  
-     Generalized beta          genbeta	  
-     Generalized Pareto        genpareto	  
-     Inverse Burr              invburr	  
-     Inverse exponential       invexp	  
-     Inverse Pareto            invpareto	  
-     Inverse paralogistic      invparalogis	  
-     Inverse Weibull           invweibull	  
-     Loggamma                  loggamma	  
-     Loglogistic               llogis	  
-     Paralogistic              paralogis	  
-     Pareto                    pareto	  
-     Single parameter Pareto   pareto1	  
-     Transformed beta          trbeta	  
-     Transformed gamma         trgamma	  
-  
+
+       Distribution name          Root
+    ------------------------- --------------
+     Burr                      burr
+     Generalized beta          genbeta
+     Generalized Pareto        genpareto
+     Inverse Burr              invburr
+     Inverse exponential       invexp
+     Inverse Pareto            invpareto
+     Inverse paralogistic      invparalogis
+     Inverse Weibull           invweibull
+     Loggamma                  loggamma
+     Loglogistic               llogis
+     Paralogistic              paralogis
+     Pareto                    pareto
+     Single parameter Pareto   pareto1
+     Transformed beta          trbeta
+     Transformed gamma         trgamma
+
     All functions are coded in C for efficiency purposes and should
     behave exactly like the functions in base R. For all distributions
     that have a scale parameter, the corresponding functions have
@@ -301,9 +315,9 @@ OTHER NEW FEATURES
     actuarial science covered by the package.
 
   o French translations of the error and warning messages.
-  
+
   o The package now has a name space.
-  
+
 DEPRECATED, DEFUNCT OR NO BACKWARD COMPATIBILITY
 
   o Function panjer(), although still present in the package, should
