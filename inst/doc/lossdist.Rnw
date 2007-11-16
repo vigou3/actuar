@@ -2,7 +2,7 @@
   \usepackage{amsmath,color,hyperref}
   \usepackage[round]{natbib}
   \usepackage[T1]{fontenc}
-  \usepackage[latin1]{inputenc}
+  \usepackage[utf8]{inputenc}
   \usepackage[english]{babel}
   \usepackage{lucidabr}
   \usepackage{booktabs,tabularx,threeparttable}
@@ -13,9 +13,9 @@
   %\VignettePackage{actuar}
 
   \title{Loss distributions modeling features of \pkg{actuar}}
-  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
-    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
-    Mathieu Pigeon \\ École d'actuariat, Université Laval}
+  \author{Christophe Dutang \\ ISFA, UniversitÃ© Claude Bernard Lyon 1 \\[3ex]
+    Vincent Goulet \\ Ã‰cole d'actuariat, UniversitÃ© Laval \\[3ex]
+    Mathieu Pigeon \\ Ã‰cole d'actuariat, UniversitÃ© Laval}
   \date{}
 
   %% Some new commands. Commands \E and \VAR redefined to fit within
@@ -23,7 +23,7 @@
   \newcommand{\E}[1]{\mathrm{E}[ #1 ]}
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
   \newcommand{\LAS}{\mathrm{LAS}}
-  \newcommand{\mat}[1]{\boldsymbol{#1}}
+  \newcommand{\mat}[1]{\mathbf{#1}}
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
@@ -284,18 +284,18 @@ absorbing state. Let
     \mat{0} & 0
   \end{bmatrix}
 \end{equation}
-be the transition rates (or intensity) matrix of such a process and
-let $(\mat{\pi}, \pi_{m + 1})$ be the initial probability
-vector. Here, $\mat{T}$ is an $m \times m$ non-singular matrix with
-$t_{ii} < 0$ for $i = 1, \dots, m$ and $t_{ij} \geq 0$ for $i \neq j$,
-$\mat{t} = - \mat{T} \mat{e}$ and $\mat{e}$ is a column vector with
-all components equal to 1. Then the cdf of the time until absorption
-random variable with parameters $\mat{\pi}$ and $\mat{T}$ is
+be the transition rates matrix (or intensity matrix) of such a process
+and let $(\pmb{\pi}, \pi_{m + 1})$ be the initial probability vector.
+Here, $\mat{T}$ is an $m \times m$ non-singular matrix with $t_{ii} <
+0$ for $i = 1, \dots, m$ and $t_{ij} \geq 0$ for $i \neq j$, $\mat{t}
+= - \mat{T} \mat{e}$ and $\mat{e}$ is a column vector with all
+components equal to 1. Then the cdf of the time until absorption
+random variable with parameters $\pmb{\pi}$ and $\mat{T}$ is
 \begin{equation}
   \label{eq:cdf-phtype}
   F(x) =
   \begin{cases}
-    1 - \mat{\pi} e^{\mat{T} x} \mat{e}, & x > 0 \\
+    1 - \pmb{\pi} e^{\mat{T} x} \mat{e}, & x > 0 \\
     \pi_{m + 1}, & x = 0,
   \end{cases}
 \end{equation}
@@ -312,7 +312,7 @@ distributions.
 
 The package provides \code{d}, \code{p}, \code{r}, \code{m} and
 \code{mgf} functions for phase-type distributions. The root is
-\code{phtype} and parameters $\mat{\pi}$ and $\mat{T}$ are named
+\code{phtype} and parameters $\pmb{\pi}$ and $\mat{T}$ are named
 \code{prob} and \code{rates}, respectively. For the package, function
 \code{pphtype} is central to the evaluation of the probability of
 ruin; see \code{?ruin} and the \code{"risk"} vignette.
@@ -561,7 +561,7 @@ function \code{mde}, very similar in usage and inner working to
 distance minimization methods.
 
 \begin{enumerate}
-\item The Cramér-von~Mises method (\code{CvM}) minimizes the squared
+\item The CramÃ©r-von~Mises method (\code{CvM}) minimizes the squared
   difference between the theoretical cdf and the empirical cdf or
   ogive at their knots:
   \begin{equation}
@@ -620,7 +620,7 @@ options(op)                             # restore warnings
 
 It should be noted that optimization is not always that simple to
 achieve. For example, consider the problem of fitting a Pareto
-distribution to the same data set using the Cramér--von~Mises method:
+distribution to the same data set using the CramÃ©r--von~Mises method:
 <<echo=TRUE, eval=FALSE>>=
 mde(gdental, ppareto, start = list(shape = 3, scale = 600),
         measure = "CvM") # no convergence
@@ -664,13 +664,13 @@ precise definitions of these terms]{LossModels2e}. Table
 
 \begin{table}
   \begin{center}
-    \caption{Coverage modifications for per-loss variable and
-      per-payment variable as presented in \cite{LossModels2e}.}
+    \caption{Coverage modifications for per-loss variable ($Y^L$) and
+      per-payment variable ($Y^P$) as defined in \cite{LossModels2e}.}
     \label{tab:coverage}
     \begin{tabular}{lll}
       \toprule
-      Coverage modification & Per-loss variable ($Y^L$) &
-      Per-payment variable ($Y^P$)\\
+      Coverage modification & Per-loss variable &
+      Per-payment variable \\
       \midrule
       Ordinary deductible ($d$)  & $\begin{cases} 0, &\; X \leq
         d\\ X - d, &\; X > d\end{cases}$ & $\begin{cases} \text{undefined}, &\; X \leq
@@ -953,5 +953,5 @@ and is usually set in advance.
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t
-%%% coding: latin-1
+%%% coding: utf-8
 %%% End:

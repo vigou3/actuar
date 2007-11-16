@@ -2,7 +2,7 @@
   \usepackage{amsmath,color,hyperref}
   \usepackage[round]{natbib}
   \usepackage[T1]{fontenc}
-  \usepackage[latin1]{inputenc}
+  \usepackage[utf8]{inputenc}
   \usepackage[english]{babel}
   \usepackage{lucidabr}
   \usepackage{booktabs,tabularx,threeparttable}
@@ -13,9 +13,9 @@
   %\VignettePackage{actuar}
 
   \title{Risk theory features of \pkg{actuar}}
-  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
-    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
-    Mathieu Pigeon \\ École d'actuariat, Université Laval}
+  \author{Christophe Dutang \\ ISFA, UniversitÃ© Claude Bernard Lyon 1 \\[3ex]
+    Vincent Goulet \\ Ã‰cole d'actuariat, UniversitÃ© Laval \\[3ex]
+    Mathieu Pigeon \\ Ã‰cole d'actuariat, UniversitÃ© Laval}
   \date{}
 
   %% Some new commands
@@ -23,7 +23,7 @@
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
   \newcommand{\VaR}{\mathrm{VaR}}
   \newcommand{\CTE}{\mathrm{CTE}}
-  \newcommand{\mat}[1]{\boldsymbol{#1}}
+  \newcommand{\mat}[1]{\mathbf{#1}}
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
@@ -577,17 +577,17 @@ assumption can hardly be used beyond illustration purposes.
 
 Fortunately, phase-type distributions have come to the rescue since
 the early 1990s. \cite{AsmussenRolski_91} first show that in the
-classical Cramér--Lundberg model where interarrival times are
+classical CramÃ©r--Lundberg model where interarrival times are
 Exponential$(\lambda)$ distributed, if claim amounts are
-Phase-type$(\mat{\pi}, \mat{T})$ distributed, then $\psi(u) = 1
-- F(u)$, where $F$ is Phase-type$(\mat{\pi}_+, \mat{Q})$ with
+Phase-type$(\pmb{\pi}, \mat{T})$ distributed, then $\psi(u) = 1
+- F(u)$, where $F$ is Phase-type$(\pmb{\pi}_+, \mat{Q})$ with
 \begin{equation}
   \label{eq:prob-ruin:cramer-lundberg}
   \begin{split}
-    \mat{\pi}_+
-    &= - \frac{\lambda}{c}\, \mat{\pi} \mat{T}^{-1} \\
+    \pmb{\pi}_+
+    &= - \frac{\lambda}{c}\, \pmb{\pi} \mat{T}^{-1} \\
     \mat{Q}
-    &= \mat{T} + \mat{t} \mat{\pi}_+,
+    &= \mat{T} + \mat{t} \pmb{\pi}_+,
   \end{split}
 \end{equation}
 and $\mat{t} = -\mat{T} \mat{e}$, $\mat{e}$ is a column vector with
@@ -598,10 +598,10 @@ In the more general Sparre~Andersen model where interarrival times can
 be any Phase-type$(\mat{\nu}, \mat{S})$ distribution,
 \cite{AsmussenRolski_91} also show that using the same claim severity
 assumption as above, one still has $\psi(u) = 1 - F(u)$ where $F$ is
-Phase-type$(\mat{\pi}_+, \mat{Q})$, but with parameters
+Phase-type$(\pmb{\pi}_+, \mat{Q})$, but with parameters
 \begin{equation}
   \label{eq:prob-ruin:sparre:pi+}
-  \mat{\pi}_+  = \frac{\mat{e}^\prime (\mat{Q} - \mat{T})}{%
+  \pmb{\pi}_+  = \frac{\mat{e}^\prime (\mat{Q} - \mat{T})}{%
     c \mat{e}^\prime \mat{t}}
 \end{equation}
 and $\mat{Q}$ solution of
@@ -610,7 +610,7 @@ and $\mat{Q}$ solution of
   \begin{split}
     \mat{Q}
     &= \Psi(\mat{Q}) \\
-    &= \mat{T} - \mat{t} \mat{\pi}
+    &= \mat{T} - \mat{t} \pmb{\pi}
     \left[
       (\mat{I}_n \otimes \mat{\nu})
       (\mat{Q} \oplus \mat{S})^{-1}
@@ -798,5 +798,5 @@ discretization step.
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t
-%%% coding: latin-1
+%%% coding: utf-8
 %%% End:
