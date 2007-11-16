@@ -2,7 +2,7 @@
   \usepackage{amsmath,color,hyperref}
   \usepackage[round]{natbib}
   \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
+  \usepackage[latin1]{inputenc}
   \usepackage[english]{babel}
   \usepackage{lucidabr}
   \usepackage{paralist}
@@ -12,7 +12,7 @@
   %\VignettePackage{actuar}
 
   \title{Complete formulas used by \code{coverage}}
-  \author{Vincent Goulet \\ Ã‰cole d'actuariat, UniversitÃ© Laval}
+  \author{Vincent Goulet \\ École d'actuariat, Université Laval}
   \date{}
 
   %% Some new commands
@@ -369,4 +369,5 @@ axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t
+%%% coding: latin-1
 %%% End:

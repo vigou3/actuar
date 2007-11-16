@@ -2,7 +2,7 @@
   \usepackage{amsmath,color,hyperref}
   \usepackage[round]{natbib}
   \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
+  \usepackage[latin1]{inputenc}
   \usepackage[english]{babel}
   \usepackage{lucidabr}
   \usepackage{booktabs,tabularx,threeparttable}
@@ -13,9 +13,9 @@
   %\VignettePackage{actuar}
 
   \title{Loss distributions modeling features of \pkg{actuar}}
-  \author{Christophe Dutang \\ ISFA, UniversitÃ© Claude Bernard Lyon 1 \\[3ex]
-    Vincent Goulet \\ Ã‰cole d'actuariat, UniversitÃ© Laval \\[3ex]
-    Mathieu Pigeon \\ Ã‰cole d'actuariat, UniversitÃ© Laval}
+  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
+    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
+    Mathieu Pigeon \\ École d'actuariat, Université Laval}
   \date{}
 
   %% Some new commands. Commands \E and \VAR redefined to fit within
@@ -561,7 +561,7 @@ function \code{mde}, very similar in usage and inner working to
 distance minimization methods.
 
 \begin{enumerate}
-\item The CramÃ©r-von~Mises method (\code{CvM}) minimizes the squared
+\item The Cramér-von~Mises method (\code{CvM}) minimizes the squared
   difference between the theoretical cdf and the empirical cdf or
   ogive at their knots:
   \begin{equation}
@@ -620,7 +620,7 @@ options(op)                             # restore warnings
 
 It should be noted that optimization is not always that simple to
 achieve. For example, consider the problem of fitting a Pareto
-distribution to the same data set using the CramÃ©r--von~Mises method:
+distribution to the same data set using the Cramér--von~Mises method:
 <<echo=TRUE, eval=FALSE>>=
 mde(gdental, ppareto, start = list(shape = 3, scale = 600),
         measure = "CvM") # no convergence
@@ -953,6 +953,5 @@ and is usually set in advance.
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t
-%%% coding: utf-8
-%%% ispell-local-dictionary: american
+%%% coding: latin-1
 %%% End:

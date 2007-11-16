@@ -2,7 +2,7 @@
   \usepackage{amsmath,color,hyperref}
   \usepackage[round]{natbib}
   \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
+  \usepackage[latin1]{inputenc}
   \usepackage[english]{babel}
   \usepackage{lucidabr}
   \usepackage{paralist}
@@ -12,9 +12,9 @@
   %\VignettePackage{actuar}
 
   \title{Credibility theory features of \pkg{actuar}}
-  \author{Christophe Dutang \\ ISFA, UniversitÃ© Claude Bernard Lyon 1 \\[3ex]
-    Vincent Goulet \\ Ã‰cole d'actuariat, UniversitÃ© Laval \\[3ex]
-    Mathieu Pigeon \\ Ã‰cole d'actuariat, UniversitÃ© Laval}
+  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
+    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
+    Mathieu Pigeon \\ École d'actuariat, Université Laval}
   \date{}
 
   %% Some new commands. Commands \E and \VAR redefined to fit within
@@ -337,7 +337,7 @@ with
   \bar{X}_{zzw} = \sum_{i = 1}^I \frac{z_{i\pt}}{z_{\pt\pt}}\, X_{izw}.
 \end{equation}
 (Hence, $\E{A_i} = c_i a$ and $\E{B} = d b$.) Then, the
-BÃ¼hlmann--Gisler estimators are
+Bühlmann--Gisler estimators are
 \begin{align}
   \label{eq:ac-BG}
   \hat{a}
@@ -433,12 +433,12 @@ example because the formulas for the credibility premiums are
 different.
 
 
-\section{BÃ¼hlmann and BÃ¼hlmann--Straub models}
+\section{Bühlmann and Bühlmann--Straub models}
 \label{sec:buhlmann}
 
-As mentioned above, the BÃ¼hlmann and BÃ¼hlmann--Straub models are
+As mentioned above, the Bühlmann and Bühlmann--Straub models are
 simply one-level hierarchical models. In this case, the
-BÃ¼hlmann--Gisler and Ohlsson estimators of the between variance
+Bühlmann--Gisler and Ohlsson estimators of the between variance
 parameters are both identical to the usual \cite{BS_70} estimator
 \begin{equation}
   \label{eq:a-hat}
@@ -455,13 +455,13 @@ and the iterative estimator
 \end{equation}
 is better known as the Bichsel--Straub estimator.
 
-To fit the BÃ¼hlmann model using \code{cm}, one simply does not
+To fit the Bühlmann model using \code{cm}, one simply does not
 specify any weights:
 <<echo=TRUE>>=
 cm(~state, hachemeister, ratios = ratio.1:ratio.12)
 @
 
-In comparison, the results for the BÃ¼hlmann--Straub model using the
+In comparison, the results for the Bühlmann--Straub model using the
 Bichsel--Straub estimator are:
 <<echo=TRUE>>=
 cm(~state, hachemeister, ratios = ratio.1:ratio.12,
@@ -473,7 +473,7 @@ cm(~state, hachemeister, ratios = ratio.1:ratio.12,
 \label{sec:regression}
 
 The regression model of \cite{Hachemeister_75} is a generalization of
-the BÃ¼hlmann--Straub model. If data shows a systematic trend, the
+the Bühlmann--Straub model. If data shows a systematic trend, the
 latter model will typically under- or over-estimate the true premium
 of an entity. The idea of \citeauthor{Hachemeister_75} was to fit to
 the data a regression model where the parameters are a credibility
@@ -508,6 +508,5 @@ predict(fit, newdata = 0)	# future value of regressor
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t
-%%% coding: utf-8
-%%% ispell-local-dictionary: american
+%%% coding: latin-1
 %%% End:

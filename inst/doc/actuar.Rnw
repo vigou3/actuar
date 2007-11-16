@@ -1,6 +1,6 @@
 \documentclass{article}
   \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
+  \usepackage[latin1]{inputenc}
   \usepackage[english]{babel}
   \usepackage{lucidabr}
   \usepackage[noae]{Sweave}
@@ -9,9 +9,9 @@
   %\VignettePackage{actuar}
 
   \title{Introduction to \pkg{actuar}}
-  \author{Christophe Dutang \\ ISFA, UniversitÃ© Claude Bernard Lyon 1 \\[3ex]
-    Vincent Goulet \\ Ã‰cole d'actuariat, UniversitÃ© Laval \\[3ex]
-    Mathieu Pigeon \\ Ã‰cole d'actuariat, UniversitÃ© Laval}
+  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
+    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
+    Mathieu Pigeon \\ École d'actuariat, Université Laval}
   \date{}
 
   \newcommand{\proglang}[1]{\textsf{#1}}
@@ -86,12 +86,12 @@ for information on how to cite the software.
 \section*{Acknowledgments}
 
 The package would not be at this stage of development without the
-stimulating contribution of SÃ©bastien Auclair, Louis-Philippe Pouliot
+stimulating contribution of Sébastien Auclair, Louis-Philippe Pouliot
 and Tommy Ouellet.
 
 This research benefited from financial support from the Natural
 Sciences and Engineering Research Council of Canada and from the
-\emph{Chaire d'actuariat} (Actuarial Science Chair) of UniversitÃ©
+\emph{Chaire d'actuariat} (Actuarial Science Chair) of Université
 Laval.
 
 \end{document}
@@ -99,6 +99,5 @@ Laval.
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t
-%%% coding: utf-8
-%%% ispell-local-dictionary: english
+%%% coding: latin-1
 %%% End:

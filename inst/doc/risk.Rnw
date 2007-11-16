@@ -2,7 +2,7 @@
   \usepackage{amsmath,color,hyperref}
   \usepackage[round]{natbib}
   \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
+  \usepackage[latin1]{inputenc}
   \usepackage[english]{babel}
   \usepackage{lucidabr}
   \usepackage{booktabs,tabularx,threeparttable}
@@ -13,13 +13,12 @@
   %\VignettePackage{actuar}
 
   \title{Risk theory features of \pkg{actuar}}
-  \author{Christophe Dutang \\ ISFA, UniversitÃ© Claude Bernard Lyon 1 \\[3ex]
-    Vincent Goulet \\ Ã‰cole d'actuariat, UniversitÃ© Laval \\[3ex]
-    Mathieu Pigeon \\ Ã‰cole d'actuariat, UniversitÃ© Laval}
+  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
+    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
+    Mathieu Pigeon \\ École d'actuariat, Université Laval}
   \date{}
 
-  %% Some new commands. Commands \E and \VAR redefined to fit within
-  %% the author's writing habits...
+  %% Some new commands
   \newcommand{\E}[1]{\mathrm{E}[ #1 ]}
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
   \newcommand{\VaR}{\mathrm{VaR}}
@@ -558,7 +557,7 @@ plot(R)
 \end{figure}
 
 
-\section{Probability or ruin}
+\section{Probability of ruin}
 \label{sec:ruin}
 
 In this subsection, we always assume that interarrival times and claim
@@ -578,7 +577,7 @@ assumption can hardly be used beyond illustration purposes.
 
 Fortunately, phase-type distributions have come to the rescue since
 the early 1990s. \cite{AsmussenRolski_91} first show that in the
-classical CramÃ©r--Lundberg model where interarrival times are
+classical Cramér--Lundberg model where interarrival times are
 Exponential$(\lambda)$ distributed, if claim amounts are
 Phase-type$(\mat{\pi}, \mat{T})$ distributed, then $\psi(u) = 1
 - F(u)$, where $F$ is Phase-type$(\mat{\pi}_+, \mat{Q})$ with
@@ -799,6 +798,5 @@ discretization step.
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t
-%%% coding: utf-8
-%%% ispell-local-dictionary: american
+%%% coding: latin-1
 %%% End:
