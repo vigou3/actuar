@@ -8,7 +8,7 @@
   \usepackage{paralist}
   \usepackage[noae]{Sweave}
 
-  %\VignetteIndexEntry{Risk theory features}
+  %\VignetteIndexEntry{Credibility theory features}
   %\VignettePackage{actuar}
 
   \title{Credibility theory features of \pkg{actuar}}
