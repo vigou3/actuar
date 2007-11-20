@@ -1,9 +1,6 @@
 ### C code
 useDynLib(actuar, .registration = TRUE)
 
-### import code
-ImportFrom(Matrix, expm)
-
 ### Exports
 export(## Credibility theory
        bstraub, cm, severity, simpf, unroll,
