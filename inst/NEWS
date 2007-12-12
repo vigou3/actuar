@@ -166,8 +166,10 @@ NEW FEATURES -- LOSS DISTRIBUTIONS
      Generalized Pareto        genpareto
      Inverse Burr              invburr
      Inverse exponential       invexp
+     Inverse gamma	       invgamma
      Inverse Pareto            invpareto
      Inverse paralogistic      invparalogis
+     Inverse transformed gamma invtrgamma
      Inverse Weibull           invweibull
      Loggamma                  loggamma
      Loglogistic               llogis
