@@ -14,8 +14,8 @@
 
 double mnorm(double order, double mean, double sd, int give_log)
 {
-    if (!R_FINITE(mean) ||
-	!R_FINITE(sd) ||
+    if (!R_FINITE(mean)  ||
+	!R_FINITE(sd)    ||
 	!R_FINITE(order) ||
 	sd <= 0.0 ||
 	(int) order != order)
@@ -42,7 +42,7 @@ double mnorm(double order, double mean, double sd, int give_log)
 double mgfnorm(double x, double mean, double sd, int give_log)
 {
     if (!R_FINITE(mean) ||
-	!R_FINITE(sd) ||
+	!R_FINITE(sd)   ||
 	sd <= 0.0)
 	return R_NaN;
 

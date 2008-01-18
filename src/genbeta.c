@@ -108,7 +108,7 @@ double rgenbeta(double shape1, double shape2, double shape3, double scale)
     if (!R_FINITE(shape1) ||
 	!R_FINITE(shape2) ||
 	!R_FINITE(shape3) ||
-	!R_FINITE(scale) ||
+	!R_FINITE(scale)  ||
 	shape1 <= 0.0 ||
 	shape2 <= 0.0 ||
 	shape3 <= 0.0 ||
@@ -149,8 +149,8 @@ double levgenbeta(double limit, double shape1, double shape2, double shape3,
     if (!R_FINITE(shape1) ||
 	!R_FINITE(shape2) ||
 	!R_FINITE(shape3) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(order) ||
+	!R_FINITE(scale)  ||
+	!R_FINITE(order)  ||
 	shape1 <= 0.0 ||
 	shape2 <= 0.0 ||
 	shape3 <= 0.0 ||

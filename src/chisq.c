@@ -13,8 +13,8 @@
 
 double mchisq(double order, double df, double ncp, int give_log)
 {
-    if (!R_FINITE(df) ||
-	!R_FINITE(ncp) ||
+    if (!R_FINITE(df)    ||
+	!R_FINITE(ncp)   ||
 	!R_FINITE(order) ||
 	df <= 0.0 ||
 	ncp < 0.0 ||
@@ -54,8 +54,8 @@ double mchisq(double order, double df, double ncp, int give_log)
 
 double levchisq(double limit, double df, double ncp, double order, int give_log)
 {
-    if (!R_FINITE(df) ||
-	!R_FINITE(ncp) ||
+    if (!R_FINITE(df)    ||
+	!R_FINITE(ncp)   ||
 	!R_FINITE(order) ||
 	df <= 0.0 ||
 	ncp < 0.0 ||
@@ -82,7 +82,7 @@ double levchisq(double limit, double df, double ncp, double order, int give_log)
 
 double mgfchisq(double x, double df, double ncp, int give_log)
 {
-    if (!R_FINITE(df) ||
+    if (!R_FINITE(df)  ||
 	!R_FINITE(ncp) ||
 	df <= 0.0 ||
 	ncp < 0.0 ||

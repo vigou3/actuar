@@ -15,7 +15,7 @@
 double dlgamma(double x, double shapelog, double ratelog, int give_log)
 {
     if (!R_FINITE(shapelog) ||
-	!R_FINITE(ratelog) ||
+	!R_FINITE(ratelog)  ||
 	shapelog <= 0.0 ||
 	ratelog <= 0.0)
 	return R_NaN;;
@@ -30,7 +30,7 @@ double plgamma(double q, double shapelog, double ratelog, int lower_tail,
 	       int log_p)
 {
     if (!R_FINITE(shapelog) ||
-	!R_FINITE(ratelog) ||
+	!R_FINITE(ratelog)  ||
 	shapelog <= 0.0 ||
 	ratelog <= 0.0)
 	return R_NaN;;
@@ -45,7 +45,7 @@ double qlgamma(double p, double shapelog, double ratelog, int lower_tail,
 	       int log_p)
 {
     if (!R_FINITE(shapelog) ||
-	!R_FINITE(ratelog) ||
+	!R_FINITE(ratelog)  ||
 	shapelog <= 0.0 ||
 	ratelog <= 0.0)
 	return R_NaN;;
@@ -59,7 +59,7 @@ double qlgamma(double p, double shapelog, double ratelog, int lower_tail,
 double rlgamma(double shapelog, double ratelog)
 {
     if (!R_FINITE(shapelog) ||
-	!R_FINITE(ratelog) ||
+	!R_FINITE(ratelog)  ||
 	shapelog <= 0.0 ||
 	ratelog <= 0.0)
 	return R_NaN;;
@@ -70,10 +70,10 @@ double rlgamma(double shapelog, double ratelog)
 double mlgamma(double order, double shapelog, double ratelog, int give_log)
 {
     if (!R_FINITE(shapelog) ||
-	!R_FINITE(ratelog) ||
+	!R_FINITE(ratelog)  ||
 	!R_FINITE(order) ||
-	shapelog <= 0.0 ||
-	ratelog <= 0.0 ||
+	shapelog <= 0.0  ||
+	ratelog <= 0.0   ||
 	order >= ratelog)
 	return R_NaN;
 
@@ -86,12 +86,12 @@ double levlgamma(double limit, double shapelog, double ratelog, double order,
     double u;
 
     if (!R_FINITE(shapelog) ||
-	!R_FINITE(ratelog) ||
-	!R_FINITE(limit) ||
-	!R_FINITE(order) ||
-	shapelog <= 0.0 ||
-	ratelog <= 0.0 ||
-	limit <= 0.0 ||
+	!R_FINITE(ratelog)  ||
+	!R_FINITE(limit)    ||
+	!R_FINITE(order)    ||
+	shapelog <= 0.0  ||
+	ratelog <= 0.0   ||
+	limit <= 0.0     ||
 	order >= ratelog)
 	return R_NaN;
 

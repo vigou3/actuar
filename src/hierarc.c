@@ -47,7 +47,7 @@ SEXP hierarc(SEXP args)
     /* Initialization of some variables */
     double bt[length(b)];	/* previous values of 'b' */
     nlevels = length(b) - 1;	/* number of levels in the model */
-    bt[nlevels] = REAL(b)[nlevels]; /* within entity variance, never
+    bt[nlevels] = REAL(b)[nlevels]; /* within entity variance; never
 				     * changes. */
     int size[nlevels + 1];      /* total number of nodes at each
 				 * level, including the portfolio level */

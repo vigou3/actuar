@@ -87,8 +87,8 @@ double mpareto(double order, double shape, double scale, int give_log)
     if (!R_FINITE(shape) ||
 	!R_FINITE(scale) ||
 	!R_FINITE(order) ||
-	shape <= 0.0 ||
-	scale <= 0.0 ||
+	shape <= 0.0  ||
+	scale <= 0.0  ||
 	order <= -1.0 ||
 	order >= shape)
 	return R_NaN;

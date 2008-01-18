@@ -14,8 +14,8 @@
 double mlnorm(double order, double logmean, double logsd, int give_log)
 {
     if (!R_FINITE(logmean) ||
-	!R_FINITE(logsd) ||
-	!R_FINITE(order) ||
+	!R_FINITE(logsd)   ||
+	!R_FINITE(order)   ||
 	logsd <= 0.0)
 	return R_NaN;
 
@@ -28,8 +28,8 @@ double levlnorm(double limit, double logmean, double logsd, double order,
     double u;
 
     if (!R_FINITE(logmean) ||
-	!R_FINITE(logsd) ||
-	!R_FINITE(order) ||
+	!R_FINITE(logsd)   ||
+	!R_FINITE(order)   ||
 	logsd <= 0.0)
 	return R_NaN;
 

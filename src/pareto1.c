@@ -2,7 +2,7 @@
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, raw and limited moments and to simulate random variates
- *  for the single-parameter Pareto distribution. See 
+ *  for the single-parameter Pareto distribution. See
  *  ../R/SingleParameterPareto.R for details.
  *
  *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
@@ -16,7 +16,7 @@
 double dpareto1(double x, double shape, double min, int give_log)
 {
     if (!R_FINITE(shape) ||
-	!R_FINITE(min) ||
+	!R_FINITE(min)   ||
 	shape <= 0.0 ||
 	min <= 0.0)
 	return R_NaN;
@@ -30,7 +30,7 @@ double dpareto1(double x, double shape, double min, int give_log)
 double ppareto1(double q, double shape, double min, int lower_tail, int log_p)
 {
     if (!R_FINITE(shape) ||
-	!R_FINITE(min) ||
+	!R_FINITE(min)   ||
 	shape <= 0.0 ||
 	min <= 0.0)
 	return R_NaN;
@@ -44,7 +44,7 @@ double ppareto1(double q, double shape, double min, int lower_tail, int log_p)
 double qpareto1(double p, double shape, double min, int lower_tail, int log_p)
 {
     if (!R_FINITE(shape) ||
-	!R_FINITE(min) ||
+	!R_FINITE(min)   ||
 	shape <= 0.0 ||
 	min <= 0.0)
 	return R_NaN;
@@ -58,7 +58,7 @@ double qpareto1(double p, double shape, double min, int lower_tail, int log_p)
 double rpareto1(double shape, double min)
 {
     if (!R_FINITE(shape) ||
-	!R_FINITE(min) ||
+	!R_FINITE(min)   ||
 	shape <= 0.0 ||
 	min <= 0.0)
 	return R_NaN;
@@ -69,10 +69,10 @@ double rpareto1(double shape, double min)
 double mpareto1(double order, double shape, double min, int give_log)
 {
     if (!R_FINITE(shape) ||
-	!R_FINITE(min) ||
+	!R_FINITE(min)   ||
 	!R_FINITE(order) ||
 	shape <= 0.0 ||
-	min <= 0.0 ||
+	min <= 0.0   ||
 	order >= shape)
 	return R_NaN;
 
@@ -85,7 +85,7 @@ double levpareto1(double limit, double shape, double min, double order,
     double tmp;
 
     if (!R_FINITE(shape) ||
-	!R_FINITE(min) ||
+	!R_FINITE(min)   ||
 	!R_FINITE(order) ||
 	shape <= 0.0 ||
 	min <= 0.0)

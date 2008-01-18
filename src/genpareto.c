@@ -50,7 +50,7 @@ double pgenpareto(double q, double shape1, double shape2, double scale,
     double u;
 
     if (!R_FINITE(shape1) ||
-	!R_FINITE(scale) ||
+	!R_FINITE(scale)  ||
 	!R_FINITE(shape2) ||
 	shape1 <= 0.0 ||
 	scale <= 0.0 ||

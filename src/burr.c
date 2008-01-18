@@ -75,7 +75,7 @@ double qburr(double p, double shape1, double shape2, double scale,
 	scale  <= 0.0)
 	return R_NaN;
 
-    R_Q_P01_boundaries(p, 0, R_PosInf );
+    R_Q_P01_boundaries(p, 0, R_PosInf);
     p =  R_D_qIv(p);
 
     return scale * R_pow(R_pow(R_D_Cval(p), -1.0/shape1) - 1.0, 1.0/shape2);

@@ -161,7 +161,7 @@ SEXP do_dpq1(int code, SEXP args)
     case  3:  return DPQ1_2(args, pinvexp);
     case  4:  return DPQ1_2(args, qinvexp);
     case  5:  return DPQ1_1(args, minvexp);
-	case  6:  return DPQ1_1(args, mgfexp);
+    case  6:  return DPQ1_1(args, mgfexp);
     default:
 	error(_("internal error in do_dpq1"));
     }
@@ -336,16 +336,16 @@ SEXP do_dpq2(int code, SEXP args)
     case 40:  return DPQ2_1(args, levexp);
     case 41:  return DPQ2_1(args, levinvexp);
     case 42:  return DPQ2_1(args, mbeta);
-	case 43:  return DPQ2_1(args, mgfgamma);
-	case 44:  return DPQ2_1(args, mgfnorm);
-	case 45:  return DPQ2_1(args, mgfunif);
-	case 46:  return DPQ2_1(args, mgfinvgamma);
-	case 47:  return DPQ2_1(args, mnorm);
-	case 48:  return DPQ2_1(args, mchisq);
-	case 49:  return DPQ2_1(args, mgfchisq);
-	case 50:  return DPQ2_1(args, minvGauss); //notation from SuppDists package
-	case 51:  return DPQ2_1(args, mgfinvGauss);
-	case 52:  return DPQ2_1(args, munif);
+    case 43:  return DPQ2_1(args, mgfgamma);
+    case 44:  return DPQ2_1(args, mgfnorm);
+    case 45:  return DPQ2_1(args, mgfunif);
+    case 46:  return DPQ2_1(args, mgfinvgamma);
+    case 47:  return DPQ2_1(args, mnorm);
+    case 48:  return DPQ2_1(args, mchisq);
+    case 49:  return DPQ2_1(args, mgfchisq);
+    case 50:  return DPQ2_1(args, minvGauss); /* notation from SuppDists */
+    case 51:  return DPQ2_1(args, mgfinvGauss);
+    case 52:  return DPQ2_1(args, munif);
     default:
 	error(_("internal error in do_dpq2"));
     }
@@ -523,9 +523,9 @@ SEXP do_dpq3(int code, SEXP args)
     case 31:  return DPQ3_1(args, levpareto1);
     case 32:  return DPQ3_1(args, levweibull);
     case 33:  return DPQ3_1(args, levbeta);
-	case 34:  return DPQ3_1(args, levchisq);
-	case 35:  return DPQ3_1(args, levinvGauss); //notation from SuppDists package
-	case 36:  return DPQ3_1(args, levunif);
+    case 34:  return DPQ3_1(args, levchisq);
+    case 35:  return DPQ3_1(args, levinvGauss); /* notation from SuppDists */
+    case 36:  return DPQ3_1(args, levunif);
     default:
 	error(_("internal error in do_dpq3"));
     }

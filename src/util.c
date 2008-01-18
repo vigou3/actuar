@@ -229,7 +229,7 @@ double expmprod(double *x, double *M, double *y, int n)
     double one = 1.0, zero = 0.0, *tmp, *expM;
 
     tmp = (double *) R_alloc(n, sizeof(double)); /* intermediate vector */
-    expM  = (double *) R_alloc(n * n, sizeof(double)); /* matrix exponential */
+    expM = (double *) R_alloc(n * n, sizeof(double)); /* matrix exponential */
 
     /* Compute exp(M) */
     expm(M, n, expM);
