@@ -667,20 +667,35 @@ precise definitions of these terms]{LossModels2e}. Table
     \caption{Coverage modifications for per-loss variable ($Y^L$) and
       per-payment variable ($Y^P$) as defined in \cite{LossModels2e}.}
     \label{tab:coverage}
-    \begin{tabular}{lll}
+\begin{tabular}{lll}
       \toprule
-      Coverage modification & Per-loss variable &
-      Per-payment variable \\
+      Coverage modification & Per-loss variable ($Y^L$) &
+      Per-payment variable ($Y^P$)\\
       \midrule
-      Ordinary deductible ($d$)  & $\begin{cases} 0, &\; X \leq
-        d\\ X - d, &\; X > d\end{cases}$ & $\begin{cases} \text{undefined}, &\; X \leq
-        d\\ X - d, &\; X > d\end{cases}$ \medskip \\
-      Franchise deductible ($d$) &  $\begin{cases} 0, &\; X \leq
-        d\\ X, &\; X > d\end{cases}$ &  $\begin{cases} \text{undefined}, &\; X \leq
-        d\\ X, &\; X > d\end{cases} $ \medskip \\
-      Limit ($u$) & $\begin{cases} X, &\; X \leq
-        u\\ u, &\; X > u\end{cases}$ & $\begin{cases} X, &\; X \leq
-        u\\ u, &\; X > u\end{cases}$ \bigskip \\
+      Ordinary deductible ($d$)  &
+      $\begin{cases}
+        0, & X \leq d \\
+        X - d, & X > d
+      \end{cases}$ &
+      $\begin{cases}
+        X - d, & X > d
+      \end{cases}$ \medskip \\
+      Franchise deductible ($d$) &
+      $\begin{cases}
+        0, & X \leq d \\
+        X, & X > d
+      \end{cases}$ &
+      $\begin{cases}
+        X, & X > d
+      \end{cases} $ \medskip \\
+      Limit ($u$) &
+      $\begin{cases}
+        X, & X \leq u \\
+        u, & X > u
+      \end{cases}$ &
+      $\begin{cases} X, & X \leq u \\
+        u, & X > u
+      \end{cases}$ \bigskip \\
       Coinsurance ($\alpha$) & $\alpha X$ & $\alpha X$ \medskip \\
       Inflation ($r$) & $(1 + r)X$ & $(1 + r)X$ \\
       \bottomrule
