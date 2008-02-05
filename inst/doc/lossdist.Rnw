@@ -59,10 +59,8 @@ options(width = 62, digits = 4)
 
 One important task of actuaries is the modeling of claim amounts
 distributions for ratemaking, loss reserving or other risk evaluation
-purposes. Package \pkg{actuar} offers a large number of functions
-related to loss distributions modeling. Some complement the many tools
-already part of base \proglang{R}, while others provide support for
-entirely untouched procedures common in Actuarial Science. The
+purposes. Package \pkg{actuar} offers many functions
+related to loss distributions modeling. The
 following subsections detail the following \pkg{actuar} features:
 \begin{enumerate}
 \item introduction of 18 additional probability laws and functions to
@@ -215,10 +213,8 @@ The package provides \code{d}, \code{p}, \code{r}, \code{m} and
 ruin; see \code{?ruin} and the \code{"risk"} vignette.
 
 The core of all the functions presented in this subsection is written
-in \proglang{C} for speed. In almost every respect, they behave just
-like the base \proglang{R} functions. The matrix exponential
-\proglang{C} routine is a simplified version of \code{expm()} from
-package \pkg{Matrix} \citep{Matrix}.
+in \proglang{C} for speed. The matrix exponential \proglang{C} routine 
+is based on \code{expm()} from package \pkg{Matrix} \citep{Matrix}.
 
 
 \section{Grouped data}
@@ -231,9 +227,7 @@ possibility that $c_r = \infty$). This representation is much more
 compact than an individual data set (where the value of each claim is
 known), but it also carries far less information. Now that storage
 space in computers has almost become a non issue, grouped data has
-somewhat fallen out of fashion, to the point that the material on
-grouped data present in the first edition of \cite{LossModels} has
-been deleted in the second edition \cite{LossModels2e}.
+somewhat fallen out of fashion.
 
 Still, grouped data remains in use in some fields of actuarial
 practice and also of interest in teaching. For this reason,
@@ -246,7 +240,7 @@ replacement and summary functions, manipulation of grouped data
 becomes similar to that of individual data.
 
 First, function \code{grouped.data} creates a grouped data object
-similar to --- an inheriting from --- a data frame. The input of the
+similar to --- and inheriting from --- a data frame. The input of the
 function is a vector of group boundaries $c_0, c_1, \dots, c_r$ and
 one or more vectors of group frequencies $n_1, \dots, n_r$. Note that
 there should be one group boundary more than group frequencies.
@@ -616,7 +610,6 @@ covered loss of $u$). Then the definition of $Y^P$ is
 \begin{equation}
   Y^P =
   \begin{cases}
-    \text{undefined}, & X < d \\
     X - d,            & d \leq X \leq u \\
     u - d,            & X \geq u
   \end{cases}

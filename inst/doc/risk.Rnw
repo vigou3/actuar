@@ -73,8 +73,7 @@ The interested reader can read more on these subjects in
 The current version of \pkg{actuar} contains four visible functions
 related to the above problems: two for the calculation of the
 aggregate claim amount distribution and two for ruin probability
-calculations. We feel the implementations make \textsf{R} shine as a
-computing and modeling platform for risk theory.
+calculations. 
 
 
 
@@ -260,8 +259,7 @@ supported.
   \end{displaymath}
   with starting value $f_S(0) = P_N(f_C(0))$, where $P_N(\cdot)$ is
   the probability generating function of $N$. Probabilities are
-  computed until their sum is close to 1 (how close is the user's
-  choice).
+  computed until their sum is arbitrarily close to 1.
 
   The recursions are done in \proglang{C} to dramatically increase
   speed. One difficulty the programmer is facing is the unknown length
@@ -618,7 +616,7 @@ and $\mat{Q}$ solution of
     \right].
   \end{split}
 \end{equation}
-In the above, $\mat{s} = -\mat{s} \mat{e}$, $\mat{I}_n$ is the $n
+In the above, $\mat{s} = -\mat{S} \mat{e}$, $\mat{I}_n$ is the $n
 \times n$ identity matrix, $\otimes$ denotes the usual Kronecker
 product between two matrices and $\oplus$ is the Kronecker sum defined
 as
