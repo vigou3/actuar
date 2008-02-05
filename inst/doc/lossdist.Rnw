@@ -88,150 +88,47 @@ The \pkg{actuar} package provides \code{d}, \code{p}, \code{q} and
 \code{r} functions for all the probability laws useful for loss
 severity modeling found in Appendix A of \cite{LossModels2e} and not
 already present in base R, excluding the inverse Gaussian and log-$t$
-but including the loggamma distribution \citep{HoggKlugman}. For
-reference, Appendix \ref{sec:appendix} lists the pdf and cdf of these
-distributions.
+but including the loggamma distribution \citep{HoggKlugman}.
 
-Tables %
-\ref{tab:distributions:trbeta_family}--\ref{tab:distributions:other} %
-list the supported distributions classified by families. Each table
-details the names of the distributions as given in
-\cite{LossModels2e}, the root name of the \proglang{R} functions and the
-names of the arguments corresponding to each parameter in the
-parametrization of \cite{LossModels2e}. One will note that by default
-all functions (except those for the Pareto distribution) use a rate
-parameter equal to the inverse of the scale parameter. This differs
-from \cite{LossModels2e} but is better in line with the functions for
-the gamma, exponential and Weibull distributions in base \proglang{R}.
-
-\begin{table}
-  \caption{Supported distributions from the Transformed Beta family,
-    root name of the \proglang{R} functions and argument name
-    corresponding to each parameter in the parametrization of
-    \cite{LossModels2e}.}
-  \label{tab:distributions:trbeta_family}
-
-  \begin{tabularx}{\textwidth}{XXXX}
-    \toprule
-    Distribution name & Root (alias) & Arguments \\
-    \midrule
-    Transformed beta & \code{trbeta} (\code{pearson6}) &
-      \code{shape1} ($\alpha$) \newline
-      \code{shape2} ($\gamma$) \newline
-      \code{shape3} ($\tau$) \newline
-      \code{rate}   ($\lambda = 1/\theta$) \newline
-      \code{scale}  ($\theta$) \\
-      \midrule
-    Burr & \code{burr} &
-      \code{shape1} ($\alpha$) \newline
-      \code{shape2} ($\gamma$) \newline
-      \code{rate}   ($\lambda = 1/\theta)$ \newline
-      \code{scale}  ($\theta$) \\
-      \midrule
-    Loglogistic & \code{llogis} &
-      \code{shape}  ($\gamma$) \newline
-      \code{rate}   ($\lambda = 1/\theta)$ \newline
-      \code{scale}  ($\theta$) \\
-      \midrule
-    Paralogistic & \code{paralogis} &
-      \code{shape}  ($\alpha$) \newline
-      \code{rate}   ($\lambda = 1/\theta)$ \newline
-      \code{scale}  ($\theta$) \\
-      \midrule
-    Generalized Pareto & \code{genpareto} &
-      \code{shape1} ($\alpha$),  \newline
-      \code{shape2} ($\tau$),  \newline
-      \code{rate}   ($\lambda = 1/\theta)$ \newline
-      \code{scale}  ($\theta$) \\
-      \midrule
-    Pareto & \code{pareto} (\code{pareto2}) &
-      \code{shape}  ($\alpha$) \newline
-      \code{scale}  ($\theta$) \\
-      \midrule
-    Inverse Burr & \code{invburr} &
-      \code{shape1} ($\tau$) \newline
-      \code{shape2} ($\gamma$) \newline
-      \code{rate}   ($\lambda = 1/\theta)$ \newline
-      \code{scale}  ($\theta$) \\
-      \midrule
-    Inverse Pareto & \code{invpareto} &
-      \code{shape}  ($\tau$) \newline
-      \code{scale}  ($\theta$) \\
-      \midrule
-    Inverse paralogistic & \code{invparalogis} &
-      \code{shape}  ($\tau$) \newline
-      \code{rate}   ($\lambda = 1/\theta)$ \newline
-      \code{scale}  ($\theta$) \\
-    \bottomrule
-  \end{tabularx}
-\end{table}
-
-\begin{table}
-  \caption{Supported distributions from the Transformed Gamma family,
-    root name of the \proglang{R} functions and argument name
-    corresponding to each parameter in the parametrization of
-    \cite{LossModels2e}.}
-  \label{tab:distributions:trgamma_family}
-
-  \begin{tabularx}{\textwidth}{XXX}
-    \toprule
-    Distribution name & Root (alias) & Arguments \\
-    \midrule
-    Transformed gamma & \code{trgamma} &
-      \code{shape1} ($\alpha$), \newline
-      \code{shape2} ($\tau$) \newline
-      \code{rate}   ($\lambda = 1/\theta$), \newline
-      \code{scale}  ($\theta$), \\
-      \midrule
-    Inverse transformed\newline gamma & \code{invtrgamma} &
-      \code{shape1} ($\alpha$), \newline
-      \code{shape2} ($\tau$) \newline
-      \code{rate}   ($\lambda = 1/\theta$), \newline
-      \code{scale}  ($\theta$), \\
-      \midrule
-    Inverse gamma & \code{invgamma} &
-      \code{shape}  ($\alpha$), \newline
-      \code{rate}   ($\lambda = 1/\theta$), \newline
-      \code{scale}  ($\theta$) \\
-      \midrule
-    Inverse Weibull & \code{invweibull} (\code{lgompertz}) &
-      \code{shape}  ($\tau$), \newline
-      \code{rate}   ($\lambda = 1/\theta$), \newline
-      \code{scale}  ($\theta$) \\
-      \midrule
-    Inverse exponential & \code{invexp} &
-      \code{rate}   ($\lambda = 1/\theta$) \newline
-      \code{scale}  ($\theta$) \\
-    \bottomrule
-  \end{tabularx}
-\end{table}
-
+Table \ref{tab:distributions} lists the supported distributions as
+named in \cite{LossModels2e} along with the root names of the
+\proglang{R} functions. For reference, Appendix \ref{sec:appendix}
+also gives for every distribution the pdf, the cdf and the name of the
+argument corresponding to each parameter in the parametrization of
+\cite{LossModels2e}. One will note that by default all functions
+(except those for the Pareto distribution) use a rate parameter equal
+to the inverse of the scale parameter. This differs from
+\cite{LossModels2e} but is better in line with the functions for the
+gamma, exponential and Weibull distributions in base \proglang{R}.
 
 \begin{table}
   \begin{threeparttable}
-    \caption{Other supported distributions, root name of the
-      \proglang{R} functions and argument name corresponding to each
-      parameter in the parametrization of \cite{LossModels2e}.}
-    \label{tab:distributions:other}
-
-    \begin{tabularx}{\textwidth}{XXX}
+    \caption{Probability laws supported by \pkg{actuar} classified by
+      family and root name of the \proglang{R} functions.}
+    \label{tab:distributions}
+    \begin{tabularx}{\textwidth}{lXl}
       \toprule
-      Distribution name & Root (alias) & Arguments \\
+      Family & Distribution & Root \\
       \midrule
-      Loggamma\tnote{1} & \code{lgamma} &
-        \code{shapelog} ($\alpha$) \newline
-        \code{ratelog}  ($\lambda$) \\
-        \midrule
-      Single parameter\newline Pareto & \code{pareto1} &
-        \code{shape} ($\alpha$) \newline
-        \code{min}    ($\theta$) \\
-        \midrule
-      Generalized beta & \code{genbeta} &
-        \code{shape1} ($\alpha$) \newline
-        \code{shape2} ($\beta$) \newline
-        \code{shape3} ($\tau$) \newline
-        \code{rate} ($\lambda = 1/\theta)$ \newline
-      \code{scale}  ($\theta$) \\
+      Transformed beta  & Transformed beta & \code{trbeta} \\
+                        & Burr & \code{burr} \\
+                        & Loglogistic & \code{llogis} \\
+                        & Paralogistic & \code{paralogis} \\
+                        & Generalized Pareto & \code{genpareto} \\
+                        & Pareto & \code{pareto} \\
+                        & Inverse Burr & \code{invburr} \\
+                        & Inverse Pareto & \code{invpareto} \\
+                        & Inverse paralogistic & \code{invparalogis} \\
+      \midrule
+      Transformed gamma & Transformed gamma & \code{trgamma} \\
+                        & Inverse transformed gamma & \code{invtrgamma} \\
+                        & Inverse gamma & \code{invgamma} \\
+                        & Inverse Weibull & \code{invweibull} \\
+                        & Inverse exponential & \code{invexp} \\
+      \midrule
+      Other             & Loggamma\tnote{1} & \code{lgamma} \\
+                        & Single parameter Pareto & \code{pareto1} \\
+                        & Generalized beta & \code{genbeta} \\
       \bottomrule
     \end{tabularx}
     \begin{tablenotes}
@@ -800,10 +697,19 @@ is the (regularized) incomplete beta function.
 Unless otherwise stated all parameters are strictly positive and the
 functions are defined for $x > 0$.
 
-\subsection{Transformed Beta family}
+\subsection{Transformed beta family}
 \label{sec:appendix:transformed-beta}
 
 \subsubsection*{Transformed beta}
+
+\begin{compactitem}[]
+\item Root: \code{trbeta}, \code{pearson6}
+\item Parameters: \code{shape1} ($\alpha$),
+      \code{shape2} ($\gamma$),
+      \code{shape3} ($\tau$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
 
 \begin{align*}
   f(x) &= \frac{\gamma u^\tau (1 - u)^\alpha}{x \beta
@@ -885,7 +791,7 @@ functions are defined for $x > 0$.
   F(x) &= u^\tau
 \end{align*}
 
-\subsection{Transformed Gamma family}
+\subsection{Transformed gamma family}
 \label{sec:appendix:transformed-gamma}
 
 \subsubsection*{Transformed gamma}
@@ -970,3 +876,138 @@ and is usually set in advance.
 %%% TeX-master: t
 %%% coding: utf-8
 %%% End:
+
+\begin{table}
+  \caption{Supported distributions from the Transformed Beta family,
+    root name of the \proglang{R} functions and argument name
+    corresponding to each parameter in the parametrization of
+    \cite{LossModels2e}.}
+  \label{tab:distributions:trbeta_family}
+
+  \begin{tabularx}{\textwidth}{XXXX}
+    \toprule
+    Distribution name & Root (alias) & Arguments \\
+    \midrule
+    Transformed beta & \code{trbeta} (\code{pearson6}) &
+      \code{shape1} ($\alpha$) \newline
+      \code{shape2} ($\gamma$) \newline
+      \code{shape3} ($\tau$) \newline
+      \code{rate}   ($\lambda = 1/\theta$) \newline
+      \code{scale}  ($\theta$) \\
+      \midrule
+    Burr & \code{burr} &
+      \code{shape1} ($\alpha$) \newline
+      \code{shape2} ($\gamma$) \newline
+      \code{rate}   ($\lambda = 1/\theta)$ \newline
+      \code{scale}  ($\theta$) \\
+      \midrule
+    Loglogistic & \code{llogis} &
+      \code{shape}  ($\gamma$) \newline
+      \code{rate}   ($\lambda = 1/\theta)$ \newline
+      \code{scale}  ($\theta$) \\
+      \midrule
+    Paralogistic & \code{paralogis} &
+      \code{shape}  ($\alpha$) \newline
+      \code{rate}   ($\lambda = 1/\theta)$ \newline
+      \code{scale}  ($\theta$) \\
+      \midrule
+    Generalized Pareto & \code{genpareto} &
+      \code{shape1} ($\alpha$),  \newline
+      \code{shape2} ($\tau$),  \newline
+      \code{rate}   ($\lambda = 1/\theta)$ \newline
+      \code{scale}  ($\theta$) \\
+      \midrule
+    Pareto & \code{pareto} (\code{pareto2}) &
+      \code{shape}  ($\alpha$) \newline
+      \code{scale}  ($\theta$) \\
+      \midrule
+    Inverse Burr & \code{invburr} &
+      \code{shape1} ($\tau$) \newline
+      \code{shape2} ($\gamma$) \newline
+      \code{rate}   ($\lambda = 1/\theta)$ \newline
+      \code{scale}  ($\theta$) \\
+      \midrule
+    Inverse Pareto & \code{invpareto} &
+      \code{shape}  ($\tau$) \newline
+      \code{scale}  ($\theta$) \\
+      \midrule
+    Inverse paralogistic & \code{invparalogis} &
+      \code{shape}  ($\tau$) \newline
+      \code{rate}   ($\lambda = 1/\theta)$ \newline
+      \code{scale}  ($\theta$) \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}
+  \caption{Supported distributions from the Transformed Gamma family,
+    root name of the \proglang{R} functions and argument name
+    corresponding to each parameter in the parametrization of
+    \cite{LossModels2e}.}
+  \label{tab:distributions:trgamma_family}
+
+  \begin{tabularx}{\textwidth}{XXX}
+    \toprule
+    Distribution name & Root (alias) & Arguments \\
+    \midrule
+    Transformed gamma & \code{trgamma} &
+      \code{shape1} ($\alpha$), \newline
+      \code{shape2} ($\tau$) \newline
+      \code{rate}   ($\lambda = 1/\theta$), \newline
+      \code{scale}  ($\theta$), \\
+      \midrule
+    Inverse transformed\newline gamma & \code{invtrgamma} &
+      \code{shape1} ($\alpha$), \newline
+      \code{shape2} ($\tau$) \newline
+      \code{rate}   ($\lambda = 1/\theta$), \newline
+      \code{scale}  ($\theta$), \\
+      \midrule
+    Inverse gamma & \code{invgamma} &
+      \code{shape}  ($\alpha$), \newline
+      \code{rate}   ($\lambda = 1/\theta$), \newline
+      \code{scale}  ($\theta$) \\
+      \midrule
+    Inverse Weibull & \code{invweibull} (\code{lgompertz}) &
+      \code{shape}  ($\tau$), \newline
+      \code{rate}   ($\lambda = 1/\theta$), \newline
+      \code{scale}  ($\theta$) \\
+      \midrule
+    Inverse exponential & \code{invexp} &
+      \code{rate}   ($\lambda = 1/\theta$) \newline
+      \code{scale}  ($\theta$) \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}
+  \begin{threeparttable}
+    \caption{Other supported distributions, root name of the
+      \proglang{R} functions and argument name corresponding to each
+      parameter in the parametrization of \cite{LossModels2e}.}
+    \label{tab:distributions:other}
+
+    \begin{tabularx}{\textwidth}{XXX}
+      \toprule
+      Distribution name & Root (alias) & Arguments \\
+      \midrule
+      Loggamma\tnote{1} & \code{lgamma} &
+        \code{shapelog} ($\alpha$) \newline
+        \code{ratelog}  ($\lambda$) \\
+        \midrule
+      Single parameter\newline Pareto & \code{pareto1} &
+        \code{shape} ($\alpha$) \newline
+        \code{min}    ($\theta$) \\
+        \midrule
+      Generalized beta & \code{genbeta} &
+        \code{shape1} ($\alpha$) \newline
+        \code{shape2} ($\beta$) \newline
+        \code{shape3} ($\tau$) \newline
+        \code{rate} ($\lambda = 1/\theta)$ \newline
+      \code{scale}  ($\theta$) \\
+      \bottomrule
+    \end{tabularx}
+    \begin{tablenotes}
+    \item[1] See \cite{HoggKlugman}.
+    \end{tablenotes}
+  \end{threeparttable}
+\end{table}
