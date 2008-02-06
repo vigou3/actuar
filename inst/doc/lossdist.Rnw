@@ -714,6 +714,14 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Burr}
 
+\begin{compactitem}[]
+\item Root: \code{burr}
+\item Parameters: \code{shape1} ($\alpha$),
+      \code{shape2} ($\gamma$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
 \begin{align*}
   f(x) &= \frac{\alpha \gamma u^\alpha (1 - u)}{x},
   \qquad u = \frac{1}{1 + v},
@@ -722,6 +730,13 @@ functions are defined for $x > 0$.
 \end{align*}
 
 \subsubsection*{Loglogistic}
+
+\begin{compactitem}[]
+\item Root: \code{llogis}
+\item Parameters: \code{shape} ($\gamma$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
 
 \begin{align*}
   f(x) &= \frac{\gamma u (1 - u)}{x},
@@ -732,6 +747,14 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Paralogistic}
 
+\begin{compactitem}[]
+\item Root: \code{paralogis}
+\item Parameters: \code{shape} ($\alpha$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+
 \begin{align*}
   f(x) &= \frac{\alpha^2 u^\alpha (1 - u)}{x},
   \qquad u = \frac{1}{1 + v},
@@ -740,6 +763,14 @@ functions are defined for $x > 0$.
 \end{align*}
 
 \subsubsection*{Generalized Pareto}
+
+\begin{compactitem}[]
+\item Root: \code{genpareto}
+\item Parameters: \code{shape1} ($\alpha$),
+      \code{shape2} ($\gamma$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
 
 \begin{align*}
   f(x) &= \frac{u^\tau (1 - u)^\alpha}{x \beta (\alpha, \tau )},
@@ -750,6 +781,12 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Pareto}
 
+\begin{compactitem}[]
+\item Root: \code{pareto}, \code{pareto2}
+\item Parameters: \code{shape} ($\alpha$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
 \begin{align*}
   f(x) &= \frac{\alpha u^\alpha (1 - u)}{x},
   \qquad u = \frac{1}{1 + v},
@@ -758,6 +795,14 @@ functions are defined for $x > 0$.
 \end{align*}
 
 \subsubsection*{Inverse Burr}
+
+\begin{compactitem}[]
+\item Root: \code{invburr}
+\item Parameters: \code{shape1} ($\tau$),
+      \code{shape2} ($\gamma$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
 
 \begin{align*}
   f(x) &= \frac{\tau \gamma u^\tau (1 - u)}{x},
@@ -768,6 +813,12 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Inverse Pareto}
 
+\begin{compactitem}[]
+\item Root: \code{invpareto}
+\item Parameters: \code{shape} ($\tau$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
 \begin{align*}
   f(x) &= \frac{\tau u^\tau (1 - u)}{x},
   \qquad u = \frac{v}{1 + v},
@@ -776,6 +827,13 @@ functions are defined for $x > 0$.
 \end{align*}
 
 \subsubsection*{Inverse paralogictic}
+
+\begin{compactitem}[]
+\item Root: \code{invparalogis}
+\item Parameters: \code{shape} ($\tau$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
 
 \begin{align*}
   f(x) &= \frac{\tau^2 u^\tau (1 - u)}{x},
@@ -789,6 +847,14 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Transformed gamma}
 
+\begin{compactitem}[]
+\item Root: \code{trgamma}
+\item Parameters: \code{shape1} ($\alpha$),
+      \code{shape2} ($\tau$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
 \begin{align*}
   f(x) &= \frac{\tau u^\alpha e^{-u}}{x \Gamma(\alpha)},
   \qquad u = \left( \frac{x}{\theta} \right)^\tau \\
@@ -797,6 +863,14 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Inverse transformed gamma}
 
+\begin{compactitem}[]
+\item Root: \code{invtrgamma}
+\item Parameters: \code{shape1} ($\alpha$),
+      \code{shape2} ($\tau$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
 \begin{align*}
   f(x) &= \frac{\tau u^\alpha e^{-u}}{x\Gamma (\alpha)},
   \qquad u = \left( \frac{\theta}{x} \right)^\tau \\
@@ -804,6 +878,13 @@ functions are defined for $x > 0$.
 \end{align*}
 
 \subsubsection*{Inverse gamma}
+
+\begin{compactitem}[]
+\item Root: \code{invgamma}
+\item Parameters: \code{shape} ($\alpha$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
 
 \begin{align*}
   f(x) &= \frac{u^\alpha e^{-u}}{x\Gamma (\alpha)},
@@ -814,6 +895,13 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Inverse Weibull}
 
+\begin{compactitem}[]
+\item Root: \code{invweibull}, \code{lgompertz}
+\item Parameters: \code{shape} ($\tau$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
 \begin{align*}
   f(x) &= \frac{\tau u e^{-u}}{x},
   \qquad u = \left( \frac{\theta}{x} \right)^\tau \\
@@ -821,6 +909,12 @@ functions are defined for $x > 0$.
 \end{align*}
 
 \subsubsection*{Inverse exponential}
+
+\begin{compactitem}[]
+\item Root: \code{invexp}
+\item Parameters: \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
 
 \begin{align*}
   f(x) &= \frac{u e^{-u}}{x},
@@ -833,6 +927,12 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Loggamma}
 
+\begin{compactitem}[]
+\item Root: \code{lgamma}
+\item Parameters: \code{shapelog} ($\alpha$),
+      \code{ratelog}   ($\lambda$)
+\end{compactitem}
+
 \begin{align*}
   f(x) &= \frac{\lambda^\alpha (\ln x)^{\alpha - 1}}{%
     x^{\lambda + 1} \Gamma(\alpha)},
@@ -841,6 +941,12 @@ functions are defined for $x > 0$.
 \end{align*}
 
 \subsubsection*{Single parameter Pareto}
+
+\begin{compactitem}[]
+\item Root: \code{pareto1}
+\item Parameters: \code{shape} ($\alpha$),
+      \code{min}   ($\theta$)
+\end{compactitem}
 
 \begin{align*}
   f(x) &= \frac{\alpha
@@ -854,6 +960,15 @@ parameter. The value of $\theta$ is the minimum of the distribution
 and is usually set in advance.
 
 \subsubsection*{Generalized beta}
+
+\begin{compactitem}[]
+\item Root: \code{genbeta}
+\item Parameters: \code{shape1} ($\alpha$),
+      \code{shape2} ($\beta$),
+      \code{shape3} ($\tau$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
 
 \begin{align*}
   f(x) &= \frac{\tau u^\alpha (1 - u)^{\beta - 1}}{x \beta (\alpha, \beta)},
