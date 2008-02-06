@@ -102,7 +102,7 @@ gamma, exponential and Weibull distributions in base \proglang{R}.
 \begin{table}
   \begin{threeparttable}
     \caption{Probability laws supported by \pkg{actuar} classified by
-      family and root name of the \proglang{R} functions.}
+      family and root names of the \proglang{R} functions.}
     \label{tab:distributions}
     \begin{tabularx}{\textwidth}{lXl}
       \toprule
