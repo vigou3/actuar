@@ -12,22 +12,6 @@ op <- par(ask = interactive() &&
           col = "black")
 
 
-###
-### DISCRETIZATION OF CLAIM AMOUNT DISTRIBUTIONS
-###
-
-### Some numerical techniques to compute the aggregate claim amount
-### distribution (see below) require a discrete arithmetic claim amount
-### distribution. Function 'discretize' can be used to, well,
-### discretize a continuous distribution. (The function can also be
-### used to "discretize" [modify the support of] an already discrete
-### distribution, but this requires additional care.)
-###
-### Currently, four discretization methods are supported: upper and
-### lower discretization, rounding of the random variable (midpoint
-### method), and local matching of the first moment. Usage is similar
-### to 'curve' of package 'graphics'.
-
 ## Upper and lower discretization of a Gamma(2, 1) distribution with a
 ## step (or span, or lag) of 0.5. The value of 'to' is chosen so as to
 ## cover most of the distribution.
@@ -54,11 +38,9 @@ par(col = "blue")
 plot(stepfun(head(x, -1), diffinv(fr)), pch = 19, add = TRUE)
 par(col = "black")
 
-## Local matching of the first moment. This ensures that the total
-## probability and the expected value on interval [from, to] match
-## between the discretized and the true distributions. This requires a
-## function to compute the limited expected value of the true
-## distribution in any point.
+## Local matching of the first moment. This requires a function to
+## compute the limited expected value of the true distribution in any
+## point.
 fb <- discretize(pgamma(x, 2, 1), method = "unbiased",
                  lev = levgamma(x, 2, 1),
                  from = 0, to = xu, step = 0.5)
@@ -93,24 +75,9 @@ legend(4, 0.2, legend = c("upper", "lower", "rounding", "unbiased"),
 par(col = "black")
 
 
-###
-### CALCULATION OF THE AGGREGATE CLAIM AMOUNT DISTRIBUTION
-###
-
-### Function 'aggregateDist' computes the aggregate claim amount
-### distribution of a portfolio using of the following five methods:
-### Panjer's recursive algorithm, convolutions, normal approximation,
-### Normal Power II approximation, simulation. (More methods can be
-### added in the future.)
-###
-### The function returns a function to compute the cdf of the
-### distribution in any point, much like 'ecdf' of package
-### 'stats'. Methods exist to summarize, plot, compute the mean and
-### compute quantiles of the aggregate claim amount distribution.
-
-## Recursive method. Requires a discrete claim amount distribution
-## typically obtained from 'discretize'. Argument 'x.scale' is used to
-## specify how much a value of 1 is really worth.
+## Calculation of the aggregate claim amount distribution using the
+## recursive method. Argument 'x.scale' is used to specify how much a
+## value of 1 is really worth.
 fx.b <- discretize(pgamma(x, 2, 1), from = 0, to = 22, step = 0.5,
                    method = "unbiased", lev = levgamma(x, 2, 1))
 Fs.b <- aggregateDist("recursive", model.freq = "poisson",
@@ -149,9 +116,7 @@ summary(Fs.np)                          # summary method
 plot(Fs.np, xlim = c(0, 60))            # truncated graphic
 
 ## Simulation method. Function 'simpf' is used to simulate the data
-## (see the 'credibility' demo for examples). The result is a step
-## function, but with very small steps if the number of simulations is
-## large.
+## (see the 'simulation' demo for examples).
 Fs.s <- aggregateDist("simulation",
                       model.freq = expression(y = rpois(10)),
                       model.sev = expression(y = rgamma(2, 1)),
