@@ -13,7 +13,7 @@ require(actuar)
 data(hachemeister)
 hachemeister
 
-## Fitting of a Bühlmann model to the Hachemeister data set using
+## Fitting of a Buhlmann model to the Hachemeister data set using
 ## function 'cm'. The interface of the function is similar to 'lm'.
 fit <- cm(~state, hachemeister, ratios = ratio.1:ratio.12)
 fit                          # print method
@@ -23,7 +23,7 @@ fit$weights                  # total weights
 fit$unbiased                 # unbiased variance estimators
 predict(fit)                 # credibility premiums
 
-## Fitting of a Bühlmann-Straub model require weights. Here, iterative
+## Fitting of a Buhlmann-Straub model require weights. Here, iterative
 ## estimators of the variance components are used.
 fit <- cm(~state, hachemeister, ratios = ratio.1:ratio.12,
           weights = weight.1:weight.12, method = "iterative")
