@@ -1,0 +1,23 @@
+citHeader("To cite actuar in publications use:")
+
+p1 <- person("Christophe", "Dutang")
+p2 <- person("Vincent", "Goulet", email = "vincent.goulet@act.ulaval.ca")
+p3 <- person("Mathieu", "Pigeon")
+
+citEntry(entry="Article",
+         title = "actuar: An R Package for Actuarial Science",
+         author = personList(p1, p2, p3),
+         journal = "Journal of Statistical Software",
+	 year = 2008,
+         note = "to appear",
+
+         textVersion =
+	 paste("C. Dutang, V. Goulet and and M. Pigeon.",
+	       "actuar: An R Package for Actuarial Science.",
+	       "Journal of Statistical Software, to appear")
+)
+
+citFooter("We have invested a lot of time and effort in creating actuar,",
+          "please cite both the package and R when using them for data analysis.",
+	  "See also", sQuote("citation()"),
+	  "for citing R.")
