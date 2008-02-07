@@ -78,7 +78,7 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
   function \eqn{h(x)} or \eqn{h(x, y)}. This is necessary in cases where
   random variables \eqn{B} and \eqn{W} are not independent.
 
-  The root of \eqn{h(x) = 1} is found my minimizing \eqn{(h(x) - 1)^2}.
+  The root of \eqn{h(x) = 1} is found by minimizing \eqn{(h(x) - 1)^2}.
 }
 \value{
   If \code{reinsurance = "none"}, a numeric vector of lenght one.
