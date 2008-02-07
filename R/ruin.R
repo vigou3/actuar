@@ -85,22 +85,25 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
             shape <- rep(shape, length.out = length(rate))
         else
             rate <-  rep(rate, length.out = length(shape))
-        n <- length(shape)
+        n <- sum(shape)
 
-        if ("weights" %in% p && n > 1)
+        if ("weights" %in% p && length(shape) > 1)
         {
             prob <- numeric(sum(shape))
             prob[cumsum(c(1, head(shape, -1)))] <- par.claims$weights
         }
-        else if (n == 1)
+        else if (length(shape) == 1)
             prob <- c(1, rep(0, n - 1))
         else
             stop("parameter \"weights\" missing in 'par.claims'")
 
         rates <- diag(rep(-rate, shape), n)
         if (n > 1 && shape > 1)
-            rates[cbind(seq_len(n - 1), seq(2, len = n - 1))] <-
-                -head(diag(rates), -1)
+		{
+			temp <- -head(diag(rates), -1)
+			temp[cumsum(head(shape, -1))] <- 0
+			rates[cbind(seq_len(n - 1), seq(2, len = n - 1))] <- temp
+		}
     }
     else                                # claims == "phase-type"
     {
@@ -142,12 +145,12 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
         m <- length(rate)
 
         if ("weights" %in% p && m > 1)
-            prob.w <- rep(par.wait$weights, length.out = n)
+            prob.w <- rep(par.wait$weights, length.out = m)
         else if (m == 1)
             prob.w <- 1
         else
             stop("parameter \"weights\" missing in 'par.wait'")
-
+		
         rates.w <- diag(-rate, m)
     }
     else if (wait == "Erlang")
@@ -166,22 +169,25 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
             shape <- rep(shape, length.out = length(rate))
         else
             rate <-  rep(rate, length.out = length(shape))
-        m <- length(shape)
+        m <- sum(shape)
 
-        if ("weights" %in% p && m > 1)
+        if ("weights" %in% p && length(shape) > 1)
         {
             prob.w <- numeric(sum(shape))
             prob.w[cumsum(c(1, head(shape, -1)))] <- par.wait$weights
         }
-        else if (m == 1)
+        else if(length(shape) == 1)
             prob.w <- c(1, rep(0, m - 1))
         else
             stop("parameter \"weights\" missing in 'par.wait'")
 
         rates.w <- diag(rep(-rate, shape), m)
         if (m > 1 && shape > 1)
-            rates.w[cbind(seq_len(m - 1), seq(2, len = m - 1))] <-
-                -head(diag(rates.w), -1)
+		{
+			temp <- -head(diag(rates.w), -1)
+			temp[cumsum(head(shape, -1))] <- 0
+            rates.w[cbind(seq_len(m - 1), seq(2, len = m - 1))] <- temp
+		}                	
     }
     else                                # wait == "phase-type"
     {
@@ -247,6 +253,7 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
 
         Q <- rates
         count <- 0
+			
         repeat
         {
             eval(exp)
@@ -256,7 +263,7 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
                 warning("maximum number of iterations reached before obtaining convergence")
                 break
             }
-
+										
             Q1 <- Q
             Q <- rates - t0pi %*% A %*% solve(Q %x% Im + B, C)
 
