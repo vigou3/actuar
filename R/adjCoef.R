@@ -78,7 +78,8 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
             h <- function(x) eval(mgfx) * eval(mgfw, list(x = -x * premium.rate))
         }
 
-        f <- function(r) (h(r) - 1)^2
+        f <- function(r)
+            (eval(h, envir = list(x = r), enclos = parent.frame()) - 1)^2
 
         return(optimize(f, c(0, upper.bound - .Machine$double.eps),
                         tol = sqrt(.Machine$double.eps))$minimum)
@@ -156,7 +157,8 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
         h <- function(x, y) eval(mgfx) * eval(mgfw, list(x = -x * eval(premium.rate)))
     }
 
-    f <- function(x, y) (h(x, y) - 1)^2
+    f <- function(x, y)
+        (eval(h, envir = list(x = x, y = y), enclos = parent.frame()) - 1)^2
     retention <- seq(from, to, length.out = n)
 
     ## Compute the adjustment coefficient for each retention level.
