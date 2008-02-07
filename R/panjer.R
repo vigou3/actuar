@@ -105,7 +105,7 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     if (is.null(p0))
         p1 = 0
 
-    fs <- .External("panjer", p0, p1, fs0, fx, a, b, tol, maxit, echo)
+    fs <- .External("do_panjer", p0, p1, fs0, fx, a, b, tol, maxit, echo)
 
     FUN <- approxfun((0:(length(fs) - 1)) * x.scale, cumsum(fs),
                      method = "constant", yleft = 0, yright = 1, f = 0,

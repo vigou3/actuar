@@ -45,7 +45,7 @@ hierarc <- function(ratios, weights, classification,
     ##
     ## Generating such factors first requires to know the number of
     ## nodes at each level in a format identical to the 'nodes'
-    ## argument of simpf(). [In the previous example, the number of
+    ## argument of simul(). [In the previous example, the number of
     ## nodes would be 'list(2, c(3, 2))'.] Then, the factors are
     ## obtained by repeating a sequence the same length as the number
     ## of nodes at one level [2] according to the number of nodes at
@@ -253,7 +253,7 @@ hierarc <- function(ratios, weights, classification,
     {
         bi <- pmax(bu, 0)       # truncation for starting values
         if (any(head(bi, -1)))  # at least one non-zero starting value
-            .External("hierarc", cred, tweights, wmeans, fnodes, denoms, bi, tol, maxit, echo)
+            .External("do_hierarc", cred, tweights, wmeans, fnodes, denoms, bi, tol, maxit, echo)
     }
     else
     {

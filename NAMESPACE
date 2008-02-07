@@ -3,7 +3,7 @@ useDynLib(actuar, .registration = TRUE)
 
 ### Exports
 export(## Credibility theory
-       bstraub, cm, severity, simpf, unroll,
+       bstraub, cm, severity, simul, unroll,
        ## Risk theory
        aggregateDist, CTE, discretize, discretise, VaR, adjCoef, ruin,
        ## One parameter distributions
@@ -53,7 +53,7 @@ import(stats, graphics)
 S3method("[", grouped.data)
 S3method("[<-", grouped.data)
 
-S3method(aggregate, simpf)
+S3method(aggregate, portfolio)
 
 S3method(CTE, aggregateDist)
 
@@ -63,7 +63,7 @@ S3method(elev, grouped.data)
 S3method(emm, default)
 S3method(emm, grouped.data)
 
-S3method(frequency, simpf)
+S3method(frequency, portfolio)
 
 S3method(hist, grouped.data)
 
@@ -89,14 +89,14 @@ S3method(print, elev)
 S3method(print, cm)
 S3method(print, mde)
 S3method(print, ogive)
-S3method(print, simpf)
+S3method(print, portfolio)
 S3method(print, summary.aggregateDist)
 S3method(print, summary.cm)
 
 S3method(quantile, aggregateDist)
 
 S3method(severity, default)
-S3method(severity, simpf)
+S3method(severity, portfolio)
 
 S3method(summary, aggregateDist)
 S3method(summary, cm)
@@ -105,4 +105,4 @@ S3method(summary, ogive)
 
 S3method(VaR, aggregateDist)
 
-S3method(weights, simpf)
+S3method(weights, portfolio)

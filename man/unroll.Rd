@@ -30,7 +30,7 @@ unroll(x, bycol = FALSE, drop = TRUE)
 }
 \seealso{
   This function was originally written for use in
-  \code{\link{severity.simpf}}.
+  \code{\link{severity.portfolio}}.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and

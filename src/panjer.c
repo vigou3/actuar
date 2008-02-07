@@ -18,7 +18,7 @@
 #define CAD8R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(e)))))))))
 #define CAD9R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(e))))))))))
 
-SEXP panjer(SEXP args)
+SEXP do_panjer(SEXP args)
 {
     SEXP p0, p1, fs0, sfx, a, b, tol, maxit, echo, sfs;
     double *fs, *fx, cumul;

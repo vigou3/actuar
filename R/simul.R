@@ -6,12 +6,12 @@
 ###
 ### In the code here, numbering of levels starts at 1 at the data
 ### level, whereas in common discussion of hierarchical models the
-### data level is not counted.
+### data level is numbered 0.
 ###
 ### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 ### Sébastien Auclair and Louis-Philippe Pouliot
 
-simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
+simul <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 {
     ## Sanity checks: 'nodes' must be a named list; at least either of
     ## 'model.freq' or 'model.sev' should be non-NULL; level names
@@ -239,18 +239,21 @@ simpf <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     }
     m[, ncol] <- unlist(lapply(nodes[[ncol]], seq)) # last column
 
-    ## Return object of class 'simpf'
+    ## Return object of class 'portfolio'
     structure(list(data = res,
                    weights = weights,
                    classification = m,
                    nodes = nodes,
                    model.freq = model.freq,
                    model.sev = model.sev),
-              class = "simpf")
+              class = "portfolio")
 }
 
-### 'print' method for 'simpf' objects
-print.simpf <- function(x, ...)
+### Alias for backward compatibility (with actuar <= 0.9-4)
+simpf <- simul
+
+### 'print' method for 'portfolio' objects
+print.portfolio <- function(x, ...)
 {
     cat("\nPortfolio of claim amounts \n\n")
     nn <- names(x$nodes)

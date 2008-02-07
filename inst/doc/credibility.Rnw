@@ -66,7 +66,7 @@ data set and two main functions:
 \begin{enumerate}
 \item matrix \code{hachemeister} containing the famous data set of
   \cite{Hachemeister_75};
-\item function \code{simpf} to simulate data from compound
+\item function \code{simul} to simulate data from compound
   hierarchical models;
 \item function \code{cm} to fit hierarchical and regression
   credibility models.
@@ -91,7 +91,7 @@ hachemeister
 \section{Portfolio simulation}
 \label{sec:simulation}
 
-Function \code{simpf} simulates portfolios of data following compound
+Function \code{simul} simulates portfolios of data following compound
 models of the form
 \begin{equation}
   \label{eq:definition-S}
@@ -129,19 +129,19 @@ literature. The $w_{ijt}$s are known weights, or volumes. Using as
 convention to number the data level 0, the above is a two-level
 hierarchical model.
 
-Function \code{simpf} is presented in the credibility theory section
+Function \code{simul} is presented in the credibility theory section
 because it was originally written in this context, but it has much
 wider applications. For instance, it is used by \code{aggregateDist}
 for the simulation of the aggregate claim amount random variable.
 
 \cite{simpf} describe in detail the model specification method used in
-\code{simpf}. For the sake of completeness, we briefly outline this
+\code{simul}. For the sake of completeness, we briefly outline this
 method here.
 
 A hierarchical model is completely specified by the number of nodes at
 each level ($I$, $J_1, \dots, J_I$ and $n_{11}, \dots, n_{IJ}$, above)
 and by the probability laws at each level. The number of nodes is
-passed to \code{simpf} by means of a named list where each element is
+passed to \code{simul} by means of a named list where each element is
 a vector of the number of nodes at a given level. Vectors are recycled
 when the number of nodes is the same throughout a level. Probability
 models are expressed in a semi-symbolic fashion using an object of
@@ -153,12 +153,12 @@ by replacing one or more parameters of a distribution at a given level
 by any combination of the names of the levels above. If no mixing is
 to take place at a level, the model for this level can be \code{NULL}.
 
-Function \code{simpf} also supports usage of weights in models. These
+Function \code{simul} also supports usage of weights in models. These
 usually modify the frequency parameters to take into account the
 ``size'' of an entity. Weights are used in simulation wherever the
 name \code{weights} appears in a model.
 
-Hence, function \code{simpf} has four main arguments:
+Hence, function \code{simul} has four main arguments:
 \begin{inparaenum}[1)]
 \item \code{nodes} for the number of nodes list;
 \item \code{model.freq} for the frequency model;
@@ -172,12 +172,11 @@ For example, assuming that $I = 2$, $J_1 = 4$, $J_2 = 3$, $n_{11} =
 \dots = n_{14} = 4$ and $n_{21} = n_{22} = n_{23} = 5$ in model
 \eqref{eq:hierarchical-model:2} above, and that weights are simply
 simulated from a uniform distribution on $(0.5, 2.5)$, then simulation
-of a data set with \code{simpf} is achieved with:
+of a data set with \code{simul} is achieved with:
 <<echo=FALSE>>=
 set.seed(3)
 @
 <<echo=TRUE>>=
-wijt <- runif(31, 0.5, 2.5)
 nodes <- list(cohort = 2,
               contract = c(4, 3),
               year = c(4, 4, 4, 4, 5, 5, 5))
@@ -187,17 +186,18 @@ mf <- expression(cohort = rexp(2),
 ms <- expression(cohort = rnorm(2, sqrt(0.1)),
                  contract = rnorm(cohort, 1),
                  year = rlnorm(contract, 1))
-pf <- simpf(nodes = nodes, model.freq = mf, model.sev = ms, weights = wijt)
+wijt <- runif(31, 0.5, 2.5)
+pf <- simul(nodes = nodes, model.freq = mf, model.sev = ms, weights = wijt)
 @
 
 The function returns the variates in a two-dimension list of class
-\code{"simpf"} containing all the individual claim amounts for each
+\code{"portfolio"} containing all the individual claim amounts for each
 entity. Such an object can be seen as a three-dimension array with a
 third dimension of potentially varying length. The function also
 returns a matrix of integers giving the classification indexes of each
 entity in the portfolio (subscripts $i$ and $j$ in the notation
 above). Displaying the complete content of the object returned by
-\code{simpf} can be impractical. For this reason, the \code{print}
+\code{simul} can be impractical. For this reason, the \code{print}
 method for this class only prints the simulation model and the number
 of claims in each node:
 <<echo=TRUE>>=
@@ -255,9 +255,9 @@ In addition, all methods have a \code{classification} and a
 \code{prefix} argument. When the first is \code{FALSE}, the
 classification index columns are omitted from the result. The second
 argument overrides the default column name prefix; see the
-\code{simpf.summaries} help page for details.
+\code{simul.summaries} help page for details.
 
-Function \code{simpf} was used to simulate the data in
+Function \code{simul} was used to simulate the data in
 \cite{Goulet_cfs}.
 
 
@@ -382,7 +382,7 @@ The credibility modeling function \code{cm} assumes that data is available in
 the format most practical applications would use, namely a rectangular
 array (matrix or data frame) with entity observations in the rows and
 with one or more classification index columns (numeric or character).
-One will recognize the output format of \code{simpf} and its summary
+One will recognize the output format of \code{simul} and its summary
 methods.
 
 Then, function \code{cm} works much the same as \code{lm}. It takes in

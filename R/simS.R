@@ -7,14 +7,14 @@
 
 simS <- function(n, model.freq, model.sev)
 {
-    ## Prepare the call to simpf() by building up 'nodes'
+    ## Prepare the call to simul() by building up 'nodes'
     level.names <- names(if (is.null(model.freq)) model.sev else model.freq)
     nlevels <- length(level.names)
     nodes <- as.list(c(rep(1, nlevels - 1), n))
     names(nodes) <- level.names
 
     ## Get sample
-    x <- aggregate(simpf(nodes = nodes,
+    x <- aggregate(simul(nodes = nodes,
                          model.freq = model.freq,
                          model.sev = model.sev))[-1]
 

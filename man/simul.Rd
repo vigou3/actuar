@@ -1,16 +1,17 @@
-\name{simpf}
+\name{simul}
+\alias{simul}
 \alias{simpf}
-\alias{print.simpf}
+\alias{print.portfolio}
 \title{Simulation of a portfolio of data}
 \description{
-  \code{simpf} simulates data for insurance applications allowing
+  \code{simul} simulates data for insurance applications allowing
   hierarchical structures and separate models for the frequency and
   severity of claims distributions.
 }
 \usage{
-simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
+simul(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 
-\method{print}{simpf}(x, \dots)
+\method{print}{portfolio}(x, \dots)
 }
 \arguments{
   \item{nodes}{a named list giving the number of "nodes" at each level
@@ -23,7 +24,7 @@ simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     of claims model (see details); if \code{NULL}, only claim numbers
     are simulated.}
   \item{weights}{a vector of weights.}
-  \item{x}{a \code{simpf} object.}
+  \item{x}{a \code{portfolio} object.}
   \item{\dots}{potential further arguments required by generic.}
 }
 \details{
@@ -59,13 +60,13 @@ simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
   matrix.
 }
 \value{
-  An object of \code{\link[base]{class}} \code{"simpf"}.  A \code{print}
-  method for this class displays the models used in the simulation as
-  well as the frequency of claims for each year and entity in the
-  portfolio.
+  An object of \code{\link[base]{class}} \code{"portfolio"}. A
+  \code{print} method for this class displays the models used in the
+  simulation as well as the frequency of claims for each year and entity
+  in the portfolio.
 
-  An object of class \code{"simpf"} is a list containing the following
-  components:
+  An object of class \code{"portfolio"} is a list containing the
+  following components:
   \item{data}{a two dimension list where each element is a vector of
     claim amounts;}
   \item{weights}{the vector of weights given in argument reshaped as a
@@ -78,7 +79,7 @@ simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
   \item{model.freq}{the frequency model as given in argument;}
   \item{model.sev}{the severity model as given in argument.}
 
-  It is recommended to manipulate objects of class \code{"simpf"} by
+  It is recommended to manipulate objects of class \code{"portfolio"} by
   means of the corresponding methods of functions \code{aggregate},
   \code{frequency} and \code{severity}.
 }
@@ -91,7 +92,7 @@ simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
   Sébastien Auclair and Louis-Philippe Pouliot
 }
 \seealso{
-  \code{\link{simpf.summaries}} for the functions to create the
+  \code{\link{simul.summaries}} for the functions to create the
   matrices of aggregate claim amounts, frequencies and individual
   claim amounts.
 }
@@ -99,7 +100,7 @@ simpf(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 ## Simple two level (contracts and years) portfolio with frequency model
 ## Nit|Theta_i ~ Poisson(Theta_i), Theta_i ~ Gamma(2, 3) and severity
 ## model X ~ Lognormal(5, 1)
-simpf(nodes = list(contract = 10, year = 5),
+simul(nodes = list(contract = 10, year = 5),
       model.freq = expression(contract = rgamma(2, 3),
                               year = rpois(contract)),
       model.sev = expression(contract = NULL,
@@ -107,13 +108,13 @@ simpf(nodes = list(contract = 10, year = 5),
 
 ## Model with weights and mixtures for both frequency and severity
 ## models
-wit <- sample(2:10, 35, replace = TRUE)
 nodes <- list(entity = 8, year = c(5, 4, 4, 5, 3, 5, 4, 5))
 mf <- expression(entity = rgamma(2, 3),
                  year = rpois(weights * entity))
 ms <- expression(entity = rnorm(5, 1),
                  year = rlnorm(entity, 1))
-pf <- simpf(nodes, mf, ms, wit)
+wit <- sample(2:10, 35, replace = TRUE)
+pf <- simul(nodes, mf, ms, wit)
 pf 				# print method
 weights(pf)			# extraction of weights
 aggregate(pf)[, -1]/weights(pf)[, -1] # ratios
@@ -125,7 +126,7 @@ mf <- expression(sector = rexp(1),
                  unit = rexp(sector),
                  employer = rgamma(unit, 1),
                  year = rpois(employer))
-pf <- simpf(nodes, mf, NULL)
+pf <- simul(nodes, mf, NULL)
 pf 				# print method
 aggregate(pf) 			# aggregate claim amounts
 frequency(pf)  			# frequencies

@@ -32,13 +32,13 @@ aggregateDist(method = c("recursive", "convolution", "normal",
     giving the name of a distribution in the \eqn{(a, b, 0)} or \eqn{(a,
       b, 1)} families of distributions. For \code{"convolution"} method:
     a vector of claim number probabilities. For \code{"simulation"}
-    method: a frequency simulation model (see \code{\link{simpf}} for
+    method: a frequency simulation model (see \code{\link{simul}} for
     details) or \code{NULL}. Ignored with \code{normal} and
     \code{npower} methods.}
   \item{model.sev}{for \code{"recursive"} and \code{"convolution"}
     methods: a vector of claim amount probabilities. For
     \code{"simulation"} method: a severity simulation model (see
-    \code{\link{simpf}} for details) or \code{NULL}. Ignored with
+    \code{\link{simul}} for details) or \code{NULL}. Ignored with
     \code{normal} and \code{npower} methods.}
   \item{p0}{arbitrary probability at zero for the frequency
     distribution. Creates a zero-modified or zero-truncated
@@ -50,7 +50,7 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   \item{moments}{vector of the true moments of the aggregate claim
     amount distribution; required only by the \code{"normal"}
     or \code{"npower"} methods.}
-  \item{nb.simul}{number of simulations for the \code{"simulation"} method.} 
+  \item{nb.simul}{number of simulations for the \code{"simulation"} method.}
   \item{\dots}{parameters of the frequency distribution for the
     \code{"recursive"} method; further arguments to be passed to or
     from other methods otherwise.}
@@ -69,7 +69,7 @@ aggregateDist(method = c("recursive", "convolution", "normal",
 \details{
   \code{aggregateDist} returns a function to compute the cumulative
   distribution function (cdf) of the aggregate claim amount distribution
-  in any point.  
+  in any point.
 
   The \code{"recursive"} method computes the cdf using the Panjer
   algorithm; the \code{"convolution"} method using convolutions; the
@@ -137,7 +137,7 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   This methods returns the empirical distribution function of a sample
   of size \code{nb.simul} of the aggregate claim amount distribution
   specified by \code{model.freq} and
-  \code{model.sev}. \code{\link{simpf}} is used for the simulation of
+  \code{model.sev}. \code{\link{simul}} is used for the simulation of
   claim amounts, hence both the frequency and severity models can be
   mixtures of distributions.
 }
@@ -160,13 +160,13 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   Value at Risk;
   \code{\link{CTE.aggregateDist}} to compute the Conditional Tail
   Expectation;
-  \code{\link{simpf}}.
+  \code{\link{simul}}.
 }
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
   \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
 
-  Daykin, C.D., Pentikäinen, T. and Pesonen, M. (1994), \emph{Practical 
+  Daykin, C.D., Pentikäinen, T. and Pesonen, M. (1994), \emph{Practical
     Risk Theory for Actuaries}, Chapman & Hall.
 }
 \author{

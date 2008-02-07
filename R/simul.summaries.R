@@ -6,8 +6,8 @@
 ### AUTHORS: Louis-Philippe Pouliot, Tommy Ouellet,
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-aggregate.simpf <- function(x, by = names(x$nodes), FUN = sum,
-                            classification = TRUE, prefix = NULL, ...)
+aggregate.portfolio <- function(x, by = names(x$nodes), FUN = sum,
+                                classification = TRUE, prefix = NULL, ...)
 {
     level.names <- names(x$nodes)       # level names
     nlevels <- length(level.names)      # number of levels
@@ -69,15 +69,16 @@ aggregate.simpf <- function(x, by = names(x$nodes), FUN = sum,
               dimnames = list(NULL, c(if (classification) rows, paste(prefix, cols, sep = ""))))
 }
 
-frequency.simpf <- function(x, by = names(x$nodes),
-                            classification = TRUE, prefix = NULL, ...)
+frequency.portfolio <- function(x, by = names(x$nodes),
+                                classification = TRUE, prefix = NULL, ...)
 {
     freq <- function(x) if (identical(x, NA)) NA else length(x)
     aggregate(x, by, freq, classification, prefix)
 }
 
-severity.simpf <- function(x, by = head(names(x$node), -1), splitcol = NULL,
-                           classification = TRUE, prefix = NULL, ...)
+severity.portfolio <- function(x, by = head(names(x$node), -1),
+                               splitcol = NULL, classification = TRUE,
+                               prefix = NULL, ...)
 {
     level.names <- names(x$nodes)       # level names
     ci <- seq_len(ncol(x$data))         # column indexes
@@ -172,7 +173,7 @@ severity.simpf <- function(x, by = head(names(x$node), -1), splitcol = NULL,
     list(first = res.first, last = res.last)
 }
 
-weights.simpf <- function(object, classification = TRUE, prefix = NULL, ...)
+weights.portfolio <- function(object, classification = TRUE, prefix = NULL, ...)
 {
     if (is.null(object$weights))
         NULL

@@ -38,8 +38,6 @@ summary(fit, newdata = 0)     # 'newdata' is future value of regressor
 predict(fit, newdata = 0)
 
 ## Simulation of a three level hierarchical portfolio.
-wijkt <- runif(50, 2, 10)
-wijkt <- runif(300, rep(0.5 * wijkt, each = 6), rep(1.5 * wijkt, each = 6))
 nodes <- list(sector = 2, unit = c(3, 4),
               contract = c(10, 5, 8, 5, 7, 11, 4), year = 6)
 mf <- expression(sector = rexp(2),
@@ -50,7 +48,9 @@ ms <- expression(sector = rnorm(2, sqrt(0.1)),
                  unit = rnorm(sector, 1),
                  contract = NULL,
                  year = rlnorm(unit, 1))
-pf <- simpf(nodes, model.freq = mf, model.sev = ms, weights = wijkt)
+wijkt <- runif(50, 2, 10)
+wijkt <- runif(300, rep(0.5 * wijkt, each = 6), rep(1.5 * wijkt, each = 6))
+pf <- simul(nodes, model.freq = mf, model.sev = ms, weights = wijkt)
 
 ## Fitting of a hierarchical model to the portfolio simulated above.
 DB <- cbind(weights(pf, prefix = "weight."),

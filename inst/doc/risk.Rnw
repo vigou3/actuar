@@ -73,7 +73,7 @@ The interested reader can read more on these subjects in
 The current version of \pkg{actuar} contains four visible functions
 related to the above problems: two for the calculation of the
 aggregate claim amount distribution and two for ruin probability
-calculations. 
+calculations.
 
 
 
@@ -301,7 +301,7 @@ supported.
   well when $\gamma_S < 1$. See \cite{Daykin_et_al} for details.
 \item Simulation of a random sample from $S$ and approximation of
   $F_S(x)$ by the empirical cdf. The simulation itself is done with
-  function \code{simpf} (see the \code{"simulation"} vignette)).
+  function \code{simul} (see the \code{"simulation"} vignette)).
   This function admits very general hierarchical models for both the
   frequency and the severity components.
 \end{enumerate}

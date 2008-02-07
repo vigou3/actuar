@@ -115,7 +115,7 @@ Fs.np <- aggregateDist("npower", moments = c(20, 60, 0.516398))
 summary(Fs.np)                          # summary method
 plot(Fs.np, xlim = c(0, 60))            # truncated graphic
 
-## Simulation method. Function 'simpf' is used to simulate the data
+## Simulation method. Function 'simul' is used to simulate the data
 ## (see the 'simulation' demo for examples).
 Fs.s <- aggregateDist("simulation",
                       model.freq = expression(y = rpois(10)),

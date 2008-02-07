@@ -29,7 +29,7 @@ severity(x, ...)
   A vector or matrix.
 }
 \seealso{
-  \code{\link{severity.simpf}} for the original motivation of these
+  \code{\link{severity.portfolio}} for the original motivation of these
   functions.
 }
 \author{

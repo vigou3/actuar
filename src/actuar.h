@@ -23,6 +23,8 @@ SEXP do_dpqphtype2(int code, SEXP args);
 SEXP do_randomphtype(SEXP args);
 SEXP do_randomphtype2(int code, SEXP args);
 
+SEXP do_hierarc(SEXP args);
+SEXP do_panjer(SEXP args);
 
 /* Utility functions */
 /*   Matrix algebra */
