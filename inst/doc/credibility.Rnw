@@ -20,7 +20,6 @@
   %% Some new commands. Commands \E and \VAR redefined to fit within
   %% the author's writing habits...
   \newcommand{\E}[1]{\mathrm{E}[ #1 ]}
-  \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
@@ -61,16 +60,13 @@ among an heterogeneous group of policyholders (henceforth called
 applicable in any setting where repeated measures are made for
 subjects with different risk levels.
 
-The credibility theory facilities of \pkg{actuar} consist of one
-data set and two main functions:
-\begin{enumerate}
-\item matrix \code{hachemeister} containing the famous data set of
-  \cite{Hachemeister_75};
-\item function \code{simul} to simulate data from compound
-  hierarchical models;
-\item function \code{cm} to fit hierarchical and regression
-  credibility models.
-\end{enumerate}
+The credibility theory facilities of \pkg{actuar} consist of matrix
+\code{hachemeister} containing the famous data set of
+\cite{Hachemeister_75} and function \code{cm} to fit hierarchical and
+regression credibility models. Furthermore, function \code{simul} can
+simulate portfolios of data satisfying the assumptions of the
+aforementioned credibility models; see the \code{"simulation"}
+vignette for details.
 
 
 \section{Hachemeister data set}
@@ -87,179 +83,6 @@ a state index, columns 2--13 contain the claim averages and columns
 data(hachemeister)
 hachemeister
 @
-
-\section{Portfolio simulation}
-\label{sec:simulation}
-
-Function \code{simul} simulates portfolios of data following compound
-models of the form
-\begin{equation}
-  \label{eq:definition-S}
-  S = C_1 + \dots + C_N,
-\end{equation}
-where $C_1, C_2, \dots$ are mutually independent and identically
-distributed random variables each independent from $N$. Both the
-frequency and the severity components can have a hierarchical
-structure. The main characteristic of hierarchical models is to have
-the probability law at some level in the classification structure be
-conditional on the outcome in previous levels. For example, consider
-the following compound hierarchical model:
-\begin{equation}
-  \label{eq:hierarchical-model:1}
-  S_{ijt} = C_{ijt1} + \dots + C_{ijt N_{ijt}},
-\end{equation}
-for
-$i = 1, \dots, I$,
-$j = 1, \dots, J_i$,
-$t = 1, \dots, n_{ij}$
-and with
-\begin{align}
-  \label{eq:hierarchical-model:2}
-  N_{ijt}|\Lambda_{ij}, \Phi_i &\sim \text{Poisson}(w_{ijt} \Lambda_{ij}) &
-  C_{ijtu}|\Theta_{ij}, \Psi_i &\sim \text{Lognormal}(\Theta_{ij}, 1)
-  \notag \\
-  \Lambda_{ij}|\Phi_i &\sim \text{Gamma}(\Phi_i, 1) &
-  \Theta_{ij}|\Psi_i     &\sim N(\Psi_i, 1) \\
-  \Phi_i &\sim \text{Exponential}(2) &
-  \Psi_i &\sim N(2, 0.1). \notag
-\end{align}
-The random variables $\Phi_i$, $\Lambda_{ij}$, $\Psi_i$ and
-$\Theta_{ij}$ are generally seen as risk parameters in the actuarial
-literature. The $w_{ijt}$s are known weights, or volumes. Using as
-convention to number the data level 0, the above is a two-level
-hierarchical model.
-
-Function \code{simul} is presented in the credibility theory section
-because it was originally written in this context, but it has much
-wider applications. For instance, it is used by \code{aggregateDist}
-for the simulation of the aggregate claim amount random variable.
-
-\cite{simpf} describe in detail the model specification method used in
-\code{simul}. For the sake of completeness, we briefly outline this
-method here.
-
-A hierarchical model is completely specified by the number of nodes at
-each level ($I$, $J_1, \dots, J_I$ and $n_{11}, \dots, n_{IJ}$, above)
-and by the probability laws at each level. The number of nodes is
-passed to \code{simul} by means of a named list where each element is
-a vector of the number of nodes at a given level. Vectors are recycled
-when the number of nodes is the same throughout a level. Probability
-models are expressed in a semi-symbolic fashion using an object of
-mode \code{"expression"}. Each element of the object must be named ---
-with names matching those of the number of nodes list --- and should
-be a complete call to an existing random number generation function,
-with the number of variates omitted. Hierarchical models are achieved
-by replacing one or more parameters of a distribution at a given level
-by any combination of the names of the levels above. If no mixing is
-to take place at a level, the model for this level can be \code{NULL}.
-
-Function \code{simul} also supports usage of weights in models. These
-usually modify the frequency parameters to take into account the
-``size'' of an entity. Weights are used in simulation wherever the
-name \code{weights} appears in a model.
-
-Hence, function \code{simul} has four main arguments:
-\begin{inparaenum}[1)]
-\item \code{nodes} for the number of nodes list;
-\item \code{model.freq} for the frequency model;
-\item \code{model.sev} for the severity model;
-\item \code{weights} for the vector of weights in lexicographic
-  order, that is all weights of entity 1, then all weights of
-  entity 2, and so on.
-\end{inparaenum}
-
-For example, assuming that $I = 2$, $J_1 = 4$, $J_2 = 3$, $n_{11} =
-\dots = n_{14} = 4$ and $n_{21} = n_{22} = n_{23} = 5$ in model
-\eqref{eq:hierarchical-model:2} above, and that weights are simply
-simulated from a uniform distribution on $(0.5, 2.5)$, then simulation
-of a data set with \code{simul} is achieved with:
-<<echo=FALSE>>=
-set.seed(3)
-@
-<<echo=TRUE>>=
-nodes <- list(cohort = 2,
-              contract = c(4, 3),
-              year = c(4, 4, 4, 4, 5, 5, 5))
-mf <- expression(cohort = rexp(2),
-                 contract = rgamma(cohort, 1),
-                 year = rpois(weights * contract))
-ms <- expression(cohort = rnorm(2, sqrt(0.1)),
-                 contract = rnorm(cohort, 1),
-                 year = rlnorm(contract, 1))
-wijt <- runif(31, 0.5, 2.5)
-pf <- simul(nodes = nodes, model.freq = mf, model.sev = ms, weights = wijt)
-@
-
-The function returns the variates in a two-dimension list of class
-\code{"portfolio"} containing all the individual claim amounts for each
-entity. Such an object can be seen as a three-dimension array with a
-third dimension of potentially varying length. The function also
-returns a matrix of integers giving the classification indexes of each
-entity in the portfolio (subscripts $i$ and $j$ in the notation
-above). Displaying the complete content of the object returned by
-\code{simul} can be impractical. For this reason, the \code{print}
-method for this class only prints the simulation model and the number
-of claims in each node:
-<<echo=TRUE>>=
-pf
-@
-
-The package defines methods for four generic functions to easily
-access key quantities of the simulated portfolio.
-\begin{enumerate}
-\item By default, the method of \code{aggregate} returns the values of
-  aggregate claim amounts $S_{ijt}$ in a regular matrix (subscripts
-  $i$ and $j$ in the rows, subscript $t$ in the columns). The method
-  has a \code{by} argument to get statistics for other groupings and
-  a \code{FUN} argument to get statistics other than the sum:
-<<echo=TRUE>>=
-aggregate(pf)
-aggregate(pf, by = c("cohort", "year"), FUN = mean)
-@
-
-\item The method of \code{frequency} returns the number of claims
-  $N_{ijt}$. It is a wrapper for \code{aggregate} with the default
-  \code{sum} statistic replaced by \code{length}. Hence, arguments
-  \code{by} and \code{FUN} remain available:
-<<echo=TRUE>>=
-frequency(pf)
-frequency(pf, by = "cohort")
-@
-
-\item The method of \code{severity} (a generic function introduced by
-  the package) returns the individual claim amounts $C_{ijtu}$ in a
-  matrix similar to those above, but with a number of columns equal to
-  the maximum number of observations per entity,
-  \begin{displaymath}
-    \max_{i, j} \sum_{t = 1}^{n_{ij}} N_{ijt}.
-  \end{displaymath}
-  Thus, the original period of observation (subscript $t$) and the
-  identifier of the severity within the period (subscript $u$) are
-  lost and each variate now constitute a ``period'' of observation.
-  For this reason, the method provides an argument \code{splitcol} in
-  case one would like to extract separately the individual severities
-  of one or more periods:
-<<echo=TRUE>>=
-severity(pf)
-severity(pf, splitcol = 1)
-@
-
-\item The method of \code{weights} extracts the weights matrix from
-  a simulated data set:
-<<echo=TRUE>>=
-weights(pf)
-@
-\end{enumerate}
-
-In addition, all methods have a \code{classification} and a
-\code{prefix} argument. When the first is \code{FALSE}, the
-classification index columns are omitted from the result. The second
-argument overrides the default column name prefix; see the
-\code{simul.summaries} help page for details.
-
-Function \code{simul} was used to simulate the data in
-\cite{Goulet_cfs}.
-
 
 \section{Hierarchical credibility model}
 \label{sec:hierarchical}

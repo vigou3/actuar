@@ -53,9 +53,10 @@ insurance coverage modifications: ordinary or franchise deductible,
 limit, coinsurance, inflation.
 
 In addition, the function can return the distribution of either the
-payment per loss or the payment per payment random variable. For the
-exact definitions of these terms as used by \code{coverage}, see
-Chapter~5 of \cite{LossModels2e}.
+payment per loss or the payment per payment random variable. This
+terminology refers to whether or not the insurer knows that a loss
+occurred. For the exact definitions of the terms as used by
+\code{coverage}, see Chapter~5 of \cite{LossModels2e}.
 
 In the presence of a deductible, four random variables can be defined:
 \begin{enumerate}
@@ -113,8 +114,6 @@ ylim <- c(0, dgammaL(0))
   Y^P
   &=
   \begin{cases}
-    \text{undefined},
-      & X < \D \frac{d}{1 + r} \\
     \alpha ((1 + r) X - d),
       & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
     \alpha (u - d),
@@ -252,8 +251,6 @@ ylim <- c(0, dgammaL(0))
   \tilde{Y}^P
   &=
   \begin{cases}
-    \text{undefined},
-      & X < \D \frac{d}{1 + r} \\
     \alpha (1 + r) X,
       & \D\frac{d}{1 + r} \leq X < \frac{u}{1 + r} \\
     \alpha u,

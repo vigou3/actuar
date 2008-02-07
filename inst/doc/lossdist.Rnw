@@ -152,8 +152,7 @@ and the moment generating function
   \label{eq:def:mgf}
   M_X(t) = \E{e^{tX}},
 \end{equation}
-when it exists. Every probability law of Tables %
-\ref{tab:distributions:trbeta_family}--\ref{tab:distributions:other} %
+when it exists. Every probability law of Table \ref{tab:distributions}
 is supported, plus the following ones: beta, exponential, chi-square,
 gamma, lognormal, normal (except \code{lev}), uniform and Weibull of
 base \proglang{R} and the inverse Gaussian distribution of package
@@ -164,8 +163,7 @@ matching of raw or limited moments; see Subsection
 \code{mgf} functions come in handy to compute the adjustment
 coefficient in ruin theory; see the \code{"risk"} vignette.
 
-In addition to the 17 distributions of Tables %
-\ref{tab:distributions:trbeta_family}--\ref{tab:distributions:other}, %
+In addition to the 17 distributions of Table \ref{tab:distributions},
 the package provides support for a family of distributions deserving a
 separate presentation. Phase-type distributions \citep{Neuts_81} are
 defined as the distribution of the time until absorption of continuous
@@ -213,7 +211,7 @@ The package provides \code{d}, \code{p}, \code{r}, \code{m} and
 ruin; see \code{?ruin} and the \code{"risk"} vignette.
 
 The core of all the functions presented in this subsection is written
-in \proglang{C} for speed. The matrix exponential \proglang{C} routine 
+in \proglang{C} for speed. The matrix exponential \proglang{C} routine
 is based on \code{expm()} from package \pkg{Matrix} \citep{Matrix}.
 
 
@@ -660,10 +658,8 @@ formulas under various combinations of coverage modifications.
 \label{sec:appendix}
 
 This appendix gives the pdf and cdf of the probability laws appearing
-in Tables
-\ref{tab:distributions:trbeta_family}--\ref{tab:distributions:other}
-using the parametrization of \cite{LossModels2e} and
-\cite{HoggKlugman}.
+in Table \ref{tab:distributions} using the parametrization of
+\cite{LossModels2e} and \cite{HoggKlugman}.
 
 In the following,
 \begin{displaymath}
