@@ -1,5 +1,28 @@
 === actuar: an R package for Actuarial Science ===
 
+Version 0.9-5
+=============
+
+USER-VISIBLE CHANGES
+
+  o Following some negative comments on a function name VG had been
+    using for years, function simpf() is renamed to simul() and the
+    class of the output from 'simpf' to 'portfolio'.
+
+  o The components of the list returned by severity.portfolio() are
+    renamed from "first" and "last" to "main" and "split",
+    respectively.
+
+BUG FIXES
+
+  o levinvgauss() returned wrong results.
+
+  o Restructuring of the weights matrix in simpf() may fail with an
+    incorrect number of columns.
+
+  o Fixed index entry of the credibility theory vignette.
+
+
 Version 0.9-4
 =============
 

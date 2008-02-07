@@ -108,8 +108,8 @@ severity.portfolio <- function(x, by = head(names(x$node), -1),
         x <- x$data
         res <- NextMethod(bycol = TRUE, drop = FALSE)
         colnames(res) <- paste(prefix, colnames(res), sep = "")
-        return(list(first = res[, !splitcol],
-                    last = if (all(!splitcol)) NULL else res[, splitcol]))
+        return(list(main = res[, !splitcol],
+                    split = if (all(!splitcol)) NULL else res[, splitcol]))
     }
 
     ## Unrolling per row (or group of rows) is more work. It requires
@@ -126,7 +126,7 @@ severity.portfolio <- function(x, by = head(names(x$node), -1),
     s <- s[match(levels(f), f), , drop = FALSE] # unique subscripts
 
     ## Keep the 'splitcol' columns for later use.
-    x.last <- x$data[, splitcol]
+    x.split <- x$data[, splitcol]
 
     ## If a prefix is not specified, use "claim." as a sensible
     ## choice.
@@ -135,17 +135,17 @@ severity.portfolio <- function(x, by = head(names(x$node), -1),
 
     ## Unroll the "main" block of columns.
     if (all(splitcol))
-        res.first <- NULL
+        res.main <- NULL
     else
     {
         x <- cbind(lapply(split(x$data[, !splitcol], f), fun))
-        res.first <- NextMethod(bycol = FALSE, drop = FALSE)
-        res.first <-
-            if (0 < (nc <- ncol(res.first)))
+        res.main <- NextMethod(bycol = FALSE, drop = FALSE)
+        res.main <-
+            if (0 < (nc <- ncol(res.main)))
             {
-                dimnames(res.first) <-
+                dimnames(res.main) <-
                     list(NULL, paste(prefix, seq_len(nc), sep = ""))
-                cbind(if (classification) s, res.first)
+                cbind(if (classification) s, res.main)
             }
             else
                 NULL
@@ -153,24 +153,24 @@ severity.portfolio <- function(x, by = head(names(x$node), -1),
 
     ## Unroll the 'splitcol' block of columns.
     if (all(!splitcol))
-        res.last <- NULL
+        res.split <- NULL
     else
     {
-        x <- cbind(lapply(split(x.last, f), fun))     # split data
-        res.last <- NextMethod(bycol = FALSE, drop = FALSE)
-        res.last <-
-            if (0 < (nc <- ncol(res.last)))
+        x <- cbind(lapply(split(x.split, f), fun))     # split data
+        res.split <- NextMethod(bycol = FALSE, drop = FALSE)
+        res.split <-
+            if (0 < (nc <- ncol(res.split)))
             {
-                dimnames(res.last) <-
+                dimnames(res.split) <-
                     list(NULL, paste(prefix, seq_len(nc), sep = ""))
-                cbind(if (classification) s, res.last)
+                cbind(if (classification) s, res.split)
             }
             else
                 NULL
     }
 
     ## Return the result as a list.
-    list(first = res.first, last = res.last)
+    list(main = res.main, split = res.split)
 }
 
 weights.portfolio <- function(object, classification = TRUE, prefix = NULL, ...)

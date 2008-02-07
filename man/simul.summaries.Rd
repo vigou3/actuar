@@ -75,11 +75,11 @@
   vector is returned.
 
   For the \code{severity} method: a list of two elements:
-  \item{first}{\code{NULL} or a matrix of claim amounts for the
+  \item{main}{\code{NULL} or a matrix of claim amounts for the
     columns not specified in \code{splitcol}, with the appropriate node
     identifiers extracted from \code{x$classification} if
     \code{classification = TRUE};}
-  \item{last}{same as above, but for the columns specified in
+  \item{split}{same as above, but for the columns specified in
     \code{splitcol}.}
 
   For the \code{weights} method: the weight matrix of the portfolio with
