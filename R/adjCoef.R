@@ -40,13 +40,17 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
             if (is.name(sh))
             {
                 fcall <- paste(sh, "(x)")
-                h <- parse(text = fcall)
+                #h <- parse(text = fcall)
+                h <- function(x)
+                    eval(parse(text = fcall), envir = list(x = x), enclos = parent.frame())
             }
             else
             {
                 if (!(is.call(sh) && match("x", all.vars(sh), nomatch = 0)))
                     stop("'h' must be a function or an expression containing 'x'")
-                h <- sh
+                #h <- sh
+                h <- function(x)
+                    eval(sh, envir = list(x = x), enclos = parent.frame())
             }
         }
         else
@@ -78,8 +82,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
             h <- function(x) eval(mgfx) * eval(mgfw, list(x = -x * premium.rate))
         }
 
-        f <- function(r)
-            (eval(h, envir = list(x = r), enclos = parent.frame()) - 1)^2
+        f <- function(r) (h(r) - 1)^2
 
         return(optimize(f, c(0, upper.bound - .Machine$double.eps),
                         tol = sqrt(.Machine$double.eps))$minimum)
@@ -103,13 +106,18 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
         if (is.name(sh))
         {
             fcall <- paste(sh, "(x, y)")
-            h <- parse(text = fcall)
+            #h <- parse(text = fcall)
+            h <- function(x, y)
+                eval(parse(text = fcall), envir = list(x = x, y = y),
+                     enclos = parent.frame())
         }
         else
         {
             if (!(is.call(sh) && all(match(c("x", "y"), all.vars(sh), nomatch = 0))))
                 stop("'h' must be a function or an expression containing 'x' and 'y'")
-            h <- sh
+            #h <- sh
+            h <- function(x, y)
+                eval(sh, envir = list(x = x, y = y), enclos = parent.frame())
         }
     }
     else
@@ -157,8 +165,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
         h <- function(x, y) eval(mgfx) * eval(mgfw, list(x = -x * eval(premium.rate)))
     }
 
-    f <- function(x, y)
-        (eval(h, envir = list(x = x, y = y), enclos = parent.frame()) - 1)^2
+    f <- function(x, y) (h(x, y) - 1)^2
     retention <- seq(from, to, length.out = n)
 
     ## Compute the adjustment coefficient for each retention level.
