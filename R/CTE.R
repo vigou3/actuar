@@ -47,7 +47,7 @@ CTE.aggregateDist <- function(x, conf.level = c(0.9, 0.95, 0.99),
         f <- function(a)
         {
             pos <- val > VaR(x, a)
-            drop(crossprod(val[pos], prob[pos])) / (1 - a)
+            drop(crossprod(val[pos], prob[pos])) / sum(prob[pos])
         }
         res <- sapply(conf.level, f)
     }
