@@ -89,7 +89,7 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
 
         if ("weights" %in% p && length(shape) > 1)
         {
-            prob <- numeric(sum(shape))
+            prob <- numeric(n)
             prob[cumsum(c(1, head(shape, -1)))] <- par.claims$weights
         }
         else if (length(shape) == 1)
@@ -99,11 +99,11 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
 
         rates <- diag(rep(-rate, shape), n)
         if (n > 1 && shape > 1)
-		{
-			temp <- -head(diag(rates), -1)
-			temp[cumsum(head(shape, -1))] <- 0
-			rates[cbind(seq_len(n - 1), seq(2, len = n - 1))] <- temp
-		}
+        {
+            tmp <- -head(diag(rates), -1)
+            tmp[cumsum(head(shape, -1))] <- 0 # insert 0s in "ll corners"
+            rates[cbind(seq_len(n - 1), seq(2, len = n - 1))] <- tmp
+        }
     }
     else                                # claims == "phase-type"
     {
@@ -150,7 +150,7 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
             prob.w <- 1
         else
             stop("parameter \"weights\" missing in 'par.wait'")
-		
+
         rates.w <- diag(-rate, m)
     }
     else if (wait == "Erlang")
@@ -176,18 +176,18 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
             prob.w <- numeric(sum(shape))
             prob.w[cumsum(c(1, head(shape, -1)))] <- par.wait$weights
         }
-        else if(length(shape) == 1)
+        else if (length(shape) == 1)
             prob.w <- c(1, rep(0, m - 1))
         else
             stop("parameter \"weights\" missing in 'par.wait'")
 
         rates.w <- diag(rep(-rate, shape), m)
         if (m > 1 && shape > 1)
-		{
-			temp <- -head(diag(rates.w), -1)
-			temp[cumsum(head(shape, -1))] <- 0
-            rates.w[cbind(seq_len(m - 1), seq(2, len = m - 1))] <- temp
-		}                	
+        {
+            tmp <- -head(diag(rates.w), -1)
+            tmp[cumsum(head(shape, -1))] <- 0 # insert 0s in "ll corners"
+            rates.w[cbind(seq_len(m - 1), seq(2, len = m - 1))] <- tmp
+        }
     }
     else                                # wait == "phase-type"
     {
@@ -253,7 +253,7 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
 
         Q <- rates
         count <- 0
-			
+
         repeat
         {
             eval(exp)
@@ -263,7 +263,7 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
                 warning("maximum number of iterations reached before obtaining convergence")
                 break
             }
-										
+
             Q1 <- Q
             Q <- rates - t0pi %*% A %*% solve(Q %x% Im + B, C)
 
