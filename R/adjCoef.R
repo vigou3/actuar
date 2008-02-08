@@ -40,17 +40,19 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
             if (is.name(sh))
             {
                 fcall <- paste(sh, "(x)")
-                #h <- parse(text = fcall)
                 h <- function(x)
-                    eval(parse(text = fcall), envir = list(x = x), enclos = parent.frame())
+                    eval(parse(text = fcall),
+                         envir = list(x = x),
+                         enclos = parent.frame(2))
             }
             else
             {
                 if (!(is.call(sh) && match("x", all.vars(sh), nomatch = 0)))
                     stop("'h' must be a function or an expression containing 'x'")
-                #h <- sh
                 h <- function(x)
-                    eval(sh, envir = list(x = x), enclos = parent.frame())
+                    eval(sh,
+                         envir = list(x = x),
+                         enclos = parent.frame(2))
             }
         }
         else
@@ -79,7 +81,8 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
                     stop("'mgf.wait' must be a function or an expression containing 'x'")
                 mgfw <- smgfw
             }
-            h <- function(x) eval(mgfx) * eval(mgfw, list(x = -x * premium.rate))
+            h <- function(x)
+                eval(mgfx) * eval(mgfw, list(x = -x * premium.rate))
         }
 
         f <- function(r) (h(r) - 1)^2
@@ -106,18 +109,19 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
         if (is.name(sh))
         {
             fcall <- paste(sh, "(x, y)")
-            #h <- parse(text = fcall)
             h <- function(x, y)
-                eval(parse(text = fcall), envir = list(x = x, y = y),
-                     enclos = parent.frame())
+                eval(parse(text = fcall),
+                     envir = list(x = x, y = y),
+                     enclos = parent.frame(2))
         }
         else
         {
             if (!(is.call(sh) && all(match(c("x", "y"), all.vars(sh), nomatch = 0))))
                 stop("'h' must be a function or an expression containing 'x' and 'y'")
-            #h <- sh
             h <- function(x, y)
-                eval(sh, envir = list(x = x, y = y), enclos = parent.frame())
+                eval(sh,
+                     envir = list(x = x, y = y),
+                     enclos = parent.frame(2))
         }
     }
     else
@@ -162,7 +166,8 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
             premium.rate <- spremium
         }
 
-        h <- function(x, y) eval(mgfx) * eval(mgfw, list(x = -x * eval(premium.rate)))
+        h <- function(x, y)
+            eval(mgfx) * eval(mgfw, list(x = -x * eval(premium.rate)))
     }
 
     f <- function(x, y) (h(x, y) - 1)^2
