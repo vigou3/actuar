@@ -2,7 +2,7 @@
 ###
 ### Demo of the risk theory facilities provided by actuar
 ###
-### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
+### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 require(actuar)
 if(dev.cur() <= 1) get(getOption("device"))()
@@ -11,6 +11,8 @@ op <- par(ask = interactive() &&
           (.Device %in% c("X11", "GTK", "gnome", "windows","quartz")),
           col = "black")
 
+
+### DISCRETIZATION OF CONTINUOUS DISTRIBUTIONS
 
 ## Upper and lower discretization of a Gamma(2, 1) distribution with a
 ## step (or span, or lag) of 0.5. The value of 'to' is chosen so as to
@@ -75,9 +77,11 @@ legend(4, 0.2, legend = c("upper", "lower", "rounding", "unbiased"),
 par(col = "black")
 
 
+### CALCULATION OF THE AGGREGATE CLAIM AMOUNT DISTRIBUTION
+
 ## Calculation of the aggregate claim amount distribution using the
-## recursive method. Argument 'x.scale' is used to specify how much a
-## value of 1 is really worth.
+## recursive method (Panjer). Argument 'x.scale' is used to specify
+## how much a value of 1 is really worth.
 fx.b <- discretize(pgamma(x, 2, 1), from = 0, to = 22, step = 0.5,
                    method = "unbiased", lev = levgamma(x, 2, 1))
 Fs.b <- aggregateDist("recursive", model.freq = "poisson",
@@ -151,6 +155,7 @@ legend(40, 0.2,
                   "normal approximation"),
        col = c("black", "blue", "red", "green", "magenta"),
        lty = 1, text.col = "black", cex = 1.2)
+par(col = "black")
 
 ## Table of quantiles for the same methods as graphic above.
 x <- knots(Fs.l)
@@ -164,5 +169,137 @@ round(cbind(x = x,
             Simulation = Fs.s(x),
             Normal = Fs.n(x)), 6)
 
+
+### CALCULATION OF THE ADJUSTMENT COEFFICIENT
+
+## No reinsurance, generalized Erlang claim amounts, inverse gamma
+## interarrival times and independence. The adjustment coefficient is
+## increasing with the safety loading.
+mgf <- function(x) 1/(1 - x) * 2/(2 - x) * 3/(3 - x)
+adjCoef(mgf, mgfinvgamma(x, 2, 6/11), 1.1, 1)
+adjCoef(mgf, mgfinvgamma(x, 2, 6/11), 1.2, 1)
+adjCoef(mgf, mgfinvgamma(x, 2, 6/11), 1.3, 1)
+
+## More sophisticated example: comparison of the effect of dependence
+## on the adjustment coefficient in the case of proportional
+## reinsurance. Use a Clayton copula with exponential marginals.
+rclayton <- function(alpha, n)
+{
+    val <- cbind(runif(n), runif(n))
+    val[,2] <- (val[,1]^(-alpha) * (val[,2]^(-alpha/(alpha + 1)) - 1) + 1)^(-1/alpha)
+    val
+}
+u <- rclayton(2, 1000)             # variates with positive dependence
+x <- qexp(u[,1])                   # claim amounts
+w <- qexp(u[,2])                   # interarrival times
+
+## Premium rate and Lundberg's functions of the retention rate. We
+## assume a safety loading of 20% for the insurer and 30% for the
+## reinsurer and premium calculated with the expected value principle.
+p <- function(a) mean(x)/mean(w) * (1.2 - 1.3 + 1.3 * a)
+h <- function(r, a) mean(exp(r * (a * x - p(a) * w)))
+R1 <- adjCoef(h = h, upper = 1, reinsurance = "prop", from = 1/3, to = 1)
+plot(R1)
+
+## Repeat the above with independent claim amounts and interarrival
+## times.
+u <- rclayton(1, 1000)             # independent variates
+x <- qexp(u[,1])                   # claim amounts
+w <- qexp(u[,2])                   # interarrival times
+R2 <- adjCoef(h = h, upper = 1, reinsurance = "prop", from = 1/3, to = 1)
+plot(R2, add = TRUE, col = "green")
+legend("bottomright", legend = c("dependence", "independence"),
+       col = c("black", "green"), lty = 1)
+
+## Similar example with excess-of-loss reinsurance.
+## positive dependence
+u <- rclayton(2, 1000)             # variates with positive dependence
+x <- qexp(u[,1])                   # claim amounts
+w <- qexp(u[,2])                   # interarrival times
+p <- function(L)
+    mean(x)/mean(w) * (1.2 - 1.3) + 1.3 * mean(pmin(L, x))/mean(w)
+h <- function(r, L)
+    mean(exp(r * (pmin(L, x) - p(L) * w)))
+R3 <- adjCoef(h = h, upper = 1, reinsurance = "prop", from = 0, to = 10)
+plot(R3)
+
+u <- rclayton(1, 1000)             # independent variates
+x <- qexp(u[,1])                   # claim amounts
+w <- qexp(u[,2])                   # interarrival times
+R4 <- adjCoef(h = h, upper = 1, reinsurance = "prop", from = 0, to = 10)
+plot(R4, add = TRUE, col = "green")
+legend("bottomright", legend = c("dependence", "independence"),
+       col = c("black", "green"), lty = 1)
+
+
+### CALCULATION OF RUIN PROBABILITIES
+
+## Case with an explicit formula: exponential claims and interarrival
+## times. Safety loading is always 20% and premiums are always
+## calculated according to the expected value principle.
+psi <- ruin(claims = "exponential",
+            par.claims = list(rate = 1),
+            wait = "exponential",
+            par.wait = list(rate = 1),
+            premium = 1.2)
+psi(0:10)
+
+## Exponential claims and hyper-exponential interarrival times.
+psi <- ruin(claims = "exponential",
+            par.claims = list(rate = 2),
+            wait   = "exponential",
+            par.wait = list(rate = c(2, 3, 1)/2, w = c(2, 3, 1)/6),
+            premium = 1.2)
+psi(0:10)
+
+## Hyper-exponential claims and interarrival times.
+psi <- ruin(claims = "exponential",
+            par.claims = list(rate = c(2, 3, 1)/2, w = c(2, 3, 1)/6),
+            wait = "exponential",
+            par.wait = list(rate = c(2, 3, 1)/4, w = c(2, 3, 1)/6),
+            premium = 0.6)
+psi(0:10)
+
+## Exponential claims and Erlang interarrival times
+psi <- ruin(claims = "exponential",
+            par.claims = list(rate = 2),
+            wait = "Erlang",
+            par.wait = list(shape = 2, rate = 1),
+            premium = 1.2)
+psi(0:10)
+
+## Erlang claims and interarrival times
+psi <- ruin(claims = "Erlang",
+            par.claims = list(shape = 2, rate = 2),
+            wait = "Erlang",
+            par.wait   = list(shape = 2, rate = 1),
+            premium = 0.6)
+psi(0:10)
+
+## Mixture of Erlang for claims and Erlang interarrival times
+psi <- ruin(claims = "Erlang",
+            par.claims = list(shape = c(2, 4), rate = c(1, 3),
+                              w = c(1, 2)/3),
+            wait = "Erlang",
+            par.wait = list(shape = 2, rate = 1),
+            premium = 1.2)
+psi(0:10)
+
+## Generalized Erlang claims and mixture of two generalized Erlang
+## interarrival times. These must be given as phase-type distributions
+## to 'ruin'.
+prob.c <- c(1, 0, 2, 0)/3
+rate.c <- cbind(c(-1, 0, 0, 0), c(1, -3, 0, 0),
+                c(0, 0, -2, 0), c(0, 0, 2, -3))
+mean.c <- mphtype(1, prob.c, rate.c)
+prob.w <- c(1, 0, 0)
+rate.w <- cbind(c(-1, 0, 0), c(1, -2, 0), c(0, 2, -3))
+mean.w <- mphtype(1, prob.w, rate.w)
+psi <- ruin(claims = "phase-type",
+            par.claims = list(prob = prob.c, rate = rate.c),
+            wait = "phase-type",
+            par.wait = list(prob = prob.w, rate = rate.w),
+            premium = 1.2 * mean.c/mean.w)
+psi(0:10)
 
 par(op)
