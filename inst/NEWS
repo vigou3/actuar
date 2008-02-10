@@ -3,6 +3,16 @@
 Version 0.9-5
 =============
 
+Mostly bug fix release, along with a few improvements.
+
+NEW FEATURES
+
+  o New "simulation" vignette on usage of function simul(). Most of
+    the material was previously in the "credibility" vignette.
+
+  o Examples of ruin() and adjCoef() added to the "risk" demo.
+
+
 USER-VISIBLE CHANGES
 
   o Following some negative comments on a function name VG had been
@@ -21,6 +31,14 @@ BUG FIXES
     incorrect number of columns.
 
   o Fixed index entry of the credibility theory vignette.
+
+  o adjCoef() would only accept as argument 'h' a function named 'h'.
+
+  o ruin() built incorrect probability vector and intensity matrix for
+    mixture or Erlangs.
+
+  o CTE.aggregateDist sometimes gave values smaller than the VaR for
+    recursive and simulation methods.
 
 
 Version 0.9-4

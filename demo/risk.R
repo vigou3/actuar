@@ -71,7 +71,7 @@ par(col = "green")
 plot(stepfun(0:4, diffinv(fr)), pch = 19, add = TRUE)
 par(col = "magenta")
 plot(stepfun(0:5, diffinv(fb)), pch = 19, add = TRUE)
-legend(4, 0.2, legend = c("upper", "lower", "rounding", "unbiased"),
+legend("bottomright", legend = c("upper", "lower", "rounding", "unbiased"),
        col = c("blue", "red", "green", "magenta"), lty = 1, pch = 19,
        text.col = "black")
 par(col = "black")
@@ -149,7 +149,7 @@ par(col = "green")
 plot(Fs.s, do.points = FALSE, verticals = TRUE, add = TRUE, sub = "")
 par(col = "magenta")
 plot(Fs.n, add = TRUE, sub = "")
-legend(40, 0.2,
+legend("bottomright",
        legend = c("recursive + unbiased", "recursive + upper",
                   "recursive + lower", "simulation",
                   "normal approximation"),
