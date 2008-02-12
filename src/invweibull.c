@@ -25,13 +25,13 @@ double dinvweibull(double x, double shape, double scale, int give_log)
     double logu;
 
     if (!R_FINITE(scale) ||
-	!R_FINITE(shape) ||
-	scale <= 0.0 ||
-	shape <= 0.0)
-	return R_NaN;;
+        !R_FINITE(shape) ||
+        scale <= 0.0 ||
+        shape <= 0.0)
+        return R_NaN;;
 
     if (!R_FINITE(x) || x < 0.0)
-	return R_D__0;
+        return R_D__0;
 
     logu = shape * (log(scale) - log(x));
 
@@ -39,18 +39,18 @@ double dinvweibull(double x, double shape, double scale, int give_log)
 }
 
 double pinvweibull(double q, double shape, double scale, int lower_tail,
-		   int log_p)
+                   int log_p)
 {
     double u;
 
     if (!R_FINITE(scale) ||
-	!R_FINITE(shape) ||
-	scale <= 0.0 ||
-	shape <= 0.0)
-	return R_NaN;;
+        !R_FINITE(shape) ||
+        scale <= 0.0 ||
+        shape <= 0.0)
+        return R_NaN;;
 
     if (q <= 0)
-	return R_DT_0;
+        return R_DT_0;
 
     u = exp(shape * (log(scale) - log(q)));
 
@@ -58,13 +58,13 @@ double pinvweibull(double q, double shape, double scale, int lower_tail,
 }
 
 double qinvweibull(double p, double shape, double scale, int lower_tail,
-		   int log_p)
+                   int log_p)
 {
     if (!R_FINITE(scale) ||
-	!R_FINITE(shape) ||
-	scale <= 0.0 ||
-	shape <= 0.0)
-	return R_NaN;;
+        !R_FINITE(shape) ||
+        scale <= 0.0 ||
+        shape <= 0.0)
+        return R_NaN;;
 
     R_Q_P01_boundaries(p, 0, R_PosInf);
     p = R_D_qIv(p);
@@ -75,10 +75,10 @@ double qinvweibull(double p, double shape, double scale, int lower_tail,
 double rinvweibull(double shape, double scale)
 {
     if (!R_FINITE(scale) ||
-	!R_FINITE(shape) ||
-	scale <= 0.0 ||
-	shape <= 0.0)
-	return R_NaN;;
+        !R_FINITE(shape) ||
+        scale <= 0.0 ||
+        shape <= 0.0)
+        return R_NaN;;
 
     return scale * R_pow(rexp(1.0), -1.0 / shape);
 }
@@ -86,36 +86,36 @@ double rinvweibull(double shape, double scale)
 double minvweibull(double order, double shape, double scale, int give_log)
 {
     if (!R_FINITE(scale) ||
-	!R_FINITE(shape) ||
-	!R_FINITE(order) ||
-	scale <= 0.0 ||
-	shape <= 0.0 ||
-	order >= shape)
-	return R_NaN;;
+        !R_FINITE(shape) ||
+        !R_FINITE(order) ||
+        scale <= 0.0 ||
+        shape <= 0.0 ||
+        order >= shape)
+        return R_NaN;;
 
     return R_pow(scale, order) * gammafn(1.0 - order / shape);
 }
 
 double levinvweibull(double limit, double shape, double scale, double order,
-		     int give_log)
+                     int give_log)
 {
     double u, tmp;
 
     if (!R_FINITE(scale) ||
-	!R_FINITE(shape) ||
-	!R_FINITE(order) ||
-	scale <= 0.0 ||
-	shape <= 0.0 ||
-	order >= shape)
-	return R_NaN;;
+        !R_FINITE(shape) ||
+        !R_FINITE(order) ||
+        scale <= 0.0 ||
+        shape <= 0.0 ||
+        order >= shape)
+        return R_NaN;;
 
     if (limit <= 0.0)
-	return 0;
+        return 0;
 
     tmp = 1.0 - order / shape;
 
     u = exp(shape * (log(scale) - log(limit)));
 
     return R_pow(scale, order) * gammafn(tmp) * pgamma(u, tmp, 1.0, 0, 0)
-	+ R_VG__0(limit, order) * (0.5 - exp(-u) + 0.5);
+        + R_VG__0(limit, order) * (0.5 - exp(-u) + 0.5);
 }

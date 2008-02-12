@@ -14,29 +14,29 @@
 double mgamma(double order, double shape, double scale, int give_log)
 {
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(order) ||
-	shape <= 0.0 ||
-	scale <= 0.0 ||
-	order <= -shape)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        !R_FINITE(order) ||
+        shape <= 0.0 ||
+        scale <= 0.0 ||
+        order <= -shape)
+        return R_NaN;
 
     return R_pow(scale, order) * gammafn(order + shape) / gammafn(shape);
 }
 
 double levgamma(double limit, double shape, double scale, double order,
-		int give_log)
+                int give_log)
 {
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(order) ||
-	shape <= 0.0 ||
-	scale <= 0.0 ||
-	order <= -shape)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        !R_FINITE(order) ||
+        shape <= 0.0 ||
+        scale <= 0.0 ||
+        order <= -shape)
+        return R_NaN;
 
     if (limit <= 0.0)
-	return 0.0;
+        return 0.0;
 
     double u, tmp;
 
@@ -44,21 +44,21 @@ double levgamma(double limit, double shape, double scale, double order,
     u = exp(log(limit) - log(scale));
 
     return R_pow(scale, order) * gammafn(tmp) *
-	pgamma(u, tmp, 1.0, 1, 0) / gammafn(shape) +
-	R_VG__0(limit, order) * pgamma(u, shape, 1.0, 0, 0);
+        pgamma(u, tmp, 1.0, 1, 0) / gammafn(shape) +
+        R_VG__0(limit, order) * pgamma(u, shape, 1.0, 0, 0);
 }
 
 double mgfgamma(double x, double shape, double scale, int give_log)
 {
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	shape <= 0.0 ||
-	scale <= 0.0 ||
-	scale * x > 1.)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0 ||
+        scale * x > 1.)
+        return R_NaN;
 
     if (x == 0.0)
-	return R_D_exp(0.0);
+        return R_D_exp(0.0);
 
     return R_D_exp(-shape * log1p(-scale * x));
 }

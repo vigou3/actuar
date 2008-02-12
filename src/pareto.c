@@ -24,13 +24,13 @@ double dpareto(double x, double shape, double scale, int give_log)
     double tmp, logu, log1mu;
 
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	shape <= 0.0 ||
-	scale <= 0.0)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;
 
     if (!R_FINITE(x) || x < 0.0)
-	return R_D__0;
+        return R_D__0;
 
     tmp = log(x) - log(scale);
     logu = - log1p(exp(tmp));
@@ -44,13 +44,13 @@ double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
     double u;
 
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	shape <= 0.0 ||
-	scale <= 0.0)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;
 
     if (q <= 0)
-	return R_DT_0;
+        return R_DT_0;
 
     u = exp(-log1p(exp(log(q) - log(scale))));
 
@@ -60,10 +60,10 @@ double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
 double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
 {
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	shape <= 0.0 ||
-	scale <= 0.0)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;
 
     R_Q_P01_boundaries(p, 0, R_PosInf);
     p = R_D_qIv(p);
@@ -74,10 +74,10 @@ double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
 double rpareto(double shape, double scale)
 {
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	shape <= 0.0 ||
-	scale <= 0.0)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;
 
     return scale * (R_pow(unif_rand(), -1.0 / shape) - 1.0);
 }
@@ -85,32 +85,32 @@ double rpareto(double shape, double scale)
 double mpareto(double order, double shape, double scale, int give_log)
 {
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(order) ||
-	shape <= 0.0  ||
-	scale <= 0.0  ||
-	order <= -1.0 ||
-	order >= shape)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        !R_FINITE(order) ||
+        shape <= 0.0  ||
+        scale <= 0.0  ||
+        order <= -1.0 ||
+        order >= shape)
+        return R_NaN;
 
     return R_pow(scale, order) * gammafn(1.0 + order) * gammafn(shape - order)
-	/ gammafn(shape);
+        / gammafn(shape);
 }
 
 double levpareto(double limit, double shape, double scale, double order,
-		 int give_log)
+                 int give_log)
 {
     double u, tmp1, tmp2;
 
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(order) ||
-	shape <= 0.0 ||
-	scale <= 0.0)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        !R_FINITE(order) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;
 
     if (limit <= 0.0)
-	return 0;
+        return 0;
 
     tmp1 = 1.0 + order;
     tmp2 = shape - order;
@@ -118,6 +118,6 @@ double levpareto(double limit, double shape, double scale, double order,
     u = exp(-log1p(exp(log(limit) - log(scale))));
 
     return R_pow(scale, order) * gammafn(tmp1) * gammafn(tmp2)
-	* pbeta(0.5 - u + 0.5, tmp1, tmp2, 1, 0) / gammafn(shape)
-	+ R_VG__0(limit, order) * R_pow(u, shape);
+        * pbeta(0.5 - u + 0.5, tmp1, tmp2, 1, 0) / gammafn(shape)
+        + R_VG__0(limit, order) * R_pow(u, shape);
 }

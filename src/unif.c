@@ -16,12 +16,12 @@ double munif(double order, double min, double max, int give_log)
     double tmp;
 
     if (!R_FINITE(min) ||
-	!R_FINITE(max) ||
-	min >= max)
-	return R_NaN;
+        !R_FINITE(max) ||
+        min >= max)
+        return R_NaN;
 
     if (order == -1.0)
-	return (log(abs(max)) - log(abs(min))) / (max - min);
+        return (log(abs(max)) - log(abs(min))) / (max - min);
 
     tmp = order + 1;
 
@@ -33,24 +33,24 @@ double levunif(double limit, double min, double max, double order, int give_log)
     double tmp;
 
     if (!R_FINITE(min) ||
-	!R_FINITE(max) ||
-	min >= max)
-	return R_NaN;
+        !R_FINITE(max) ||
+        min >= max)
+        return R_NaN;
 
     if (limit <= min)
-	return R_pow(limit, order);
+        return R_pow(limit, order);
 
     if (limit >= max)
-	return munif(order, min, max, give_log);
+        return munif(order, min, max, give_log);
 
     if (order == -1.0)
-	return (log(abs(limit)) - log(abs(min))) / (max - min) +
-	    (max - limit) / (limit * (max - min));
+        return (log(abs(limit)) - log(abs(min))) / (max - min) +
+            (max - limit) / (limit * (max - min));
 
     tmp = order + 1;
 
     return (R_pow(limit, tmp) - R_pow(min, tmp)) / ((max - min) * tmp) +
-	R_pow(limit, order) * (max - limit) / (max - min);
+        R_pow(limit, order) * (max - limit) / (max - min);
 }
 
 double mgfunif(double x, double min, double max, int give_log)
@@ -58,12 +58,12 @@ double mgfunif(double x, double min, double max, int give_log)
     double tmp1, tmp2;
 
     if (!R_FINITE(min) ||
-	!R_FINITE(max) ||
-	min >= max)
-	return R_NaN;
+        !R_FINITE(max) ||
+        min >= max)
+        return R_NaN;
 
     if (x == 0.0)
-	return R_D_exp(0.0);
+        return R_D_exp(0.0);
 
     tmp1 = exp(x * max) - exp(x * min);
     tmp2 = x * (max - min);

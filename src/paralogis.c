@@ -25,13 +25,13 @@ double dparalogis(double x, double shape, double scale, int give_log)
     double tmp, logu, log1mu;
 
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	shape <= 0.0 ||
-	scale <= 0.0)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;
 
     if (!R_FINITE(x) || x < 0.0)
-	return R_D__0;
+        return R_D__0;
 
     tmp = shape * (log(x) - log(scale));
     logu = - log1p(exp(tmp));
@@ -41,18 +41,18 @@ double dparalogis(double x, double shape, double scale, int give_log)
 }
 
 double pparalogis(double q, double shape, double scale, int lower_tail,
-		  int log_p)
+                  int log_p)
 {
     double u;
 
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	shape <= 0.0 ||
-	scale <= 0.0)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;
 
     if (q <= 0)
-	return R_DT_0;
+        return R_DT_0;
 
     u = exp(-log1p(exp(shape * (log(q) - log(scale)))));
 
@@ -60,15 +60,15 @@ double pparalogis(double q, double shape, double scale, int lower_tail,
 }
 
 double qparalogis(double p, double shape, double scale, int lower_tail,
-		  int log_p)
+                  int log_p)
 {
     double tmp;
 
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	shape <= 0.0 ||
-	scale <= 0.0)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;
 
     R_Q_P01_boundaries(p, 0, R_PosInf);
     p = R_D_qIv(p);
@@ -83,10 +83,10 @@ double rparalogis(double shape, double scale)
     double tmp;
 
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	shape <= 0.0 ||
-	scale <= 0.0)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;
 
     tmp = 1.0 / shape;
 
@@ -98,35 +98,35 @@ double mparalogis(double order, double shape, double scale, int give_log)
     double tmp;
 
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(order) ||
-	shape <= 0.0 ||
-	scale <= 0.0 ||
-	order <= -shape ||
-	order >= shape * shape)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        !R_FINITE(order) ||
+        shape <= 0.0 ||
+        scale <= 0.0 ||
+        order <= -shape ||
+        order >= shape * shape)
+        return R_NaN;
 
     tmp = order / shape;
 
     return R_pow(scale, order) * gammafn(1.0 + tmp) * gammafn(shape - tmp)
-	/ gammafn(shape);
+        / gammafn(shape);
 }
 
 double levparalogis(double limit, double shape, double scale, double order,
-		    int give_log)
+                    int give_log)
 {
     double u, tmp1, tmp2, tmp3;
 
     if (!R_FINITE(shape) ||
-	!R_FINITE(scale) ||
-	!R_FINITE(order) ||
-	shape <= 0.0 ||
-	scale <= 0.0 ||
-	order <= -shape)
-	return R_NaN;
+        !R_FINITE(scale) ||
+        !R_FINITE(order) ||
+        shape <= 0.0 ||
+        scale <= 0.0 ||
+        order <= -shape)
+        return R_NaN;
 
     if (limit <= 0.0)
-	return 0;
+        return 0;
 
     tmp1 = order / shape;
     tmp2 = 1.0 + tmp1;
@@ -135,6 +135,6 @@ double levparalogis(double limit, double shape, double scale, double order,
     u = exp(-log1p(exp(shape * (log(limit) - log(scale)))));
 
     return R_pow(scale, order) * gammafn(tmp2) * gammafn(tmp3)
-	* pbeta(0.5 - u + 0.5, tmp2, tmp3, 1, 0) / gammafn(shape)
-	+ R_VG__0(limit, order) * R_pow(u, shape);
+        * pbeta(0.5 - u + 0.5, tmp2, tmp3, 1, 0) / gammafn(shape)
+        + R_VG__0(limit, order) * R_pow(u, shape);
 }

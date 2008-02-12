@@ -25,10 +25,10 @@ double dinvexp(double x, double scale, int give_log)
     double logu;
 
     if (!R_FINITE(scale) || scale <= 0.0)
-	return R_NaN;
+        return R_NaN;
 
     if (!R_FINITE(x) || x < 0.0)
-	return R_D__0;
+        return R_D__0;
 
     logu = log(scale) - log(x);
 
@@ -40,10 +40,10 @@ double pinvexp(double q, double scale, int lower_tail, int log_p)
     double u;
 
     if (!R_FINITE(scale) || scale <= 0.0)
-	return R_NaN;
+        return R_NaN;
 
     if (q <= 0)
-	return R_DT_0;
+        return R_DT_0;
 
     u = exp(log(scale) - log(q));
 
@@ -53,7 +53,7 @@ double pinvexp(double q, double scale, int lower_tail, int log_p)
 double qinvexp(double p, double scale, int lower_tail, int log_p)
 {
     if (!R_FINITE(scale) || scale <= 0.0)
-	return R_NaN;
+        return R_NaN;
 
     R_Q_P01_boundaries(p, 0, R_PosInf);
     p = R_D_qIv(p);
@@ -64,7 +64,7 @@ double qinvexp(double p, double scale, int lower_tail, int log_p)
 double rinvexp(double scale)
 {
     if (!R_FINITE(scale) || scale <= 0.0)
-	return R_NaN;
+        return R_NaN;
 
     return scale / rexp(1.0);
 }
@@ -72,10 +72,10 @@ double rinvexp(double scale)
 double minvexp(double order, double scale, int give_log)
 {
     if (!R_FINITE(scale) ||
-	!R_FINITE(order) ||
-	scale <= 0.0 ||
-	order >= 1.0)
-	return R_NaN;
+        !R_FINITE(order) ||
+        scale <= 0.0 ||
+        order >= 1.0)
+        return R_NaN;
 
     return R_pow(scale, order) * gammafn(1.0 - order);
 }
@@ -85,18 +85,18 @@ double levinvexp(double limit, double scale, double order, int give_log)
     double u, tmp;
 
     if (!R_FINITE(scale) ||
-	R_FINITE(order) ||
-	scale <= 0.0 ||
-	order >= 1.0)
-	return R_NaN;
+        R_FINITE(order) ||
+        scale <= 0.0 ||
+        order >= 1.0)
+        return R_NaN;
 
     if (limit <= 0.0)
-	return 0;
+        return 0;
 
     tmp = 1.0 - order;
 
     u = exp(log(scale) - log(limit));
 
     return R_pow(scale, order) * gammafn(tmp) * pgamma(u, tmp, 1.0, 0, 0)
-	+ R_VG__0(limit, order) * (0.5 - exp(-u) + 0.5);
+        + R_VG__0(limit, order) * (0.5 - exp(-u) + 0.5);
 }

@@ -1,7 +1,7 @@
 #include <Rinternals.h>
 
 /*Error messages */
-#define R_MSG_NA	_("NaNs produced")
+#define R_MSG_NA        _("NaNs produced")
 
 /* Functions accessed from .External() */
 SEXP do_dpq(SEXP args);
