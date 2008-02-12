@@ -9,7 +9,7 @@
   \usepackage{paralist}
   \usepackage[noae]{Sweave}
 
-  %\VignetteIndexEntry{Risk theory features}
+  %\VignetteIndexEntry{Risk and ruin theory}
   %\VignettePackage{actuar}
 
   \title{Risk theory features of \pkg{actuar}}

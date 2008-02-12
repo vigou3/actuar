@@ -9,7 +9,7 @@
   \usepackage{paralist}
   \usepackage[noae]{Sweave}
 
-  %\VignetteIndexEntry{Loss distributions modeling features}
+  %\VignetteIndexEntry{Loss distributions modeling}
   %\VignettePackage{actuar}
 
   \title{Loss distributions modeling features of \pkg{actuar}}

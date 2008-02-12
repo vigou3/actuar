@@ -85,15 +85,16 @@ rpois(n, rgamma(n, 3, rgamma(n, 2, 2)))
 
 However, for categorical data common in actuarial applications there
 will usually be many categories --- or \emph{nodes} --- at each level.
-Furthermore, actuaries often work with compound models of the form
+Furthermore, actuaries often need to simulate both the frequency and
+the severity of claims for compound models of the form
 \begin{equation}
   \label{eq:definition-S}
   S = C_1 + \dots + C_N,
 \end{equation}
 where $C_1, C_2, \dots$ are mutually independent and identically
-distributed random variables each independent from $N$. Simulation of
-data for such models is complicated by the need to always use the
-correct parameters for each variate.
+distributed random variables each independent from $N$. Simulation is
+then complicated by the need to always use the correct parameters for
+each variate.
 
 The package provides function \code{simul} to simulate data from
 compound models like \eqref{eq:definition-S} where both the frequency
@@ -146,22 +147,22 @@ to take place at a level, the model for this level can be \code{NULL}.
   $J_3 = 6$ and
   $n_{ij} \equiv n = 10$.
   Then the number of nodes is specified by
-\begin{Sinput}
+\begin{verbatim}
 list(Theta = 3, Lambda = c(4, 5, 6), Data = 10)
-\end{Sinput}
+\end{verbatim}
   and the probability model is expressed as
-\begin{Sinput}
+\begin{verbatim}
 expression(Theta = rgamma(2, 2),
            Lambda = rgamma(3, Theta),
            Data = rpois(Lambda))
-\end{Sinput}
+\end{verbatim}
   \qed
 \end{example}
 
 Storing the probability model requires an expression object in order
-to avoid the incomplete calls to the random number generation
-functions to be evaluated. Function \code{simul} builds and executes
-the calls to the random generation functions from the top of the
+to avoid evaluation of the incomplete calls to the random number
+generation functions. Function \code{simul} builds and executes the
+calls to the random generation functions from the top of the
 hierarchical model to the bottom. At each level, the function
 \begin{inparaenum}[1)]
 \item infers the number of variates to generate from the number of
@@ -305,7 +306,7 @@ frequency(pf)
 frequency(pf, by = "cohort")
 @
   The method of \code{severity} returns the individual
-  variates $X_{ijtu}$ in a matrix similar to those above, but with a
+  variates $C_{ijtu}$ in a matrix similar to those above, but with a
   number of columns equal to the maximum number of observations per
   entity,
   \begin{displaymath}
