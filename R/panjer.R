@@ -4,7 +4,7 @@
 ### claim amount distribution of a portfolio over a period.
 ###
 ### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>,
-### Sébastien Auclair, Louis-Philippe Pouliot and Tommy Ouellet
+### Sebastien Auclair, Louis-Philippe Pouliot and Tommy Ouellet
 
 panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
                    tol = sqrt(.Machine$double.eps), maxit = 500,

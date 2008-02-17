@@ -110,7 +110,7 @@ cm <- function(formula, data, ratios, weights, subset, xreg = NULL,
     ## Dispatch to appropriate calculation function
     if (nlevels < 2)                    # one-dimensional model
     {
-        if (is.null(xreg))              # Bühlmann-Straub
+        if (is.null(xreg))              # Buhlmann-Straub
         {
             ## bstraub() accepts only "unbiased" and "iterative" for
             ## argument 'method'.
@@ -214,7 +214,7 @@ summary.cm <- function(object, levels = NULL, newdata, ...)
 
     if (length(level.names) == 1)
     {
-        ## Single level cases (Bühlmann-Straub and Hachemeister):
+        ## Single level cases (Buhlmann-Straub and Hachemeister):
         ## return the object with the following modifications: put
         ## credibility factors into a list and add a list of the
         ## credibility premiums.

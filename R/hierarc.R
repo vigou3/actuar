@@ -179,7 +179,7 @@ hierarc <- function(ratios, weights, classification,
     ## factors at the level below, weighted averages use credibility
     ## factors from previous level.
     ##
-    ## Bühlmann-Gisler estimators truncate the per node variance
+    ## Buhlmann-Gisler estimators truncate the per node variance
     ## estimates to 0 before taking the mean, whereas the Ohlsson
     ## estimators do not make any truncation.
     method <- match.arg(method)

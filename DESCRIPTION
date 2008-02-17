@@ -1,8 +1,8 @@
 Package: actuar
 Type: Package
 Title: Actuarial functions
-Version: 0.9-5
-Date: 2008-02-12
+Version: 0.9-6
+Date: 2008-02-17
 Author: Vincent Goulet, Sébastien Auclair, Christophe Dutang, Tommy Ouellet, Louis-Philippe Pouliot, Mathieu Pigeon
 Maintainer: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 URL: http://www.actuar-project.org

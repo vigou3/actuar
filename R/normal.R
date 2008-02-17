@@ -3,7 +3,7 @@
 ### Normal and Normal Power Approximation of the total amount of
 ### claims distribution
 ###
-### See Dayken, Pentikänen and Pesonen, Practical Risk Theory for
+### See Dayken, Pentikanen and Pesonen, Practical Risk Theory for
 ### Actuaries, Chapman & Hall, 1994.
 ###
 ### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>

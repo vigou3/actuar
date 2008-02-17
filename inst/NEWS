@@ -1,5 +1,13 @@
 === actuar: an R package for Actuarial Science ===
 
+Version 0.9-6
+=============
+
+Accented letters in comments removed to avoid compilation problems
+under MacOS X on CRAN (see thread starting at
+https://stat.ethz.ch/pipermail/r-devel/2008-February/048391.html).
+
+
 Version 0.9-5
 =============
 
@@ -35,7 +43,7 @@ BUG FIXES
   o adjCoef() would only accept as argument 'h' a function named 'h'.
 
   o ruin() built incorrect probability vector and intensity matrix for
-    mixture or Erlangs.
+    mixture of Erlangs.
 
   o CTE.aggregateDist sometimes gave values smaller than the VaR for
     recursive and simulation methods.

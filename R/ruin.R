@@ -1,7 +1,7 @@
 ### ===== actuar: an R package for Actuarial Science =====
 ###
 ### Calulation of infinite time ruin probabilities in the models of
-### Cramér-Lundberg and Sparre Andersen. In general, one has
+### Cramer-Lundberg and Sparre Andersen. In general, one has
 ###
 ###   psi(u) = pphtype(u, pi, Q, lower.tail = FALSE)
 ###

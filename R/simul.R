@@ -9,7 +9,7 @@
 ### data level is numbered 0.
 ###
 ### AUTHORS:  Vincent Goulet <vincent.goulet@act.ulaval.ca>,
-### Sébastien Auclair and Louis-Philippe Pouliot
+### Sebastien Auclair and Louis-Philippe Pouliot
 
 simul <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 {
