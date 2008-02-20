@@ -85,16 +85,16 @@ rpois(n, rgamma(n, 3, rgamma(n, 2, 2)))
 
 However, for categorical data common in actuarial applications there
 will usually be many categories --- or \emph{nodes} --- at each level.
-Furthermore, actuaries often need to simulate both the frequency and
-the severity of claims for compound models of the form
+Simulation is then complicated by the need to always use the correct
+parameters for each variate. Furthermore, actuaries often need to
+simulate both the frequency and the severity of claims for compound
+models of the form
 \begin{equation}
   \label{eq:definition-S}
   S = C_1 + \dots + C_N,
 \end{equation}
 where $C_1, C_2, \dots$ are mutually independent and identically
-distributed random variables each independent from $N$. Simulation is
-then complicated by the need to always use the correct parameters for
-each variate.
+distributed random variables each independent of $N$.
 
 The package provides function \code{simul} to simulate data from
 compound models like \eqref{eq:definition-S} where both the frequency
@@ -125,10 +125,11 @@ models are expressed in a semi-symbolic fashion using an object of
 mode \code{"expression"}. Each element of the object must be named ---
 with names matching those of the number of nodes list --- and should
 be a complete call to an existing random number generation function,
-with the number of variates omitted. Hierarchical models are achieved
-by replacing one or more parameters of a distribution at a given level
-by any combination of the names of the levels above. If no mixing is
-to take place at a level, the model for this level can be \code{NULL}.
+but with the number of variates omitted. Hierarchical models are
+achieved by replacing one or more parameters of a distribution at a
+given level by any combination of the names of the levels above. If no
+mixing is to take place at a level, the model for this level can be
+\code{NULL}.
 
 \begin{example}
   Consider the following expanded version of model \eqref{eq:basic_model}:
@@ -200,14 +201,14 @@ main arguments:
 
 The function returns the variates in a list of class
 \code{"portfolio"} with a \code{dim} attribute of length two. The list
-contains all the individual claim amounts for each entity. Such an
-object can be seen as a three-dimension array with a third dimension
-of potentially varying length. The function also returns a matrix of
-integers giving the classification indexes of each entity in the
-portfolio.
+contains all the individual claim amounts for each entity. Since every
+element can be a vector, the object can be seen as a three-dimension
+array with a third dimension of potentially varying length. The
+function also returns a matrix of integers giving the classification
+indexes of each entity in the portfolio.
 
 The package also defines methods for four generic functions to easily
-access key quantities of the simulated portfolio:
+access key quantities for each entity of the simulated portfolio:
 \begin{enumerate}
 \item a method of \code{aggregate} to compute the aggregate claim
   amounts $S$;
@@ -223,6 +224,8 @@ In addition, all methods have a \code{classification} and a
 classification index columns are omitted from the result. The second
 argument overrides the default column name prefix; see the
 \code{simul.summaries} help page for details.
+
+The following example illustrates these concepts in detail.
 
 \begin{example}
   Consider the following compound hierarchical model:
@@ -277,13 +280,15 @@ pf$data
 pf$classification
 @
 
+
   The output of \code{pf\$data} is not much readable. Printing the
   results of \code{simul} like this would bring many users to wonder
   what \code{Numeric,\emph{n}} means. It is actually \proglang{R}'s
   way to specify that a given element in the list is a numeric vector
-  of length $n$. For this reason, the \code{print} method for objects
-  of class \code{"portfolio"} only prints the simulation model and the
-  number of claims in each node:
+  of length $n$ --- the third dimension mentioned above. To ease
+  reading, the \code{print} method for objects of class
+  \code{"portfolio"} only prints the simulation model and the number
+  of claims in each node:
 <<echo=TRUE>>=
 pf
 @
@@ -297,6 +302,7 @@ pf
 aggregate(pf)
 aggregate(pf, by = c("cohort", "year"), FUN = mean)
 @
+
   The method of \code{frequency} returns the values of $N_{ijt}$. It
   is mostly a wrapper for the \code{aggregate} method with the default
   \code{sum} statistic replaced by \code{length}. Hence, arguments
@@ -305,6 +311,7 @@ aggregate(pf, by = c("cohort", "year"), FUN = mean)
 frequency(pf)
 frequency(pf, by = "cohort")
 @
+
   The method of \code{severity} returns the individual
   variates $C_{ijtu}$ in a matrix similar to those above, but with a
   number of columns equal to the maximum number of observations per
@@ -322,6 +329,7 @@ frequency(pf, by = "cohort")
 severity(pf)
 severity(pf, splitcol = 1)
 @
+
   Finally, the weights matrix corresponding to the data in object
   \code{pf} is
 <<echo=TRUE>>=

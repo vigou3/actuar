@@ -55,7 +55,7 @@ options(width = 62, digits = 4)
 \label{sec:introduction}
 
 Credibility models are actuarial tools to distribute premiums fairly
-among an heterogeneous group of policyholders (henceforth called
+among a heterogeneous group of policyholders (henceforth called
 \emph{entities}). More generally, they can be seen as prediction methods
 applicable in any setting where repeated measures are made for
 subjects with different risk levels.

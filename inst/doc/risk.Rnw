@@ -476,7 +476,7 @@ For the rest of this discussion, we make the following assumptions
 \label{sec:adjustment-coefficient}
 
 The quantity known as the adjustment coefficient $R$ hardly has any
-physical interpretation, but it comes useful as an approximation to
+physical interpretation, but it is useful as an approximation to
 the probability of ruin since we have the inequality
 \begin{displaymath}
   \psi(u) \leq e^{-R u}, \quad u \geq 0.
@@ -593,7 +593,7 @@ all components equal to 1; see the \code{"lossdist"} vignette for
 details.
 
 In the more general Sparre~Andersen model where interarrival times can
-be any Phase-type$(\mat{\nu}, \mat{S})$ distribution,
+have any Phase-type$(\mat{\nu}, \mat{S})$ distribution,
 \cite{AsmussenRolski_91} also show that using the same claim severity
 assumption as above, one still has $\psi(u) = 1 - F(u)$ where $F$ is
 Phase-type$(\pmb{\pi}_+, \mat{Q})$, but with parameters
