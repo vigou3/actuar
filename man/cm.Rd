@@ -4,12 +4,11 @@
 \alias{predict.cm}
 \alias{summary.cm}
 \alias{print.summary.cm}
-\title{Hierarchical Credibility Models}
+\title{Credibility Models}
 \description{
-  Fit a credibility model in the formulation of variance components as
-  described in Dannenburg, Kaas and Goovaerts (1996). Models supported
-  are part of a generalized hierarchical credibility theory as
-  introduced in Dannenburg (1995).
+  Fit any of the following credibility models: \enc{Bühlmann}{Buhlmann},
+  \enc{Bühlmann}{Buhlmann}-Straub, hierarchical or regression
+  (Hachemeister).
 }
 \usage{
 cm(formula, data, ratios, weights, subset, xreg = NULL,
