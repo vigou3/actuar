@@ -1,5 +1,13 @@
 === actuar: an R package for Actuarial Science ===
 
+Version 1.0-0
+=============
+
+NEW FEATURES
+
+  o plot method for function objects returned by ruin().
+
+
 Version 0.9-6
 =============
 
@@ -19,7 +27,6 @@ NEW FEATURES
     the material was previously in the "credibility" vignette.
 
   o Examples of ruin() and adjCoef() added to the "risk" demo.
-
 
 USER-VISIBLE CHANGES
 

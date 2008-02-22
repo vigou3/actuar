@@ -626,10 +626,10 @@ as
   \mat{A} \otimes \mat{I}_n + \mat{B} \otimes \mat{I}_m.
 \end{equation}
 
-Function \code{ruin} of \pkg{actuar} returns a function object to
-compute the probability of ruin for any initial surplus $u$. In all
-cases except the exponential/exponential model where
-\eqref{eq:ruin-cramer-lundberg} is used, the output object calls
+Function \code{ruin} of \pkg{actuar} returns a function object of
+class \code{"ruin"} to compute the probability of ruin for any initial
+surplus $u$. In all cases except the exponential/exponential model
+where \eqref{eq:ruin-cramer-lundberg} is used, the output object calls
 function \code{pphtype} to compute the ruin probabilities.
 
 Some thought went into the interface of \code{ruin}. Obviously, all
@@ -672,20 +672,20 @@ ruin(claims = "p", par.claims = list(prob = prob, rates = rates),
      wait   = "e", par.wait   = list(rate = c(5, 1), weights = c(0.4, 0.6)))
 @
 
-One can plot the probability of ruin function using \code{curve}
-(see Figure \ref{fig:prob-ruin}):
+To ease plotting of the probability of ruin function, the package
+provides a method of \code{plot} for objects returned by \code{ruin}.
+that is a simple wrapper for \code{curve} (see Figure
+\ref{fig:prob-ruin}):
 <<echo=TRUE, fig=FALSE>>=
 psi <- ruin(claims = "p", par.claims = list(prob = prob, rates = rates),
      wait   = "e", par.wait   = list(rate = c(5, 1), weights = c(0.4, 0.6)))
-curve(psi, from = 0, to = 50, main = "Probability of ruin",
-      xlab = "u", ylab = expression(psi(u)))
+plot(psi, from = 0, to = 50)
 @
 
 \begin{figure}[t]
   \centering
 <<echo=FALSE, fig=TRUE>>=
-curve(psi, from = 0, to = 50, main = "Probability of ruin",
-      xlab = "u", ylab = expression(psi(u)))
+plot(psi, from = 0, to = 50)
 @
   \caption{Graphic of the probability of ruin as a function of the
     initial surplus $u$}

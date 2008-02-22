@@ -1,5 +1,6 @@
 \name{ruin}
 \alias{ruin}
+\alias{plot.ruin}
 \title{Probability of Ruin}
 \description{
   Calulation of infinite time probability of ruin in the models of
@@ -12,6 +13,10 @@ ruin(claims = c("exponential", "Erlang", "phase-type"), par.claims,
      wait = c("exponential", "Erlang", "phase-type"), par.wait,
      premium.rate = 1, tol = sqrt(.Machine$double.eps),
      maxit = 200, echo = FALSE)
+
+\method{plot}{ruin}(x, from = NULL, to = NULL, add = FALSE,
+     xlab = "u", ylab = expression(psi(u)),
+     main = "Probability of Ruin", xlim = NULL, \dots)
 }
 \arguments{
   \item{claims}{character; the type of claim severity distribution.}
@@ -24,6 +29,14 @@ ruin(claims = c("exponential", "Erlang", "phase-type"), par.claims,
     stopping criteria, the maximum number of iterations and whether or
     not to echo the procedure when the transition rates matrix is
     determined iteratively. Ignored if \code{wait = "exponential"}.}
+  \item{from, to}{the range over which the function will be plotted.}
+  \item{add}{logical; if \code{TRUE} add to already existing plot.}
+  \item{xlim}{numeric of length 2; if specified, it serves as default
+    for \code{c(from, to)}.}
+  \item{xlab, ylab}{label of the x and y axes, respectively.}
+  \item{main}{main title.}
+  \item{\dots}{further graphical parameters accepted by
+    \code{\link[graphics]{curve}}.}
 }
 \details{
   The names of the parameters in \code{par.claims} and \code{par.wait}
@@ -55,8 +68,9 @@ ruin(claims = c("exponential", "Erlang", "phase-type"), par.claims,
   two successive values of the matrix.
 }
 \value{
-  A function to compute the probability of ruin given initial surplus
-  levels. The function has arguments:
+  A function of class \code{"ruin"} inheriting from the
+  \code{"function"} class to compute the probability of ruin given
+  initial surplus levels. The function has arguments:
   \item{u}{numeric vector of initial surplus levels;}
   \item{survival}{logical; if \code{FALSE} (default), probabilities are
     \eqn{\psi(u)}{psi(u)}, otherwise, \eqn{\phi(u) = 1 - \psi(u)}{phi(u)
@@ -85,7 +99,7 @@ psi <- ruin(claims = "e", par.claims = list(rate = 5),
             wait   = "e", par.wait   = list(rate = 3))
 psi
 psi(0:10)
-curve(psi(x), xlim = c(0, 10))
+plot(psi, from = 0, to = 10)
 
 ## Mixture of two exponentials for claims, exponential interarrival
 ## times (Gerber 1979)
@@ -97,19 +111,20 @@ psi(u)
 
 ## Phase-type claims, exponential interarrival times (Asmussen and
 ## Rolski 1991)
-prob.B1 <- c(0.5614, 0.4386)
-rates.B1 <- matrix(c(-8.64, 0.101, 1.997, -1.095), 2, 2)
+p <- c(0.5614, 0.4386)
+r <- matrix(c(-8.64, 0.101, 1.997, -1.095), 2, 2)
 lambda <- 1/(1.1 * mphtype(1, prob.B1, rates.B1))
-psi <- ruin(claims = "p", par.claims = list(prob = prob.B1, rates = rates.B1),
+psi <- ruin(claims = "p", par.claims = list(prob = p, rates = r),
             wait   = "e", par.wait   = list(rate = lambda))
 psi
-curve(psi, xlim = c(0, 50), xlab = "u", ylab = expression(psi(u)))
+plot(psi, xlim = c(0, 50))
 
 ## Phase-type claims, mixture of two exponentials for interarrival times
 ## (Asmussen and Rolski 1991)
 a <- (0.4/5 + 0.6) * lambda
-ruin(claims = "p", par.claims = list(prob = prob.B1, rates = rates.B1),
+ruin(claims = "p", par.claims = list(prob = p, rates = r),
      wait   = "e", par.wait   = list(rate = c(5 * a, a), weights =
-                                     c(0.4, 0.6)), p = 1, maxit = 225)
+                                     c(0.4, 0.6)),
+     maxit = 225)
 }
 \keyword{models}

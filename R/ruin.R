@@ -211,7 +211,6 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
     ## Cramer-Lundberg model
     if (wait == "exponential" && m == 1)
     {
-
         ## Special case with an explicit solution
         if (claims == "exponential" && n == 1)
         {
@@ -221,6 +220,7 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
                                     list(a = -lambda/drop(rates),
                                          b = -drop(rates) - lambda))
             environment(FUN) <- new.env() # new, empty environment
+            class(FUN) <- c("ruin", class(FUN))
             return(FUN)
         }
 
@@ -278,5 +278,12 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
     body(FUN) <- substitute(pphtype(u, a, b, lower.tail = !lower.tail),
                             list(a = pi, b = Q))
     environment(FUN) <- new.env()       # new, empty environment
+    class(FUN) <- c("ruin", class(FUN))
     FUN
 }
+
+plot.ruin <- function(x, from = NULL, to = NULL, add = FALSE,
+                      xlab = "u", ylab = expression(psi(u)),
+                      main = "Probability of Ruin", xlim = NULL, ...)
+    curve(x, from = from, to = to, add = add, xlab = xlab,
+          ylab = ylab, main = main, xlim = xlim, ...)

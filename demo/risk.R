@@ -243,6 +243,7 @@ psi <- ruin(claims = "exponential",
             par.wait = list(rate = 1),
             premium = 1.2)
 psi(0:10)
+plot(psi, from = 0, to = 10)
 
 ## Exponential claims and hyper-exponential interarrival times.
 psi <- ruin(claims = "exponential",
