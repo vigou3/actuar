@@ -5,8 +5,7 @@
   \usepackage[utf8]{inputenc}
   \usepackage[english]{babel}
   \usepackage{lucidabr}
-  \usepackage{booktabs,tabularx,threeparttable}
-  \usepackage{paralist}
+  \usepackage{booktabs,paralist}
   \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Loss distributions modeling}
@@ -100,39 +99,35 @@ to the inverse of the scale parameter. This differs from
 gamma, exponential and Weibull distributions in base \proglang{R}.
 
 \begin{table}
-  \begin{threeparttable}
-    \caption{Probability laws supported by \pkg{actuar} classified by
-      family and root names of the \proglang{R} functions.}
-    \label{tab:distributions}
-    \begin{tabularx}{\textwidth}{lXl}
-      \toprule
-      Family & Distribution & Root \\
-      \midrule
-      Transformed beta  & Transformed beta & \code{trbeta} \\
-                        & Burr & \code{burr} \\
-                        & Loglogistic & \code{llogis} \\
-                        & Paralogistic & \code{paralogis} \\
-                        & Generalized Pareto & \code{genpareto} \\
-                        & Pareto & \code{pareto} \\
-                        & Inverse Burr & \code{invburr} \\
-                        & Inverse Pareto & \code{invpareto} \\
-                        & Inverse paralogistic & \code{invparalogis} \\
-      \midrule
-      Transformed gamma & Transformed gamma & \code{trgamma} \\
-                        & Inverse transformed gamma & \code{invtrgamma} \\
-                        & Inverse gamma & \code{invgamma} \\
-                        & Inverse Weibull & \code{invweibull} \\
-                        & Inverse exponential & \code{invexp} \\
-      \midrule
-      Other             & Loggamma\tnote{1} & \code{lgamma} \\
-                        & Single parameter Pareto & \code{pareto1} \\
-                        & Generalized beta & \code{genbeta} \\
-      \bottomrule
-    \end{tabularx}
-    \begin{tablenotes}
-    \item[1] See \cite{HoggKlugman}.
-    \end{tablenotes}
-  \end{threeparttable}
+  \centering
+  \caption{Probability laws supported by \pkg{actuar} classified by
+    family and root names of the \proglang{R} functions.}
+  \label{tab:distributions}
+  \begin{tabular}{lll}
+    \toprule
+    Family & Distribution & Root \\
+    \midrule
+    Transformed beta  & Transformed beta & \code{trbeta} \\
+                      & Burr & \code{burr} \\
+                      & Loglogistic & \code{llogis} \\
+                      & Paralogistic & \code{paralogis} \\
+                      & Generalized Pareto & \code{genpareto} \\
+                      & Pareto & \code{pareto} \\
+                      & Inverse Burr & \code{invburr} \\
+                      & Inverse Pareto & \code{invpareto} \\
+                      & Inverse paralogistic & \code{invparalogis} \\
+    \midrule
+    Transformed gamma & Transformed gamma & \code{trgamma} \\
+                      & Inverse transformed gamma & \code{invtrgamma} \\
+                      & Inverse gamma & \code{invgamma} \\
+                      & Inverse Weibull & \code{invweibull} \\
+                      & Inverse exponential & \code{invexp} \\
+    \midrule
+    Other             & Loggamma & \code{lgamma} \\
+                      & Single parameter Pareto & \code{pareto1} \\
+                      & Generalized beta & \code{genbeta} \\
+    \bottomrule
+  \end{tabular}
 \end{table}
 
 In addition to the \code{d}, \code{p}, \code{q} and \code{r}
