@@ -7,6 +7,10 @@ NEW FEATURES
 
   o plot method for function objects returned by ruin().
 
+BUG FIXES
+
+  o Better display of first column for grouped data objects.
+
 
 Version 0.9-6
 =============

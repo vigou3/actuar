@@ -11,7 +11,8 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
                 check.names = TRUE)
 {
     ## Utility function
-    numform <- function(x) formatC(x, digits = 2, format = "fg")
+    numform <- function(x, w)
+        formatC(x, digits = 2, width = w, format = "fg")
 
     ## The function must be called with at least two arguments. The
     ## first is the vector of group boundaries. The others are vectors
@@ -38,7 +39,8 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
 
     ## Return a data frame with formatted group boundaries in the
     ## first column.
-    xfmt <- paste("(", numform(x[-nx, ]), ", ", numform(x[-1, ]), "]",
+    w <- max(nchar(x[-1, ]))            # longest upper boundary
+    xfmt <- paste("(", numform(x[-nx, ], -1), ", ", numform(x[-1, ], w), "]",
                   sep = "")
     res <- data.frame(xfmt, y, row.names = row.names, check.rows = check.rows,
                       check.names = check.names)
