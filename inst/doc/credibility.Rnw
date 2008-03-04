@@ -150,7 +150,7 @@ following. First, let
   c_i
   &= w_{i\pt\pt} - \sum_{j = 1}^{J_i} \frac{w_{ij\pt}^2}{w_{i\pt\pt}} \\
   B
-  &= \sum_{i = 1}^I z_{i.} (X_{izw} - \bar{X}_{zzw})^2 - (I - 1) a &
+  &= \sum_{i = 1}^I z_{i\pt} (X_{izw} - \bar{X}_{zzw})^2 - (I - 1) a &
   d
   &= z_{\pt\pt} - \sum_{i = 1}^I \frac{z_{i\pt}^2}{z_{\pt\pt}},
 \end{align*}
