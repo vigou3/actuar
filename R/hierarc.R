@@ -158,7 +158,7 @@ hierarc <- function(ratios, weights, classification,
     ## level, hence this list is one shorter than the others.
     tweights <- vector("list", nlevels1p)       # total level weights
     wmeans <- vector("list", nlevels1p)         # weighted averages
-    bu <- bi <- c(numeric(nlevels), s2)          # variance estimators
+    bu <- bi <- c(numeric(nlevels), s2)         # variance estimators
     cred <- vector("list", nlevels)             # credibility factors
 
     ## Values already computed at the entity level.
@@ -194,25 +194,21 @@ hierarc <- function(ratios, weights, classification,
         ## Total weight of the level as per the rule above.
         tweights[[i]] <- as.vector(tapply(tweights[[i + 1]], fnodes[[i]], sum))
 
-        ## Calculation of the weighted averages. If the previous level
-        ## between variance estimate is zero then the level average is
-        ## simply the arithmetic average of the previous level's
-        ## weighted averages.
+        ## Calculation of the weighted averages of the level. Before
+        ## the between variance is estimated, these use the total
+        ## weights calculated above.
         wmeans[[i]] <-
-            if (bu[i + 1])
-                ifelse(tweights[[i]] > 0,
-                       as.vector(tapply(tweights[[i + 1]] * wmeans[[i + 1]],
-                                        fnodes[[i]],
-                                        sum) / tweights[[i]]),
-                       0)
-            else
-                as.vector(tapply(wmeans[[i + 1]], fnodes[[i]], mean))
+            ifelse(tweights[[i]] > 0,
+                   as.vector(tapply(tweights[[i + 1]] * wmeans[[i + 1]],
+                                    fnodes[[i]],
+                                    sum) / tweights[[i]]),
+                   0)
 
         ## Calculation of the per node variance estimate. The estimate
-        ## is unbiased provided a multiple (well, not necessarily
-        ## integer) of the latest non-zero variance estimate is
-        ## subtracted from the sum of squares. This is what the
-        ## expression 'bu[bu != 0][1]' is used for, below.
+        ## is unbiased provided a multiple of the latest non-zero
+        ## variance estimate is subtracted from the sum of squares.
+        ## This is what the expression 'bu[bu != 0][1]' is used for,
+        ## below.
         bui <- as.vector(tapply(tweights[[i + 1]] *
                                 (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2,
                                 fnodes[[i]],
@@ -224,14 +220,21 @@ hierarc <- function(ratios, weights, classification,
         ## The final estimate is the average of all the per node estimates.
         eval(bexp)
 
-        ## For the calculation of the next variance estimator, the
-        ## total weights for the current level are replaced by the sum
-        ## of the credibility factors -- provided the variance
-        ## estimate is non-zero.
+        ## For the calculation of the next variance estimator,
+        ## provided the variance estimate is non-zero, the total
+        ## weights for the current level are replaced by the sum of
+        ## the credibility factors and the weighted averages are
+        ## recomputed with these new weights.
         if (bu[i])
         {
             cred[[i]] <- 1/(1 + bu[i + 1]/(bu[i] * tweights[[i + 1]]))
             tweights[[i]] <- as.vector(tapply(cred[[i]], fnodes[[i]], sum))
+            wmeans[[i]] <-
+                ifelse(tweights[[i]] > 0,
+                       as.vector(tapply(cred[[i]] * wmeans[[i + 1]],
+                                        fnodes[[i]],
+                                        sum) / tweights[[i]]),
+                       0)
         }
         else
             cred[[i]] <- numeric(sum(nnodes[[i]]))
@@ -259,20 +262,20 @@ hierarc <- function(ratios, weights, classification,
     {
         bi <- NULL
 
-        ## === ESTIMATION OF THE COLLECTIVE MEAN ===
-        ##
-        ## This is required only for the "unbiased" estimation of the
-        ## variance components since the weighted averages calculated
-        ## earlier with this method are not the correct sufficient
-        ## statistics for each level. For the "iterative" method, the
-        ## calculations were done in C.
-        for (i in nlevels:1)
-        {
-            weights <- if (bu[i]) cred[[i]] else tweights[[i + 1]]
-            wmeans[[i]] <- ifelse(tweights[[i]] > 0,
-                                  as.vector(tapply(weights * wmeans[[i + 1]], fnodes[[i]], sum) / tweights[[i]]),
-                                  0)
-        }
+##         ## === ESTIMATION OF THE COLLECTIVE MEAN ===
+##         ##
+##         ## This is required only for the "unbiased" estimation of the
+##         ## variance components since the weighted averages calculated
+##         ## earlier with this method are not the correct sufficient
+##         ## statistics for each level. For the "iterative" method, the
+##         ## calculations were done in C.
+##         for (i in nlevels:1)
+##         {
+##             weights <- if (bu[i]) cred[[i]] else tweights[[i + 1]]
+##             wmeans[[i]] <- ifelse(tweights[[i]] > 0,
+##                                   as.vector(tapply(weights * wmeans[[i + 1]], fnodes[[i]], sum) / tweights[[i]]),
+##                                   0)
+##         }
     }
 
     ## Results
