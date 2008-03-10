@@ -208,9 +208,7 @@ hierarc <- function(ratios, weights, classification,
         ## in the estimator and in the credibility factors.
         between <- bu[bu != 0][1]
 
-        ## Calculation of the per node variance estimate. The estimate
-        ## is unbiased provided a multiple of the latest non-zero
-        ## variance estimate is subtracted from the sum of squares.
+        ## Calculation of the per node variance estimate.
         bui <- as.vector(tapply(tweights[[i + 1]] *
                                 (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2,
                                 fnodes[[i]],
@@ -222,11 +220,10 @@ hierarc <- function(ratios, weights, classification,
         ## The final estimate is the average of all the per node estimates.
         eval(bexp)
 
-        ## For the calculation of the next variance estimator,
-        ## provided the variance estimate is non-zero, the total
-        ## weights for the current level are replaced by the sum of
-        ## the credibility factors and the weighted averages are
-        ## recomputed with these new weights.
+        ## Calculation of the credibility factors. If these are
+        ## non-zero, the total weights for the current level are
+        ## replaced by the sum of the credibility factors and the
+        ## weighted averages are recomputed with these new weights.
         if (bu[i])
         {
             cred[[i]] <- 1/(1 + between/(bu[i] * tweights[[i + 1]]))
