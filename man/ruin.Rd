@@ -29,6 +29,7 @@ ruin(claims = c("exponential", "Erlang", "phase-type"), par.claims,
     stopping criteria, the maximum number of iterations and whether or
     not to echo the procedure when the transition rates matrix is
     determined iteratively. Ignored if \code{wait = "exponential"}.}
+  \item{x}{an object of class \code{"ruin"}.}
   \item{from, to}{the range over which the function will be plotted.}
   \item{add}{logical; if \code{TRUE} add to already existing plot.}
   \item{xlim}{numeric of length 2; if specified, it serves as default
@@ -113,7 +114,7 @@ psi(u)
 ## Rolski 1991)
 p <- c(0.5614, 0.4386)
 r <- matrix(c(-8.64, 0.101, 1.997, -1.095), 2, 2)
-lambda <- 1/(1.1 * mphtype(1, prob.B1, rates.B1))
+lambda <- 1/(1.1 * mphtype(1, p, r))
 psi <- ruin(claims = "p", par.claims = list(prob = p, rates = r),
             wait   = "e", par.wait   = list(rate = lambda))
 psi
