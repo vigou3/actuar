@@ -224,6 +224,7 @@ hierarc <- function(ratios, weights, classification,
         ## non-zero, the total weights for the current level are
         ## replaced by the sum of the credibility factors and the
         ## weighted averages are recomputed with these new weights.
+        #if (max(bu[i], 0))           # don't compute negative factors!
         if (bu[i])
         {
             cred[[i]] <- 1/(1 + between/(bu[i] * tweights[[i + 1]]))
@@ -258,24 +259,8 @@ hierarc <- function(ratios, weights, classification,
             .External("do_hierarc", cred, tweights, wmeans, fnodes, denoms, bi, tol, maxit, echo)
     }
     else
-    {
         bi <- NULL
 
-##         ## === ESTIMATION OF THE COLLECTIVE MEAN ===
-##         ##
-##         ## This is required only for the "unbiased" estimation of the
-##         ## variance components since the weighted averages calculated
-##         ## earlier with this method are not the correct sufficient
-##         ## statistics for each level. For the "iterative" method, the
-##         ## calculations were done in C.
-##         for (i in nlevels:1)
-##         {
-##             weights <- if (bu[i]) cred[[i]] else tweights[[i + 1]]
-##             wmeans[[i]] <- ifelse(tweights[[i]] > 0,
-##                                   as.vector(tapply(weights * wmeans[[i + 1]], fnodes[[i]], sum) / tweights[[i]]),
-##                                   0)
-##         }
-    }
 
     ## Results
     structure(list(means = wmeans,

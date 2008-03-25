@@ -1,6 +1,6 @@
 === actuar: an R package for Actuarial Science ===
 
-Version 1.0-0
+Version 0.9-7
 =============
 
 NEW FEATURES
@@ -9,7 +9,12 @@ NEW FEATURES
 
 BUG FIXES
 
+  o Calculation of the Bühlmann-Gisler and Ohlsson estimators was
+    incorrect for hierarchical models with more than one level.
+
   o Better display of first column for grouped data objects.
+
+  o Miscellaneous corrections to the vignettes.
 
 
 Version 0.9-6
