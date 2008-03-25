@@ -673,7 +673,7 @@ ruin(claims = "p", par.claims = list(prob = prob, rates = rates),
 @
 
 To ease plotting of the probability of ruin function, the package
-provides a method of \code{plot} for objects returned by \code{ruin}.
+provides a method of \code{plot} for objects returned by \code{ruin}
 that is a simple wrapper for \code{curve} (see Figure
 \ref{fig:prob-ruin}):
 <<echo=TRUE, fig=FALSE>>=
