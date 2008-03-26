@@ -60,9 +60,9 @@ among a heterogeneous group of policyholders (henceforth called
 applicable in any setting where repeated measures are made for
 subjects with different risk levels.
 
-The credibility theory facilities of \pkg{actuar} consist of matrix
+The credibility theory facilities of \pkg{actuar} consist of the matrix
 \code{hachemeister} containing the famous data set of
-\cite{Hachemeister_75} and function \code{cm} to fit hierarchical and
+\cite{Hachemeister_75} and the function \code{cm} to fit hierarchical and
 regression credibility models. Furthermore, function \code{simul} can
 simulate portfolios of data satisfying the assumptions of the
 aforementioned credibility models; see the \code{"simulation"}
@@ -209,7 +209,7 @@ One will recognize the output format of \code{simul} and its summary
 methods.
 
 Then, function \code{cm} works much the same as \code{lm}. It takes in
-argument a formula of the form \code{\~{} terms} describing the
+argument: a formula of the form \code{\~{} terms} describing the
 hierarchical interactions in a data set; the data set containing the
 variables referenced in the formula; the names of the columns
 where the ratios and the weights are to be found in the data set. The

@@ -80,7 +80,7 @@ calculations.
 \section{The collective risk model}
 \label{sec:collective-risk-model}
 
-Let the random variable $S$ represent the aggregate claim amount (or
+Let  random variable $S$ represent the aggregate claim amount (or
 total amount of claims) of a portfolio of independent risks over a
 fixed period of time, random variable $N$ represent the number of
 claims (or frequency) in the portfolio over that period, and random
@@ -91,7 +91,7 @@ we have the random sum
   S = C_1 + \dots + C_N,
 \end{equation}
 where we assume that $C_1, C_2, \dots$ are mutually independent and
-identically distributed random variables each independent from $N$.
+identically distributed random variables each independent of $N$.
 The task at hand consists in evaluating numerically the cdf of $S$,
 given by
 \begin{align}
@@ -121,7 +121,7 @@ is the $n$-fold convolution of $F_C(\cdot)$. If $C$ is discrete on $0,
 \label{sec:discretization}
 
 Some numerical techniques to compute the aggregate claim amount
-distribution (see Subsection \ref{sec:aggregate}) require a
+distribution (see Section~\ref{sec:aggregate}) require a
 discrete arithmetic claim amount distribution; that is, a distribution
 defined on $0, h, 2h, \dots$ for some step (or span, or lag) $h$. The
 package provides function \code{discretize} to discretize a
@@ -250,9 +250,9 @@ supported.
   $0, 1, 2, \dots, m$ for some monetary unit and the frequency
   distribution to be a member of either the $(a, b, 0)$ or $(a, b, 1)$
   family of distributions \citep{LossModels2e}. (These families
-  contain the Poisson, binomial and negative binomial distributions
-  and their extensions with an arbitrary mass at $x = 0$.) The general
-  recursive formula is:
+  contain the Poisson, binomial, negative binomial and logarithmic
+  distributions and their extensions with an arbitrary mass at $x =
+  0$.) The general recursive formula is:
   \begin{displaymath}
     f_S(x) = \frac{(p_1 - (a + b)p_0)f_C(x) + \sum_{y=1}^{\min(x,
         m)}(a + by/x)f_C(y)f_S(x - y)}{1 - a f_C(0)},
@@ -268,11 +268,12 @@ supported.
   this amount each time the allocated space gets full.
 
 \item Exact calculation by numerical convolutions using
-  \eqref{eq:cdf-S} and \eqref{eq:convolution-formula}. Hence, this
+  \eqref{eq:cdf-S} and \eqref{eq:convolution-formula}. This
   also requires a discrete severity distribution. However, there is no
   restriction on the shape of the frequency distribution. The package
   merely implements the sum \eqref{eq:cdf-S}, the convolutions being
-  computed with \proglang{R}'s function \code{convolve}. This approach
+  computed with \proglang{R}'s function \code{convolve}, which in turn
+  uses the Fast Fourier Transform. This approach
   is practical for small problems only, even on today's fast
   computers.
 \item Normal approximation of the cdf, that is
@@ -300,10 +301,10 @@ supported.
   approximation is valid for $x > \mu_S$ only and performs reasonably
   well when $\gamma_S < 1$. See \cite{Daykin_et_al} for details.
 \item Simulation of a random sample from $S$ and approximation of
-  $F_S(x)$ by the empirical cdf. The simulation itself is done with
-  function \code{simul} (see the \code{"simulation"} vignette)).
-  This function admits very general hierarchical models for both the
-  frequency and the severity components.
+  $F_S(x)$ by the empirical cdf \eqref{eq:ecdf}. The simulation itself
+  is done with function \code{simul} (see the \code{"simulation"}
+  vignette)). This function admits very general hierarchical models
+  for both the frequency and the severity components.
 \end{enumerate}
 
 Here also, adding other methods to \code{aggregateDist} is simple due
@@ -364,8 +365,8 @@ quantile(Fs, 0.999)                   # quantiles
 @
 
 Second, the package introduces the generic functions \code{VaR} and
-\code{CTE} with methods for \code{"aggregateDist"} objects. The
-former computes the value-at-risk $\VaR_\alpha$ such that
+\code{CTE} with methods for objects of class \code{"aggregateDist"}.
+The former computes the value-at-risk $\VaR_\alpha$ such that
 \begin{equation}
   \label{eq:VaR}
   \Pr[S \leq \VaR_\alpha] = \alpha,
@@ -377,7 +378,7 @@ computes the conditional tail expectation
   \label{eq:CTE}
   \CTE_\alpha = \E{S|S > \VaR_\alpha}.
 \end{equation}
-Here are examples:
+Here are examples using object \code{Fs} obtained above:
 <<echo=TRUE>>=
 VaR(Fs)
 CTE(Fs)
@@ -442,7 +443,7 @@ the infinite time probability of ruin is
   \psi(u) = \Pr[U(t) < 0 \text{ for some } t \geq 0].
 \end{equation}
 
-We define some other quantities of interest in the sequel. Let $N(t)$
+We define some other quantities needed in the sequel. Let $N(t)$
 denote the number of claims up to time $t \geq 0$ and $C_j$ denote the
 amount of claim $j$. Then the definition of $S(t)$ is analogous to
 \eqref{eq:definition-S}:
@@ -459,12 +460,12 @@ time between claim $j - 1$ and claim $j$ is defined as $W_1 = T_1$ and
   W_j = T_j - T_{j - 1}, \quad j \geq 2.
 \end{equation}
 
-For the rest of this discussion, we make the following assumptions
+For the rest of this discussion, we make the following assumptions:
 \begin{enumerate}
 \item premiums are collected at a constant rate $c$, hence $c(t) =
   ct$;
 \item the sequence $\{T_j\}_{j \geq 1}$ forms an ordinary renewal
-  process, with the consequence that the random variables $W_1, W_2,
+  process, with the consequence that  random variables $W_1, W_2,
   \dots$ are independent and identically distributed;
 \item claim amounts $C_1, C_2, \dots$ are independent and identically
   distributed.
@@ -475,11 +476,11 @@ For the rest of this discussion, we make the following assumptions
 \section{Adjustment coefficient}
 \label{sec:adjustment-coefficient}
 
-The quantity known as the adjustment coefficient $R$ hardly has any
+The quantity known as the adjustment coefficient $\rho$ hardly has any
 physical interpretation, but it is useful as an approximation to
 the probability of ruin since we have the inequality
 \begin{displaymath}
-  \psi(u) \leq e^{-R u}, \quad u \geq 0.
+  \psi(u) \leq e^{-\rho u}, \quad u \geq 0.
 \end{displaymath}
 The adjustment coefficient is defined as the smallest strictly
 positive solution (if it exists) of the Lundberg equation
@@ -496,17 +497,18 @@ most common models, then the equation can be rewritten as
 \end{equation}
 
 Function \code{adjCoef} of \pkg{actuar} computes the adjustment
-coefficient $R$ from the following arguments: either the two moment
+coefficient $\rho$ from the following arguments: either the two moment
 generating functions $M_C(t)$ and $M_W(t)$ (thereby assuming
 independence) or else function $h(t)$; the premium rate $c$; the upper
-bound of the support of $M_C(t)$ or any other upper bound for $R$.
+bound of the support of $M_C(t)$ or any other upper bound for $\rho$.
 
 For example, if $W$ and $C$ are independent, $W \sim
 \text{Exponential}(2)$, $C \sim \text{Exponential}(1)$ and the premium
 rate is $c = 2.4$ (for a safety loading of 20\% using the expected
 value premium principle), then the adjustment coefficient is
 <<echo=TRUE>>=
-adjCoef(mgf.claim = mgfexp(x), mgf.wait = mgfexp(x, 2), p = 2.4, upper = 1)
+adjCoef(mgf.claim = mgfexp(x), mgf.wait = mgfexp(x, 2),
+        premium.rate = 2.4, upper = 1)
 @
 
 The function also supports models with proportional or excess-of-loss
@@ -539,16 +541,16 @@ Figure \ref{fig:adjcoef} for the graph):
 <<echo=TRUE, fig=FALSE>>=
 mgfx <- function(x, y) mgfexp(x * y)
 p <- function(x) 2.6 * x - 0.2
-R <- adjCoef(mgfx, mgfexp(x, 2), premium = p, upper = 1, reins = "prop",
+rho <- adjCoef(mgfx, mgfexp(x, 2), premium = p, upper = 1, reins = "prop",
               from = 0, to = 1)
-R(c(0.75, 0.8, 0.9, 1))
-plot(R)
+rho(c(0.75, 0.8, 0.9, 1))
+plot(rho)
 @
 
 \begin{figure}[t]
   \centering
 <<echo=FALSE, fig=TRUE>>=
-plot(R)
+plot(rho)
 @
   \caption{Adjustment coefficient as a function of the retention rate}
   \label{fig:adjcoef}

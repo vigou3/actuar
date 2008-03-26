@@ -25,10 +25,11 @@
 
 \pkg{actuar} is a package providing additional Actuarial Science
 functionality to the \proglang{R} statistical system. Although various
-packages on CRAN provide functions useful to actuaries, \pkg{actuar}
-aims to serve as a central location for more specifically actuarial
-functions and data sets. The project was officially launched in 2005
-and is under active development.
+packages on the Comprehensive \proglang{R} Archive Network (CRAN)
+provide functions useful to actuaries, \pkg{actuar} aims to serve as a
+central location for more specifically actuarial functions and data
+sets. The project was officially launched in 2005 and is under active
+development.
 
 The feature set of the package can be split in four main categories:
 loss distributions modeling, risk theory (including ruin theory),

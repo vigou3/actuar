@@ -391,9 +391,8 @@ frequency(simul(list(entity = 3, year = 5),
 \end{example}
 
 One will find more examples of \code{simul} usage in the
-\code{simulation} demo file.
-Function \code{simul} was used to simulate the data in
-\cite{Goulet_cfs}.
+\code{simulation} demo file. Function \code{simul} was used to
+simulate the data in \cite{Goulet_cfs}.
 
 
 \bibliography{actuar}
