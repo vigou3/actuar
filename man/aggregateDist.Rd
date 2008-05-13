@@ -11,7 +11,7 @@
 }
 \usage{
 aggregateDist(method = c("recursive", "convolution", "normal",
-                         "npower", "simulation"),
+                         "npower","bgamma", "simulation"),
               model.freq = NULL, model.sev = NULL, p0 = NULL,
               x.scale = 1, moments, nb.simul, \dots,
               tol = 1e-06, maxit = 500, echo = FALSE)
@@ -33,8 +33,8 @@ aggregateDist(method = c("recursive", "convolution", "normal",
       b, 1)} families of distributions. For \code{"convolution"} method:
     a vector of claim number probabilities. For \code{"simulation"}
     method: a frequency simulation model (see \code{\link{simul}} for
-    details) or \code{NULL}. Ignored with \code{normal} and
-    \code{npower} methods.}
+    details) or \code{NULL}. Ignored with \code{normal},
+    \code{npower} and \code{bgamma} methods.}
   \item{model.sev}{for \code{"recursive"} and \code{"convolution"}
     methods: a vector of claim amount probabilities. For
     \code{"simulation"} method: a severity simulation model (see
@@ -48,8 +48,8 @@ aggregateDist(method = c("recursive", "convolution", "normal",
     unit). Used only with \code{"recursive"} and \code{"convolution"}
     methods.}
   \item{moments}{vector of the true moments of the aggregate claim
-    amount distribution; required only by the \code{"normal"}
-    or \code{"npower"} methods.}
+    amount distribution; required only by the \code{"normal"}, 
+    \code{"npower"} or \code{"bgamma"} methods.}
   \item{nb.simul}{number of simulations for the \code{"simulation"} method.}
   \item{\dots}{parameters of the frequency distribution for the
     \code{"recursive"} method; further arguments to be passed to or
@@ -74,7 +74,8 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   The \code{"recursive"} method computes the cdf using the Panjer
   algorithm; the \code{"convolution"} method using convolutions; the
   \code{"normal"} method using a normal approximation; the
-  \code{"npower"} method using the Normal Power 2 approximation; the
+  \code{"npower"} method using the Normal Power 2 approximation; the 
+  \code{"bgamma"} method using the Bowers gamma approximation; the
   \code{"simulation"} method using simulations. More details follow.
 }
 \section{Recursive method}{
@@ -116,7 +117,7 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   claim amount distribution; the first element \strong{must} be
   \eqn{f_X(0)}{fx(0)}.
 }
-\section{Normal and Normal Power 2 methods}{
+\section{Normal, Normal Power 2 and Bowers Gamma methods}{
   The Normal approximation of a cumulative distribution function (cdf)
   \eqn{F(x)} with mean \eqn{\mu}{m} and standard deviation
   \eqn{\sigma}{s} is
@@ -132,6 +133,44 @@ aggregateDist(method = c("recursive", "convolution", "normal",
     F(x) ~= pnorm(-3/g + sqrt(9/g^2 + 1 + (6/g) * (x - m)/s)).}
   This formula is valid only for the right-hand tail of the distribution
   and skewness should not exceed unity.
+
+  The Bowers Gamma approximation of a cumulative distribution function (cdf) 
+  \eqn{F(x)} uses Laguerre polynomials (orthogonal to the density of a gamma 
+  distribution) \eqn{L_k(x) = (-1)^k x^(1-a) e^x d^k( x^(k+a-1) ) / dx^k} 
+  for {k=0..5}.  
+  \eqn{F} is approximated by
+  \deqn{ F(x) \approx g(z;\alpha, 1) * (1-A_3+A_4-A_5) + g(z; \alpha+1, 1) * 
+  ( 3A_3 - 4A_4 + 5A_5) + g(z; \alpha+2,1) * (-3A_3 + 6A_4 -10A_5) 
+  + g(z; \alpha+3,1) *(A_3 - 4A_4 +10 A_5 ) + g(z; \alpha+4,1) * (A_4-5A_5)
+  +g(z; \alpha+5,1) * A_5 }{%
+  F(x) ~= g(z; a, 1) * (1-A3+A4-A5) + g(z; a+1, 1) * 
+  ( 3*A3 - 4*A4 + 5*A5) + g(z; a+2,1) * (-3*A3 + 6*A4 -10*A5) 
+  + g(z; a+3,1) *(A3 - 4*A4 +10* A5 ) + g(z; a+4,1) * (A4-5*A5)
+  +g(z;a+5,1) * A5
+  }
+  where \eqn{\alpha=\frac{E^2[S]}{Var[S]} }{a =E^2[S]/Var[S]}, 
+  \eqn{\beta =\frac{E[S]}{Var[S]} }{b=E[S]/Var[S]}, \eqn{z=\beta x}{z= b*x} and
+  the random variable \eqn{Z = \beta X}{Z = bX} of cdf 
+  \eqn{g(z;\alpha, 1)}{g(z;a, 1)} follows a \eqn{G(\alpha,1)}{G(a,1)} 
+  Gamma distribution. The constants \eqn{A_3}{A3}, \eqn{A_4}{A4} and 
+  \eqn{A_5}{A5} are defined by
+  \deqn{A_3 = \frac{E[(Z-E[Z])^3]-(\alpha+2)(\alpha+1)\alpha}{3!}
+  }{%
+  A3 = [ E[(Z-E[Z])^3] - 2*a ] / 3!,
+  } \deqn{A_4 = \frac{E[(Z-E[Z])^4]-12 E[(Z-E[Z])^3]-3\alpha^2+18\alpha}{4!}
+  }{%
+  A4 = [ E[(Z-E[Z])^4]-12 E(Z-E[Z])Z^3]-3a^2+18a ] / 4!
+  } and \deqn{A_5 = \frac{E[(Z-E[Z])^5]-20 E[(Z-E[Z])^4]-(10\alpha-120)
+  E[(Z-E[Z])^3] 60\alpha^2-144\alpha}{5!}
+  }{%
+  A5 = [ E[(Z-E[Z])^5]-20 E[(Z-E[Z])^4]-(10a-120)E[(Z-E[Z])^3]
+  +60a^2-144a ] / 5! .
+  }
+  Note that \code{moments} are assumed to be the mean, the variance and 
+  other central moments. If \code{moments} is a vector with only the first 
+  three moments of \eqn{S}, then \eqn{A_4}{A4} and \eqn{A_5}{A5} are 
+  put to zero, otherwise they are defined by the equation above.
+  
 }
 \section{Simulation method}{
   This methods returns the empirical distribution function of a sample
@@ -168,6 +207,12 @@ aggregateDist(method = c("recursive", "convolution", "normal",
 
   Daykin, C.D., Pentikäinen, T. and Pesonen, M. (1994), \emph{Practical
     Risk Theory for Actuaries}, Chapman & Hall.
+
+  Bowers, N. L. Jr. (1966), \emph{Expansion of 
+  probability density functions as a sum of gamma densities with
+  applications in risk theory}, Transactions of society of actuaries.
+
+  Thibault, Louis (1997), \emph{méthodes d'évaluation de la distribution du montant total des réclamations}, Mémoires et thèses de l'Université Laval.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
@@ -192,6 +237,12 @@ plot(Fs)
 ## Normal Power approximation
 Fs <- aggregateDist("npower", moments = c(200, 200, 0.5))
 Fs(210)
+
+## Bowers Gamma approximation (example A of Bowers (1966))
+Fs <- aggregateDist("bgamma", moments = c(16, 32, 96))
+plot(Fs)
+Fs <- aggregateDist("bgamma", moments = c(16, 32, 96, 3456, 32640))
+plot(Fs, add=TRUE, col="blue")
 
 ## Simulation method
 model.freq <- expression(data = rpois(3))

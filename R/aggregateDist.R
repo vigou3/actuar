@@ -8,7 +8,7 @@
 ### Louis-Philippe Pouliot
 
 aggregateDist <-
-    function(method = c("recursive", "convolution", "normal", "npower", "simulation"),
+    function(method = c("recursive", "convolution", "normal", "npower","bgamma", "simulation"),
              model.freq = NULL, model.sev = NULL, p0 = NULL, x.scale = 1,
              moments, nb.simul, ..., tol = 1e-06, maxit = 500, echo = FALSE)
 {
@@ -37,6 +37,13 @@ aggregateDist <-
             stop("'moments' must supply the mean, variance and skewness of the distribution")
         FUN <- npower(moments[1], moments[2], moments[3])
         comment(FUN) <- "Normal Power approximation"
+    }
+    else if (method == "bgamma")
+    {
+        if (missing(moments) || length(moments) < 3)
+            stop("'moments' must supply the mean and the other first two or four central moments of the distribution")
+        FUN <- bowergamma(moments)
+        comment(FUN) <- "Bowers Gamma approximation"
     }
 
     else if (method == "simulation")
