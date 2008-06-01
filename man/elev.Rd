@@ -75,7 +75,7 @@ lev
 summary(lev)
 knots(lev)            # the group boundaries
 
-lev(knots(lev))       # empirical lev at boudaries
+lev(knots(lev))       # empirical lev at boundaries
 lev(c(80, 200, 2000)) # and at other limits
 
 plot(lev, type = "o", pch = 16)
