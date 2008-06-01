@@ -138,7 +138,7 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   \eqn{F(x)} uses Laguerre polynomials (orthogonal to the density of a gamma 
   distribution) \eqn{L_k(x) = (-1)^k x^(1-a) e^x d^k( x^(k+a-1) ) / dx^k} 
   for {k=0..5}.  
-  \eqn{F} is approximated by
+  \eqn{F} is approximated by a combination of gamma distributions
   \deqn{ F(x) \approx g(z;\alpha, 1) * (1-A_3+A_4-A_5) + g(z; \alpha+1, 1) * 
   ( 3A_3 - 4A_4 + 5A_5) + g(z; \alpha+2,1) * (-3A_3 + 6A_4 -10A_5) 
   + g(z; \alpha+3,1) *(A_3 - 4A_4 +10 A_5 ) + g(z; \alpha+4,1) * (A_4-5A_5)
@@ -240,9 +240,9 @@ Fs(210)
 
 ## Bowers Gamma approximation (example A of Bowers (1966))
 Fs <- aggregateDist("bgamma", moments = c(16, 32, 96))
-plot(Fs)
+plot(Fs, xlim = c(0, 50) )
 Fs <- aggregateDist("bgamma", moments = c(16, 32, 96, 3456, 32640))
-plot(Fs, add=TRUE, col="blue")
+plot(Fs, add = TRUE, col = "blue", xlim = c(0, 50))
 
 ## Simulation method
 model.freq <- expression(data = rpois(3))

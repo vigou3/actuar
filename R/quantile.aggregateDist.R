@@ -11,10 +11,11 @@ quantile.aggregateDist <-
 {
     label <- comment(x)
 
-    ## The Normal and Normal Power approximations are the only
-    ## continuous distributions of class 'aggregateDist'. They are
-    ## therefore treated differently, using the 'base' quantile
-    ## function qnorm().
+    ## The Normal, Normal Power and Bower Gamma approximations 
+    ## are the only continuous distributions of class 'aggregateDist'. 
+    ## They are therefore treated differently, using the 'base' quantile
+    ## function qnorm() or numerical optimization through the 'base' 
+    ## optimize function.
     if (label == "Normal approximation")
         res <- qnorm(probs, get("mean", environment(x)),
                      sqrt(get("variance", environment(x))))
@@ -27,6 +28,16 @@ quantile.aggregateDist <-
         res <- ifelse(probs <= 0.5, NA,
                       ((qnorm(probs) + 3/skewness)^2 - 9/(skewness^2) - 1) *
                       sqrt(variance) * skewness/6 + mean)
+    }
+    else if (label == "Bowers Gamma approximation")
+    {
+
+        alpha <- get("alpha", environment(x))
+        mse <- function(q, p) ( p - x(q) )^2
+        ## a supremum of the upper bond needed to search for the quantile
+        ubound <- qgamma( max(probs), alpha + 6 )
+        quantile <- function(p) optimize( mse, c(0, ubound), p)$minimum  
+        res <- sapply( probs, quantile )
     }
     else
     {

@@ -124,7 +124,8 @@ print.aggregateDist <- function(x, ...)
         cat("\n")
     }
     if (label %in% c("Normal approximation",
-                     "Normal Power approximation"))
+                     "Normal Power approximation",
+                 "Bowers Gamma approximation"))
         cat(attr(x, "source"), "\n")
     invisible(x)
 }
@@ -162,13 +163,15 @@ summary.aggregateDist <- function(object, ...)
 print.summary.aggregateDist <- function(x, ...)
 {
     cat(ifelse(comment(x) %in%
-               c("Normal approximation", "Normal Power approximation"),
+               c("Normal approximation", "Normal Power approximation", "Bowers Gamma approximation"),
                "Aggregate Claim Amount CDF:\n",
                "Aggregate Claim Amount Empirical CDF:\n"))
     q <- quantile(x, p = c(0.25, 0.5, 0.75))
+    
     expectation <- mean(x)
 
-    if (comment(x) %in% c("Normal approximation", "Normal Power approximation"))
+    if (comment(x) %in% c("Normal approximation", "Normal Power approximation",
+                                                                                        "Bowers Gamma approximation"))
     {
         min <- 0
         max <- NA
@@ -191,7 +194,8 @@ mean.aggregateDist <- function(x, ...)
     ## Simply return the value of the true mean given in argument in
     ## the case of the Normal and Normal Power approximations.
     if (label %in%
-        c("Normal approximation", "Normal Power approximation"))
+        c("Normal approximation", "Normal Power approximation", 
+                                                     "Bowers Gamma approximation"))
         return(get("mean", envir = environment(x)))
 
     ## For the recursive, exact and simulation methods, compute the

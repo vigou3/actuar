@@ -20,18 +20,18 @@ bowergamma <- function(moments)
     # moments of the standardized variable X
     alpha <- moments[1]^2 / moments[2]
     beta <- moments[1] / moments[2]
-    mu3 <- beta^3 * moments[3]
-#    cat("alpha", alpha, " beta ", beta,"\n")
-#    cat("central mom mu1", alpha, " mu2 ", alpha, " mu3 ", mu3, "\n")
-    if( length(moments) == 5)
+    mu3 <- moments[3] * beta^3
+#  cat("alpha", alpha, " beta ", beta,"\n")
+#  cat("central mom mu1", alpha, " mu2 ", alpha, " mu3 ", mu3, "\n")
+    if( length(moments) == 5 )
     {
         mu4 <- beta^4 * moments[4]
         mu5 <- beta^5 * moments[5]
-#        cat("mu4 ", mu4, " mu5 ", mu5, "\n")
+#  cat("mu4 ", mu4, " mu5 ", mu5, "\n")
     }
     
 # coefficient of the orthogonal polynomials expansion
-    A3 <- 1 / 6 * (mu3 -  2 * alpha)
+    A3 <- 1 / 6 * (mu3 -  2 * alpha )
     if( length(moments) == 5)
     {
         A4 <- 1 / 24 * (mu4 - 12 * mu3 - 3 * alpha^2 + 18 * alpha)
@@ -42,9 +42,9 @@ bowergamma <- function(moments)
         A4 <- 0
         A5 <- 0
     }
-#    cat("A3 ", A3 ,"\n")
-#       cat("A4 ", A4 ,"\n")
-#        cat("A5 ", A5 ,"\n")
+#cat("A3 ", A3 ,"\n")
+#   cat("A4 ", A4 ,"\n")
+#    cat("A5 ", A5 ,"\n")
 # coefficient of the Bowers gamma approximation    
     c1 <- 1 - A3 + A4 - A5
     c2 <- 3 * A3 - 4 * A4 + 5 * A5
@@ -53,22 +53,39 @@ bowergamma <- function(moments)
     c5 <- A4 - 5 * A5
     c6 <- A5
     
-    cat("c1 ", c1, " c2 ", c2, " c3 ", c3, "\n")
-    cat("c4 ", c4, " c5 ",c5, " c6 ", c6, " somme ",c1+c2+c3+c4+c5+c6 ,"\n")
+#  options(digits = 15)
+    
+#cat("c1 ", c1, " c2 ", c2, " c3 ", c3, "\n")
+#cat("c4 ", c4, " c5 ",c5, " c6 ", c6, " somme ",c1+c2+c3+c4+c5+c6 ,"\n")
+    
+#            cat("c1 ", c1, " c2 ", c2, " c3 ", c3, "\n")
+#            cat("c4 ", c4, " c5 ",c5, " c6 ", c6, " somme ",c1+c2+c3+c4+c5+c6 ,"\n")
+
     
     FUN <- function(x)
-    {
-#print(x)
-            x <- x * beta
-#print(x)
-            pgamma(x, alpha) * c1 + pgamma(x, alpha+1) * c2 + pgamma(x, alpha+2) * c3 
-            + pgamma(x, alpha+3) * c4 + pgamma(x, alpha+4) * c5 + pgamma(x, alpha+5) * c6
-    }
+        return( pgamma(x * beta, alpha) * c1 + pgamma(x * beta, alpha+1) * c2 
+               + pgamma(x * beta, alpha+2) * c3 + pgamma(x * beta, alpha+3) * c4 
+               + pgamma(x * beta, alpha+4) * c5 + pgamma(x * beta, alpha+5) * c6 )
     
+    #create a new environment for FUN
     environment(FUN) <- new.env()
+    assign("alpha", alpha, envir = environment(FUN))
+    assign("beta", beta, envir = environment(FUN))
+    assign("c1", c1, envir = environment(FUN))
+    assign("c2", c2, envir = environment(FUN))
+    assign("c3", c3, envir = environment(FUN))
+    assign("c4", c4, envir = environment(FUN))
+    assign("c5", c5, envir = environment(FUN))
+    assign("c6", c6, envir = environment(FUN))
     assign("mean", moments[1], envir = environment(FUN))
     assign("variance", moments[2], envir = environment(FUN))
-    assign("skewness", moments[3] / sqrt(moments[2])^3, envir = environment(FUN))
-    attr(FUN, "source") <- "function(x) pgamma(x, alpha) * c1 + pgamma(x, alpha+1) * c2 + pgamma(x, alpha+2) * c3 + pgamma(x, alpha+3) * c4 + pgamma(x, alpha+4) * c5 + pgamma(x, alpha+5) * c6"
+
+#not needed
+  assign("skewness", moments[3] / sqrt(moments[2])^3, envir = environment(FUN))
+    
+    if( length(moments) == 5)
+        attr(FUN, "source") <- "pgamma(x * beta, alpha) * c1 + pgamma(x * beta, alpha+1) * c2 \n+ pgamma(x * beta, alpha+2) * c3 + pgamma(x * beta, alpha+3) * c4 \n+ pgamma(x * beta, alpha+4) * c5 + pgamma(x * beta, alpha+5) * c6"
+    else
+        attr(FUN, "source") <- "pgamma(x * beta, alpha) * c1 + pgamma(x * beta, alpha+1) * c2 \n+ pgamma(x * beta, alpha+2) * c3 + pgamma(x * beta, alpha+3) * c4"    
     FUN
 }
