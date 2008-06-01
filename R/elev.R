@@ -27,6 +27,8 @@ elev.default <- function(x, ...)
     FUN
 }
 
+### This function assumes right-closed intervals, but the numerical
+### values are identical for left-closed intervals.
 elev.grouped.data <- function(x, ...)
 {
     if (!exists("Call", inherits = FALSE))
@@ -40,7 +42,7 @@ elev.grouped.data <- function(x, ...)
         limit <-  pmin(limit, cj[r + 1])
 
         ## Class in which the limit is located.
-        cl <- cut(limit, cj, include.lowest = TRUE, labels = FALSE)
+        cl <- findInterval(limit, cj, all.inside = TRUE)
 
         ## Means for all classes below each limit.
         cjt <- head(cj, max(cl))        # upper bounds
