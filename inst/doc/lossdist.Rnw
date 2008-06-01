@@ -17,9 +17,8 @@
     Mathieu Pigeon \\ École d'actuariat, Université Laval}
   \date{}
 
-  %% Some new commands. Commands \E and \VAR redefined to fit within
-  %% the author's writing habits...
-  \newcommand{\E}[1]{\mathrm{E}[ #1 ]}
+  %% Some new commands
+  \newcommand{\E}[1]{E[ #1 ]}
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
   \newcommand{\LAS}{\mathrm{LAS}}
   \newcommand{\mat}[1]{\mathbf{#1}}
@@ -142,7 +141,7 @@ functions to compute, respectively, theoretical raw moments
 theoretical limited moments
 \begin{equation}
   \label{eq:def:limited-moment}
-  \E{(X \wedge x)^k} = \E{(\min{X, x})^k}
+  \E{(X \wedge x)^k} = \E{\min(X, x)^k}
 \end{equation}
 and the moment generating function
 \begin{equation}

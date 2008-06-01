@@ -19,7 +19,7 @@
   \date{}
 
   %% Some new commands
-  \newcommand{\E}[1]{\mathrm{E}[ #1 ]}
+  \newcommand{\E}[1]{E[ #1 ]}
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
   \newcommand{\VaR}{\mathrm{VaR}}
   \newcommand{\CTE}{\mathrm{CTE}}

@@ -17,9 +17,8 @@
     Mathieu Pigeon \\ École d'actuariat, Université Laval}
   \date{}
 
-  %% Some new commands. Commands \E and \VAR redefined to fit within
-  %% the author's writing habits...
-  \newcommand{\E}[1]{\mathrm{E}[ #1 ]}
+  %% Some new commands
+  \newcommand{\E}[1]{E[ #1 ]}
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
