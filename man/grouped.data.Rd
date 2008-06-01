@@ -7,12 +7,14 @@
   group form.
 }
 \usage{
-grouped.data(\dots, row.names = NULL, check.rows = FALSE,
+grouped.data(\dots, right = TRUE, row.names = NULL, check.rows = FALSE,
              check.names = TRUE)
 }
 \arguments{
   \item{\dots}{these arguments are either of the form \code{value} or
     \code{tag = value}. See Details.}
+  \item{right}{logical, indicating if the intervals should be closed on
+    the right (and open on the left) or vice versa.}
   \item{row.names, check.rows, check.names}{arguments identical to those
     of \code{\link{data.frame}}.}
 }
@@ -24,16 +26,16 @@ grouped.data(\dots, row.names = NULL, check.rows = FALSE,
   }
 
   The first argument will be taken as the vector of group
-  boundaries. This vector must be exactly one element longer than 
+  boundaries. This vector must be exactly one element longer than
   the other arguments, which will be taken as vectors of group
   frequencies. All arguments are coerced to data frames.
 
   Missing (\code{NA}) frequencies are replaced by zeros, with a
   warning.
-  
+
   Extraction and replacement methods exist for \code{grouped.data}
   objects, but working on non adjacent groups will most likely yield
-  useless results.  
+  useless results.
 }
 \value{
   An object of \code{class} \code{c("grouped.data", "data.frame")} with

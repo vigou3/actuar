@@ -1,5 +1,15 @@
 === actuar: an R package for Actuarial Science ===
 
+Version 0.9-8
+=============
+
+NEW FEATURES
+
+  o New argument 'right' for grouped.data() to allow intervals closed
+    on the right (default) or on the left.
+
+
+
 Version 0.9-7
 =============
 

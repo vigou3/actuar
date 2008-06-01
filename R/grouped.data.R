@@ -7,8 +7,8 @@
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 ### Mathieu Pigeon, Louis-Philippe Pouliot
 
-grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
-                check.names = TRUE)
+grouped.data <- function(..., right = TRUE, row.names = NULL,
+                         check.rows = FALSE, check.names = TRUE)
 {
     ## Utility function
     numform <- function(x, w)
@@ -40,7 +40,9 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
     ## Return a data frame with formatted group boundaries in the
     ## first column.
     w <- max(nchar(x[-1, ]))            # longest upper boundary
-    xfmt <- paste("(", numform(x[-nx, ], -1), ", ", numform(x[-1, ], w), "]",
+    xfmt <- paste(if (right) "(" else "[",
+                  numform(x[-nx, ], -1), ", ", numform(x[-1, ], w),
+                  if (right) "]" else ")",
                   sep = "")
     res <- data.frame(xfmt, y, row.names = row.names, check.rows = check.rows,
                       check.names = check.names)
@@ -48,5 +50,6 @@ grouped.data <- function(..., row.names = NULL, check.rows = FALSE,
     class(res) <- c("grouped.data", "data.frame")
     environment(res) <- new.env()
     assign("cj", unlist(x, use.names = FALSE), environment(res))
+    attr(res, "right") <- right
     res
 }
