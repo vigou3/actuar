@@ -29,9 +29,9 @@ hache <- function(ratios, weights, xreg, tol = sqrt(.Machine$double.eps),
     fits <- lapply(s, f)
     sfits <- lapply(fits, summary)
 
-    ## Regression coefficients, residuals and the analog of the inverse
-    ## of the total contract weights (to be used to compute the
-    ## credibility matrices). for each contract
+    ## Regression coefficients, residuals and the analogue of the
+    ## inverse of the total contract weights (to be used to compute
+    ## the credibility matrices). for each contract
     ind <- sapply(fits, coef)
     r <- sapply(fits, residuals)
     sigma2 <- sapply(sfits, "[[", "sigma")^2
