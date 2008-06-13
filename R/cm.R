@@ -7,7 +7,7 @@
 
 cm <- function(formula, data, ratios, weights, subset, xreg = NULL,
                method = c("Buhlmann-Gisler", "Ohlsson", "iterative"),
-               tol = sqrt(.Machine$double.eps), maxit = 100,
+               adjust = FALSE, tol = sqrt(.Machine$double.eps), maxit = 100,
                echo = FALSE)
 {
     Call <- match.call()
@@ -126,8 +126,15 @@ cm <- function(formula, data, ratios, weights, subset, xreg = NULL,
                            old.format = FALSE)
         }
         else                            # Hachemeister
-            res <- hache(ratios, weights, xreg, tol = tol,
+        {
+            ## hache() accepts only "unbiased" and "iterative" for
+            ## argument 'method'.
+            method <- match.arg(method)
+            if (method == "Buhlmann-Gisler" || method == "Ohlsson")
+                method <- "unbiased"
+            res <- hache(ratios, weights, xreg, method = method, adjust = adjust, tol = tol,
                          maxit = maxit, echo = echo)
+        }
 
         ## Add quantities not taken into account in calculation
         ## functions to results list.
