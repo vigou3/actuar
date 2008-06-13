@@ -12,7 +12,7 @@
 }
 \usage{
 cm(formula, data, ratios, weights, subset, xreg = NULL,
-   method = c("Buhlmann-Gisler", "Ohlsson", "iterative"),
+   method = c("Buhlmann-Gisler", "Ohlsson", "iterative"), adjust = FALSE,
    tol = sqrt(.Machine$double.eps), maxit = 100, echo = FALSE)
 
 \method{print}{cm}(x, \dots)
@@ -39,6 +39,9 @@ cm(formula, data, ratios, weights, subset, xreg = NULL,
   \item{xreg}{an optional vector or matrix of regressors.}
   \item{method}{estimation method for the variance components of the
     model; see details below.}
+  \item{adjust}{a boolean which permit (if TRUE) to adjust both intercept and slope of the
+    regression parameters when slope of the regression credibility line is not
+    between slope of regression individual line and regression collective line.}
   \item{tol}{tolerance level for the stopping criteria for iterative
     estimation method.}
   \item{maxit}{maximum number of iterations in iterative estimation
