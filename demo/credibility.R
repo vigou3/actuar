@@ -32,8 +32,10 @@ predict(fit)
 
 ## Fitting of a Hachemeister regression model. This requires to
 ## specify a vector or matrix of regressors with argument 'xreg'.
+## Here the boolean adjust is set at TRUE so as to adjust
+## intercept and slope in the regression model. Iterative estimators.
 fit <- cm(~state, hachemeister, ratios = ratio.1:ratio.12,
-          weights = weight.1:weight.12, xreg = 12:1)
+          weights = weight.1:weight.12, xreg = 12:1, method = "iterative", adjust = TRUE)
 summary(fit, newdata = 0)     # 'newdata' is future value of regressor
 predict(fit, newdata = 0)
 
