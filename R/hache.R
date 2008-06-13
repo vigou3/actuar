@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== Actuar: an R package for Actuarial Science =====
 ###
 ### Credibility in the Regression Case
 ###
@@ -11,11 +11,32 @@ hache <- function(ratios, weights, xreg, tol = sqrt(.Machine$double.eps),
 {
     Call <- match.call()
 
+    ## If weights are not specified, use equal weights as in
+    ## Buhlmann's model.
+    if (missing(weights))
+    {
+      	stop("missing ratios not allowed when weights are not supplied")
+        weights <- array(1, dim(ratios))
+    }
+
+    ## Check other bad arguments.
+    if (ncol(ratios) < 2)
+        stop("there must be at least one node with more than one period of experience")
+    if (nrow(ratios) < 2)
+        stop("there must be more than one node")
+    if (!identical(which(is.na(ratios)), which(is.na(weights))))
+        stop("missing values are not in the same positions in weights and in ratios")
+    if (all(!weights, na.rm = TRUE))
+        stop("no available data to fit model")
+
     ## Frequently used values
-    ncontracts <- NROW(ratios)          # number of contracts
-    nyears <- NCOL(ratios)              # number of years
-    p <- NCOL(xreg) + 1                 # dimension of design matrix
-    s <- seq_len(ncontracts)            # 1:ncontracts
+    weights.s <- rowSums(weights, na.rm = TRUE)
+    has.data <- which(weights.s > 0)	# contracts with data
+    all.na <- which(weights.s == 0)     # contracts without data
+    ncontracts <- sum(weights.s > 0)   	# effective number of contracts
+    p <- NCOL(xreg) + 1               	# dimension of design matrix
+    s <- seq_len(nrow(ratios))	        # vector 1:5 with Hachemeister datas, real number of contracts
+    k <- seq_len(ncol(weights))	        # vector 1:12 with Hachemeister datas, periods
 
     ## Fit linear model to each contract and make summary of each
     ## model for later extraction of key quantities.
@@ -23,22 +44,34 @@ hache <- function(ratios, weights, xreg, tol = sqrt(.Machine$double.eps),
     fo <- as.formula(paste("y ~ ", paste(colnames(xreg), collapse = "+")))
     f <- function(i)
     {
-        DF <- data.frame(y = ratios[i, ], xreg, w = weights[i, ])
-        lm(fo, data = DF, weights = w)
+    	if (all(is.na(ratios[i,])))
+    	{
+            ratios[i,] <- 0
+            DF <- data.frame(y = ratios[i, ], xreg, w = weights[i, ])
+            lm(fo, data = DF, weights = NULL)
+    	}
+        else
+        {
+            DF <- data.frame(y = ratios[i, ], xreg, w = weights[i, ])
+            lm(fo, data = DF, weights = w)
+        }
     }
     fits <- lapply(s, f)
     sfits <- lapply(fits, summary)
 
-    ## Regression coefficients, residuals and the analogue of the
-    ## inverse of the total contract weights (to be used to compute
-    ## the credibility matrices). for each contract
+    ## Regression coefficients, residuals and the analogue of the inverse
+    ## of the total contract weights (to be used to compute the
+    ## credibility matrices). for each contract
     ind <- sapply(fits, coef)
-    r <- sapply(fits, residuals)
     sigma2 <- sapply(sfits, "[[", "sigma")^2
-    weights.s <- lapply(sfits, "[[", "cov.unscaled")
 
     ## === ESTIMATION OF WITHIN VARIANCE ===
-    s2 <- mean(sigma2)
+    s2 <- sum(sigma2) / ncontracts
+
+    ## covUnscaled equivalent to alpha_j factor in credibility factor ("Surveys of Actuarial studies",p.55)
+    covUnscaled <- vector("list", nrow(ratios))
+    covUnscaled[has.data] <- lapply(sfits[has.data],"[[", "cov.unscaled")
+    covUnscaled[all.na] <- list(matrix(0, nrow = p, ncol = p))
 
     ## === ESTIMATION OF THE BETWEEN VARIANCE-COVARIANCE MATRIX ===
     ##
@@ -49,16 +82,18 @@ hache <- function(ratios, weights, xreg, tol = sqrt(.Machine$double.eps),
     ## Starting credibility matrices and collective regression
     ## coefficients. The credibility matrices are stored in an array
     ## of dimension p x p x ncontracts.
-    cred <- array(diag(p), dim = c(p, p, ncontracts)) # identity matrices
-    coll <- rowMeans(ind)         # coherent with above cred. matrices
+    cred <- array(diag(p), dim = c(p, p, nrow(ratios))) # identity matrices
+    cred[, , all.na] <- matrix(0, p, p)
+    coll <- rowSums(ind) / ncontracts         				# coherent with above cred. matrices
 
     ## If printing of iterations was asked for, start by printing a
     ## header and the starting values.
+
     if (echo)
     {
         cat("Iteration\tCollective regression coefficients\n")
         exp <- expression(cat(" ", count, "\t\t ", coll1 <- coll,
-                              fill = TRUE))
+            fill = TRUE))
     }
     else
         exp <- expression(coll1 <-  coll)
@@ -79,21 +114,20 @@ hache <- function(ratios, weights, xreg, tol = sqrt(.Machine$double.eps),
         ## As calculated here, the between variance-covariance matrix
         ## is actually a vector. It is turned into a matrix by adding
         ## a 'dim' attribute.
-        A <- rowSums(sapply(s,
-                            function(i) cred[, , i] %*% tcrossprod(ind[, i] - coll))) / (ncontracts - 1)
+        A <- rowSums(sapply(has.data, function(i) cred[, , i] %*% tcrossprod(ind[, i] - coll))) / (ncontracts - 1)
         dim(A) <- c(p, p)
 
         ## Symmetrize A
         A <- (A + t(A))/2
 
         ## New credibility matrices
-        cred <- sapply(weights.s, function(w) A %*% solve(A + s2 * w))
-        dim(cred) <- c(p, p, ncontracts)
+        cred[, , has.data] <- sapply(covUnscaled[has.data], function(w) A %*% solve(A + s2 * w))
+        dim(cred) <- c(p, p, nrow(ratios))
 
         ## New collective regression coefficients
-        cred.s <- apply(cred, c(1, 2), sum)
+        cred.s <- apply(cred[, , has.data], c(1, 2), sum)
         coll <- solve(cred.s,
-                      rowSums(sapply(s, function(i) cred[, , i] %*% ind[, i])))
+                      rowSums(sapply(has.data, function(i) cred[, , i] %*% ind[, i])))
 
         ## Test for convergence
         if (max(abs((coll - coll1)/coll1)) < tol)
@@ -102,12 +136,11 @@ hache <- function(ratios, weights, xreg, tol = sqrt(.Machine$double.eps),
 
     ## Final calculation of the between variance-covariance matrix and
     ## credibility matrices.
-    A <- rowSums(sapply(s,
-                        function(i) cred[, , i] %*% tcrossprod(ind[, i] - coll))) / (ncontracts - 1)
+    A <- rowSums(sapply(has.data, function(i) cred[, , i] %*% tcrossprod(ind[, i] - coll))) / (ncontracts - 1)
     dim(A) <- c(p, p)
     A <- (A + t(A))/2
-    cred <- sapply(weights.s, function(w) A %*% solve(A + s2 * w))
-    dim(cred) <- c(p, p, ncontracts)
+    cred[, , has.data] <- sapply(covUnscaled[has.data], function(w) A %*% solve(A + s2 * w))
+    dim(cred) <- c(p, p, nrow(ratios))
 
     ## Credibility adjusted coefficients. The coefficients of the
     ## models are replaced with these values. That way, prediction
@@ -120,7 +153,7 @@ hache <- function(ratios, weights, xreg, tol = sqrt(.Machine$double.eps),
 
     ## Results
     structure(list(means = list(coll, ind),
-                   weights = list(cred.s, lapply(weights.s, solve)),
+                   weights = list(cred.s, lapply(covUnscaled[has.data], solve)),
                    unbiased = NULL,
                    iterative = list(A, s2),
                    cred = cred,
