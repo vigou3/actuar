@@ -5,9 +5,10 @@
 ### AUTHORS: Louis-Philippe Pouliot, Tommy Ouellet,
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>.
 
-cm <- function(formula, data, ratios, weights, subset, xreg = NULL,
+cm <- function(formula, data, ratios, weights, subset,
+               regformula = NULL, regdata, adj.intercept = FALSE,
                method = c("Buhlmann-Gisler", "Ohlsson", "iterative"),
-               adjust = FALSE, tol = sqrt(.Machine$double.eps), maxit = 100,
+               tol = sqrt(.Machine$double.eps), maxit = 100,
                echo = FALSE)
 {
     Call <- match.call()
@@ -38,7 +39,7 @@ cm <- function(formula, data, ratios, weights, subset, xreg = NULL,
     ##
     if (any(duplicated(level.numbers)))
         stop("unsupported interactions in 'formula'")
-    if (nlevels > 1 && !is.null(xreg))
+    if (nlevels > 1 && !is.null(regformula))
         stop("hierarchical regression models not supported")
     if (missing(ratios) & !missing(weights))
         stop("ratios have to be supplied if weights are")
@@ -110,7 +111,7 @@ cm <- function(formula, data, ratios, weights, subset, xreg = NULL,
     ## Dispatch to appropriate calculation function
     if (nlevels < 2)                    # one-dimensional model
     {
-        if (is.null(xreg))              # Buhlmann-Straub
+        if (is.null(regformula))        # Buhlmann-Straub
         {
             ## bstraub() accepts only "unbiased" and "iterative" for
             ## argument 'method'.
@@ -119,8 +120,8 @@ cm <- function(formula, data, ratios, weights, subset, xreg = NULL,
                 method <- "unbiased"
 
             ## *** The 'old.format = FALSE' argument is necessary in
-            ## *** the deprecation phase of the output format of ***
-            ## bstraub(). To delete later.
+            ## *** the deprecation phase of the output format of
+            ## *** bstraub(). To delete later.
             res <- bstraub(ratios, weights, method = method,
                            tol = tol, maxit = maxit, echo = echo,
                            old.format = FALSE)
@@ -132,8 +133,29 @@ cm <- function(formula, data, ratios, weights, subset, xreg = NULL,
             method <- match.arg(method)
             if (method == "Buhlmann-Gisler" || method == "Ohlsson")
                 method <- "unbiased"
-            res <- hache(ratios, weights, xreg, method = method, adjust = adjust, tol = tol,
-                         maxit = maxit, echo = echo)
+
+            ## Build the design matrix to pass to hache(). If
+            ## regression model is actually empty or has on;y an
+            ## intercept, call bstraub().
+            mf <- model.frame(regformula, regdata,
+                              drop.unused.levels = TRUE)
+            mt <- attr(mf, "terms")
+            res <-
+                if (length(attr(mt, "factors")) == 0)
+                {
+                    warning("useless regression model; fitting with Buhlmann-Straub's model")
+                    bstraub(ratios, weights, method = method,
+                            tol = tol, maxit = maxit, echo = echo,
+                            old.format = FALSE)
+                }
+                else
+                {
+                    xreg <- model.matrix(mt, mf)
+                    hache(ratios, weights, xreg,
+                          adj.intercept = adj.intercept,
+                          method = method, tol = tol,
+                          maxit = maxit, echo = echo)
+                }
         }
 
         ## Add quantities not taken into account in calculation

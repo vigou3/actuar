@@ -1,14 +1,15 @@
-### ===== Actuar: an R package for Actuarial Science =====
+### ===== actuar: an R package for Actuarial Science =====
 ###
-### Credibility in the Regression Case
-###
-### The Hachemeister Regression Model (1975).
+### Credibility in the regression case using the Hachemeister (1975)
+### model with possibly an adjustment to put the intercept at the
+### barycenter of time (see Buhlmann & Gisler, 2005).
 ###
 ### AUTHORS: Xavier Milhaud, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-hache <- function(ratios, weights, xreg, method = c("unbiased", "iterative"),
-                       adjust = FALSE, tol = sqrt(.Machine$double.eps),
-                       maxit = 100, echo = FALSE)
+hache <- function(ratios, weights, xreg, adj.intercept = FALSE,
+                  method = c("unbiased", "iterative"),
+                  tol = sqrt(.Machine$double.eps),
+                  maxit = 100, echo = FALSE)
 {
     Call <- match.call()
     method <- match.arg(method)
@@ -17,95 +18,111 @@ hache <- function(ratios, weights, xreg, method = c("unbiased", "iterative"),
     ## Buhlmann's model.
     if (missing(weights))
     {
-      	stop("missing ratios not allowed when weights are not supplied")
+        if (any(is.na(ratios)))
+            stop("missing ratios not allowed when weights are not supplied")
         weights <- array(1, dim(ratios))
     }
 
     ## Check other bad arguments.
-    if (ncol(ratios) < 2)
+    if (NCOL(ratios) < 2)
         stop("there must be at least one node with more than one period of experience")
-    if (nrow(ratios) < 2)
+    if (NROW(ratios) < 2)
         stop("there must be more than one node")
     if (!identical(which(is.na(ratios)), which(is.na(weights))))
-        stop("missing values are not in the same positions in weights and in ratios")
+        stop("missing values are not in the same positions in 'weights' and in 'ratios'")
     if (all(!weights, na.rm = TRUE))
         stop("no available data to fit model")
-    if (method == "unbiased" && !adjust)
-        warning("estimators are calculated iteratively, argument method should be iterative")
 
-    ## Frequently used values
-    weights.s <- rowSums(weights, na.rm = TRUE)
+    ## Frequently used values. Note that 'xreg' is guaranteed to have
+    ## at least 2 columns when called from cm.
+    weights.s <- rowSums(weights, na.rm = TRUE) # contract total weights
     has.data <- which(weights.s > 0)	# contracts with data
     all.na <- which(weights.s == 0)     # contracts without data
-    ncontracts <- sum(weights.s > 0)   	# effective number of contracts
-    p <- NCOL(xreg) + 1               	# dimension of design matrix
-    s <- seq_len(nrow(ratios))	        # vector 1:5 with Hachemeister data, number of contracts
-    k <- seq_len(ncol(weights))	        # vector 1:12 with Hachemeister data, periods
+    ncontracts <- nrow(ratios)   	# number of contracts
+    eff.ncontracts <- sum(weights.s > 0) # effective number of contracts
+    p <- ncol(xreg)               	# rank (>= 2) of design matrix
+    n <- NROW(xreg)                     # number of observations
+    s <- seq_len(ncontracts)	        # sequence 1, ..., ncontracts
+    #k <- seq_len(ncol(weights))	        # sequence 1, ..., n
 
-    if (p > 2 && adjust)
-        stop("if adjust = TRUE, regressor must be vector and not a multidimensionnal object")
-
-    xreg <- cbind(xreg)                 # force dims and colnames
-    ## Compute centre of gravity of time j0 in data
-    if (adjust)
+    ## If there should be an adjustment to take the barycenter of time
+    ## as intercept in the regression, it is computed as the *across
+    ## contract* weighted average of the regressor. Only one regressor
+    ## (i.e. simple regression) is supported in this case.
+    if (adj.intercept)
     {
-        j0 <- drop(crossprod(colSums(weights, na.rm = TRUE), k))/sum(weights.s)
-        xreg <- xreg - j0
+        if (p > 2 && adj.intercept)
+            stop("only one regressor is supported in regression at the barycenter of time")
+        j0 <- sum(weights %*% xreg[, 2], na.rm = TRUE)/sum(weights.s)
+        xreg[, 2] <- xreg[, 2] - j0
     }
 
     ## Fit linear model to each contract and make summary of each
     ## model for later extraction of key quantities.
-    fo <- as.formula(paste("y ~ ", paste(colnames(xreg), collapse = "+")))
     f <- function(i)
     {
-    	if (all(is.na(ratios[i,])))
-    	{
-            ratios[i,] <- 0
-            DF <- data.frame(y = ratios[i, ], xreg, w = weights[i, ])
-            lm(fo, data = DF, weights = NULL)
-    	}
-        else
-        {
-            DF <- data.frame(y = ratios[i, ], xreg, w = weights[i, ])
-            lm(fo, data = DF, weights = w)
-        }
+    	if (i %in% all.na)              # contract with no data
+            lm.fit(xreg, rep.int(0, n))
+        else                            # contract with data
+            lm.wfit(xreg, ratios[i, ], weights[i, ])
     }
     fits <- lapply(s, f)
-    sfits <- lapply(fits, summary)
 
-    ## Regression coefficients, residuals and the analogue of the inverse
-    ## of the total contract weights (to be used to compute the
-    ## credibility matrices). for each contract
+    ## Individual regression coefficients
     ind <- sapply(fits, coef)
-    sigma2 <- sapply(sfits, "[[", "sigma")^2
+
+    ## Individual variance estimators
+    S <- function(z)                    # from stats:::summary.lm
+    {
+        r <- z$residuals
+        w <- z$weights
+        if (is.null(w))
+            rss <- sum(r^2)
+        else
+            rss <- sum(w * r^2)
+        rss/(n - p)
+    }
+    sigma2 <- sapply(fits, S)
 
     ## === ESTIMATION OF WITHIN VARIANCE ===
-    s2 <- sum(sigma2) / ncontracts
+    s2 <- sum(sigma2) / eff.ncontracts
 
-    ## Starting credibility matrices, stored in an array
-    ## of dimension p x p x ncontracts.
-    cred <- array(diag(p), dim = c(p, p, nrow(ratios))) # identity matrices
-    cred[, , all.na] <- matrix(0, p, p)  # coherent with above cred. matrices
-
-    if (!adjust)
+    ## === ESTIMATION OF THE BETWEEN VARIANCE-COVARIANCE MATRIX ===
+    ##
+    ## The procedure is different depending if there is an adjustment
+    ## of the intercept or not.
+    ##
+    ## If there is no adjustment, we use an iterative procedure
+    ## similar to the Bischel-Straub estimator. Following Goovaerts &
+    ## Hoogstad (1987), the stopping criterion is based on the
+    ## collective regression coefficients estimates.
+    ##
+    ## If the intercept is positioned at the barycenter of time, then
+    ## intercept and slope variance components are estimated just like
+    ## in the Buhlmann-Straub model. This means that unbiased and
+    ## iterative estimators are available.
+    if (!adj.intercept)                 # intercept at time origin
     {
-        ## covUnscaled equivalent to alpha_j factor in credibility factor ("Surveys of Actuarial studies",p.55)
-        covUnscaled <- vector("list", nrow(ratios))
-        covUnscaled[has.data] <- lapply(sfits[has.data],"[[", "cov.unscaled")
-        covUnscaled[all.na] <- list(matrix(0, nrow = p, ncol = p))
+        ## Only iterative estimation is supported.
+        if (method == "unbiased")
+            warning("using iterative estimators with regression at time origin")
 
-        ## === ESTIMATION OF THE BETWEEN VARIANCE-COVARIANCE MATRIX ===
-        ##
-        ## This is an iterative procedure similar to the Bischel-Straub
-        ## estimator. Following Goovaerts & Hoogstad, stopping criterion
-        ## is based in the collective regression coefficients estimates.
-        ##
-        ## Starting collective regression coefficients.
-        coll <- rowSums(ind) / ncontracts
+        ## "Weight" and credibility matrices are stored in p x p x
+        ## ncontracts arrays. We must keep them equal to 0 (matrix)
+        ## for contracts with no data. We also initialize the between
+        ## variance-covariance matrix A for later use.
+        R <- function(z)                # from stats:::summary.lm
+            chol2inv(z$qr$qr[1:p, 1:p, drop = FALSE])
+        cred <- W <- array(0, c(p, p, ncontracts))
+        W[, , has.data] <- sapply(fits[has.data], R)
+        cred[, , has.data] <- A <- diag(p)
+
+        ## Starting collective regression coefficients. Arithmetic
+        ## average is coherent with above credibility matrices.
+        coll <- rowSums(ind) / eff.ncontracts
 
         ## If printing of iterations was asked for, start by printing a
         ## header and the starting values.
-
         if (echo)
         {
             cat("Iteration\tCollective regression coefficients\n")
@@ -128,23 +145,23 @@ hache <- function(ratios, weights, xreg, method = c("unbiased", "iterative"),
                 break
             }
 
-            ## As calculated here, the between variance-covariance matrix
-            ## is actually a vector. It is turned into a matrix by adding
-            ## a 'dim' attribute.
-            A <- rowSums(sapply(has.data, function(i) cred[, , i] %*% tcrossprod(ind[, i] - coll))) / (ncontracts - 1)
-            dim(A) <- c(p, p)
+            ## Calculation of the between variance-covariance matrix.
+            A[] <- rowSums(sapply(has.data, function(i)
+                                cred[, , i] %*% tcrossprod(ind[, i] - coll))) /
+                                    (eff.ncontracts - 1)
 
             ## Symmetrize A
             A <- (A + t(A))/2
 
             ## New credibility matrices
-            cred[, , has.data] <- sapply(covUnscaled[has.data], function(w) A %*% solve(A + s2 * w))
-            dim(cred) <- c(p, p, nrow(ratios))
+            cred[, , has.data] <- sapply(has.data, function(i)
+                                         A %*% solve(A + s2 * W[, , i]))
 
             ## New collective regression coefficients
             cred.s <- apply(cred[, , has.data], c(1, 2), sum)
             coll <- solve(cred.s,
-                          rowSums(sapply(has.data, function(i) cred[, , i] %*% ind[, i])))
+                          rowSums(sapply(has.data, function(i)
+                                         cred[, , i] %*% ind[, i])))
 
             ## Test for convergence
             if (max(abs((coll - coll1)/coll1)) < tol)
@@ -153,19 +170,21 @@ hache <- function(ratios, weights, xreg, method = c("unbiased", "iterative"),
 
         ## Final calculation of the between variance-covariance matrix and
         ## credibility matrices.
-        A <- rowSums(sapply(has.data, function(i) cred[, , i] %*% tcrossprod(ind[, i] - coll))) / (ncontracts - 1)
-        dim(A) <- c(p, p)
+        A[] <- rowSums(sapply(has.data, function(i)
+                              cred[, , i] %*% tcrossprod(ind[, i] - coll))) /
+                                  (eff.ncontracts - 1)
         A <- (A + t(A))/2
-        cred[, , has.data] <- sapply(covUnscaled[has.data], function(w) A %*% solve(A + s2 * w))
-        dim(cred) <- c(p, p, nrow(ratios))
+        cred[, , has.data] <- sapply(has.data, function(i)
+                                     A %*% solve(A + s2 * W[, , i]))
 
         ## Credibility adjusted coefficients. The coefficients of the
         ## models are replaced with these values. That way, prediction
         ## will be trivial using predict.lm().
         for (i in s)
-            fits[[i]]$coefficients <- coll + drop(cred[, , i] %*% (ind[, i] - coll))
+            fits[[i]]$coefficients <-
+                coll + drop(cred[, , i] %*% (ind[, i] - coll))
     }
-    else
+    else                                # intercept at barycenter
     {
         g <- function(i)
         {
@@ -286,46 +305,3 @@ predict.hache <- function(object, levels = NULL, newdata, ...)
 
 print.hache <- function(x, ...)
     print.default(x)
-
-bvar.unbiased <- function(x, w, within, n)
-{
-    w.s <- sum(w)
-    x.w <- drop(crossprod(w, x)) / w.s
-
-    w.s * (drop(crossprod(w, (x - x.w)^2)) - (n - 1) * within) / (w.s^2 - sum(w^2))
-}
-
-bvar.iterative <- function(x, w, within, n, start,
-                           tol = sqrt(.Machine$double.eps), maxit = 100,
-                           echo = FALSE)
-{
-    if (echo)
-    {
-        cat("Iteration\tBetween variance estimator\n")
-        exp <- expression(cat(" ", count, "\t\t ", a1 <- a, fill = TRUE))
-    }
-    else
-        exp <- expression(a1 <-  a)
-
-    a <- start
-    count <- 0
-
-    repeat
-    {
-        eval(exp)
-
-        if (maxit < (count <- count + 1))
-        {
-            warning("maximum number of iterations reached before obtaining convergence")
-            break
-        }
-
-        cred <- 1 / (1 + within/(w * a))
-        x.z <- drop(crossprod(cred, x)) / sum(cred)
-        a <- drop(crossprod(cred, (x - x.z)^2)) / (n - 1)
-
-        if (abs((a - a1)/a1) < tol)
-            break
-    }
-    a
-}
