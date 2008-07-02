@@ -54,10 +54,10 @@ simul <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     for (i in 2:nlevels)       # first node doesn't need recycling
         nodes[[i]] <- rep(nodes[[i]], length = sum(nodes[[i - 1]]))
 
-    ## Simulation of the frequency risk (or mixing) parameters for
-    ## each level (e.g. class, contract) and, at the last level, the
-    ## actual frequencies. If 'model.freq' is NULL, this is equivalent
-    ## to having one claim per node.
+    ## Simulation of the frequency mixing parameters for each level
+    ## (e.g. class, contract) and, at the last level, the actual
+    ## frequencies. If 'model.freq' is NULL, this is equivalent to
+    ## having one claim per node.
     if (has.freq)
     {
         ## Normally, only the immediately above mixing parameter will
@@ -162,11 +162,11 @@ simul <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     ## We must now distribute the claim amounts in vector 'severities'
     ## to the appropriate nodes. This is complicated by the
     ## possibility to have different number of nodes (years of
-    ## observation) for each "entity". The result must be a matrix
+    ## observation) for each entity. The result must be a matrix
     ## with the number of columns equal to the maximum number of last
     ## level nodes.
     ##
-    ## The number of nodes (years of observation) per "entity" is
+    ## The number of nodes (years of observation) per entity is
     ## given by 'n.current' since we reached the last level in (either
     ## one of) the above loops.
     ##
@@ -217,7 +217,7 @@ simul <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     }
 
     ## Finally, create a matrix where each row contains the series of
-    ## identifiers for an "entity" in the portfolio, e.g. if the data
+    ## identifiers for an entity in the portfolio, e.g. if the data
     ## is denoted X_{ijkt}, one line of the matrix will contain
     ## subscripts i, j and k. As we move from right to left in the
     ## columns of 'm', the subcripts are increasingly repeated.
