@@ -8,6 +8,9 @@ NEW FEATURES
   o New argument 'right' for grouped.data() to allow intervals closed
     on the right (default) or on the left.
 
+BUG FIXES
+
+  o frequency.portfolio was wrongly counting NAs.
 
 
 Version 0.9-7

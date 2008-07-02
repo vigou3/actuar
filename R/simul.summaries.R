@@ -72,7 +72,7 @@ aggregate.portfolio <- function(x, by = names(x$nodes), FUN = sum,
 frequency.portfolio <- function(x, by = names(x$nodes),
                                 classification = TRUE, prefix = NULL, ...)
 {
-    freq <- function(x) if (identical(x, NA)) NA else length(x)
+    freq <- function(x) if (identical(x, NA)) NA else length(x[!is.na(x)])
     aggregate(x, by, freq, classification, prefix)
 }
 
