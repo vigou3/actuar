@@ -4,7 +4,7 @@
 \alias{summary.ogive}
 \alias{knots.ogive}
 \alias{plot.ogive}
-\title{Ogive for grouped data}
+\title{Ogive for Grouped Data}
 \description{
   Compute a smoothed empirical distribution function for grouped data.
 }
@@ -33,10 +33,9 @@ ogive(x, y = NULL, \dots)
   \item{\dots}{arguments to be passed to subsequent methods.}
 }
 \details{
-  The ogive of a grouped data set links the values of the empirical
-  cumulative distribution known at group boundaries by straight line
-  segments, resulting in an approximation of the empirical cdf.
-  
+  The ogive is a linear interpolation of the empirical cumulative
+  distribution function.
+
   The equation of the ogive is
   \deqn{F_n(x) = \frac{(c_j - x) F_n(c_{j-1}) +
       (x - c_{j-1}) F_n(c_j)}{c_j - c_{j - 1}}}{%

@@ -1,7 +1,7 @@
 \name{dental}
 \docType{data}
 \alias{dental}
-\title{Individual dental claims data set}
+\title{Individual Dental Claims Data Set}
 \description{
   Basic dental claims on a policy with a deductible of 50.
 }

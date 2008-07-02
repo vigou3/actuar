@@ -1,7 +1,7 @@
 \name{adjCoef}
 \alias{adjCoef}
 \alias{plot.adjCoef}
-\title{Adjustment coefficient}
+\title{Adjustment Coefficient}
 \description{
   Compute the adjustment coefficient in ruin theory, or return a
   function to compute the adjustment coefficient for various reinsurance
@@ -100,7 +100,7 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
   \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
 }
 \author{
-  Christophe Dutang, Vincent Goulet \email{vincent.goulet@act.ulaval.ca}  
+  Christophe Dutang, Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
 }
 \examples{
 ## Basic example: no reinsurance, exponential claim severity and wait
@@ -125,7 +125,7 @@ R1 <- adjCoef(mgfx, premium = p, upper = 1, reins = "proportional",
               from = 0, to = 1, n = 11)
 R2 <- adjCoef(h = h, upper = 1, reins = "p",
              from = 0, to = 1, n = 101)
-R1(seq(0, 1, length = 10))	# evaluation for various retention rates 
+R1(seq(0, 1, length = 10))	# evaluation for various retention rates
 R2(seq(0, 1, length = 10))	# same
 plot(R1)		        # graphical representation
 plot(R2, col = "green", add = TRUE) # smoother function

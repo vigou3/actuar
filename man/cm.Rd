@@ -6,13 +6,14 @@
 \alias{print.summary.cm}
 \title{Credibility Models}
 \description{
-  Fit any of the following credibility models: \enc{Bühlmann}{Buhlmann},
+  Fit the following credibility models: \enc{Bühlmann}{Buhlmann},
   \enc{Bühlmann}{Buhlmann}-Straub, hierarchical or regression
   (Hachemeister).
 }
 \usage{
-cm(formula, data, ratios, weights, subset, xreg = NULL,
-   method = c("Buhlmann-Gisler", "Ohlsson", "iterative"), adjust = FALSE,
+cm(formula, data, ratios, weights, subset,
+   regformula = NULL, regdata, adj.intercept = FALSE,
+   method = c("Buhlmann-Gisler", "Ohlsson", "iterative"),
    tol = sqrt(.Machine$double.eps), maxit = 100, echo = FALSE)
 
 \method{print}{cm}(x, \dots)
@@ -24,8 +25,9 @@ cm(formula, data, ratios, weights, subset, xreg = NULL,
 \method{print}{summary.cm}(x, \dots)
 }
 \arguments{
-  \item{formula}{a symbolic description of the model to be fit.
-    The details of model specification are given below.}
+  \item{formula}{an object of class \code{"\link{formula}"}: a symbolic
+    description of the model to be fit. The details of model
+    specification are given below.}
   \item{data}{a matrix or a data frame containing the portfolio
     structure, the ratios or claim amounts and their associated weights,
     if any.}
@@ -36,12 +38,18 @@ cm(formula, data, ratios, weights, subset, xreg = NULL,
   \item{subset}{an optional logical expression indicating a subset of
     observations to be used in the modeling process. All observations
     are included by default.}
-  \item{xreg}{an optional vector or matrix of regressors.}
+  \item{regformula}{an object of class \code{"\link{formula}"}: symbolic
+    description of the regression component (see \code{"\link{lm}"} for
+    details). No left hand side is needed in the formula; if present it
+    is ignored. If \code{NULL}, no regression is done on the data.}
+  \item{regdata}{an optional data frame, list or environment (or object
+    coercible by \code{\link{as.data.frame}} to a data frame) containing
+    the variables in the regression model.}
+  \item{adj.intercept}{if \code{TRUE}, the intercept of the regression
+    model is located at the barycenter of the regressor instead of the
+    origin.}
   \item{method}{estimation method for the variance components of the
     model; see details below.}
-  \item{adjust}{a boolean which permit (if TRUE) to adjust both intercept and slope of the
-    regression parameters when slope of the regression credibility line is not
-    between slope of regression individual line and regression collective line.}
   \item{tol}{tolerance level for the stopping criteria for iterative
     estimation method.}
   \item{maxit}{maximum number of iterations in iterative estimation

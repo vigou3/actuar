@@ -2,7 +2,7 @@
 \alias{simul}
 \alias{simpf}
 \alias{print.portfolio}
-\title{Simulation of a portfolio of data}
+\title{Simulation from Compound Hierarchical Models}
 \description{
   \code{simul} simulates data for insurance applications allowing
   hierarchical structures and separate models for the frequency and

@@ -1,6 +1,6 @@
 \name{hist.grouped.data}
 \alias{hist.grouped.data}
-\title{Histogram for grouped data}
+\title{Histogram for Grouped Data}
 \description{
   This method for the generic function \code{\link{hist}} is mainly
   useful to plot the histogram of grouped data. If \code{plot = FALSE},

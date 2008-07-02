@@ -1,7 +1,7 @@
 \name{hachemeister}
 \docType{data}
 \alias{hachemeister}
-\title{Hachemeister data set}
+\title{Hachemeister Data Set}
 \description{
   Hachemeister (1975) data set giving average claim amounts in private
   passenger bodily injury insurance in five U.S. states over 12 quarters
@@ -15,7 +15,7 @@
     \item{\code{state}}{the state number;}
     \item{\code{ratio.1}, \dots, \code{ratio.12}}{the average claim
       amounts;}
-    \item{\code{weight.1}, \dots, \code{weight.12}}{the 
+    \item{\code{weight.1}, \dots, \code{weight.12}}{the
       corresponding number of claims.}
   }
 }

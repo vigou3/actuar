@@ -1,7 +1,7 @@
 \name{gdental}
 \docType{data}
 \alias{gdental}
-\title{Grouped dental claims data set}
+\title{Grouped Dental Claims Data Set}
 \description{
   Grouped dental claims, that is presented in a number of claims per
   claim amount group form.
