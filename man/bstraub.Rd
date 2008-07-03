@@ -36,7 +36,7 @@ bstraub(ratios, weights,
   Direct usage of this function is deprecated. The function will not be
   exported in future versions of the package. Use
   \code{\link[actuar]{cm}} instead.
-  
+
   The credibility premium of contract \eqn{i} is given by
   \deqn{z_i X_{iw} + (1 - z_i) X_{zw},}{z[i] X[iw] + (1 - z[i]) X[zw],}
   where
@@ -87,9 +87,9 @@ bstraub(ratios, weights,
     credibility factors;}
   \item{s2}{estimator of the within contract heterogeneity parameter;}
   \item{unbiased}{unbiased estimator of the between contract
-    heterogeneity parameter;}
+    heterogeneity parameter, or \code{NULL};}
   \item{iterative}{iterative estimator of the between contract
-    heterogeneity parameter;}
+    heterogeneity parameter, or \code{NULL};}
   \item{cred}{vector of credibility factors;}
 
   For \code{bstraub} with \code{old.format = FALSE}, an object of
@@ -100,13 +100,13 @@ bstraub(ratios, weights,
   \item{weights}{a list containing the total portfolio weight and the
     vector of contracts total weights, as used in credibility factors;}
   \item{unbiased}{a vector containing the unbiased variance components
-    estimators.}
+    estimators, or \code{NULL}.}
   \item{iterative}{a vector containing the iterative variance components
     estimators, or \code{NULL}.}
   \item{cred}{vector of credibility factors.}
   \item{nodes}{a list containing the number of contracts in the
     portfolio.}
-  
+
   For \code{predict.bstraub}, a vector of credibility premiums.
 }
 \references{
