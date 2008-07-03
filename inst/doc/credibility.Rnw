@@ -304,24 +304,27 @@ weighted average of an entity's regression parameters and the group's
 parameters.
 
 In order to use \code{cm} to fit a credibility regression model to a
-data set, one has to specify a vector or matrix of regressors by means
-of argument \code{xreg}. For example, fitting the model
+data set, one has to supply, ia arguments \code{regformula} and
+\code{regdata}, a regression model and a data frame of regressors much
+like with function \code{lm}. One difference is that the regression
+model formula does not need to have a left hand side. For example,
+fitting the model
 \begin{displaymath}
   X_{it} = \beta_0 + \beta_1 (12 - t) + \varepsilon_t, \quad
   t = 1, \dots, 12
 \end{displaymath}
 to the original data set of \citeauthor{Hachemeister_75} is done with
 <<echo=TRUE>>=
-fit <- cm(~state, hachemeister, xreg = 12:1,
+fit <- cm(~state, hachemeister,
+          regformula = ~ time, regdata = data.frame(time = 12:1),
           ratios = ratio.1:ratio.12, weights = weight.1:weight.12)
 fit
 @
 
 Computing the credibility premiums requires to give the ``future''
-values of the regressors as in \code{predict.lm}, although with a
-simplified syntax for the one regressor case:
+values of the regressors as in \code{predict.lm}:
 <<echo=TRUE>>=
-predict(fit, newdata = 0)	# future value of regressor
+predict(fit, newdata = data.frame(time = 0))
 @
 
 \bibliography{actuar}
