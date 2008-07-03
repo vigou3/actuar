@@ -108,7 +108,10 @@ cm <- function(formula, data, ratios, weights, subset,
             as.matrix(eval(cl, parent.frame())) # weights as matrix
         }
 
-    ## Dispatch to appropriate calculation function
+    ## == DISPATCH TO APPROPRIATE CALCULATION FUNCTION ==
+    ##
+    ## Buhlmann-Straub models are handled by bstraub(), regression
+    ## models by hache() and hierarcahical models by hierarc().
     if (nlevels < 2)                    # one-dimensional model
     {
         if (is.null(regformula))        # Buhlmann-Straub
@@ -135,7 +138,7 @@ cm <- function(formula, data, ratios, weights, subset,
                 method <- "unbiased"
 
             ## Build the design matrix to pass to hache(). If
-            ## regression model is actually empty or has on;y an
+            ## regression model is actually empty or has only an
             ## intercept, call bstraub().
             mf <- model.frame(regformula, regdata,
                               drop.unused.levels = TRUE)
@@ -143,7 +146,7 @@ cm <- function(formula, data, ratios, weights, subset,
             res <-
                 if (length(attr(mt, "factors")) == 0)
                 {
-                    warning("useless regression model; fitting with Buhlmann-Straub's model")
+                    warning("empty regression model; fitting with Buhlmann-Straub's model")
                     bstraub(ratios, weights, method = method,
                             tol = tol, maxit = maxit, echo = echo,
                             old.format = FALSE)
@@ -156,6 +159,7 @@ cm <- function(formula, data, ratios, weights, subset,
                           method = method, tol = tol,
                           maxit = maxit, echo = echo)
                 }
+            res$terms <- mt
         }
 
         ## Add quantities not taken into account in calculation
