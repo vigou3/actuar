@@ -58,8 +58,8 @@ cm(formula, data, ratios, weights, subset,
   \item{x, object}{an object of class \code{"cm"}}
   \item{levels}{character vector indicating the levels to predict or to
     include in the summary; if \code{NULL} all levels are included.}
-  \item{newdata}{vector or data frame containing the variables used to
-    predict credibility regression models.}
+  \item{newdata}{data frame containing the variables used to predict
+    credibility regression models.}
   \item{\dots}{additional attributes to attach to the result for the
     \code{predict} and \code{summary} methods; further arguments to
     \code{\link[base]{format}} for the \code{print.summary} method;
@@ -133,9 +133,8 @@ cm(formula, data, ratios, weights, subset,
   name the columns.
 
   Argument \code{newdata} provides the \dQuote{future} value of the
-  regressors for prediction purposes. It is either as defined in
-  \code{\link[stats]{predict.lm}} or else a vector of length one for
-  regression models with a single regressor.
+  regressors for prediction purposes. It should be given as specified in
+  \code{\link[stats]{predict.lm}}.
 }
 \section{Variance components estimation}{
   For hierarchical models, two sets of estimators of the variance
@@ -213,9 +212,11 @@ cm(formula, data, ratios, weights, subset,
   \item{ordering}{a list containing, for each level, the affiliation of
     a node to the node of the level above.}
 
-  Regression fits have in addition the following component:
+  Regression fits have in addition the following components:
   \item{adj.models}{a list containing, for each node, the credibility
-    adjusted regression model as obtained with \code{\link[stats]{lm}}.}
+    adjusted regression model as obtained with
+    \code{\link[stats]{lm.fit}} or \code{\link[stats]{lm.wfit}}.}
+  \item{terms}{the \code{\link[stats]{terms}} object used.}
 
   The method of \code{predict} for objects of class \code{"cm"} computes
   the credibility premiums for the nodes of every level included in
@@ -261,12 +262,13 @@ predict(fit, levels = "unit")	# unit credibility premiums only
 summary(fit)
 summary(fit, levels = "unit")	# unit summaries only
 
-## Regression model
-fit <- cm(~state, hachemeister, xreg = 12:1,
+## Regression model with intercept at time origin
+fit <- cm(~state, hachemeister,
+          regformula = ~time, regdata = data.frame(time = 12:1),
           ratios = ratio.1:ratio.12, weights = weight.1:weight.12)
 fit
-predict(fit, newdata = 0)	# future value of regressor
-summary(fit, newdata = 0)
+predict(fit, newdata = data.frame(time = 0))
+summary(fit, newdata = data.frame(time = 0))
 
 }
 \keyword{models}

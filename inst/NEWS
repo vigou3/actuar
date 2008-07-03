@@ -8,7 +8,22 @@ NEW FEATURES
   o New argument 'right' for grouped.data() to allow intervals closed
     on the right (default) or on the left.
 
+USER-VISIBLE CHANGES
+
+  o cm() no longer returns the values of the unbiased estimators when
+    method = "iterative".
+
+  o Specification of regression models in cm() has changed: one should
+    now provide the regression model as a formula and the regressors
+    in a separate matrix or data frame.
+
+  o Due to above change, predict.cm() now expects 'newdata' to be a
+    data frame as for stats:::predict.lm().
+
 BUG FIXES
+
+  o Functions r<foo>() are now more consistent in warning when NA's
+    (specifically NaN's) are generated (as per the change in R 2.7.0).
 
   o frequency.portfolio was wrongly counting NAs.
 
