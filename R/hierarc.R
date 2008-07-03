@@ -263,7 +263,7 @@ hierarc <- function(ratios, weights, classification,
     ## Results
     structure(list(means = wmeans,
                    weights = tweights,
-                   unbiased = if (method == "unbiased") b,
+                   unbiased = if (method != "iterative") b,
                    iterative = if (method == "iterative") b,
                    cred = cred,
                    nodes = nnodes,
