@@ -53,33 +53,23 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
     s2 <-  sum(weights * (ratios - ratios.w)^2, na.rm = TRUE) / (ntotal - ncontracts)
 
     ## First estimation of a. Always compute the unbiased estimator.
-    ac <- bvar.unbiased(ratios.w, weights.s, s2, ncontracts)
+    a <- bvar.unbiased(ratios.w, weights.s, s2, ncontracts)
 
     ## Iterative estimation of a. Compute only if
     ## 1. asked to in argument;
-    ## 2. the unbiased estimator is > 0;
-    ## 3. weights are not all equal (Bühlmann model).
+    ## 2. weights are not all equal (Bühlmann model).
+    ## 3. the unbiased estimator is > 0;
     method <- match.arg(method)
 
-    if (method == "iterative")
+    if (method == "iterative" &&
+        diff(range(weights, na.rm = TRUE)) > .Machine$double.eps^0.5)
     {
-        at <-
-            if (ac > 0)
-            {
-                if (diff(range(weights, na.rm = TRUE)) > .Machine$double.eps^0.5)
-                    bvar.iterative(ratios.w, weights.s, s2, ncontracts, start = ac,
-                                   tol = tol, maxit = maxit, echo = echo)
-                else
-                    ac
-            }
+        a <-
+            if (a > 0)
+                bvar.iterative(ratios.w, weights.s, s2, ncontracts, start = a,
+                               tol = tol, maxit = maxit, echo = echo)
             else
                 0
-        a <- at
-    }
-    else
-    {
-        a <- ac
-        at <- NULL
     }
 
     ## Final credibility factors and estimator of the collective mean.
@@ -101,8 +91,8 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
                        collective = ratios.zw,
                        weights = weights.s,
                        s2 = s2,
-                       unbiased = ac,
-                       iterative = at,
+                       unbiased = if (method == "unbiased") a,
+                       iterative = if (method == "iterative") a,
                        cred = cred),
                   class = "bstraub.old",
                   model = "Buhlmann-Straub")
@@ -110,8 +100,8 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
     else
         structure(list(means = list(ratios.zw, ratios.w),
                        weights = list(if (a > 0) sum(cred) else weights.ss, weights.s),
-                       unbiased = c(ac, s2),
-                       iterative = if (!is.null(at)) c(at, s2),
+                       unbiased = if (method == "unbiased") c(a, s2),
+                       iterative = if (method == "iterative") c(a, s2),
                        cred = cred,
                        nodes = list(nrow(weights))),
                   class = "bstraub",

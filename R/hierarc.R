@@ -158,7 +158,7 @@ hierarc <- function(ratios, weights, classification,
     ## level, hence this list is one shorter than the others.
     tweights <- vector("list", nlevels1p)       # total level weights
     wmeans <- vector("list", nlevels1p)         # weighted averages
-    bu <- bi <- c(numeric(nlevels), s2)         # variance estimators
+    b <- c(numeric(nlevels), s2)                # variance estimators
     cred <- vector("list", nlevels)             # credibility factors
 
     ## Values already computed at the entity level.
@@ -185,9 +185,9 @@ hierarc <- function(ratios, weights, classification,
     method <- match.arg(method)
 
     if (method == "Buhlmann-Gisler")
-        bexp <- expression(bu[i] <- mean(pmax(ifelse(ci != 0, bui/ci, 0), 0), na.rm = TRUE))
+        bexp <- expression(b[i] <- mean(pmax(ifelse(ci != 0, bi/ci, 0), 0), na.rm = TRUE))
     else                                # Ohlsson
-        bexp <- expression(bu[i] <- sum(bui, na.rm = TRUE) / sum(ci, na.rm = TRUE))
+        bexp <- expression(b[i] <- sum(bi, na.rm = TRUE) / sum(ci, na.rm = TRUE))
 
     for (i in nlevels:1)
     {
@@ -206,10 +206,10 @@ hierarc <- function(ratios, weights, classification,
 
         ## Latest non-zero between variance estimate -- the one used
         ## in the estimator and in the credibility factors.
-        between <- bu[bu != 0][1]
+        between <- b[b != 0][1]
 
         ## Calculation of the per node variance estimate.
-        bui <- as.vector(tapply(tweights[[i + 1]] *
+        bi <- as.vector(tapply(tweights[[i + 1]] *
                                 (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2,
                                 fnodes[[i]],
                                 sum)) -
@@ -225,9 +225,9 @@ hierarc <- function(ratios, weights, classification,
         ## replaced by the sum of the credibility factors and the
         ## weighted averages are recomputed with these new weights.
         #if (max(bu[i], 0))           # don't compute negative factors!
-        if (bu[i])
+        if (b[i])
         {
-            cred[[i]] <- 1/(1 + between/(bu[i] * tweights[[i + 1]]))
+            cred[[i]] <- 1/(1 + between/(b[i] * tweights[[i + 1]]))
             tweights[[i]] <- as.vector(tapply(cred[[i]], fnodes[[i]], sum))
             wmeans[[i]] <-
                 ifelse(tweights[[i]] > 0,
@@ -254,19 +254,17 @@ hierarc <- function(ratios, weights, classification,
     ## the current level.
     if (method == "iterative")
     {
-        bi <- pmax(bu, 0)       # truncation for starting values
-        if (any(head(bi, -1)))  # at least one non-zero starting value
-            .External("do_hierarc", cred, tweights, wmeans, fnodes, denoms, bi, tol, maxit, echo)
+        b <- pmax(b, 0)         # truncation for starting values
+        if (any(head(b, -1)))   # at least one non-zero starting value
+            .External("do_hierarc", cred, tweights, wmeans, fnodes, denoms,
+                      b, tol, maxit, echo)
     }
-    else
-        bi <- NULL
-
 
     ## Results
     structure(list(means = wmeans,
                    weights = tweights,
-                   unbiased = bu,
-                   iterative = bi,
+                   unbiased = if (method = "unbiased") b,
+                   iterative = if (method = "iterative") b,
                    cred = cred,
                    nodes = nnodes,
                    classification = classification[, -1],
