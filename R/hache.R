@@ -43,6 +43,17 @@ hache <- function(ratios, weights, xreg, adj.intercept = FALSE,
     p <- ncol(xreg)               	# rank (>= 2) of design matrix
     n <- NROW(xreg)                     # number of observations
 
+#    for (i in seq_len(ncontracts))
+#    {
+#        for (j in seq_len(n))
+#        {
+#            if (is.na(ratios[i,j]))
+#                ratios[i,j] <- 0
+#            if (is.na(weights[i,j]))
+#                weights[i,j] <- 0
+#        }
+#    }
+
     ## To put the intercept at the barycenter of time, transform the
     ## design matrix into a "weighted orthogonal" matrix.
     x <-
@@ -60,6 +71,7 @@ hache <- function(ratios, weights, xreg, adj.intercept = FALSE,
     {
     	z <-
             if (i %in% has.data)            # contract with data
+                #lm(ratios[i,] ~ x, weights = weights[i,], na.action = na.exclude)
                 lm.wfit(x, ratios[i, ], weights[i, ])
             else                            # contract with no data
                 lm.fit(x, rep.int(0, n))
@@ -186,7 +198,7 @@ hache <- function(ratios, weights, xreg, adj.intercept = FALSE,
         ## variance-covariance matrix A using the Buhlmann-Straub
         ## estimators (see bstraub.R for details).
         for (i in seq_len(p))
-            A[i, i] <- bvar.unbiased(ind[i, has.data], W[i, i, has.data],
+            A[i, i] <- bvar.unbiased(ind[i, has.data], 1 / W[i, i, has.data],
                                      s2, eff.ncontracts)
 
         if (method == "iterative" &&
@@ -196,7 +208,7 @@ hache <- function(ratios, weights, xreg, adj.intercept = FALSE,
             {
                 A[i, i] <-
                     if (A[i, i] > 0)
-                        bvar.iterative(ind[i, has.data], W[i, i, has.data],
+                        bvar.iterative(ind[i, has.data], 1 / W[i, i, has.data],
                                        s2, eff.ncontracts, start = A[i, i],
                                        tol = tol, maxit = maxit, echo = echo)
                     else
@@ -210,13 +222,13 @@ hache <- function(ratios, weights, xreg, adj.intercept = FALSE,
         {
             if (A[i, i] > 0)
             {
-                z <- cred[i, i, has.data] <- 1/(1 + s2/(W[i, i, has.data] * A))
+                z <- cred[i, i, has.data] <- 1/(1 + (s2 * W[i, i, has.data]) / A[i, i])
                 coll[i] <- drop(crossprod(z, ind[i, has.data])) / sum(z)
             }
             else
             {
                 cred[i, i, ] <- numeric(ncontracts)
-                w <- W[i, i, has,data]
+                w <- 1 / W[i, i, has,data]
                 coll[i] <- drop(crossprod(w, ind[i, ])) / sum(w)
             }
         }
@@ -225,9 +237,15 @@ hache <- function(ratios, weights, xreg, adj.intercept = FALSE,
     ## Add names to the collective coefficients vector.
     names(coll) <- rownames(ind)
 
+    ## Credibility adjusted coefficients. The coefficients of the
+    ## models are replaced with these values. That way, prediction
+    ## will be trivial using predict.lm().
+    for (i in seq_len(ncontracts))
+        fits[[i]]$coefficients <- coll + drop(cred[, , i] %*% (ind[, i] - coll))
+
     ## Results
     structure(list(means = list(coll, ind),
-                   weights = list(cred.s, W),
+                   weights = list(1 / W),
                    unbiased = if (method == "unbiased") list(A, s2),
                    iterative = if (method == "iterative") list(A, s2),
                    cred = cred,
