@@ -43,24 +43,16 @@ hache <- function(ratios, weights, xreg, adj.intercept = FALSE,
     p <- ncol(xreg)               	# rank (>= 2) of design matrix
     n <- NROW(xreg)                     # number of observations
 
-#    for (i in seq_len(ncontracts))
-#    {
-#        for (j in seq_len(n))
-#        {
-#            if (is.na(ratios[i,j]))
-#                ratios[i,j] <- 0
-#            if (is.na(weights[i,j]))
-#                weights[i,j] <- 0
-#        }
-#    }
-
     ## To put the intercept at the barycenter of time, transform the
     ## design matrix into a "weighted orthogonal" matrix.
     x <-
         if (adj.intercept)
         {
             w <- colSums(weights, na.rm = TRUE)/sum(weights.s)
-            qr.Q(qr(sqrt(w) * xreg)) / sqrt(w)
+            ## QR decomposition of the design matrix : X = QR
+            Xwqr <- qr(xreg * sqrt(w))          # object qr
+            Rw <- qr.R(Xwqr)                    # transition matrix R
+            qr.Q(qr(sqrt(w) * xreg)) / sqrt(w)  ## orthogonal matrix Q
         }
         else
             xreg
@@ -71,7 +63,6 @@ hache <- function(ratios, weights, xreg, adj.intercept = FALSE,
     {
     	z <-
             if (i %in% has.data)            # contract with data
-                #lm(ratios[i,] ~ x, weights = weights[i,], na.action = na.exclude)
                 lm.wfit(x, ratios[i, ], weights[i, ])
             else                            # contract with no data
                 lm.fit(x, rep.int(0, n))
@@ -228,7 +219,7 @@ hache <- function(ratios, weights, xreg, adj.intercept = FALSE,
             else
             {
                 cred[i, i, ] <- numeric(ncontracts)
-                w <- 1 / W[i, i, has,data]
+                w <- 1 / W[i, i, has.data]
                 coll[i] <- drop(crossprod(w, ind[i, ])) / sum(w)
             }
         }
@@ -241,7 +232,16 @@ hache <- function(ratios, weights, xreg, adj.intercept = FALSE,
     ## models are replaced with these values. That way, prediction
     ## will be trivial using predict.lm().
     for (i in seq_len(ncontracts))
+    {
         fits[[i]]$coefficients <- coll + drop(cred[, , i] %*% (ind[, i] - coll))
+        if (adj.intercept)   # change basis to come back at the basis of the beginning
+            fits[[i]]$coefficients <- solve(Rw) %*% fits[[i]]$coefficients
+    }
+    if (adj.intercept)
+    {
+        ind <- solve(Rw) %*% ind    # change basis
+        coll <- solve(Rw) %*% coll  # change basis
+    }
 
     ## Results
     structure(list(means = list(coll, ind),
@@ -253,6 +253,30 @@ hache <- function(ratios, weights, xreg, adj.intercept = FALSE,
                    nodes = list(ncontracts)),
               class = "hache",
               model = "regression")
+}
+
+plot.hache <- function(x, contractNo)
+{
+    ## Plot an object of class "hache", and particularly 3 regression lines
+    ## *the collective regression line (blue) : evolution of the premium of the portfolio,
+    ## *the individual one (red) : the same for the given contract,
+    ## *the credibility regression line (green) : useful to check it lies between the two first
+    ## I / O : object and no of the contract / the plot associated
+    mu_ind <- mu_coll <- mu_cred <- numeric(ncol(weights))
+    for (i in 1:ncol(weights))
+    {
+        mu_ind[i] <- x$means[[2]][1, contractNo] + i * x$means[[2]][2, contractNo]
+        mu_coll[i] <- x$means[[1]][1] + i * x$means[[1]][2]
+        mu_cred[i] <- x$adj.models[[contractNo]]$coefficients[1] +
+            i * x$adj.models[[contractNo]]$coefficients[2]
+    }
+    ylim = range(c(mu_ind, mu_coll))
+    plot(1:ncol(weights), ratios[contractNo, ], type = "p",
+         ylim = extendrange(r = ylim, f = 0.05),
+         xlab = "contract", ylab = "premiums")
+    lines(1:ncol(weights), mu_ind, col = "red")
+    lines(1:ncol(weights), mu_coll, col = "blue")
+    lines(1:ncol(weights), mu_cred, col = "green")
 }
 
 predict.hache <- function(object, levels = NULL, newdata, ...)
