@@ -255,30 +255,6 @@ hache <- function(ratios, weights, xreg, adj.intercept = FALSE,
               model = "regression")
 }
 
-plot.hache <- function(x, contractNo)
-{
-    ## Plot an object of class "hache", and particularly 3 regression lines
-    ## *the collective regression line (blue) : evolution of the premium of the portfolio,
-    ## *the individual one (red) : the same for the given contract,
-    ## *the credibility regression line (green) : useful to check it lies between the two first
-    ## I / O : object and no of the contract / the plot associated
-    mu_ind <- mu_coll <- mu_cred <- numeric(ncol(weights))
-    for (i in 1:ncol(weights))
-    {
-        mu_ind[i] <- x$means[[2]][1, contractNo] + i * x$means[[2]][2, contractNo]
-        mu_coll[i] <- x$means[[1]][1] + i * x$means[[1]][2]
-        mu_cred[i] <- x$adj.models[[contractNo]]$coefficients[1] +
-            i * x$adj.models[[contractNo]]$coefficients[2]
-    }
-    ylim = range(c(mu_ind, mu_coll))
-    plot(1:ncol(weights), ratios[contractNo, ], type = "p",
-         ylim = extendrange(r = ylim, f = 0.05),
-         xlab = "contract", ylab = "premiums")
-    lines(1:ncol(weights), mu_ind, col = "red")
-    lines(1:ncol(weights), mu_coll, col = "blue")
-    lines(1:ncol(weights), mu_cred, col = "green")
-}
-
 predict.hache <- function(object, levels = NULL, newdata, ...)
 {
     ## Prediction (credibility premiums) using predict.lm() on each of
@@ -295,3 +271,59 @@ predict.hache <- function(object, levels = NULL, newdata, ...)
 
 print.hache <- function(x, ...)
     print.default(x)
+
+plot.hache <- function(x, contractNo, from = NULL, to = NULL, n = 101,
+                       add = FALSE, xlab = "time", ylab = "premiums",
+                       main = "Evolution of the premiums")
+{
+    ## Plot an object of class "hache", and particularly 3 regression lines
+    ## *the collective regression line (blue) : evolution of the premium of the portfolio,
+    ## *the individual one (red) : the same for the given contract,
+    ## *the credibility regression line (green) : useful to check it lies between the two first.
+
+    mu_ind <- mu_coll <- mu_cred <- numeric(n)
+    ## degree of the regression (ex : quadratic => degree = 2)
+    degree <- length(x$means[[1]]) - 1
+    abscisses <- seq(from = from, to = to, length.out = n)
+    comp.premium.individual <- function(abscisses)
+    {
+        ## compute values of the individual regression line
+        for (i in 1:n)
+        {
+            mu_ind[i] <- x$means[[2]][1, contractNo]
+            for (j in 1:degree)
+                mu_ind[i] <- mu_ind[i] + abscisses[i]^j * x$means[[2]][j+1, contractNo]
+        }
+        mu_ind
+    }
+    comp.premium.collective <- function(abscisses)
+    {
+        for (i in 1:n)
+        {
+            mu_coll[i] <- x$means[[1]][1]
+            for (j in 1:degree)
+                mu_coll[i] <- mu_coll[i] + abscisses[i]^j * x$means[[1]][j+1]
+        }
+        mu_coll
+    }
+    comp.premium.credibility <- function(abscisses)
+    {
+        for (i in 1:n)
+        {
+            mu_cred[i] <- x$adj.models[[contractNo]]$coefficients[1]
+            for (j in 1:degree)
+                mu_cred[i] <- mu_cred[i] + abscisses[i]^j * x$adj.models[[contractNo]]$coefficients[j+1]
+        }
+        mu_cred
+    }
+    mu_ind <- comp.premium.individual(abscisses)
+    mu_coll <- comp.premium.collective(abscisses)
+    ylim = range(c(mu_ind, mu_coll))
+    ## plots
+    curve(comp.premium.individual, from = from, to = to, n = n, col = "red",
+          add = add, xlab = xlab, ylab = ylab, main = main, ylim = ylim)
+    curve(comp.premium.collective, from = from, to = to, n = n, col = "blue",
+          add = TRUE, xlab = xlab, ylab = ylab, main = main, ylim = ylim)
+    curve(comp.premium.credibility, from = from, to = to, n = n, col = "green",
+          add = TRUE, xlab = xlab, ylab = ylab, main = main, ylim = ylim)
+}
