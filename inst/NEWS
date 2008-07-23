@@ -5,6 +5,13 @@ Version 0.9-8
 
 NEW FEATURES
 
+  o Improved support for regression credibility models. There is now
+    an option to make the computations with the intercept at the
+    barycenter of time. This assures that the credibility adjusted
+    regression line (or plane, or ...) lies between the individual and
+    collective ones. In addition, contracts without data are now
+    supported like in other credibility models.
+
   o New argument 'right' for grouped.data() to allow intervals closed
     on the right (default) or on the left.
 

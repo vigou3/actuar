@@ -114,14 +114,14 @@ cm <- function(formula, data, ratios, weights, subset,
     ## models by hache() and hierarcahical models by hierarc().
     if (nlevels < 2)                    # one-dimensional model
     {
+        ## One-dimensional models accept only "unbiased" and
+        ## "iterative" for argument 'method'.
+        method <- match.arg(method)
+        if (method == "Buhlmann-Gisler" || method == "Ohlsson")
+            method <- "unbiased"
+
         if (is.null(regformula))        # Buhlmann-Straub
         {
-            ## bstraub() accepts only "unbiased" and "iterative" for
-            ## argument 'method'.
-            method <- match.arg(method)
-            if (method == "Buhlmann-Gisler" || method == "Ohlsson")
-                method <- "unbiased"
-
             ## *** The 'old.format = FALSE' argument is necessary in
             ## *** the deprecation phase of the output format of
             ## *** bstraub(). To delete later.
@@ -131,20 +131,11 @@ cm <- function(formula, data, ratios, weights, subset,
         }
         else                            # Hachemeister
         {
-            ## hache() accepts only "unbiased" and "iterative" for
-            ## argument 'method'.
-            method <- match.arg(method)
-            if (method == "Buhlmann-Gisler" || method == "Ohlsson")
-                method <- "unbiased"
-
-            ## Build the design matrix to pass to hache(). If
-            ## regression model is actually empty or has only an
+            ## If regression model is actually empty or has only an
             ## intercept, call bstraub().
-            mf <- model.frame(regformula, regdata,
-                              drop.unused.levels = TRUE)
-            mt <- attr(mf, "terms")
+            trf <- terms(regformula)
             res <-
-                if (length(attr(mt, "factors")) == 0)
+                if (length(attr(trf, "factors")) == 0)
                 {
                     warning("empty regression model; fitting with Buhlmann-Straub's model")
                     bstraub(ratios, weights, method = method,
@@ -152,18 +143,13 @@ cm <- function(formula, data, ratios, weights, subset,
                             old.format = FALSE)
                 }
                 else
-                {
-                    xreg <- model.matrix(mt, mf)
-                    hache(ratios, weights, xreg,
+                    hache(ratios, weights, regformula, regdata,
                           adj.intercept = adj.intercept,
                           method = method, tol = tol,
                           maxit = maxit, echo = echo)
-                }
-            res$terms <- mt
         }
 
-        ## Add quantities not taken into account in calculation
-        ## functions to results list.
+        ## Add missing quantities to results.
         res$classification <- levs
         res$ordering <- list(seq_along(levs))
     }

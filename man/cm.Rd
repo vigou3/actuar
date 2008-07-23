@@ -84,11 +84,13 @@ cm(formula, data, ratios, weights, subset,
   \code{data}. In general, the formula should be of the form \eqn{~ a +
   a:b + a:b:c + a:b:c:d + ...}.
 
-  If argument \code{xreg} is not \code{NULL}, the regression model of
-  Hachemeister will be fit to data. Hierarchical classification
-  structures are not supported with this model. Regression models
-  fitting is currently less robust than hierarchical models fitting. In
-  particular, one should avoid nodes with no data.
+  If argument \code{regformula} is not \code{NULL}, the regression model
+  of Hachemeister is fit to the data. The response is usually time. By
+  default, the intercept of the model is located at time origin. If
+  argument \code{adj.intercept} is \code{TRUE}, the intercept is moved
+  to the (collective) barycenter of time, by orthogonalization of the
+  design matrix. Note that the regression coefficients may be difficult
+  to interpret in this case.
 
   Arguments \code{ratios}, \code{weights} and \code{subset} are used
   like arguments \code{select}, \code{select} and \code{subset},
@@ -124,13 +126,15 @@ cm(formula, data, ratios, weights, subset,
   regression coefficients, \eqn{Z_i}{Z[i]} is the credibility matrix and
   \eqn{I} is the identity matrix. The credibility matrix of node \eqn{i}
   is equal to
-  \deqn{\frac{W_i}{W_i + s^2/A},}{W[i]/(W[i] + s2/A),}
-  where \eqn{W_i}{W[i]} is the unscaled regression covariance matrix of
+  \deqn{A^{-1} (A + s^2 S_i),}{A^(-1) (A + s2 S[i]),}
+  where \eqn{S_i}{S[i]} is the unscaled regression covariance matrix of
   the node, \eqn{s^2}{s2} is the average within node variance and
   \eqn{A} is the within node covariance matrix.
 
-  If argument \code{xreg} is a matrix, it is strongly recommended to
-  name the columns.
+  If the intercept is positioned at the barycenter of time, matrices
+  \eqn{S_i}{S[i]} and \eqn{A} (and hence \eqn{Z_i}{Z[i]}) are diagonal.
+  This amounts to use \enc{Bühlmann}{Buhlmann}-Straub models for each
+  regression coefficient.
 
   Argument \code{newdata} provides the \dQuote{future} value of the
   regressors for prediction purposes. It should be given as specified in
@@ -184,8 +188,11 @@ cm(formula, data, ratios, weights, subset,
   level minus the effective number of nodes of the level above. The
   Ohlsson estimators are used as starting values.
 
-  For regression models, only iterative estimators are available, hence
-  argument \code{method} is not taken into account.
+  For regression models, with the intercept at time origin, only
+  iterative estimators are available. If \code{method} is different from
+  \code{"iterative"}, a warning is issued. With the intercept at the
+  barycenter of time, the choice of estimators is the same as in the
+  \enc{Bühlmann}{Buhlmann}-Straub model.
 }
 \value{
   Function \code{cm} computes the structure parameters estimators of the
@@ -216,6 +223,9 @@ cm(formula, data, ratios, weights, subset,
   \item{adj.models}{a list containing, for each node, the credibility
     adjusted regression model as obtained with
     \code{\link[stats]{lm.fit}} or \code{\link[stats]{lm.wfit}}.}
+  \item{transition}{if \code{adj.intercept} is \code{TRUE}, a transition
+    matrix from the basis of the orthogonal design matrix to the basis
+    of the original design matrix.}
   \item{terms}{the \code{\link[stats]{terms}} object used.}
 
   The method of \code{predict} for objects of class \code{"cm"} computes
@@ -237,7 +247,7 @@ cm(formula, data, ratios, weights, subset,
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
-  Tommy Ouellet, Louis-Philippe Pouliot
+  Xavier Milhaud, Tommy Ouellet, Louis-Philippe Pouliot
 }
 \seealso{
   \code{\link[base]{subset}}, \code{\link[base]{formula}},
@@ -270,5 +280,12 @@ fit
 predict(fit, newdata = data.frame(time = 0))
 summary(fit, newdata = data.frame(time = 0))
 
+## Same regression model, with intercept at barycenter of time
+fit <- cm(~state, hachemeister, adj.intercept = TRUE,
+          regformula = ~time, regdata = data.frame(time = 12:1),
+          ratios = ratio.1:ratio.12, weights = weight.1:weight.12)
+fit
+predict(fit, newdata = data.frame(time = 0))
+summary(fit, newdata = data.frame(time = 0))
 }
 \keyword{models}

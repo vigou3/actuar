@@ -304,7 +304,7 @@ weighted average of an entity's regression parameters and the group's
 parameters.
 
 In order to use \code{cm} to fit a credibility regression model to a
-data set, one has to supply, ia arguments \code{regformula} and
+data set, one has to supply in arguments \code{regformula} and
 \code{regdata}, a regression model and a data frame of regressors much
 like with function \code{lm}. One difference is that the regression
 model formula does not need to have a left hand side. For example,
