@@ -90,7 +90,7 @@ print.hache <- function(x, ...)
 
 plot.hache <- function(x, contractNo, from = NULL, to = NULL, n = 101,
                        add = FALSE, xlab = "time", ylab = "premiums",
-                       main = "Evolution of the premiums")
+                       main = NULL)
 {
     ## Plot an object of class "hache", and particularly 3 regression
     ## lines:
