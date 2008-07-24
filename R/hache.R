@@ -94,10 +94,24 @@ plot.hache <- function(x, contractNo, from = NULL, to = NULL, n = 101,
 {
     ## Plot an object of class "hache", and particularly 3 regression
     ## lines:
-    ##
     ## * the collective regression line (blue)
     ## * the individual one (red)
     ## * the credibility regression line (green)
+
+    ## If model was fitted at the barycenter of time (there is a
+    ## transition matrix in the object), then also convert the
+    ## regression coefficients in the base of the (original) design
+    ## matrix.
+    if (!is.null(R <- x$transition))
+    {
+        x$means[[1]] <- solve(R, x$means[[1]])
+        x$means[[2]] <- solve(R, x$means[[2]])
+        for (i in seq_along(x$adj.models))
+        {
+            b <- coefficients(x$adj.models[[i]])
+            x$adj.models[[i]]$coefficients <- solve(R, b)
+        }
+    }
 
     mu_ind <- mu_coll <- mu_cred <- numeric(n)
     ## degree of the regression (ex : quadratic => degree = 2)
