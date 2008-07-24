@@ -24,26 +24,30 @@ hache.origin <- function(ratios, weights, xreg, tol, maxit, echo)
             {
                 y <- ratios[i, ]
                 not.na <- !is.na(y)
-                lm.wfit(xreg[not.na, ], y[not.na], weights[i, not.na])
+                lm.wfit(xreg[not.na, , drop = FALSE], y[not.na], weights[i, not.na])
             }
             else                            # contract without data
-                lm.fit(x, rep.int(0, n))
+                lm.fit(xreg, rep.int(0, n))
         z[c("coefficients", "residuals", "weights", "rank", "qr")]
     }
     fits <- lapply(seq_len(ncontracts), f)
 
     ## Individual regression coefficients
     ind <- sapply(fits, coef)
+    ind[is.na(ind)] <- 0
 
     ## Individual variance estimators. The contribution of contracts
     ## without data is 0.
     S <- function(z)                    # from stats:::summary.lm
     {
+        nQr <- NROW(z$qr$qr)
+        r1 <- z$rank
         r <- z$residuals
         w <- z$weights
-        sum(w * r^2) / (n - p)
+        sum(w * r^2) / (nQr - r1)
     }
     sigma2 <- sapply(fits[has.data], S)
+    sigma2[is.nan(sigma2)] <- 0
 
     ## Initialization of a few containers: p x p x ncontracts arrays
     ## for the weight and credibility matrices; p x p matrices for the
@@ -55,7 +59,13 @@ hache.origin <- function(ratios, weights, xreg, tol, maxit, echo)
     ## Weight matrices: we use directly (X'WX)^{-1}. This is quite
     ## different from hache.barycenter().
     V <- function(z)                # from stats:::summary.lm
-        chol2inv(z$qr$qr[1:p, 1:p, drop = FALSE])
+    {
+        r1 <- z$rank
+        if (r1 == 1)
+            diag(as.real(chol2inv(z$qr$qr[1, 1, drop = FALSE])), p)
+        else
+            chol2inv(z$qr$qr[1:r1, 1:r1, drop = FALSE])
+    }
     W[, , has.data] <- sapply(fits[has.data], V)
 
     ## Starting credibility matrices and collective regression
