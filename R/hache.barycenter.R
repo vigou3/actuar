@@ -41,7 +41,7 @@ hache.barycenter <- function(ratios, weights, xreg, method,
             {
                 y <- ratios[i, ]
                 not.na <- !is.na(y)
-                lm.wfit(x[not.na, ], y[not.na], weights[i, not.na])
+                lm.wfit(x[not.na, , drop = FALSE], y[not.na], weights[i, not.na])
             }
             else                            # contract without data
                 lm.fit(x, rep.int(0, n))
@@ -51,16 +51,20 @@ hache.barycenter <- function(ratios, weights, xreg, method,
 
     ## Individual regression coefficients
     ind <- sapply(fits, coef)
+    ind[is.na(ind)] <- 0
 
     ## Individual variance estimators. The contribution of contracts
     ## without data is 0.
     S <- function(z)                    # from stats:::summary.lm
     {
+        nQr <- NROW(z$qr$qr)
+        rank <- z$rank
         r <- z$residuals
         w <- z$weights
-        sum(w * r^2) / (n - p)
+        sum(w * r^2) / (nQr - rank)
     }
     sigma2 <- sapply(fits[has.data], S)
+    sigma2[is.nan(sigma2)] <- 0
 
     ## Initialization of a few containers: p x p x ncontracts arrays
     ## for the weight and credibility matrices; p x p matrices for the
@@ -82,7 +86,7 @@ hache.barycenter <- function(ratios, weights, xreg, method,
             colSums(t(weights[has.data, ]) * x[, i]^2, na.rm = TRUE)
 
     ## === ESTIMATION OF THE WITHIN VARIANCE ===
-    s2 <- sum(sigma2) / eff.ncontracts
+    s2 <- mean(sigma2)
 
     ## === ESTIMATION OF THE BETWEEN VARIANCE-COVARIANCE MATRIX ===
     ##
