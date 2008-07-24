@@ -312,3 +312,44 @@ print.summary.cm <- function(x, ...)
     }
     invisible(x)
 }
+
+## Function not totally implemented : only the Hachemeister model
+## can be "plotted". see credibility.R in demo/ for its use.
+## Based on plot.lm in lm.R
+plot.cm <- function (x, which = c(1,2,3),
+                     caption = c("Ratio within/between variance in Buhlmann-Straub model",
+                     "Evolution of the premiums with the Hachemeister model",
+                     "Ratio within/between variance ina hierarchical model"),
+                     contractNo = NULL, from = NULL, to = NULL,
+                     method = c("iterative", "unbiased"),
+                     panel = if(add.smooth) panel.smooth else points,
+                     main = "", ...,
+                     label.pos = c(4,2), cex.caption = 1)
+{
+    if (!inherits(x, "cm"))
+	stop("use only with \"cm\" objects")
+    if (!is.numeric(which) || (any(which) < 1) ||(any(which) > 3))
+	stop("'which' must be one of the three models required")
+
+    require(graphics)
+    show <- rep(FALSE, 3)
+    show[which] <- TRUE
+
+    ##---------- Do the individual plots : ----------
+    if (show[1] || show[3])   ## Buhlmann-Straub or hierarc models
+    {
+        method <- match.arg(method)
+        if (method == "iterative")
+            mat <- rbind(x$iterative[[1]][1,1], x$iterative[[2]])
+        else
+            mat <- rbind(x$unbiased[[1]][1,1], x$unbiased[[2]])
+        ## draw a barplot with extreme values equals to within and
+        ## between variance. The larger it is, the less homogeneous
+        ## the portfolio is.
+        boxplot(as.data.frame(mat), col = "grey", main = caption[2],
+                xlab = "portfolio", ylab = "variance")
+    }
+    if (show[2])    ## Hachemeister model
+        plot.hache(x, contractNo, from = from, to = to,
+                   main = caption[2])
+}
