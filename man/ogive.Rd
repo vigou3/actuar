@@ -37,13 +37,14 @@ ogive(x, y = NULL, \dots)
   distribution function.
 
   The equation of the ogive is
-  \deqn{F_n(x) = \frac{(c_j - x) F_n(c_{j-1}) +
-      (x - c_{j-1}) F_n(c_j)}{c_j - c_{j - 1}}}{%
-    Fn(x) = ((c[j] - x) Fn(c[j-1]) +
+  \deqn{G_n(x) = \frac{(c_j - x) F_n(c_{j - 1}) +
+      (x - c_{j - 1}) F_n(c_j)}{c_j - c_{j - 1}}}{%
+    Gn(x) = ((c[j] - x) Fn(c[j-1]) +
     (x - c[j-1]) Fn(c[j]))/(c[j] - c[j-1])}
   for \eqn{c_{j-1} < x \leq c_j}{c[j-1] < x <= c[j]} and where
   \eqn{c_0, \dots, c_r}{c[0], \dots, c[r]} are the \eqn{r + 1} group
-  boundaries.
+  boundaries and \eqn{F_n}{Fn} is the empirical distribution function of
+  the sample.
 }
 \value{
   For \code{ogive}, a function of class \code{"ogive"}, inheriting from the
@@ -55,6 +56,7 @@ ogive(x, y = NULL, \dots)
 }
 \seealso{
   \code{\link{grouped.data}} to create grouped data objects;
+  \code{\link{quantile.grouped.data}} for the inverse function;
   \code{\link{approxfun}}, which is used to compute the ogive;
   \code{\link{stepfun}} for related documentation (even though the ogive
   is not a step function).

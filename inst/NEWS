@@ -12,8 +12,11 @@ NEW FEATURES
     collective ones. In addition, contracts without data are now
     supported like in other credibility models.
 
-  o New argument 'right' for grouped.data() to allow intervals closed
-    on the right (default) or on the left.
+  o Argument 'right' for grouped.data() to allow intervals closed on
+    the right (default) or on the left.
+
+  o Method of quantile() for grouped data objects to compute the
+    inverse of the ogive.
 
 USER-VISIBLE CHANGES
 

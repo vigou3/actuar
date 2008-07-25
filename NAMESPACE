@@ -97,6 +97,7 @@ S3method(print, summary.aggregateDist)
 S3method(print, summary.cm)
 
 S3method(quantile, aggregateDist)
+S3method(quantile, grouped.data)
 
 S3method(severity, default)
 S3method(severity, portfolio)
