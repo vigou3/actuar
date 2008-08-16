@@ -24,7 +24,7 @@ simS <- function(n, model.freq, model.sev)
     x <- sort(x)
     vals <- unique(x)
     fs <- tabulate(match(x, vals))/length(x)
-    FUN <- approxfun(vals, cumsum(fs), method = "constant",
+    FUN <- approxfun(vals, pmin(cumsum(fs), 1), method = "constant",
                      yleft = 0, yright = 1, f = 0, ties = "ordered")
     class(FUN) <- c("ecdf", "stepfun", class(FUN))
     assign("fs", fs, envir = environment(FUN))

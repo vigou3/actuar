@@ -11,7 +11,8 @@ quantile.grouped.data <- function(x, probs = seq(0, 1, 0.25),
     x <- eval(expression(cj), env = environment(x))
 
     ## Inverse of the ogive
-    fun <- approxfun(cumsum(c(0, y))/sum(y), x, yleft = 0, yright = 1,
+    fun <- approxfun(c(0, cumsum(y))/sum(y), x,
+                     yleft = min(x), yright = max(x),
                      method = "linear", ties = "ordered")
 
     ## Quantiles

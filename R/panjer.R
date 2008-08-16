@@ -107,7 +107,7 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
 
     fs <- .External("do_panjer", p0, p1, fs0, fx, a, b, tol, maxit, echo)
 
-    FUN <- approxfun((0:(length(fs) - 1)) * x.scale, cumsum(fs),
+    FUN <- approxfun((0:(length(fs) - 1)) * x.scale, pmin(cumsum(fs), 1),
                      method = "constant", yleft = 0, yright = 1, f = 0,
                      ties = "ordered")
     class(FUN) <- c("ecdf", "stepfun", class(FUN))

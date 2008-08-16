@@ -1,6 +1,6 @@
 === actuar: an R package for Actuarial Science ===
 
-Version 0.9-8
+Version 1.0-0
 =============
 
 NEW FEATURES
@@ -37,6 +37,8 @@ BUG FIXES
 
   o frequency.portfolio was wrongly counting NAs.
 
+  o Domain of pdfs returned by aggregateDist() now restricted to
+    [0, 1].
 
 Version 0.9-7
 =============
