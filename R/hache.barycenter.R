@@ -143,10 +143,12 @@ hache.barycenter <- function(ratios, weights, xreg, method,
     names(coll) <- rownames(ind)
 
     ## Results
-    list(means = list(coll, ind),
+    list(ratios = ratios,
+         means = list(coll, ind),
          weights = list(W.s, W),
          unbiased = if (method == "unbiased") list(A, s2),
          iterative = if (method == "iterative") list(A, s2),
+         withinVar = sigma2,
          cred = cred,
          nodes = list(ncontracts),
          adj.models = fits,

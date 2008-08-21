@@ -262,6 +262,7 @@ fit <- cm(~state, hachemeister,
 fit				# print method
 predict(fit)			# credibility premiums
 summary(fit)			# more details
+plot.cm(fit, levels = NULL, node = 2, which = 1:2, from = NULL, to = NULL)
 
 ## Two-level hierarchical model. Notice that data does not have
 ## to be sorted by level
@@ -279,6 +280,7 @@ fit <- cm(~state, hachemeister,
 fit
 predict(fit, newdata = data.frame(time = 0))
 summary(fit, newdata = data.frame(time = 0))
+plot.cm(fit, levels = NULL, node = 4, which = 1:2, from = 1, to = 12)
 
 ## Same regression model, with intercept at barycenter of time
 fit <- cm(~state, hachemeister, adj.intercept = TRUE,
@@ -287,5 +289,6 @@ fit <- cm(~state, hachemeister, adj.intercept = TRUE,
 fit
 predict(fit, newdata = data.frame(time = 0))
 summary(fit, newdata = data.frame(time = 0))
+plot.cm(fit, levels = NULL, node = 4, which = 1:2, from = 1, to = 12)
 }
 \keyword{models}

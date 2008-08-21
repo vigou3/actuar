@@ -313,43 +313,56 @@ print.summary.cm <- function(x, ...)
     invisible(x)
 }
 
-## Function not totally implemented : only the Hachemeister model
-## can be "plotted". see credibility.R in demo/ for its use.
-## Based on plot.lm in lm.R
-plot.cm <- function (x, which = c(1,2,3),
-                     caption = c("Ratio within/between variance in Buhlmann-Straub model",
-                     "Evolution of the premiums with the Hachemeister model",
-                     "Ratio within/between variance ina hierarchical model"),
-                     contractNo = NULL, from = NULL, to = NULL,
-                     method = c("iterative", "unbiased"),
-                     panel = if(add.smooth) panel.smooth else points,
-                     main = "", ...,
-                     label.pos = c(4,2), cex.caption = 1)
+## Plots one of the three following models : B-S, hierarchical or
+## Hachemeister model. see credibility.R in demo/ for its use.
+## Inspired from plot.lm() in library/stats/R/plot.lm.R.
+## Two different plots are available for each model :
+##    * the plot of the premium lines and their prediction,
+##    * the plot representing the heterogeneity of the portfolio.
+## Arguments "level" and "node" determine the data to be seen :
+## - if level = NULL then node = no. contract in the B-S and Hachemeister models,
+## - if level != NULL then apply the hierarchical model :
+plot.cm <- function (x, levels = NULL, node, which = c(1,2),
+                     caption = c("Premium lines and prediction",
+                     "Heterogeneity of the portfolio"),
+                     from = NULL, to = NULL,
+                     main = "", ..., cex.caption = 1)
 {
     if (!inherits(x, "cm"))
 	stop("use only with \"cm\" objects")
-    if (!is.numeric(which) || (any(which) < 1) ||(any(which) > 3))
-	stop("'which' must be one of the three models required")
+    if (!is.numeric(which) || any(which < 1) || any(which > 2))
+	stop("'which' must be in 1:2")
+    if (is.null(levels) && is.null(node))
+        stop("you have to specify at least the node ( = contract)")
 
     require(graphics)
-    show <- rep(FALSE, 3)
+    show <- rep(FALSE, 2)
     show[which] <- TRUE
 
     ##---------- Do the individual plots : ----------
-    if (show[1] || show[3])   ## Buhlmann-Straub or hierarc models
+    obj <- class(x)[2]
+    if (show[1])
     {
-        method <- match.arg(method)
-        if (method == "iterative")
-            mat <- rbind(x$iterative[[1]][1,1], x$iterative[[2]])
-        else
-            mat <- rbind(x$unbiased[[1]][1,1], x$unbiased[[2]])
-        ## draw a barplot with extreme values equals to within and
-        ## between variance. The larger it is, the less homogeneous
-        ## the portfolio is.
-        boxplot(as.data.frame(mat), col = "grey", main = caption[2],
-                xlab = "portfolio", ylab = "variance")
+        switch(obj,
+               bstraub = plot.bstraub(x, contractNo = node, type = "predictions",
+                                      main = caption[1]),
+               hache = plot.hache(x, contractNo = node, type = "predictions",
+                                  from = from, to = to, main = paste(caption[1], " (contract ", node, ")(Hachem. model)")),
+               hierarc = plot.hierarc(x, levels = levels, node = node, type = "predictions",
+                                      main = caption[1]))
+
+        if (show[2])
+        {
+            par(ask = TRUE)
+            plot.new()
+            switch(obj,
+                   bstraub = plot.bstraub(x, contractNo = node, type = "heterogeneity",
+                                          main = caption[2]),
+                   hache = plot.hache(x, contractNo = node, type = "heterogeneity",
+                                      main = caption[2]),
+                   hierarc = plot.hierarc(x, levels = levels, node = node, type = "heterogeneity",
+                                          main = caption[2]))
+        }
     }
-    if (show[2])    ## Hachemeister model
-        plot.hache(x, contractNo, from = from, to = to,
-                   main = caption[2])
+    invisible(x)
 }

@@ -327,6 +327,56 @@ values of the regressors as in \code{predict.lm}:
 predict(fit, newdata = data.frame(time = 0))
 @
 
+Although the Hachemeister model in the standard regression case is
+well-known to predict premiums, we could also imagine a multiple
+regression model, but it does not seem relevant to use it
+because time is the only interesting variable. The standard model
+fits exactly into the framework of the credibility regression model.
+
+But when Hachemeister used the model to his bodily injured data, he
+was surprised to see that in some states (for exemple state 4),
+results were very stange and opposed to commonsense judgement.
+Indeed, the slope of the credibility adjusted regression line was
+smaller than that in the collective as well as that for the individual
+risk. It should have been somewhere between the two!
+\begin{figure}
+<<echo=FALSE , fig=TRUE>>=
+fit <- cm(~state, hachemeister,
+          regformula = ~ time, regdata = data.frame(time = 1:12),
+          ratios = ratio.1:ratio.12, weights = weight.1:weight.12)
+plot.cm(fit, levels = NULL, node = 4, which = 1:2, from = 1, to = 12)
+@
+
+\caption{Regression lines of the 4th contract}
+\label{fig : reglines}
+\end{figure}
+
+The predictions based on this regression line did not make sense because
+the trend was not the correct one. They were less than what one would
+predict using either the individual regression line as well as being less
+than the predictions one would make using all the states together, i.e.
+the portfolio. Noone would trust such a prediction.
+
+The solution was found only twenty years later by Buhlmann and Gisler en 1997.
+The trick consists of modelling the intercept in the centre of the time range
+instead of in the time origin, by orthogonalizing the design matrix (regressors).
+It simplifies the computations and allow us to use the Bühlmann--Gisler and Ohlsson
+estimators because credibility matrices are diagonal. So when we position the
+intercept at the barycenter of time, we can use the Buhlmann-Straub model
+for each regression coefficient. Here is the graphical result of this orthogonalization :
+\begin{figure}
+<<echo=FALSE , fig=TRUE>>=
+fit <- cm(~state, hachemeister, adj.intercept = TRUE,
+          regformula = ~ time, regdata = data.frame(time = 1:12),
+          ratios = ratio.1:ratio.12, weights = weight.1:weight.12,
+          method = ``iterative'')
+plot.cm(fit, levels = NULL, node = 4, which = 1:2, from = 1, to = 12)
+@
+
+\caption{Regression lines with intercept at the barycenter of time}
+\label{fig : reglinesAdjusted}
+\end{figure}
+
 \bibliography{actuar}
 
 \end{document}
