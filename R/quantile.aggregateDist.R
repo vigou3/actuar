@@ -11,9 +11,9 @@ quantile.aggregateDist <-
 {
     label <- comment(x)
 
-    ## The Normal, Normal Power and Bower Gamma approximations
-    ## are the only continuous distributions of class 'aggregateDist'.
-    ## They are therefore treated differently, using the 'base' quantile
+    ## The Normal and Normal Power approximations are the only
+    ## continuous distributions of class 'aggregateDist'. They are
+    ## therefore treated differently, using the 'base' quantile
     ## function qnorm() or numerical optimization through the 'base'
     ## optimize function.
     if (label == "Normal approximation")
@@ -29,15 +29,6 @@ quantile.aggregateDist <-
                       ((qnorm(probs) + 3/skewness)^2 - 9/(skewness^2) - 1) *
                       sqrt(variance) * skewness/6 + mean)
     }
-    else if (label == "Bowers Gamma approximation")
-    {
-        alpha <- get("alpha", environment(x))
-        mse <- function(q, p) ( p - x(q) )^2
-        ## supremum of the upper bound needed to search for the quantile
-        ubound <- qgamma( max(probs), alpha + 6 )
-        quantile <- function(p) optimize( mse, c(0, ubound), p)$minimum
-        res <- sapply( probs, quantile )
-    }
     else
     {
         ## An empirical and discrete approach is used for
@@ -45,7 +36,6 @@ quantile.aggregateDist <-
         ## Normal and Normal Power.
         y <- get("y", environment(x))
         x <- get("x", environment(x))
-        ##ind <- sapply(probs, function(q) match(TRUE, Fs >= q))
 
         ## Create the inverse function of either the cdf or the ogive.
         fun <-
@@ -58,15 +48,6 @@ quantile.aggregateDist <-
 
         ## Quantiles
         res <- fun(probs)
-
-##         res <-
-##             if (smooth)
-##             {
-##                 h <- (Fs[ind] - probs) / (Fs[ind] - Fs[ind - 1])
-##                 (1 - h) * x[ind - 1] + h * x[ind]
-##             }
-##             else
-##                 x[ind]
     }
 
     if (names)

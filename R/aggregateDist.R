@@ -8,7 +8,7 @@
 ### Louis-Philippe Pouliot
 
 aggregateDist <-
-    function(method = c("recursive", "convolution", "normal", "npower","bgamma", "simulation"),
+    function(method = c("recursive", "convolution", "normal", "npower", "simulation"),
              model.freq = NULL, model.sev = NULL, p0 = NULL, x.scale = 1,
              moments, nb.simul, ..., tol = 1e-06, maxit = 500, echo = FALSE)
 {
@@ -38,14 +38,6 @@ aggregateDist <-
         FUN <- npower(moments[1], moments[2], moments[3])
         comment(FUN) <- "Normal Power approximation"
     }
-    else if (method == "bgamma")
-    {
-        if (missing(moments) || length(moments) < 3)
-            stop("'moments' must supply the mean and the other first two or four central moments of the distribution")
-        FUN <- bowergamma(moments)
-        comment(FUN) <- "Bowers Gamma approximation"
-    }
-
     else if (method == "simulation")
     {
         if (missing(nb.simul))
@@ -55,7 +47,6 @@ aggregateDist <-
         FUN <- simS(nb.simul, model.freq = model.freq, model.sev = model.sev)
         comment(FUN) <- "Approximation by simulation"
     }
-
     else
     {
         ## "recursive" and "convolution" cases. Both require a
@@ -124,8 +115,7 @@ print.aggregateDist <- function(x, ...)
         cat("\n")
     }
     if (label %in% c("Normal approximation",
-                     "Normal Power approximation",
-                 "Bowers Gamma approximation"))
+                     "Normal Power approximation"))
         cat(attr(x, "source"), "\n")
     invisible(x)
 }
@@ -163,15 +153,13 @@ summary.aggregateDist <- function(object, ...)
 print.summary.aggregateDist <- function(x, ...)
 {
     cat(ifelse(comment(x) %in%
-               c("Normal approximation", "Normal Power approximation", "Bowers Gamma approximation"),
+               c("Normal approximation", "Normal Power approximation"),
                "Aggregate Claim Amount CDF:\n",
                "Aggregate Claim Amount Empirical CDF:\n"))
     q <- quantile(x, p = c(0.25, 0.5, 0.75))
-    
     expectation <- mean(x)
 
-    if (comment(x) %in% c("Normal approximation", "Normal Power approximation",
-                                                                                        "Bowers Gamma approximation"))
+    if (comment(x) %in% c("Normal approximation", "Normal Power approximation"))
     {
         min <- 0
         max <- NA
@@ -194,8 +182,7 @@ mean.aggregateDist <- function(x, ...)
     ## Simply return the value of the true mean given in argument in
     ## the case of the Normal and Normal Power approximations.
     if (label %in%
-        c("Normal approximation", "Normal Power approximation", 
-                                                     "Bowers Gamma approximation"))
+        c("Normal approximation", "Normal Power approximation"))
         return(get("mean", envir = environment(x)))
 
     ## For the recursive, exact and simulation methods, compute the

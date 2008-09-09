@@ -43,17 +43,13 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
     ratios.w <- ifelse(weights.s > 0, rowSums(weights * ratios, na.rm = TRUE) / weights.s, 0)
 
     ## Size of the portfolio.
-    nobs <- ncol(ratios)
     ncontracts <- sum(weights.s > 0)
     ntotal <- sum(!is.na(weights))
 
     ## Collective weighted average.
     weights.ss <- sum(weights.s)
 
-    ## Estimators of individual within variances
-    sigma2 <- rowSums(weights * (ratios - ratios.w)^2) / (nobs-1)
-
-    ## Estimation of s^2 : mean of within variances.
+    ## Estimation of s^2
     s2 <-  sum(weights * (ratios - ratios.w)^2, na.rm = TRUE) / (ntotal - ncontracts)
 
     ## First estimation of a. Always compute the unbiased estimator.
@@ -102,12 +98,10 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
                   model = "Buhlmann-Straub")
     }
     else
-        structure(list(ratios = ratios,
-                       means = list(ratios.zw, ratios.w),
+        structure(list(means = list(ratios.zw, ratios.w),
                        weights = list(if (a > 0) sum(cred) else weights.ss, weights.s),
                        unbiased = if (method == "unbiased") c(a, s2),
                        iterative = if (method == "iterative") c(a, s2),
-                       within = sigma2,
                        cred = cred,
                        nodes = list(nrow(weights))),
                   class = "bstraub",
@@ -119,84 +113,6 @@ predict.bstraub.old <- function(object, ...)
 
 predict.bstraub <- function(object, levels = NULL, newdata, ...)
     object$means[[1]] + object$cred * (object$means[[2]] - object$means[[1]])
-
-plot.bstraub <- function(x, contractNo, add = FALSE, main = NULL,
-                         type = c("predictions","heterogeneity"))
-{
-    ## check the class of the object
-    if (!inherits(x, "bstraub"))
-        stop("use only with \"bstraub\" objects")
-
-    type <- match.arg(type)
-    if (type == "predictions")
-    {
-        ## plot an object of class 'bstraub' and more particularly :
-        ##   * the collective regression line (blue) : constant,
-        ##   * the individual regression line (red) : constant,
-        ##   * the prediction of the credibility premium : constant.
-
-        ## draw the data required in the model
-        plot(1:(ncol(x$ratios)+1), c(x$ratios[contractNo, ],NA), type = "p",
-             xlab = "time", ylab = "premiums",
-             main = paste("Evolution of the premiums: contract ", contractNo,"(B-S model)"))
-        ## add the collective mean
-        lines(1:ncol(x$ratios), rep(x$means[[1]],ncol(x$ratios)),
-              type = "l", col = "blue")
-        ## add the individual mean
-        lines(1:ncol(x$ratios), rep(x$means[[2]][contractNo],ncol(x$ratios)),
-              type = "l", col = "red")
-        ## add prediction to the graph : "star point"
-        points(ncol(x$ratios)+1,
-               predict(x, newdata = data.frame(ncol(x$ratios)+1))[contractNo],
-               pch = 8, col = "green")
-        legend("topright", legend = c("observations", "collective premium", "individual premium", "credibility premium prediction"),
-               text.width = strwidth("credibility premium prediction"), lty = c(-1,1,1,-1),
-               pch = c(21,-1,-1,8), col = c("black","blue","red","green"), xjust = 1, yjust = 1, cex = 0.6)
-    }
-    else
-    {
-        ## construct the structure of the summary, generated in our fashion.
-        ## -> 'stats' argument : changes from classical boxplot()
-        ## each column has the following meaning
-        ##  * 1st and 2nd element : ind. mean - 0.5*sqrt(within variance of the contract)
-        ##    (2 equal elements so as to hide the whiskers)
-        ##  * 3rd element : ind. mean of the contract
-        ##  * 4th and 5th element : ind. mean + 0.5*sqrt(within variance of the contract)
-        stats <- matrix(0, nrow = 5, ncol = nrow(x$ratios))
-        for (j in 1:nrow(x$ratios))
-        {
-            stats[1, j] <- stats[2, j] <- x$means[[2]][j] - 0.5*sqrt(x$within[j])
-            stats[3, j] <- x$means[[2]][j]
-            stats[4, j] <- stats[5, j] <- x$means[[2]][j] + 0.5*sqrt(x$within[j])
-        }
-        ## specify different attributes necessary to bxp()
-        ## 'n' attribute = number of observations
-        n <- numeric(nrow(x$ratios))
-        for (i in 1:nrow(x$ratios))
-            n[i] <- length(x$ratios[i, ])
-        ## 'confidence interval' attribute
-        conf <- matrix(NA, nrow = 2, ncol = nrow(x$ratios))
-        out <- numeric()          ## 'out' attribute
-        group <- numeric()        ## 'group' attribute
-        ## 'names' attribute
-        names <- vector("character", nrow(x$ratios))
-        for (i in 1:nrow(x$ratios))
-            names[i] <- i
-
-        bx.p <- list(stats = stats, n = n, conf = conf, out = out,
-                     group = group, names = names)
-        bxp(bx.p, show.names = TRUE, medcol = "red", medlwd = 7,
-            boxwex = 0.01, staplewex = 30, ylab = "Within variance",
-            main = "Homogeneity of the portfolio", xlab = "contracts ")
-        arrows(x0 = 1.5, y0 = min(stats[3, ]), x1 = 1.5, y1 = max(stats[3, ]),
-               length = 0.1, angle = 15, code = 3, lty = 2)
-        text(1.5, 0.5*(min(stats[3, ])+max(stats[3, ])), "between variance", pos = 4,
-             cex = 0.7, srt = 90)
-        legend("topright", legend = "individual premium",
-               text.width = strwidth("individual premium"), lty = -1, pch = 19,
-               col = "red", xjust = 1, yjust = 1, cex = 0.7)
-    }
-}
 
 bvar.unbiased <- function(x, w, within, n)
 {
