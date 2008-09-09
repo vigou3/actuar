@@ -15,6 +15,12 @@ coverage <- function(pdf, cdf, deductible = 0, franchise = FALSE,
 {
     Call <- match.call()
 
+    ## First determine if the cdf is needed or not. It is when there
+    ## is a deductible or a limit and, of course, if the output
+    ## function should compute the cdf.
+    is.cdf <- missing(pdf) || is.null(pdf) # return cdf?
+    needs.cdf <- any(deductible > 0, limit < Inf, is.cdf) # cdf needed?
+
     ## Sanity check of arguments
     if (any(deductible < 0, limit < 0, coinsurance < 0, inflation < 0))
         stop("coverage modifications must be positive")
@@ -22,66 +28,61 @@ coverage <- function(pdf, cdf, deductible = 0, franchise = FALSE,
       stop("deductible must be smaller than the limit")
     if (coinsurance > 1)
         stop("coinsurance must be between 0 and 1")
-    if (missing(cdf))
+    if (missing(cdf) & needs.cdf)
         stop("'cdf' must be supplied")
 
-    ## Determine if the output function should compute the cdf or the
-    ## pdf of the modified random variable. It is the latter if 'pdf'
-    ## is missing or NULL. (It would make for sense to have a variable
-    ## 'has.pdf', but 'cdf' was a TRUE/FALSE at the time the rest of
-    ## the code was written.)
-    is.cdf <- missing(pdf) || is.null(pdf)
-
-    ## Arguments 'pdf' and 'cdf' can be character strings giving
-    ## function names or straight function objects. In the latter
-    ## case, 'pdf' and 'cdf' will contain function definitions and the
-    ## output function of coverage() will contain multiple function
-    ## definitions. Not nice. Instead, always treat 'pdf' and 'cdf' as
-    ## character strings.
-    ##
-    cdf <- as.character(Call$cdf)
-    if (!is.cdf)
-        pdf <- as.character(Call$pdf)
-
-    ## The cumulative distribution function is always needed. Get its
-    ## argument list to build function calls and, eventually, specify
-    ## arguments of the output function.
-    formalsCDF <- formals(cdf)          # arguments as list
-    argsCDF <- names(formalsCDF)        # arguments names as strings
-
-    ## Remember if argument 'lower.tail' is available, so we can use
-    ## it later. Then, drop unsupported arguments 'lower.tail' and
-    ## 'log.p'.
-    has.lower <- if ("lower.tail" %in% argsCDF) TRUE else FALSE
-    argsCDF <- setdiff(argsCDF, c("lower.tail", "log.p"))
-
-    ## 1. Set arguments of the output function. Should be those of
-    ##    'cdf' or 'pdf' depending if 'pdf' is missing or not,
-    ##    respectively.
-    ##
-    ## 2. Set the symbol representing the variable in function
-    ##    calls. Should be the first argument of the output
-    ##    function.
-    ##
-    ## 3. Drop unsupported argument 'log', if present, in 'pdf'.
-    ##
-    ## 4. Drop the first argument of 'cdf' and 'pdf' which are no
-    ##    longer used after this block and prepare argument list for
-    ##    use in do.call().
-    if (is.cdf)                # return cdf of the modified r.v.
+    ## Prepare the cdf object for cases needing the cdf: output
+    ## function is a cdf or there is a deductible or a limit.
+    if (needs.cdf)
     {
-        argsFUN <- formalsCDF[argsCDF]  # arguments of output function
-        x <- as.name(argsCDF[1])        # symbol
+        ## Arguments 'cdf' can be a character string giving the
+        ## function name or a straight function object. In the latter
+        ## case, 'cdf' will contain function definitions and the
+        ## output function of coverage() will contain multiple
+        ## function definitions. Not nice. Instead, always treat 'cdf'
+        ## (and 'pdf', below) as character strings.
+        cdf <- as.character(Call$cdf)
+
+        ## Get argument list to build function calls and, eventually,
+        ## to specify arguments of the output function.
+        formalsCDF <- formals(cdf)          # arguments as list
+        argsCDF <- names(formalsCDF)        # arguments names as strings
+
+        ## Remember if argument 'lower.tail' is available, so we can
+        ## use it later. Then, drop unsupported arguments 'lower.tail'
+        ## and 'log.p'.
+        has.lower <- "lower.tail" %in% argsCDF
+        argsCDF <- setdiff(argsCDF, c("lower.tail", "log.p"))
+
+        ## If output function is a cdf:
+        ##
+        ## 1. Set its arguments to those of 'cdf'.
+        ## 2. Set the symbol representing the variable in function
+        ##    calls. Should be the first argument of the output
+        ##    function.
+        ## 3. Drop the first argument of 'cdf' since it is no longer
+        ##    used after this block.
+        if (is.cdf)
+        {
+            argsFUN <- formalsCDF[argsCDF]  # arguments of output function
+            x <- as.name(argsCDF[1])        # symbol
+        }
+
+        ##  Prepare argument list for use in do.call
+        argsCDF <- sapply(argsCDF[-1], as.name) # for use in do.call()
     }
-    else
+
+    ## Repeat same steps as above for case needing the pdf: output
+    ## function is a pdf.
+    if (!is.cdf)
     {
+        pdf <- as.character(Call$pdf)   # same as 'cdf' above
         formalsPDF <- formals(pdf)      # arguments as list
         argsPDF <- setdiff(names(formalsPDF), "log") # drop argument 'log'
         argsFUN <- formalsPDF[argsPDF]  # arguments of output function
         x <- as.name(argsPDF[1])        # symbol
         argsPDF <- sapply(argsPDF[-1], as.name) # for use in do.call()
     }
-    argsCDF <- sapply(argsCDF[-1], as.name) # for use in do.call()
 
     ## Quantites often used
     r <- 1 + inflation
@@ -172,11 +173,11 @@ coverage <- function(pdf, cdf, deductible = 0, franchise = FALSE,
 
     ## Output function
     eval(substitute(FUN <- function()
-               ifelse(cond1, f1,
-                      ifelse(cond2, f2,
-                             ifelse(cond3, f3, 0))),
-               list(cond1 = cond1, cond2 = cond2, cond3 = cond3,
-                    f1 = f1, f2 = f2, f3 = f3)))
+                    ifelse(cond1, f1,
+                           ifelse(cond2, f2,
+                                  ifelse(cond3, f3, 0))),
+                    list(cond1 = cond1, cond2 = cond2, cond3 = cond3,
+                         f1 = f1, f2 = f2, f3 = f3)))
     formals(FUN) <- argsFUN             # set arguments
     environment(FUN) <- new.env()       # new, empty environment
     FUN
