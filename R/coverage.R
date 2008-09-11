@@ -31,6 +31,11 @@ coverage <- function(pdf, cdf, deductible = 0, franchise = FALSE,
     if (missing(cdf) & needs.cdf)
         stop("'cdf' must be supplied")
 
+    ## Quantites often used
+    r <- 1 + inflation
+    d <- deductible/r
+    u <- limit/r
+
     ## Prepare the cdf object for cases needing the cdf: output
     ## function is a cdf or there is a deductible or a limit.
     if (needs.cdf)
@@ -70,6 +75,23 @@ coverage <- function(pdf, cdf, deductible = 0, franchise = FALSE,
 
         ##  Prepare argument list for use in do.call
         argsCDF <- sapply(argsCDF[-1], as.name) # for use in do.call()
+
+        ## Definitions of 1 - F(d) and 1 - F(u), using 'lower.tail =
+        ## FALSE' if available in 'cdf'.
+        if (has.lower)
+        {
+            Sd <- substitute(do.call(F, a),
+                             list(F = cdf, a = c(d, argsCDF, lower.tail = FALSE)))
+            Su <- substitute(do.call(F, a),
+                             list(F = cdf, a = c(u, argsCDF, lower.tail = FALSE)))
+        }
+        else
+        {
+            Sd <- substitute(1 - do.call(F, a),
+                             list(F = cdf, a = c(d, argsCDF)))
+            Su <- substitute(1 - do.call(F, a),
+                             list(F = cdf, a = c(u, argsCDF)))
+        }
     }
 
     ## Repeat same steps as above for case needing the pdf: output
@@ -83,11 +105,6 @@ coverage <- function(pdf, cdf, deductible = 0, franchise = FALSE,
         x <- as.name(argsPDF[1])        # symbol
         argsPDF <- sapply(argsPDF[-1], as.name) # for use in do.call()
     }
-
-    ## Quantites often used
-    r <- 1 + inflation
-    d <- deductible/r
-    u <- limit/r
 
     ## Build the value at which the underlying pdf/cdf will be called
     ## for non special case values of 'x'.
@@ -118,23 +135,6 @@ coverage <- function(pdf, cdf, deductible = 0, franchise = FALSE,
         bound2 <- coinsurance * (limit - deductible)
         cond1 <- substitute(x == 0, list(x = x))
         cond2 <- substitute(0 < x & x < b, list(x = x, b = bound2))
-    }
-
-    ## Definitions of 1 - F(d) and 1 - F(u), using 'lower.tail =
-    ## FALSE' if available in 'cdf'.
-    if (has.lower)
-    {
-        Sd <- substitute(do.call(F, a),
-                         list(F = cdf, a = c(d, argsCDF, lower.tail = FALSE)))
-        Su <- substitute(do.call(F, a),
-                         list(F = cdf, a = c(u, argsCDF, lower.tail = FALSE)))
-    }
-    else
-    {
-        Sd <- substitute(1 - do.call(F, a),
-                         list(F = cdf, a = c(d, argsCDF)))
-        Su <- substitute(1 - do.call(F, a),
-                         list(F = cdf, a = c(u, argsCDF)))
     }
 
     ## Function definition for the first branch.
