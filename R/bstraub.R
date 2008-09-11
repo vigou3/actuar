@@ -10,8 +10,7 @@
 ### Sébastien Auclair, Louis-Philippe Pouliot
 
 bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
-                    tol = sqrt(.Machine$double.eps), maxit = 100,
-                    echo = FALSE, old.format = FALSE)
+                    tol = sqrt(.Machine$double.eps), maxit = 100, echo = FALSE)
 {
     ## If weights are not specified, use equal weights as in
     ## Bühlmann's model.
@@ -84,28 +83,14 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
         ratios.zw <- drop(crossprod(weights.s, ratios.w)) / sum(weights.s)
     }
 
-    if (old.format)
-    {
-        warning("this output format is deprecated")
-        structure(list(individual = ratios.w,
-                       collective = ratios.zw,
-                       weights = weights.s,
-                       s2 = s2,
-                       unbiased = if (method == "unbiased") a,
-                       iterative = if (method == "iterative") a,
-                       cred = cred),
-                  class = "bstraub.old",
-                  model = "Buhlmann-Straub")
-    }
-    else
-        structure(list(means = list(ratios.zw, ratios.w),
-                       weights = list(if (a > 0) sum(cred) else weights.ss, weights.s),
-                       unbiased = if (method == "unbiased") c(a, s2),
-                       iterative = if (method == "iterative") c(a, s2),
-                       cred = cred,
-                       nodes = list(nrow(weights))),
-                  class = "bstraub",
-                  model = "Buhlmann-Straub")
+    structure(list(means = list(ratios.zw, ratios.w),
+                   weights = list(if (a > 0) sum(cred) else weights.ss, weights.s),
+                   unbiased = if (method == "unbiased") c(a, s2),
+                   iterative = if (method == "iterative") c(a, s2),
+                   cred = cred,
+                   nodes = list(nrow(weights))),
+              class = "bstraub",
+              model = "Buhlmann-Straub")
 }
 
 predict.bstraub.old <- function(object, ...)

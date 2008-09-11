@@ -30,6 +30,9 @@ USER-VISIBLE CHANGES
   o Due to above change, predict.cm() now expects 'newdata' to be a
     data frame as for stats:::predict.lm().
 
+  o Function bstraub() is no longer exported. Users are expected to
+    use cm() as interface instead.
+
 BUG FIXES
 
   o Functions r<foo>() are now more consistent in warning when NA's
@@ -39,6 +42,13 @@ BUG FIXES
 
   o Domain of pdfs returned by aggregateDist() now restricted to
     [0, 1].
+
+  o Quantiles are now computed correctly (and more efficiently) in 0
+    and 1 by quantile.aggregateDist().
+
+  o coverage() no longer requires a cdf when it is not needed, namely
+    when there is no deductible and no limit.
+
 
 Version 0.9-7
 =============

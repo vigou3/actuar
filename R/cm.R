@@ -122,12 +122,8 @@ cm <- function(formula, data, ratios, weights, subset,
 
         if (is.null(regformula))        # Buhlmann-Straub
         {
-            ## *** The 'old.format = FALSE' argument is necessary in
-            ## *** the deprecation phase of the output format of
-            ## *** bstraub(). To delete later.
             res <- bstraub(ratios, weights, method = method,
-                           tol = tol, maxit = maxit, echo = echo,
-                           old.format = FALSE)
+                           tol = tol, maxit = maxit, echo = echo)
         }
         else                            # Hachemeister
         {

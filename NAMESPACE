@@ -3,7 +3,7 @@ useDynLib(actuar, .registration = TRUE)
 
 ### Exports
 export(## Credibility theory
-       bstraub, cm,
+       cm,
        ## Simulation of compound models
        simul, simpf, severity, unroll,
        ## Risk theory
@@ -82,7 +82,6 @@ S3method(plot, ogive)
 S3method(plot, ruin)
 
 S3method(predict, bstraub)
-S3method(predict, bstraub.old)
 S3method(predict, cm)
 S3method(predict, hache)
 S3method(predict, hierarc)
