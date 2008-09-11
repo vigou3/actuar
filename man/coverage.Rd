@@ -30,19 +30,15 @@ coverage(pdf, cdf, deductible = 0, franchise = FALSE,
     \code{FALSE} (default) for the per payment distribution.}
 }
 \details{
-  \code{coverage()} returns a function to compute the probability
+  \code{coverage} returns a function to compute the probability
   density function (pdf) or the cumulative distribution function (cdf)
   of the distribution of losses under coverage modifications. The pdf
   and cdf of unmodified losses are \code{pdf} and \code{cdf},
   respectively.
 
-  If both \code{pdf} and \code{cdf} are specified, the pdf is returned;
-  if \code{pdf} is missing or \code{NULL}, the cdf is returned. Hence,
-  \code{cdf} must always be specified.
-
-  See \code{vignette("coverage")} for the exact definitions of the
-  per payment and per loss random variables under an ordinary or
-  franchise deductible.
+  If \code{pdf} is specified, the pdf is returned; if \code{pdf} is
+  missing or \code{NULL}, the cdf is returned. Note that \code{cdf} is
+  needed if there is a deductible or a limit.
 }
 \value{
   An object of mode \code{"function"} with the same arguments as
@@ -55,6 +51,11 @@ coverage(pdf, cdf, deductible = 0, franchise = FALSE,
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Mathieu Pigeon
+}
+\seealso{
+  \code{vignette("coverage")} for the exact definitions of the
+  per payment and per loss random variables under an ordinary or
+  franchise deductible.
 }
 \examples{
 ## Default case: pdf of the per payment random variable with
@@ -88,5 +89,8 @@ coverage(dweibull, pweibull, per.loss = TRUE, limit = 5)
 coverage(dweibull, pweibull, franchise = TRUE, limit = 5)
 coverage(dweibull, pweibull, per.loss = TRUE, franchise = TRUE,
          limit = 5)
+
+## Coinsurance alone; only case that does not require the cdf
+coverage(dgamma, coinsurance = 0.8)
 }
 \keyword{models}
