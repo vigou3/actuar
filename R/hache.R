@@ -79,7 +79,7 @@ predict.hache <- function(object, levels = NULL, newdata, ...)
     f <- function(z, ...)
     {
         z$terms <- object$terms
-        predict.lm(z, ...)
+        unname(predict.lm(z, ...))
     }
 
     sapply(object$adj.models, f, newdata = newdata)
