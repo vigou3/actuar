@@ -26,6 +26,12 @@
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
 
+  %% Redefine Sweave environments with smaller font
+  \RecustomVerbatimEnvironment{Sinput}{Verbatim}{%
+    fontshape=sl,fontsize=\small,xleftmargin=0pt}
+  \RecustomVerbatimEnvironment{Soutput}{Verbatim}{%
+    fontsize=\small,xleftmargin=0pt}
+
   \bibliographystyle{plainnat}
 
   \definecolor{Red}{rgb}{0.7,0,0}
@@ -635,11 +641,24 @@ f(12, shape = 5, rate = 1)
 
 Note how function \code{f} is built specifically for the coverage
 modifications submitted and contains as little useless code as
-possible. For comparison purpose, the following function contains no
-deductible and no limit:
+possible.
+
+
+Let object \code{y} contain a sample of claims amounts from policies
+with the above deductible and limit. Then one can fit a gamma
+distribution by maximum likelihood to the claim severity process as
+follows:
+<<echo=FALSE>>=
+x <- rgamma(100, 2, 0.5)
+y <- pmin(x[x > 1], 9)
+op <- options(warn = -1)                # hide warnings from fitdistr()
+@
 <<echo=TRUE>>=
-g <- coverage(dgamma, pgamma)
-g
+library(MASS)
+fitdistr(y, f, start = list(shape = 2, rate = 0.5))
+@
+<<echo=FALSE>>=
+options(op)                             # restore warnings
 @
 
 The vignette \code{"coverage"} contains more detailed pdf and cdf

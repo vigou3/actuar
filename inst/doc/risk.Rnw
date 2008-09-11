@@ -28,6 +28,12 @@
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
 
+  %% Redefine Sweave environments with smaller font
+  \RecustomVerbatimEnvironment{Sinput}{Verbatim}{%
+    fontshape=sl,fontsize=\small,xleftmargin=0pt}
+  \RecustomVerbatimEnvironment{Soutput}{Verbatim}{%
+    fontsize=\small,xleftmargin=0pt}
+
   \bibliographystyle{plainnat}
 
   \definecolor{Red}{rgb}{0.7,0,0}
