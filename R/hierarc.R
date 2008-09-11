@@ -255,7 +255,7 @@ hierarc <- function(ratios, weights, classification,
     if (method == "iterative")
     {
         b <- pmax(b, 0)         # truncation for starting values
-        if (any(head(b, -1)))   # at least one non-zero starting value
+        if (any(head(b, -1) > 0))   # at least one non-zero starting value
             .External("do_hierarc", cred, tweights, wmeans, fnodes, denoms,
                       b, tol, maxit, echo)
     }
