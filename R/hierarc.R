@@ -32,7 +32,7 @@ hierarc <- function(ratios, weights, classification,
 
     ## Sanity check if weights and ratios correspond.
     if (!identical(which(is.na(ratios)), which(is.na(weights))))
-        stop("missing values are not in the same positions in weights and in ratios")
+        stop("missing values are not in the same positions in 'weights' and in 'ratios'")
 
     ## === NUMBER OF NODES AND SPLITTING FACTORS ===
     ##

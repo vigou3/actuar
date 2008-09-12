@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: R 2.3.0\n"
 "Report-Msgid-Bugs-To: bugs@r-project.org\n"
-"POT-Creation-Date: 2008-02-17 18:13\n"
+"POT-Creation-Date: 2008-09-12 09:56\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,16 +80,13 @@ msgstr ""
 msgid "there must be more than one node"
 msgstr ""
 
-msgid "missing values are not in the same positions in weights and in ratios"
+msgid "missing values are not in the same positions in 'weights' and in 'ratios'"
 msgstr ""
 
 msgid "no available data to fit model"
 msgstr ""
 
 msgid "maximum number of iterations reached before obtaining convergence"
-msgstr ""
-
-msgid "this output format is deprecated"
 msgstr ""
 
 msgid "unsupported interactions in 'formula'"
@@ -99,6 +96,9 @@ msgid "hierarchical regression models not supported"
 msgstr ""
 
 msgid "ratios have to be supplied if weights are"
+msgstr ""
+
+msgid "empty regression model; fitting with Buhlmann-Straub's model"
 msgstr ""
 
 msgid "invalid level name"

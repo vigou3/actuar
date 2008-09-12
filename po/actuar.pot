@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-04 22:30-0500\n"
+"POT-Creation-Date: 2008-09-12 10:02-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: dpq.c:73 dpq.c:198 dpq.c:383 dpq.c:567 dpq.c:738 dpqphtype.c:49 random.c:61
-#: random.c:68 random.c:142 random.c:149 random.c:236 random.c:243
-#: random.c:330 random.c:337 randomphtype.c:66 randomphtype.c:73
+#: random.c:68 random.c:143 random.c:150 random.c:237 random.c:244
+#: random.c:331 random.c:338 randomphtype.c:66 randomphtype.c:73
 msgid "invalid arguments"
 msgstr ""
 
@@ -56,23 +56,27 @@ msgid ""
 "complete"
 msgstr ""
 
-#: random.c:98
+#: random.c:87 random.c:170 random.c:265 random.c:360
+msgid "NAs produced"
+msgstr ""
+
+#: random.c:99
 msgid "internal error in do_random1"
 msgstr ""
 
-#: random.c:189
+#: random.c:191
 msgid "internal error in do_random2"
 msgstr ""
 
-#: random.c:281
+#: random.c:283
 msgid "internal error in do_random3"
 msgstr ""
 
-#: random.c:374
+#: random.c:376
 msgid "internal error in do_random4"
 msgstr ""
 
-#: random.c:405
+#: random.c:407
 msgid "internal error in do_random"
 msgstr ""
 

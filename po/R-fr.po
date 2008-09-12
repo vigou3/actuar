@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: actuar 0.9-4\n"
 "Report-Msgid-Bugs-To: bugs@r-project.org\n"
-"POT-Creation-Date: 2007-11-04 23:30\n"
-"PO-Revision-Date: 2008-09-11 12:43-0400\n"
+"POT-Creation-Date: 2008-09-12 09:56\n"
+"PO-Revision-Date: 2008-09-12 09:59-0400\n"
 "Last-Translator: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
 "Language-Team: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
 "MIME-Version: 1.0\n"
@@ -93,7 +93,8 @@ msgstr ""
 msgid "there must be more than one node"
 msgstr "il doit y avoir plus d'un noeud"
 
-msgid "missing values are not in the same positions in weights and in ratios"
+msgid ""
+"missing values are not in the same positions in 'weights' and in 'ratios'"
 msgstr ""
 "les données manquantes ne sont pas aux mêmes positions dans les poids et "
 "dans les ratios"
@@ -104,9 +105,6 @@ msgstr "aucune donnée disponible pour la modélisation"
 msgid "maximum number of iterations reached before obtaining convergence"
 msgstr "nombre d'itérations maximal atteint avant obtention de la convergence"
 
-msgid "this output format is deprecated"
-msgstr "cette présentation des résultats est obsolète"
-
 msgid "unsupported interactions in 'formula'"
 msgstr "interactions non supportées dans 'formula'"
 
@@ -115,6 +113,9 @@ msgstr "modèles de régression hiérarchiques non supportés"
 
 msgid "ratios have to be supplied if weights are"
 msgstr "ratios requis s'il y a des poids"
+
+msgid "empty regression model; fitting with Buhlmann-Straub's model"
+msgstr "modèle de régression vide; utilisation du modèle de Bühlmann-Straub"
 
 msgid "invalid level name"
 msgstr "nom de niveau incorrect"
@@ -282,3 +283,6 @@ msgstr "valeur de 'by' incorrecte"
 
 msgid "'x' must be a vector or a matrix"
 msgstr "'x' doit être un vecteur ou une matrice"
+
+#~ msgid "this output format is deprecated"
+#~ msgstr "cette présentation des résultats est obsolète"

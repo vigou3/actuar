@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: actuar 0.9-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-04 22:30-0500\n"
-"PO-Revision-Date: 2007-11-04 23:34-0500\n"
+"POT-Creation-Date: 2008-09-12 10:02-0400\n"
+"PO-Revision-Date: 2008-09-12 10:04-0400\n"
 "Last-Translator: Vincent Goulet <vincent@vgoulet.act.ulaval.ca>\n"
 "Language-Team: Vincent Goulet <vincent@vgoulet.act.ulaval.ca>\n"
 "MIME-Version: 1.0\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: dpq.c:73 dpq.c:198 dpq.c:383 dpq.c:567 dpq.c:738 dpqphtype.c:49 random.c:61
-#: random.c:68 random.c:142 random.c:149 random.c:236 random.c:243
-#: random.c:330 random.c:337 randomphtype.c:66 randomphtype.c:73
+#: random.c:68 random.c:143 random.c:150 random.c:237 random.c:244
+#: random.c:331 random.c:338 randomphtype.c:66 randomphtype.c:73
 msgid "invalid arguments"
 msgstr "arguments incorrects"
 
@@ -57,23 +57,27 @@ msgid ""
 "complete"
 msgstr "nombre de récursions maximal atteint avant obtention de la convergence"
 
-#: random.c:98
+#: random.c:87 random.c:170 random.c:265 random.c:360
+msgid "NAs produced"
+msgstr "production de NA"
+
+#: random.c:99
 msgid "internal error in do_random1"
 msgstr "erreur interne dans do_random1"
 
-#: random.c:189
+#: random.c:191
 msgid "internal error in do_random2"
 msgstr "erreur interne dans do_random2"
 
-#: random.c:281
+#: random.c:283
 msgid "internal error in do_random3"
 msgstr "erreur interne dans do_random3"
 
-#: random.c:374
+#: random.c:376
 msgid "internal error in do_random4"
 msgstr "erreur interne dans do_random4"
 
-#: random.c:405
+#: random.c:407
 msgid "internal error in do_random"
 msgstr "erreur interne dans do_random"
 
@@ -96,12 +100,16 @@ msgstr "erreur interne dans do_randomphtype"
 #: util.c:102
 #, c-format
 msgid "LAPACK routine dgebal returned info code %d when permuting"
-msgstr "la procédure LAPACK dgebal a produit le code d'erreur %d lors de la permutation"
+msgstr ""
+"la procédure LAPACK dgebal a produit le code d'erreur %d lors de la "
+"permutation"
 
 #: util.c:106
 #, c-format
 msgid "LAPACK routine dgebal returned info code %d when scaling"
-msgstr "la procédure LAPACK dgebal a produit le code d'erreur %d lors de la mis à l'échelle"
+msgstr ""
+"la procédure LAPACK dgebal a produit le code d'erreur %d lors de la mis à "
+"l'échelle"
 
 #: util.c:153
 #, c-format
@@ -129,6 +137,3 @@ msgstr "valeur incorrecte pour l'argument %d du sous-programme Lapack %s"
 #: util.c:278
 msgid "Lapack routine dgesv: system is exactly singular"
 msgstr "sous-programme Lapack dgesv: le système est exactement singulier"
-
-#~ msgid "NaNs produced"
-#~ msgstr "production de NaN"
