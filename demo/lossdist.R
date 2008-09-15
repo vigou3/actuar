@@ -222,6 +222,12 @@ knots(Fnt)                              # group boundaries
 Fnt(knots(Fnt))                         # ogive at group boundaries
 plot(Fnt)                               # plot of the ogive
 
+## A method of 'quantile' for grouped data objects computes linearly
+## smoothed quantiles from a sample, that is the inverse of the ogive
+## in various points.
+quantile(x)
+Fnt(ogive(x))
+
 
 ###
 ### EMPIRICAL MOMENTS CALCULATION
