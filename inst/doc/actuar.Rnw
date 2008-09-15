@@ -1,7 +1,10 @@
 \documentclass{article}
+  \usepackage{amsmath,color,hyperref}
+  \usepackage[round]{natbib}
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage[english]{babel}
+  \usepackage{lucidabr}
   \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Introduction to actuar}
@@ -16,6 +19,23 @@
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
 
+  \bibliographystyle{plainnat}
+
+  \definecolor{Red}{rgb}{0.7,0,0}
+  \definecolor{Blue}{rgb}{0,0,0.8}
+  \hypersetup{%
+    hyperindex = {true},
+    colorlinks = {true},
+    linktocpage = {true},
+    plainpages = {false},
+    linkcolor = {Blue},
+    citecolor = {Blue},
+    urlcolor = {Red},
+    pdfstartview = {Fit},
+    pdfpagemode = {UseOutlines},
+    pdfview = {XYZ null null null}
+  }
+
 \begin{document}
 
 \maketitle
@@ -23,17 +43,18 @@
 \section{Introduction}
 \label{sec:introduction}
 
-\pkg{actuar} is a package providing additional Actuarial Science
-functionality to the \proglang{R} statistical system. Although various
-packages on the Comprehensive \proglang{R} Archive Network (CRAN)
-provide functions useful to actuaries, \pkg{actuar} aims to serve as a
-central location for more specifically actuarial functions and data
-sets. The project was officially launched in 2005 and is under active
-development.
+\pkg{actuar} \citep{actuar} is a package providing additional
+Actuarial Science functionality to the \proglang{R} statistical
+system. Although various packages on the Comprehensive \proglang{R}
+Archive Network (CRAN) provide functions useful to actuaries,
+\pkg{actuar} aims to serve as a central location for more specifically
+actuarial functions and data sets. The project was officially launched
+in 2005 and is under active development.
 
-The feature set of the package can be split in four main categories:
-loss distributions modeling, risk theory (including ruin theory),
-simulation of compound hierarchical models and credibility theory.
+The current feature set of the package can be split in four main
+categories: loss distributions modeling, risk theory (including ruin
+theory), simulation of compound hierarchical models and credibility
+theory.
 
 As much as possible, the developers have tried to keep the ``user
 interface'' of the various functions of the package consistent.
@@ -86,13 +107,15 @@ for information on how to cite the software.
 \section*{Acknowledgments}
 
 The package would not be at this stage of development without the
-stimulating contribution of Sébastien Auclair, Louis-Philippe Pouliot
-and Tommy Ouellet.
+stimulating contribution of Sébastien Auclair, Xavier Milhaud,
+Tommy Ouellet and Louis-Philippe Pouliot.
 
 This research benefited from financial support from the Natural
 Sciences and Engineering Research Council of Canada and from the
 \emph{Chaire d'actuariat} (Actuarial Science Foundation) of Université
 Laval.
+
+\bibliography{actuar}
 
 \end{document}
 

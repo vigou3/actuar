@@ -105,7 +105,10 @@ distributed random variables each independent of $N$.
 The package provides function \code{simul} to simulate data from
 compound models like \eqref{eq:definition-S} where both the frequency
 and the severity components can have a hierarchical structure. The
-function also supports weights (or volumes) in the model.
+function also supports weights (or volumes) in the model. We give here
+a brief description of the function and its usage; see
+\cite{Goulet:simpf:2008} for details about the supported models and
+more thorough examples.
 
 
 \section{Description of hierarchical models}

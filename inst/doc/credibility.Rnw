@@ -355,7 +355,7 @@ there is no guarantee that the credibility regression line will lie
 between the collective and individual ones. This may lead to grossly
 inadequate premiums, as Figure~\ref{fig:state4} shows.
 
-\begin{figure}
+\begin{figure}[t]
   \centering
 <<echo=FALSE, fig=TRUE>>=
 plot(NA, xlim = c(1, 13), ylim = c(1000, 2000), xlab = "", ylab = "")
@@ -378,15 +378,15 @@ legend("bottomright",
   \label{fig:state4}
 \end{figure}
 
-The solution proposed by \cite{Buhlmann:regression:1997} \citep[see
-also][Section~8.4]{Buhlmann_Gisler} is simply to position the
-intercept at the barycenter of time instead of at time origin. In
-mathematical terms, this essentially amounts to using an orthogonal
-design matrix. By setting the argument \code{adj.intercept} to
-\code{TRUE} in the call, \code{cm} will automatically fit the
-credibility regression model with the intercept at the barycenter of
-time. The resulting regression coefficients have little meaning, but
-the predictions are sensible:
+The solution proposed by \cite{Buhlmann:regression:1997} is simply to
+position the intercept at the barycenter of time instead of at time
+origin \citep[see also][Section~8.4]{Buhlmann_Gisler}. In mathematical
+terms, this essentially amounts to using an orthogonal design matrix.
+By setting the argument \code{adj.intercept} to \code{TRUE} in the
+call, \code{cm} will automatically fit the credibility regression
+model with the intercept at the barycenter of time. The resulting
+regression coefficients have little meaning, but the predictions are
+sensible:
 <<echo=TRUE>>=
 fit2 <- cm(~state, hachemeister,
            regformula = ~ time, regdata = data.frame(time = 1:12),
@@ -397,7 +397,7 @@ summary(fit2, newdata = data.frame(time = 13))
 Figure~\ref{fig:state4:2} shows the beneficient effect of the
 intercept adjustment on the premium of State 4.
 
-\begin{figure}
+\begin{figure}[t]
   \centering
 <<echo=FALSE, fig=TRUE>>=
 plot(NA, xlim = c(1, 13), ylim = c(1000, 2000), xlab = "", ylab = "")

@@ -76,10 +76,10 @@ insurance company occurs.
 The interested reader can read more on these subjects in
 \cite{LossModels2e,Gerber_MRT,DenuitCharpentier1,MART}, among others.
 
-The current version of \pkg{actuar} contains four visible functions
-related to the above problems: two for the calculation of the
-aggregate claim amount distribution and two for ruin probability
-calculations.
+The current version of \pkg{actuar} \citep{actuar} contains four
+visible functions related to the above problems: two for the
+calculation of the aggregate claim amount distribution and two for
+ruin probability calculations.
 
 
 

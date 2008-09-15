@@ -63,9 +63,9 @@ options(width = 62, digits = 4)
 
 One important task of actuaries is the modeling of claim amount
 distributions for ratemaking, loss reserving or other risk evaluation
-purposes. Package \pkg{actuar} offers many functions for loss
-distributions modeling. The following subsections detail the following
-\pkg{actuar} features:
+purposes. Package \pkg{actuar} \citep{actuar} offers many functions
+for loss distributions modeling. The following subsections detail the
+following \pkg{actuar} features:
 \begin{enumerate}
 \item introduction of 18 additional probability laws and utility
   functions to get raw moments, limited moments and the moment
@@ -388,6 +388,15 @@ plot(Fnt)
   \label{fig:ogive}
 \end{figure}
 
+Finally, a method of function \code{quantile} for grouped data objects
+returns linearly smoothed quantiles, that is the inverse of the ogive
+evaluated at various points:
+<<echo=TRUE>>=
+quantile(x)
+Fnt(quantile(x))
+@
+
+
 \section{Data sets}
 \label{sec:data-sets}
 
@@ -594,16 +603,15 @@ definitions of $Y^L$ and $Y^P$.
   \label{tab:coverage}
 \end{table}
 
-Often, one will want to use data $Y^L_1, \dots, Y^L_n$ (or $Y^P_1,
-\dots, Y^P_n$) from the random variable $Y^L$ ($Y^P$) to fit a
-model on the unobservable random variable $X$. This requires
-expressing the pdf or cdf of $Y^L$ ($Y^P$) in terms of the pdf or
-cdf of $X$. Function \code{coverage} of \pkg{actuar} does just that:
-given a pdf or cdf and any combination of the coverage modifications
-mentioned above, \code{coverage} returns a function object to compute
-the pdf or cdf of the modified random variable. The function can then
-be used in modeling like any other \code{dfoo} or \code{pfoo}
-function.
+Often, one will want to use data $Y^P_1, \dots, Y^P_n$ (or $Y^L_1,
+\dots, Y^L_n$) from the random variable $Y^P$ ($Y^L$) to fit a model
+on the unobservable random variable $X$. This requires expressing the
+pdf or cdf of $Y^P$ ($Y^L$) in terms of the pdf or cdf of $X$.
+Function \code{coverage} of \pkg{actuar} does just that: given a pdf
+or cdf and any combination of the coverage modifications mentioned
+above, \code{coverage} returns a function object to compute the pdf or
+cdf of the modified random variable. The function can then be used in
+modeling like any other \code{dfoo} or \code{pfoo} function.
 
 For example, let $Y^P$ represent the amount paid by an insurer for a
 policy with an ordinary deductible $d$ and a limit $u - d$ (or maximum
@@ -642,7 +650,6 @@ f(12, shape = 5, rate = 1)
 Note how function \code{f} is built specifically for the coverage
 modifications submitted and contains as little useless code as
 possible.
-
 
 Let object \code{y} contain a sample of claims amounts from policies
 with the above deductible and limit. Then one can fit a gamma
