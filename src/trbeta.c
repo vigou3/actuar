@@ -38,6 +38,9 @@ double dtrbeta(double x, double shape1, double shape2, double shape3,
     if (!R_FINITE(x) || x < 0.0)
         return R_D__0;
 
+    /* handle x == 0 separately */
+    if (x == 0) R_D_mode(shape2 * shape3 > 1);
+
     tmp = shape2 * (log(x) - log(scale));
     logu = - log1p(exp(-tmp));
     log1mu = - log1p(exp(tmp));

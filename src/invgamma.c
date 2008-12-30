@@ -30,7 +30,8 @@ double dinvgamma(double x, double shape, double scale, int give_log)
         scale <= 0.0)
         return R_NaN;
 
-    if (!R_FINITE(x) || x < 0.0)
+    /* handle also x == 0 here */
+    if (!R_FINITE(x) || x <= 0.0)
         return R_D__0;
 
     logu = log(scale) - log(x);

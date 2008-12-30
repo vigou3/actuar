@@ -33,6 +33,9 @@ double dinvpareto(double x, double shape, double scale, int give_log)
     if (!R_FINITE(x) || x < 0.0)
         return R_D__0;
 
+    /* handle x == 0 separately */
+    if (x == 0) R_D_mode(shape > 1);
+
     tmp = log(x) - log(scale);
     logu = - log1p(exp(-tmp));
     log1mu = - log1p(exp(tmp));

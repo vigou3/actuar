@@ -1,4 +1,18 @@
-=== actuar: an R package for Actuarial Science ===
+=== actuar: An R Package for Actuarial Science ===
+
+Version 1.0-1
+=============
+
+BUG FIXES
+
+  o Functions d<foo>() now handle the case x == 0 correctly.
+
+  o Functions q<foo>() now return NaN instead of an error when
+    argument p is outside [0, 1] (as in R).
+
+  o The warning message "NaNs produced" was not (and could not be)
+    translated.
+
 
 Version 1.0-0
 =============

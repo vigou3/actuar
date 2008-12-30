@@ -8,13 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-12 10:02-0400\n"
+"POT-Creation-Date: 2008-12-30 01:08-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: actuar.h:4
+msgid "NaNs produced"
+msgstr ""
 
 #: dpq.c:73 dpq.c:198 dpq.c:383 dpq.c:567 dpq.c:738 dpqphtype.c:49 random.c:61
 #: random.c:68 random.c:143 random.c:150 random.c:237 random.c:244

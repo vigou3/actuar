@@ -33,7 +33,8 @@ double dinvtrgamma(double x, double shape1, double shape2, double scale,
         scale  <= 0.0)
         return R_NaN;
 
-    if (!R_FINITE(x) || x < 0.0)
+    /* handle also x == 0 here */
+    if (!R_FINITE(x) || x <= 0.0)
         return R_D__0;
 
     logu = shape2 * (log(scale) - log(x));
