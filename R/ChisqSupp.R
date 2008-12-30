@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Definition of the {m,lev,mgf}chisq functions to compute raw and
 ### limited moments, and the moment generating function for

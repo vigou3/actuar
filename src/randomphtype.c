@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to generate variates of phase-type distributions. This
  *  file is based on random.c with the following modifications:

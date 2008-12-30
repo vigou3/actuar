@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to calculate raw and limited moments for the inverse gaussian
  *  distribution. See ../R/InvGaussSupp.R for details.

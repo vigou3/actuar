@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Simulation of hierarchical portfolios of data. Claim number and
 ### claim amounts in any given node are simulated independently. Both

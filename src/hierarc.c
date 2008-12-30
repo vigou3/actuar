@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Function to compute the iterative part of function cm, used
  *  to deal with credibility models.

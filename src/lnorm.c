@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Fonctions to calculate raw and limited moments for the lognormal
  *  distribution. See ../R/LognormalMoments.R for details.

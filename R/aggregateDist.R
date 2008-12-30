@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Use one of five methods to compute the aggregate claim amount
 ### distribution of a portfolio over a period given a frequency and a

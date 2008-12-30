@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Calulation of infinite time ruin probabilities in the models of
 ### Cramer-Lundberg and Sparre Andersen. In general, one has

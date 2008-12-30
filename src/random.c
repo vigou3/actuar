@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to generate variates of some probability laws not in
  *  base R. Function .External() calls do_random() with arguments:
@@ -84,7 +84,7 @@ SEXP do_random1(int code, SEXP args)
     {
         for (i = 0; i < n; i++)
             REAL(x)[i] = NA_REAL;
-	warning(_("NAs produced"));    
+	warning(_("NAs produced"));
     }
     /* Otherwise, dispatch to appropriate r* function */
     else
@@ -167,7 +167,7 @@ SEXP do_random2(int code, SEXP args)
     {
         for (i = 0; i < n; i++)
             REAL(x)[i] = NA_REAL;
-	warning(_("NAs produced"));    
+	warning(_("NAs produced"));
     }
     /* Otherwise, dispatch to appropriate r* function */
     else
@@ -262,12 +262,12 @@ SEXP do_random3(int code, SEXP args)
     {
         for (i = 0; i < n; i++)
             REAL(x)[i] = NA_REAL;
-	warning(_("NAs produced"));	    
+	warning(_("NAs produced"));
     }
     /* Otherwise, dispatch to appropriate r* function */
     else
     {
-    	Rboolean naflag = FALSE; 
+    	Rboolean naflag = FALSE;
         PROTECT(a = coerceVector(CADR(args), REALSXP));
         PROTECT(b = coerceVector(CADDR(args), REALSXP));
         PROTECT(c = coerceVector(CADDDR(args), REALSXP));
@@ -356,8 +356,8 @@ SEXP do_random4(int code, SEXP args)
     if (na < 1 || nb < 1 || nc < 1 || nd < 1)
     {
         for (i = 0; i < n; i++)
-            REAL(x)[i] = NA_REAL;	
-	warning(_("NAs produced"));	    
+            REAL(x)[i] = NA_REAL;
+	warning(_("NAs produced"));
     }
     /* Otherwise, dispatch to appropriate r* function */
     else

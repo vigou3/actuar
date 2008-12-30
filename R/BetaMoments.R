@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Definition of the {m,lev}beta functions to compute raw and limited
 ### moments for the Beta distribution (as defined in R). The

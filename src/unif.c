@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to calculate raw and limited moments for the Uniform
  *  distribution. See ../R/UniformSupp.R for details.

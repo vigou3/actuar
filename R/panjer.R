@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Panjer recursion formula to compute the approximate aggregate
 ### claim amount distribution of a portfolio over a period.

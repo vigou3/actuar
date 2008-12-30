@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, and to simulate random variates for the loggamma

@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Display all values of a matrix of vectors by 'unrolling' the
 ### object vertically or horizontally.

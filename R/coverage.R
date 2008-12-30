@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Create modified density and modified cumulative distribution
 ### function for data with deductible, limit, coinsurance and

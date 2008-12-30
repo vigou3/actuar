@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Definition of the {d,p,q,r,m,lev}genbeta functions to compute
 ### characteristics of the Generalized Beta distribution. The version
