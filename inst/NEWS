@@ -3,6 +3,11 @@
 Version 1.0-1
 =============
 
+USER-VISIBLE CHANGES
+
+  o levinvpareto() now works for order > -shape and defaults to order
+    = 1, like all other lev<foo>() functions.
+
 BUG FIXES
 
   o Functions d<foo>() now handle the case x == 0 correctly.
@@ -12,6 +17,9 @@ BUG FIXES
 
   o The warning message "NaNs produced" was not (and could not be)
     translated.
+
+  o Function levinvpareto() now computes limited moments for order >
+    -shape using numerical integration.
 
 
 Version 1.0-0

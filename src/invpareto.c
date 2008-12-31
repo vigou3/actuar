@@ -10,6 +10,7 @@
 
 #include <R.h>
 #include <Rmath.h>
+#include <R_ext/Applic.h>
 #include "locale.h"
 #include "dpq.h"
 
@@ -103,29 +104,56 @@ double minvpareto(double order, double shape, double scale, int give_log)
         / gammafn(shape);
 }
 
+/* The function to integrate in the limited moment */
+static void fn(double *x, int n, void *ex)
+{
+    int i;
+    double *pars = (double *) ex, shape, scale, order;
+
+    shape = pars[0]; scale = pars[1]; order = pars[2];
+
+    for(i = 0; i < n; i++)
+	x[i] = R_pow(x[i], shape + order) * R_pow(1 - x[i], -order);
+}
+
 double levinvpareto(double limit, double shape, double scale, double order,
                     int give_log)
 {
-    double u, tmp1, tmp2;
+    double u;
+    double ex[3], lower, upper, epsabs, epsrel, result, abserr, *work;
+    int neval, ier, subdiv, lenw, last, *iwork;
 
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
         shape <= 0.0 ||
         scale <= 0.0 ||
-        order <= -shape ||
-        order >= 1.0)
+        order <= -shape)
         return R_NaN;;
 
     if (limit <= 0.0)
         return 0;
 
-    tmp1 = shape + order;
-    tmp2 = 1.0 - order;
+    /* Parameters for the integral are pretty much fixed here */
+    ex[0] = shape; ex[1] = scale; ex[2] = order;
+    lower = 0.0; upper = limit / (limit + scale);
+    subdiv = 100;
+    epsabs = R_pow(DOUBLE_EPS, 0.25);
+    epsrel = epsabs;
+    lenw = 4 * subdiv;		     /* as instructed in WRE */
+    iwork =   (int *) R_alloc(subdiv, sizeof(int));  /* idem */
+    work = (double *) R_alloc(lenw, sizeof(double)); /* idem */
 
-    u = exp(-log1p(exp(log(scale) - log(limit))));
+    Rdqags(fn, (void *) &ex,
+	   &lower, &upper, &epsabs, &epsrel, &result,
+	   &abserr, &neval, &ier, &subdiv, &lenw, &last, iwork, work);
 
-    return R_pow(scale, order) * gammafn(tmp1) * gammafn(tmp2)
-        * pbeta(u, tmp1, tmp2, 1, 0) / gammafn(shape)
-        + R_VG__0(limit, order) * (0.5 - R_pow(u, shape) + 0.5);
+    if (ier == 0)
+    {
+	u = exp(-log1p(exp(log(scale) - log(limit))));
+	return R_pow(scale, order) * shape * result
+	    + R_VG__0(limit, order) * (0.5 - R_pow(u, shape) + 0.5);
+    }
+    else
+	error(_("integration failed"));
 }

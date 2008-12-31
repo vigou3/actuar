@@ -18,7 +18,7 @@ pinvpareto(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
 qinvpareto(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
 rinvpareto(n, shape, scale)
 minvpareto(order, shape, scale)
-levinvpareto(limit, shape, scale, order)
+levinvpareto(limit, shape, scale, order = 1)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
@@ -45,8 +45,7 @@ levinvpareto(limit, shape, scale, order)
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
 
-  For numerical evaluation purposes, \code{levinvpareto} requires that
-  \code{-shape < order < 1}.
+  Evaluation of \code{levinvpareto} is done using numerical integration.
 }
 \value{
   \code{dinvpareto} gives the density,
