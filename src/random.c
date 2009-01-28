@@ -213,7 +213,7 @@ static Rboolean random3(double (*f) (), double *a, int na,
         bi = b[i % nb];
         ci = c[i % nc];
         x[i] = f(ai, bi, ci);
-        if (!ISNAN(x[i])) naflag = TRUE;
+        if (ISNAN(x[i])) naflag = TRUE;
     }
     return(naflag);
 }
@@ -307,7 +307,7 @@ static Rboolean random4(double (*f) (), double *a, int na,
         ci = c[i % nc];
         di = d[i % nd];
         x[i] = f(ai, bi, ci, di);
-        if (!ISNAN(x[i])) naflag = TRUE;
+        if (ISNAN(x[i])) naflag = TRUE;
     }
     return(naflag);
 }
