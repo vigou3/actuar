@@ -113,7 +113,7 @@ static void fn(double *x, int n, void *ex)
     shape = pars[0]; scale = pars[1]; order = pars[2];
 
     for(i = 0; i < n; i++)
-	x[i] = R_pow(x[i], shape + order) * R_pow(1 - x[i], -order);
+	x[i] = R_pow(x[i], shape + order - 1) * R_pow(1 - x[i], -order);
 }
 
 double levinvpareto(double limit, double shape, double scale, double order,
