@@ -21,13 +21,6 @@
 #define R_DT_val(x)     (lower_tail ? R_D_val(x)  : R_D_Clog(x))
 #define R_DT_Cval(x)    (lower_tail ? R_D_Clog(x) : R_D_val(x))
 
-/* Value of densities at 0 */
-#define R_D_mode(x)                                     \
-    if (x)						\
-	return R_D__0;  /* strictly positive mode */	\
-    else						\
-	return R_PosInf /* mode at 0 */
-
 /*Boundaries*/
 #define R_Q_P01_boundaries(p, _LEFT_, _RIGHT_)          \
     if (log_p) {                                        \

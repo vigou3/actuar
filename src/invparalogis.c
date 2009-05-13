@@ -34,7 +34,13 @@ double dinvparalogis(double x, double shape, double scale, int give_log)
         return R_D__0;
 
     /* handle x == 0 separately */
-    if (x == 0) R_D_mode(shape > 1);
+    if (x == 0)
+    {
+	if (shape < 1) return R_PosInf;
+	if (shape > 1) return R_D__0;
+	/* else */
+	return R_D_val(1.0 / scale);
+    }
 
     tmp = shape * (log(x) - log(scale));
     logu = - log1p(exp(-tmp));
@@ -104,10 +110,12 @@ double minvparalogis(double order, double shape, double scale, int give_log)
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
         shape <= 0.0 ||
-        scale <= 0.0 ||
-        order <= - shape * shape ||
+        scale <= 0.0)
+        return R_NaN;
+
+    if (order <= - shape * shape ||
         order >= shape)
-        return R_NaN;;
+	return R_PosInf;
 
     tmp = order / shape;
 
@@ -124,9 +132,11 @@ double levinvparalogis(double limit, double shape, double scale, double order,
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
         shape <= 0.0 ||
-        scale <= 0.0 ||
-        order <= -shape * shape)
-        return R_NaN;;
+        scale <= 0.0)
+        return R_NaN;
+
+    if (order <= -shape * shape)
+	return R_PosInf;
 
     tmp1 = order / shape;
     tmp2 = shape + tmp1;

@@ -131,9 +131,11 @@ double mgenbeta(double order, double shape1, double shape2, double shape3,
         shape1 <= 0.0 ||
         shape2 <= 0.0 ||
         shape3 <= 0.0 ||
-        scale  <= 0.0 ||
-        order  <= - shape1 * shape3)
+        scale  <= 0.0)
         return R_NaN;
+
+    if (order  <= - shape1 * shape3)
+	return R_PosInf;
 
     tmp = order / shape3;
 
@@ -154,12 +156,14 @@ double levgenbeta(double limit, double shape1, double shape2, double shape3,
         shape1 <= 0.0 ||
         shape2 <= 0.0 ||
         shape3 <= 0.0 ||
-        scale  <= 0.0 ||
-        order  <= - shape1 * shape3)
+        scale  <= 0.0)
         return R_NaN;
 
+    if (order  <= - shape1 * shape3)
+	return R_PosInf;
+
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     tmp = order / shape3;
 

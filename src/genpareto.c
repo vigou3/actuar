@@ -37,7 +37,15 @@ double dgenpareto(double x, double shape1, double shape2, double scale,
         return R_D__0;
 
     /* handle x == 0 separately */
-    if (x == 0) R_D_mode(shape2 > 1);
+    if (x == 0)
+    {
+	if (shape2 < 1) return R_PosInf;
+	if (shape2 > 1) return R_D__0;
+	/* else */
+	return give_log ?
+	    - log(scale) - lbeta(shape2, shape1) :
+	    1 / (scale * beta(shape2, shape1));
+    }
 
     tmp = log(x) - log(scale);
     logu = - log1p(exp(-tmp));
@@ -107,10 +115,12 @@ double mgenpareto(double order, double shape1, double shape2, double scale,
         !R_FINITE(order)  ||
         shape1 <= 0.0 ||
         shape2 <= 0.0 ||
-        scale  <= 0.0 ||
-        order  <= -shape2 ||
-        order  >= shape1)
+        scale  <= 0.0)
         return R_NaN;
+
+    if (order  <= -shape2 ||
+        order  >= shape1)
+	return R_PosInf;
 
     return R_pow(scale, order) * beta(shape1 - order, shape2 + order)
         / beta(shape1, shape2);
@@ -127,12 +137,14 @@ double levgenpareto(double limit, double shape1, double shape2, double scale,
         !R_FINITE(order)  ||
         shape1 <= 0.0 ||
         shape2 <= 0.0 ||
-        scale  <= 0.0 ||
-        order  <= -shape2)
+        scale  <= 0.0)
         return R_NaN;
 
+    if (order  <= -shape2)
+	return R_PosInf;
+
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     tmp1 = shape1 - order;
     tmp2 = shape2 + order;

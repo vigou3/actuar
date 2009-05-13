@@ -34,7 +34,7 @@ double levlnorm(double limit, double logmean, double logsd, double order,
         return R_NaN;
 
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     u = (log(limit) - logmean)/logsd;
 

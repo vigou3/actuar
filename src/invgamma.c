@@ -36,7 +36,7 @@ double dinvgamma(double x, double shape, double scale, int give_log)
 
     logu = log(scale) - log(x);
 
-    return R_D_exp(shape * logu - exp(logu) - log(x) - lgamma(shape));
+    return R_D_exp(shape * logu - exp(logu) - log(x) - lgammafn(shape));
 }
 
 double pinvgamma(double q, double shape, double scale, int lower_tail,
@@ -90,9 +90,11 @@ double minvgamma(double order, double shape, double scale, int give_log)
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
         shape <= 0.0 ||
-        scale <= 0.0 ||
-        order >= shape)
-        return R_NaN;;
+        scale <= 0.0)
+        return R_NaN;
+
+    if (order >= shape)
+	return R_PosInf;
 
     return R_pow(scale, order) * gammafn(shape - order) / gammafn(shape);
 }
@@ -106,12 +108,14 @@ double levinvgamma(double limit, double shape, double scale, double order,
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
         shape <= 0.0 ||
-        scale <= 0.0 ||
-        order >= shape)
-        return R_NaN;;
+        scale <= 0.0)
+        return R_NaN;
+
+    if (order >= shape)
+	return R_PosInf;
 
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     tmp = shape - order;
 

@@ -112,7 +112,7 @@ double rphtype(double *pi, double **Q, double *rates, int m)
 
     /* Simulate initial state according to vector pi (transient states
      * are numbered 0, ..., m - 1 and absorbing state is numbered
-     * m. See the definition of SampleSingleValue() to see why this
+     * m). See the definition of SampleSingleValue() to see why this
      * works fine here and below. */
     state = SampleSingleValue(m, pi);
 

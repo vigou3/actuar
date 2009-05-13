@@ -17,9 +17,11 @@ double mchisq(double order, double df, double ncp, int give_log)
         !R_FINITE(ncp)   ||
         !R_FINITE(order) ||
         df <= 0.0 ||
-        ncp < 0.0 ||
-        order <= -df/2)
+        ncp < 0.0)
         return R_NaN;
+
+    if (order <= -df/2)
+	return R_PosInf;
 
     /* Trivial case */
     if (order == 0.0)
@@ -58,12 +60,14 @@ double levchisq(double limit, double df, double ncp, double order, int give_log)
         !R_FINITE(ncp)   ||
         !R_FINITE(order) ||
         df <= 0.0 ||
-        ncp < 0.0 ||
-        order <= -df/2)
+        ncp < 0.0)
         return R_NaN;
 
+    if (order <= -df/2)
+	return R_PosInf;
+
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     if (ncp == 0.0)
     {

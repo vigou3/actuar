@@ -35,7 +35,13 @@ double dinvpareto(double x, double shape, double scale, int give_log)
         return R_D__0;
 
     /* handle x == 0 separately */
-    if (x == 0) R_D_mode(shape > 1);
+    if (x == 0)
+    {
+	if (shape < 1) return R_PosInf;
+	if (shape > 1) return R_D__0;
+	/* else */
+	return R_D_val(1.0 / scale);
+    }
 
     tmp = log(x) - log(scale);
     logu = - log1p(exp(-tmp));
@@ -95,10 +101,12 @@ double minvpareto(double order, double shape, double scale, int give_log)
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
         shape <= 0.0 ||
-        scale <= 0.0 ||
-        order <= -shape ||
+        scale <= 0.0)
+        return R_NaN;
+
+    if (order <= -shape ||
         order >= 1.0)
-        return R_NaN;;
+	return R_PosInf;
 
     return R_pow(scale, order) * gammafn(shape + order) * gammafn(1.0 - order)
         / gammafn(shape);
@@ -127,12 +135,14 @@ double levinvpareto(double limit, double shape, double scale, double order,
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
         shape <= 0.0 ||
-        scale <= 0.0 ||
-        order <= -shape)
-        return R_NaN;;
+        scale <= 0.0)
+        return R_NaN;
+
+    if (order <= -shape)
+	return R_PosInf;
 
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     /* Parameters for the integral are pretty much fixed here */
     ex[0] = shape; ex[1] = scale; ex[2] = order;

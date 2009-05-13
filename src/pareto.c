@@ -91,10 +91,12 @@ double mpareto(double order, double shape, double scale, int give_log)
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
         shape <= 0.0  ||
-        scale <= 0.0  ||
-        order <= -1.0 ||
-        order >= shape)
+        scale <= 0.0)
         return R_NaN;
+
+    if (order <= -1.0 ||
+        order >= shape)
+	return R_PosInf;
 
     return R_pow(scale, order) * gammafn(1.0 + order) * gammafn(shape - order)
         / gammafn(shape);
@@ -112,8 +114,11 @@ double levpareto(double limit, double shape, double scale, double order,
         scale <= 0.0)
         return R_NaN;
 
+    if (order <= -1.0)
+	return R_PosInf;
+
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     tmp1 = 1.0 + order;
     tmp2 = shape - order;

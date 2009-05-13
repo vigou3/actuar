@@ -49,7 +49,7 @@ double levinvGauss(double limit, double nu, double lambda, double order,
         return R_NaN;
 
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     /* From R, order == 1 */
     tmp = sqrt(lambda/limit);

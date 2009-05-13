@@ -39,7 +39,15 @@ double dtrbeta(double x, double shape1, double shape2, double shape3,
         return R_D__0;
 
     /* handle x == 0 separately */
-    if (x == 0) R_D_mode(shape2 * shape3 > 1);
+    if (x == 0)
+    {
+	if (shape2 * shape3 < 1) return R_PosInf;
+	if (shape2 * shape3 > 1) return R_D__0;
+	/* else */
+	return give_log ?
+	    log(shape2) - log(scale) - lbeta(shape3, shape1) :
+	    shape2 / (scale * beta(shape3, shape1));
+    }
 
     tmp = shape2 * (log(x) - log(scale));
     logu = - log1p(exp(-tmp));
@@ -120,10 +128,12 @@ double mtrbeta(double order, double shape1, double shape2, double shape3,
         shape1 <= 0.0 ||
         shape2 <= 0.0 ||
         shape3 <= 0.0 ||
-        scale  <= 0.0 ||
-        order  <= - shape3 * shape2 ||
-        order  >= shape1 * shape2)
-        return R_NaN;
+        scale  <= 0.0)
+	return R_NaN;
+
+    if (order <= - shape3 * shape2 ||
+        order >= shape1 * shape2)
+        return R_PosInf;
 
     tmp = order / shape2;
 
@@ -144,12 +154,14 @@ double levtrbeta(double limit, double shape1, double shape2, double shape3,
         shape1 <= 0.0 ||
         shape2 <= 0.0 ||
         shape3 <= 0.0 ||
-        scale  <= 0.0 ||
-        order  <= - shape3 * shape2)
+        scale  <= 0.0)
         return R_NaN;
 
+    if (order  <= - shape3 * shape2)
+        return R_PosInf;
+
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     tmp1 = order / shape2;
     tmp2 = shape3 + tmp1;

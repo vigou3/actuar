@@ -74,9 +74,11 @@ double minvexp(double order, double scale, int give_log)
 {
     if (!R_FINITE(scale) ||
         !R_FINITE(order) ||
-        scale <= 0.0 ||
-        order >= 1.0)
+        scale <= 0.0)
         return R_NaN;
+
+    if (order >= 1.0)
+	return R_PosInf;
 
     return R_pow(scale, order) * gammafn(1.0 - order);
 }
@@ -87,12 +89,14 @@ double levinvexp(double limit, double scale, double order, int give_log)
 
     if (!R_FINITE(scale) ||
         R_FINITE(order) ||
-        scale <= 0.0 ||
-        order >= 1.0)
+        scale <= 0.0)
         return R_NaN;
 
+    if (order >= 1.0)
+	return R_PosInf;
+
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     tmp = 1.0 - order;
 

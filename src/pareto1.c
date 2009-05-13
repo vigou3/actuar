@@ -72,9 +72,11 @@ double mpareto1(double order, double shape, double min, int give_log)
         !R_FINITE(min)   ||
         !R_FINITE(order) ||
         shape <= 0.0 ||
-        min <= 0.0   ||
-        order >= shape)
+        min <= 0.0)
         return R_NaN;
+
+    if (order >= shape)
+	return R_PosInf;
 
     return shape * R_pow(min, order) / (shape - order);
 }
@@ -90,6 +92,9 @@ double levpareto1(double limit, double shape, double min, double order,
         shape <= 0.0 ||
         min <= 0.0)
         return R_NaN;
+
+    if (limit <= min)
+        return 0.0;
 
     tmp = shape - order;
 

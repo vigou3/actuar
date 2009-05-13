@@ -17,9 +17,11 @@ double mweibull(double order, double shape, double scale, int give_log)
         !R_FINITE(shape) ||
         !R_FINITE(order) ||
         scale <= 0.0 ||
-        shape <= 0.0 ||
-        order <= -shape)
+        shape <= 0.0)
         return R_NaN;
+
+    if (order <= -shape)
+	return R_PosInf;
 
     return R_pow(scale, order) * gammafn(1.0 + order / shape);
 }
@@ -33,12 +35,14 @@ double levweibull(double limit, double shape, double scale, double order,
         !R_FINITE(shape) ||
         !R_FINITE(order) ||
         scale <= 0.0 ||
-        shape <= 0.0 ||
-        order <= -shape)
+        shape <= 0.0)
         return R_NaN;
 
+    if (order <= -shape)
+	return R_PosInf;
+
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     tmp = 1.0 + order / shape;
 
