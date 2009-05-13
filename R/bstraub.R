@@ -1,19 +1,19 @@
 ### ===== actuar: An R Package for Actuarial Science =====
 ###
-### Bühlmann-Straub credibility model calculations.
+### Buhlmann-Straub credibility model calculations.
 ###
 ### Computation of the between variance estimators has been moved to
 ### external functions bvar.unbiased() and bvar.iterative() to share
 ### with hache().
 ###
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
-### Sébastien Auclair, Louis-Philippe Pouliot
+### Sebastien Auclair, Louis-Philippe Pouliot
 
 bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
                     tol = sqrt(.Machine$double.eps), maxit = 100, echo = FALSE)
 {
     ## If weights are not specified, use equal weights as in
-    ## Bühlmann's model.
+    ## Buhlmann's model.
     if (missing(weights))
     {
         if (any(is.na(ratios)))
@@ -56,7 +56,7 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
 
     ## Iterative estimation of a. Compute only if
     ## 1. asked to in argument;
-    ## 2. weights are not all equal (Bühlmann model).
+    ## 2. weights are not all equal (Buhlmann model).
     ## 3. the unbiased estimator is > 0;
     method <- match.arg(method)
 
