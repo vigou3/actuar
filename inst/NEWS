@@ -1,5 +1,24 @@
 === actuar: An R Package for Actuarial Science ===
 
+Version 1.0-2
+=============
+
+USER-VISIBLE CHANGES
+
+  o m<foo>() and lev<foo>() now return Inf instead of NaN for infinite
+    moments. (Thanks to David Humke for the idea.)
+
+BUG FIXES
+
+  o Non-ascii characters in one R source file prevented compilation of
+    the package in a C locale (at least on OS X).
+
+  o For probability laws that have a strictly positive mode or a mode
+    at zero depending on the value of one or more shape parameters,
+    d<foo>(0, ...) did not handle correctly the case exactly at the
+    boundary condition. 
+
+
 Version 1.0-1
 =============
 
