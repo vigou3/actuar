@@ -37,7 +37,7 @@ mgfexp(x, rate = 1, log = FALSE)
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{
-  \code{\link{Exponential}}
+  \code{\link[stats]{Exponential}}
 }
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),

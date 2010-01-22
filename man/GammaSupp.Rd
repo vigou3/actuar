@@ -38,7 +38,7 @@ mgfgamma(x, shape, rate = 1, scale = 1/rate, log = FALSE)
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{
-  \code{\link{GammaDist}}
+  \code{\link[stats]{GammaDist}}
 }
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),

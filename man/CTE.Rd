@@ -39,7 +39,7 @@ CTE(x, \dots)
   deviation and \eqn{\alpha}{a} the confidence level.
 
   For the Normal Power approximation, the CTE is computed from the
-  definition using \code{\link{integrate}}.
+  definition using \code{\link[stats]{integrate}}.
 }
 \value{
   A numeric vector, named if \code{names} is \code{TRUE}.

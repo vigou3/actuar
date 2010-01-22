@@ -25,8 +25,8 @@ cm(formula, data, ratios, weights, subset,
 \method{print}{summary.cm}(x, \dots)
 }
 \arguments{
-  \item{formula}{an object of class \code{"\link{formula}"}: a symbolic
-    description of the model to be fit. The details of model
+  \item{formula}{an object of class \code{"\link[stats]{formula}"}: a
+    symbolic description of the model to be fit. The details of model
     specification are given below.}
   \item{data}{a matrix or a data frame containing the portfolio
     structure, the ratios or claim amounts and their associated weights,
@@ -38,13 +38,14 @@ cm(formula, data, ratios, weights, subset,
   \item{subset}{an optional logical expression indicating a subset of
     observations to be used in the modeling process. All observations
     are included by default.}
-  \item{regformula}{an object of class \code{"\link{formula}"}: symbolic
-    description of the regression component (see \code{"\link{lm}"} for
-    details). No left hand side is needed in the formula; if present it
-    is ignored. If \code{NULL}, no regression is done on the data.}
+  \item{regformula}{an object of class \code{"\link[stats]{formula}"}:
+    symbolic description of the regression component (see
+    \code{\link[stats]{lm}} for details). No left hand side is needed
+    in the formula; if present it is ignored. If \code{NULL}, no
+    regression is done on the data.}
   \item{regdata}{an optional data frame, list or environment (or object
-    coercible by \code{\link{as.data.frame}} to a data frame) containing
-    the variables in the regression model.}
+    coercible by \code{\link[base]{as.data.frame}} to a data frame)
+    containing the variables in the regression model.}
   \item{adj.intercept}{if \code{TRUE}, the intercept of the regression
     model is located at the barycenter of the regressor instead of the
     origin.}
@@ -250,7 +251,7 @@ cm(formula, data, ratios, weights, subset,
   Xavier Milhaud, Tommy Ouellet, Louis-Philippe Pouliot
 }
 \seealso{
-  \code{\link[base]{subset}}, \code{\link[base]{formula}},
+  \code{\link[base]{subset}}, \code{\link[stats]{formula}},
   \code{\link[stats]{lm}}, \code{\link[stats]{predict.lm}}.
 }
 \examples{

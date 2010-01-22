@@ -32,7 +32,7 @@ levbeta(limit, shape1, shape2, order = 1)
   warning.
 }
 \seealso{
-  \code{\link{Beta}} for details on the Beta distribution and
+  \code{\link[stats]{Beta}} for details on the Beta distribution and
   functions \code{{d,p,q,r}beta}.
 }
 \references{
