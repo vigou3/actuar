@@ -65,7 +65,7 @@ aggregateDist <-
                                 "binomial", "logarithmic"))
             FUN <- panjer(fx = model.sev, dist = dist, p0 = p0,
                           x.scale = x.scale, ...,
-                          tol = tol, maxit = maxit, echo = echo)
+                          convolve = 0, tol = tol, maxit = maxit, echo = echo)
             comment(FUN) <- "Recursive method approximation"
         }
 
