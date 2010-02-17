@@ -266,7 +266,7 @@ summary(fit)			# more details
 
 ## Two-level hierarchical model. Notice that data does not have
 ## to be sorted by level
-X <- cbind(unit = c(1, 2, 1, 2, 2), hachemeister)
+X <- data.frame(unit = c("A", "B", "A", "B", "B"), hachemeister)
 fit <- cm(~unit + unit:state, X, ratio.1:ratio.12, weight.1:weight.12)
 predict(fit)
 predict(fit, levels = "unit")	# unit credibility premiums only

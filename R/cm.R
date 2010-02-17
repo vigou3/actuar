@@ -150,10 +150,16 @@ cm <- function(formula, data, ratios, weights, subset,
         res$ordering <- list(seq_along(levs))
     }
     else                                # hierarchical model
+    {
+        ## Computations with auxiliary function.
         res <- hierarc(ratios, weights, classification = ilevs,
                        method = method, tol = tol, maxit = maxit,
                        echo = echo)
 
+        ## Put back original level names into the object
+        res$classification <- levs
+    }
+    
     ## Transfer level names to lists
     names(res$means) <- names(res$weights) <- c("portfolio", level.names)
     names(res$unbiased) <- if (!is.null(res$unbiased)) names(res$means)

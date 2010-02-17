@@ -1,15 +1,20 @@
 \name{CTE}
 \alias{CTE}
+\alias{TVaR}
 \alias{CTE.aggregateDist}
 \title{Conditional Tail Expectation}
 \description{
-  Conditional Tail Expectation.
+  Conditional Tail Expectation, also called Tail Value-at-Risk.
+
+  \code{TVaR} is an alias for \code{CTE}.
 }
 \usage{
 CTE(x, \dots)
 
 \method{CTE}{aggregateDist}(x, conf.level = c(0.9, 0.95, 0.99),
          names = TRUE, \dots)
+
+TVaR(x, \dots)
 }  
 \arguments{
   \item{x}{an \R object.}
@@ -20,9 +25,10 @@ CTE(x, \dots)
   \item{\dots}{further arguments passed to or from other methods.}
 }
 \details{
-  The Conditional Tail Expectation measures the average of losses above
-  the Value at Risk for some given confidence level, that is \eqn{E[X|X
-  > VaR(X)]} where \eqn{X} is the loss random variable.
+  The Conditional Tail Expectation (or Tail Value-at-Risk) measures the
+  average of losses above the Value at Risk for some given confidence
+  level, that is \eqn{E[X|X > VaR(X)]} where \eqn{X} is the loss random
+  variable.
 
   \code{CTE} is a generic function with, currently, only a method for
   objects of class \code{"aggregateDist"}.

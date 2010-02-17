@@ -13,7 +13,7 @@
 aggregateDist(method = c("recursive", "convolution", "normal",
                          "npower", "simulation"),
               model.freq = NULL, model.sev = NULL, p0 = NULL,
-              x.scale = 1, moments, nb.simul, \dots,
+              x.scale = 1, convolve = 0, moments, nb.simul, \dots,
               tol = 1e-06, maxit = 500, echo = FALSE)
 
 \method{print}{aggregateDist}(x, \dots)
@@ -47,6 +47,8 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   \item{x.scale}{value of an amount of 1 in the severity model (monetary
     unit). Used only with \code{"recursive"} and \code{"convolution"}
     methods.}
+  \item{convolve}{number of times to convolve the resulting distribution
+    with itself. Used only with \code{"recursive"} method.}
   \item{moments}{vector of the true moments of the aggregate claim
     amount distribution; required only by the \code{"normal"} or
     \code{"npower"} methods.}
@@ -54,8 +56,9 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   \item{\dots}{parameters of the frequency distribution for the
     \code{"recursive"} method; further arguments to be passed to or
     from other methods otherwise.}
-  \item{tol}{the recursion in the \code{"recursive"} method stops when the
-    cumulative distribution function is less than \code{tol} away from 1.}
+  \item{tol}{the resulting cumulative distribution in the
+    \code{"recursive"} method will get less than \code{tol} away from
+    1.}
   \item{maxit}{maximum number of recursions in the \code{"recursive"}
     method.}
   \item{echo}{logical; echo the recursions to screen in the
@@ -93,8 +96,13 @@ aggregateDist(method = c("recursive", "convolution", "normal",
 
   \code{model.sev} is a vector of the (discretized) claim amount
   distribution \eqn{X}; the first element \strong{must} be \eqn{f_X(0) =
-  \Pr[X = 0]}{fx(0) = Pr[X = 0]}.
+    \Pr[X = 0]}{fx(0) = Pr[X = 0]}.
 
+  The recursion will fail to start if the expected number of claims is
+  too large. One may divide the appropriate parameter of the frequency
+  distribution by \eqn{2^n} and convolve the resulting distribution
+  \eqn{n =} \code{convolve} times.
+  
   Failure to obtain a cumulative distribution function less than
   \code{tol} away from 1 within \code{maxit} iterations is often due
   to a too coarse discretization of the severity distribution.
@@ -163,8 +171,8 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   \code{\link{simul}}.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
-  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
+  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 
   Daykin, C.D., Pentikäinen, T. and Pesonen, M. (1994), \emph{Practical
     Risk Theory for Actuaries}, Chapman & Hall.
@@ -187,6 +195,15 @@ plot(Fs)
 ## Recursive method
 Fs <- aggregateDist("recursive", model.freq = "poisson",
                     model.sev = fx, lambda = 3, x.scale = 25)
+plot(Fs)
+Fs(knots(Fs))		      # cdf evaluated at its knots
+diff(Fs(knots(Fs)))           # probability mass function
+
+## Recursive method (high frequency)
+\dontrun{Fs <- aggregateDist("recursive", model.freq = "poisson",
+                    model.sev = fx, lambda = 1000)}
+Fs <- aggregateDist("recursive", model.freq = "poisson",
+                    model.sev = fx, lambda = 250, convolve = 2, maxit = 1500)
 plot(Fs)
 
 ## Normal Power approximation

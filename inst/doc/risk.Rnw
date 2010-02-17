@@ -5,7 +5,7 @@
   \usepackage[utf8]{inputenc}
   \usepackage[english]{babel}
   \usepackage{lucidabr}
-  \usepackage{booktabs,tabularx,threeparttable}
+  \usepackage{booktabs}
   \usepackage{paralist}
   \usepackage[noae]{Sweave}
 
@@ -74,7 +74,7 @@ that the surplus becomes negative, in which case technical ruin of the
 insurance company occurs.
 
 The interested reader can read more on these subjects in
-\cite{LossModels2e,Gerber_MRT,DenuitCharpentier1,MART}, among others.
+\cite{LossModels3e,Gerber_MRT,DenuitCharpentier1,MART}, among others.
 
 The current version of \pkg{actuar} \citep{actuar} contains four
 visible functions related to the above problems: two for the
@@ -255,7 +255,7 @@ supported.
   This requires the severity distribution to be discrete arithmetic on
   $0, 1, 2, \dots, m$ for some monetary unit and the frequency
   distribution to be a member of either the $(a, b, 0)$ or $(a, b, 1)$
-  family of distributions \citep{LossModels2e}. (These families
+  family of distributions \citep{LossModels3e}. (These families
   contain the Poisson, binomial, negative binomial and logarithmic
   distributions and their extensions with an arbitrary mass at $x =
   0$.) The general recursive formula is:
@@ -323,6 +323,16 @@ the severity distribution. This way, one does not have to mentally do
 the conversion between the support of $0, 1, 2, \dots$ assumed by the
 recursive and convolution methods and the true support of $S$.
 
+The recursive method fails when the expected number of claims is so
+large that $f_S(0)$ is numerically equal to zero. One solution
+proposed by \citet{LossModels3e} consists in dividing the appropriate
+parameter of the frequency distribution by $2^n$, with $n$ such that
+$f_S(0) > 0$ and the recursions can start. One then computes the
+aggregate claim amount distribution using the recursive method and
+then convolves the resulting distribution $n$ times with itself to
+obtain the final distribution. Function \code{aggregateDist} supports
+this procedure through its argument \code{convolve}.
+
 The function returns an object of class \code{"aggregateDist"}
 inheriting from the \code{"function"} class. Thus, one can use the
 object as a function to compute the value of $F_S(x)$ in any $x$.
@@ -340,11 +350,18 @@ Fs <- aggregateDist("recursive", model.freq = "poisson",
                     model.sev = fx, lambda = 10, x.scale = 0.5)
 summary(Fs)                           # summary method
 @
-Hence, object \code{Fs} contains an empirical cdf with support
+Although useless here, the following is essentially equivalent, except
+in the far right tail for numerical reasons:
+<<echo=TRUE>>=
+Fsc <- aggregateDist("recursive", model.freq = "poisson",
+                     model.sev = fx, lambda = 5, convolve = 1, x.scale = 0.5)
+summary(Fsc)                           # summary method
+@
+
+We return to object \code{Fs}. It contains an empirical cdf with support
 <<echo=TRUE>>=
 knots(Fs)                             # support of Fs.b (knots)
 @
-
 A nice graph of this function is obtained with a method of \code{plot} (see
 Figure \ref{fig:Fs}):
 <<echo=TRUE, eval=FALSE>>=
@@ -371,15 +388,17 @@ quantile(Fs, 0.999)                   # quantiles
 @
 
 Second, the package introduces the generic functions \code{VaR} and
-\code{CTE} with methods for objects of class \code{"aggregateDist"}.
-The former computes the value-at-risk $\VaR_\alpha$ such that
+\code{CTE} (with alias \code{TVaR}) with methods for objects of class
+\code{"aggregateDist"}. The former computes the value-at-risk
+$\VaR_\alpha$ such that
 \begin{equation}
   \label{eq:VaR}
   \Pr[S \leq \VaR_\alpha] = \alpha,
 \end{equation}
 where $\alpha$ is the confidence level. Thus, the value-at-risk is
 nothing else than a quantile. As for the method of \code{CTE}, it
-computes the conditional tail expectation
+computes the conditional tail expectation (also called Tail
+Value-at-Risk)
 \begin{equation}
   \label{eq:CTE}
   \CTE_\alpha = \E{S|S > \VaR_\alpha}.

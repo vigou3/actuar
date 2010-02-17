@@ -134,30 +134,35 @@ SEXP do_panjer(SEXP args)
         while (cumul < REAL(tol)[0]);
     }
 
+    /* If needed, convolve the distribution obtained above with itself
+     * using a very simple direct technique. Since we want to
+     * continue storing the distribution in array 'fs', we need to
+     * copy the vector in an auxiliary array at each convolution. */
     if (n)
     {
-	Rprintf("entered the convolution loop!\n");
 	int i, j, ox;
-	
-	double ofs[(1 << n - 1) * (x - 1) + 1];
+	double *ofs;		/* auxiliary array */
+
+	/* Resize 'fs' to its final size after 'n' convolutions. Each
+	 * convolution increases the length from 'x' to '2 * x - 1'. */
 	fs = (double *) S_realloc((char *) fs, (1 << n) * (x - 1) + 1, size, sizeof(double));
-	Rprintf("allocated the vectors\n");
+
+	/* Allocate enough memory in the auxiliary array for the 'n'
+	 * convolutions. This is just slightly over half the final
+	 * size of 'fs'. */
+	ofs = (double *) S_alloc((1 << n - 1) * (x - 1) + 1, sizeof(double));
 
 	for (k = 0; k < n; k++)
 	{
-	    Rprintf("Convolution %d\n", k + 1);
-	    memcpy(ofs, fs, x * sizeof(double));
-	    Rprintf("  copied fs to ofs");
-	    ox = x;
-	    x = (x << 1) - 1;
+	    memcpy(ofs, fs, x * sizeof(double)); /* keep previous array */
+	    ox = x;		/* previous array length */
+	    x = (x << 1) - 1;	/* new array length */
 	    for(i = 0; i < x; i++)
 		fs[i] = 0.0;
-	    Rprintf("  initialized new fs\n");
 	    for(i = 0; i < ox; i++)
 		for(j = 0; j < ox; j++)
 		    fs[i + j] += ofs[i] * ofs[j];
-	    Rprintf("  convolution done\n");
-	} 
+	}
     }
 
     /*  Copy the values of fs to a SEXP which will be returned to R. */

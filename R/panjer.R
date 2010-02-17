@@ -7,13 +7,18 @@
 ### Sebastien Auclair, Louis-Philippe Pouliot and Tommy Ouellet
 
 panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
-                   convolve = 0,
-                   tol = sqrt(.Machine$double.eps), maxit = 500,
-                   echo = FALSE)
+                   convolve = 0, tol = sqrt(.Machine$double.eps),
+                   maxit = 500, echo = FALSE)
 {
-    ## Express 'tol' as a value close to 1.
-    tol <- 0.5 - tol + 0.5
-
+    ## Express 'tol' as a value close to 1. If needed, modify the
+    ## accuracy level so that the user specified level is attained
+    ## *after* the additional convolutions (without getting too high).
+    tol <- if (convolve > 0)
+        min((0.5 - tol + 0.5)^(0.5 ^ convolve),
+            0.5 - sqrt(.Machine$double.eps) + 0.5)
+    else
+        0.5 - tol + 0.5
+    
     ## Check whether p0 is a valid probability or not.
     if ( !is.null(p0) ) if ( (p0 < 0) | (p0 > 1) )
         stop("'p0' must be a valid probability (between 0 and 1)")
@@ -108,10 +113,6 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
 
     fs <- .External("do_panjer", p0, p1, fs0, fx, a, b, convolve, tol, maxit, echo)
 
-    ## if (convolve > 0)
-    ##     for (i in seq_len(convolve))
-    ##         fs <- convolve(fs, rev(fs), type = "open")
-    
     FUN <- approxfun((0:(length(fs) - 1)) * x.scale, pmin(cumsum(fs), 1),
                      method = "constant", yleft = 0, yright = 1, f = 0,
                      ties = "ordered")
