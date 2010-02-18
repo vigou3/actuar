@@ -80,8 +80,8 @@ levgenbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
   defined on page 251 of Johnson et al, 1995.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
-  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
+  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 
   Johnson, N. L., Kotz, S. and Balakrishnan, N. (1995)
   \emph{Continuous Univariate Distributions}, volume 2, Wiley.

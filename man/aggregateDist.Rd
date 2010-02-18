@@ -165,9 +165,9 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   \code{\link{mean.aggregateDist}} to compute the mean of the
   distribution;
   \code{\link{quantile.aggregateDist}} to compute the quantiles or the
-  Value at Risk;
+  Value-at-Risk;
   \code{\link{CTE.aggregateDist}} to compute the Conditional Tail
-  Expectation;
+  Expectation (or Tail Value-at-Risk);
   \code{\link{simul}}.
 }
 \references{
@@ -182,7 +182,7 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   Louis-Philippe Pouliot
 }
 \examples{
-## Convolution method (example 6.6 of Klugman et al. (2004))
+## Convolution method (example 9.5 of Klugman et al. (2008))
 fx <- c(0, 0.15, 0.2, 0.25, 0.125, 0.075,
         0.05, 0.05, 0.05, 0.025, 0.025)
 pn <- c(0.05, 0.1, 0.15, 0.2, 0.25, 0.15, 0.06, 0.03, 0.01)

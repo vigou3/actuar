@@ -237,8 +237,11 @@ cm(formula, data, ratios, weights, subset,
 }
 \references{
   \enc{Bühlmann}{Buhlmann}, H. and Gisler, A. (2005), \emph{A course in
-  credibility theory and its applications}, Springer.
+    credibility theory and its applications}, Springer.
 
+  Belhadj, H., Goulet, V. and Ouellet, T. (2009), \emph{On Parameter
+  Estimation in Hierarchical Credibility}, \emph{Astin Bulletin} \bold{39}.
+  
   Goulet, V. (1998), Principles and Application of Credibility
   Theory, \emph{Journal of Actuarial Practice} \bold{6}, ISSN
   1064-6647.

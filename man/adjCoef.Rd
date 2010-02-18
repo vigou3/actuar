@@ -96,8 +96,8 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
   Gerber, H. U. (1979), \emph{An Introduction to Mathematical Risk
     Theory}, Philadelphia: Huebner Foundation.
 
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
-  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
+  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 }
 \author{
   Christophe Dutang, Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
@@ -112,7 +112,7 @@ adjCoef(mgfexp, premium = 1.2, upper = 1)
 h <- function(x) 1/((1 - x) * (1 + 1.2 * x))
 adjCoef(h = h, upper = 1)
 
-## Example 8.7, Klugman et al. (2004)
+## Example 11.4 of Klugman et al. (2008)
 mgfx <- function(x) 0.6 * exp(x) + 0.4 * exp(2 * x)
 adjCoef(mgfx(x), mgfexp(x, 4), prem = 7, upper = 0.3182)
 

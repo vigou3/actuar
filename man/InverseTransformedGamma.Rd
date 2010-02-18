@@ -91,8 +91,8 @@ levinvtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
   Distribution also known as the Inverse Generalized Gamma.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
-  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
+  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
