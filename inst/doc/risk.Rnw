@@ -117,9 +117,11 @@ is the $n$-fold convolution of $F_C(\cdot)$. If $C$ is discrete on $0,
   \begin{cases}
     I\{x \geq 0\}, & k = 0 \\
     F_C(x),        & k = 1 \\
-    \sum_{y = 0}^x F_C^{*(k - 1)}(x - y) f_C(y), & k = 2, 3, \dots
+    \sum_{y = 0}^x F_C^{*(k - 1)}(x - y) f_C(y), & k = 2, 3, \dots,
   \end{cases}
 \end{equation}
+where $I\{\mathcal{A}\} = 1$ if $\mathcal{A}$ is true and
+$I\{\mathcal{A}\} = 0$ otherwise.
 
 
 
@@ -307,10 +309,14 @@ supported.
   approximation is valid for $x > \mu_S$ only and performs reasonably
   well when $\gamma_S < 1$. See \cite{Daykin_et_al} for details.
 \item Simulation of a random sample from $S$ and approximation of
-  $F_S(x)$ by the empirical cdf \eqref{eq:ecdf}. The simulation itself
-  is done with function \code{simul} (see the \code{"simulation"}
-  vignette)). This function admits very general hierarchical models
-  for both the frequency and the severity components.
+  $F_S(x)$ by the empirical cdf
+  \begin{equation}
+    F_n(x) = \frac{1}{n} \sum_{j = 1}^n I\{x_j \leq x\}.
+  \end{equation}
+  The simulation itself is done with function \code{simul} (see the
+  \code{"simulation"} vignette)). This function admits very general
+  hierarchical models for both the frequency and the severity
+  components.
 \end{enumerate}
 
 Here also, adding other methods to \code{aggregateDist} is simple due
@@ -387,7 +393,15 @@ quantile(Fs)                          # quantiles
 quantile(Fs, 0.999)                   # quantiles
 @
 
-Second, the package introduces the generic functions \code{VaR} and
+Second, a method of \texttt{diff} gives easy access to the underlying
+probability mass function:
+<<echo=TRUE>>=
+diff(Fs)
+@
+Of course, this is defined (and makes sense) for the recursive, direct
+convolution and simulation methods only.
+
+Third, the package introduces the generic functions \code{VaR} and
 \code{CTE} (with alias \code{TVaR}) with methods for objects of class
 \code{"aggregateDist"}. The former computes the value-at-risk
 $\VaR_\alpha$ such that

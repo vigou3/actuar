@@ -7,7 +7,7 @@ export(## Credibility theory
        ## Simulation of compound models
        simul, simpf, severity, unroll,
        ## Risk theory
-       aggregateDist, CTE, discretize, discretise, VaR, adjCoef, ruin,
+       aggregateDist, CTE, TVaR, discretize, discretise, VaR, adjCoef, ruin,
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        mexp, levexp, mgfexp,
@@ -58,6 +58,8 @@ S3method("[<-", grouped.data)
 S3method(aggregate, portfolio)
 
 S3method(CTE, aggregateDist)
+
+S3method(diff, aggregateDist)
 
 S3method(elev, default)
 S3method(elev, grouped.data)

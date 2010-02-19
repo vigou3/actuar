@@ -192,3 +192,17 @@ mean.aggregateDist <- function(x, ...)
     drop(crossprod(get("x", envir = environment(x)),
                    get("fs", envir = environment(x))))
 }
+
+diff.aggregateDist <- function(x, ...)
+{
+    label <- comment(x)
+
+    ## The 'diff' method is defined for the recursive, exact and
+    ## simulation methods only.
+    if (label == "Normal approximation" || label == "Normal Power approximation")
+        stop("function not defined for approximating distributions")
+
+    ## The probability vector is already stored in the environment of
+    ## the "aggregateDist" object.
+    get("fs", environment(x))
+}

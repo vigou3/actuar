@@ -4,6 +4,7 @@
 \alias{plot.aggregateDist}
 \alias{summary.aggregateDist}
 \alias{mean.aggregateDist}
+\alias{diff.aggregateDist}
 \title{Aggregate Claim Amount Distribution}
 \description{
   Compute the aggregate claim amount cumulative distribution function of
@@ -25,6 +26,8 @@ aggregateDist(method = c("recursive", "convolution", "normal",
 \method{summary}{aggregateDist}(object, \dots)
 
 \method{mean}{aggregateDist}(x, \dots)
+
+\method{diff}{aggregateDist}(x, \dots)
 }
 \arguments{
   \item{method}{method to be used}
@@ -159,6 +162,10 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   (\code{print}), plot (\code{plot}), compute quantiles
   (\code{quantile}) and compute the mean (\code{mean}) of
   \code{"aggregateDist"} objects.
+
+  For the \code{diff} method: a numeric vector of probabilities
+  corresponding to the probability mass function evaluated
+  at the knots of the distribution.
 }
 \seealso{
   \code{\link{discretize}} to discretize a severity distribution;
@@ -174,8 +181,8 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
   \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 
-  Daykin, C.D., Pentikäinen, T. and Pesonen, M. (1994), \emph{Practical
-    Risk Theory for Actuaries}, Chapman & Hall.
+  Daykin, C.D., \enc{Pentikäinen}{Pentikainen}, T. and Pesonen, M.
+  (1994), \emph{Practical Risk Theory for Actuaries}, Chapman & Hall.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
@@ -197,7 +204,7 @@ Fs <- aggregateDist("recursive", model.freq = "poisson",
                     model.sev = fx, lambda = 3, x.scale = 25)
 plot(Fs)
 Fs(knots(Fs))		      # cdf evaluated at its knots
-diff(Fs(knots(Fs)))           # probability mass function
+diff(Fs)                      # probability mass function
 
 ## Recursive method (high frequency)
 \dontrun{Fs <- aggregateDist("recursive", model.freq = "poisson",
