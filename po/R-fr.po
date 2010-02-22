@@ -1,3 +1,18 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"PO-Revision-Date: 2010-02-22 01:21-0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
 # French translations for actuar package
 # Traduction française du package actuar.
 # Copyright (C) 2010 Vincent Goulet
@@ -8,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: actuar 0.9-4\n"
 "Report-Msgid-Bugs-To: bugs@r-project.org\n"
-"POT-Creation-Date: 2010-02-17 22:09\n"
+"POT-Creation-Date: 2010-02-22 01:13\n"
 "PO-Revision-Date: 2010-02-17 22:27-0500\n"
 "Last-Translator: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
 "Language-Team: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
@@ -69,6 +84,9 @@ msgstr "'model.freq' doit être un vecteur de probabilités"
 
 msgid "internal error"
 msgstr "erreur interne"
+
+msgid "function not defined for approximating distributions"
+msgstr "fonction non définie pour les méthodes d'approximation"
 
 msgid "missing ratios not allowed when weights are not supplied"
 msgstr "ratios manquants non permis lorsque les poids ne sont pas fournis"

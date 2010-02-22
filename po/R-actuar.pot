@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: R 2.10.1\n"
 "Report-Msgid-Bugs-To: bugs@r-project.org\n"
-"POT-Creation-Date: 2010-02-17 22:09\n"
+"POT-Creation-Date: 2010-02-22 01:13\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,6 +57,9 @@ msgid "'model.freq' must be a vector of probabilities"
 msgstr ""
 
 msgid "internal error"
+msgstr ""
+
+msgid "function not defined for approximating distributions"
 msgstr ""
 
 msgid "missing ratios not allowed when weights are not supplied"

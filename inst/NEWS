@@ -12,10 +12,18 @@ NEW FEATURES
     Dividing the frequency parameter by 2^n and convolving n times can
     solve the problem.
 
+  o New method of 'diff' for "aggregateDist" objects to return the
+    probability mass function at the knots of the aggregate
+    distribution. Valid (and defined) for "recursive", "exact" and
+    "simulation" methods only.
+
   o Since the terminolgy Tail Value-at-Risk is often used instead of
     Conditional Tail Expectation, TVaR() is now an alias for CTE().
 
 BUG FIXES
+
+  o Quantiles (and thus VaRs and CTEs) for "aggregateDist" objects
+    where off by one knot of the distribution.
 
   o cm() returned the internal classification codes instead of the
     original ones for hierarchical models. (Thanks to Zachary Martin
