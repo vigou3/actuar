@@ -47,7 +47,7 @@ mgfinvgamma(x, shape, rate =1, scale = 1/rate, log =FALSE)
     f(x) = u^a exp(-u)/(x Gamma(a)), u = s/x}
   for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0} and \eqn{\theta > 0}{s > 0}.
   (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
-  by R's \code{\link{gamma}()} and defined in its help.)
+  by \R's \code{\link{gamma}()} and defined in its help.)
 
   The special case \code{shape == 1} is an
   \link[=dinvexp]{Inverse Exponential} distribution.

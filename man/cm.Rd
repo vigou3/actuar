@@ -80,9 +80,9 @@ cm(formula, data, ratios, weights, subset,
   portfolio data. Terms are separated by \code{+} operators and
   interactions within each term by \code{:}. For a portfolio divided
   first into sectors, then units and finally contracts, \code{formula}
-  would be \eqn{~ sector + sector:unit + sector:unit:contract}, where
+  would be \code{~ sector + sector:unit + sector:unit:contract}, where
   \code{sector}, \code{unit} and \code{contract} are column names in
-  \code{data}. In general, the formula should be of the form \eqn{~ a +
+  \code{data}. In general, the formula should be of the form \code{~ a +
   a:b + a:b:c + a:b:c:d + ...}.
 
   If argument \code{regformula} is not \code{NULL}, the regression model
@@ -236,18 +236,18 @@ cm(formula, data, ratios, weights, subset,
   an atomic vector for one-level models.
 }
 \references{
-  \enc{Bühlmann}{Buhlmann}, H. and Gisler, A. (2005), \emph{A course in
-    credibility theory and its applications}, Springer.
+  \enc{Bühlmann}{Buhlmann}, H. and Gisler, A. (2005), \emph{A Course in
+    Credibility Theory and its Applications}, Springer.
 
-  Belhadj, H., Goulet, V. and Ouellet, T. (2009), \emph{On Parameter
-  Estimation in Hierarchical Credibility}, \emph{Astin Bulletin} \bold{39}.
+  Belhadj, H., Goulet, V. and Ouellet, T. (2009), On parameter
+  estimation in hierarchical credibility, \emph{Astin Bulletin} \bold{39}.
   
-  Goulet, V. (1998), Principles and Application of Credibility
-  Theory, \emph{Journal of Actuarial Practice} \bold{6}, ISSN
+  Goulet, V. (1998), Principles and application of credibility
+  theory, \emph{Journal of Actuarial Practice} \bold{6}, ISSN
   1064-6647.
 
   Goovaerts, M. J. and Hoogstad, W. J. (1987), \emph{Credibility Theory},
-  Surveys of Actuarial Studies, NO.4, Nationale-Nederlanden N.V.
+  Surveys of Actuarial Studies, No. 4, Nationale-Nederlanden N.V.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},

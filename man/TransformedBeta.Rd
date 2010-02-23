@@ -60,7 +60,7 @@ levtrbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
   for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0}, \eqn{\gamma > 0}{b > 0},
   \eqn{\tau > 0}{c > 0} and \eqn{\theta > 0}{s > 0}.
   (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
-  by R's \code{\link{gamma}()} and defined in its help.)
+  by \R's \code{\link{gamma}()} and defined in its help.)
 
   The Transformed Beta is the distribution of the random variable
   \deqn{\theta \left(\frac{X}{1 - X}\right)^{1/\gamma},}{%

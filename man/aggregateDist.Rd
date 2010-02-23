@@ -121,7 +121,8 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   the (discrete) claim amount random variable.
 
   \code{model.freq} is vector \eqn{p_n}{pn} of the number of claims
-  probabilities; the first element \strong{must} be \eqn{Pr[N = 0]}.
+  probabilities; the first element \strong{must} be \eqn{\Pr[N =
+  0]}{Pr[N = 0]}.
 
   \code{model.sev} is vector \eqn{f_X(x)}{fx(x)} of the (discretized)
   claim amount distribution; the first element \strong{must} be

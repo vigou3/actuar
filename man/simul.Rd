@@ -84,8 +84,8 @@ simul(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
   \code{frequency} and \code{severity}.
 }
 \references{
-  Goulet, V. and Pouliot, L.-P. (2008), Simulation of Compound
-  Hierarchical Models in R, \emph{North American Actuarial Journal}
+  Goulet, V. and Pouliot, L.-P. (2008), Simulation of compound
+  hierarchical models in R, \emph{North American Actuarial Journal}
   \bold{12}, 401--412.
 }
 \author{

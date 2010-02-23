@@ -36,8 +36,8 @@ mgfnorm(x, mean = 0, sd = 1, log = FALSE)
   \code{\link{Normal}}
 }
 \references{
-  Johnson, N. L. and Kotz, S. (1970), \emph{Continuous univariate
-    distributions, Volume 1}, Wiley.
+  Johnson, N. L. and Kotz, S. (1970), \emph{Continuous Univariate
+    Distributions, Volume 1}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},

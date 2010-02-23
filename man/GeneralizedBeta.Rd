@@ -84,7 +84,7 @@ levgenbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
   \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 
   Johnson, N. L., Kotz, S. and Balakrishnan, N. (1995)
-  \emph{Continuous Univariate Distributions}, volume 2, Wiley.
+  \emph{Continuous Univariate Distributions, Volume 2}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca}

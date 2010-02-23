@@ -43,7 +43,7 @@ levburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
     \alpha}{= a}, \code{shape2} \eqn{= \gamma}{= b} and \code{scale}
   \eqn{= \theta}{= s} has density:
   \deqn{f(x) = \frac{\alpha \gamma (x/\theta)^\gamma}{%
-      x[1 + (x/scale)^\gamma]^{\alpha + 1}}}{%
+      x[1 + (x/\theta)^\gamma]^{\alpha + 1}}}{%
     f(x) = (a b (x/s)^b)/(x [1 + (x/s)^b]^(a + 1))}
   for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0}, \eqn{\gamma > 0}{b > 0}
   and \eqn{\theta > 0}{s > 0}.

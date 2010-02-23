@@ -48,7 +48,7 @@ levtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
   for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0}, \eqn{\tau > 0}{b > 0}
   and \eqn{\theta > 0}{s > 0}.
   (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
-  by R's \code{\link{gamma}()} and defined in its help.)
+  by \R's \code{\link{gamma}()} and defined in its help.)
 
   The Transformed Gamma is the distribution of the random variable
   \eqn{\theta X^{1/\tau},}{s X^(1/b),}

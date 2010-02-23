@@ -43,8 +43,8 @@ mgfexp(x, rate = 1, log = FALSE)
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
   \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 
-  Johnson, N. L. and Kotz, S. (1970), \emph{Continuous univariate
-    distributions, Volume 1}, Wiley.
+  Johnson, N. L. and Kotz, S. (1970), \emph{Continuous Univariate
+    Distributions, Volume 1}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
