@@ -1,5 +1,18 @@
 === actuar: An R Package for Actuarial Science ===
 
+Version 1.1-1
+=============
+
+USER-VISIBLE CHANGES
+
+  o CITATION file updated.
+
+BUG FIX
+
+  o summary.cm() could skip records in the output thinking they were
+    duplicates.
+
+
 Version 1.1-0
 =============
 
@@ -17,7 +30,7 @@ NEW FEATURES
     distribution. Valid (and defined) for "recursive", "exact" and
     "simulation" methods only.
 
-  o Since the terminolgy Tail Value-at-Risk is often used instead of
+  o Since the terminology Tail Value-at-Risk is often used instead of
     Conditional Tail Expectation, TVaR() is now an alias for CTE().
 
 BUG FIXES

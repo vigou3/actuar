@@ -159,7 +159,7 @@ cm <- function(formula, data, ratios, weights, subset,
         ## Put back original level names into the object
         res$classification <- levs
     }
-    
+
     ## Transfer level names to lists
     names(res$means) <- names(res$weights) <- c("portfolio", level.names)
     names(res$unbiased) <- if (!is.null(res$unbiased)) names(res$means)
@@ -279,7 +279,7 @@ print.summary.cm <- function(x, ...)
         cat("  Level:", level.names[i], "\n")
         level.id <- match(level.names[i], colnames(x$classification))
         levs <- x$classification[, seq.int(level.id), drop = FALSE]
-        m <- duplicated(apply(levs, 1, paste, collapse = ""))
+        m <- duplicated(levs)
 
         ## Treat the Hachemeister and no regression models
         ## separately.

@@ -11,12 +11,13 @@ citEntry(entry="Article",
 	 year = 2008,
 	 volume = 25,
 	 number = 7,
-	 url = {http://www.jstatsoft.org/v25/i07},
+	 pages = 1--37,
+	 url = "http://www.jstatsoft.org/v25/i07",
 
          textVersion =
 	 paste("C. Dutang, V. Goulet and M. Pigeon (2008).",
 	       "actuar: An R Package for Actuarial Science.",
-	       "Journal of Statistical Software, vol. 25, no. 7.",
+	       "Journal of Statistical Software, vol. 25, no. 7, 1-37.",
 	       "URL http://www.jstatsoft.org/v25/i07")
 )
 
