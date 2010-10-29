@@ -1,5 +1,16 @@
 === actuar: An R Package for Actuarial Science ===
 
+Version 1.1-2
+=============
+
+BUG FIX
+
+  o discretize() would return wrong results when argument 'step' was
+  omitted in favor of 'by' *and* the discretization method 'unbiased'
+  was used. (Thanks to Marie-Pier Côté <marie-pier.cote.11@ulaval.ca>
+  for the catch.)
+
+
 Version 1.1-1
 =============
 
