@@ -53,7 +53,7 @@ quantile.aggregateDist <-
     {
         dig <- max(2, getOption("digits"))
         names(res) <- formatC(paste(100 * probs, "%", sep = ""),
-                              format = "fg", wid = 1, digits = dig)
+                              format = "fg", width = 1, digits = dig)
     }
     res
 }

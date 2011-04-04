@@ -104,7 +104,7 @@ print.aggregateDist <- function(x, ...)
     {
         n <- length(get("x", envir = environment(x)))
         cat("Data:  (", n, "obs. )\n")
-        numform <- function(x) paste(formatC(x, dig = 4, width = 5), collapse = ", ")
+        numform <- function(x) paste(formatC(x, digits = 4, width = 5), collapse = ", ")
         i1 <- 1:min(3, n)
         i2 <- if (n >= 4)
             max(4, n - 1):n

@@ -16,7 +16,7 @@ ogive <- function(x, y = NULL, ...)
     if (inherits(x, "grouped.data"))
     {
         y <- x[, 2]
-        x <- eval(expression(cj), env = environment(x))
+        x <- eval(expression(cj), envir = environment(x))
     }
     else
     {
@@ -36,13 +36,13 @@ ogive <- function(x, y = NULL, ...)
 print.ogive <- function(x, digits = getOption("digits") - 2, ...)
 {
     ## Utility function
-    numform <- function(x) paste(formatC(x, dig = digits), collapse = ", ")
+    numform <- function(x) paste(formatC(x, digits = digits), collapse = ", ")
 
     ## The rest is adapted from ecdf()
     cat("Ogive for grouped data \nCall: ")
     print(attr(x, "call"), ...)
-    nc <- length(xxc <- get("x", env = environment(x)))
-    nn <- length(xxn <- get("y", env = environment(x)))
+    nc <- length(xxc <- get("x", envir = environment(x)))
+    nn <- length(xxn <- get("y", envir = environment(x)))
     i1 <- 1:min(3, nc)
     i2 <- if (nc >= 4) max(4, nc - 1):nc else integer(0)
     i3 <- 1:min(3, nn)
@@ -57,7 +57,7 @@ print.ogive <- function(x, digits = getOption("digits") - 2, ...)
 ### Essentially identical to stats::summary.ecdf().
 summary.ogive <- function (object, ...)
 {
-    cat("Ogive:\t ", eval(expression(n), env = environment(object)),
+    cat("Ogive:\t ", eval(expression(n), envir = environment(object)),
         "unique values with summary\n")
     summary(knots(object), ...)
 }

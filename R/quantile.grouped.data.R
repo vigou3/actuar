@@ -8,7 +8,7 @@ quantile.grouped.data <- function(x, probs = seq(0, 1, 0.25),
                                   names = TRUE, ...)
 {
     y <- x[, 2]
-    x <- eval(expression(cj), env = environment(x))
+    x <- eval(expression(cj), envir = environment(x))
 
     ## Inverse of the ogive
     fun <- approxfun(c(0, cumsum(y))/sum(y), x,
@@ -22,7 +22,7 @@ quantile.grouped.data <- function(x, probs = seq(0, 1, 0.25),
     {
         dig <- max(2, getOption("digits"))
         names(res) <- formatC(paste(100 * probs, "%", sep = ""),
-                              format = "fg", wid = 1, digits = dig)
+                              format = "fg", width = 1, digits = dig)
     }
     res
 }

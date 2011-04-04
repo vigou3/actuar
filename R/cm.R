@@ -135,8 +135,7 @@ cm <- function(formula, data, ratios, weights, subset,
                 {
                     warning("empty regression model; fitting with Buhlmann-Straub's model")
                     bstraub(ratios, weights, method = method,
-                            tol = tol, maxit = maxit, echo = echo,
-                            old.format = FALSE)
+                            tol = tol, maxit = maxit, echo = echo)
                 }
                 else
                     hache(ratios, weights, regformula, regdata,

@@ -24,7 +24,7 @@ emm.grouped.data <- function(x, order = 1, ...)
         stop("'order' must be positive")
 
     ## Extract group boundaries
-    cj <- eval(expression(cj), env = environment(x))
+    cj <- eval(expression(cj), envir = environment(x))
 
     ## Compute the factor
     ##
