@@ -94,17 +94,17 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
 }
 \references{
   Bowers, N. J. J., Gerber, H. U., Hickman, J., Jones, D. and Nesbitt, C.
-  (1986), \emph{Actuarial Mathematics}, Itasca IL: Society of Actuaries.
+  (1986), \emph{Actuarial Mathematics}, Society of Actuaries.
 
   Centeno, M. d. L. (2002), Measuring the effects of reinsurance by the
   adjustment coefficient in the Sparre-Anderson model, \emph{Insurance:
     Mathematics and Economics} \bold{30}, 37--49.
 
   Gerber, H. U. (1979), \emph{An Introduction to Mathematical Risk
-    Theory}, Philadelphia: Huebner Foundation.
+    Theory}, Huebner Foundation.
 
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
-  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
+  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 }
 \author{
   Christophe Dutang and Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
@@ -119,7 +119,7 @@ adjCoef(mgfexp, premium = 1.2, upper = 1)
 h <- function(x) 1/((1 - x) * (1 + 1.2 * x))
 adjCoef(h = h, upper = 1)
 
-## Example 8.7, Klugman et al. (2004)
+## Example 11.4 of Klugman et al. (2008)
 ## severity distribution is a mixture of exponential distributions, 
 ## while waiting times are exponentially distributed Exp(4)
 mgfsev <- function(x) 0.6 * exp(x) + 0.4 * exp(2 * x)

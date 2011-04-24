@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Sample empirical limited value functions for individual and
 ### grouped data.
@@ -19,8 +19,8 @@ elev.default <- function(x, ...)
     FUN <- function(limit)
         colMeans(sapply(limit, pmin, x = x))
     environment(FUN) <- new.env()
-    assign("x", sort(x), env = environment(FUN))
-    assign("n", length(unique(x)), env = environment(FUN))
+    assign("x", sort(x), envir = environment(FUN))
+    assign("n", length(unique(x)), envir = environment(FUN))
     class(FUN) <- c("elev", class(FUN))
     attr(FUN, "call") <- Call
     attr(FUN, "grouped") <- FALSE
@@ -65,10 +65,10 @@ elev.grouped.data <- function(x, ...)
     }
 
     environment(FUN) <- new.env()
-    assign("cj", eval(expression(cj), env = environment(x)),
-           env = environment(FUN))
-    assign("nj", x[, 2], env = environment(FUN))
-    assign("n", nrow(x), env = environment(FUN))
+    assign("cj", eval(expression(cj), envir = environment(x)),
+           envir = environment(FUN))
+    assign("nj", x[, 2], envir = environment(FUN))
+    assign("n", nrow(x), envir = environment(FUN))
     class(FUN) <- c("elev", class(FUN))
     attr(FUN, "call") <- Call
     attr(FUN, "grouped") <- TRUE
@@ -79,13 +79,13 @@ elev.grouped.data <- function(x, ...)
 print.elev <- function(x, digits = getOption("digits") - 2, ...)
 {
     ## Utility function
-    numform <- function(x) paste(formatC(x, dig = digits), collapse = ", ")
+    numform <- function(x) paste(formatC(x, digits = digits), collapse = ", ")
 
     ## The rest is adapted from ecdf()
     varname <- if (attr(x, "grouped")) "cj" else "x"
     cat("Empirical LEV \nCall: ")
     print(attr(x, "call"), ...)
-    n <- length(xx <- eval(parse(text = varname), env = environment(x)))
+    n <- length(xx <- eval(parse(text = varname), envir = environment(x)))
     i1 <- 1:min(3, n)
     i2 <- if (n >= 4) max(4, n - 1):n else integer(0)
     cat(" ", varname, "[1:", n, "] = ", numform(xx[i1]), if (n > 3) ", ",
@@ -96,7 +96,7 @@ print.elev <- function(x, digits = getOption("digits") - 2, ...)
 ### Essentially identical to stats::summary.ecdf().
 summary.elev <- function (object, ...)
 {
-    cat("Empirical LEV:\t ", eval(expression(n), env = environment(object)),
+    cat("Empirical LEV:\t ", eval(expression(n), envir = environment(object)),
         "unique values with summary\n")
     summary(knots(object), ...)
 }
@@ -105,9 +105,9 @@ summary.elev <- function (object, ...)
 knots.elev <- function(Fn, ...)
 {
     if (attr(Fn, "grouped"))
-        eval(expression(cj), env = environment(Fn))
+        eval(expression(cj), envir = environment(Fn))
     else
-        eval(expression(x), env = environment(Fn))
+        eval(expression(x), envir = environment(Fn))
 }
 
 plot.elev <- function(x, ..., main = NULL, xlab = "x", ylab = "Empirical LEV")

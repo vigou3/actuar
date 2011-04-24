@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to compute probability density, cumulative probability
  *  and moment generating functions, and raw moments for phase-type

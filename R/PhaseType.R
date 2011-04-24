@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Definition of the {d,p,r,m,mgf}ph functions to compute
 ### characteristics of Phase-type distributions with cumulative

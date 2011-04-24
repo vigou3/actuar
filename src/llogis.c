@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, raw and limited moments and to simulate random variates
@@ -31,6 +31,15 @@ double dllogis(double x, double shape, double scale, int give_log)
 
     if (!R_FINITE(x) || x < 0.0)
         return R_D__0;
+
+    /* handle x == 0 separately */
+    if (x == 0)
+    {
+	if (shape < 1) return R_PosInf;
+	if (shape > 1) return R_D__0;
+	/* else */
+	return R_D_val(1.0 / scale);
+    }
 
     tmp = shape * (log(x) - log(scale));
     logu = - log1p(exp(-tmp));
@@ -90,10 +99,12 @@ double mllogis(double order, double shape, double scale, int give_log)
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
         shape <= 0.0 ||
-        scale <= 0.0 ||
-        order <= -shape ||
-        order >= shape)
+        scale <= 0.0)
         return R_NaN;
+
+    if (order <= -shape ||
+        order >= shape)
+	return R_PosInf;
 
     tmp = order / shape;
 
@@ -109,9 +120,14 @@ double levllogis(double limit, double shape, double scale, double order,
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
         shape <= 0.0 ||
-        scale <= 0.0 ||
-        order <= -shape)
-        return R_NaN;
+        scale <= 0.0)
+	return R_NaN;;
+
+    if (order <= -shape)
+        return R_PosInf;
+
+    if (limit <= 0.0)
+        return 0;
 
     tmp1 = order / shape;
     tmp2 = 1.0 + tmp1;

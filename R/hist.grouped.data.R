@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Histogram for grouped data
 ###
@@ -15,7 +15,7 @@ hist.grouped.data <-
              plot = TRUE, labels = FALSE, ...)
 {
     ## Group boundaries are in the environment of 'x'
-    cj <- eval(expression(cj), env = environment(x))
+    cj <- eval(expression(cj), envir = environment(x))
     nj <- x[, 2]
 
     ## If any frequency is non finite, omit the group

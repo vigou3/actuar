@@ -1,12 +1,12 @@
 \documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
   \usepackage{amsmath,color,hyperref}
   \usepackage[round]{natbib}
-  \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
   \usepackage[english]{babel}
-  \usepackage{lucidabr}
-  \usepackage{booktabs,tabularx,threeparttable}
-  \usepackage{paralist}
+  \usepackage[scaled=0.9]{helvet}
+  \usepackage[sc]{mathpazo}
+  \usepackage{booktabs,paralist}
   \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Risk and ruin theory}
@@ -27,6 +27,12 @@
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
+
+  %% Redefine Sweave environments with smaller font
+  \RecustomVerbatimEnvironment{Sinput}{Verbatim}{%
+    fontshape=sl,fontsize=\small,xleftmargin=0pt}
+  \RecustomVerbatimEnvironment{Soutput}{Verbatim}{%
+    fontsize=\small,xleftmargin=0pt}
 
   \bibliographystyle{plainnat}
 
@@ -68,12 +74,12 @@ that the surplus becomes negative, in which case technical ruin of the
 insurance company occurs.
 
 The interested reader can read more on these subjects in
-\cite{LossModels2e,Gerber_MRT,DenuitCharpentier1,MART}, among others.
+\cite{LossModels3e,Gerber_MRT,DenuitCharpentier1,MART}, among others.
 
-The current version of \pkg{actuar} contains four visible functions
-related to the above problems: two for the calculation of the
-aggregate claim amount distribution and two for ruin probability
-calculations.
+The current version of \pkg{actuar} \citep{actuar} contains four
+visible functions related to the above problems: two for the
+calculation of the aggregate claim amount distribution and two for
+ruin probability calculations.
 
 
 
@@ -111,9 +117,11 @@ is the $n$-fold convolution of $F_C(\cdot)$. If $C$ is discrete on $0,
   \begin{cases}
     I\{x \geq 0\}, & k = 0 \\
     F_C(x),        & k = 1 \\
-    \sum_{y = 0}^x F_C^{*(k - 1)}(x - y) f_C(y), & k = 2, 3, \dots
+    \sum_{y = 0}^x F_C^{*(k - 1)}(x - y) f_C(y), & k = 2, 3, \dots,
   \end{cases}
 \end{equation}
+where $I\{\mathcal{A}\} = 1$ if $\mathcal{A}$ is true and
+$I\{\mathcal{A}\} = 0$ otherwise.
 
 
 
@@ -249,7 +257,7 @@ supported.
   This requires the severity distribution to be discrete arithmetic on
   $0, 1, 2, \dots, m$ for some monetary unit and the frequency
   distribution to be a member of either the $(a, b, 0)$ or $(a, b, 1)$
-  family of distributions \citep{LossModels2e}. (These families
+  family of distributions \citep{LossModels3e}. (These families
   contain the Poisson, binomial, negative binomial and logarithmic
   distributions and their extensions with an arbitrary mass at $x =
   0$.) The general recursive formula is:
@@ -301,10 +309,14 @@ supported.
   approximation is valid for $x > \mu_S$ only and performs reasonably
   well when $\gamma_S < 1$. See \cite{Daykin_et_al} for details.
 \item Simulation of a random sample from $S$ and approximation of
-  $F_S(x)$ by the empirical cdf \eqref{eq:ecdf}. The simulation itself
-  is done with function \code{simul} (see the \code{"simulation"}
-  vignette)). This function admits very general hierarchical models
-  for both the frequency and the severity components.
+  $F_S(x)$ by the empirical cdf
+  \begin{equation}
+    F_n(x) = \frac{1}{n} \sum_{j = 1}^n I\{x_j \leq x\}.
+  \end{equation}
+  The simulation itself is done with function \code{simul} (see the
+  \code{"simulation"} vignette)). This function admits very general
+  hierarchical models for both the frequency and the severity
+  components.
 \end{enumerate}
 
 Here also, adding other methods to \code{aggregateDist} is simple due
@@ -316,6 +328,16 @@ argument to note is \code{x.scale} to specify the monetary unit of
 the severity distribution. This way, one does not have to mentally do
 the conversion between the support of $0, 1, 2, \dots$ assumed by the
 recursive and convolution methods and the true support of $S$.
+
+The recursive method fails when the expected number of claims is so
+large that $f_S(0)$ is numerically equal to zero. One solution
+proposed by \citet{LossModels3e} consists in dividing the appropriate
+parameter of the frequency distribution by $2^n$, with $n$ such that
+$f_S(0) > 0$ and the recursions can start. One then computes the
+aggregate claim amount distribution using the recursive method and
+then convolves the resulting distribution $n$ times with itself to
+obtain the final distribution. Function \code{aggregateDist} supports
+this procedure through its argument \code{convolve}.
 
 The function returns an object of class \code{"aggregateDist"}
 inheriting from the \code{"function"} class. Thus, one can use the
@@ -334,11 +356,18 @@ Fs <- aggregateDist("recursive", model.freq = "poisson",
                     model.sev = fx, lambda = 10, x.scale = 0.5)
 summary(Fs)                           # summary method
 @
-Hence, object \code{Fs} contains an empirical cdf with support
+Although useless here, the following is essentially equivalent, except
+in the far right tail for numerical reasons:
+<<echo=TRUE>>=
+Fsc <- aggregateDist("recursive", model.freq = "poisson",
+                     model.sev = fx, lambda = 5, convolve = 1, x.scale = 0.5)
+summary(Fsc)                           # summary method
+@
+
+We return to object \code{Fs}. It contains an empirical cdf with support
 <<echo=TRUE>>=
 knots(Fs)                             # support of Fs.b (knots)
 @
-
 A nice graph of this function is obtained with a method of \code{plot} (see
 Figure \ref{fig:Fs}):
 <<echo=TRUE, eval=FALSE>>=
@@ -364,16 +393,26 @@ quantile(Fs)                          # quantiles
 quantile(Fs, 0.999)                   # quantiles
 @
 
-Second, the package introduces the generic functions \code{VaR} and
-\code{CTE} with methods for objects of class \code{"aggregateDist"}.
-The former computes the value-at-risk $\VaR_\alpha$ such that
+Second, a method of \texttt{diff} gives easy access to the underlying
+probability mass function:
+<<echo=TRUE>>=
+diff(Fs)
+@
+Of course, this is defined (and makes sense) for the recursive, direct
+convolution and simulation methods only.
+
+Third, the package introduces the generic functions \code{VaR} and
+\code{CTE} (with alias \code{TVaR}) with methods for objects of class
+\code{"aggregateDist"}. The former computes the value-at-risk
+$\VaR_\alpha$ such that
 \begin{equation}
   \label{eq:VaR}
   \Pr[S \leq \VaR_\alpha] = \alpha,
 \end{equation}
 where $\alpha$ is the confidence level. Thus, the value-at-risk is
 nothing else than a quantile. As for the method of \code{CTE}, it
-computes the conditional tail expectation
+computes the conditional tail expectation (also called Tail
+Value-at-Risk)
 \begin{equation}
   \label{eq:CTE}
   \CTE_\alpha = \E{S|S > \VaR_\alpha}.

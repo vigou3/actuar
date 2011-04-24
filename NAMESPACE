@@ -3,11 +3,11 @@ useDynLib(actuar, .registration = TRUE)
 
 ### Exports
 export(## Credibility theory
-       bstraub, cm,
+       cm,
        ## Simulation of compound models
        simul, simpf, severity, unroll,
        ## Risk theory
-       aggregateDist, CTE, discretize, discretise, VaR, adjCoef, ruin,
+       aggregateDist, CTE, TVaR, discretize, discretise, VaR, adjCoef, ruin,
        ## One parameter distributions
        dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
        mexp, levexp, mgfexp,
@@ -59,6 +59,8 @@ S3method(aggregate, portfolio)
 
 S3method(CTE, aggregateDist)
 
+S3method(diff, aggregateDist)
+
 S3method(elev, default)
 S3method(elev, grouped.data)
 
@@ -82,7 +84,6 @@ S3method(plot, ogive)
 S3method(plot, ruin)
 
 S3method(predict, bstraub)
-S3method(predict, bstraub.old)
 S3method(predict, cm)
 S3method(predict, hache)
 S3method(predict, hierarc)

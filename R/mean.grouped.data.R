@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Mean (TODO: and summaries) of grouped data objects
 ###
@@ -9,7 +9,7 @@
 mean.grouped.data <- function(x, ...)
 {
     ## Get group boundaries
-    cj <- eval(expression(cj), env = environment(x))
+    cj <- eval(expression(cj), envir = environment(x))
 
     ## Compute group midpoints
     midpoints <- cj[-length(cj)] + diff(cj)/2

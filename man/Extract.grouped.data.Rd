@@ -16,7 +16,7 @@
   \item{i, j}{elements to extract or replace. \code{i, j} are
     \code{numeric} or \code{character} or, for \code{[} only, empty.
     Numeric values are coerced to integer as if by
-    \code{\link{as.integer}}. For replacement by \code{[}, a logical
+    \code{\link[base]{as.integer}}. For replacement by \code{[}, a logical
     matrix is allowed, but not replacement in the group boundaries and
     group frequencies simultaneously.}
 
@@ -55,8 +55,9 @@
   columns.
 }
 \seealso{
-  \code{\link{[.data.frame}} for extraction and replacement methods of
-  data frames, \code{\link{grouped.data}} to create grouped data objects.
+  \code{\link[base]{[.data.frame}} for extraction and replacement
+  methods of data frames, \code{\link{grouped.data}} to create grouped
+  data objects.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca}

@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Definition of the {m,mgf}norm functions to compute raw and the
 ### moment generating function for the Normal distribution (as defined

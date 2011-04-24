@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to calculate raw and limited moments for the Beta
  *  distribution. See ../R/BetaMoments.R for details.
@@ -17,9 +17,11 @@ double mbeta(double order, double shape1, double shape2, int give_log)
         !R_FINITE(shape2) ||
         !R_FINITE(order)  ||
         shape1 <= 0.0 ||
-        shape2 <= 0.0 ||
-        order <= -shape1)
+        shape2 <= 0.0)
         return R_NaN;
+
+    if (order <= -shape1)
+	return R_PosInf;
 
     return beta(shape1 + order, shape2) / beta(shape1, shape2);
 }
@@ -33,12 +35,14 @@ double levbeta(double limit, double shape1, double shape2, double order,
         !R_FINITE(shape2) ||
         !R_FINITE(order) ||
         shape1 <= 0.0 ||
-        shape2 <= 0.0 ||
-        order <= -shape1)
+        shape2 <= 0.0)
         return R_NaN;
 
+    if (order <= -shape1)
+	return R_PosInf;
+
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     tmp = order + shape1;
 

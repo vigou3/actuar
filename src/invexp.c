@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, raw and limited moments and to simulate random variates
@@ -27,7 +27,8 @@ double dinvexp(double x, double scale, int give_log)
     if (!R_FINITE(scale) || scale <= 0.0)
         return R_NaN;
 
-    if (!R_FINITE(x) || x < 0.0)
+    /* handle also x == 0 here */
+    if (!R_FINITE(x) || x <= 0.0)
         return R_D__0;
 
     logu = log(scale) - log(x);
@@ -73,9 +74,11 @@ double minvexp(double order, double scale, int give_log)
 {
     if (!R_FINITE(scale) ||
         !R_FINITE(order) ||
-        scale <= 0.0 ||
-        order >= 1.0)
+        scale <= 0.0)
         return R_NaN;
+
+    if (order >= 1.0)
+	return R_PosInf;
 
     return R_pow(scale, order) * gammafn(1.0 - order);
 }
@@ -86,12 +89,14 @@ double levinvexp(double limit, double scale, double order, int give_log)
 
     if (!R_FINITE(scale) ||
         R_FINITE(order) ||
-        scale <= 0.0 ||
-        order >= 1.0)
+        scale <= 0.0)
         return R_NaN;
 
+    if (order >= 1.0)
+	return R_PosInf;
+
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     tmp = 1.0 - order;
 

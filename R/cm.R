@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Main interface to credibility model fitting functions.
 ###
@@ -122,12 +122,8 @@ cm <- function(formula, data, ratios, weights, subset,
 
         if (is.null(regformula))        # Buhlmann-Straub
         {
-            ## *** The 'old.format = FALSE' argument is necessary in
-            ## *** the deprecation phase of the output format of
-            ## *** bstraub(). To delete later.
             res <- bstraub(ratios, weights, method = method,
-                           tol = tol, maxit = maxit, echo = echo,
-                           old.format = FALSE)
+                           tol = tol, maxit = maxit, echo = echo)
         }
         else                            # Hachemeister
         {
@@ -139,8 +135,7 @@ cm <- function(formula, data, ratios, weights, subset,
                 {
                     warning("empty regression model; fitting with Buhlmann-Straub's model")
                     bstraub(ratios, weights, method = method,
-                            tol = tol, maxit = maxit, echo = echo,
-                            old.format = FALSE)
+                            tol = tol, maxit = maxit, echo = echo)
                 }
                 else
                     hache(ratios, weights, regformula, regdata,
@@ -154,9 +149,15 @@ cm <- function(formula, data, ratios, weights, subset,
         res$ordering <- list(seq_along(levs))
     }
     else                                # hierarchical model
+    {
+        ## Computations with auxiliary function.
         res <- hierarc(ratios, weights, classification = ilevs,
                        method = method, tol = tol, maxit = maxit,
                        echo = echo)
+
+        ## Put back original level names into the object
+        res$classification <- levs
+    }
 
     ## Transfer level names to lists
     names(res$means) <- names(res$weights) <- c("portfolio", level.names)
@@ -277,7 +278,7 @@ print.summary.cm <- function(x, ...)
         cat("  Level:", level.names[i], "\n")
         level.id <- match(level.names[i], colnames(x$classification))
         levs <- x$classification[, seq.int(level.id), drop = FALSE]
-        m <- duplicated(apply(levs, 1, paste, collapse = ""))
+        m <- duplicated(levs)
 
         ## Treat the Hachemeister and no regression models
         ## separately.
@@ -309,60 +310,6 @@ print.summary.cm <- function(x, ...)
         rownames(y) <- rep("   ", nrow(y))
         print(y, quote = FALSE, right = FALSE, ...)
         cat("\n")
-    }
-    invisible(x)
-}
-
-## Plots one of the three following models : B-S, hierarchical or
-## Hachemeister model. see credibility.R in demo/ for its use.
-## Inspired from plot.lm() in library/stats/R/plot.lm.R.
-## Two different plots are available for each model :
-##    * the plot of the premium lines and their prediction,
-##    * the plot representing the heterogeneity of the portfolio.
-## Arguments "level" and "node" determine the data to be seen :
-## - if level = NULL then node = no. contract in the B-S and Hachemeister models,
-## - if level != NULL then apply the hierarchical model :
-plot.cm <- function (x, levels = NULL, node, which = c(1,2),
-                     caption = c("Premium lines and prediction",
-                     "Heterogeneity of the portfolio"),
-                     from = NULL, to = NULL,
-                     main = "", ..., cex.caption = 1)
-{
-    if (!inherits(x, "cm"))
-	stop("use only with \"cm\" objects")
-    if (!is.numeric(which) || any(which < 1) || any(which > 2))
-	stop("'which' must be in 1:2")
-    if (is.null(levels) && is.null(node))
-        stop("you have to specify at least the node ( = contract)")
-
-    require(graphics)
-    show <- rep(FALSE, 2)
-    show[which] <- TRUE
-
-    ##---------- Do the individual plots : ----------
-    obj <- class(x)[2]
-    if (show[1])
-    {
-        switch(obj,
-               bstraub = plot.bstraub(x, contractNo = node, type = "predictions",
-                                      main = caption[1]),
-               hache = plot.hache(x, contractNo = node, type = "predictions",
-                                  from = from, to = to, main = paste(caption[1], " (contract ", node, ")(Hachem. model)")),
-               hierarc = plot.hierarc(x, levels = levels, node = node, type = "predictions",
-                                      main = caption[1]))
-
-        if (show[2])
-        {
-            par(ask = TRUE)
-            plot.new()
-            switch(obj,
-                   bstraub = plot.bstraub(x, contractNo = node, type = "heterogeneity",
-                                          main = caption[2]),
-                   hache = plot.hache(x, contractNo = node, type = "heterogeneity",
-                                      main = caption[2]),
-                   hierarc = plot.hierarc(x, levels = levels, node = node, type = "heterogeneity",
-                                          main = caption[2]))
-        }
     }
     invisible(x)
 }

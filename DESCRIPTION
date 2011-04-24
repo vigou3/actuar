@@ -1,18 +1,19 @@
 Package: actuar
 Type: Package
 Title: Actuarial functions
-Version: 1.0-0
-Date: 2008-08-16
+Version: 1.1-2
+Date: 2011-04-24
 Author: Vincent Goulet, Sébastien Auclair, Christophe Dutang, Xavier Milhaud, Tommy Ouellet, Louis-Philippe Pouliot, Mathieu Pigeon
 Maintainer: Vincent Goulet <vincent.goulet@act.ulaval.ca>
-URL: http://www.actuar-project.org
-Description: Collection of functions and data sets related to
-  actuarial science applications, mostly loss distributions, risk
-  theory (including ruin theory), simulation of compound hierarchical
-  models and credibility theory, for the moment.
+Description: Additional actuarial science functionality, mostly in the
+  fields of loss distributions, risk theory (including ruin theory),
+  simulation of compound hierarchical models and credibility theory.
+  The package also features 17 new probability laws commonly used in
+  insurance, most notably heavy tailed distributions.
 Depends: R (>= 2.6.0)
+Imports: stats, graphics
+Suggests: MASS
 License: GPL (>= 2)
 Encoding: latin1
 LazyLoad: yes
 LazyData: yes
-ZipData: yes

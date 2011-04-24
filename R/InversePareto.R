@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Definition of the {d,p,q,r,m}invpareto functions to compute
 ### characteristics of the Inverse Pareto distribution. The version
@@ -26,5 +26,5 @@ rinvpareto <- function(n, shape, scale)
 minvpareto <- function(order, shape, scale)
      .External("do_dpq", "minvpareto", order, shape, scale, FALSE)
 
-levinvpareto <- function(limit, shape, scale, order)
+levinvpareto <- function(limit, shape, scale, order = 1)
      .External("do_dpq", "levinvpareto", limit, shape, scale, order, FALSE)

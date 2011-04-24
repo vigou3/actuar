@@ -4,6 +4,7 @@
 \alias{plot.aggregateDist}
 \alias{summary.aggregateDist}
 \alias{mean.aggregateDist}
+\alias{diff.aggregateDist}
 \title{Aggregate Claim Amount Distribution}
 \description{
   Compute the aggregate claim amount cumulative distribution function of
@@ -11,9 +12,9 @@
 }
 \usage{
 aggregateDist(method = c("recursive", "convolution", "normal",
-                         "npower","bgamma", "simulation"),
+                         "npower", "simulation"),
               model.freq = NULL, model.sev = NULL, p0 = NULL,
-              x.scale = 1, moments, nb.simul, \dots,
+              x.scale = 1, convolve = 0, moments, nb.simul, \dots,
               tol = 1e-06, maxit = 500, echo = FALSE)
 
 \method{print}{aggregateDist}(x, \dots)
@@ -25,6 +26,8 @@ aggregateDist(method = c("recursive", "convolution", "normal",
 \method{summary}{aggregateDist}(object, \dots)
 
 \method{mean}{aggregateDist}(x, \dots)
+
+\method{diff}{aggregateDist}(x, \dots)
 }
 \arguments{
   \item{method}{method to be used}
@@ -33,8 +36,8 @@ aggregateDist(method = c("recursive", "convolution", "normal",
       b, 1)} families of distributions. For \code{"convolution"} method:
     a vector of claim number probabilities. For \code{"simulation"}
     method: a frequency simulation model (see \code{\link{simul}} for
-    details) or \code{NULL}. Ignored with \code{normal},
-    \code{npower} and \code{bgamma} methods.}
+    details) or \code{NULL}. Ignored with \code{normal} and
+    \code{npower} methods.}
   \item{model.sev}{for \code{"recursive"} and \code{"convolution"}
     methods: a vector of claim amount probabilities. For
     \code{"simulation"} method: a severity simulation model (see
@@ -47,15 +50,18 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   \item{x.scale}{value of an amount of 1 in the severity model (monetary
     unit). Used only with \code{"recursive"} and \code{"convolution"}
     methods.}
+  \item{convolve}{number of times to convolve the resulting distribution
+    with itself. Used only with \code{"recursive"} method.}
   \item{moments}{vector of the true moments of the aggregate claim
-    amount distribution; required only by the \code{"normal"}, 
-    \code{"npower"} or \code{"bgamma"} methods.}
+    amount distribution; required only by the \code{"normal"} or
+    \code{"npower"} methods.}
   \item{nb.simul}{number of simulations for the \code{"simulation"} method.}
   \item{\dots}{parameters of the frequency distribution for the
     \code{"recursive"} method; further arguments to be passed to or
     from other methods otherwise.}
-  \item{tol}{the recursion in the \code{"recursive"} method stops when the
-    cumulative distribution function is less than \code{tol} away from 1.}
+  \item{tol}{the resulting cumulative distribution in the
+    \code{"recursive"} method will get less than \code{tol} away from
+    1.}
   \item{maxit}{maximum number of recursions in the \code{"recursive"}
     method.}
   \item{echo}{logical; echo the recursions to screen in the
@@ -74,8 +80,7 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   The \code{"recursive"} method computes the cdf using the Panjer
   algorithm; the \code{"convolution"} method using convolutions; the
   \code{"normal"} method using a normal approximation; the
-  \code{"npower"} method using the Normal Power 2 approximation; the 
-  \code{"bgamma"} method using the Bowers gamma approximation; the
+  \code{"npower"} method using the Normal Power 2 approximation; the
   \code{"simulation"} method using simulations. More details follow.
 }
 \section{Recursive method}{
@@ -94,8 +99,13 @@ aggregateDist(method = c("recursive", "convolution", "normal",
 
   \code{model.sev} is a vector of the (discretized) claim amount
   distribution \eqn{X}; the first element \strong{must} be \eqn{f_X(0) =
-  \Pr[X = 0]}{fx(0) = Pr[X = 0]}.
+    \Pr[X = 0]}{fx(0) = Pr[X = 0]}.
 
+  The recursion will fail to start if the expected number of claims is
+  too large. One may divide the appropriate parameter of the frequency
+  distribution by \eqn{2^n} and convolve the resulting distribution
+  \eqn{n =} \code{convolve} times.
+  
   Failure to obtain a cumulative distribution function less than
   \code{tol} away from 1 within \code{maxit} iterations is often due
   to a too coarse discretization of the severity distribution.
@@ -111,13 +121,14 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   the (discrete) claim amount random variable.
 
   \code{model.freq} is vector \eqn{p_n}{pn} of the number of claims
-  probabilities; the first element \strong{must} be \eqn{Pr[N = 0]}.
+  probabilities; the first element \strong{must} be \eqn{\Pr[N =
+  0]}{Pr[N = 0]}.
 
   \code{model.sev} is vector \eqn{f_X(x)}{fx(x)} of the (discretized)
   claim amount distribution; the first element \strong{must} be
   \eqn{f_X(0)}{fx(0)}.
 }
-\section{Normal, Normal Power 2 and Bowers Gamma methods}{
+\section{Normal and Normal Power 2 methods}{
   The Normal approximation of a cumulative distribution function (cdf)
   \eqn{F(x)} with mean \eqn{\mu}{m} and standard deviation
   \eqn{\sigma}{s} is
@@ -133,44 +144,6 @@ aggregateDist(method = c("recursive", "convolution", "normal",
     F(x) ~= pnorm(-3/g + sqrt(9/g^2 + 1 + (6/g) * (x - m)/s)).}
   This formula is valid only for the right-hand tail of the distribution
   and skewness should not exceed unity.
-
-  The Bowers Gamma approximation of a cumulative distribution function (cdf) 
-  \eqn{F(x)} uses Laguerre polynomials (orthogonal to the density of a gamma 
-  distribution) \eqn{L_k(x) = (-1)^k x^(1-a) e^x d^k( x^(k+a-1) ) / dx^k} 
-  for {k=0..5}.  
-  \eqn{F} is approximated by a combination of gamma distributions
-  \deqn{ F(x) \approx g(z;\alpha, 1) * (1-A_3+A_4-A_5) + g(z; \alpha+1, 1) * 
-  ( 3A_3 - 4A_4 + 5A_5) + g(z; \alpha+2,1) * (-3A_3 + 6A_4 -10A_5) 
-  + g(z; \alpha+3,1) *(A_3 - 4A_4 +10 A_5 ) + g(z; \alpha+4,1) * (A_4-5A_5)
-  +g(z; \alpha+5,1) * A_5 }{%
-  F(x) ~= g(z; a, 1) * (1-A3+A4-A5) + g(z; a+1, 1) * 
-  ( 3*A3 - 4*A4 + 5*A5) + g(z; a+2,1) * (-3*A3 + 6*A4 -10*A5) 
-  + g(z; a+3,1) *(A3 - 4*A4 +10* A5 ) + g(z; a+4,1) * (A4-5*A5)
-  +g(z;a+5,1) * A5
-  }
-  where \eqn{\alpha=\frac{E^2[S]}{Var[S]} }{a =E^2[S]/Var[S]}, 
-  \eqn{\beta =\frac{E[S]}{Var[S]} }{b=E[S]/Var[S]}, \eqn{z=\beta x}{z= b*x} and
-  the random variable \eqn{Z = \beta X}{Z = bX} of cdf 
-  \eqn{g(z;\alpha, 1)}{g(z;a, 1)} follows a \eqn{G(\alpha,1)}{G(a,1)} 
-  Gamma distribution. The constants \eqn{A_3}{A3}, \eqn{A_4}{A4} and 
-  \eqn{A_5}{A5} are defined by
-  \deqn{A_3 = \frac{E[(Z-E[Z])^3]-(\alpha+2)(\alpha+1)\alpha}{3!}
-  }{%
-  A3 = [ E[(Z-E[Z])^3] - 2*a ] / 3!,
-  } \deqn{A_4 = \frac{E[(Z-E[Z])^4]-12 E[(Z-E[Z])^3]-3\alpha^2+18\alpha}{4!}
-  }{%
-  A4 = [ E[(Z-E[Z])^4]-12 E(Z-E[Z])Z^3]-3a^2+18a ] / 4!
-  } and \deqn{A_5 = \frac{E[(Z-E[Z])^5]-20 E[(Z-E[Z])^4]-(10\alpha-120)
-  E[(Z-E[Z])^3] 60\alpha^2-144\alpha}{5!}
-  }{%
-  A5 = [ E[(Z-E[Z])^5]-20 E[(Z-E[Z])^4]-(10a-120)E[(Z-E[Z])^3]
-  +60a^2-144a ] / 5! .
-  }
-  Note that \code{moments} are assumed to be the mean, the variance and 
-  other central moments. If \code{moments} is a vector with only the first 
-  three moments of \eqn{S}, then \eqn{A_4}{A4} and \eqn{A_5}{A5} are 
-  put to zero, otherwise they are defined by the equation above.
-  
 }
 \section{Simulation method}{
   This methods returns the empirical distribution function of a sample
@@ -190,36 +163,34 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   (\code{print}), plot (\code{plot}), compute quantiles
   (\code{quantile}) and compute the mean (\code{mean}) of
   \code{"aggregateDist"} objects.
+
+  For the \code{diff} method: a numeric vector of probabilities
+  corresponding to the probability mass function evaluated
+  at the knots of the distribution.
 }
 \seealso{
   \code{\link{discretize}} to discretize a severity distribution;
   \code{\link{mean.aggregateDist}} to compute the mean of the
   distribution;
   \code{\link{quantile.aggregateDist}} to compute the quantiles or the
-  Value at Risk;
+  Value-at-Risk;
   \code{\link{CTE.aggregateDist}} to compute the Conditional Tail
-  Expectation;
+  Expectation (or Tail Value-at-Risk);
   \code{\link{simul}}.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
-  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
+  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 
-  Daykin, C.D., Pentikäinen, T. and Pesonen, M. (1994), \emph{Practical
-    Risk Theory for Actuaries}, Chapman & Hall.
-
-  Bowers, N. L. Jr. (1966), \emph{Expansion of 
-  probability density functions as a sum of gamma densities with
-  applications in risk theory}, Transactions of society of actuaries.
-
-  Thibault, Louis (1997), \emph{méthodes d'évaluation de la distribution du montant total des réclamations}, Mémoires et thèses de l'Université Laval.
+  Daykin, C.D., \enc{Pentikäinen}{Pentikainen}, T. and Pesonen, M.
+  (1994), \emph{Practical Risk Theory for Actuaries}, Chapman & Hall.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and
   Louis-Philippe Pouliot
 }
 \examples{
-## Convolution method (example 6.6 of Klugman et al. (2004))
+## Convolution method (example 9.5 of Klugman et al. (2008))
 fx <- c(0, 0.15, 0.2, 0.25, 0.125, 0.075,
         0.05, 0.05, 0.05, 0.025, 0.025)
 pn <- c(0.05, 0.1, 0.15, 0.2, 0.25, 0.15, 0.06, 0.03, 0.01)
@@ -233,16 +204,19 @@ plot(Fs)
 Fs <- aggregateDist("recursive", model.freq = "poisson",
                     model.sev = fx, lambda = 3, x.scale = 25)
 plot(Fs)
+Fs(knots(Fs))		      # cdf evaluated at its knots
+diff(Fs)                      # probability mass function
+
+## Recursive method (high frequency)
+\dontrun{Fs <- aggregateDist("recursive", model.freq = "poisson",
+                    model.sev = fx, lambda = 1000)}
+Fs <- aggregateDist("recursive", model.freq = "poisson",
+                    model.sev = fx, lambda = 250, convolve = 2, maxit = 1500)
+plot(Fs)
 
 ## Normal Power approximation
 Fs <- aggregateDist("npower", moments = c(200, 200, 0.5))
 Fs(210)
-
-## Bowers Gamma approximation (example A of Bowers (1966))
-Fs <- aggregateDist("bgamma", moments = c(16, 32, 96))
-plot(Fs, xlim = c(0, 50) )
-Fs <- aggregateDist("bgamma", moments = c(16, 32, 96, 3456, 32640))
-plot(Fs, add = TRUE, col = "blue", xlim = c(0, 50))
 
 ## Simulation method
 model.freq <- expression(data = rpois(3))

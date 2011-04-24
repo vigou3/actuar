@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Function to discretize a continuous distribution using various
 ### methods.
@@ -107,9 +107,9 @@ discretize <- function (cdf, from, to, step = 1,
         ##   (E[X ^ x] - E[X ^ x - step])/step - 1 + F(x).
         ##
         ## See exercise 6.36 in Loss Models, 2nd edition.
-        return(c(-diff(head(Ex, 2))/step + 1 - Fx[1],
-                 (2 * head(Ex[-1], -1) - head(Ex, -2) - tail(Ex, -2))/step,
-                 diff(tail(Ex, 2))/step - 1 + Fx[2]))
+        return(c(-diff(head(Ex, 2))/by + 1 - Fx[1],
+                 (2 * head(Ex[-1], -1) - head(Ex, -2) - tail(Ex, -2))/by,
+                 diff(tail(Ex, 2))/by - 1 + Fx[2]))
     }
 }
 

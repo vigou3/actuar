@@ -84,8 +84,9 @@ simul(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
   \code{frequency} and \code{severity}.
 }
 \references{
-  Goulet, V. (2006), \emph{Credibility for severity
-    revisited}, North American Actuarial Journal \bold{10}, 49--62.
+  Goulet, V. and Pouliot, L.-P. (2008), Simulation of compound
+  hierarchical models in R, \emph{North American Actuarial Journal}
+  \bold{12}, 401--412.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},

@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, raw and limited moments and to simulate random variates
@@ -36,10 +36,21 @@ double dtrgamma(double x, double shape1, double shape2, double scale,
     if (!R_FINITE(x) || x < 0.0)
         return R_D__0;
 
+    /* handle x == 0 separately */
+    if (x == 0)
+    {
+	if (shape1 * shape2 < 1) return R_PosInf;
+	if (shape1 * shape2 > 1) return R_D__0;
+	/* else */
+	return give_log ?
+	    log(shape2) - log(scale) - lgammafn(shape1) :
+	    shape2 / (scale * gammafn(shape1));
+    }
+
     logu = shape2 * (log(x) - log(scale));
 
     return R_D_exp(log(shape2) + shape1 * logu - exp(logu)
-                   - log(x) - lgamma(shape1));
+                   - log(x) - lgammafn(shape1));
 }
 
 double ptrgamma(double q, double shape1, double shape2, double scale,
@@ -103,9 +114,11 @@ double mtrgamma(double order, double shape1, double shape2, double scale,
         !R_FINITE(order) ||
         shape1 <= 0.0 ||
         shape2 <= 0.0 ||
-        scale <= 0.0 ||
-        order <= -shape1 * shape2)
+        scale <= 0.0)
         return R_NaN;
+
+    if (order <= -shape1 * shape2)
+	return R_PosInf;
 
     return R_pow(scale, order) * gammafn(shape1 + order/shape2)
         / gammafn(shape1);
@@ -122,12 +135,14 @@ double levtrgamma(double limit, double shape1, double shape2, double scale,
         !R_FINITE(order)  ||
         shape1 <= 0.0 ||
         shape2 <= 0.0 ||
-        scale  <= 0.0 ||
-        order <= -shape1 * shape2)
+        scale  <= 0.0)
         return R_NaN;
 
+    if (order <= -shape1 * shape2)
+	return R_PosInf;
+
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     tmp = shape1 + order / shape2;
 

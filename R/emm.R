@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Empirical moments for individual and grouped data.
 ###
@@ -24,7 +24,7 @@ emm.grouped.data <- function(x, order = 1, ...)
         stop("'order' must be positive")
 
     ## Extract group boundaries
-    cj <- eval(expression(cj), env = environment(x))
+    cj <- eval(expression(cj), envir = environment(x))
 
     ## Compute the factor
     ##

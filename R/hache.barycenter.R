@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Auxiliary function to fit regression credibility model by
 ### positioning the intercept at the barycenter of time.
@@ -143,12 +143,10 @@ hache.barycenter <- function(ratios, weights, xreg, method,
     names(coll) <- rownames(ind)
 
     ## Results
-    list(ratios = ratios,
-         means = list(coll, ind),
+    list(means = list(coll, ind),
          weights = list(W.s, W),
          unbiased = if (method == "unbiased") list(A, s2),
          iterative = if (method == "iterative") list(A, s2),
-         withinVar = sigma2,
          cred = cred,
          nodes = list(ncontracts),
          adj.models = fits,

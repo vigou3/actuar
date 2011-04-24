@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Use one of five methods to compute the aggregate claim amount
 ### distribution of a portfolio over a period given a frequency and a
@@ -8,9 +8,10 @@
 ### Louis-Philippe Pouliot
 
 aggregateDist <-
-    function(method = c("recursive", "convolution", "normal", "npower","bgamma", "simulation"),
+    function(method = c("recursive", "convolution", "normal", "npower", "simulation"),
              model.freq = NULL, model.sev = NULL, p0 = NULL, x.scale = 1,
-             moments, nb.simul, ..., tol = 1e-06, maxit = 500, echo = FALSE)
+             convolve = 0, moments, nb.simul, ...,
+             tol = 1e-06, maxit = 500, echo = FALSE)
 {
     Call <- match.call()
 
@@ -38,14 +39,6 @@ aggregateDist <-
         FUN <- npower(moments[1], moments[2], moments[3])
         comment(FUN) <- "Normal Power approximation"
     }
-    else if (method == "bgamma")
-    {
-        if (missing(moments) || length(moments) < 3)
-            stop("'moments' must supply the mean and the other first two or four central moments of the distribution")
-        FUN <- bowergamma(moments)
-        comment(FUN) <- "Bowers Gamma approximation"
-    }
-
     else if (method == "simulation")
     {
         if (missing(nb.simul))
@@ -55,7 +48,6 @@ aggregateDist <-
         FUN <- simS(nb.simul, model.freq = model.freq, model.sev = model.sev)
         comment(FUN) <- "Approximation by simulation"
     }
-
     else
     {
         ## "recursive" and "convolution" cases. Both require a
@@ -73,7 +65,7 @@ aggregateDist <-
                               c("poisson", "geometric", "negative binomial",
                                 "binomial", "logarithmic"))
             FUN <- panjer(fx = model.sev, dist = dist, p0 = p0,
-                          x.scale = x.scale, ...,
+                          x.scale = x.scale, ..., convolve = convolve,
                           tol = tol, maxit = maxit, echo = echo)
             comment(FUN) <- "Recursive method approximation"
         }
@@ -112,7 +104,7 @@ print.aggregateDist <- function(x, ...)
     {
         n <- length(get("x", envir = environment(x)))
         cat("Data:  (", n, "obs. )\n")
-        numform <- function(x) paste(formatC(x, dig = 4, width = 5), collapse = ", ")
+        numform <- function(x) paste(formatC(x, digits = 4, width = 5), collapse = ", ")
         i1 <- 1:min(3, n)
         i2 <- if (n >= 4)
             max(4, n - 1):n
@@ -124,8 +116,7 @@ print.aggregateDist <- function(x, ...)
         cat("\n")
     }
     if (label %in% c("Normal approximation",
-                     "Normal Power approximation",
-                 "Bowers Gamma approximation"))
+                     "Normal Power approximation"))
         cat(attr(x, "source"), "\n")
     invisible(x)
 }
@@ -163,15 +154,13 @@ summary.aggregateDist <- function(object, ...)
 print.summary.aggregateDist <- function(x, ...)
 {
     cat(ifelse(comment(x) %in%
-               c("Normal approximation", "Normal Power approximation", "Bowers Gamma approximation"),
+               c("Normal approximation", "Normal Power approximation"),
                "Aggregate Claim Amount CDF:\n",
                "Aggregate Claim Amount Empirical CDF:\n"))
     q <- quantile(x, p = c(0.25, 0.5, 0.75))
-    
     expectation <- mean(x)
 
-    if (comment(x) %in% c("Normal approximation", "Normal Power approximation",
-                                                                                        "Bowers Gamma approximation"))
+    if (comment(x) %in% c("Normal approximation", "Normal Power approximation"))
     {
         min <- 0
         max <- NA
@@ -194,8 +183,7 @@ mean.aggregateDist <- function(x, ...)
     ## Simply return the value of the true mean given in argument in
     ## the case of the Normal and Normal Power approximations.
     if (label %in%
-        c("Normal approximation", "Normal Power approximation", 
-                                                     "Bowers Gamma approximation"))
+        c("Normal approximation", "Normal Power approximation"))
         return(get("mean", envir = environment(x)))
 
     ## For the recursive, exact and simulation methods, compute the
@@ -203,4 +191,18 @@ mean.aggregateDist <- function(x, ...)
     ## environment of the object.
     drop(crossprod(get("x", envir = environment(x)),
                    get("fs", envir = environment(x))))
+}
+
+diff.aggregateDist <- function(x, ...)
+{
+    label <- comment(x)
+
+    ## The 'diff' method is defined for the recursive, exact and
+    ## simulation methods only.
+    if (label == "Normal approximation" || label == "Normal Power approximation")
+        stop("function not defined for approximating distributions")
+
+    ## The probability vector is already stored in the environment of
+    ## the "aggregateDist" object.
+    get("fs", environment(x))
 }

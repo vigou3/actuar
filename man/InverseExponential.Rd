@@ -36,8 +36,8 @@ levinvexp(limit, rate = 1, scale = 1/rate, order)
 }
 \details{
   The Inverse Exponential distribution with parameter \code{scale}
-  \eqn{\theta}{= s} has density:
-  \deqn{f(x) = \frac{s e^{-s/x}}{x^2}}{f(x) = s exp(-s/x)/x^2}
+  \eqn{= \theta}{= s} has density:
+  \deqn{f(x) = \frac{\theta e^{-\theta/x}}{x^2}}{f(x) = s exp(-s/x)/x^2}
   for \eqn{x > 0} and \eqn{\theta > 0}{s > 0}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
@@ -58,8 +58,8 @@ levinvexp(limit, rate = 1, scale = 1/rate, order)
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
-  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
+  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and

@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to compute density, cumulative distribution and moment
  *  generating functions, raw moments and to simulate random variates
@@ -112,7 +112,7 @@ double rphtype(double *pi, double **Q, double *rates, int m)
 
     /* Simulate initial state according to vector pi (transient states
      * are numbered 0, ..., m - 1 and absorbing state is numbered
-     * m. See the definition of SampleSingleValue() to see why this
+     * m). See the definition of SampleSingleValue() to see why this
      * works fine here and below. */
     state = SampleSingleValue(m, pi);
 

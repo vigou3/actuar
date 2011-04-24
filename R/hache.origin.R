@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Auxiliary function to fit regression credibility model using the
 ### original Hachemeister model.
@@ -148,12 +148,10 @@ hache.origin <- function(ratios, weights, xreg, tol, maxit, echo)
     names(coll) <- rownames(ind)
 
     ## Results
-    list(ratios = ratios,
-         means = list(coll, ind),
+    list(means = list(coll, ind),
          weights = list(cred.s, W),
          unbiased = NULL,
          iterative = list(A, s2),
-         withinVar = sigma2,
          cred = cred,
          nodes = list(ncontracts),
          adj.models = fits)

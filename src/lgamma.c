@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, and to simulate random variates for the loggamma
@@ -70,12 +70,14 @@ double rlgamma(double shapelog, double ratelog)
 double mlgamma(double order, double shapelog, double ratelog, int give_log)
 {
     if (!R_FINITE(shapelog) ||
-        !R_FINITE(ratelog)  ||
+        !R_FINITE(ratelog) ||
         !R_FINITE(order) ||
-        shapelog <= 0.0  ||
-        ratelog <= 0.0   ||
-        order >= ratelog)
+        shapelog <= 0.0 ||
+        ratelog <= 0.0)
         return R_NaN;
+
+    if (order >= ratelog)
+	return R_PosInf;
 
     return R_pow(1.0 - order / ratelog, -shapelog);
 }
@@ -86,14 +88,19 @@ double levlgamma(double limit, double shapelog, double ratelog, double order,
     double u;
 
     if (!R_FINITE(shapelog) ||
-        !R_FINITE(ratelog)  ||
-        !R_FINITE(limit)    ||
-        !R_FINITE(order)    ||
-        shapelog <= 0.0  ||
-        ratelog <= 0.0   ||
-        limit <= 0.0     ||
-        order >= ratelog)
+        !R_FINITE(ratelog) ||
+        !R_FINITE(limit) ||
+        !R_FINITE(order) ||
+        shapelog <= 0.0 ||
+        ratelog <= 0.0 ||
+        limit <= 0.0)
         return R_NaN;
+
+    if (order >= ratelog)
+	return R_PosInf;
+
+    if (limit <= 1.0)
+        return 0.0;
 
     u = log(limit);
 

@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Table of functions internal to the package. First element is an
  *  argument to one of do_math or do_random, functions callable from

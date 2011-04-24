@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Demo of the credibility theory facilities provided by actuar
 ###
@@ -29,21 +29,6 @@ fit <- cm(~state, hachemeister, ratios = ratio.1:ratio.12,
           weights = weight.1:weight.12, method = "iterative")
 summary(fit)
 predict(fit)
-## plot the contract number 2, prediction and heterogeneity of the portfolio
-plot.cm(fit, levels = NULL, node = 2, which = 1:2, from = NULL, to = NULL)
-
-## Fitting of a Hachemeister regression model. This requires to
-## specify a vector or matrix of regressors with argument 'xreg'.
-## 'xreg' must be a matrix and represents the regressor = time here.
-## The boolean adjust is set at TRUE so as to adjust intercept
-## and slope in the regression model. Iterative estimators.
-fit <- cm(~state, hachemeister, ratios = ratio.1:ratio.12,
-          weights = weight.1:weight.12, regformula = ~time,
-          regdata = data.frame(time=12:1), adj.intercept = TRUE, method = "iterative")
-summary(fit, newdata = data.frame(time = 0))     # 'newdata' is the future value of regressor
-predict(fit, newdata = data.frame(time = 0))
-## graph of the Hachemeister regression lines, contract No 4
-plot.cm(fit, levels = NULL, node = 4, which = 1:2, from = 1, to = 12)
 
 ## Simulation of a three level hierarchical portfolio.
 nodes <- list(sector = 2, unit = c(3, 4),
@@ -72,52 +57,16 @@ predict(fit)                          # credibility premiums
 predict(fit, levels = "unit")         # unit credibility premiums only
 summary(fit)                          # portfolio summary
 summary(fit, levels = "unit")         # unit portfolio summary only
-## plot the premium lines and prediction, then the heterogeneity
-## at levels 'sector', for the sector 2.
-plot.cm(fit, levels = "sector", node = 2, which = 1:2, from = NULL, to = NULL)
-## the same at levels 'unit', for the unit 3 in the sector 2.
-plot.cm(fit, levels = "unit", node = c(2,3), which = 1:2, from = NULL, to = NULL)
-## the same at levels 'contract', for the contract 1 in the
-## unit 4 of the sector 2.
-plot.cm(fit, levels = "contract", node = c(2,4,1), which = 1:2, from = NULL, to = NULL)
 
+## Fitting of Hachemeister regression model with intercept at time origin.
+fit <- cm(~state, hachemeister, ratios = ratio.1:ratio.12,
+          weights = weight.1:weight.12, regformula = ~time,
+          regdata = data.frame(time = 1:12))
+summary(fit, newdata = data.frame(time = 13)) # 'newdata' is the future value of regressor
+predict(fit, newdata = data.frame(time = 13))
 
-## Simulation of a 4 levels hierarchical portfolio.
-nodes <- list(sector = 2, unit = c(2, 2), interm = c(3, 2, 4, 1),
-              contract = c(4,3,2,5,7,2,5,1,3,6), year = 6)
-mf <- expression(sector = rexp(2),
-                 unit = rgamma(sector, 0.1),
-                 interm = rgamma(unit, 0.1),
-                 contract = rgamma(interm, 1),
-                 year = rpois(weights * contract))
-ms <- expression(sector = rnorm(2, sqrt(0.1)),
-                 unit = rnorm(sector, 1),
-                 interm = rnorm(unit, 1),
-                 contract = NULL,
-                 year = rlnorm(unit, 1))
-wijkt <- runif(38, 2, 10)
-wijkt <- runif(228, rep(0.5 * wijkt, each = 6), rep(1.5 * wijkt, each = 6))
-pf <- simul(nodes, model.freq = mf, model.sev = ms, weights = wijkt)
-
-## Fitting of a hierarchical model to the portfolio simulated above.
-DB <- cbind(weights(pf, prefix = "weight."),
-            aggregate(pf, classif = FALSE) / weights(pf, classif = FALSE))
-
-fit <- cm(~sector + sector:unit + sector:unit:interm + sector:unit:interm:contract,
-          data = DB, ratios = year.1:year.6,
-          weights = weight.year.1:weight.year.6)
-predict(fit)                          # credibility premiums
-predict(fit, levels = "interm")         # unit credibility premiums only
-summary(fit)                          # portfolio summary
-summary(fit, levels = "interm")         # unit portfolio summary only
-## plot the premium lines and prediction, then the heterogeneity
-## at levels 'sector', for the sector 2.
-plot.cm(fit, levels = "sector", node = 2, which = 1:2, from = NULL, to = NULL)
-## the same at levels 'unit', for the unit 1 in the sector 2.
-plot.cm(fit, levels = "unit", node = c(2,1), which = 1:2, from = NULL, to = NULL)
-## the same at levels 'interm', for the interm 3 in the
-## unit 1 of the sector 2.
-plot.cm(fit, levels = "interm", node = c(2,1,4), which = 1:2, from = NULL, to = NULL)
-## the same at levels 'contract', for the contract 2 in the
-## interm 3 of the unit 1 of the sector 2.
-plot.cm(fit, levels = "contract", node = c(2,1,4,2), which = 1:2, from = NULL, to = NULL)
+## Position the intercept at the barycenter of time.
+fit <- cm(~state, hachemeister, ratios = ratio.1:ratio.12,
+          weights = weight.1:weight.12, regformula = ~time,
+          regdata = data.frame(time = 1:12), adj.intercept = TRUE)
+summary(fit, newdata = data.frame(time = 13))

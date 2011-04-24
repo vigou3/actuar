@@ -45,8 +45,9 @@ coverage(pdf, cdf, deductible = 0, franchise = FALSE,
   \code{pdf} or \code{cdf}, except \code{"lower.tail"},
   \code{"log.p"} and \code{"log"}, which are not supported.
 }
-\references{Klugman, Panjer & Willmot, Loss Models, Second
-  Edition, Wiley, 2004.
+\references{
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
+  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and

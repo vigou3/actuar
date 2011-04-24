@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Definition of the {d,p,q,r,m,lev}invtrgamma functions to compute
 ### characteristics of the Inverse Transformed Gamma distribution. The

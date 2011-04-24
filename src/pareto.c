@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, raw and limited moments and to simulate random variates
@@ -31,6 +31,9 @@ double dpareto(double x, double shape, double scale, int give_log)
 
     if (!R_FINITE(x) || x < 0.0)
         return R_D__0;
+
+    /* handle x == 0 separately */
+    if (x == 0) R_D_val(shape / scale);
 
     tmp = log(x) - log(scale);
     logu = - log1p(exp(tmp));
@@ -88,10 +91,12 @@ double mpareto(double order, double shape, double scale, int give_log)
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
         shape <= 0.0  ||
-        scale <= 0.0  ||
-        order <= -1.0 ||
-        order >= shape)
+        scale <= 0.0)
         return R_NaN;
+
+    if (order <= -1.0 ||
+        order >= shape)
+	return R_PosInf;
 
     return R_pow(scale, order) * gammafn(1.0 + order) * gammafn(shape - order)
         / gammafn(shape);
@@ -109,8 +114,11 @@ double levpareto(double limit, double shape, double scale, double order,
         scale <= 0.0)
         return R_NaN;
 
+    if (order <= -1.0)
+	return R_PosInf;
+
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     tmp1 = 1.0 + order;
     tmp2 = shape - order;

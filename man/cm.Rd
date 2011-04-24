@@ -25,8 +25,8 @@ cm(formula, data, ratios, weights, subset,
 \method{print}{summary.cm}(x, \dots)
 }
 \arguments{
-  \item{formula}{an object of class \code{"\link{formula}"}: a symbolic
-    description of the model to be fit. The details of model
+  \item{formula}{an object of class \code{"\link[stats]{formula}"}: a
+    symbolic description of the model to be fit. The details of model
     specification are given below.}
   \item{data}{a matrix or a data frame containing the portfolio
     structure, the ratios or claim amounts and their associated weights,
@@ -38,13 +38,14 @@ cm(formula, data, ratios, weights, subset,
   \item{subset}{an optional logical expression indicating a subset of
     observations to be used in the modeling process. All observations
     are included by default.}
-  \item{regformula}{an object of class \code{"\link{formula}"}: symbolic
-    description of the regression component (see \code{"\link{lm}"} for
-    details). No left hand side is needed in the formula; if present it
-    is ignored. If \code{NULL}, no regression is done on the data.}
+  \item{regformula}{an object of class \code{"\link[stats]{formula}"}:
+    symbolic description of the regression component (see
+    \code{\link[stats]{lm}} for details). No left hand side is needed
+    in the formula; if present it is ignored. If \code{NULL}, no
+    regression is done on the data.}
   \item{regdata}{an optional data frame, list or environment (or object
-    coercible by \code{\link{as.data.frame}} to a data frame) containing
-    the variables in the regression model.}
+    coercible by \code{\link[base]{as.data.frame}} to a data frame)
+    containing the variables in the regression model.}
   \item{adj.intercept}{if \code{TRUE}, the intercept of the regression
     model is located at the barycenter of the regressor instead of the
     origin.}
@@ -79,9 +80,9 @@ cm(formula, data, ratios, weights, subset,
   portfolio data. Terms are separated by \code{+} operators and
   interactions within each term by \code{:}. For a portfolio divided
   first into sectors, then units and finally contracts, \code{formula}
-  would be \eqn{~ sector + sector:unit + sector:unit:contract}, where
+  would be \code{~ sector + sector:unit + sector:unit:contract}, where
   \code{sector}, \code{unit} and \code{contract} are column names in
-  \code{data}. In general, the formula should be of the form \eqn{~ a +
+  \code{data}. In general, the formula should be of the form \code{~ a +
   a:b + a:b:c + a:b:c:d + ...}.
 
   If argument \code{regformula} is not \code{NULL}, the regression model
@@ -235,22 +236,25 @@ cm(formula, data, ratios, weights, subset,
   an atomic vector for one-level models.
 }
 \references{
-  \enc{Bühlmann}{Buhlmann}, H. and Gisler, A. (2005), \emph{A course in
-  credibility theory and its applications}, Springer.
+  \enc{Bühlmann}{Buhlmann}, H. and Gisler, A. (2005), \emph{A Course in
+    Credibility Theory and its Applications}, Springer.
 
-  Goulet, V. (1998), Principles and Application of Credibility
-  Theory, \emph{Journal of Actuarial Practice} \bold{6}, ISSN
+  Belhadj, H., Goulet, V. and Ouellet, T. (2009), On parameter
+  estimation in hierarchical credibility, \emph{Astin Bulletin} \bold{39}.
+  
+  Goulet, V. (1998), Principles and application of credibility
+  theory, \emph{Journal of Actuarial Practice} \bold{6}, ISSN
   1064-6647.
 
   Goovaerts, M. J. and Hoogstad, W. J. (1987), \emph{Credibility Theory},
-  Surveys of Actuarial Studies, NO.4, Nationale-Nederlanden N.V.
+  Surveys of Actuarial Studies, No. 4, Nationale-Nederlanden N.V.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
   Xavier Milhaud, Tommy Ouellet, Louis-Philippe Pouliot
 }
 \seealso{
-  \code{\link[base]{subset}}, \code{\link[base]{formula}},
+  \code{\link[base]{subset}}, \code{\link[stats]{formula}},
   \code{\link[stats]{lm}}, \code{\link[stats]{predict.lm}}.
 }
 \examples{
@@ -262,11 +266,10 @@ fit <- cm(~state, hachemeister,
 fit				# print method
 predict(fit)			# credibility premiums
 summary(fit)			# more details
-plot.cm(fit, levels = NULL, node = 2, which = 1:2, from = NULL, to = NULL)
 
 ## Two-level hierarchical model. Notice that data does not have
 ## to be sorted by level
-X <- cbind(unit = c(1, 2, 1, 2, 2), hachemeister)
+X <- data.frame(unit = c("A", "B", "A", "B", "B"), hachemeister)
 fit <- cm(~unit + unit:state, X, ratio.1:ratio.12, weight.1:weight.12)
 predict(fit)
 predict(fit, levels = "unit")	# unit credibility premiums only
@@ -280,7 +283,6 @@ fit <- cm(~state, hachemeister,
 fit
 predict(fit, newdata = data.frame(time = 0))
 summary(fit, newdata = data.frame(time = 0))
-plot.cm(fit, levels = NULL, node = 4, which = 1:2, from = 1, to = 12)
 
 ## Same regression model, with intercept at barycenter of time
 fit <- cm(~state, hachemeister, adj.intercept = TRUE,
@@ -289,6 +291,5 @@ fit <- cm(~state, hachemeister, adj.intercept = TRUE,
 fit
 predict(fit, newdata = data.frame(time = 0))
 summary(fit, newdata = data.frame(time = 0))
-plot.cm(fit, levels = NULL, node = 4, which = 1:2, from = 1, to = 12)
 }
 \keyword{models}

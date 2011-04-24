@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to calculate raw and limited moments for the Exponential
  *  distribution. See ../R/ExponentialSupp.R for details.
@@ -15,9 +15,11 @@ double mexp(double order, double scale, int give_log)
 {
     if (!R_FINITE(scale) ||
         !R_FINITE(order) ||
-        scale <= 0.0 ||
-        order <= -1.0)
+        scale <= 0.0)
         return R_NaN;
+
+    if (order <= -1.0)
+	return R_PosInf;
 
     return R_pow(scale, order) * gammafn(1.0 + order);
 }
@@ -26,9 +28,11 @@ double levexp(double limit, double scale, double order, int give_log)
 {
     if (!R_FINITE(scale) ||
         !R_FINITE(order) ||
-        scale <= 0.0 ||
-        order <= -1.0)
+        scale <= 0.0)
         return R_NaN;
+
+    if (order <= -1.0)
+	return R_PosInf;
 
     if (limit <= 0.0)
         return 0.0;

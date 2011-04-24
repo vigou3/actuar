@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, raw and limited moments and to simulate random variates
@@ -34,6 +34,15 @@ double dinvburr(double x, double shape1, double shape2, double scale,
 
     if (!R_FINITE(x) || x < 0.0)
         return R_D__0;
+
+    /* handle x == 0 separately */
+    if (x == 0)
+    {
+	if (shape1 * shape2 < 1) return R_PosInf;
+	if (shape1 * shape2 > 1) return R_D__0;
+	/* else */
+	return R_D_val(1.0 / scale);
+    }
 
     tmp = shape2 * (log(x) - log(scale));
     logu = - log1p(exp(-tmp));
@@ -105,10 +114,12 @@ double minvburr(double order, double shape1, double shape2, double scale,
         !R_FINITE(order)  ||
         shape1 <= 0.0 ||
         shape2 <= 0.0 ||
-        scale  <= 0.0 ||
-        order  <= - shape1 * shape2 ||
-        order  >= shape2)
+        scale  <= 0.0)
         return R_NaN;
+
+    if (order  <= - shape1 * shape2 ||
+        order  >= shape2)
+	return R_PosInf;
 
     tmp = order / shape2;
 
@@ -127,12 +138,14 @@ double levinvburr(double limit, double shape1, double shape2, double scale,
         !R_FINITE(order) ||
         shape1 <= 0.0 ||
         shape2 <= 0.0 ||
-        scale  <= 0.0 ||
-        order  <= -shape1 * shape2)
+        scale  <= 0.0)
         return R_NaN;
 
+    if (order  <= -shape1 * shape2)
+	return R_PosInf;
+
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     tmp1 = order / shape2;
     tmp2 = shape1 + tmp1;

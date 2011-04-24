@@ -32,12 +32,12 @@ levbeta(limit, shape1, shape2, order = 1)
   warning.
 }
 \seealso{
-  \code{\link{Beta}} for details on the Beta distribution and
+  \code{\link[stats]{Beta}} for details on the Beta distribution and
   functions \code{{d,p,q,r}beta}.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
-  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
+  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and

@@ -1,4 +1,4 @@
-/*  ===== actuar: an R package for Actuarial Science =====
+/*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to calculate raw and limited moments for the inverse gaussian
  *  distribution. See ../R/InvGaussSupp.R for details.
@@ -49,7 +49,7 @@ double levinvGauss(double limit, double nu, double lambda, double order,
         return R_NaN;
 
     if (limit <= 0.0)
-        return 0;
+        return 0.0;
 
     /* From R, order == 1 */
     tmp = sqrt(lambda/limit);

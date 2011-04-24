@@ -49,7 +49,7 @@ levinvtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
   for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0}, \eqn{\tau > 0}{b > 0}
   and \eqn{\theta > 0}{s > 0}.
   (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
-  by R's \code{\link{gamma}()} and defined in its help.)
+  by \R's \code{\link{gamma}()} and defined in its help.)
 
   The Inverse Transformed Gamma is the distribution of the random
   variable
@@ -91,8 +91,8 @@ levinvtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
   Distribution also known as the Inverse Generalized Gamma.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2004),
-  \emph{Loss Models, From Data to Decisions, Second Edition}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
+  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and

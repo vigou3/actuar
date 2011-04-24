@@ -3,7 +3,7 @@
 \alias{VaR.aggregateDist}
 \title{Quantiles of Aggregate Claim Amount Distribution}
 \description{
-  Quantile and Value at Risk methods for objects of class
+  Quantile and Value-at-Risk methods for objects of class
   \code{"aggregateDist"}.
 }
 \usage{

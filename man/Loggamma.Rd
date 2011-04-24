@@ -42,7 +42,7 @@ levlgamma(limit, shapelog, ratelog, order = 1)
   for \eqn{x > 1}, \eqn{\alpha > 0}{a > 0} and \eqn{\lambda > 0}{b >
     0}.
   (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
-  by R's \code{\link{gamma}()} and defined in its help.)
+  by \R's \code{\link{gamma}()} and defined in its help.)
 
   The Loggamma is the distribution of the random variable
   \eqn{e^X}{exp(X)},  where \eqn{X} has a Gamma distribution with

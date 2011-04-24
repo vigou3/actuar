@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Conditional Tail Expectation for objects of class 'aggregateDist'.
 ###
@@ -17,8 +17,7 @@ CTE.aggregateDist <- function(x, conf.level = c(0.9, 0.95, 0.99),
     {
         m <- get("mean", environment(x))
         sd <- sqrt(get("variance", environment(x)))
-        res <- m + sd * exp(-(qnorm(conf.level))^2 / 2) /
-            ((1 - conf.level) * sqrt(2 * pi))
+        res <- m + sd * dnorm(qnorm(conf.level)) / (1 - conf.level)
     }
     ## Normal Power approximation; no explicit formula so revert to
     ## numerical integration.
@@ -60,3 +59,5 @@ CTE.aggregateDist <- function(x, conf.level = c(0.9, 0.95, 0.99),
     }
     res
 }
+
+TVaR <- CTE

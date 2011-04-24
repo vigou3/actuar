@@ -1,4 +1,4 @@
-### ===== actuar: an R package for Actuarial Science =====
+### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Definition of a generic function for the Value at Risk. Currently,
 ### there is no default method for this function. The only method is
