@@ -1,0 +1,148 @@
+/*  ===== actuar: An R Package for Actuarial Science =====
+ *
+ *  Functions to compute density, cumulative distribution and quantile
+ *  functions, raw and limited moments and to simulate random variates
+ *  for the Inverse Gamma distribution. See ../R/InverseGamma.R for
+ *  details.
+ *
+ *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
+ */
+
+#include <R.h>
+#include <Rmath.h>
+#include "locale.h"
+#include "dpq.h"
+
+double dinvgamma(double x, double shape, double scale, int give_log)
+{
+    /*  We work with the density expressed as
+     *
+     *  u^shape * e^(-u) / (x * gamma(shape))
+     *
+     *  with u = scale/x.
+     */
+
+    double logu;
+
+    if (!R_FINITE(shape) ||
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;
+
+    /* handle also x == 0 here */
+    if (!R_FINITE(x) || x <= 0.0)
+        return R_D__0;
+
+    logu = log(scale) - log(x);
+
+    return R_D_exp(shape * logu - exp(logu) - log(x) - lgammafn(shape));
+}
+
+double pinvgamma(double q, double shape, double scale, int lower_tail,
+                 int log_p)
+{
+    double u;
+
+    if (!R_FINITE(shape) ||
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;;
+
+    if (q <= 0)
+        return R_DT_0;
+
+    u = exp(log(scale) - log(q));
+
+    return pgamma(u, shape, 1.0, !lower_tail, log_p);
+}
+
+double qinvgamma(double p, double shape, double scale, int lower_tail,
+                 int log_p)
+{
+    if (!R_FINITE(shape) ||
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;;
+
+    R_Q_P01_boundaries(p, 0, R_PosInf);
+    p = R_D_qIv(p);
+
+    return scale / qgamma(p, shape, 1.0, !lower_tail, 0);
+}
+
+double rinvgamma(double shape, double scale)
+{
+    if (!R_FINITE(shape) ||
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;;
+
+    return scale / rgamma(shape, 1.0);
+}
+
+double minvgamma(double order, double shape, double scale, int give_log)
+{
+    if (!R_FINITE(shape) ||
+        !R_FINITE(scale) ||
+        !R_FINITE(order) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;
+
+    if (order >= shape)
+	return R_PosInf;
+
+    return R_pow(scale, order) * gammafn(shape - order) / gammafn(shape);
+}
+
+double levinvgamma(double limit, double shape, double scale, double order,
+                   int give_log)
+{
+    double u, tmp;
+
+    if (!R_FINITE(shape) ||
+        !R_FINITE(scale) ||
+        !R_FINITE(order) ||
+        shape <= 0.0 ||
+        scale <= 0.0)
+        return R_NaN;
+
+    if (order >= shape)
+	return R_PosInf;
+
+    if (limit <= 0.0)
+        return 0.0;
+
+    tmp = shape - order;
+
+    u = exp(log(scale) - log(limit));
+
+    return R_pow(scale, order) * gammafn(shape - order)
+        * pgamma(u, tmp, 1.0, 0, 0) / gammafn(shape)
+        + R_VG__0(limit, order) * pgamma(u, shape, 1.0, 1, 0);
+}
+
+double mgfinvgamma(double x, double shape, double scale, int give_log)
+{
+    double tmp;
+
+    if (!R_FINITE(shape) ||
+        !R_FINITE(scale) ||
+        shape <= 0.0 ||
+        scale <= 0.0 ||
+        x > 0.0 )
+        return R_NaN;
+
+    if (x == 0.0)
+        return R_D_exp(0.0);
+
+    tmp = -scale * x;
+
+    return R_D_exp(log(2.0) + shape * log(tmp)/2.0 +
+                   log(bessel_k(sqrt(4 * tmp), shape, 1)) -
+                   lgammafn(shape));
+}
