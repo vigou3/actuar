@@ -55,22 +55,22 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
   In the typical case \code{reinsurance = "none"}, the coefficient of
   determination is the smallest (strictly) positive root of the Lundberg
   equation%
-  \deqn{h(x) = E[e^{x S - x c W}] = 1}{h(x) = E[exp(x S - x c W)] = 1}%
-  on \eqn{[0, m)}, where \eqn{m =} \code{upper.bound}, \eqn{S} is the
+  \deqn{h(x) = E[e^{x B - x c W}] = 1}{h(x) = E[exp(x B - x c W)] = 1}%
+  on \eqn{[0, m)}, where \eqn{m =} \code{upper.bound}, \eqn{B} is the
   claim severity random variable, \eqn{W} is the claim interarrival
   (or wait) time random variable and \eqn{c =} \code{premium.rate}. The
   premium rate must satisfy the positive safety loading constraint
   \eqn{E[B - c W] < 0}.
 
   With \code{reinsurance = "proportional"}, the equation becomes
-  \deqn{h(x, y) = E[e^{x y S - x c(y) W}] = 1,}{%
-    h(x, y) = E[exp(x y S - x c(y) W)] = 1,}
+  \deqn{h(x, y) = E[e^{x y B - x c(y) W}] = 1,}{%
+    h(x, y) = E[exp(x y B - x c(y) W)] = 1,}
   where \eqn{y} is the retention rate and \eqn{c(y)} is the premium rate
   function.
 
   With \code{reinsurance = "excess-of-loss"}, the equation becomes
-  \deqn{h(x, y) = E[e^{x \min(S, y) - x c(y) W}] = 1,}{%
-    h(x, y) = E[exp(x min(S, y) - x c(y) W)] = 1,}
+  \deqn{h(x, y) = E[e^{x \min(B, y) - x c(y) W}] = 1,}{%
+    h(x, y) = E[exp(x min(B, y) - x c(y) W)] = 1,}
   where \eqn{y} is the retention limit and \eqn{c(y)} is the premium rate
   function.
 
@@ -78,19 +78,12 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
   function \eqn{h(x)} or \eqn{h(x, y)}. This is necessary in cases where
   random variables \eqn{B} and \eqn{W} are not independent.
 
-  The root of \eqn{h(x) = 1} is found by minimizing the least
-  square distance \eqn{(h(x) - 1)^2}.
-
-  If adjCoef raises warnings "NA / Inf replaced by maximum positived value",
-  it comes generally from a wrong specification of the problem.
+  The root of \eqn{h(x) = 1} is found by minimizing \eqn{(h(x) - 1)^2}.
 }
 \value{
   If \code{reinsurance = "none"}, a numeric vector of lenght one.
   Otherwise, a function of class \code{"adjCoef"} inheriting from the
   \code{"function"} class.
-	
-  If adjCoef raises warnings "NA / Inf replaced by maximum positived value",
-  it comes generally from a wrong specification of the problem.
 }
 \references{
   Bowers, N. J. J., Gerber, H. U., Hickman, J., Jones, D. and Nesbitt, C.
@@ -107,31 +100,28 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
   \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 }
 \author{
-  Christophe Dutang and Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
+  Christophe Dutang, Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
 }
 \examples{
-## Basic example: no reinsurance, exponential Exp(1) claim severity and wait
+## Basic example: no reinsurance, exponential claim severity and wait
 ## times, premium rate computed with expected value principle and
 ## safety loading of 20\%.
 adjCoef(mgfexp, premium = 1.2, upper = 1)
 
-## Same thing, giving function h, see Details above for the definition of h.
+## Same thing, giving function h.
 h <- function(x) 1/((1 - x) * (1 + 1.2 * x))
 adjCoef(h = h, upper = 1)
 
 ## Example 11.4 of Klugman et al. (2008)
-## severity distribution is a mixture of exponential distributions, 
-## while waiting times are exponentially distributed Exp(4)
-mgfsev <- function(x) 0.6 * exp(x) + 0.4 * exp(2 * x)
-adjCoef(mgfsev(x), mgfexp(x, 4), prem = 7, upper = 0.3182)
+mgfx <- function(x) 0.6 * exp(x) + 0.4 * exp(2 * x)
+adjCoef(mgfx(x), mgfexp(x, 4), prem = 7, upper = 0.3182)
 
-## Proportional reinsurance: 
-## same assumptions as above (i.e. SõExp(1) and WõExp(1)), 
-## reinsurer's safety loading of 30\% and insurer's of 10\%.
-mgfsev <- function(x, y) mgfexp(x * y)
-premrate <- function(x) 1.3 * x - 0.1
-h <- function(x, a) 1/((1 - a * x) * (1 + x * premrate(a)))
-R1 <- adjCoef(mgfsev, premium = premrate, upper = 1, reins = "proportional",
+## Proportional reinsurance, same assumptions as above, reinsurer's
+## safety loading of 30\%.
+mgfx <- function(x, y) mgfexp(x * y)
+p <- function(x) 1.3 * x - 0.1
+h <- function(x, a) 1/((1 - a * x) * (1 + x * p(a)))
+R1 <- adjCoef(mgfx, premium = p, upper = 1, reins = "proportional",
               from = 0, to = 1, n = 11)
 R2 <- adjCoef(h = h, upper = 1, reins = "p",
              from = 0, to = 1, n = 101)
@@ -140,16 +130,13 @@ R2(seq(0, 1, length = 10))	# same
 plot(R1)		        # graphical representation
 plot(R2, col = "green", add = TRUE) # smoother function
 
-## Excess-of-loss reinsurance:
-## we assume claim severity is gamma G(2,2) distributed and 
-## waiting time is exponentially Exp(1) distributed with 
-## the same loading factors as above.
-premrate <- function(x) 1.3 * levgamma(x, 2, 2) - 0.1
-mgfsev <- function(x, l)
+## Excess-of-loss reinsurance
+p <- function(x) 1.3 * levgamma(x, 2, 2) - 0.1
+mgfx <- function(x, l)
     mgfgamma(x, 2, 2) * pgamma(l, 2, 2 - x) +
     exp(x * l) * pgamma(l, 2, 2, lower = FALSE)
-h <- function(x, l) mgfsev(x, l) * mgfexp(-x * premrate(l))
-R1 <- adjCoef(mgfsev, upper = 1, premium = premrate, reins = "excess-of-loss",
+h <- function(x, l) mgfx(x, l) * mgfexp(-x * p(l))
+R1 <- adjCoef(mgfx, upper = 1, premium = p, reins = "excess-of-loss",
              from = 0, to = 10, n = 11)
 R2 <- adjCoef(h = h, upper = 1, reins = "e",
              from = 0, to = 10, n = 101)
