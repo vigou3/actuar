@@ -1,10 +1,11 @@
 \documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
   \usepackage{amsmath,color,hyperref}
   \usepackage[round]{natbib}
-  \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
   \usepackage[english]{babel}
-  \usepackage{lucidabr}
+  \usepackage[scaled=0.9]{helvet}
+  \usepackage[sc]{mathpazo}
   \usepackage{booktabs,paralist}
   \usepackage[noae]{Sweave}
 
@@ -527,7 +528,7 @@ mde(gdental, ppareto, start = list(shape = 3, scale = 600),
 @
 <<echo=FALSE, eval=TRUE>>=
 out <- try(mde(gdental, ppareto, start = list(shape = 3, scale = 600),
-        measure = "CvM"))
+        measure = "CvM"), silent = TRUE)
 cat(sub(", measure", ",\n             measure", out))
 @
 

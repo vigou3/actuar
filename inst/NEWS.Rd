@@ -1,5 +1,6 @@
 \name{NEWS}
 \title{actuar News}
+\encoding{UTF-8}
 
 \section{CHANGES IN VERSION 1.1-2}{
   \subsection{BUG FIX}{
@@ -7,7 +8,7 @@
       \item \code{discretize()} would return wrong results when argument
       \code{step} was omitted in favor of \code{by} \emph{and} the
       discretization method \code{unbiased} was used. (Thanks to
-      Marie-Pier Côté \email{marie-pier.cote.11@ulaval.ca} for the
+      Marie-Pier CÃ´tÃ© \email{marie-pier.cote.11@ulaval.ca} for the
       catch.)
     }
   }
@@ -186,7 +187,7 @@
 
   \subsection{BUG FIXES}{
     \itemize{
-      \item Calculation of the Bühlmann-Gisler and Ohlsson estimators
+      \item Calculation of the BÃ¼hlmann-Gisler and Ohlsson estimators
       was incorrect for hierarchical models with more than one level.
 
       \item Better display of first column for grouped data objects.
@@ -197,9 +198,11 @@
 }
 
 \section{CHANGES IN VERSION 0.9-6}{
-  Accented letters in comments removed to avoid compilation problems
-  under MacOS X on CRAN (see thread starting at
-  \url{https://stat.ethz.ch/pipermail/r-devel/2008-February/048391.html}).
+  \itemize{
+    \item  Accented letters in comments removed to avoid compilation problems
+    under MacOS X on CRAN (see thread starting at
+    \url{https://stat.ethz.ch/pipermail/r-devel/2008-February/048391.html}).
+  }
 }
 
 \section{CHANGES IN VERSION 0.9-5}{
@@ -249,7 +252,9 @@
 }
 
 \section{CHANGES IN VERSION 0.9-4}{
-  Maintenance and new features release.
+  \itemize{
+    \item Maintenance and new features release.
+  }
 
   \subsection{NEW FEATURES -- LOSS DISTRIBUTIONS}{
     \itemize{
@@ -290,7 +295,7 @@
 
       \item Function \code{ruin()} returns a function to compute the
       infinite time probability of ruin for given initial surpluses in
-      the Cramér-Lundberg and Sparre Andersen models. Most calculations
+      the CramÃ©r-Lundberg and Sparre Andersen models. Most calculations
       are done using the cdf of phase-type distributions as per Asmussen
       and Rolski (1991).
 
@@ -309,7 +314,7 @@
       function \code{cm()}.
 
       \item For the hierarchical credibility model: support for the
-      variance components estimators of Bühlmann and Gisler (2005) and
+      variance components estimators of BÃ¼hlmann and Gisler (2005) and
       Ohlsson (2005). Support remains for iterative pseudo-estimators.
 
       \item Calculations of iterative pseudo-estimators in hierarchical
@@ -414,10 +419,12 @@
 }
 
 \section{CHANGES IN VERSION 0.9-2}{
-  Major official update. This version is not backward compatible with
-  the 0.1-x series. Features of the package can be split in the following
-  categories: loss distributions modeling, risk theory, credibility
-  theory.
+  \itemize{
+    Major official update. This version is not backward compatible with
+    the 0.1-x series. Features of the package can be split in the following
+    categories: loss distributions modeling, risk theory, credibility
+    theory.
+  }
 
   \subsection{NEW FEATURES -- LOSS DISTRIBUTIONS}{
     \itemize{
@@ -575,7 +582,7 @@
 
       \item Function \code{cm()} (for \emph{c}redibility \emph{m}odel)
       to compute structure parameters estimators for hierarchical
-      credibility models, including the Bühlmann and Bühlmann-Straub
+      credibility models, including the BÃ¼hlmann and BÃ¼hlmann-Straub
       models. Usage is similar to \code{lm()} of package \pkg{stats} in
       that the hierarchical structure is specified by means of a formula
       object and data is extracted from a matrix or data frame. There
@@ -583,7 +590,7 @@
       objects of class \code{"cm"}. Credibility premiums are computed
       using a method of \code{predict()}; see below.
 
-      For simple Bühlmann and Bühlmann-Straub models, \code{bstraub()}
+      For simple BÃ¼hlmann and BÃ¼hlmann-Straub models, \code{bstraub()}
       remains simpler to use and faster.
 
       \item Function \code{bstraub()} now returns an object of class
@@ -647,8 +654,10 @@
 
 
 \section{CHANGES IN VERSION 0.1-3}{
-  Fixed the dependency on R >= 2.1.0 since the package uses function
-  \code{isTRUE()}.
+  \itemize{
+    \item Fixed the dependency on R >= 2.1.0 since the package uses
+    function \code{isTRUE()}.
+  }
 }
 
 \section{CHANGES IN VERSION 0.1-2}{

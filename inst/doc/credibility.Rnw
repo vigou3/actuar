@@ -1,10 +1,11 @@
 \documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
   \usepackage{amsmath,color,hyperref}
   \usepackage[round]{natbib}
-  \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
   \usepackage[english]{babel}
-  \usepackage{lucidabr}
+  \usepackage[scaled=0.9]{helvet}
+  \usepackage[sc]{mathpazo}
   \usepackage{paralist}
   \usepackage[noae]{Sweave}
 
@@ -194,7 +195,7 @@ the Ohlsson estimators are
   \label{eq:ac-Ohl}
   \hat{a}^\prime
   &= \frac{\sum_{i = 1}^I A_i}{\sum_{i = 1}^I c_i} \\
-  \label{eq:ac-Ohl}
+  \label{eq:bc-Ohl}
   \hat{b}^\prime
   &= \frac{B}{d}
 \end{align}

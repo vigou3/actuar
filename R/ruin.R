@@ -5,7 +5,7 @@
 ###
 ###   psi(u) = pphtype(u, pi, Q, lower.tail = FALSE)
 ###
-### for definitions of pi and Q that depend on the severity and wating
+### for definitions of pi and Q that depend on the severity and waiting
 ### times models. An explicit solution exists when both severity and
 ### waiting times are exponential (no mixture).
 ###
