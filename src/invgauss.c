@@ -56,8 +56,8 @@ double levinvGauss(double limit, double nu, double lambda, double order,
     y = (limit + nu)/nu;
     z = (limit - nu)/nu;
 
-    return limit - nu * z * pnorm(z * tmp, 0.0, 1.0, 0, 0)
-        - nu * y * exp(2 * lambda/nu) * pnorm(-y * tmp, 0., 1.0, 0, 0);
+    return limit - nu * z * pnorm(z * tmp, 0.0, 1.0, 1, 0)
+        - nu * y * exp(2 * lambda/nu) * pnorm(-y * tmp, 0.0, 1.0, 1, 0);
 }
 
 double mgfinvGauss(double x, double nu, double lambda, int give_log)
