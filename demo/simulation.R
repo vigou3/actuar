@@ -40,13 +40,13 @@ frequency(pf)
 ## The string "weights" should appear in the model specification
 ## wherever weights are to be used.
 wit <- runif(10, 2, 10)
-( wit <- runif(50, rep(0.5 * wit, each = 5), rep(1.5 * wit, each = 5)) )
-( pf <- simul(list(entity = 10, year = 5),
-              model.freq = expression(entity = rgamma(2, 1),
-                  year = rpois(weights * entity)),
-              model.sev = expression(entity = rnorm(5, 1),
-                  year = rlnorm(entity, 1)),
-              weights = wit) )
+(wit <- runif(50, rep(0.5 * wit, each = 5), rep(1.5 * wit, each = 5)))
+(pf <- simul(list(entity = 10, year = 5),
+             model.freq = expression(entity = rgamma(2, 1),
+                 year = rpois(weights * entity)),
+             model.sev = expression(entity = rnorm(5, 1),
+                 year = rlnorm(entity, 1)),
+             weights = wit))
 weights(pf)                             # extraction of weights
 
 ## Three level hierarchical model (sector, unit, contract). Claim

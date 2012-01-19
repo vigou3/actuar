@@ -5,11 +5,7 @@
 ### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 require(actuar)
-if(dev.cur() <= 1) get(getOption("device"))()
-
-op <- par(ask = interactive() &&
-          (.Device %in% c("X11", "GTK", "gnome", "windows","quartz")),
-          col = "black")
+require(graphics)
 
 
 ### DISCRETIZATION OF CONTINUOUS DISTRIBUTIONS
@@ -186,12 +182,12 @@ adjCoef(mgf, mgfinvgamma(x, 2, 6/11), 1.3, 1)
 rclayton <- function(alpha, n)
 {
     val <- cbind(runif(n), runif(n))
-    val[,2] <- (val[,1]^(-alpha) * (val[,2]^(-alpha/(alpha + 1)) - 1) + 1)^(-1/alpha)
+    val[, 2] <- (val[, 1]^(-alpha) * (val[, 2]^(-alpha/(alpha + 1)) - 1) + 1)^(-1/alpha)
     val
 }
 u <- rclayton(2, 1000)             # variates with positive dependence
-x <- qexp(u[,1])                   # claim amounts
-w <- qexp(u[,2])                   # interarrival times
+x <- qexp(u[, 1])                  # claim amounts
+w <- qexp(u[, 2])                  # interarrival times
 
 ## Premium rate and Lundberg's functions of the retention rate. We
 ## assume a safety loading of 20% for the insurer and 30% for the

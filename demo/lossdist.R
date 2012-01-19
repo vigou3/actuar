@@ -5,10 +5,8 @@
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 require(actuar)
-if(dev.cur() <= 1) get(getOption("device"))()
+require(graphics)
 
-op <- par(ask = interactive() &&
-          (.Device %in% c("X11", "GTK", "gnome", "windows", "quartz")))
 
 ### A utility function to create graphs for probability laws
 showgraphs <- function(fun, par, what = c("d", "p", "m", "lev"), xlim)
