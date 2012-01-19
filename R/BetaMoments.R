@@ -10,7 +10,7 @@
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 mbeta <- function(order, shape1, shape2)
-    .External("do_dpq", "mbeta", order, shape1, shape2, FALSE)
+    .External("actuar_do_dpq", "mbeta", order, shape1, shape2, FALSE)
 
 levbeta <- function(limit, shape1, shape2, order = 1)
-    .External("do_dpq", "levbeta", limit, shape1, shape2, order, FALSE)
+    .External("actuar_do_dpq", "levbeta", limit, shape1, shape2, order, FALSE)

@@ -12,22 +12,22 @@
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dllogis <- function (x, shape, rate = 1, scale = 1/rate, log = FALSE)
-     .External("do_dpq", "dllogis", x, shape, scale, log)
+     .External("actuar_do_dpq", "dllogis", x, shape, scale, log)
 
 pllogis <- function(q, shape, rate = 1, scale = 1/rate,
                     lower.tail = TRUE, log.p = FALSE)
-     .External("do_dpq", "pllogis", q, shape, scale, lower.tail, log.p)
+     .External("actuar_do_dpq", "pllogis", q, shape, scale, lower.tail, log.p)
 
 qllogis <- function(p, shape, rate = 1, scale = 1/rate,
                     lower.tail = TRUE, log.p = FALSE)
-     .External("do_dpq", "qllogis", p, shape, scale, lower.tail, log.p)
+     .External("actuar_do_dpq", "qllogis", p, shape, scale, lower.tail, log.p)
 
 rllogis <- function(n, shape, rate = 1, scale = 1/rate)
-     .External("do_random", "rllogis", n, shape, scale)
+     .External("actuar_do_random", "rllogis", n, shape, scale)
 
 mllogis <- function(order, shape, rate = 1, scale = 1/rate)
-     .External("do_dpq", "mllogis", order, shape, scale, FALSE)
+     .External("actuar_do_dpq", "mllogis", order, shape, scale, FALSE)
 
 levllogis <- function(limit, shape, rate = 1, scale = 1/rate,
                       order = 1)
-     .External("do_dpq", "levllogis", limit, shape, scale, order, FALSE)
+     .External("actuar_do_dpq", "levllogis", limit, shape, scale, order, FALSE)

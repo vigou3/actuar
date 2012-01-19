@@ -9,10 +9,10 @@
 ### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 munif <- function(order, min = 0, max = 1)
-    .External("do_dpq", "munif", order, min, max, FALSE)
+    .External("actuar_do_dpq", "munif", order, min, max, FALSE)
 
 levunif <- function(limit, min = 0, max =1, order = 1)
-    .External("do_dpq", "levunif", limit, min, max, order, FALSE)
+    .External("actuar_do_dpq", "levunif", limit, min, max, order, FALSE)
 
 mgfunif <- function(x, min = 0, max = 1, log = FALSE)
-    .External("do_dpq", "mgfunif", x, min, max, log)
+    .External("actuar_do_dpq", "mgfunif", x, min, max, log)

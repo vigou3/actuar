@@ -12,25 +12,25 @@
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dinvweibull <- function (x, shape, rate = 1, scale = 1/rate, log = FALSE)
-    .External("do_dpq", "dinvweibull", x, shape, scale, log)
+    .External("actuar_do_dpq", "dinvweibull", x, shape, scale, log)
 
 pinvweibull <- function(q, shape, rate = 1, scale = 1/rate,
                         lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "pinvweibull", q, shape, scale, lower.tail, log.p)
+    .External("actuar_do_dpq", "pinvweibull", q, shape, scale, lower.tail, log.p)
 
 qinvweibull <- function(p, shape, rate = 1, scale = 1/rate,
                         lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "qinvweibull", p, shape, scale, lower.tail, log.p)
+    .External("actuar_do_dpq", "qinvweibull", p, shape, scale, lower.tail, log.p)
 
 rinvweibull <- function(n, shape, rate = 1, scale = 1/rate)
-    .External("do_random", "rinvweibull", n, shape, scale)
+    .External("actuar_do_random", "rinvweibull", n, shape, scale)
 
 minvweibull <- function(order, shape, rate = 1, scale = 1/rate)
-    .External("do_dpq", "minvweibull", order, shape, scale, FALSE)
+    .External("actuar_do_dpq", "minvweibull", order, shape, scale, FALSE)
 
 levinvweibull <- function(limit, shape, rate = 1, scale = 1/rate,
                           order = 1)
-    .External("do_dpq", "levinvweibull", limit, shape, scale, order, FALSE)
+    .External("actuar_do_dpq", "levinvweibull", limit, shape, scale, order, FALSE)
 
 ## Aliases
 dlgompertz <- dinvweibull

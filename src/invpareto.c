@@ -118,7 +118,9 @@ static void fn(double *x, int n, void *ex)
     int i;
     double *pars = (double *) ex, shape, scale, order;
 
-    shape = pars[0]; scale = pars[1]; order = pars[2];
+    shape = pars[0];
+    scale = pars[1];
+    order = pars[2];
 
     for(i = 0; i < n; i++)
 	x[i] = R_pow(x[i], shape + order - 1) * R_pow(1 - x[i], -order);

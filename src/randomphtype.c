@@ -53,7 +53,7 @@ static Rboolean randomphtype2(double (*f)(), double *a, double *b,
             randomphtype2(fun, REAL(a), REAL(b), na, REAL(x), n); \
             break
 
-SEXP do_randomphtype2(int code, SEXP args)
+SEXP actuar_do_randomphtype2(int code, SEXP args)
 {
     SEXP x, a, b, bdims;
     int i, n, na, nb, nrow, ncol;
@@ -113,7 +113,7 @@ SEXP do_randomphtype2(int code, SEXP args)
         {
             RANDPHTYPE2(1, rphtype);
         default:
-            error(_("internal error in do_randomphtype2"));
+            error(_("internal error in actuar_do_randomphtype2"));
         }
         if (naflag)
             warning(R_MSG_NA);
@@ -125,7 +125,7 @@ SEXP do_randomphtype2(int code, SEXP args)
 
 
 /* Main function, the only one used by .External(). */
-SEXP do_randomphtype(SEXP args)
+SEXP actuar_do_randomphtype(SEXP args)
 {
     int i;
     const char *name;
@@ -134,13 +134,13 @@ SEXP do_randomphtype(SEXP args)
     args = CDR(args);
     name = CHAR(STRING_ELT(CAR(args), 0));
 
-    /* Dispatch to do_random{1,2,3,4} */
+    /* Dispatch to actuar_do_random{1,2,3,4} */
     for (i = 0; fun_tab[i].name; i++)
         if (!strcmp(fun_tab[i].name, name))
             return fun_tab[i].cfun(fun_tab[i].code, CDR(args));
 
     /* No dispatch is an error */
-    error(_("internal error in do_randomphtype"));
+    error(_("internal error in actuar_do_randomphtype"));
 
     return args;                /* never used; to keep -Wall happy */
 }

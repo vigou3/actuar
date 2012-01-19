@@ -12,22 +12,22 @@
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dparalogis <- function (x, shape, rate = 1, scale = 1/rate, log = FALSE)
-    .External("do_dpq", "dparalogis", x, shape, scale, log)
+    .External("actuar_do_dpq", "dparalogis", x, shape, scale, log)
 
 pparalogis <- function(q, shape, rate = 1, scale = 1/rate,
                        lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "pparalogis", q, shape, scale, lower.tail, log.p)
+    .External("actuar_do_dpq", "pparalogis", q, shape, scale, lower.tail, log.p)
 
 qparalogis <- function(p, shape, rate = 1, scale = 1/rate,
                        lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "qparalogis", p, shape, scale, lower.tail, log.p)
+    .External("actuar_do_dpq", "qparalogis", p, shape, scale, lower.tail, log.p)
 
 rparalogis <- function(n, shape, rate = 1, scale = 1/rate)
-    .External("do_random", "rparalogis", n, shape, scale)
+    .External("actuar_do_random", "rparalogis", n, shape, scale)
 
 mparalogis <- function(order, shape, rate = 1, scale = 1/rate)
-    .External("do_dpq", "mparalogis", order, shape, scale, FALSE)
+    .External("actuar_do_dpq", "mparalogis", order, shape, scale, FALSE)
 
 levparalogis <- function(limit, shape, rate = 1, scale = 1/rate,
                          order = 1)
-    .External("do_dpq", "levparalogis", limit, shape, scale, order, FALSE)
+    .External("actuar_do_dpq", "levparalogis", limit, shape, scale, order, FALSE)

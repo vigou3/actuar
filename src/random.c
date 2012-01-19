@@ -1,25 +1,28 @@
 /*  ===== actuar: An R Package for Actuarial Science =====
  *
  *  Functions to generate variates of some probability laws not in
- *  base R. Function .External() calls do_random() with arguments:
+ *  base R. Function .External() calls actuar_do_random() with
+ *  arguments:
  *
  *      1. the name of the distribution from which to simulate, with
  *         an "r" prepended to it (e.g. "rpareto");
  *      2. the number of variates;
  *    3:x. the parameters of the distribution.
  *
- *  Function do_random() will extract the name of the distribution,
- *  look up in table fun_tab defined in names.c which of
- *  do_random{1,2,3,4} should take care of the simulation and dispatch
- *  to this function. In turn, functions do_random{1,2,3,4} call
- *  function rdist() to get actual variates from distribution "dist".
+ *  Function actuar_do_random() will extract the name of the
+ *  distribution, look up in table fun_tab defined in names.c which of
+ *  actuar_do_random{1,2,3,4} should take care of the simulation and
+ *  dispatch to this function. In turn, functions
+ *  actuar_do_random{1,2,3,4} call function rdist() to get actual
+ *  variates from distribution "dist".
  *
  *  This scheme is essentially what is used in base R (see files
  *  .../src/main/random.c, .../src/main/names.c in R sources).
  *
  * To add a new distribution: write an rdist() function, add an entry
  * in names.c and in the definition of the corresponding
- * do_random{1,2,3,4} function, declare the function in actuar.h.
+ * actuar_do_random{1,2,3,4} function, declare the function in
+ * actuar.h.
  *
  *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
  *          with much indirect help from the R Core Team
@@ -51,7 +54,7 @@ static Rboolean random1(double (*f)(), double *a, int na, double *x, int n)
             naflag = random1(fun, REAL(a), na, REAL(x), n); \
             break
 
-SEXP do_random1(int code, SEXP args)
+SEXP actuar_do_random1(int code, SEXP args)
 {
     SEXP x, a;
     int i, n, na;
@@ -96,7 +99,7 @@ SEXP do_random1(int code, SEXP args)
         {
             RAND1(1, rinvexp);
         default:
-            error(_("internal error in do_random1"));
+            error(_("internal error in actuar_do_random1"));
         }
         if (naflag)
             warning(R_MSG_NA);
@@ -131,7 +134,7 @@ static Rboolean random2(double (*f)(), double *a, int na,
             break
 
 
-SEXP do_random2(int code, SEXP args)
+SEXP actuar_do_random2(int code, SEXP args)
 {
     SEXP x, a, b;
     int i, n, na, nb;
@@ -188,7 +191,7 @@ SEXP do_random2(int code, SEXP args)
             RAND2(8, rpareto);
             RAND2(9, rpareto1);
         default:
-            error(_("internal error in do_random2"));
+            error(_("internal error in actuar_do_random2"));
         }
         if (naflag)
             warning(R_MSG_NA);
@@ -224,7 +227,7 @@ static Rboolean random3(double (*f) (), double *a, int na,
             break
 
 
-SEXP do_random3(int code, SEXP args)
+SEXP actuar_do_random3(int code, SEXP args)
 {
     SEXP x, a, b, c;
     int i, n, na, nb, nc;
@@ -280,7 +283,7 @@ SEXP do_random3(int code, SEXP args)
             RAND3(4, rinvtrgamma);
             RAND3(5, rtrgamma);
         default:
-            error(_("internal error in do_random3"));
+            error(_("internal error in actuar_do_random3"));
         }
         if (naflag)
             warning(R_MSG_NA);
@@ -317,7 +320,7 @@ static Rboolean random4(double (*f) (), double *a, int na,
             naflag = random4(fun, REAL(a), na, REAL(b), nb, REAL(c), nc, REAL(d), nd, REAL(x), n); \
             break
 
-SEXP do_random4(int code, SEXP args)
+SEXP actuar_do_random4(int code, SEXP args)
 {
     SEXP x, a, b, c, d;
     int i, n, na, nb, nc, nd;
@@ -373,7 +376,7 @@ SEXP do_random4(int code, SEXP args)
             RAND4(1, rtrbeta);
             RAND4(2, rgenbeta);
         default:
-            error(_("internal error in do_random4"));
+            error(_("internal error in actuar_do_random4"));
         }
         if (naflag)
             warning(R_MSG_NA);
@@ -387,7 +390,7 @@ SEXP do_random4(int code, SEXP args)
 
 
 /* Main function, the only one used by .External(). */
-SEXP do_random(SEXP args)
+SEXP actuar_do_random(SEXP args)
 {
     int i;
     const char *name;
@@ -396,7 +399,7 @@ SEXP do_random(SEXP args)
     args = CDR(args);
     name = CHAR(STRING_ELT(CAR(args), 0));
 
-    /* Dispatch to do_random{1,2,3,4} */
+    /* Dispatch to actuar_do_random{1,2,3,4} */
     for (i = 0; fun_tab[i].name; i++)
     {
         if (!strcmp(fun_tab[i].name, name))
@@ -404,7 +407,7 @@ SEXP do_random(SEXP args)
     }
 
     /* No dispatch is an error */
-    error(_("internal error in do_random"));
+    error(_("internal error in actuar_do_random"));
 
     return args;                /* never used; to keep -Wall happy */
 }

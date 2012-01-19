@@ -55,7 +55,7 @@ double dphtype(double x, double *pi, double *T, int m, int give_log)
             tmp[ij] = x * T[ij];
         }
 
-    return R_D_val(expmprod(pi, tmp, t, m));
+    return R_D_val(actuar_expmprod(pi, tmp, t, m));
 }
 
 double pphtype(double q, double *pi, double *T, int m, int lower_tail,
@@ -94,7 +94,7 @@ double pphtype(double q, double *pi, double *T, int m, int lower_tail,
     for (i = 0; i < m * m; i++)
         tmp[i] = q * T[i];
 
-    return R_DT_Cval(expmprod(pi, tmp, e, m));
+    return R_DT_Cval(actuar_expmprod(pi, tmp, e, m));
 }
 
 double rphtype(double *pi, double **Q, double *rates, int m)
@@ -153,7 +153,7 @@ double mphtype(double order, double *pi, double *T, int m, int give_log)
 
     /* Compute the power of T */
     Tpow = (double *) R_alloc(m * m, sizeof(double));
-    matpow(T, m, (int) -order, Tpow);
+    actuar_matpow(T, m, (int) -order, Tpow);
 
     /* Compute vector tmp = sum(pi * Tpow) */
     for (i = 0; i < m; i++)
@@ -197,7 +197,7 @@ double mgfphtype(double x, double *pi, double *T, int m, int give_log)
 
     /* Compute tmp2 = tmp1^(-1) * t */
     tmp2 = (double *) R_alloc(m, sizeof(double));
-    solve(tmp1, t, m, 1, tmp2);
+    actuar_solve(tmp1, t, m, 1, tmp2);
 
     /* Compute z = pi * (e + tmp2) */
     for (i = 0; i < m; i++)

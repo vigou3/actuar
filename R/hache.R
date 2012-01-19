@@ -79,6 +79,7 @@ predict.hache <- function(object, levels = NULL, newdata, ...)
     f <- function(z, ...)
     {
         z$terms <- object$terms
+        class(z) <- "lm"                # to keep predict.lm() quiet
         unname(predict.lm(z, ...))
     }
 

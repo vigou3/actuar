@@ -156,7 +156,7 @@ static SEXP dpqphtype2_2(SEXP sx, SEXP sa, SEXP sb, SEXP sI, SEXP sJ, double (*f
 #define DPQPHTYPE2_1(A, FUN) dpqphtype2_1(CAR(A), CADR(A), CADDR(A), CADDDR(A), FUN);
 #define DPQPHTYPE2_2(A, FUN) dpqphtype2_2(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), FUN)
 
-SEXP do_dpqphtype2(int code, SEXP args)
+SEXP actuar_do_dpqphtype2(int code, SEXP args)
 {
     switch (code)
     {
@@ -165,14 +165,14 @@ SEXP do_dpqphtype2(int code, SEXP args)
     case  3:  return DPQPHTYPE2_1(args, mphtype);
     case  4:  return DPQPHTYPE2_1(args, mgfphtype);
     default:
-        error(_("internal error in do_dpqphtype2"));
+        error(_("internal error in actuar_do_dpqphtype2"));
     }
 
     return args;                /* never used; to keep -Wall happy */
 }
 
 /* Main function, the only one used by .External(). */
-SEXP do_dpqphtype(SEXP args)
+SEXP actuar_do_dpqphtype(SEXP args)
 {
     int i;
     const char *name;
@@ -181,13 +181,13 @@ SEXP do_dpqphtype(SEXP args)
     args = CDR(args);
     name = CHAR(STRING_ELT(CAR(args), 0));
 
-    /* Dispatch to do_dpqphtype{1,2,3,4,5} */
+    /* Dispatch to actuar_do_dpqphtype{1,2,3,4,5} */
     for (i = 0; fun_tab[i].name; i++)
         if (!strcmp(fun_tab[i].name, name))
             return fun_tab[i].cfun(fun_tab[i].code, CDR(args));
 
     /* No dispatch is an error */
-    error("internal error in do_dpqphtype");
+    error("internal error in actuar_do_dpqphtype");
 
     return args;                /* never used; to keep -Wall happy */
 }

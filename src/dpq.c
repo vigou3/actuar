@@ -4,7 +4,7 @@
  *  quantile functions and moment generating functions, raw moments
  *  and limited moments for some probability laws not in base R (or
  *  those quantities not provided in base R). Function .External()
- *  calls do_dpq() with arguments:
+ *  calls actuar_do_dpq() with arguments:
  *
  *       1. the name of the distribution, with a "d", a "p" or "q"
  *          prepended to it (e.g. "dpareto", "pburr");
@@ -17,10 +17,10 @@
  *     x+2. whether to return probability in log scale or the cumulant
  *          generating function (d*, p*, q* and mgf* only).
  *
- *  Function do_dpq() will extract the name of the distribution, look
- *  up in table fun_tab defined in names.c which of do_dpq{1,2,3,4}
+ *  Function actuar_do_dpq() will extract the name of the distribution, look
+ *  up in table fun_tab defined in names.c which of actuar_do_dpq{1,2,3,4}
  *  should take care of the calculation and dispatch to this function.
- *  In turn, functions do_dpq{1,2,3,4} call function
+ *  In turn, functions actuar_do_dpq{1,2,3,4} call function
  *  {d,p,q,m,lev,mgf}dist() to get actual values from distribution
  *  "dist".
  *
@@ -36,7 +36,7 @@
  *
  *  To add a new distribution: write a {d,p,q,m,lev,mgf}dist()
  *  function, add an entry in names.c and in the definition of the
- *  corresponding do_dpq{1,2,3,4} function, declare the function in
+ *  corresponding actuar_do_dpq{1,2,3,4} function, declare the function in
  *  actuar.h.
  *
  *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
@@ -152,7 +152,7 @@ static SEXP dpq1_2(SEXP sx, SEXP sa, SEXP sI, SEXP sJ, double (*f)())
 #define DPQ1_1(A, FUN) dpq1_1(CAR(A), CADR(A), CADDR(A), FUN);
 #define DPQ1_2(A, FUN) dpq1_2(CAR(A), CADR(A), CADDR(A), CADDDR(A), FUN)
 
-SEXP do_dpq1(int code, SEXP args)
+SEXP actuar_do_dpq1(int code, SEXP args)
 {
     switch (code)
     {
@@ -163,7 +163,7 @@ SEXP do_dpq1(int code, SEXP args)
     case  5:  return DPQ1_1(args, minvexp);
     case  6:  return DPQ1_1(args, mgfexp);
     default:
-        error(_("internal error in do_dpq1"));
+        error(_("internal error in actuar_do_dpq1"));
     }
 
     return args;                /* never used; to keep -Wall happy */
@@ -289,7 +289,7 @@ static SEXP dpq2_2(SEXP sx, SEXP sa, SEXP sb, SEXP sI, SEXP sJ, double (*f)())
 #define DPQ2_1(A, FUN) dpq2_1(CAR(A), CADR(A), CADDR(A), CADDDR(A), FUN);
 #define DPQ2_2(A, FUN) dpq2_2(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), FUN)
 
-SEXP do_dpq2(int code, SEXP args)
+SEXP actuar_do_dpq2(int code, SEXP args)
 {
 
     switch (code)
@@ -347,7 +347,7 @@ SEXP do_dpq2(int code, SEXP args)
     case 51:  return DPQ2_1(args, mgfinvGauss);
     case 52:  return DPQ2_1(args, munif);
     default:
-        error(_("internal error in do_dpq2"));
+        error(_("internal error in actuar_do_dpq2"));
     }
 
     return args;                /* never used; to keep -Wall happy */
@@ -486,7 +486,7 @@ static SEXP dpq3_2(SEXP sx, SEXP sa, SEXP sb, SEXP sc, SEXP sI, SEXP sJ, double 
 #define DPQ3_1(A, FUN) dpq3_1(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), FUN);
 #define DPQ3_2(A, FUN) dpq3_2(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), CAD5R(A), FUN)
 
-SEXP do_dpq3(int code, SEXP args)
+SEXP actuar_do_dpq3(int code, SEXP args)
 {
     switch (code)
     {
@@ -527,7 +527,7 @@ SEXP do_dpq3(int code, SEXP args)
     case 35:  return DPQ3_1(args, levinvGauss); /* notation from SuppDists */
     case 36:  return DPQ3_1(args, levunif);
     default:
-        error(_("internal error in do_dpq3"));
+        error(_("internal error in actuar_do_dpq3"));
     }
 
     return args;                /* never used; to keep -Wall happy */
@@ -681,7 +681,7 @@ static SEXP dpq4_2(SEXP sx, SEXP sa, SEXP sb, SEXP sc, SEXP sd, SEXP sI, SEXP sJ
 #define DPQ4_1(A, FUN) dpq4_1(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), CAD5R(A), FUN);
 #define DPQ4_2(A, FUN) dpq4_2(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), CAD5R(A), CAD6R(A), FUN)
 
-SEXP do_dpq4(int code, SEXP args)
+SEXP actuar_do_dpq4(int code, SEXP args)
 {
     switch (code)
     {
@@ -699,7 +699,7 @@ SEXP do_dpq4(int code, SEXP args)
     case 12:  return DPQ4_2(args, qgenbeta);
     case 13:  return DPQ4_1(args, mgenbeta);
     default:
-        error(_("internal error in do_dpq4"));
+        error(_("internal error in actuar_do_dpq4"));
     }
 
     return args;                /* never used; to keep -Wall happy */
@@ -825,14 +825,14 @@ static SEXP dpq5_1(SEXP sx, SEXP sa, SEXP sb, SEXP sc, SEXP sd, SEXP se, SEXP sI
 #define CAD7R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(e))))))))
 #define DPQ5_1(A, FUN) dpq5_1(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), CAD5R(A), CAD6R(A), FUN);
 
-SEXP do_dpq5(int code, SEXP args)
+SEXP actuar_do_dpq5(int code, SEXP args)
 {
     switch (code)
     {
     case  1:  return DPQ5_1(args, levtrbeta);
     case  2:  return DPQ5_1(args, levgenbeta);
     default:
-        error(_("internal error in do_dpq5"));
+        error(_("internal error in actuar_do_dpq5"));
     }
 
     return args;                /* never used; to keep -Wall happy */
@@ -840,7 +840,7 @@ SEXP do_dpq5(int code, SEXP args)
 
 
 /* Main function, the only one used by .External(). */
-SEXP do_dpq(SEXP args)
+SEXP actuar_do_dpq(SEXP args)
 {
     int i;
     const char *name;
@@ -849,7 +849,7 @@ SEXP do_dpq(SEXP args)
     args = CDR(args);
     name = CHAR(STRING_ELT(CAR(args), 0));
 
-    /* Dispatch to do_dpq{1,2,3,4,5} */
+    /* Dispatch to actuar_do_dpq{1,2,3,4,5} */
     for (i = 0; fun_tab[i].name; i++)
     {
         if (!strcmp(fun_tab[i].name, name))
@@ -859,7 +859,7 @@ SEXP do_dpq(SEXP args)
     }
 
     /* No dispatch is an error */
-    error("internal error in do_dpq");
+    error("internal error in actuar_do_dpq");
 
     return args;                /* never used; to keep -Wall happy */
 }

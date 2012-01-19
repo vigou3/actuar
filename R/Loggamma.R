@@ -9,19 +9,19 @@
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dlgamma <- function(x, shapelog, ratelog, log = FALSE)
-    .External("do_dpq", "dlgamma", x, shapelog, ratelog, log)
+    .External("actuar_do_dpq", "dlgamma", x, shapelog, ratelog, log)
 
 plgamma <- function(q, shapelog, ratelog, lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "plgamma", q, shapelog, ratelog, lower.tail, log.p)
+    .External("actuar_do_dpq", "plgamma", q, shapelog, ratelog, lower.tail, log.p)
 
 qlgamma <- function(p, shapelog, ratelog, lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "qlgamma", p, shapelog, ratelog, lower.tail, log.p)
+    .External("actuar_do_dpq", "qlgamma", p, shapelog, ratelog, lower.tail, log.p)
 
 rlgamma <- function(n, shapelog, ratelog)
-    .External("do_random", "rlgamma", n, shapelog, ratelog)
+    .External("actuar_do_random", "rlgamma", n, shapelog, ratelog)
 
 mlgamma <- function(order, shapelog, ratelog)
-    .External("do_dpq", "mlgamma", order, shapelog, ratelog, FALSE)
+    .External("actuar_do_dpq", "mlgamma", order, shapelog, ratelog, FALSE)
 
 levlgamma <- function(limit, shapelog, ratelog, order = 1)
-    .External("do_dpq", "levlgamma", limit, shapelog, ratelog, order, FALSE)
+    .External("actuar_do_dpq", "levlgamma", limit, shapelog, ratelog, order, FALSE)

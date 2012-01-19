@@ -4,34 +4,34 @@
 #define R_MSG_NA        _("NaNs produced")
 
 /* Functions accessed from .External() */
-SEXP do_dpq(SEXP args);
-SEXP do_dpq1(int code, SEXP args);
-SEXP do_dpq2(int code, SEXP args);
-SEXP do_dpq3(int code, SEXP args);
-SEXP do_dpq4(int code, SEXP args);
-SEXP do_dpq5(int code, SEXP args);
+SEXP actuar_do_dpq(SEXP args);
+SEXP actuar_do_dpq1(int code, SEXP args);
+SEXP actuar_do_dpq2(int code, SEXP args);
+SEXP actuar_do_dpq3(int code, SEXP args);
+SEXP actuar_do_dpq4(int code, SEXP args);
+SEXP actuar_do_dpq5(int code, SEXP args);
 
-SEXP do_random(SEXP args);
-SEXP do_random1(int code, SEXP args);
-SEXP do_random2(int code, SEXP args);
-SEXP do_random3(int code, SEXP args);
-SEXP do_random4(int code, SEXP args);
+SEXP actuar_do_random(SEXP args);
+SEXP actuar_do_random1(int code, SEXP args);
+SEXP actuar_do_random2(int code, SEXP args);
+SEXP actuar_do_random3(int code, SEXP args);
+SEXP actuar_do_random4(int code, SEXP args);
 
-SEXP do_dpqphtype(SEXP args);
-SEXP do_dpqphtype2(int code, SEXP args);
+SEXP actuar_do_dpqphtype(SEXP args);
+SEXP actuar_do_dpqphtype2(int code, SEXP args);
 
-SEXP do_randomphtype(SEXP args);
-SEXP do_randomphtype2(int code, SEXP args);
+SEXP actuar_do_randomphtype(SEXP args);
+SEXP actuar_do_randomphtype2(int code, SEXP args);
 
-SEXP do_hierarc(SEXP args);
-SEXP do_panjer(SEXP args);
+SEXP actuar_do_hierarc(SEXP args);
+SEXP actuar_do_panjer(SEXP args);
 
 /* Utility functions */
 /*   Matrix algebra */
-void expm(double *x, int n, double *z);
-double expmprod(double *x, double *M, double *y, int n);
-void matpow(double *x, int n, int k, double *z);
-void solve(double *A, double *B, int n, int p, double *z);
+void actuar_expm(double *x, int n, double *z);
+double actuar_expmprod(double *x, double *M, double *y, int n);
+void actuar_matpow(double *x, int n, int k, double *z);
+void actuar_solve(double *A, double *B, int n, int p, double *z);
 
 /*   Sampling */
 int SampleSingleValue(int n, double *p);

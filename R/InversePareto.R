@@ -12,19 +12,19 @@
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dinvpareto <- function(x, shape, scale, log = FALSE)
-     .External("do_dpq", "dinvpareto", x, shape, scale, log)
+     .External("actuar_do_dpq", "dinvpareto", x, shape, scale, log)
 
 pinvpareto <- function(q, shape, scale, lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "pinvpareto", q, shape, scale, lower.tail, log.p)
+    .External("actuar_do_dpq", "pinvpareto", q, shape, scale, lower.tail, log.p)
 
 qinvpareto <- function(p, shape, scale, lower.tail = TRUE, log.p = FALSE)
-     .External("do_dpq", "qinvpareto", p, shape, scale, lower.tail, log.p)
+     .External("actuar_do_dpq", "qinvpareto", p, shape, scale, lower.tail, log.p)
 
 rinvpareto <- function(n, shape, scale)
-     .External("do_random", "rinvpareto", n, shape, scale)
+     .External("actuar_do_random", "rinvpareto", n, shape, scale)
 
 minvpareto <- function(order, shape, scale)
-     .External("do_dpq", "minvpareto", order, shape, scale, FALSE)
+     .External("actuar_do_dpq", "minvpareto", order, shape, scale, FALSE)
 
 levinvpareto <- function(limit, shape, scale, order = 1)
-     .External("do_dpq", "levinvpareto", limit, shape, scale, order, FALSE)
+     .External("actuar_do_dpq", "levinvpareto", limit, shape, scale, order, FALSE)

@@ -13,13 +13,13 @@
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 minvGauss <- function(order, nu, lambda)
-    .External("do_dpq", "minvGauss", order, nu, lambda, FALSE)
+    .External("actuar_do_dpq", "minvGauss", order, nu, lambda, FALSE)
 
 levinvGauss <- function(limit, nu, lambda, order = 1)
-    .External("do_dpq", "levinvGauss", limit,  nu, lambda, order, FALSE)
+    .External("actuar_do_dpq", "levinvGauss", limit,  nu, lambda, order, FALSE)
 
 mgfinvGauss <- function(x, nu, lambda, log = FALSE)
-    .External("do_dpq", "mgfinvGauss", x, nu, lambda, log)
+    .External("actuar_do_dpq", "mgfinvGauss", x, nu, lambda, log)
 
 ## Aliases
 minvgauss <- minvGauss

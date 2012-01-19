@@ -18,7 +18,7 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
             0.5 - sqrt(.Machine$double.eps) + 0.5)
     else
         0.5 - tol + 0.5
-    
+
     ## Check whether p0 is a valid probability or not.
     if ( !is.null(p0) ) if ( (p0 < 0) | (p0 > 1) )
         stop("'p0' must be a valid probability (between 0 and 1)")
@@ -111,7 +111,7 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     if (is.null(p0))
         p1 = 0
 
-    fs <- .External("do_panjer", p0, p1, fs0, fx, a, b, convolve, tol, maxit, echo)
+    fs <- .External("actuar_do_panjer", p0, p1, fs0, fx, a, b, convolve, tol, maxit, echo)
 
     FUN <- approxfun((0:(length(fs) - 1)) * x.scale, pmin(cumsum(fs), 1),
                      method = "constant", yleft = 0, yright = 1, f = 0,

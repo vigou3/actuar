@@ -21,7 +21,7 @@
 
 #define INITSIZE 100		/* default size for prob. vector */
 
-SEXP do_panjer(SEXP args)
+SEXP actuar_do_panjer(SEXP args)
 {
     SEXP p0, p1, fs0, sfx, a, b, conv, tol, maxit, echo, sfs;
     double *fs, *fx, cumul;

@@ -17,24 +17,24 @@
 
 dtrgamma <- function (x, shape1, shape2, rate = 1, scale = 1/rate,
                       log = FALSE)
-    .External("do_dpq", "dtrgamma", x, shape1, shape2, scale, log)
+    .External("actuar_do_dpq", "dtrgamma", x, shape1, shape2, scale, log)
 
 ptrgamma <- function(q, shape1, shape2, rate = 1, scale = 1/rate,
                      lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "ptrgamma", q, shape1, shape2, scale,
+    .External("actuar_do_dpq", "ptrgamma", q, shape1, shape2, scale,
               lower.tail, log.p)
 
 qtrgamma <- function(p, shape1, shape2, rate = 1, scale = 1/rate,
                      lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "qtrgamma", p, shape1, shape2, scale,
+    .External("actuar_do_dpq", "qtrgamma", p, shape1, shape2, scale,
               lower.tail, log.p)
 
 rtrgamma <- function(n, shape1, shape2, rate = 1, scale = 1/rate)
-    .External("do_random", "rtrgamma", n, shape1, shape2, scale)
+    .External("actuar_do_random", "rtrgamma", n, shape1, shape2, scale)
 
 mtrgamma <- function(order, shape1, shape2, rate = 1, scale = 1/rate)
-    .External("do_dpq", "mtrgamma", order, shape1, shape2, scale, FALSE)
+    .External("actuar_do_dpq", "mtrgamma", order, shape1, shape2, scale, FALSE)
 
 levtrgamma <- function(limit, shape1, shape2, rate = 1, scale = 1/rate,
                        order = 1)
-    .External("do_dpq", "levtrgamma", limit, shape1, shape2, scale, order, FALSE)
+    .External("actuar_do_dpq", "levtrgamma", limit, shape1, shape2, scale, order, FALSE)

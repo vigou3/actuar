@@ -18,25 +18,25 @@
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dinvgamma <- function (x, shape, rate = 1, scale = 1/rate, log = FALSE)
-     .External("do_dpq", "dinvgamma", x, shape, scale, log)
+     .External("actuar_do_dpq", "dinvgamma", x, shape, scale, log)
 
 pinvgamma <- function(q, shape, rate = 1, scale = 1/rate,
                       lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "pinvgamma", q, shape, scale, lower.tail, log.p)
+    .External("actuar_do_dpq", "pinvgamma", q, shape, scale, lower.tail, log.p)
 
 qinvgamma <- function(p, shape, rate = 1, scale = 1/rate,
                       lower.tail = TRUE, log.p = FALSE)
-     .External("do_dpq", "qinvgamma", p, shape, scale, lower.tail, log.p)
+     .External("actuar_do_dpq", "qinvgamma", p, shape, scale, lower.tail, log.p)
 
 rinvgamma <- function(n, shape, rate = 1, scale = 1/rate)
-     .External("do_random", "rinvgamma", n, shape, scale)
+     .External("actuar_do_random", "rinvgamma", n, shape, scale)
 
 minvgamma <- function(order, shape, rate = 1, scale = 1/rate)
-     .External("do_dpq", "minvgamma", order, shape, scale, FALSE)
+     .External("actuar_do_dpq", "minvgamma", order, shape, scale, FALSE)
 
 levinvgamma <- function(limit, shape, rate = 1, scale = 1/rate,
                         order = 1)
-     .External("do_dpq", "levinvgamma", limit, shape, scale, order, FALSE)
+     .External("actuar_do_dpq", "levinvgamma", limit, shape, scale, order, FALSE)
 
 mgfinvgamma <- function(x, shape, rate = 1, scale = 1/rate, log = FALSE)
-    .External("do_dpq", "mgfinvgamma", x, shape, scale, log)
+    .External("actuar_do_dpq", "mgfinvgamma", x, shape, scale, log)

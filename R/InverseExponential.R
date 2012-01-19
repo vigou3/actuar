@@ -13,21 +13,21 @@
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dinvexp <- function (x, rate = 1, scale = 1/rate, log = FALSE)
-    .External("do_dpq", "dinvexp", x, scale, log)
+    .External("actuar_do_dpq", "dinvexp", x, scale, log)
 
 pinvexp <- function(q, rate = 1, scale = 1/rate,
                     lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "pinvexp", q, scale, lower.tail, log.p)
+    .External("actuar_do_dpq", "pinvexp", q, scale, lower.tail, log.p)
 
 qinvexp <- function(p, rate = 1, scale = 1/rate,
                     lower.tail = TRUE, log.p = FALSE)
-    .External("do_dpq", "qinvexp", p, scale, lower.tail, log.p)
+    .External("actuar_do_dpq", "qinvexp", p, scale, lower.tail, log.p)
 
 rinvexp <- function(n, rate = 1, scale = 1/rate)
-    .External("do_random", "rinvexp", n, scale)
+    .External("actuar_do_random", "rinvexp", n, scale)
 
 minvexp <- function(order, rate = 1, scale = 1/rate)
-    .External("do_dpq", "minvexp", order, scale, FALSE)
+    .External("actuar_do_dpq", "minvexp", order, scale, FALSE)
 
 levinvexp <- function(limit, rate = 1, scale = 1/rate, order)
-    .External("do_dpq", "levinvexp", limit, scale, order, FALSE)
+    .External("actuar_do_dpq", "levinvexp", limit, scale, order, FALSE)

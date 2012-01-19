@@ -47,7 +47,7 @@ const static double padec88 [] =
  * expm() of package Matrix, which is itself based on the function of
  * the same name in Octave.
  */
-void expm(double *x, int n, double *z)
+void actuar_expm(double *x, int n, double *z)
 {
     if (n == 1)
         z[0] = exp(x[0]);               /* scalar exponential */
@@ -222,7 +222,7 @@ void expm(double *x, int n, double *z)
 /* Product x * exp(M) * y, where x is an (1 x n) vector, M is an (n x
  * n) matrix and y is an (n x 1) vector. Result z is a scalar.
  */
-double expmprod(double *x, double *M, double *y, int n)
+double actuar_expmprod(double *x, double *M, double *y, int n)
 {
     char *transa = "N";
     int p = 1;
@@ -232,7 +232,7 @@ double expmprod(double *x, double *M, double *y, int n)
     expM = (double *) R_alloc(n * n, sizeof(double)); /* matrix exponential */
 
     /* Compute exp(M) */
-    expm(M, n, expM);
+    actuar_expm(M, n, expM);
 
     /* Product      tmp   := x     * exp(M)
      * (Dimensions: 1 x n    1 x n   n x n) */
@@ -253,7 +253,7 @@ double expmprod(double *x, double *M, double *y, int n)
  * checking (e.g. no check that A is square) since it is currently
  * used in a very narrow and already controlled context.
  */
-void solve(double *A, double *B, int n, int p, double *z)
+void actuar_solve(double *A, double *B, int n, int p, double *z)
 {
     int info, *ipiv;
     double *Avals;
@@ -285,7 +285,7 @@ void solve(double *A, double *B, int n, int p, double *z)
  * with little error checking since it is currently used in a very
  * narrow and already controlled context.
  */
-void matpow(double *x, int n, int k, double *z)
+void actuar_matpow(double *x, int n, int k, double *z)
 {
     if (k == 0)
     {
@@ -307,7 +307,7 @@ void matpow(double *x, int n, int k, double *z)
         {
             k = -k;
 
-            /*  Create identity matrix for use in solve() */
+            /*  Create identity matrix for use in actuar_solve() */
             int i, j;
             double *y = (double *) R_alloc(n * n, sizeof(double));
             for (i = 0; i < n; i++)
@@ -315,7 +315,7 @@ void matpow(double *x, int n, int k, double *z)
                     y[i * n + j] = (i == j) ? 1.0 : 0.0;
 
             /* Inverse */
-            solve(x, y, n, n, xtmp);
+            actuar_solve(x, y, n, n, xtmp);
         }
         else
             Memcpy(xtmp, x, (size_t) (n * n));
