@@ -34,14 +34,17 @@ mgfinvgauss(x, nu, lambda, log= FALSE)
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]}, the \eqn{k}th limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)^k]} and the moment generating function is
-  \eqn{E[e^{xX}]}.  
+  \eqn{E[e^{xX}]}.
+
+  The moment generating function is defined for \code{x <= lambda/(2 *
+    nu^2)}.
 }
 \value{
   \code{minvGauss} gives the \eqn{k}th raw moment,
   \code{levinvGauss} gives the \eqn{k}th moment of the limited loss
   variable, and
   \code{mgfinvGauss} gives the moment generating function in \code{x}.
-  
+
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{
@@ -61,8 +64,8 @@ mgfinvgauss(x, nu, lambda, log= FALSE)
   Christophe Dutang
 }
 \examples{
-minvGauss(2, 3, 4) 
+minvGauss(2, 3, 4)
 levinvGauss(10, 3, 4)
-mgfinvGauss(1,3,2)
+mgfinvGauss(0.2, 3, 4)
 }
 \keyword{distribution}
