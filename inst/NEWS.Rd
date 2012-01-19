@@ -2,6 +2,19 @@
 \title{actuar News}
 \encoding{UTF-8}
 
+\section{CHANGES IN VERSION 1.1-3}{
+  \subsection{BUG FIX}{
+    \itemize{
+      \item Resolved symbol clash at C level tickled by package
+      GeneralizedHyperbolic on Solaris.
+      \item Wrong result given by levinvGauss() because the upper tail
+      of the normal distribution was used in the calculation instead of
+      the lower tail. Thanks to Dan Murphy <chiefmurphy@gmail.com> for
+      the heads up.
+    }
+  }
+}
+
 \section{CHANGES IN VERSION 1.1-2}{
   \subsection{BUG FIX}{
     \itemize{
