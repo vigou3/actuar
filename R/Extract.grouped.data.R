@@ -40,7 +40,7 @@
         }
 
         ## Fetch the appropriate group boundaries.
-        cj <- eval(expression(cj), env = environment(x))
+        cj <- eval(expression(cj), envir = environment(x))
         cj <- cj[sort(unique(c(ii, ii + 1)))]
 
         ## Extraction of the first column only: return the vector of group
@@ -112,7 +112,7 @@
         ## supported: replacement of group boundaries only
         if (identical(ij, as.integer(1)))
         {
-            cj <- eval(expression(cj), env = environment(x))
+            cj <- eval(expression(cj), envir = environment(x))
             cj[sort(unique(c(ii, ii + 1)))] <- value
             res <- grouped.data(cj, x[, -1])
             names(res) <- names(x)

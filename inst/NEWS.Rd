@@ -2,6 +2,16 @@
 \title{actuar News}
 \encoding{UTF-8}
 
+\section{CHANGES IN VERSION 1.1-4}{
+  \subsection{USER-VISIBLE CHANGES}{
+    \itemize{
+      \item The function resulting from elev() for individual data is
+      now faster for a large number of limits. (Thanks to Frank Zhan
+      \email{FrankZhan@donegalgroup.com} for the catch and report.)
+    }
+  }
+}
+
 \section{CHANGES IN VERSION 1.1-3}{
   \subsection{BUG FIX}{
     \itemize{

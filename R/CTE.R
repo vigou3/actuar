@@ -55,7 +55,7 @@ CTE.aggregateDist <- function(x, conf.level = c(0.9, 0.95, 0.99),
     {
         dig <- max(2, getOption("digits"))
         names(res) <- formatC(paste(100 * conf.level, "%", sep = ""),
-                              format = "fg", wid = 1, digits = dig)
+                              format = "fg", width = 1, digits = dig)
     }
     res
 }
