@@ -9,7 +9,7 @@
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-coverage2 <- function(pdf, cdf, deductible = 0, franchise = FALSE,
+coverage <- function(pdf, cdf, deductible = 0, franchise = FALSE,
                      limit = Inf, coinsurance = 1, inflation = 0,
                      per.loss = FALSE)
 {
@@ -31,44 +31,43 @@ coverage2 <- function(pdf, cdf, deductible = 0, franchise = FALSE,
     if (missing(cdf) & needs.cdf)
         stop("'cdf' must be supplied")
 
-    ## Quantites often used
+    ## Quantites often used.
     r <- 1 + inflation
     d <- deductible/r
     u <- limit/r
 
-    ## We will build the body of the output function as an expression,
-    ## piece by piece as we go along. We start here with the first
-    ## couple of lines that never change.
-    e <- expression(
-        args <- as.list(match.call())[-c(1L, 2L)],
-        nargs <- names(args))
+    ## The modified cdf or pdf are usually defined in branches. To
+    ## avoid using nested ifelse(), we will rather rely on sets of
+    ## expressions to make the required calculations for each branch
+    ## separately. This is actually much faster.
+    ##
+    ## The output function will have varying number of said
+    ## expressions depending on the case that is dealt with. We will
+    ## build the body of the output function piece by piece as we go
+    ## along. We start here with the first couple of lines that never
+    ## change.
+    e <- expression(argv <- formals(), argn <- names(argv))
 
-    ## Prepare the cdf object for cases needing the cdf.
+    ## One main discriminating factor is whether the cdf is needed for
+    ## the output function of not.
     if (needs.cdf)
     {
-        ## Argument 'cdf' can be a character string giving the
-        ## function name or a straight function object. In the latter
-        ## case, 'cdf' will contain function definitions and the
-        ## output function of coverage() will contain multiple
-        ## function definitions. Not nice. Instead, always treat 'cdf'
-        ## (and 'pdf', below) as character strings.
-        cdf <- as.character(Call$cdf)
-
         ## Initialization in the output function.
         e <- c(e,
-               substitute(F <- fun, list(fun = as.name(cdf))),
-               quote(formals(F)[nargs] <- args))
+               substitute(F <- fun, list(fun = as.name(Call$cdf))),
+               quote(formals(F)[argn] <- argv),
+               quote(print(formals(F))))
 
-        ## Get argument list to build function calls and, eventually,
-        ## to specify arguments of the output function.
-        formalsCDF <- formals(cdf)          # arguments as list
-        argsCDF <- names(formalsCDF)        # arguments names as strings
+        ## Get argument list fo 'cdf' to transfert them to the output
+        ## function.
+        argv <- formals(cdf)            # arguments as list
+        argn <- names(argv)             # arguments names as strings
 
         ## Remember if argument 'lower.tail' is available, so we can
         ## use it later. Then, drop unsupported arguments 'lower.tail'
         ## and 'log.p'.
-        has.lower <- "lower.tail" %in% argsCDF
-        argsCDF <- setdiff(argsCDF, c("lower.tail", "log.p"))
+        has.lower <- "lower.tail" %in% argn
+        argn <- setdiff(argn, c("lower.tail", "log.p"))
 
         ## If output function is a cdf:
         ##
@@ -80,12 +79,14 @@ coverage2 <- function(pdf, cdf, deductible = 0, franchise = FALSE,
         ##    used after this block.
         if (is.cdf)
         {
-            argsFUN <- formalsCDF[argsCDF]  # arguments of output function
-            x <- as.name(argsCDF[1])        # symbol
+            argsFUN <- argv[argn]       # arguments of output function
+            x <- as.name(argn[1])       # symbol
         }
 
-        ## Definitions of 1 - F(d) and 1 - F(u), using 'lower.tail =
-        ## FALSE' if available in 'cdf'.
+        ## We will need to compute 1 - F(d) and 1 - F(u) in future
+        ## expressions. We definite the expressions to do these
+        ## computations here; they will differ depending if
+        ## 'lower.tail = FALSE' is available or not in 'cdf'.
         if (has.lower)
         {
             Sd <- substitute(F(a, lower.tail = FALSE), list(a = d))
@@ -98,27 +99,24 @@ coverage2 <- function(pdf, cdf, deductible = 0, franchise = FALSE,
         }
     }
 
-    ## Repeat same steps as above for case needing the pdf: output
-    ## function is a pdf.
+    ## Repeat same steps as above for case needing the pdf. The output
+    ## function is a pdf and in this case the arguments of the output
+    ## function are those of 'pdf'.
     if (!is.cdf)
     {
-        pdf <- as.character(Call$pdf)   # same as 'cdf' above
         e <- c(e,
-               substitute(f <- fun, list(fun = as.name(pdf))),
-               quote(formals(f)[nargs] <- args))
-        formalsPDF <- formals(pdf)      # arguments as list
-        argsPDF <- setdiff(names(formalsPDF), "log") # drop argument 'log'
-        argsFUN <- formalsPDF[argsPDF]  # arguments of output function
-        x <- as.name(argsPDF[1])        # symbol
+               substitute(f <- fun, list(fun = as.name(Call$pdf))),
+               quote(formals(f)[argn] <- argv),
+               quote(print(formals(f))))
+        argv <- formals(pdf)                # arguments as list
+        argn <- setdiff(names(argv), "log") # drop argument 'log'
+        argsFUN <- argv[argn]           # arguments of output function
+        x <- as.name(argn[1])           # symbol
     }
 
-    ## Initialization of the results vector in the output function
-    ## with 0s.
-    e <- c(e,
-           substitute(res <- numeric(length(x)), list(x = x)))
-
     ## Build the value at which the underlying pdf/cdf will be called
-    ## for non special case values of 'x'.
+    ## for non special case values of 'x'. We need to index 'x' to
+    ## only compute for the correct values of a given branch.
     x.mod <- as.call(c(as.name("["), x, as.name("w")))
     if (coinsurance < 1)
         x.mod <- substitute(x/alpha, list(x = x.mod, alpha = coinsurance))
@@ -148,13 +146,20 @@ coverage2 <- function(pdf, cdf, deductible = 0, franchise = FALSE,
         cond2 <- substitute(0 < x & x < b, list(x = x, b = bound2))
     }
 
-    ## Definition for the first branch. Computation to make only if
-    ## there is a decutible with the payment per loss random variable.
-    ## For all other cases, the value in the first branch is 0.
+    ## Initialization of the results vector in the output function
+    ## with 0s.
+    e <- c(e,
+           substitute(res <- numeric(length(x)), list(x = x)))
+
+    ## Definition of the output function for the first branch. There
+    ## is a computation to make only if there is a deductible with the
+    ## payment per loss random variable. For all other cases, the
+    ## value in the first branch is 0 and we rely on the
+    ## initialization with numeric() done at the previous step.
     if (per.loss & deductible)
         e <- c(e,
-               substitute(w <- which(cond1), list(cond1 = cond1)),
-               substitute(res[w] <- F(a), list(a = d)))
+               substitute(res[which(cond1)] <- F(a),
+                          list(cond1 = cond1, a = d)))
 
     ## Function definitions for the second and third branches. The
     ## 'is.cdf = TRUE' and 'is.cdf = FALSE' cases must be treated
@@ -188,11 +193,11 @@ coverage2 <- function(pdf, cdf, deductible = 0, franchise = FALSE,
     e <- c(e,
            substitute(w <- which(cond2), list(cond2 = cond2)),
            substitute(res[w] <- f2, list(f2 = f2)),
-           substitute(w <- which(cond3), list(cond3 = cond3)),
-           substitute(res[w] <- f3, list(f3 = f3)),
+           substitute(res[which(cond3)] <- f3, list(cond3 = cond3, f3 = f3)),
            quote(res))
 
     ## Wrap up the output function.
+    FUN <- function() {}
     body(FUN) <- as.call(c(as.name("{"), e)) # taken from help(body)
     formals(FUN) <- argsFUN             # set arguments
     environment(FUN) <- new.env()       # new, empty environment
