@@ -2,6 +2,24 @@
 \title{actuar News}
 \encoding{UTF-8}
 
+\section{CHANGES IN VERSION 1.1-5}{
+  \subsection{USER-VISIBLE CHANGES}{
+    \itemize{
+      \item Complete rewrite of coverage(); the function it creates no
+      longer relies on ifelse() and, consequently, is much faster. The
+      rewrite was motivated by a change in the way [dp]gamma() handle their
+      arguments in R 2.15.1.
+    }
+  }
+  \subsection{BUG FIX}{
+    \itemize{
+      \item summary.ogive() no longer relies on length 'n' to be in the
+      environment of a function created by approxfun(). Fix required by
+      R >= 2.16.0.
+    }
+  }
+}
+
 \section{CHANGES IN VERSION 1.1-4}{
   \subsection{USER-VISIBLE CHANGES}{
     \itemize{
