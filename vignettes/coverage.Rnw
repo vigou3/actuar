@@ -100,15 +100,10 @@ dgammaL <- coverage(dgamma, pgamma, deductible = deductible, limit = limit,
 pgammaP <- coverage(cdf = pgamma, deductible = deductible, limit = limit)
 dgammaP <- coverage(dgamma, pgamma, deductible = deductible, limit = limit)
 
-formals(pgammaL)[c("shape", "rate")] <- c(5, 0.6)
-formals(dgammaL)[c("shape", "rate")] <- c(5, 0.6)
-formals(pgammaP)[c("shape", "rate")] <- c(5, 0.6)
-formals(dgammaP)[c("shape", "rate")] <- c(5, 0.6)
-
 d <- deductible
 u <- limit - d
 e <- 0.001
-ylim <- c(0, dgammaL(0))
+ylim <- c(0, dgammaL(0, 5, 0.6))
 @
 
 \begin{align*}
@@ -135,10 +130,10 @@ ylim <- c(0, dgammaL(0))
   \begin{minipage}{0.4\linewidth}
 <<echo=FALSE, fig=TRUE, width=4, height=3>>=
 par(mar = c(2, 3, 1, 1))
-curve(pgammaP(x), from = 0, to = u - e,
+curve(pgammaP(x, 5, 0.6), from = 0, to = u - e,
       xlim = c(0, limit), ylim = c(0, 1),
       xlab = "", ylab = "", xaxt = "n", lwd = 2)
-curve(pgammaP(x), from = u, add = TRUE, lwd = 2)
+curve(pgammaP(x, 5, 0.6), from = u, add = TRUE, lwd = 2)
 axis(1, at = c(0, u), labels = c("0", "u - d"))
 @
   \end{minipage} \\
@@ -158,10 +153,10 @@ axis(1, at = c(0, u), labels = c("0", "u - d"))
   \begin{minipage}{0.4\linewidth}
 <<echo=FALSE, fig=TRUE, width=4, height=3>>=
 par(mar = c(2, 3, 1, 1))
-curve(dgammaP(x), from = 0 + e, to = u - e,
+curve(dgammaP(x, 5, 0.6), from = 0 + e, to = u - e,
       xlim = c(0, limit), ylim = ylim,
       xlab = "", ylab = "", xaxt = "n", lwd = 2)
-points(u, dgammaP(u), pch = 16)
+points(u, dgammaP(u, 5, 0.6), pch = 16)
 axis(1, at = c(0, u), labels = c("0", "u - d"))
 @
   \end{minipage}
@@ -194,10 +189,10 @@ axis(1, at = c(0, u), labels = c("0", "u - d"))
   \begin{minipage}{0.4\linewidth}
 <<echo=FALSE, fig=TRUE, width=4, height=3>>=
 par(mar = c(2, 3, 1, 1))
-curve(pgammaL(x), from = 0, to = u - e,
+curve(pgammaL(x, 5, 0.6), from = 0, to = u - e,
       xlim = c(0, limit), ylim = c(0, 1),
       xlab = "", ylab = "", xaxt = "n", lwd = 2)
-curve(pgammaL(x), from = u, add = TRUE, lwd = 2)
+curve(pgammaL(x, 5, 0.6), from = u, add = TRUE, lwd = 2)
 axis(1, at = c(0, u), labels = c("0", "u - d"))
 @
   \end{minipage} \\
@@ -215,10 +210,10 @@ axis(1, at = c(0, u), labels = c("0", "u - d"))
   \begin{minipage}{0.4\linewidth}
 <<echo=FALSE, fig=TRUE, width=4, height=3>>=
 par(mar = c(2, 3, 1, 1))
-curve(dgammaL(x), from = 0 + e, to = u - e,
+curve(dgammaL(x, 5, 0.6), from = 0 + e, to = u - e,
       xlim = c(0, limit), ylim = ylim,
       xlab = "", ylab = "", xaxt = "n", lwd = 2)
-points(c(0, u), dgammaL(c(0, u)), pch = 16)
+points(c(0, u), dgammaL(c(0, u), 5, 0.6), pch = 16)
 axis(1, at = c(0, u), labels = c("0", "u - d"))
 @
   \end{minipage}
@@ -237,15 +232,10 @@ pgammaP <- coverage(cdf = pgamma, deductible = deductible, limit = limit,
 dgammaP <- coverage(dgamma, pgamma, deductible = deductible, limit = limit,
                     franchise = TRUE)
 
-formals(pgammaL)[c("shape", "rate")] <- c(5, 0.6)
-formals(dgammaL)[c("shape", "rate")] <- c(5, 0.6)
-formals(pgammaP)[c("shape", "rate")] <- c(5, 0.6)
-formals(dgammaP)[c("shape", "rate")] <- c(5, 0.6)
-
 d <- deductible
 u <- limit
 e <- 0.001
-ylim <- c(0, dgammaL(0))
+ylim <- c(0, dgammaL(0, 5, 0.6))
 @
 
 \begin{align*}
@@ -272,10 +262,10 @@ ylim <- c(0, dgammaL(0))
   \begin{minipage}{0.4\linewidth}
 <<echo=FALSE, fig=TRUE, width=4, height=3>>=
 par(mar = c(2, 3, 1, 1))
-curve(pgammaP(x), from = 0, to = u - e,
+curve(pgammaP(x, 5, 0.6), from = 0, to = u - e,
       xlim = c(0, limit + d), ylim = c(0, 1),
       xlab = "", ylab = "", xaxt = "n", lwd = 2)
-curve(pgammaP(x), from = u, add = TRUE, lwd = 2)
+curve(pgammaP(x, 5, 0.6), from = u, add = TRUE, lwd = 2)
 axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 @
   \end{minipage} \\
@@ -295,11 +285,11 @@ axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
   \begin{minipage}{0.4\linewidth}
 <<echo=FALSE, fig=TRUE, width=4, height=3>>=
 par(mar = c(2, 3, 1, 1))
-curve(dgammaP(x), from = d + e, to = u - e,
+curve(dgammaP(x, 5, 0.6), from = d + e, to = u - e,
       xlim = c(0, limit + d), ylim = ylim,
       xlab = "", ylab = "", xaxt = "n", lwd = 2)
-curve(dgammaL(x), from = 0 + e, to = d, add = TRUE, lwd = 2)
-points(u, dgammaP(u), pch = 16)
+curve(dgammaL(x, 5, 0.6), from = 0 + e, to = d, add = TRUE, lwd = 2)
+points(u, dgammaP(u, 5, 0.6), pch = 16)
 axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 @
   \end{minipage}
@@ -332,10 +322,10 @@ axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
   \begin{minipage}{0.4\linewidth}
 <<echo=FALSE, fig=TRUE, width=4, height=3>>=
 par(mar = c(2, 3, 1, 1))
-curve(pgammaL(x), from = 0, to = u - e,
+curve(pgammaL(x, 5, 0.6), from = 0, to = u - e,
       xlim = c(0, limit + d), ylim = c(0, 1),
       xlab = "", ylab = "", xaxt = "n", lwd = 2)
-curve(pgammaL(x), from = u, add = TRUE, lwd = 2)
+curve(pgammaL(x, 5, 0.6), from = u, add = TRUE, lwd = 2)
 axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 @
   \end{minipage} \\
@@ -352,11 +342,11 @@ axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
   \begin{minipage}{0.4\linewidth}
 <<echo=FALSE, fig=TRUE, width=4, height=3>>=
 par(mar = c(2, 3, 1, 1))
-curve(dgammaL(x), from = d + e, to = u - e,
+curve(dgammaL(x, 5, 0.6), from = d + e, to = u - e,
       xlim = c(0, limit + d), ylim = ylim,
       xlab = "", ylab = "", xaxt = "n", lwd = 2)
-curve(dgammaL(x), from = 0 + e, to = d, add = TRUE, lwd = 2)
-points(c(0, u), dgammaL(c(0, u)), pch = 16)
+curve(dgammaL(x, 5, 0.6), from = 0 + e, to = d, add = TRUE, lwd = 2)
+points(c(0, u), dgammaL(c(0, u), 5, 0.6), pch = 16)
 axis(1, at = c(0, d, u), labels = c("0", "d", "u"))
 @
   \end{minipage}

@@ -45,6 +45,10 @@ coverage(pdf, cdf, deductible = 0, franchise = FALSE,
   \code{pdf} or \code{cdf}, except \code{"lower.tail"},
   \code{"log.p"} and \code{"log"}, which are not supported.
 }
+\note{
+  Setting arguments of the function returned by \code{coverage} using
+  \code{\link{formals}} may very well not work as expected.
+}
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
   \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
