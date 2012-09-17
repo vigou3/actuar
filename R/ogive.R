@@ -15,12 +15,12 @@ ogive <- function(x, y = NULL, ...)
     ## shorter than the first.
     if (inherits(x, "grouped.data"))
     {
-        y <- x[, 2]
+        y <- x[, 2L]
         x <- eval(expression(cj), envir = environment(x))
     }
     else
     {
-        if (length(x) - length(y) != 1)
+        if (length(x) - length(y) != 1L)
             stop("invalid number of group boundaries and frequencies")
     }
 
@@ -43,23 +43,34 @@ print.ogive <- function(x, digits = getOption("digits") - 2, ...)
     print(attr(x, "call"), ...)
     nc <- length(xxc <- get("x", envir = environment(x)))
     nn <- length(xxn <- get("y", envir = environment(x)))
-    i1 <- 1:min(3, nc)
-    i2 <- if (nc >= 4) max(4, nc - 1):nc else integer(0)
-    i3 <- 1:min(3, nn)
-    i4 <- if (nn >= 4) max(4, nn - 1):nn else integer(0)
+    i1 <- 1L:min(3L, nc)
+    i2 <- if (nc >= 4L) max(4L, nc - 1L):nc else integer(0)
+    i3 <- 1L:min(3L, nn)
+    i4 <- if (nn >= 4L) max(4L, nn - 1L):nn else integer(0)
     cat("    x = ", numform(xxc[i1]), if (nc > 3) ", ",
         if (nc > 5) " ..., ", numform(xxc[i2]), "\n", sep = "")
     cat(" F(x) = ", numform(xxn[i3]), if (nn > 3) ", ",
-        if (nn > 5) " ..., ", numform(xxn[i4]), "\n", sep = "")
+        if (nn > 5L) " ..., ", numform(xxn[i4]), "\n", sep = "")
     invisible(x)
 }
 
 ### Essentially identical to stats::summary.ecdf().
 summary.ogive <- function (object, ...)
 {
-    cat("Ogive:\t ", eval(expression(n), envir = environment(object)),
-        "unique values with summary\n")
-    summary(knots(object), ...)
+    n <- length(eval(expression(x), envir = environment(object)))
+    header <- paste("Ogive:	 ", n,
+                    "unique values with summary\n")
+    structure(summary(knots(object), ...),
+              header = header, class = "summary.ogive")
+}
+
+### Identical to stats::print.summary.ecdf().
+print.summary.ogive <- function(x, ...)
+{
+    cat(attr(x, "header"))
+    y <- unclass(x); attr(y, "header") <- NULL
+    print(y, ...)
+    invisible(x)
 }
 
 ### Identical to stats::knots.stepfun().
