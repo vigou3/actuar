@@ -61,10 +61,10 @@ hache.origin <- function(ratios, weights, xreg, tol, maxit, echo)
     V <- function(z)                # from stats:::summary.lm
     {
         r1 <- z$rank
-        if (r1 == 1)
-            diag(as.real(chol2inv(z$qr$qr[1, 1, drop = FALSE])), p)
+        if (r1 == 1L)
+            diag(as.double(chol2inv(z$qr$qr[1L, 1L, drop = FALSE])), p)
         else
-            chol2inv(z$qr$qr[1:r1, 1:r1, drop = FALSE])
+            chol2inv(z$qr$qr[1L:r1, 1L:r1, drop = FALSE])
     }
     W[, , has.data] <- sapply(fits[has.data], V)
 
@@ -119,7 +119,7 @@ hache.origin <- function(ratios, weights, xreg, tol, maxit, echo)
                                      A %*% solve(A + s2 * W[, , i]))
 
         ## New collective regression coefficients
-        cred.s <- apply(cred[, , has.data], c(1, 2), sum)
+        cred.s <- apply(cred[, , has.data], c(1L, 2L), sum)
         coll <- solve(cred.s,
                       rowSums(sapply(has.data, function(i)
                                      cred[, , i] %*% ind[, i])))
