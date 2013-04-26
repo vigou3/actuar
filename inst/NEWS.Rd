@@ -2,6 +2,14 @@
 \title{actuar News}
 \encoding{UTF-8}
 
+\section{CHANGES IN VERSION 1.1-6}{
+  \subsection{BUG FIX}{
+    \itemize{
+      \item Fixed a deprecated use of real().
+    }
+  }
+}
+
 \section{CHANGES IN VERSION 1.1-5}{
   \subsection{USER-VISIBLE CHANGES}{
     \itemize{
