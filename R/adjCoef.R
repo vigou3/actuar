@@ -10,7 +10,7 @@
 ###
 ### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
+adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
                     h, reinsurance = c("none", "proportional", "excess-of-loss"),
                     from, to, n = 101)
 {
@@ -192,8 +192,8 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
     ## computed above, joining the points by straight line segments.
     FUN <- approxfun(retention, coef, rule = 2, method = "linear")
 
-    comment(FUN) <- paste(toupper(substring(reinsurance, 1, 1)),
-                          substring(reinsurance, 2),
+    comment(FUN) <- paste(toupper(substring(reinsurance, 1L, 1L)),
+                          substring(reinsurance, 2L),
                           " reinsurance",
                           sep = "", collapse = "")
     class(FUN) <- c("adjCoef", class(FUN))

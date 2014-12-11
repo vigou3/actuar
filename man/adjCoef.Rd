@@ -8,7 +8,7 @@
   retentions.
 }
 \usage{
-adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
+adjCoef(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
         h, reinsurance = c("none", "proportional", "excess-of-loss"),
         from, to, n = 101)
 
@@ -24,7 +24,7 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
   \item{mgf.wait}{an expression written as a function of \code{x}, or
     alternatively the name of a function, giving the mgf of the
     claims interarrival time distribution. Defaults to an exponential
-    distribution with parameter 1.}
+    distribution with mean 1.}
   \item{premium.rate}{if \code{reinsurance = "none"}, a numeric value of
     the premium rate; otherwise, an expression written as a function of
     \code{y}, or alternatively the name of a function, giving the
@@ -81,7 +81,7 @@ adjCoef(mgf.claim, mgf.wait = mgfexp(x), premium.rate, upper.bound,
   The root of \eqn{h(x) = 1} is found by minimizing \eqn{(h(x) - 1)^2}.
 }
 \value{
-  If \code{reinsurance = "none"}, a numeric vector of lenght one.
+  If \code{reinsurance = "none"}, a numeric vector of length one.
   Otherwise, a function of class \code{"adjCoef"} inheriting from the
   \code{"function"} class.
 }
