@@ -105,7 +105,7 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   too large. One may divide the appropriate parameter of the frequency
   distribution by \eqn{2^n} and convolve the resulting distribution
   \eqn{n =} \code{convolve} times.
-  
+
   Failure to obtain a cumulative distribution function less than
   \code{tol} away from 1 within \code{maxit} iterations is often due
   to a too coarse discretization of the severity distribution.
@@ -182,7 +182,7 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
   \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
 
-  Daykin, C.D., \enc{Pentik‰inen}{Pentikainen}, T. and Pesonen, M.
+  Daykin, C.D., \enc{Pentik√§inen}{Pentikainen}, T. and Pesonen, M.
   (1994), \emph{Practical Risk Theory for Actuaries}, Chapman & Hall.
 }
 \author{

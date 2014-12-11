@@ -6,8 +6,8 @@
 \alias{print.summary.cm}
 \title{Credibility Models}
 \description{
-  Fit the following credibility models: \enc{Bühlmann}{Buhlmann},
-  \enc{Bühlmann}{Buhlmann}-Straub, hierarchical or regression
+  Fit the following credibility models: \enc{BÃ¼hlmann}{Buhlmann},
+  \enc{BÃ¼hlmann}{Buhlmann}-Straub, hierarchical or regression
   (Hachemeister).
 }
 \usage{
@@ -69,8 +69,8 @@ cm(formula, data, ratios, weights, subset,
 \details{
   \code{cm} is the unified front end for credibility models fitting.
   Currently, the function supports hierarchical models with any number
-  of levels (with \enc{Bühlmann}{Buhlmann} and
-  \enc{Bühlmann}{Buhlmann}-Straub models as special cases) and the
+  of levels (with \enc{BÃ¼hlmann}{Buhlmann} and
+  \enc{BÃ¼hlmann}{Buhlmann}-Straub models as special cases) and the
   regression model of Hachemeister. Usage of \code{cm} is similar to
   \code{\link[stats]{lm}}.
 
@@ -134,7 +134,7 @@ cm(formula, data, ratios, weights, subset,
 
   If the intercept is positioned at the barycenter of time, matrices
   \eqn{S_i}{S[i]} and \eqn{A} (and hence \eqn{Z_i}{Z[i]}) are diagonal.
-  This amounts to use \enc{Bühlmann}{Buhlmann}-Straub models for each
+  This amounts to use \enc{BÃ¼hlmann}{Buhlmann}-Straub models for each
   regression coefficient.
 
   Argument \code{newdata} provides the \dQuote{future} value of the
@@ -161,7 +161,7 @@ cm(formula, data, ratios, weights, subset,
   lowest level, the sum of the natural weights the next level and the
   sum of the credibility factors for all upper levels.
 
-  The \enc{Bühlmann}{Buhlmann}-Gisler estimators (\code{method =
+  The \enc{BÃ¼hlmann}{Buhlmann}-Gisler estimators (\code{method =
     "Buhlmann-Gisler"}) are given by%
   \deqn{b = \frac{1}{I} \sum_i \max \left( \frac{B_i}{c_i}, 0
     \right),}{%
@@ -176,7 +176,7 @@ cm(formula, data, ratios, weights, subset,
   without any truncation. Note that negative estimates will be truncated
   to zero for credibility factor calculations.
 
-  In the \enc{Bühlmann}{Buhlmann}-Straub model, these estimators are
+  In the \enc{BÃ¼hlmann}{Buhlmann}-Straub model, these estimators are
   equivalent.
 
   Iterative estimators \code{method = "iterative"} are pseudo-estimators
@@ -193,7 +193,7 @@ cm(formula, data, ratios, weights, subset,
   iterative estimators are available. If \code{method} is different from
   \code{"iterative"}, a warning is issued. With the intercept at the
   barycenter of time, the choice of estimators is the same as in the
-  \enc{Bühlmann}{Buhlmann}-Straub model.
+  \enc{BÃ¼hlmann}{Buhlmann}-Straub model.
 }
 \value{
   Function \code{cm} computes the structure parameters estimators of the
@@ -236,12 +236,12 @@ cm(formula, data, ratios, weights, subset,
   an atomic vector for one-level models.
 }
 \references{
-  \enc{Bühlmann}{Buhlmann}, H. and Gisler, A. (2005), \emph{A Course in
+  \enc{BÃ¼hlmann}{Buhlmann}, H. and Gisler, A. (2005), \emph{A Course in
     Credibility Theory and its Applications}, Springer.
 
   Belhadj, H., Goulet, V. and Ouellet, T. (2009), On parameter
   estimation in hierarchical credibility, \emph{Astin Bulletin} \bold{39}.
-  
+
   Goulet, V. (1998), Principles and application of credibility
   theory, \emph{Journal of Actuarial Practice} \bold{6}, ISSN
   1064-6647.

@@ -90,7 +90,7 @@ simul(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},
-  Sébastien Auclair and Louis-Philippe Pouliot
+  SÃ©bastien Auclair and Louis-Philippe Pouliot
 }
 \seealso{
   \code{\link{simul.summaries}} for the functions to create the

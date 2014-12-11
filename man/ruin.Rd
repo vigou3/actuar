@@ -4,7 +4,7 @@
 \title{Probability of Ruin}
 \description{
   Calulation of infinite time probability of ruin in the models of
-  \enc{Cramér}{Cramer}-Lundberg and Sparre Andersen, that is with
+  \enc{CramÃ©r}{Cramer}-Lundberg and Sparre Andersen, that is with
   exponential or phase-type (including mixtures of exponentials, Erlang
   and mixture of Erlang) claims interarrival time.
 }
