@@ -1,129 +1,130 @@
 # French translations for actuar package
-# Traduction franÁaise du package actuar.
+# Traduction fran√ßaise du package actuar.
 # Copyright (C) 2007 Vincent Goulet
 # This file is distributed under the same license as the actuar package.
 # Vincent Goulet <vincent@vgoulet.act.ulaval.ca>, 2007.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: actuar 0.9-4\n"
+"Project-Id-Version: actuar 1.1-7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-30 01:08-0500\n"
-"PO-Revision-Date: 2008-12-30 01:12-0500\n"
+"POT-Creation-Date: 2014-12-11 12:11-0500\n"
+"PO-Revision-Date: 2014-12-11 12:25-0500\n"
 "Last-Translator: Vincent Goulet <vincent@vgoulet.act.ulaval.ca>\n"
 "Language-Team: Vincent Goulet <vincent@vgoulet.act.ulaval.ca>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: actuar.h:4
-msgid "NaNs produced"
-msgstr "production de NaN"
-
-#: dpq.c:73 dpq.c:198 dpq.c:383 dpq.c:567 dpq.c:738 dpqphtype.c:49 random.c:61
-#: random.c:68 random.c:143 random.c:150 random.c:237 random.c:244
-#: random.c:331 random.c:338 randomphtype.c:66 randomphtype.c:73
+#: dpq.c:73 dpq.c:198 dpq.c:383 dpq.c:567 dpq.c:738 dpqphtype.c:49 random.c:64
+#: random.c:71 random.c:146 random.c:153 random.c:240 random.c:247
+#: random.c:334 random.c:341 randomphtype.c:66 randomphtype.c:73
 msgid "invalid arguments"
 msgstr "arguments incorrects"
 
 #: dpq.c:166
-msgid "internal error in do_dpq1"
-msgstr "erreur interne dans do_dpq1"
+msgid "internal error in actuar_do_dpq1"
+msgstr "erreur interne dans actuar_do_dpq1"
 
 #: dpq.c:350
-msgid "internal error in do_dpq2"
-msgstr "erreur interne dans do_dpq2"
+msgid "internal error in actuar_do_dpq2"
+msgstr "erreur interne dans actuar_do_dpq2"
 
 #: dpq.c:530
-msgid "internal error in do_dpq3"
-msgstr "erreur interne dans do_dpq3"
+msgid "internal error in actuar_do_dpq3"
+msgstr "erreur interne dans actuar_do_dpq3"
 
 #: dpq.c:702
-msgid "internal error in do_dpq4"
-msgstr "erreur interne dans do_dpq4"
+msgid "internal error in actuar_do_dpq4"
+msgstr "erreur interne dans actuar_do_dpq4"
 
 #: dpq.c:835
-msgid "internal error in do_dpq5"
-msgstr "erreur interne dans do_dpq5"
+msgid "internal error in actuar_do_dpq5"
+msgstr "erreur interne dans actuar_do_dpq5"
 
 #: dpqphtype.c:168
-msgid "internal error in do_dpqphtype2"
-msgstr "erreur interne dans do_dpqphtype2"
+msgid "internal error in actuar_do_dpqphtype2"
+msgstr "erreur interne dans actuar_do_dpqphtype2"
 
 #: hierarc.c:100
 msgid "maximum number of iterations reached before obtaining convergence"
-msgstr "nombre d'itÈrations maximal atteint avant obtention de la convergence"
+msgstr "nombre d'it√©rations maximal atteint avant obtention de la convergence"
 
-#: panjer.c:69 panjer.c:112
+#: invpareto.c:170
+msgid "integration failed"
+msgstr "l'int√©gration a √©chou√©"
+
+#: panjer.c:71 panjer.c:112
 msgid ""
 "maximum number of recursions reached before the probability distribution was "
 "complete"
-msgstr "nombre de rÈcursions maximal atteint avant obtention de la convergence"
+msgstr "nombre de r√©cursions maximal atteint avant obtention de la convergence"
 
-#: random.c:87 random.c:170 random.c:265 random.c:360
+#: random.c:90 random.c:173 random.c:268 random.c:363
 msgid "NAs produced"
 msgstr "production de NA"
 
-#: random.c:99
-msgid "internal error in do_random1"
-msgstr "erreur interne dans do_random1"
+#: random.c:102
+msgid "internal error in actuar_do_random1"
+msgstr "erreur interne dans actuar_do_random1"
 
-#: random.c:191
-msgid "internal error in do_random2"
-msgstr "erreur interne dans do_random2"
+#: random.c:194
+msgid "internal error in actuar_do_random2"
+msgstr "erreur interne dans actuar_do_random2"
 
-#: random.c:283
-msgid "internal error in do_random3"
-msgstr "erreur interne dans do_random3"
+#: random.c:286
+msgid "internal error in actuar_do_random3"
+msgstr "erreur interne dans actuar_do_random3"
 
-#: random.c:376
-msgid "internal error in do_random4"
-msgstr "erreur interne dans do_random4"
+#: random.c:379
+msgid "internal error in actuar_do_random4"
+msgstr "erreur interne dans actuar_do_random4"
 
-#: random.c:407
-msgid "internal error in do_random"
-msgstr "erreur interne dans do_random"
+#: random.c:410
+msgid "internal error in actuar_do_random"
+msgstr "erreur interne dans actuar_do_random"
 
 #: randomphtype.c:93
 msgid "non-square sub-intensity matrix"
-msgstr "matrice de sous-intensitÈ non carrÈe"
+msgstr "matrice de sous-intensit√© non carr√©e"
 
 #: randomphtype.c:97
 msgid "non-conformable arguments"
 msgstr "arguments non conformes"
 
 #: randomphtype.c:116
-msgid "internal error in do_randomphtype2"
-msgstr "erreur interne dans do_randomphtype2"
+msgid "internal error in actuar_do_randomphtype2"
+msgstr "erreur interne dans actuar_do_randomphtype2"
 
 #: randomphtype.c:143
-msgid "internal error in do_randomphtype"
-msgstr "erreur interne dans do_randomphtype"
+msgid "internal error in actuar_do_randomphtype"
+msgstr "erreur interne dans actuar_do_randomphtype"
 
 #: util.c:102
 #, c-format
 msgid "LAPACK routine dgebal returned info code %d when permuting"
 msgstr ""
-"la procÈdure LAPACK dgebal a produit le code d'erreur %d lors de la "
+"la proc√©dure LAPACK dgebal a produit le code d'erreur %d lors de la "
 "permutation"
 
 #: util.c:106
 #, c-format
 msgid "LAPACK routine dgebal returned info code %d when scaling"
 msgstr ""
-"la procÈdure LAPACK dgebal a produit le code d'erreur %d lors de la mis ‡ "
-"l'Èchelle"
+"la proc√©dure LAPACK dgebal a produit le code d'erreur %d lors de la mise √† "
+"l'√©chelle"
 
 #: util.c:153
 #, c-format
 msgid "LAPACK routine dgetrf returned info code %d"
-msgstr "la procÈdure LAPACK dgetrf a produit le code d'erreur %d"
+msgstr "la proc√©dure LAPACK dgetrf a produit le code d'erreur %d"
 
 #: util.c:156
 #, c-format
 msgid "LAPACK routine dgetrs returned info code %d"
-msgstr "la procÈdure LAPACK dgetrs a produit le code d'erreur %d"
+msgstr "la proc√©dure LAPACK dgetrs a produit le code d'erreur %d"
 
 #: util.c:262
 msgid "'A' is 0-diml"
@@ -136,8 +137,11 @@ msgstr "aucun membre de droite dans 'B'"
 #: util.c:275
 #, c-format
 msgid "argument %d of Lapack routine dgesv had invalid value"
-msgstr "valeur incorrecte pour l'argument %d du sous-programme Lapack %s"
+msgstr "valeur incorrecte pour l'argument %d du sous-programme dgesv de Lapack"
 
 #: util.c:278
 msgid "Lapack routine dgesv: system is exactly singular"
-msgstr "sous-programme Lapack dgesv: le systËme est exactement singulier"
+msgstr "sous-programme Lapack dgesv: le syst√®me est exactement singulier"
+
+#~ msgid "NaNs produced"
+#~ msgstr "production de NaN"
