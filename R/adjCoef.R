@@ -40,7 +40,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
             if (is.name(sh))
             {
                 fcall <- paste(sh, "(x)")
-                h <- function(x)
+                h1 <- function(x)
                     eval(parse(text = fcall),
                          envir = list(x = x),
                          enclos = parent.frame(2))
@@ -49,7 +49,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
             {
                 if (!(is.call(sh) && match("x", all.vars(sh), nomatch = 0)))
                     stop("'h' must be a function or an expression containing 'x'")
-                h <- function(x)
+                h1 <- function(x)
                     eval(sh,
                          envir = list(x = x),
                          enclos = parent.frame(2))
@@ -81,13 +81,13 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
                     stop("'mgf.wait' must be a function or an expression containing 'x'")
                 mgfw <- smgfw
             }
-            h <- function(x)
+            h1 <- function(x)
                 eval(mgfx) * eval(mgfw, list(x = -x * premium.rate))
         }
 
-        f <- function(r) (h(r) - 1)^2
+        f1 <- function(r) (h1(r) - 1)^2
 
-        return(optimize(f, c(0, upper.bound - .Machine$double.eps),
+        return(optimize(f1, c(0, upper.bound - .Machine$double.eps),
                         tol = sqrt(.Machine$double.eps))$minimum)
     }
 
@@ -109,7 +109,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
         if (is.name(sh))
         {
             fcall <- paste(sh, "(x, y)")
-            h <- function(x, y)
+            h2 <- function(x, y)
                 eval(parse(text = fcall),
                      envir = list(x = x, y = y),
                      enclos = parent.frame(2))
@@ -118,7 +118,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
         {
             if (!(is.call(sh) && all(match(c("x", "y"), all.vars(sh), nomatch = 0))))
                 stop("'h' must be a function or an expression containing 'x' and 'y'")
-            h <- function(x, y)
+            h2 <- function(x, y)
                 eval(sh,
                      envir = list(x = x, y = y),
                      enclos = parent.frame(2))
@@ -166,11 +166,11 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
             premium.rate <- spremium
         }
 
-        h <- function(x, y)
+        h2 <- function(x, y)
             eval(mgfx) * eval(mgfw, list(x = -x * eval(premium.rate)))
     }
 
-    f <- function(x, y) (h(x, y) - 1)^2
+    f2 <- function(x, y) (h2(x, y) - 1)^2
     retention <- seq(from, to, length.out = n)
 
     ## Compute the adjustment coefficient for each retention level.
@@ -184,7 +184,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
     ## second argument of 'f'. *This requires R >= 2.6.0 to work since
     ## argument '...' comes much earlier in the definition of
     ## optimize().
-    coef <- sapply(retention, optimize, f = f,
+    coef <- sapply(retention, optimize, f = f2,
                    interval = c(0, upper.bound-.Machine$double.eps),
                    tol = sqrt(.Machine$double.eps))[1,]
 
