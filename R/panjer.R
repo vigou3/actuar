@@ -93,7 +93,7 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
         beta <- (1/par$prob) - 1
         a <- beta/(1 + beta)
         b <- -a
-        fs0 <- p0 + (1 - p0)*(1 - log(1 - beta(fx[1] - 1))/log(1 + beta))
+        fs0 <- p0 + (1 - p0)*(1 - log(1 - beta * (fx[1] - 1))/log(1 + beta))
         p1 <- beta/((1 + beta) * log(1 + beta))
     }
     else
