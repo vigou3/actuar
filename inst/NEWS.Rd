@@ -2,6 +2,16 @@
 \title{actuar News}
 \encoding{UTF-8}
 
+\section{CHANGES IN VERSION 1.1-7}{
+  \subsection{BUG FIX}{
+    \itemize{
+      \item panjer() result was wrong for the "logarithmic" type of
+      frequency distribution. Thanks to <mmclaramunt@ub.edu> for the
+      catch.
+    }
+  }
+}
+
 \section{CHANGES IN VERSION 1.1-6}{
   \subsection{BUG FIX}{
     \itemize{
