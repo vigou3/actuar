@@ -5,6 +5,10 @@
 ###
 ### AUTHORS: Tommy Ouellet, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
+### codetools does not like the way 'coll1' is defined in function
+### 'hache.origin' below. Avoid false positive in R CMD check.
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("coll1"))
+
 hache.origin <- function(ratios, weights, xreg, tol, maxit, echo)
 {
     ## Frequently used values

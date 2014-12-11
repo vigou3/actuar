@@ -27,6 +27,11 @@ elev.default <- function(x, ...)
     FUN
 }
 
+### Function 'elev.grouped.data' below returns a function that uses
+### data stored in its environment. Avoid false positive in R CMD
+### check.
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("cj", "nj"))
+
 ### This function assumes right-closed intervals, but the numerical
 ### values are identical for left-closed intervals.
 elev.grouped.data <- function(x, ...)
@@ -35,25 +40,29 @@ elev.grouped.data <- function(x, ...)
         Call <- match.call()
     FUN <- function(limit)
     {
+        ## Explicitely get the data from the function environment.
+        ## cj <- eval(expression(cj))
+        ## nj <- eval(expression(nj))
+
         ## Number of classes.
         r <- length(nj)
 
         ## This is to avoid numerical problems.
-        limit <-  pmin(limit, cj[r + 1])
+        limit <-  pmin(limit, cj[r + 1L])
 
         ## Class in which the limit is located.
         cl <- findInterval(limit, cj, all.inside = TRUE)
 
         ## Means for all classes below each limit.
         cjt <- head(cj, max(cl))        # upper bounds
-        res1 <- sapply(cl - 1, function(n, x)
+        res1 <- sapply(cl - 1L, function(n, x)
                        drop(crossprod(head(x, n), head(nj, n))),
                        (head(cjt, -1) + tail(cjt, -1))/2)
 
         ## Means for classes with each limit.
         cjt <- cj[cl]                   # lower bounds
         njt <- nj[cl]                   # frequencies
-        p <- (limit - cjt) / (cj[cl + 1] - cjt) # prop. to take
+        p <- (limit - cjt) / (cj[cl + 1L] - cjt) # prop. to take
         res2 <- njt * p * (cjt + limit)/2 + njt * (1 - p) * limit
 
         ## Means for classes above each limit.
@@ -86,10 +95,10 @@ print.elev <- function(x, digits = getOption("digits") - 2, ...)
     cat("Empirical LEV \nCall: ")
     print(attr(x, "call"), ...)
     n <- length(xx <- eval(parse(text = varname), envir = environment(x)))
-    i1 <- 1:min(3, n)
-    i2 <- if (n >= 4) max(4, n - 1):n else integer(0)
-    cat(" ", varname, "[1:", n, "] = ", numform(xx[i1]), if (n > 3) ", ",
-        if (n > 5) " ..., ",  numform(xx[i2]), "\n", sep = "")
+    i1 <- 1L:min(3L, n)
+    i2 <- if (n >= 4L) max(4L, n - 1L):n else integer(0)
+    cat(" ", varname, "[1:", n, "] = ", numform(xx[i1]), if (n > 3L) ", ",
+        if (n > 5L) " ..., ",  numform(xx[i2]), "\n", sep = "")
     invisible(x)
 }
 

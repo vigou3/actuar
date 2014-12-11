@@ -93,9 +93,6 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
               model = "Buhlmann-Straub")
 }
 
-predict.bstraub.old <- function(object, ...)
-    object$collective + object$cred * (object$individual - object$collective)
-
 predict.bstraub <- function(object, levels = NULL, newdata, ...)
     object$means[[1]] + object$cred * (object$means[[2]] - object$means[[1]])
 
@@ -106,6 +103,10 @@ bvar.unbiased <- function(x, w, within, n)
 
     w.s * (drop(crossprod(w, (x - x.w)^2)) - (n - 1) * within) / (w.s^2 - sum(w^2))
 }
+
+### codetools does not like the way 'a1' is defined in function
+### 'bvar.iterative' below. Avoid false positive in R CMD check.
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("a1"))
 
 bvar.iterative <- function(x, w, within, n, start,
                            tol = sqrt(.Machine$double.eps), maxit = 100,
