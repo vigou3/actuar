@@ -56,18 +56,18 @@ SEXP actuar_do_hierarc(SEXP args)
         size[i] = length(VECTOR_ELT(s_fnodes, i - 1));
 
     /* Allocation of arrays that will be needed below. */
-    cred     = (double **) S_alloc(nlevels,     sizeof(double));
-    tweights = (double **) S_alloc(nlevels + 1, sizeof(double));
-    wmeans   = (double **) S_alloc(nlevels + 1, sizeof(double));
-    fnodes   = (int **)    S_alloc(nlevels,     sizeof(int));
-    tweights[0] = (double *) S_alloc(size[0], sizeof(double));
-    wmeans[0]   = (double *) S_alloc(size[0], sizeof(double));
+    cred     = (double **) R_alloc(nlevels,     sizeof(double *));
+    tweights = (double **) R_alloc(nlevels + 1, sizeof(double *));
+    wmeans   = (double **) R_alloc(nlevels + 1, sizeof(double *));
+    fnodes   = (int **)    R_alloc(nlevels,     sizeof(int *));
+    tweights[0] = (double *) R_alloc(size[0], sizeof(double));
+    wmeans[0]   = (double *) R_alloc(size[0], sizeof(double));
     for (i = 1; i <= nlevels; i++)
     {
-        cred[i - 1]   = (double *) S_alloc(size[i], sizeof(double));
-        tweights[i]   = (double *) S_alloc(size[i], sizeof(double));
-        wmeans[i]     = (double *) S_alloc(size[i], sizeof(double));
-        fnodes[i - 1] = (int *)    S_alloc(size[i], sizeof(int));
+        cred[i - 1]   = (double *) R_alloc(size[i], sizeof(double));
+        tweights[i]   = (double *) R_alloc(size[i], sizeof(double));
+        wmeans[i]     = (double *) R_alloc(size[i], sizeof(double));
+        fnodes[i - 1] = (int *)    R_alloc(size[i], sizeof(int));
     }
 
     /* Get values of fnodes, tweights and wmeans from R lists. For
