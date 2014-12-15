@@ -150,7 +150,7 @@ SEXP actuar_do_panjer(SEXP args)
 	/* Allocate enough memory in the auxiliary array for the 'n'
 	 * convolutions. This is just slightly over half the final
 	 * size of 'fs'. */
-	ofs = (double *) S_alloc((1 << n - 1) * (x - 1) + 1, sizeof(double));
+	ofs = (double *) S_alloc((1 << (n - 1)) * (x - 1) + 1, sizeof(double));
 
 	for (k = 0; k < n; k++)
 	{
