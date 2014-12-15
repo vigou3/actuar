@@ -21,7 +21,7 @@ double munif(double order, double min, double max, int give_log)
         return R_NaN;
 
     if (order == -1.0)
-        return (log(abs(max)) - log(abs(min))) / (max - min);
+        return (log(fabs(max)) - log(fabs(min))) / (max - min);
 
     tmp = order + 1;
 
@@ -44,7 +44,7 @@ double levunif(double limit, double min, double max, double order, int give_log)
         return munif(order, min, max, give_log);
 
     if (order == -1.0)
-        return (log(abs(limit)) - log(abs(min))) / (max - min) +
+        return (log(fabs(limit)) - log(fabs(min))) / (max - min) +
             (max - limit) / (limit * (max - min));
 
     tmp = order + 1;
