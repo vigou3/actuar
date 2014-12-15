@@ -2,6 +2,17 @@
 \title{actuar News}
 \encoding{UTF-8}
 
+\section{CHANGES IN VERSION 1.1-8}{
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Memory allocation problem at the C level in hierarc().
+      Thanks to Prof. Ripley for identification of the problem and help
+      solving it.
+      \item Abusive use of abs() at the C level in a few places.
+    }
+  }
+}
+
 \section{CHANGES IN VERSION 1.1-7}{
   \subsection{BUG FIX}{
     \itemize{
