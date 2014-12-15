@@ -32,7 +32,7 @@ mgfunif(x, min = 0, max = 1, log = FALSE)
   \code{levunif} gives the \eqn{k}th moment of the limited random
   variable, and
   \code{mgfunif} gives the moment generating function in \code{x}.
-  
+
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{
@@ -49,7 +49,7 @@ mgfunif(x, min = 0, max = 1, log = FALSE)
 munif(-1)
 munif(1:5)
 levunif(3, order=1:5)
-levunif(3, 2,4)
-mgfunif(1,1,2)
+levunif(3, 2, 4)
+mgfunif(1, 1, 2)
 }
 \keyword{distribution}
