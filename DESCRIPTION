@@ -1,11 +1,11 @@
 Package: actuar
 Type: Package
 Title: Actuarial Functions
-Version: 1.1-8
-Date: 2014-12-15
+Version: 1.1-9
+Date: 2015-07-03
 Author: Vincent Goulet, Sébastien Auclair, Christophe Dutang, Xavier Milhaud, Tommy Ouellet, Louis-Philippe Pouliot, Mathieu Pigeon
 Maintainer: Vincent Goulet <vincent.goulet@act.ulaval.ca>
-Description: Actuarial science functionality, mostly in the
+Description: Various actuarial science functionalities, mostly in the
   fields of loss distributions, risk theory (including ruin theory),
   simulation of compound hierarchical models and credibility theory.
   The package also features 17 probability laws commonly used in

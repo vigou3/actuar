@@ -2,6 +2,15 @@
 \title{actuar News}
 \encoding{UTF-8}
 
+\section{CHANGES IN VERSION 1.1-9}{
+  \subsection{BUG FIX}{
+    \itemize{
+      \item Functions 'head' and 'tail' explicitly imported from package
+      utils in NAMESPACE to obey in new requirement of R 3.3.x.
+    }
+  }
+}
+
 \section{CHANGES IN VERSION 1.1-8}{
   \subsection{BUG FIXES}{
     \itemize{

@@ -50,6 +50,7 @@ export(## Credibility theory
 
 ### Imports
 import(stats, graphics)
+importFrom(utils, head, tail)
 
 ### Methods
 S3method("[", grouped.data)
