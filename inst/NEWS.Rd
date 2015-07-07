@@ -3,10 +3,10 @@
 \encoding{UTF-8}
 
 \section{CHANGES IN VERSION 1.1-9}{
-  \subsection{BUG FIX}{
+  \subsection{MAINTENANCE}{
     \itemize{
       \item Functions 'head' and 'tail' explicitly imported from package
-      utils in NAMESPACE to obey in new requirement of R 3.3.x.
+      utils in NAMESPACE to obey a new requirement of R 3.3.x.
     }
   }
 }
