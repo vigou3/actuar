@@ -111,7 +111,7 @@ cm <- function(formula, data, ratios, weights, subset,
     ## == DISPATCH TO APPROPRIATE CALCULATION FUNCTION ==
     ##
     ## Buhlmann-Straub models are handled by bstraub(), regression
-    ## models by hache() and hierarcahical models by hierarc().
+    ## models by hache() and hierarchical models by hierarc().
     if (nlevels < 2)                    # one-dimensional model
     {
         ## One-dimensional models accept only "unbiased" and
