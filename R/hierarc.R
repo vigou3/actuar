@@ -16,11 +16,11 @@ hierarc <- function(ratios, weights, classification,
     ## numbers, whereas 'classification' must be a matrix of integers
     ## giving the affiliation of each entity in the portfolio.
     nlevels <- ncol(classification)              # number of levels
-    nlevels1p <- nlevels + 1                     # frequently used
+    nlevels1p <- nlevels + 1L                    # frequently used
 
     ## To symmetrize further calculations, bind a column of ones
     ## representing the affiliation to the global portfolio.
-    classification <- cbind(pf = 1, classification)
+    classification <- cbind(pf = 1L, classification)
 
     ## If weights are not specified, use equal weights.
     if (missing(weights))
@@ -51,20 +51,25 @@ hierarc <- function(ratios, weights, classification,
     ## of nodes at one level [2] according to the number of nodes at
     ## the level below [c(3, 2)].
     ##
+    ## 0. Initialization
+    fnodes <- nnodes <- vector("list", nlevels)
+
     ## 1. Calculation of the number of nodes: the main idea is to
-    ## create a unique ID for each node by pasting together the
-    ## elements in the rows of 'classification'. This is not required for the
-    ## lowest level (the entities), though, since they are known to
-    ## all be different.
+    ## create a unique factor for each node using interaction()
+    ## recursively on the columns of 'classification'. We can do
+    ## something simpler for the lowest level (the entities), since we
+    ## know the combinations of indexes to all be different at this
+    ## level.
     fx <- vector("list", nlevels1p)
     fx[[nlevels1p]] <- factor(classification[, nlevels1p]) # entity level
 
-    fnodes <- nnodes <- vector("list", nlevels)
-
-    for (i in nlevels:1)
+    for (i in nlevels:1L)
     {
-        fx[[i]] <- factor(apply(classification[, seq.int(i), drop = FALSE],
-                                1, paste, collapse = ""))
+        ## Function 'interaction' expects its arguments separately or
+        ## as a list, hence the lapply() below.
+        fx[[i]] <- as.integer(interaction(lapply(seq.int(i),
+                                                 function(j) classification[, j]),
+                                          drop = TRUE))
         ## 'as.vector' below is used to get rid of names
         nnodes[[i]] <- as.vector(sapply(split(fx[[i + 1]], fx[[i]]),
                                         function(x) length(unique(x))))
@@ -85,8 +90,8 @@ hierarc <- function(ratios, weights, classification,
     ## summary made using these factors will be sorted. This done, it
     ## is possible to use the command above for the upper levels.
     fnodes[[nlevels]] <- as.integer(fx[[nlevels]])
-    fnodes[-nlevels] <-
-        lapply(nnodes[-nlevels], function(x) rep(seq_along(x), x))
+    fnodes[-nlevels] <- lapply(nnodes[-nlevels],
+                               function(x) rep(seq_along(x), x))
 
     ## === PER ENTITY SUMMARIES ===
     ##
@@ -113,7 +118,7 @@ hierarc <- function(ratios, weights, classification,
     ## above.
     eff.nnodes <- vector("list", nlevels)
     w <- weights.s
-    for (i in nlevels:1)
+    for (i in nlevels:1L)
     {
         eff.nnodes[[i]] <- tapply(w, fnodes[[i]], function(x) sum(x > 0))
         w <- tapply(w, fnodes[[i]], sum) # running totals
@@ -135,12 +140,12 @@ hierarc <- function(ratios, weights, classification,
     ##   (effective) number of "sectors" - 1
     ##
     ## The 1 neither is included in 'eff.nnodes'.
-    denoms <- diff(c(1, sapply(eff.nnodes, sum), sum(!is.na(ratios))))
+    denoms <- diff(c(1L, sapply(eff.nnodes, sum), sum(!is.na(ratios))))
 
     ## Final sanity checks
     if (any(!denoms))
         stop("there must be at least two nodes at every level")
-    if (ncol(ratios) < 2)
+    if (ncol(ratios) < 2L)
         stop("there must be at least one node with more than one period of experience")
 
     ## === ESTIMATION OF s^2 ===
@@ -189,33 +194,33 @@ hierarc <- function(ratios, weights, classification,
     else                                # Ohlsson
         bexp <- expression(b[i] <- sum(bi, na.rm = TRUE) / sum(ci, na.rm = TRUE))
 
-    for (i in nlevels:1)
+    for (i in nlevels:1L)
     {
         ## Total weight of the level as per the rule above.
-        tweights[[i]] <- as.vector(tapply(tweights[[i + 1]], fnodes[[i]], sum))
+        tweights[[i]] <- as.vector(tapply(tweights[[i + 1L]], fnodes[[i]], sum))
 
         ## Calculation of the weighted averages of the level. Before
         ## the between variance is estimated, these use the total
         ## weights calculated above.
         wmeans[[i]] <-
             ifelse(tweights[[i]] > 0,
-                   as.vector(tapply(tweights[[i + 1]] * wmeans[[i + 1]],
+                   as.vector(tapply(tweights[[i + 1L]] * wmeans[[i + 1L]],
                                     fnodes[[i]],
                                     sum) / tweights[[i]]),
                    0)
 
         ## Latest non-zero between variance estimate -- the one used
         ## in the estimator and in the credibility factors.
-        between <- b[b != 0][1]
+        between <- b[b != 0][1L]
 
         ## Calculation of the per node variance estimate.
-        bi <- as.vector(tapply(tweights[[i + 1]] *
-                                (wmeans[[i + 1]] - wmeans[[i]][fnodes[[i]]])^2,
+        bi <- as.vector(tapply(tweights[[i + 1L]] *
+                                (wmeans[[i + 1L]] - wmeans[[i]][fnodes[[i]]])^2,
                                 fnodes[[i]],
                                 sum)) -
                                     (eff.nnodes[[i]] - 1) * between
         ci <- tweights[[i]] -
-            as.vector(tapply(tweights[[i + 1]]^2, fnodes[[i]], sum)) / tweights[[i]]
+            as.vector(tapply(tweights[[i + 1L]]^2, fnodes[[i]], sum)) / tweights[[i]]
 
         ## The final estimate is the average of all the per node estimates.
         eval(bexp)
@@ -227,11 +232,11 @@ hierarc <- function(ratios, weights, classification,
         #if (max(bu[i], 0))           # don't compute negative factors!
         if (b[i])
         {
-            cred[[i]] <- 1/(1 + between/(b[i] * tweights[[i + 1]]))
+            cred[[i]] <- 1/(1 + between/(b[i] * tweights[[i + 1L]]))
             tweights[[i]] <- as.vector(tapply(cred[[i]], fnodes[[i]], sum))
             wmeans[[i]] <-
                 ifelse(tweights[[i]] > 0,
-                       as.vector(tapply(cred[[i]] * wmeans[[i + 1]],
+                       as.vector(tapply(cred[[i]] * wmeans[[i + 1L]],
                                         fnodes[[i]],
                                         sum) / tweights[[i]]),
                        0)
@@ -254,8 +259,8 @@ hierarc <- function(ratios, weights, classification,
     ## the current level.
     if (method == "iterative")
     {
-        b <- pmax(b, 0)           # truncation for starting values
-        if (any(head(b, -1) > 0)) # at least one non-zero starting value
+        b <- pmax(b, 0)            # truncation for starting values
+        if (any(head(b, -1L) > 0)) # at least one non-zero starting value
             .External("actuar_do_hierarc", cred, tweights, wmeans, fnodes, denoms,
                       b, tol, maxit, echo)
     }
@@ -267,7 +272,7 @@ hierarc <- function(ratios, weights, classification,
                    iterative = if (method == "iterative") b,
                    cred = cred,
                    nodes = nnodes,
-                   classification = classification[, -1],
+                   classification = classification[, -1L],
                    ordering = fnodes),
               class = "hierarc",
               model = "hierarchical")
@@ -298,7 +303,7 @@ predict.hierarc <- function(object, levels = NULL, newdata, ...)
     res <- vector("list", n)
 
     ## First level credibility premiums
-    res[[1]] <- means[[1]] + cred[[1]] * (means[[2]] - means[[1]])
+    res[[1L]] <- means[[1L]] + cred[[1L]] * (means[[2L]] - means[[1L]])
 
     for (i in seq(2, length.out = n - 1))
     {
