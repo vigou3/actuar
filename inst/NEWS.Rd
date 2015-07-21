@@ -2,11 +2,22 @@
 \title{actuar News}
 \encoding{UTF-8}
 
+\section{CHANGES IN VERSION 1.1-10}{
+  \subsection{BUG FIX}{
+    \itemize{
+      \item Results of 'cm' for hierarchical models would get
+      incorrectly sorted when there were 10 nodes or more at a given
+      level. Thanks to Dylan Wienke \email{dwienke2@gmail.com} for the
+      catch.
+    }
+  }
+}
+
 \section{CHANGES IN VERSION 1.1-9}{
   \subsection{MAINTENANCE}{
     \itemize{
       \item Functions 'head' and 'tail' explicitly imported from package
-      utils in NAMESPACE to obey a new requirement of R 3.3.x.
+      utils in NAMESPACE as per a new requirement of R 3.3.x.
     }
   }
 }
@@ -26,7 +37,7 @@
   \subsection{BUG FIX}{
     \itemize{
       \item panjer() result was wrong for the "logarithmic" type of
-      frequency distribution. Thanks to <mmclaramunt@ub.edu> for the
+      frequency distribution. Thanks to \email{mmclaramunt@ub.edu} for the
       catch.
     }
   }
@@ -75,7 +86,7 @@
       GeneralizedHyperbolic on Solaris.
       \item Wrong result given by levinvGauss() because the upper tail
       of the normal distribution was used in the calculation instead of
-      the lower tail. Thanks to Dan Murphy <chiefmurphy@gmail.com> for
+      the lower tail. Thanks to Dan Murphy \email{chiefmurphy@gmail.com} for
       the heads up.
     }
   }
