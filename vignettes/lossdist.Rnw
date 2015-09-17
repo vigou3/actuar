@@ -847,7 +847,7 @@ functions are defined for $x > 0$.
   F(x) &= u^\tau
 \end{align*}
 
-\subsubsection*{Inverse paralogictic}
+\subsubsection*{Inverse paralogistic}
 
 \begin{compactitem}[]
 \item Root: \code{invparalogis}
