@@ -2,6 +2,19 @@
 \title{actuar News}
 \encoding{UTF-8}
 
+\section{CHANGES IN VERSION 1.2-0}{
+  \subsection{NEW FEATURE}{
+    \itemize{
+      \item In the computation of the CTE in the Normal Power case,
+      numerical integration has been replaced by the explicit formula given
+      in Castañer, A.; Claramunt, M.M.; Mármol, M. (2013). Tail value at
+      risk. An analysis with the Normal-Power approximation. In Statistical
+      and Soft Computing Approaches in Insurance Problems. Nova Science
+      Publishers. ISBN 978-1-62618-506-7.
+    }
+  }
+}
+
 \section{CHANGES IN VERSION 1.1-10}{
   \subsection{BUG FIX}{
     \itemize{
