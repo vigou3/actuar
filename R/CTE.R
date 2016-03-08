@@ -19,23 +19,16 @@ CTE.aggregateDist <- function(x, conf.level = c(0.9, 0.95, 0.99),
         sd <- sqrt(get("variance", environment(x)))
         res <- m + sd * dnorm(qnorm(conf.level)) / (1 - conf.level)
     }
-    ## Normal Power approximation; no explicit formula so revert to
-    ## numerical integration.
+    ## Normal Power approximation; explicit formula in Castaner,
+    ## Claramunt and Marmol (2013)
     else if (label == "Normal Power approximation")
     {
         m <- get("mean", envir = environment(x))
         sd <- sqrt(get("variance", envir = environment(x)))
         sk <- get("skewness", envir = environment(x))
 
-        f1 <- function(x)
-        {
-            y <- sqrt(1 + 9/sk^2 + 6 * (x - m)/(sd * sk))
-            3 * x * dnorm(y - 3/sk) / (sd * sk * y)
-        }
-
-        res <- sapply(quantile(x, conf.level),
-                      function(x) integrate(f1, x, Inf)$value) /
-                          (1 - conf.level)
+        q <- qnorm(conf.level)
+        res <- m + sd * dnorm(q) * (1 + sk * q/6) / (1 - conf.level)
     }
     ## Recursive method, simulation and convolutions; each yield a
     ## step function that can be used to make calculations.
@@ -57,6 +50,7 @@ CTE.aggregateDist <- function(x, conf.level = c(0.9, 0.95, 0.99),
         names(res) <- formatC(paste(100 * conf.level, "%", sep = ""),
                               format = "fg", width = 1, digits = dig)
     }
+    print("local")
     res
 }
 
