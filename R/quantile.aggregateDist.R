@@ -24,9 +24,9 @@ quantile.aggregateDist <-
         variance <- get("variance", environment(x))
         skewness <- get("skewness", environment(x))
         ## Calling qnorm() and inverting the Normal Power 'standardization'
+        q <- qnorm(probs)
         res <- ifelse(probs <= 0.5, NA,
-                      ((qnorm(probs) + 3/skewness)^2 - 9/(skewness^2) - 1) *
-                      sqrt(variance) * skewness/6 + mean)
+                      mean + sqrt(variance) * (q + skewness * (q^2 - 1)/6))
     }
     else
     {
