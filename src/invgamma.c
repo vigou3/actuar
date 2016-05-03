@@ -142,7 +142,7 @@ double mgfinvgamma(double x, double shape, double scale, int give_log)
 
     tmp = -scale * x;
 
-    return ACT_D_exp(log(2.0) + shape * log(tmp)/2.0 +
+    return ACT_D_exp(M_LN2 + shape * log(tmp)/2.0 +
                    log(bessel_k(sqrt(4 * tmp), shape, 1)) -
                    lgammafn(shape));
 }

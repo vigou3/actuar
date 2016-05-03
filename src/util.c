@@ -108,7 +108,7 @@ void actuar_expm(double *x, int n, double *z)
         /* Step 3 of preconditioning: Scaling according to infinity
          * norm (a priori always needed). */
         infnorm = F77_CALL(dlange)("I", &n, &n, z, &n, work);
-        sqrpowscal = (infnorm > 0) ? imax2((int) 1 + log(infnorm)/log(2.0), 0) : 0;
+        sqrpowscal = (infnorm > 0) ? imax2((int) 1 + log(infnorm)/M_LN2, 0) : 0;
         if (sqrpowscal > 0)
         {
             double scalefactor = R_pow_di(2, sqrpowscal);
