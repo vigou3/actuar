@@ -47,7 +47,7 @@ double mgfnorm(double x, double mean, double sd, int give_log)
         return R_NaN;
 
     if (x == 0.0)
-        return R_D_exp(0.0);
+        return ACT_D_exp(0.0);
 
-    return R_D_exp(x * mean + 0.5 * x * x * sd * sd) ;
+    return ACT_D_exp(x * mean + 0.5 * x * x * sd * sd) ;
 }

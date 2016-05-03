@@ -70,7 +70,7 @@ double mgfinvGauss(double x, double nu, double lambda, int give_log)
         return R_NaN;
 
     if (x == 0.0)
-        return R_D_exp(0.0);
+        return ACT_D_exp(0.0);
 
-    return R_D_exp(lambda / nu * (1 - sqrt(1 - 2 * nu * nu * x/lambda)));
+    return ACT_D_exp(lambda / nu * (1 - sqrt(1 - 2 * nu * nu * x/lambda)));
 }

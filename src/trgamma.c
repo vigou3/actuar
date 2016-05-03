@@ -34,13 +34,13 @@ double dtrgamma(double x, double shape1, double shape2, double scale,
         return R_NaN;
 
     if (!R_FINITE(x) || x < 0.0)
-        return R_D__0;
+        return ACT_D__0;
 
     /* handle x == 0 separately */
     if (x == 0)
     {
 	if (shape1 * shape2 < 1) return R_PosInf;
-	if (shape1 * shape2 > 1) return R_D__0;
+	if (shape1 * shape2 > 1) return ACT_D__0;
 	/* else */
 	return give_log ?
 	    log(shape2) - log(scale) - lgammafn(shape1) :
@@ -49,7 +49,7 @@ double dtrgamma(double x, double shape1, double shape2, double scale,
 
     logu = shape2 * (log(x) - log(scale));
 
-    return R_D_exp(log(shape2) + shape1 * logu - exp(logu)
+    return ACT_D_exp(log(shape2) + shape1 * logu - exp(logu)
                    - log(x) - lgammafn(shape1));
 }
 
@@ -67,7 +67,7 @@ double ptrgamma(double q, double shape1, double shape2, double scale,
         return R_NaN;
 
     if (q <= 0)
-        return R_DT_0;
+        return ACT_DT_0;
 
     u = exp(shape2 * (log(q) - log(scale)));
 
@@ -85,8 +85,8 @@ double qtrgamma(double p, double shape1, double shape2, double scale,
         scale  <= 0.0)
         return R_NaN;
 
-    R_Q_P01_boundaries(p, 0, R_PosInf);
-    p = R_D_qIv(p);
+    ACT_Q_P01_boundaries(p, 0, R_PosInf);
+    p = ACT_D_qIv(p);
 
     return scale * R_pow(qgamma(p, shape1, 1.0, lower_tail, 0),
                          1.0 / shape2);
@@ -150,5 +150,5 @@ double levtrgamma(double limit, double shape1, double shape2, double scale,
 
     return R_pow(scale, order) * gammafn(tmp)
         * pgamma(u, tmp, 1.0, 1, 0) / gammafn(shape1)
-        + R_VG__0(limit, order) * pgamma(u, shape1, 1.0, 0, 0);
+        + ACT_DLIM__0(limit, order) * pgamma(u, shape1, 1.0, 0, 0);
 }

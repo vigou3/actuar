@@ -29,11 +29,11 @@ double dinvexp(double x, double scale, int give_log)
 
     /* handle also x == 0 here */
     if (!R_FINITE(x) || x <= 0.0)
-        return R_D__0;
+        return ACT_D__0;
 
     logu = log(scale) - log(x);
 
-    return R_D_exp(logu - exp(logu) - log(x));
+    return ACT_D_exp(logu - exp(logu) - log(x));
 }
 
 double pinvexp(double q, double scale, int lower_tail, int log_p)
@@ -44,11 +44,11 @@ double pinvexp(double q, double scale, int lower_tail, int log_p)
         return R_NaN;
 
     if (q <= 0)
-        return R_DT_0;
+        return ACT_DT_0;
 
     u = exp(log(scale) - log(q));
 
-    return R_DT_val(exp(-u));
+    return ACT_DT_val(exp(-u));
 }
 
 double qinvexp(double p, double scale, int lower_tail, int log_p)
@@ -56,10 +56,10 @@ double qinvexp(double p, double scale, int lower_tail, int log_p)
     if (!R_FINITE(scale) || scale <= 0.0)
         return R_NaN;
 
-    R_Q_P01_boundaries(p, 0, R_PosInf);
-    p = R_D_qIv(p);
+    ACT_Q_P01_boundaries(p, 0, R_PosInf);
+    p = ACT_D_qIv(p);
 
-    return -scale / log(R_D_Lval(p));
+    return -scale / log(ACT_D_Lval(p));
 }
 
 double rinvexp(double scale)
@@ -103,5 +103,5 @@ double levinvexp(double limit, double scale, double order, int give_log)
     u = exp(log(scale) - log(limit));
 
     return R_pow(scale, order) * gammafn(tmp) * pgamma(u, tmp, 1.0, 0, 0)
-        + R_VG__0(limit, order) * (0.5 - exp(-u) + 0.5);
+        + ACT_DLIM__0(limit, order) * (0.5 - exp(-u) + 0.5);
 }

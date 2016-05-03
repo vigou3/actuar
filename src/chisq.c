@@ -78,7 +78,7 @@ double levchisq(double limit, double df, double ncp, double order, int give_log)
 
         return R_pow(2, order) * gammafn(tmp) *
             pgamma(u, tmp, 1.0, 1, 0) / gammafn(df/2) +
-            R_VG__0(limit, order) * pgamma(u, df/2, 1.0, 0, 0);
+            ACT_DLIM__0(limit, order) * pgamma(u, df/2, 1.0, 0, 0);
     }
     else
         return R_NaN;
@@ -94,7 +94,7 @@ double mgfchisq(double x, double df, double ncp, int give_log)
         return R_NaN;
 
     if (x == 0.0)
-        return R_D_exp(0.0);
+        return ACT_D_exp(0.0);
 
-    return R_D_exp(ncp * x / (1 - 2 * x) - df/2 * log1p(-2 * x));
+    return ACT_D_exp(ncp * x / (1 - 2 * x) - df/2 * log1p(-2 * x));
 }

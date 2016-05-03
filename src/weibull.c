@@ -49,5 +49,5 @@ double levweibull(double limit, double shape, double scale, double order,
     u = exp(shape * (log(limit) - log(scale)));
 
     return R_pow(scale, order) * gammafn(tmp) * pgamma(u, tmp, 1.0, 1, 0) +
-        R_VG__0(limit, order) * exp(-u);
+        ACT_DLIM__0(limit, order) * exp(-u);
 }

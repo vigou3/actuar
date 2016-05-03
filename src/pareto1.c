@@ -22,9 +22,9 @@ double dpareto1(double x, double shape, double min, int give_log)
         return R_NaN;
 
     if (!R_FINITE(x) || x < min)
-        return R_D__0;
+        return ACT_D__0;
 
-    return R_D_exp(log(shape) + shape * log(min) - (shape + 1.0) * log(x));
+    return ACT_D_exp(log(shape) + shape * log(min) - (shape + 1.0) * log(x));
 }
 
 double ppareto1(double q, double shape, double min, int lower_tail, int log_p)
@@ -36,9 +36,9 @@ double ppareto1(double q, double shape, double min, int lower_tail, int log_p)
         return R_NaN;
 
     if (q <= min)
-        return R_DT_0;
+        return ACT_DT_0;
 
-    return R_DT_Cval(R_pow(min / q, shape));
+    return ACT_DT_Cval(R_pow(min / q, shape));
 }
 
 double qpareto1(double p, double shape, double min, int lower_tail, int log_p)
@@ -49,10 +49,10 @@ double qpareto1(double p, double shape, double min, int lower_tail, int log_p)
         min <= 0.0)
         return R_NaN;
 
-    R_Q_P01_boundaries(p, min, R_PosInf);
-    p = R_D_qIv(p);
+    ACT_Q_P01_boundaries(p, min, R_PosInf);
+    p = ACT_D_qIv(p);
 
-    return min / R_pow(R_D_Cval(p), 1.0 / shape);
+    return min / R_pow(ACT_D_Cval(p), 1.0 / shape);
 }
 
 double rpareto1(double shape, double min)

@@ -32,22 +32,22 @@ double dinvpareto(double x, double shape, double scale, int give_log)
         return R_NaN;
 
     if (!R_FINITE(x) || x < 0.0)
-        return R_D__0;
+        return ACT_D__0;
 
     /* handle x == 0 separately */
     if (x == 0)
     {
 	if (shape < 1) return R_PosInf;
-	if (shape > 1) return R_D__0;
+	if (shape > 1) return ACT_D__0;
 	/* else */
-	return R_D_val(1.0 / scale);
+	return ACT_D_val(1.0 / scale);
     }
 
     tmp = log(x) - log(scale);
-    logu = - log1p(exp(-tmp));
-    log1mu = - log1p(exp(tmp));
+    logu = - log1pexp(-tmp);
+    log1mu = - log1pexp(tmp);
 
-    return R_D_exp(log(shape) + shape * logu + log1mu - log(x));
+    return ACT_D_exp(log(shape) + shape * logu + log1mu - log(x));
 }
 
 double pinvpareto(double q, double shape, double scale, int lower_tail,
@@ -62,11 +62,11 @@ double pinvpareto(double q, double shape, double scale, int lower_tail,
         return R_NaN;;
 
     if (q <= 0)
-        return R_DT_0;
+        return ACT_DT_0;
 
-    u = exp(-log1p(exp(log(scale) - log(q))));
+    u = exp(-log1pexp(log(scale) - log(q)));
 
-    return R_DT_val(R_pow(u, shape));
+    return ACT_DT_val(R_pow(u, shape));
 }
 
 double qinvpareto(double p, double shape, double scale, int lower_tail,
@@ -78,10 +78,10 @@ double qinvpareto(double p, double shape, double scale, int lower_tail,
         scale <= 0.0)
         return R_NaN;;
 
-    R_Q_P01_boundaries(p, 0, R_PosInf);
-    p = R_D_qIv(p);
+    ACT_Q_P01_boundaries(p, 0, R_PosInf);
+    p = ACT_D_qIv(p);
 
-    return scale / (R_pow(R_D_Lval(p), -1.0 / shape) - 1.0);
+    return scale / (R_pow(ACT_D_Lval(p), -1.0 / shape) - 1.0);
 }
 
 double rinvpareto(double shape, double scale)
@@ -162,9 +162,9 @@ double levinvpareto(double limit, double shape, double scale, double order,
 
     if (ier == 0)
     {
-	u = exp(-log1p(exp(log(scale) - log(limit))));
+	u = exp(-log1pexp(log(scale) - log(limit)));
 	return R_pow(scale, order) * shape * result
-	    + R_VG__0(limit, order) * (0.5 - R_pow(u, shape) + 0.5);
+	    + ACT_DLIM__0(limit, order) * (0.5 - R_pow(u, shape) + 0.5);
     }
     else
 	error(_("integration failed"));

@@ -30,16 +30,16 @@ double dpareto(double x, double shape, double scale, int give_log)
         return R_NaN;
 
     if (!R_FINITE(x) || x < 0.0)
-        return R_D__0;
+        return ACT_D__0;
 
     /* handle x == 0 separately */
-    if (x == 0) R_D_val(shape / scale);
+    if (x == 0) ACT_D_val(shape / scale);
 
     tmp = log(x) - log(scale);
-    logu = - log1p(exp(tmp));
-    log1mu = - log1p(exp(-tmp));
+    logu = - log1pexp(tmp);
+    log1mu = - log1pexp(-tmp);
 
-    return R_D_exp(log(shape) + shape * logu + log1mu - log(x));
+    return ACT_D_exp(log(shape) + shape * logu + log1mu - log(x));
 }
 
 double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
@@ -53,11 +53,11 @@ double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
         return R_NaN;
 
     if (q <= 0)
-        return R_DT_0;
+        return ACT_DT_0;
 
-    u = exp(-log1p(exp(log(q) - log(scale))));
+    u = exp(-log1pexp(log(q) - log(scale)));
 
-    return R_DT_Cval(R_pow(u, shape));
+    return ACT_DT_Cval(R_pow(u, shape));
 }
 
 double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
@@ -68,10 +68,10 @@ double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
         scale <= 0.0)
         return R_NaN;
 
-    R_Q_P01_boundaries(p, 0, R_PosInf);
-    p = R_D_qIv(p);
+    ACT_Q_P01_boundaries(p, 0, R_PosInf);
+    p = ACT_D_qIv(p);
 
-    return scale * (R_pow(R_D_Cval(p), -1.0 / shape) - 1.0);
+    return scale * (R_pow(ACT_D_Cval(p), -1.0 / shape) - 1.0);
 }
 
 double rpareto(double shape, double scale)
@@ -123,9 +123,9 @@ double levpareto(double limit, double shape, double scale, double order,
     tmp1 = 1.0 + order;
     tmp2 = shape - order;
 
-    u = exp(-log1p(exp(log(limit) - log(scale))));
+    u = exp(-log1pexp(log(limit) - log(scale)));
 
     return R_pow(scale, order) * gammafn(tmp1) * gammafn(tmp2)
         * pbeta(0.5 - u + 0.5, tmp1, tmp2, 1, 0) / gammafn(shape)
-        + R_VG__0(limit, order) * R_pow(u, shape);
+        + ACT_DLIM__0(limit, order) * R_pow(u, shape);
 }

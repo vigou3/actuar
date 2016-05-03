@@ -63,10 +63,10 @@ double mgfunif(double x, double min, double max, int give_log)
         return R_NaN;
 
     if (x == 0.0)
-        return R_D_exp(0.0);
+        return ACT_D_exp(0.0);
 
     tmp1 = exp(x * max) - exp(x * min);
     tmp2 = x * (max - min);
 
-    return R_D_exp(log(tmp1) - log(tmp2));
+    return ACT_D_exp(log(tmp1) - log(tmp2));
 }

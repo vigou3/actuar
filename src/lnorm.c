@@ -40,5 +40,5 @@ double levlnorm(double limit, double logmean, double logsd, double order,
 
     return exp(order * (logmean + 0.5 * order * R_pow(logsd, 2.0))) *
         pnorm(u - order * logsd, 0., 1.0, 1, 0) +
-        R_VG__0(limit, order) * pnorm(u, 0., 1.0, 0, 0);
+        ACT_DLIM__0(limit, order) * pnorm(u, 0., 1.0, 0, 0);
 }

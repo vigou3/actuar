@@ -34,13 +34,13 @@ double dgenpareto(double x, double shape1, double shape2, double scale,
         return R_NaN;
 
     if (!R_FINITE(x) || x < 0.0)
-        return R_D__0;
+        return ACT_D__0;
 
     /* handle x == 0 separately */
     if (x == 0)
     {
 	if (shape2 < 1) return R_PosInf;
-	if (shape2 > 1) return R_D__0;
+	if (shape2 > 1) return ACT_D__0;
 	/* else */
 	return give_log ?
 	    - log(scale) - lbeta(shape2, shape1) :
@@ -48,10 +48,10 @@ double dgenpareto(double x, double shape1, double shape2, double scale,
     }
 
     tmp = log(x) - log(scale);
-    logu = - log1p(exp(-tmp));
-    log1mu = - log1p(exp(tmp));
+    logu = - log1pexp(-tmp);
+    log1mu = - log1pexp(tmp);
 
-    return R_D_exp(shape2 * logu + shape1 * log1mu - log(x)
+    return ACT_D_exp(shape2 * logu + shape1 * log1mu - log(x)
                    - lbeta(shape2, shape1));
 }
 
@@ -69,9 +69,9 @@ double pgenpareto(double q, double shape1, double shape2, double scale,
         return R_NaN;
 
     if (q <= 0)
-        return R_DT_0;
+        return ACT_DT_0;
 
-    u = exp(-log1p(exp(log(scale) - log(q))));
+    u = exp(-log1pexp(log(scale) - log(q)));
 
     return pbeta(u, shape2, shape1, lower_tail, log_p);
 }
@@ -87,8 +87,8 @@ double qgenpareto(double p, double shape1, double shape2, double scale,
         scale  <= 0.0)
         return R_NaN;
 
-    R_Q_P01_boundaries(p, 0, R_PosInf);
-    p = R_D_qIv(p);
+    ACT_Q_P01_boundaries(p, 0, R_PosInf);
+    p = ACT_D_qIv(p);
 
     return scale / (1.0 / qbeta(p, shape2, shape1, lower_tail, 0) - 1.0);
 }
@@ -149,9 +149,9 @@ double levgenpareto(double limit, double shape1, double shape2, double scale,
     tmp1 = shape1 - order;
     tmp2 = shape2 + order;
 
-    u = exp(-log1p(exp(log(scale) - log(limit))));
+    u = exp(-log1pexp(log(scale) - log(limit)));
 
     return R_pow(scale, order) * beta(tmp1, tmp2) / beta(shape1, shape2)
         * pbeta(u, tmp2, tmp1, 1, 0)
-        + R_VG__0(limit, order) * pbeta(u, shape2, shape1, 0, 0);
+        + ACT_DLIM__0(limit, order) * pbeta(u, shape2, shape1, 0, 0);
 }

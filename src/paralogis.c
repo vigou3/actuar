@@ -31,22 +31,22 @@ double dparalogis(double x, double shape, double scale, int give_log)
         return R_NaN;
 
     if (!R_FINITE(x) || x < 0.0)
-        return R_D__0;
+        return ACT_D__0;
 
     /* handle x == 0 separately */
     if (x == 0)
     {
 	if (shape < 1) return R_PosInf;
-	if (shape > 1) return R_D__0;
+	if (shape > 1) return ACT_D__0;
 	/* else */
-	return R_D_val(1.0 / scale);
+	return ACT_D_val(1.0 / scale);
     }
 
     tmp = shape * (log(x) - log(scale));
-    logu = - log1p(exp(tmp));
-    log1mu = - log1p(exp(-tmp));
+    logu = - log1pexp(tmp);
+    log1mu = - log1pexp(-tmp);
 
-    return R_D_exp(2.0 * log(shape) + shape * logu + log1mu - log(x));
+    return ACT_D_exp(2.0 * log(shape) + shape * logu + log1mu - log(x));
 }
 
 double pparalogis(double q, double shape, double scale, int lower_tail,
@@ -61,11 +61,11 @@ double pparalogis(double q, double shape, double scale, int lower_tail,
         return R_NaN;
 
     if (q <= 0)
-        return R_DT_0;
+        return ACT_DT_0;
 
-    u = exp(-log1p(exp(shape * (log(q) - log(scale)))));
+    u = exp(-log1pexp(shape * (log(q) - log(scale))));
 
-    return R_DT_Cval(R_pow(u, shape));
+    return ACT_DT_Cval(R_pow(u, shape));
 }
 
 double qparalogis(double p, double shape, double scale, int lower_tail,
@@ -79,12 +79,12 @@ double qparalogis(double p, double shape, double scale, int lower_tail,
         scale <= 0.0)
         return R_NaN;
 
-    R_Q_P01_boundaries(p, 0, R_PosInf);
-    p = R_D_qIv(p);
+    ACT_Q_P01_boundaries(p, 0, R_PosInf);
+    p = ACT_D_qIv(p);
 
     tmp = 1.0 / shape;
 
-    return scale * R_pow(R_pow(R_D_Cval(p), -tmp) - 1.0, tmp);
+    return scale * R_pow(R_pow(ACT_D_Cval(p), -tmp) - 1.0, tmp);
 }
 
 double rparalogis(double shape, double scale)
@@ -145,9 +145,9 @@ double levparalogis(double limit, double shape, double scale, double order,
     tmp2 = 1.0 + tmp1;
     tmp3 = shape - tmp1;
 
-    u = exp(-log1p(exp(shape * (log(limit) - log(scale)))));
+    u = exp(-log1pexp(shape * (log(limit) - log(scale))));
 
     return R_pow(scale, order) * gammafn(tmp2) * gammafn(tmp3)
         * pbeta(0.5 - u + 0.5, tmp2, tmp3, 1, 0) / gammafn(shape)
-        + R_VG__0(limit, order) * R_pow(u, shape);
+        + ACT_DLIM__0(limit, order) * R_pow(u, shape);
 }

@@ -36,25 +36,25 @@ double dgenbeta(double x, double shape1, double shape2, double shape3,
         return R_NaN;
 
     if (x < 0 || x > scale)
-        return R_D__0;
+        return ACT_D__0;
     if (x == 0)
     {
         tmp = shape1 * shape3;
-        if (tmp > 1) return(R_D__0);
+        if (tmp > 1) return(ACT_D__0);
         if (tmp < 1) return(R_PosInf);
-        /* tmp == 1 : */ return(R_D_val(shape3/beta(shape1, shape2)));
+        /* tmp == 1 : */ return(ACT_D_val(shape3/beta(shape1, shape2)));
     }
     if (x == scale)
     {
-        if (shape2 > 1) return(R_D__0);
+        if (shape2 > 1) return(ACT_D__0);
         if (shape2 < 1) return(R_PosInf);
-        /* shape2 == 1 : */ return(R_D_val(shape1 * shape3));
+        /* shape2 == 1 : */ return(ACT_D_val(shape1 * shape3));
     }
 
     logu = shape3 * (log(x) - log(scale));
     log1mu = log1p(-exp(logu));
 
-    return R_D_exp(log(shape3) + shape1 * logu + (shape2 - 1.0) * log1mu
+    return ACT_D_exp(log(shape3) + shape1 * logu + (shape2 - 1.0) * log1mu
                    - log(x) - lbeta(shape1, shape2));
 }
 
@@ -74,9 +74,9 @@ double pgenbeta(double q, double shape1, double shape2, double shape3,
         return R_NaN;
 
     if (q <= 0)
-        return R_DT_0;
+        return ACT_DT_0;
     if (q >= scale)
-        return R_DT_1;
+        return ACT_DT_1;
 
     u = exp(shape3 * (log(q) - log(scale)));
 
@@ -96,8 +96,8 @@ double qgenbeta(double p, double shape1, double shape2, double shape3,
         scale  <= 0.0)
         return R_NaN;
 
-    R_Q_P01_boundaries(p, 0, scale);
-    p = R_D_qIv(p);
+    ACT_Q_P01_boundaries(p, 0, scale);
+    p = ACT_D_qIv(p);
 
     return scale * R_pow(qbeta(p, shape1, shape2, lower_tail, 0),
                          1.0 / shape3);
@@ -171,5 +171,5 @@ double levgenbeta(double limit, double shape1, double shape2, double shape3,
 
     return R_pow(scale, order) * beta(shape1 + tmp, shape2)
         / beta(shape1, shape2) * pbeta(u, shape1 + tmp, shape2, 1, 0)
-        + R_VG__0(limit, order) * pbeta(u, shape1, shape2, 0, 0);
+        + ACT_DLIM__0(limit, order) * pbeta(u, shape1, shape2, 0, 0);
 }

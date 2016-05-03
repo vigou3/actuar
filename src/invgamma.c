@@ -32,11 +32,11 @@ double dinvgamma(double x, double shape, double scale, int give_log)
 
     /* handle also x == 0 here */
     if (!R_FINITE(x) || x <= 0.0)
-        return R_D__0;
+        return ACT_D__0;
 
     logu = log(scale) - log(x);
 
-    return R_D_exp(shape * logu - exp(logu) - log(x) - lgammafn(shape));
+    return ACT_D_exp(shape * logu - exp(logu) - log(x) - lgammafn(shape));
 }
 
 double pinvgamma(double q, double shape, double scale, int lower_tail,
@@ -51,7 +51,7 @@ double pinvgamma(double q, double shape, double scale, int lower_tail,
         return R_NaN;;
 
     if (q <= 0)
-        return R_DT_0;
+        return ACT_DT_0;
 
     u = exp(log(scale) - log(q));
 
@@ -67,8 +67,8 @@ double qinvgamma(double p, double shape, double scale, int lower_tail,
         scale <= 0.0)
         return R_NaN;;
 
-    R_Q_P01_boundaries(p, 0, R_PosInf);
-    p = R_D_qIv(p);
+    ACT_Q_P01_boundaries(p, 0, R_PosInf);
+    p = ACT_D_qIv(p);
 
     return scale / qgamma(p, shape, 1.0, !lower_tail, 0);
 }
@@ -123,7 +123,7 @@ double levinvgamma(double limit, double shape, double scale, double order,
 
     return R_pow(scale, order) * gammafn(shape - order)
         * pgamma(u, tmp, 1.0, 0, 0) / gammafn(shape)
-        + R_VG__0(limit, order) * pgamma(u, shape, 1.0, 1, 0);
+        + ACT_DLIM__0(limit, order) * pgamma(u, shape, 1.0, 1, 0);
 }
 
 double mgfinvgamma(double x, double shape, double scale, int give_log)
@@ -138,11 +138,11 @@ double mgfinvgamma(double x, double shape, double scale, int give_log)
         return R_NaN;
 
     if (x == 0.0)
-        return R_D_exp(0.0);
+        return ACT_D_exp(0.0);
 
     tmp = -scale * x;
 
-    return R_D_exp(log(2.0) + shape * log(tmp)/2.0 +
+    return ACT_D_exp(log(2.0) + shape * log(tmp)/2.0 +
                    log(bessel_k(sqrt(4 * tmp), shape, 1)) -
                    lgammafn(shape));
 }

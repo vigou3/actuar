@@ -32,11 +32,11 @@ double dinvweibull(double x, double shape, double scale, int give_log)
 
     /* handle also x == 0 here */
     if (!R_FINITE(x) || x <= 0.0)
-        return R_D__0;
+        return ACT_D__0;
 
     logu = shape * (log(scale) - log(x));
 
-    return R_D_exp(log(shape) + logu - exp(logu) - log(x));
+    return ACT_D_exp(log(shape) + logu - exp(logu) - log(x));
 }
 
 double pinvweibull(double q, double shape, double scale, int lower_tail,
@@ -51,11 +51,11 @@ double pinvweibull(double q, double shape, double scale, int lower_tail,
         return R_NaN;;
 
     if (q <= 0)
-        return R_DT_0;
+        return ACT_DT_0;
 
     u = exp(shape * (log(scale) - log(q)));
 
-    return R_DT_val(exp(-u));
+    return ACT_DT_val(exp(-u));
 }
 
 double qinvweibull(double p, double shape, double scale, int lower_tail,
@@ -67,10 +67,10 @@ double qinvweibull(double p, double shape, double scale, int lower_tail,
         shape <= 0.0)
         return R_NaN;;
 
-    R_Q_P01_boundaries(p, 0, R_PosInf);
-    p = R_D_qIv(p);
+    ACT_Q_P01_boundaries(p, 0, R_PosInf);
+    p = ACT_D_qIv(p);
 
-    return scale * R_pow(-log(R_D_Lval(p)), -1.0 / shape);
+    return scale * R_pow(-log(ACT_D_Lval(p)), -1.0 / shape);
 }
 
 double rinvweibull(double shape, double scale)
@@ -122,5 +122,5 @@ double levinvweibull(double limit, double shape, double scale, double order,
     u = exp(shape * (log(scale) - log(limit)));
 
     return R_pow(scale, order) * gammafn(tmp) * pgamma(u, tmp, 1.0, 0, 0)
-        + R_VG__0(limit, order) * (0.5 - exp(-u) + 0.5);
+        + ACT_DLIM__0(limit, order) * (0.5 - exp(-u) + 0.5);
 }

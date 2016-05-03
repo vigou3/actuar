@@ -27,7 +27,7 @@ double dphtype(double x, double *pi, double *T, int m, int give_log)
      */
 
     if (!R_FINITE(x) || x < 0.0)
-        return R_D__0;
+        return ACT_D__0;
 
     if (x == 0.0)
     {
@@ -37,7 +37,7 @@ double dphtype(double x, double *pi, double *T, int m, int give_log)
         for (i = 0; i < m; i++)
             z += pi[i];
 
-        return R_D_Clog(z);
+        return ACT_D_Clog(z);
     }
 
     int i, j, ij;
@@ -55,7 +55,7 @@ double dphtype(double x, double *pi, double *T, int m, int give_log)
             tmp[ij] = x * T[ij];
         }
 
-    return R_D_val(actuar_expmprod(pi, tmp, t, m));
+    return ACT_D_val(actuar_expmprod(pi, tmp, t, m));
 }
 
 double pphtype(double q, double *pi, double *T, int m, int lower_tail,
@@ -70,7 +70,7 @@ double pphtype(double q, double *pi, double *T, int m, int lower_tail,
      */
 
     if (q < 0.0)
-        return R_DT_0;
+        return ACT_DT_0;
 
     if (q == 0.0)
     {
@@ -80,7 +80,7 @@ double pphtype(double q, double *pi, double *T, int m, int lower_tail,
         for (i = 0; i < m; i++)
             z += pi[i];
 
-        return R_DT_Cval(z);
+        return ACT_DT_Cval(z);
     }
 
     int i;
@@ -94,7 +94,7 @@ double pphtype(double q, double *pi, double *T, int m, int lower_tail,
     for (i = 0; i < m * m; i++)
         tmp[i] = q * T[i];
 
-    return R_DT_Cval(actuar_expmprod(pi, tmp, e, m));
+    return ACT_DT_Cval(actuar_expmprod(pi, tmp, e, m));
 }
 
 double rphtype(double *pi, double **Q, double *rates, int m)
@@ -161,7 +161,7 @@ double mphtype(double order, double *pi, double *T, int m, int give_log)
             tmp += pi[j] * Tpow[i * m + j];
 
     /* Multiply by -1 if order is odd */
-    return R_D_val((int) order % 2 ?
+    return ACT_D_val((int) order % 2 ?
                    -gammafn(order + 1.0) * tmp :
                    gammafn(order + 1.0) * tmp);
 }
@@ -178,7 +178,7 @@ double mgfphtype(double x, double *pi, double *T, int m, int give_log)
      */
 
     if (x == 0.0)
-        return R_D_exp(0.0);
+        return ACT_D_exp(0.0);
 
     int i, j, ij;
     double z = 0.0, *t, *tmp1, *tmp2;
@@ -203,5 +203,5 @@ double mgfphtype(double x, double *pi, double *T, int m, int give_log)
     for (i = 0; i < m; i++)
         z += pi[i] * (1 + tmp2[i]);
 
-    return R_D_Clog(z);
+    return ACT_D_Clog(z);
 }

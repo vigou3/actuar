@@ -48,5 +48,5 @@ double levbeta(double limit, double shape1, double shape2, double order,
 
     return beta(tmp, shape2) / beta(shape1, shape2) *
         pbeta(limit, tmp, shape2, 1, 0) +
-        R_VG__0(limit, order) * pbeta(limit, shape1, shape2, 0, 0);
+        ACT_DLIM__0(limit, order) * pbeta(limit, shape1, shape2, 0, 0);
 }
