@@ -34,9 +34,9 @@ double mnorm(double order, double mean, double sd, int give_log)
 
     for (i = 0; i <= n/2; i++)
         res += R_pow_di(sd, 2 * i) * R_pow_di(mean, n - 2 * i) /
-            (R_pow_di(2, i) * gammafn(i + 1) * gammafn(order - 2 * i + 1));
+            (R_pow_di(2.0, i) * gammafn(i + 1) * gammafn(order - 2.0 * i + 1.0));
 
-    return gammafn(order + 1) * res;
+    return gammafn(order + 1.0) * res;
 }
 
 double mgfnorm(double x, double mean, double sd, int give_log)
