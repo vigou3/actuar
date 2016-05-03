@@ -20,7 +20,7 @@ double mchisq(double order, double df, double ncp, int give_log)
         ncp < 0.0)
         return R_NaN;
 
-    if (order <= -df/2)
+    if (order <= -df/2.0)
 	return R_PosInf;
 
     /* Trivial case */
@@ -29,7 +29,7 @@ double mchisq(double order, double df, double ncp, int give_log)
 
     /* Centered chi-square distribution */
     if (ncp == 0.0)
-        return R_pow(2, order) * gammafn(order + df/2) / gammafn(df/2);
+        return R_pow(2.0, order) * gammafn(order + df/2.0) / gammafn(df/2.0);
 
     /* Non centered chi-square distribution */
     if (order >= 1.0 && (int) order == order)
@@ -43,9 +43,9 @@ double mchisq(double order, double df, double ncp, int give_log)
         res[1] = df + ncp;      /* E[X] */
         for (i = 2; i <= n; i++)
         {
-            res[i] = R_pow_di(2, i - 1) * (df + i * ncp);
+            res[i] = R_pow_di(2.0, i - 1) * (df + i * ncp);
             for (j = 1; j < i; j++)
-                res[i] += R_pow_di(2, j - 1) * (df + j * ncp) * res[i - j] / gammafn(i - j + 1);
+                res[i] += R_pow_di(2.0, j - 1) * (df + j * ncp) * res[i - j] / gammafn(i - j + 1);
             res[i] *= gammafn(i);
         }
         return res[n];
@@ -63,7 +63,7 @@ double levchisq(double limit, double df, double ncp, double order, int give_log)
         ncp < 0.0)
         return R_NaN;
 
-    if (order <= -df/2)
+    if (order <= -df/2.0)
 	return R_PosInf;
 
     if (limit <= 0.0)
@@ -73,12 +73,12 @@ double levchisq(double limit, double df, double ncp, double order, int give_log)
     {
         double u, tmp;
 
-        tmp = order + df/2;
+        tmp = order + df/2.0;
         u = exp(log(limit) - M_LN2);
 
-        return R_pow(2, order) * gammafn(tmp) *
-            pgamma(u, tmp, 1.0, 1, 0) / gammafn(df/2) +
-            ACT_DLIM__0(limit, order) * pgamma(u, df/2, 1.0, 0, 0);
+        return R_pow(2.0, order) * gammafn(tmp) *
+            pgamma(u, tmp, 1.0, 1, 0) / gammafn(df/2.0) +
+            ACT_DLIM__0(limit, order) * pgamma(u, df/2.0, 1.0, 0, 0);
     }
     else
         return R_NaN;
@@ -90,11 +90,11 @@ double mgfchisq(double x, double df, double ncp, int give_log)
         !R_FINITE(ncp) ||
         df <= 0.0 ||
         ncp < 0.0 ||
-        2 * x > 1.0)
+        2.0 * x > 1.0)
         return R_NaN;
 
     if (x == 0.0)
         return ACT_D_exp(0.0);
 
-    return ACT_D_exp(ncp * x / (1 - 2 * x) - df/2 * log1p(-2 * x));
+    return ACT_D_exp(ncp * x / (1.0 - 2.0 * x) - df/2.0 * log1p(-2.0 * x));
 }
