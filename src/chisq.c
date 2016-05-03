@@ -74,7 +74,7 @@ double levchisq(double limit, double df, double ncp, double order, int give_log)
         double u, tmp;
 
         tmp = order + df/2;
-        u = exp(log(limit) - log(2));
+        u = exp(log(limit) - M_LN2);
 
         return R_pow(2, order) * gammafn(tmp) *
             pgamma(u, tmp, 1.0, 1, 0) / gammafn(df/2) +
