@@ -277,6 +277,6 @@ print.portfolio <- function(x, ...)
                   "\n", sep = ""), sep = "")
     }
     cat("\n  Number of claims per node: \n\n")
-    print(frequency(x))
+    print(frequency(x), ...)
     invisible(x)
 }

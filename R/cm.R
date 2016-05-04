@@ -191,7 +191,7 @@ predict.cm <- function(object, levels = NULL, newdata, ...)
 
 print.cm <- function(x, ...)
 {
-    chkDots(...)
+    chkDots(...)                        # method does not use '...'
     nlevels <- length(x$nodes)
     level.names <- names(x$nodes)
     b <- if (is.null(x$iterative)) x$unbiased else x$iterative

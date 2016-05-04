@@ -16,6 +16,7 @@ elev.default <- function(x, ...)
 {
     if (!exists("Call", inherits = FALSE))
         Call <- match.call()
+    chkDots(...)                        # method does not use '...'
     FUN <- function(limit)
         sapply(limit, function(x, y) mean(pmin(x, y)), x = x)
     environment(FUN) <- new.env()
@@ -38,6 +39,7 @@ elev.grouped.data <- function(x, ...)
 {
     if (!exists("Call", inherits = FALSE))
         Call <- match.call()
+    chkDots(...)                        # method does not use '...'
     FUN <- function(limit)
     {
         ## Explicitely get the data from the function environment.
@@ -76,7 +78,7 @@ elev.grouped.data <- function(x, ...)
     environment(FUN) <- new.env()
     assign("cj", eval(expression(cj), envir = environment(x)),
            envir = environment(FUN))
-    assign("nj", x[, 2], envir = environment(FUN))
+    assign("nj", x[, 2L], envir = environment(FUN))
     assign("n", nrow(x), envir = environment(FUN))
     class(FUN) <- c("elev", class(FUN))
     attr(FUN, "call") <- Call
@@ -110,7 +112,7 @@ summary.elev <- function (object, ...)
     summary(knots(object), ...)
 }
 
-### Identical to stats::knots.stepfun().
+### Essentially identical to stats::knots.stepfun().
 knots.elev <- function(Fn, ...)
 {
     if (attr(Fn, "grouped"))

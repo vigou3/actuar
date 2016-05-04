@@ -2,6 +2,34 @@
 \title{actuar News}
 \encoding{UTF-8}
 
+\section{CHANGES IN VERSION 1.2-1}{
+  \subsection{(MORE OR LESS) USER-VISIBLE CHANGES}{
+    \itemize{
+      \item ogive() lost its argument '...' as it was unused anyway.
+      \item Usage of chkDots() (new in R 3.3.0) in a few methods that do
+      not use the content of their '...' argument.
+    }
+  }
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Deleted an unwanted debugging message ("local") printed by
+      CTE() at every execution.
+      \item predict.cm() and summary.cm() now treat the '...' argument
+      as advertised in the help file.
+    }
+  }
+  \subsection{MAINTENANCE}{
+    \itemize{
+      \item C-level function log1pexp(...) used in a few places in lieu
+      of log1p(exp(...)).
+      \item Names of the internal utility macros defined in dpq.h
+      changed from "R_<...>" to "ACT_<...>" to make it clearer that they
+      are defined by the package (although they were copied from R
+      sources).
+    }
+  }
+}
+
 \section{CHANGES IN VERSION 1.2-0}{
   \subsection{NEW FEATURE}{
     \itemize{

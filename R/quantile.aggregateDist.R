@@ -9,6 +9,7 @@ quantile.aggregateDist <-
     function(x, probs = c(0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99, 0.995),
              smooth = FALSE, names = TRUE, ...)
 {
+    chkDots(...)                        # method does not use '...'
     label <- comment(x)
 
     ## The Normal and Normal Power approximations are the only

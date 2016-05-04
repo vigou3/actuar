@@ -72,6 +72,7 @@ aggregate.portfolio <- function(x, by = names(x$nodes), FUN = sum,
 frequency.portfolio <- function(x, by = names(x$nodes),
                                 classification = TRUE, prefix = NULL, ...)
 {
+    chkDots(...)                        # method does not use '...'
     freq <- function(x) if (identical(x, NA)) NA else length(x[!is.na(x)])
     aggregate(x, by, freq, classification, prefix)
 }
@@ -80,6 +81,8 @@ severity.portfolio <- function(x, by = head(names(x$node), -1),
                                splitcol = NULL, classification = TRUE,
                                prefix = NULL, ...)
 {
+    chkDots(...)                        # method does not use '...'
+
     level.names <- names(x$nodes)       # level names
     ci <- seq_len(ncol(x$data))         # column indexes
 
@@ -101,9 +104,9 @@ severity.portfolio <- function(x, by = head(names(x$node), -1),
         splitcol <- ci %in% splitcol
 
     ## Unroll claim amounts by column; simplest case
-    if (tail(level.names, 1) %in% by)
+    if (tail(level.names, 1L) %in% by)
     {
-        if (length(by) > 1)
+        if (length(by) > 1L)
             stop("invalid 'by' specification")
         x <- x$data
         res <- NextMethod(bycol = TRUE, drop = FALSE)
@@ -141,7 +144,7 @@ severity.portfolio <- function(x, by = head(names(x$node), -1),
         x <- cbind(lapply(split(x$data[, !splitcol], f), fun))
         res.main <- NextMethod(bycol = FALSE, drop = FALSE)
         res.main <-
-            if (0 < (nc <- ncol(res.main)))
+            if (0L < (nc <- ncol(res.main)))
             {
                 dimnames(res.main) <-
                     list(NULL, paste(prefix, seq_len(nc), sep = ""))
@@ -159,7 +162,7 @@ severity.portfolio <- function(x, by = head(names(x$node), -1),
         x <- cbind(lapply(split(x.split, f), fun))     # split data
         res.split <- NextMethod(bycol = FALSE, drop = FALSE)
         res.split <-
-            if (0 < (nc <- ncol(res.split)))
+            if (0L < (nc <- ncol(res.split)))
             {
                 dimnames(res.split) <-
                     list(NULL, paste(prefix, seq_len(nc), sep = ""))
@@ -175,6 +178,8 @@ severity.portfolio <- function(x, by = head(names(x$node), -1),
 
 weights.portfolio <- function(object, classification = TRUE, prefix = NULL, ...)
 {
+    chkDots(...)                        # method does not use '...'
+
     if (is.null(object$weights))
         NULL
     else

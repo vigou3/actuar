@@ -95,7 +95,7 @@ print.aggregateDist <- function(x, ...)
     cat("  ", label <- comment(x), "\n\n", sep = "")
 
     cat("Call:\n")
-    print(attr(x, "call"))
+    print(attr(x, "call"), ...)
     cat("\n")
 
     if (label %in% c("Exact calculation (convolutions)",
@@ -105,13 +105,13 @@ print.aggregateDist <- function(x, ...)
         n <- length(get("x", envir = environment(x)))
         cat("Data:  (", n, "obs. )\n")
         numform <- function(x) paste(formatC(x, digits = 4, width = 5), collapse = ", ")
-        i1 <- 1:min(3, n)
-        i2 <- if (n >= 4)
-            max(4, n - 1):n
-        else integer(0)
+        i1 <- 1L:min(3L, n)
+        i2 <- if (n >= 4L)
+            max(4L, n - 1L):n
+        else integer()
         xx <- eval(expression(x), envir = environment(x))
-        cat(" x[1:", n, "] = ", numform(xx[i1]), if (n > 3)
-        ", ", if (n > 5)
+        cat(" x[1:", n, "] = ", numform(xx[i1]), if (n > 3L)
+        ", ", if (n > 5L)
         " ..., ", numform(xx[i2]), "\n", sep = "")
         cat("\n")
     }
@@ -149,7 +149,7 @@ plot.aggregateDist <- function(x, xlim,
 }
 
 summary.aggregateDist <- function(object, ...)
-    structure(object, class = c("summary.aggregateDist", class(object)))
+    structure(object, class = c("summary.aggregateDist", class(object)), ...)
 
 print.summary.aggregateDist <- function(x, ...)
 {
@@ -172,7 +172,7 @@ print.summary.aggregateDist <- function(x, ...)
     }
     res <- c(min, q[c(1, 2)], expectation, q[3], max)
     names(res) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
-    print(res)
+    print(res, ...)
     invisible(x)
 }
 
