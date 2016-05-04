@@ -83,7 +83,7 @@ predict.hache <- function(object, levels = NULL, newdata, ...)
         unname(predict.lm(z, ...))
     }
 
-    sapply(object$adj.models, f, newdata = newdata)
+    structure(sapply(object$adj.models, f, newdata = newdata), ...)
 }
 
 print.hache <- function(x, ...)

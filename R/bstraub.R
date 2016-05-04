@@ -94,7 +94,7 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
 }
 
 predict.bstraub <- function(object, levels = NULL, newdata, ...)
-    object$means[[1]] + object$cred * (object$means[[2]] - object$means[[1]])
+    structure(object$means[[1]] + object$cred * (object$means[[2]] - object$means[[1]]), ...)
 
 bvar.unbiased <- function(x, w, within, n)
 {

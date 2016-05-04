@@ -191,6 +191,7 @@ predict.cm <- function(object, levels = NULL, newdata, ...)
 
 print.cm <- function(x, ...)
 {
+    chkDots(...)
     nlevels <- length(x$nodes)
     level.names <- names(x$nodes)
     b <- if (is.null(x$iterative)) x$unbiased else x$iterative
@@ -264,7 +265,7 @@ summary.cm <- function(object, levels = NULL, newdata, ...)
         object$nodes <- object$nodes[plevs]
         class(object) <- c("summary.cm", class(object))
     }
-    object
+    structure(object, ...)     # attach additional attributes in '...'
 }
 
 print.summary.cm <- function(x, ...)
