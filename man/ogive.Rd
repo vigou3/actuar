@@ -9,7 +9,7 @@
   Compute a smoothed empirical distribution function for grouped data.
 }
 \usage{
-ogive(x, y = NULL, \dots)
+ogive(x, y = NULL)
 
 \method{print}{ogive}(x, digits = getOption("digits") - 2, \dots)
 
