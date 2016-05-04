@@ -117,19 +117,19 @@ print.mde <- function(x, digits = getOption("digits"), ...)
     ans1 <- format(x$estimate, digits = digits)
     ans1 <- sapply(ans1, function(x) paste("", x))
     nm1 <- names(ans1)
-    nm1 <- paste(substring("      ", 1, (nchar(ans1) - nchar(nm1)) %/% 2),
+    nm1 <- paste(substring("      ", 1L, (nchar(ans1) - nchar(nm1)) %/% 2),
                  nm1)
     nm1 <- paste(nm1,
-                 substring("      ", 1, (nchar(ans1) - nchar(nm1)) %/% 2 + 1))
+                 substring("      ", 1L, (nchar(ans1) - nchar(nm1)) %/% 2 + 1))
     names(ans1) <- nm1
 
     ans2 <- format(x$distance, digits = digits)
     ans2 <- sapply(ans2, function(x) paste("", x))
     nm2 <- "distance"
-    nm2 <- paste(substring("      ", 1, (nchar(ans2) - nchar(nm2)) %/% 2),
+    nm2 <- paste(substring("      ", 1L, (nchar(ans2) - nchar(nm2)) %/% 2),
                  nm2)
     nm2 <- paste(nm2,
-                 substring("      ", 1, (nchar(ans2) - nchar(nm2)) %/% 2))
+                 substring("      ", 1L, (nchar(ans2) - nchar(nm2)) %/% 2))
     names(ans2) <- nm2
 
     print(ans1, quote = FALSE)
