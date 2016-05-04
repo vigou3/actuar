@@ -7,7 +7,7 @@
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 ### Mathieu Pigeon
 
-ogive <- function(x, y = NULL, ...)
+ogive <- function(x, y = NULL)
 {
     ## Can compute the ogive either from an object of class
     ## 'grouped.data', or from a vector of class boundaries and a
