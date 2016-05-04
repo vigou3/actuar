@@ -48,8 +48,8 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
     if (all(i == 0L))
         stop(gettextf("parameters %s missing in 'par.claims'",
                       paste(dQuote(choices), collapse = ", ")))
-    par.claims <- par.claims[i > 0]     # keep relevant components
-    p <- choices[i[i > 0]]              # keep relevant names
+    par.claims <- par.claims[i > 0L]    # keep relevant components
+    p <- choices[i[i > 0L]]             # keep relevant names
     names(par.claims) <- p              # use full names
 
     if (claims == "exponential")
@@ -60,9 +60,9 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
             stop("parameter \"rate\" missing in 'par.claims'")
         n <- length(rate)
 
-        if ("weights" %in% p && n > 1)
+        if ("weights" %in% p && n > 1L)
             prob <- rep(par.claims$weights, length.out = n)
-        else if (n == 1)
+        else if (n == 1L)
             prob <- 1
         else
             stop("parameter \"weights\" missing in 'par.claims'")
@@ -87,12 +87,12 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
             rate <-  rep(rate, length.out = length(shape))
         n <- sum(shape)
 
-        if ("weights" %in% p && length(shape) > 1)
+        if ("weights" %in% p && length(shape) > 1L)
         {
             prob <- numeric(n)
             prob[cumsum(c(1, head(shape, -1)))] <- par.claims$weights
         }
-        else if (length(shape) == 1)
+        else if (length(shape) == 1L)
             prob <- c(1, rep(0, n - 1))
         else
             stop("parameter \"weights\" missing in 'par.claims'")
@@ -100,8 +100,8 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
         rates <- diag(rep(-rate, shape), n)
         if (n > 1 && shape > 1)
         {
-            tmp <- -head(diag(rates), -1)
-            tmp[cumsum(head(shape, -1))] <- 0 # insert 0s in "ll corners"
+            tmp <- -head(diag(rates), -1L)
+            tmp[cumsum(head(shape, -1L))] <- 0 # insert 0s in "ll corners"
             rates[cbind(seq_len(n - 1), seq(2, len = n - 1))] <- tmp
         }
     }
@@ -132,8 +132,8 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
     if (all(i == 0L))
         stop(gettextf("parameters %s missing in 'par.wait'",
                       paste(dQuote(choices), collapse = ", ")))
-    par.wait <- par.wait[i > 0]         # keep relevant components
-    p <- choices[i[i > 0]]              # keep relevant names
+    par.wait <- par.wait[i > 0L]        # keep relevant components
+    p <- choices[i[i > 0L]]             # keep relevant names
     names(par.wait) <- p                # use full names
 
     if (wait == "exponential")
@@ -144,9 +144,9 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
             stop("parameter \"rate\" missing in 'par.wait'")
         m <- length(rate)
 
-        if ("weights" %in% p && m > 1)
+        if ("weights" %in% p && m > 1L)
             prob.w <- rep(par.wait$weights, length.out = m)
-        else if (m == 1)
+        else if (m == 1L)
             prob.w <- 1
         else
             stop("parameter \"weights\" missing in 'par.wait'")
@@ -171,12 +171,12 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
             rate <-  rep(rate, length.out = length(shape))
         m <- sum(shape)
 
-        if ("weights" %in% p && length(shape) > 1)
+        if ("weights" %in% p && length(shape) > 1L)
         {
             prob.w <- numeric(sum(shape))
-            prob.w[cumsum(c(1, head(shape, -1)))] <- par.wait$weights
+            prob.w[cumsum(c(1, head(shape, -1L)))] <- par.wait$weights
         }
-        else if (length(shape) == 1)
+        else if (length(shape) == 1L)
             prob.w <- c(1, rep(0, m - 1))
         else
             stop("parameter \"weights\" missing in 'par.wait'")
@@ -184,8 +184,8 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
         rates.w <- diag(rep(-rate, shape), m)
         if (m > 1 && shape > 1)
         {
-            tmp <- -head(diag(rates.w), -1)
-            tmp[cumsum(head(shape, -1))] <- 0 # insert 0s in "ll corners"
+            tmp <- -head(diag(rates.w), -1L)
+            tmp[cumsum(head(shape, -1L))] <- 0 # insert 0s in "ll corners"
             rates.w[cbind(seq_len(m - 1), seq(2, len = m - 1))] <- tmp
         }
     }
@@ -209,10 +209,10 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
     FUN <- function(u, survival = FALSE, lower.tail = !survival) {}
 
     ## Cramer-Lundberg model
-    if (wait == "exponential" && m == 1)
+    if (wait == "exponential" && m == 1L)
     {
         ## Special case with an explicit solution
-        if (claims == "exponential" && n == 1)
+        if (claims == "exponential" && n == 1L)
         {
             lambda <- -drop(rates.w) / premium.rate
             body(FUN) <- substitute({res <- a * exp(-(b) * u);
@@ -252,13 +252,13 @@ ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
             exp <- expression(Q1 <- Q)
 
         Q <- rates
-        count <- 0
+        count <- 0L
 
         repeat
         {
             eval(exp)
 
-            if (maxit < (count <- count + 1))
+            if (maxit < (count <- count + 1L))
             {
                 warning("maximum number of iterations reached before obtaining convergence")
                 break
