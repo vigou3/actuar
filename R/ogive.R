@@ -47,9 +47,9 @@ print.ogive <- function(x, digits = getOption("digits") - 2, ...)
     i2 <- if (nc >= 4L) max(4L, nc - 1L):nc else integer(0)
     i3 <- 1L:min(3L, nn)
     i4 <- if (nn >= 4L) max(4L, nn - 1L):nn else integer(0)
-    cat("    x = ", numform(xxc[i1]), if (nc > 3) ", ",
-        if (nc > 5) " ..., ", numform(xxc[i2]), "\n", sep = "")
-    cat(" F(x) = ", numform(xxn[i3]), if (nn > 3) ", ",
+    cat("    x = ", numform(xxc[i1]), if (nc > 3L) ", ",
+        if (nc > 5L) " ..., ", numform(xxc[i2]), "\n", sep = "")
+    cat(" F(x) = ", numform(xxn[i3]), if (nn > 3L) ", ",
         if (nn > 5L) " ..., ", numform(xxn[i4]), "\n", sep = "")
     invisible(x)
 }
