@@ -47,7 +47,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
             }
             else
             {
-                if (!(is.call(sh) && match("x", all.vars(sh), nomatch = 0)))
+                if (!(is.call(sh) && match("x", all.vars(sh), nomatch = 0L)))
                     stop("'h' must be a function or an expression containing 'x'")
                 h1 <- function(x)
                     eval(sh,
@@ -65,7 +65,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
             }
             else
             {
-                if (!(is.call(smgfx) && match("x", all.vars(smgfx), nomatch = 0)))
+                if (!(is.call(smgfx) && match("x", all.vars(smgfx), nomatch = 0L)))
                     stop("'mgf.claim' must be a function or an expression containing 'x'")
                 mgfx <- smgfx
             }
@@ -77,7 +77,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
             }
             else
             {
-                if (!(is.call(smgfw) && match("x", all.vars(smgfw), nomatch = 0)))
+                if (!(is.call(smgfw) && match("x", all.vars(smgfw), nomatch = 0L)))
                     stop("'mgf.wait' must be a function or an expression containing 'x'")
                 mgfw <- smgfw
             }
@@ -116,7 +116,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
         }
         else
         {
-            if (!(is.call(sh) && all(match(c("x", "y"), all.vars(sh), nomatch = 0))))
+            if (!(is.call(sh) && all(match(c("x", "y"), all.vars(sh), nomatch = 0L))))
                 stop("'h' must be a function or an expression containing 'x' and 'y'")
             h2 <- function(x, y)
                 eval(sh,
@@ -137,7 +137,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
         }
         else
         {
-            if (!(is.call(smgfx) && all(match(c("x", "y"), all.vars(smgfx), nomatch = 0))))
+            if (!(is.call(smgfx) && all(match(c("x", "y"), all.vars(smgfx), nomatch = 0L))))
                 stop("'mgf.claim' must be a function or an expression containing 'x' and 'y'")
             mgfx <- smgfx
         }
@@ -149,7 +149,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
         }
         else
         {
-            if (!(is.call(smgfw) && match("x", all.vars(smgfw), nomatch = 0)))
+            if (!(is.call(smgfw) && match("x", all.vars(smgfw), nomatch = 0L)))
                 stop("'mgf.wait' must be a function or an expression containing 'x'")
             mgfw <- smgfw
         }
@@ -161,7 +161,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
         }
         else
         {
-            if (!(is.call(spremium) && match("y", all.vars(spremium), nomatch = 0)))
+            if (!(is.call(spremium) && match("y", all.vars(spremium), nomatch = 0L)))
                 stop("'premium.rate' must be a function or an expression containing 'y'")
             premium.rate <- spremium
         }
