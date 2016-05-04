@@ -186,7 +186,7 @@ adjCoef <- function(mgf.claim, mgf.wait = mgfexp, premium.rate, upper.bound,
     ## optimize().
     coef <- sapply(retention, optimize, f = f2,
                    interval = c(0, upper.bound-.Machine$double.eps),
-                   tol = sqrt(.Machine$double.eps))[1,]
+                   tol = sqrt(.Machine$double.eps))[1L, ]
 
     ## Make a function from the (retention, coefficient) pairs
     ## computed above, joining the points by straight line segments.
