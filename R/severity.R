@@ -10,9 +10,10 @@
 severity <- function(x, ...) UseMethod("severity")
 
 ### Default method. Currently identical to 'unroll' by lack of a
-### better alternative.
+### better alternative. This default method is called (at least) by
+### severity.portfolio() with NextMethod() and receives additional,
+### unused arguments. As such, it should not check the content of
+### '...' with chkDots(). [I'm not quite sure whether this is bad
+### programming or not.]
 severity.default <- function(x, bycol = FALSE, drop = TRUE, ...)
-{
-    chkDots(...)                        # method does not use '...'
     unroll(x, bycol, drop)
-}
