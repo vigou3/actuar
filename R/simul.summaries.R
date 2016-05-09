@@ -108,8 +108,8 @@ severity.portfolio <- function(x, by = head(names(x$node), -1),
     {
         if (length(by) > 1L)
             stop("invalid 'by' specification")
-        x <- x$data
-        res <- NextMethod(bycol = TRUE, drop = FALSE)
+        #x <- x$data
+        res <- unroll(x$data, bycol = TRUE, drop = FALSE)
         colnames(res) <- paste(prefix, colnames(res), sep = "")
         return(list(main = res[, !splitcol],
                     split = if (all(!splitcol)) NULL else res[, splitcol]))
@@ -142,7 +142,7 @@ severity.portfolio <- function(x, by = head(names(x$node), -1),
     else
     {
         x <- cbind(lapply(split(x$data[, !splitcol], f), fun))
-        res.main <- NextMethod(bycol = FALSE, drop = FALSE)
+        res.main <- unroll(x, bycol = FALSE, drop = FALSE)
         res.main <-
             if (0L < (nc <- ncol(res.main)))
             {
@@ -160,7 +160,7 @@ severity.portfolio <- function(x, by = head(names(x$node), -1),
     else
     {
         x <- cbind(lapply(split(x.split, f), fun))     # split data
-        res.split <- NextMethod(bycol = FALSE, drop = FALSE)
+        res.split <- unroll(x, bycol = FALSE, drop = FALSE)
         res.split <-
             if (0L < (nc <- ncol(res.split)))
             {

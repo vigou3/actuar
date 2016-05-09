@@ -8,6 +8,8 @@
       \item ogive() lost its argument '...' as it was unused anyway.
       \item Usage of chkDots() (new in R 3.3.0) in a few methods that do
       not use the content of their '...' argument.
+      \item severity.portfolio() calls unroll() directly instead of
+      relying on the default method to be identical to unroll().
     }
   }
   \subsection{BUG FIXES}{
