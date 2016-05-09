@@ -87,6 +87,6 @@ p <- (1:10)/10
 pinvgamma(qinvgamma(p, 2, 3), 2, 3)
 minvgamma(-1, 2, 2) ^ 2
 levinvgamma(10, 2, 2, order = 1)
-mgfinvgamma(1,3,2)
+mgfinvgamma(-1, 3, 2)
 }
 \keyword{distribution}

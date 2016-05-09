@@ -31,7 +31,7 @@ mgfchisq(x, df, ncp = 0, log= FALSE)
 
   Only integer moments are supported for the non central Chi-square
   distribution (\code{ncp > 0}).
-  
+
   The limited expected value is supported for the centered Chi-square
   distribution (\code{ncp = 0}).
 }
@@ -40,7 +40,7 @@ mgfchisq(x, df, ncp = 0, log= FALSE)
   \code{levchisq} gives the \eqn{k}th moment of the limited loss
   variable, and
   \code{mgfchisq} gives the moment generating function in \code{x}.
-  
+
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{
@@ -49,7 +49,7 @@ mgfchisq(x, df, ncp = 0, log= FALSE)
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
   \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
- 
+
   Johnson, N. L. and Kotz, S. (1970), \emph{Continuous Univariate
     Distributions, Volume 1}, Wiley.
 }
@@ -59,6 +59,6 @@ mgfchisq(x, df, ncp = 0, log= FALSE)
 \examples{
 mchisq(2, 3, 4)
 levchisq(10, 3, order = 2)
-mgfchisq(1, 3, 2)
+mgfchisq(0.25, 3, 2)
 }
 \keyword{distribution}

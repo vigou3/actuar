@@ -92,10 +92,10 @@ levinvburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   Mathieu Pigeon
 }
 \examples{
-exp(dinvburr(2, 3, 4, 5, log = TRUE))
+exp(dinvburr(2, 2, 3, 1, log = TRUE))
 p <- (1:10)/10
 pinvburr(qinvburr(p, 2, 3, 1), 2, 3, 1)
-minvburr(2, 1, 2, 3) - minvburr(1, 1, 2, 3) ^ 2
-levinvburr(10, 1, 2, 3, order = 2)
+minvburr(2, 2, 3, 1) - minvburr(1, 2, 3, 1) ^ 2
+levinvburr(10, 2, 3, 1, order = 2)
 }
 \keyword{distribution}

@@ -18,6 +18,8 @@
       CTE() at every execution.
       \item predict.cm() and summary.cm() now treat the '...' argument
       as advertised in the help file.
+      \item Fixed bad examples in a few probability law help files that
+      returned results such as Inf or NaN.
     }
   }
   \subsection{MAINTENANCE}{

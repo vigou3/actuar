@@ -47,7 +47,7 @@ levtrbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
   \item{order}{order of the moment.}
   \item{limit}{limit of the loss variable.}
 }
-\details{ 
+\details{
   The Transformed Beta distribution with parameters \code{shape1} \eqn{=
     \alpha}{= a}, \code{shape2} \eqn{= \gamma}{= b}, \code{shape3}
   \eqn{= \tau}{= c} and \code{scale} \eqn{= \theta}{= s}, has
@@ -120,7 +120,7 @@ exp(dtrbeta(2, 2, 3, 4, 5, log = TRUE))
 p <- (1:10)/10
 ptrbeta(qtrbeta(p, 2, 3, 4, 5), 2, 3, 4, 5)
 qpearson6(0.3, 2, 3, 4, 5, lower.tail = FALSE)
-mtrbeta(2, 1, 2, 3, 4) - mtrbeta(1, 1, 2, 3, 4) ^ 2
-levtrbeta(10, 1, 2, 3, 4, order = 2)
+mtrbeta(2, 2, 3, 4, 5) - mtrbeta(1, 2, 3, 4, 5) ^ 2
+levtrbeta(10, 2, 3, 4, 5, order = 2)
 }
 \keyword{distribution}

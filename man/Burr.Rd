@@ -62,7 +62,7 @@ levburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
     \code{shape2 == shape1};
     \item A \link[=dpareto]{Pareto} distribution when \code{shape2 ==
       1}.
-  }    
+  }
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
@@ -92,10 +92,10 @@ levburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   Mathieu Pigeon
 }
 \examples{
-exp(dburr(2, 3, 4, 5, log = TRUE))
+exp(dburr(1, 2, 3, log = TRUE))
 p <- (1:10)/10
-pburr(qburr(p, 2, 3, 1), 2, 3, 1)
-mburr(2, 1, 2, 3) - mburr(1, 1, 2, 3) ^ 2
-levburr(10, 1, 2, 3, order = 2)
+pburr(qburr(p, 2, 3, 2), 2, 3, 2)
+mburr(2, 2, 3, 1) - mburr(1, 2, 3, 1) ^ 2
+levburr(10, 2, 3, 1, order = 2)
 }
 \keyword{distribution}
