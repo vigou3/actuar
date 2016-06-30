@@ -30,6 +30,9 @@
 #define ACT_DT_val(x)     (lower_tail ? ACT_D_val(x)  : ACT_D_Clog(x))
 #define ACT_DT_Cval(x)    (lower_tail ? ACT_D_Clog(x) : ACT_D_val(x))
 
+// log(1 - exp(x))  in more stable form than log1p(- R_D_qIv(x)) :
+#define ACT_Log1_Exp(x)   ((x) > -M_LN2 ? log(-expm1(x)) : log1p(-exp(x)))
+
 /*Boundaries*/
 #define ACT_Q_P01_boundaries(p, _LEFT_, _RIGHT_)          \
     if (log_p) {                                        \

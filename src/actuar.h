@@ -33,6 +33,9 @@ double actuar_expmprod(double *x, double *M, double *y, int n);
 void actuar_matpow(double *x, int n, int k, double *z);
 void actuar_solve(double *A, double *B, int n, int p, double *z);
 
+/*   Distribution function */
+double actuar_pbetanegb(double x, double a, double b); /* <- trbeta.c */
+
 /*   Sampling */
 int SampleSingleValue(int n, double *p);
 
@@ -47,6 +50,11 @@ double qinvexp(double p, double scale, int lower_tail, int log_p);
 double rinvexp(double scale);
 double minvexp(double order, double scale, int give_log);
 double levinvexp(double limit, double scale, double order, int give_log);
+
+double dztpois(double x, double lambda, int give_log);
+double pztpois(double q, double lambda, int lower_tail, int log_p);
+double qztpois(double p, double lambda, int lower_tail, int log_p);
+double rztpois(double lambda);
 
 /*   Two parameter distributions, hence associated with dpq2 */
 double munif(double order, double min, double max, int give_log);

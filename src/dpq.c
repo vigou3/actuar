@@ -162,6 +162,9 @@ SEXP actuar_do_dpq1(int code, SEXP args)
     case  4:  return DPQ1_2(args, qinvexp);
     case  5:  return DPQ1_1(args, minvexp);
     case  6:  return DPQ1_1(args, mgfexp);
+    case  7:  return DPQ1_1(args, dztpois);
+    case  8:  return DPQ1_2(args, pztpois);
+    case  9:  return DPQ1_2(args, qztpois);
     default:
         error(_("internal error in actuar_do_dpq1"));
     }

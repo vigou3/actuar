@@ -98,6 +98,7 @@ SEXP actuar_do_random1(int code, SEXP args)
         switch (code)
         {
             RAND1(1, rinvexp);
+            RAND1(2, rztpois);
         default:
             error(_("internal error in actuar_do_random1"));
         }
