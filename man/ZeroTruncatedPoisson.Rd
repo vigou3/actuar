@@ -67,5 +67,13 @@ rztpois(n, lambda)
 }
 \examples{
 dztpois(0:10, lambda = 1)
+
+qztpois(pztpois(1:8, 1), 1)
+
+x <- seq(0, 8)
+plot(x, dztpois(x, 2), type = "h", ylab = "p(x)", main = "Zero Truncated Poisson(2) and Poisson(2) PDF")
+points(x, dpois(x, 2), col = "red")
+legend("topright", c("ZT Poisson probabilities", "Poisson probabilities"),
+       col = c("black", "red"), lty = c(1, 0), pch = c(NA, 1))
 }
 \keyword{distribution}
