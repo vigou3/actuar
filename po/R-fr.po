@@ -1,15 +1,15 @@
 # French translations for actuar package
 # Traduction française du package actuar.
-# Copyright (C) 2010 Vincent Goulet
+# Copyright (C) 2016 Vincent Goulet
 # This file is distributed under the same license as the actuar package.
 # Vincent Goulet <vincent@vgoulet.act.ulaval.ca>, 2010.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: actuar 1.1-7\n"
+"Project-Id-Version: actuar 2.0-0\n"
 "Report-Msgid-Bugs-To: bugs@r-project.org\n"
 "POT-Creation-Date: 2014-12-11 12:11\n"
-"PO-Revision-Date: 2014-12-11 12:16-0500\n"
+"PO-Revision-Date: 2016-07-05 00:13-0400\n"
 "Last-Translator: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
 "Language-Team: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
 "Language: fr\n"
@@ -67,7 +67,7 @@ msgid "'nb.simul' must supply the number of simulations"
 msgstr "'nb.simul' doit spécifier le nombre de simulations"
 
 msgid "expressions in 'model.freq' and 'model.sev' must be named"
-msgstr "les expressions dans 'model.freq' et 'model.sev' doit être nommées"
+msgstr "les expressions dans 'model.freq' et 'model.sev' doivent être nommées"
 
 msgid "'model.sev' must be a vector of probabilities"
 msgstr "'model.sev' doit être un vecteur de probabilités"
