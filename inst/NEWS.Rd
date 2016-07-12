@@ -2,6 +2,14 @@
 \title{actuar News}
 \encoding{UTF-8}
 
+\section{CHANGES IN VERSION 2.0-0}{
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item dpareto() did not handle the case x == 0 correctly.
+    }
+  }
+}
+
 \section{CHANGES IN VERSION 1.2-1}{
   \subsection{(MORE OR LESS) USER-VISIBLE CHANGES}{
     \itemize{
