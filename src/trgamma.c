@@ -37,7 +37,7 @@ double dtrgamma(double x, double shape1, double shape2, double scale,
         return ACT_D__0;
 
     /* handle x == 0 separately */
-    if (x == 0)
+    if (x == 0.0)
     {
 	if (shape1 * shape2 < 1) return R_PosInf;
 	if (shape1 * shape2 > 1) return ACT_D__0;

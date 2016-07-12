@@ -191,7 +191,7 @@ double dtrbeta(double x, double shape1, double shape2, double shape3,
         return ACT_D__0;
 
     /* handle x == 0 separately */
-    if (x == 0)
+    if (x == 0.0)
     {
 	if (shape2 * shape3 < 1) return R_PosInf;
 	if (shape2 * shape3 > 1) return ACT_D__0;

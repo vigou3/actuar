@@ -35,9 +35,9 @@ double dgenbeta(double x, double shape1, double shape2, double shape3,
         scale  <= 0.0)
         return R_NaN;
 
-    if (x < 0 || x > scale)
+    if (x < 0.0 || x > scale)
         return ACT_D__0;
-    if (x == 0)
+    if (x == 0.0)
     {
         tmp = shape1 * shape3;
         if (tmp > 1) return(ACT_D__0);

@@ -34,7 +34,7 @@ double dinvparalogis(double x, double shape, double scale, int give_log)
         return ACT_D__0;
 
     /* handle x == 0 separately */
-    if (x == 0)
+    if (x == 0.0)
     {
 	if (shape < 1.0) return R_PosInf;
 	if (shape > 1.0) return ACT_D__0;
