@@ -33,7 +33,7 @@ double dpareto(double x, double shape, double scale, int give_log)
         return ACT_D__0;
 
     /* handle x == 0 separately */
-    if (x == 0) ACT_D_val(shape / scale);
+    if (x == 0.0) return ACT_D_val(shape / scale);
 
     tmp = log(x) - log(scale);
     logu = - log1pexp(tmp);
