@@ -5,7 +5,19 @@
  *  zero truncated Poisson distribution. See
  *  ../R/ZeroTruncatedPoisson.R for details.
  *
- *  AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>
+ *  Zero truncated distributions have density
+ *
+ *      Pr[Z = x] = Pr[X = x]/(1 - Pr[X = 0]),
+ *
+ *  and distribution function
+ *
+ *      Pr[Z <= x] = (Pr[X <= x] - Pr[X = 0])/(1 - Pr[X = 0])
+ *
+ *  or, alternatively, survival function
+ *
+ *      Pr[Z > x] = (1 - Pr[X > x])/(1 - Pr[X = 0]).
+ *
+ *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
 
 #include <R.h>
@@ -13,7 +25,7 @@
 #include "locale.h"
 #include "dpq.h"
 
-/* The Poiaaon distribution has F(0) = Pr[X = 0] = exp(-lambda) */
+/* The Poisson distribution has F(0) = Pr[X = 0] = exp(-lambda) */
 
 double dztpois(double x, double lambda, int give_log)
 {
