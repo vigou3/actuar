@@ -23,9 +23,12 @@ FUNTAB fun_tab[] = {
     {"qinvexp",         actuar_do_dpq1,        4},
     {"minvexp",         actuar_do_dpq1,        5},
     {"mgfexp",          actuar_do_dpq1,        6},
-    {"dztpois",         actuar_do_dpq1,        7},
-    {"pztpois",         actuar_do_dpq1,        8},
-    {"qztpois",         actuar_do_dpq1,        9},
+    {"dlogarithmic",    actuar_do_dpq1,        7},
+    {"plogarithmic",    actuar_do_dpq1,        8},
+    /* {"qlogarithmic",    actuar_do_dpq1,        9}, */
+    {"dztpois",         actuar_do_dpq1,       10},
+    {"pztpois",         actuar_do_dpq1,       11},
+    {"qztpois",         actuar_do_dpq1,       12},
     /* Two parameter distributions */
     {"mgamma",          actuar_do_dpq2,         1},
     {"dinvgamma",       actuar_do_dpq2,         2},
@@ -142,7 +145,8 @@ FUNTAB fun_tab[] = {
     /* RANDOM NUMBERS FUNCTIONS */
     /* One parameter distributions */
     {"rinvexp",         actuar_do_random1,     1},
-    {"rztpois",         actuar_do_random1,     2},
+    {"rlogarithmic",    actuar_do_random1,     2},
+    {"rztpois",         actuar_do_random1,     3},
     /* Two parameter distributions */
     {"rinvgamma",       actuar_do_random2,     1},
     {"rinvparalogis",   actuar_do_random2,     2},

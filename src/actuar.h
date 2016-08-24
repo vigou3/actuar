@@ -51,6 +51,10 @@ double rinvexp(double scale);
 double minvexp(double order, double scale, int give_log);
 double levinvexp(double limit, double scale, double order, int give_log);
 
+double dlogarithmic(double x, double p, int give_log);
+double plogarithmic(double x, double p, int lower_tail, int log_p);
+double rlogarithmic(double p);
+
 double dztpois(double x, double lambda, int give_log);
 double pztpois(double q, double lambda, int lower_tail, int log_p);
 double qztpois(double p, double lambda, int lower_tail, int log_p);

@@ -2,7 +2,7 @@
  *
  * Utilities for `dpq' handling (density/probability/quantile)
  *
- * These (except the last one) are copied from nmath/dpq.h in the R
+ * These (except ACT_DLIM__0) are copied from nmath/dpq.h in the R
  * sources with the names changed from "R_" to "ACT_".
  *
  *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
@@ -54,3 +54,19 @@
 
 /* Infinite limit in "lev" */
 #define ACT_DLIM__0(x, y)   (R_FINITE(x) ? R_pow(x, y) : 0.)
+
+
+/* This is taken from nmath/nmath.h in the R sources */
+#ifdef HAVE_NEARYINT
+# define ACT_forceint(x)   nearbyint()
+#else
+# define ACT_forceint(x)   round(x)
+#endif
+# define ACT_nonint(x) 	  (fabs((x) - ACT_forceint(x)) > 1e-7*fmax2(1., fabs(x)))
+
+// for discrete d<distr>(x, ...) :
+#define ACT_D_nonint_check(x)				\
+   if (ACT_nonint(x)) {					\
+       warning(_("non-integer x = %f"), x);	\
+	return ACT_D__0;					\
+   }
