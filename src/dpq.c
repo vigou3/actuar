@@ -164,7 +164,7 @@ SEXP actuar_do_dpq1(int code, SEXP args)
     case  6:  return DPQ1_1(args, mgfexp);
     case  7:  return DPQ1_1(args, dlogarithmic);
     case  8:  return DPQ1_2(args, plogarithmic);
-    /* case  9:  return DPQ1_2(args, qlogarithmic); */
+    case  9:  return DPQ1_2(args, qlogarithmic);
     case 10:  return DPQ1_1(args, dztpois);
     case 11:  return DPQ1_2(args, pztpois);
     case 12:  return DPQ1_2(args, qztpois);

@@ -53,6 +53,7 @@ double levinvexp(double limit, double scale, double order, int give_log);
 
 double dlogarithmic(double x, double p, int give_log);
 double plogarithmic(double x, double p, int lower_tail, int log_p);
+double qlogarithmic(double x, double p, int lower_tail, int log_p);
 double rlogarithmic(double p);
 
 double dztpois(double x, double lambda, int give_log);

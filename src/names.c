@@ -25,7 +25,7 @@ FUNTAB fun_tab[] = {
     {"mgfexp",          actuar_do_dpq1,        6},
     {"dlogarithmic",    actuar_do_dpq1,        7},
     {"plogarithmic",    actuar_do_dpq1,        8},
-    /* {"qlogarithmic",    actuar_do_dpq1,        9}, */
+    {"qlogarithmic",    actuar_do_dpq1,        9},
     {"dztpois",         actuar_do_dpq1,       10},
     {"pztpois",         actuar_do_dpq1,       11},
     {"qztpois",         actuar_do_dpq1,       12},

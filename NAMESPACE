@@ -11,7 +11,7 @@ export(## Credibility theory
     ## One parameter distributions
     dinvexp, pinvexp, qinvexp, rinvexp, minvexp, levinvexp,
     mexp, levexp, mgfexp,
-    dlogarithmic, plogarithmic, rlogarithmic,
+    dlogarithmic, plogarithmic, qlogarithmic, rlogarithmic,
     dztpois, pztpois, qztpois, rztpois,
     ## Two parameter distributions
     munif, levunif, mgfunif,
