@@ -25,14 +25,13 @@ double dlogarithmic(double x, double p, int give_log)
     if (ISNAN(x) || ISNAN(p))
 	return x + p;
 #endif
-
-    /* limiting case as p approaches zero is point mass at one */
-    if (p == 0) return (x == 1) ? ACT_D__1 : ACT_D__0;
-
     if (p < 0 || p >= 1) return R_NaN;
     ACT_D_nonint_check(x);
 
     if (!R_FINITE(x) || x < 1) return ACT_D__0;
+
+    /* limiting case as p approaches zero is point mass at one */
+    if (p == 0) return (x == 1) ? ACT_D__1 : ACT_D__0;
 
     x = ACT_forceint(x);
 
@@ -52,19 +51,17 @@ double dlogarithmic(double x, double p, int give_log)
 
 double plogarithmic(double x, double p, int lower_tail, int log_p)
 {
-
 #ifdef IEEE_754
     if (ISNAN(x) || ISNAN(p))
 	return x + p;
 #endif
-
-    /* limiting case as p approaches zero is point mass at one. */
-    if (p == 0) return (x >= 1) ? ACT_DT_1 : ACT_DT_0;
-
     if (p < 0 || p >= 1) return R_NaN;
 
     if (x < 1) return ACT_DT_0;
     if (!R_FINITE(x)) return ACT_DT_1;
+
+    /* limiting case as p approaches zero is point mass at one. */
+    if (p == 0) return (x >= 1) ? ACT_DT_1 : ACT_DT_0;
 
     int i;
     double s, pk;
@@ -117,11 +114,11 @@ do_search(double y, double *z, double x, double pr, double incr)
 
 double qlogarithmic(double x, double p, int lower_tail, int log_p)
 {
-
 #ifdef IEEE_754
     if (ISNAN(x) || ISNAN(p))
 	return x + p;
 #endif
+    if (p < 0 || p >= 1) return R_NaN;
 
     /* limiting case as p approaches zero is point mass at one */
     if (p == 0)
@@ -140,8 +137,6 @@ double qlogarithmic(double x, double p, int lower_tail, int log_p)
 	    return 1.0;
 	}
     }
-
-    if (p < 0 || p >= 1) return R_NaN;
 
     ACT_Q_P01_boundaries(x, 1.0, R_PosInf);
 
@@ -207,12 +202,10 @@ double qlogarithmic(double x, double p, int lower_tail, int log_p)
 
 double rlogarithmic(double p)
 {
-    /* limiting case as p approaches zero is point mass at one. */
-    if (p == 0.0)
-        return 1.0;
+    if (p < 0 || p > 1) return R_NaN;
 
-    if (p < 0.0 || p > 1.0)
-        return R_NaN;
+    /* limiting case as p approaches zero is point mass at one. */
+    if (p == 0) return 1.0;
 
     /* Automatic selection between the LS and LK algorithms */
     if (p < 0.95)
@@ -236,13 +229,13 @@ double rlogarithmic(double p)
 	double r = log1p(-p);
 	double v = unif_rand();
 
-	if (v >= p)     return 1.0;
+	if (v >= p)       return 1.0;
 
 	double u = unif_rand();
 	double q = -expm1(r * u);
 
 	if (v <= (q * q)) return(round(1.0 + log(v)/log(q)));
-	if (v <= q)     return(1.0); /* case q^2 < v <= q */
-	return(2.0);		   /* case v > q */
+	if (v <= q)       return(1.0); /* case q^2 < v <= q */
+	return(2.0);		       /* case v > q */
     }
 }
