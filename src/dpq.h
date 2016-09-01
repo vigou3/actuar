@@ -67,8 +67,8 @@
 # define ACT_nonint(x) 	  (fabs((x) - ACT_forceint(x)) > 1e-7*fmax2(1., fabs(x)))
 
 // for discrete d<distr>(x, ...) :
-#define ACT_D_nonint_check(x)				\
-   if (ACT_nonint(x)) {					\
-       warning(_("non-integer x = %f"), x);	\
+#define ACT_D_nonint_check(x)					\
+    if (ACT_nonint(x)) {					\
+	warning(_("non-integer x = %f"), x);			\
 	return ACT_D__0;					\
-   }
+    }
