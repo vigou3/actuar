@@ -157,7 +157,7 @@ double mgfinvGauss(double t, double nu, double lambda, int give_log);
 double dztnbinom(double x, double size, double prob, int give_log);
 double pztnbinom(double q, double size, double prob, int lower_tail, int log_p);
 double qztnbinom(double p, double size, double prob, int lower_tail, int log_p);
-double rnbinom(double size, double prob);
+double rztnbinom(double size, double prob);
 
 /*   Three parameter distributions */
 double dburr(double x, double shape1, double shape2, double scale, int give_log);
