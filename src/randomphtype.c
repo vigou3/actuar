@@ -5,7 +5,8 @@
  *
  *     1. support for a matrix argument;
  *     2. no iteration over the parameters;
- *     3. support for two parameter distributions only.
+ *     3. support for two parameter distributions only;
+ *     4. no support for integer random variates.
  *
  *  For details, see random.c.
  *
@@ -53,7 +54,10 @@ static Rboolean randomphtype2(double (*f)(), double *a, double *b,
             randomphtype2(fun, REAL(a), REAL(b), na, REAL(x), n); \
             break
 
-SEXP actuar_do_randomphtype2(int code, SEXP args)
+/* The function below retains a 'type' argument that is not actually
+ * used. This is to fit within the scheme of the other random
+ * generation functions of random.c and names.c. */
+SEXP actuar_do_randomphtype2(int code, SEXP args, SEXPTYPE type /* unused */)
 {
     SEXP x, a, b, bdims;
     int i, n, na, nb, nrow, ncol;
@@ -135,9 +139,9 @@ SEXP actuar_do_randomphtype(SEXP args)
     name = CHAR(STRING_ELT(CAR(args), 0));
 
     /* Dispatch to actuar_do_random{1,2,3,4} */
-    for (i = 0; fun_tab[i].name; i++)
-        if (!strcmp(fun_tab[i].name, name))
-            return fun_tab[i].cfun(fun_tab[i].code, CDR(args));
+    for (i = 0; random_tab[i].name; i++)
+        if (!strcmp(random_tab[i].name, name))
+            return random_tab[i].cfun(random_tab[i].code, CDR(args), random_tab[i].type);
 
     /* No dispatch is an error */
     error(_("internal error in actuar_do_randomphtype"));

@@ -18,7 +18,7 @@
  *          generating function (d*, p*, q* and mgf* only).
  *
  *  Function actuar_do_dpq() will extract the name of the distribution, look
- *  up in table fun_tab defined in names.c which of actuar_do_dpq{1,2,3,4}
+ *  up in table dpq_tab defined in names.c which of actuar_do_dpq{1,2,3,4}
  *  should take care of the calculation and dispatch to this function.
  *  In turn, functions actuar_do_dpq{1,2,3,4} call function
  *  {d,p,q,m,lev,mgf}dist() to get actual values from distribution
@@ -856,11 +856,11 @@ SEXP actuar_do_dpq(SEXP args)
     name = CHAR(STRING_ELT(CAR(args), 0));
 
     /* Dispatch to actuar_do_dpq{1,2,3,4,5} */
-    for (i = 0; fun_tab[i].name; i++)
+    for (i = 0; dpq_tab[i].name; i++)
     {
-        if (!strcmp(fun_tab[i].name, name))
+        if (!strcmp(dpq_tab[i].name, name))
         {
-            return fun_tab[i].cfun(fun_tab[i].code, CDR(args));
+            return dpq_tab[i].cfun(dpq_tab[i].code, CDR(args));
         }
     }
 

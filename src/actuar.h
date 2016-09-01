@@ -12,16 +12,16 @@ SEXP actuar_do_dpq4(int code, SEXP args);
 SEXP actuar_do_dpq5(int code, SEXP args);
 
 SEXP actuar_do_random(SEXP args);
-SEXP actuar_do_random1(int code, SEXP args);
-SEXP actuar_do_random2(int code, SEXP args);
-SEXP actuar_do_random3(int code, SEXP args);
-SEXP actuar_do_random4(int code, SEXP args);
+SEXP actuar_do_random1(int code, SEXP args, SEXPTYPE type);
+SEXP actuar_do_random2(int code, SEXP args, SEXPTYPE type);
+SEXP actuar_do_random3(int code, SEXP args, SEXPTYPE type);
+SEXP actuar_do_random4(int code, SEXP args, SEXPTYPE type);
 
 SEXP actuar_do_dpqphtype(SEXP args);
 SEXP actuar_do_dpqphtype2(int code, SEXP args);
 
 SEXP actuar_do_randomphtype(SEXP args);
-SEXP actuar_do_randomphtype2(int code, SEXP args);
+SEXP actuar_do_randomphtype2(int code, SEXP args, SEXPTYPE type);
 
 SEXP actuar_do_hierarc(SEXP args);
 SEXP actuar_do_panjer(SEXP args);
@@ -213,11 +213,21 @@ double mphtype(double order, double *pi, double *T, int m, int give_log);
 double mgfphtype(double x, double *pi, double *T, int m, int give_log);
 
 
-/* Definitions for the table linking the first group of functions to
- * the second one. Table found in names.c */
+/* Definitions for the tables linking the first group of functions to
+ * the second one. Tables found in names.c. One table for
+ * {d,p,q,m,lev} functions and one for the {r} functions since we
+ * need one more argument: the type of the result. */
 typedef struct {
     char *name;
     SEXP (*cfun)(int, SEXP);
     int code;
-} FUNTAB;
-extern FUNTAB fun_tab[];
+} DPQTAB;
+extern DPQTAB dpq_tab[];
+
+typedef struct {
+    char *name;
+    SEXP (*cfun)(int, SEXP, SEXPTYPE);
+    int code;
+    SEXPTYPE type;
+} RANDOMTAB;
+extern RANDOMTAB random_tab[];

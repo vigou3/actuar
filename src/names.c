@@ -13,9 +13,9 @@
 #include <Rinternals.h>
 #include "actuar.h"
 
-FUNTAB fun_tab[] = {
-    /* DENSITY, CUMULATIVE PROBABILITY AND QUANTILE FUNCTIONS,
-     * RAW AND LIMITED MOMENTS */
+/* DENSITY, CUMULATIVE PROBABILITY AND QUANTILE FUNCTIONS,
+ * RAW AND LIMITED MOMENTS */
+DPQTAB dpq_tab[] = {
     /* One parameter distributions */
     {"mexp",            actuar_do_dpq1,        1},
     {"dinvexp",         actuar_do_dpq1,        2},
@@ -141,32 +141,35 @@ FUNTAB fun_tab[] = {
     {"pphtype",         actuar_do_dpqphtype2,  2},
     {"mphtype",         actuar_do_dpqphtype2,  3},
     {"mgfphtype",       actuar_do_dpqphtype2,  4},
+    {0, 0, 0}
+};
 
-    /* RANDOM NUMBERS FUNCTIONS */
+/* RANDOM NUMBERS FUNCTIONS */
+RANDOMTAB random_tab[] = {
     /* One parameter distributions */
-    {"rinvexp",         actuar_do_random1,     1},
-    {"rlogarithmic",    actuar_do_random1,     2},
-    {"rztpois",         actuar_do_random1,     3},
+    {"rinvexp",         actuar_do_random1,     1, REALSXP},
+    {"rlogarithmic",    actuar_do_random1,     2, INTSXP},
+    {"rztpois",         actuar_do_random1,     3, INTSXP},
     /* Two parameter distributions */
-    {"rinvgamma",       actuar_do_random2,     1},
-    {"rinvparalogis",   actuar_do_random2,     2},
-    {"rinvpareto",      actuar_do_random2,     3},
-    {"rinvweibull",     actuar_do_random2,     4},
-    {"rlgamma",         actuar_do_random2,     5},
-    {"rllogis",         actuar_do_random2,     6},
-    {"rparalogis",      actuar_do_random2,     7},
-    {"rpareto",         actuar_do_random2,     8},
-    {"rpareto1",        actuar_do_random2,     9},
+    {"rinvgamma",       actuar_do_random2,     1, REALSXP},
+    {"rinvparalogis",   actuar_do_random2,     2, REALSXP},
+    {"rinvpareto",      actuar_do_random2,     3, REALSXP},
+    {"rinvweibull",     actuar_do_random2,     4, REALSXP},
+    {"rlgamma",         actuar_do_random2,     5, REALSXP},
+    {"rllogis",         actuar_do_random2,     6, REALSXP},
+    {"rparalogis",      actuar_do_random2,     7, REALSXP},
+    {"rpareto",         actuar_do_random2,     8, REALSXP},
+    {"rpareto1",        actuar_do_random2,     9, REALSXP},
     /* Three parameter distributions */
-    {"rburr",           actuar_do_random3,     1},
-    {"rgenpareto",      actuar_do_random3,     2},
-    {"rinvburr",        actuar_do_random3,     3},
-    {"rinvtrgamma",     actuar_do_random3,     4},
-    {"rtrgamma",        actuar_do_random3,     5},
+    {"rburr",           actuar_do_random3,     1, REALSXP},
+    {"rgenpareto",      actuar_do_random3,     2, REALSXP},
+    {"rinvburr",        actuar_do_random3,     3, REALSXP},
+    {"rinvtrgamma",     actuar_do_random3,     4, REALSXP},
+    {"rtrgamma",        actuar_do_random3,     5, REALSXP},
     /* Four parameter distributions */
-    {"rtrbeta",         actuar_do_random4,     1},
-    {"rgenbeta",        actuar_do_random4,     2},
+    {"rtrbeta",         actuar_do_random4,     1, REALSXP},
+    {"rgenbeta",        actuar_do_random4,     2, REALSXP},
     /* Phase-type distributions */
-    {"rphtype",         actuar_do_randomphtype2, 1},
+    {"rphtype",         actuar_do_randomphtype2, 1, REALSXP},
     {0, 0, 0}
 };

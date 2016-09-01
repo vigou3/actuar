@@ -10,14 +10,16 @@
  *    3:x. the parameters of the distribution.
  *
  *  Function actuar_do_random() will extract the name of the
- *  distribution, look up in table fun_tab defined in names.c which of
+ *  distribution, look up in table random_tab defined in names.c which of
  *  actuar_do_random{1,2,3,4} should take care of the simulation and
  *  dispatch to this function. In turn, functions
  *  actuar_do_random{1,2,3,4} call function rdist() to get actual
  *  variates from distribution "dist".
  *
  *  This scheme is essentially what is used in base R (see files
- *  .../src/main/random.c, .../src/main/names.c in R sources).
+ *  .../src/main/random.c, .../src/main/names.c in R sources) with
+ *  add-ons taken from .../src/library/stats/src/random.c to support
+ *  return values that can be either real or integer.
  *
  * To add a new distribution: write an rdist() function, add an entry
  * in names.c and in the definition of the corresponding
@@ -33,31 +35,67 @@
 #include "actuar.h"
 #include "locale.h"
 
-/* Functions for one parameter distributions */
-static Rboolean random1(double (*f)(), double *a, int na, double *x, int n)
-{
-    double ai;
+/* Utility function used in actuar_do_random{1,2,3,4}. */
+static void fill_with_NAs(SEXP x, int n, SEXPTYPE type) {
     int i;
-    Rboolean naflag = FALSE;
-    for (i = 0; i < n; i++)
-    {
-        ai = a[i % na];
-        x[i] = f(ai);
-	if (ISNAN(x[i])) naflag = TRUE;
+
+    if (type == INTSXP) {
+        for (i = 0; i < n; i++) {
+            INTEGER(x)[i] = NA_INTEGER;
+        }
+    } else { /* REALSXP */
+        for (i = 0; i < n; i++) {
+            REAL(x)[i] = NA_REAL;
+        }
     }
-    return(naflag);
+    warning(_("NAs produced"));
 }
 
 
-#define RAND1(num, fun) \
-        case num: \
-            naflag = random1(fun, REAL(a), na, REAL(x), n); \
-            break
+/* Functions for one parameter distributions */
+static Rboolean random1(double (*f)(), double *a, int na, SEXP x, int n, SEXPTYPE type)
+{
+    int i;
+    Rboolean naflag = FALSE;
+    if (type == INTSXP)
+    {
+	double rx;
+	int *ix = INTEGER(x);
 
-SEXP actuar_do_random1(int code, SEXP args)
+	for (i = 0; i < n; i++)
+	{
+	    rx = f(a[i % na]);
+	    if (ISNAN(rx) || rx > INT_MAX || rx <= INT_MIN)
+	    {
+		naflag = TRUE;
+		ix[i] = NA_INTEGER;
+	    }
+	    else
+		ix[i] = (int) rx;
+	}
+    }
+    else /* REALSXP */
+    {
+	double *rx = REAL(x);
+	for (i = 0; i < n; i++)
+	{
+	    rx[i] = f(a[i % na]);
+	    if (ISNAN(rx[i])) naflag = TRUE;
+	}
+    }
+
+    return(naflag);
+}
+
+#define RAND1(num, fun)                                 \
+    case num:						\
+    naflag = random1(fun, REAL(a), na, x, n, type);	\
+    break
+
+SEXP actuar_do_random1(int code, SEXP args, SEXPTYPE type)
 {
     SEXP x, a;
-    int i, n, na;
+    int n, na;
 
     /* Check validity of arguments */
     if (!isVector(CAR(args)) || !isNumeric(CADR(args)))
@@ -74,7 +112,7 @@ SEXP actuar_do_random1(int code, SEXP args)
         n = LENGTH(CAR(args));
 
     /* If n == 0, return numeric(0) */
-    PROTECT(x = allocVector(REALSXP, n));
+    PROTECT(x = allocVector(type, n));
     if (n == 0)
     {
         UNPROTECT(1);
@@ -84,11 +122,7 @@ SEXP actuar_do_random1(int code, SEXP args)
     /* If length of parameters < 1, return NaN */
     na = LENGTH(CADR(args));
     if (na < 1)
-    {
-        for (i = 0; i < n; i++)
-            REAL(x)[i] = NA_REAL;
-	warning(_("NAs produced"));
-    }
+	fill_with_NAs(x, n, type);
     /* Otherwise, dispatch to appropriate r* function */
     else
     {
@@ -115,31 +149,49 @@ SEXP actuar_do_random1(int code, SEXP args)
 
 /* Functions for two parameter distributions */
 static Rboolean random2(double (*f)(), double *a, int na,
-                        double *b, int nb, double *x, int n)
+                        double *b, int nb, SEXP x, int n, SEXPTYPE type)
 {
-    double ai, bi;
     int i;
     Rboolean naflag = FALSE;
-    for (i = 0; i < n; i++)
+    if (type == INTSXP)
     {
-        ai = a[i % na];
-        bi = b[i % nb];
-        x[i] = f(ai, bi);
-	if (ISNAN(x[i])) naflag = TRUE;
+	double rx;
+	int *ix = INTEGER(x);
+
+	for (i = 0; i < n; i++)
+	{
+	    rx = f(a[i % na], b[i % nb]);
+	    if (ISNAN(rx) || rx > INT_MAX || rx <= INT_MIN)
+	    {
+		naflag = TRUE;
+		ix[i] = NA_INTEGER;
+	    }
+	    else
+		ix[i] = (int) rx;
+	}
     }
+    else /* REALSXP */
+    {
+	double *rx = REAL(x);
+	for (i = 0; i < n; i++)
+	{
+	    rx[i] = f(a[i % na], b[i % nb]);
+	    if (ISNAN(rx[i])) naflag = TRUE;
+	}
+    }
+
     return(naflag);
 }
 
-#define RAND2(num, fun) \
-        case num: \
-            naflag = random2(fun, REAL(a), na, REAL(b), nb, REAL(x), n); \
-            break
+#define RAND2(num, fun)							\
+    case num:								\
+    naflag = random2(fun, REAL(a), na, REAL(b), nb, x, n, type);	\
+    break
 
-
-SEXP actuar_do_random2(int code, SEXP args)
+SEXP actuar_do_random2(int code, SEXP args, SEXPTYPE type)
 {
     SEXP x, a, b;
-    int i, n, na, nb;
+    int n, na, nb;
 
     /* Check validity of arguments */
     if (!isVector(CAR(args)) ||
@@ -158,7 +210,7 @@ SEXP actuar_do_random2(int code, SEXP args)
         n = LENGTH(CAR(args));
 
     /* If n == 0, return numeric(0) */
-    PROTECT(x = allocVector(REALSXP, n));
+    PROTECT(x = allocVector(type, n));
     if (n == 0)
     {
         UNPROTECT(1);
@@ -169,11 +221,7 @@ SEXP actuar_do_random2(int code, SEXP args)
     na = LENGTH(CADR(args));
     nb = LENGTH(CADDR(args));
     if (na < 1 || nb < 1)
-    {
-        for (i = 0; i < n; i++)
-            REAL(x)[i] = NA_REAL;
-	warning(_("NAs produced"));
-    }
+	fill_with_NAs(x, n, type);
     /* Otherwise, dispatch to appropriate r* function */
     else
     {
@@ -204,35 +252,53 @@ SEXP actuar_do_random2(int code, SEXP args)
     return x;
 }
 
+
 /* Functions for three parameter distributions */
 static Rboolean random3(double (*f) (), double *a, int na,
                         double *b, int nb, double *c, int nc,
-                        double *x, int n)
+                        SEXP x, int n, SEXPTYPE type)
 {
-    double ai, bi, ci;
     int i;
     Rboolean naflag = FALSE;
-    for (i = 0; i < n; i++)
+    if (type == INTSXP)
     {
-        ai = a[i % na];
-        bi = b[i % nb];
-        ci = c[i % nc];
-        x[i] = f(ai, bi, ci);
-        if (ISNAN(x[i])) naflag = TRUE;
+	double rx;
+	int *ix = INTEGER(x);
+
+	for (i = 0; i < n; i++)
+	{
+	    rx = f(a[i % na], b[i % nb], c[i % nc]);
+	    if (ISNAN(rx) || rx > INT_MAX || rx <= INT_MIN)
+	    {
+		naflag = TRUE;
+		ix[i] = NA_INTEGER;
+	    }
+	    else
+		ix[i] = (int) rx;
+	}
     }
+    else /* REALSXP */
+    {
+	double *rx = REAL(x);
+	for (i = 0; i < n; i++)
+	{
+	    rx[i] = f(a[i % na], b[i % nb], c[i % nc]);
+	    if (ISNAN(rx[i])) naflag = TRUE;
+	}
+    }
+
     return(naflag);
 }
 
-#define RAND3(num, fun) \
-        case num: \
-            naflag = random3(fun, REAL(a), na, REAL(b), nb, REAL(c), nc, REAL(x), n); \
-            break
+#define RAND3(num, fun)							\
+    case num:								\
+    naflag = random3(fun, REAL(a), na, REAL(b), nb, REAL(c), nc, x, n, type); \
+    break
 
-
-SEXP actuar_do_random3(int code, SEXP args)
+SEXP actuar_do_random3(int code, SEXP args, SEXPTYPE type)
 {
     SEXP x, a, b, c;
-    int i, n, na, nb, nc;
+    int n, na, nb, nc;
 
     /* Check validity of arguments */
     if (!isVector(CAR(args)) ||
@@ -252,7 +318,7 @@ SEXP actuar_do_random3(int code, SEXP args)
         n = LENGTH(CAR(args));
 
     /* If n == 0, return numeric(0) */
-    PROTECT(x = allocVector(REALSXP, n));
+    PROTECT(x = allocVector(type, n));
     if (n == 0)
     {
         UNPROTECT(1);
@@ -264,11 +330,7 @@ SEXP actuar_do_random3(int code, SEXP args)
     nb = LENGTH(CADDR(args));
     nc = LENGTH(CADDDR(args));
     if (na < 1 || nb < 1 || nc < 1)
-    {
-        for (i = 0; i < n; i++)
-            REAL(x)[i] = NA_REAL;
-	warning(_("NAs produced"));
-    }
+	fill_with_NAs(x, n, type);
     /* Otherwise, dispatch to appropriate r* function */
     else
     {
@@ -300,32 +362,49 @@ SEXP actuar_do_random3(int code, SEXP args)
 /* Functions for four parameter distributions */
 static Rboolean random4(double (*f) (), double *a, int na,
                         double *b, int nb, double *c, int nc,
-                        double *d, int nd, double *x, int n)
+                        double *d, int nd, SEXP x, int n, SEXPTYPE type)
 {
-    double ai, bi, ci, di;
     int i;
     Rboolean naflag = FALSE;
-    for (i = 0; i < n; i++)
+    if (type == INTSXP)
     {
-        ai = a[i % na];
-        bi = b[i % nb];
-        ci = c[i % nc];
-        di = d[i % nd];
-        x[i] = f(ai, bi, ci, di);
-        if (ISNAN(x[i])) naflag = TRUE;
+	double rx;
+	int *ix = INTEGER(x);
+
+	for (i = 0; i < n; i++)
+	{
+	    rx = f(a[i % na], b[i % nb], c[i % nc], d[i % nd]);
+	    if (ISNAN(rx) || rx > INT_MAX || rx <= INT_MIN)
+	    {
+		naflag = TRUE;
+		ix[i] = NA_INTEGER;
+	    }
+	    else
+		ix[i] = (int) rx;
+	}
     }
+    else /* REALSXP */
+    {
+	double *rx = REAL(x);
+	for (i = 0; i < n; i++)
+	{
+	    rx[i] = f(a[i % na], b[i % nb], c[i % nc], d[i % nd]);
+	    if (ISNAN(rx[i])) naflag = TRUE;
+	}
+    }
+
     return(naflag);
 }
 
-#define RAND4(num, fun) \
-        case num: \
-            naflag = random4(fun, REAL(a), na, REAL(b), nb, REAL(c), nc, REAL(d), nd, REAL(x), n); \
-            break
+#define RAND4(num, fun)							\
+    case num:								\
+    naflag = random4(fun, REAL(a), na, REAL(b), nb, REAL(c), nc, REAL(d), nd, x, n, type); \
+    break
 
-SEXP actuar_do_random4(int code, SEXP args)
+SEXP actuar_do_random4(int code, SEXP args, SEXPTYPE type)
 {
     SEXP x, a, b, c, d;
-    int i, n, na, nb, nc, nd;
+    int n, na, nb, nc, nd;
 
     /* Check validity of arguments */
     if (!isVector(CAR(args)) ||
@@ -346,7 +425,7 @@ SEXP actuar_do_random4(int code, SEXP args)
         n = LENGTH(CAR(args));
 
     /* If n == 0, return numeric(0) */
-    PROTECT(x = allocVector(REALSXP, n));
+    PROTECT(x = allocVector(type, n));
     if (n == 0)
     {
         UNPROTECT(1);
@@ -359,11 +438,7 @@ SEXP actuar_do_random4(int code, SEXP args)
     nc = LENGTH(CADDDR(args));
     nd = LENGTH(CAD4R(args));
     if (na < 1 || nb < 1 || nc < 1 || nd < 1)
-    {
-        for (i = 0; i < n; i++)
-            REAL(x)[i] = NA_REAL;
-	warning(_("NAs produced"));
-    }
+	fill_with_NAs(x, n, type);
     /* Otherwise, dispatch to appropriate r* function */
     else
     {
@@ -402,10 +477,10 @@ SEXP actuar_do_random(SEXP args)
     name = CHAR(STRING_ELT(CAR(args), 0));
 
     /* Dispatch to actuar_do_random{1,2,3,4} */
-    for (i = 0; fun_tab[i].name; i++)
+    for (i = 0; random_tab[i].name; i++)
     {
-        if (!strcmp(fun_tab[i].name, name))
-            return fun_tab[i].cfun(fun_tab[i].code, CDR(args));
+        if (!strcmp(random_tab[i].name, name))
+            return random_tab[i].cfun(random_tab[i].code, CDR(args), random_tab[i].type);
     }
 
     /* No dispatch is an error */

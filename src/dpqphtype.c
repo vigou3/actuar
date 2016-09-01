@@ -182,9 +182,9 @@ SEXP actuar_do_dpqphtype(SEXP args)
     name = CHAR(STRING_ELT(CAR(args), 0));
 
     /* Dispatch to actuar_do_dpqphtype{1,2,3,4,5} */
-    for (i = 0; fun_tab[i].name; i++)
-        if (!strcmp(fun_tab[i].name, name))
-            return fun_tab[i].cfun(fun_tab[i].code, CDR(args));
+    for (i = 0; dpq_tab[i].name; i++)
+        if (!strcmp(dpq_tab[i].name, name))
+            return dpq_tab[i].cfun(dpq_tab[i].code, CDR(args));
 
     /* No dispatch is an error */
     error("internal error in actuar_do_dpqphtype");
