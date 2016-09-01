@@ -13,6 +13,7 @@ export(## Credibility theory
     mexp, levexp, mgfexp,
     dlogarithmic, plogarithmic, qlogarithmic, rlogarithmic,
     dztpois, pztpois, qztpois, rztpois,
+    dztnbinom, pztnbinom, qztnbinom, rztnbinom,
     ## Two parameter distributions
     munif, levunif, mgfunif,
     mnorm, mgfnorm,

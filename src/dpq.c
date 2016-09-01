@@ -352,6 +352,9 @@ SEXP actuar_do_dpq2(int code, SEXP args)
     case 50:  return DPQ2_1(args, minvGauss); /* notation from SuppDists */
     case 51:  return DPQ2_1(args, mgfinvGauss);
     case 52:  return DPQ2_1(args, munif);
+    case 53:  return DPQ2_1(args, dztnbinom);
+    case 54:  return DPQ2_1(args, pztnbinom);
+    case 55:  return DPQ2_1(args, qztnbinom);
     default:
         error(_("internal error in actuar_do_dpq2"));
     }

@@ -231,15 +231,16 @@ SEXP actuar_do_random2(int code, SEXP args, SEXPTYPE type)
         GetRNGstate();
         switch (code)
         {
-            RAND2(1, rinvgamma);
-            RAND2(2, rinvparalogis);
-            RAND2(3, rinvpareto);
-            RAND2(4, rinvweibull);
-            RAND2(5, rlgamma);
-            RAND2(6, rllogis);
-            RAND2(7, rparalogis);
-            RAND2(8, rpareto);
-            RAND2(9, rpareto1);
+            RAND2( 1, rinvgamma);
+            RAND2( 2, rinvparalogis);
+            RAND2( 3, rinvpareto);
+            RAND2( 4, rinvweibull);
+            RAND2( 5, rlgamma);
+            RAND2( 6, rllogis);
+            RAND2( 7, rparalogis);
+            RAND2( 8, rpareto);
+            RAND2( 9, rpareto1);
+            RAND2(10, rztnbinom);
         default:
             error(_("internal error in actuar_do_random2"));
         }

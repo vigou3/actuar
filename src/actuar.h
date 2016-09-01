@@ -39,7 +39,7 @@ double actuar_pbetanegb(double x, double a, double b); /* <- trbeta.c */
 /*   Sampling */
 int SampleSingleValue(int n, double *p);
 
-/*   One parameter distributions, hence associated with dpq1 */
+/*   One parameter distributions */
 double mexp(double order, double scale, int give_log);
 double levexp(double limit, double scale, double order, int give_log);
 double mgfexp(double t, double scale, int give_log);
@@ -61,7 +61,7 @@ double pztpois(double q, double lambda, int lower_tail, int log_p);
 double qztpois(double p, double lambda, int lower_tail, int log_p);
 double rztpois(double lambda);
 
-/*   Two parameter distributions, hence associated with dpq2 */
+/*   Two parameter distributions */
 double munif(double order, double min, double max, int give_log);
 double levunif(double limit, double min, double max, double order, int give_log);
 double mgfunif(double x, double min, double max, int give_log);
@@ -154,7 +154,12 @@ double minvGauss(double order, double nu, double lambda, int give_log);
 double levinvGauss(double limit, double nu, double lambda, double order, int give_log);
 double mgfinvGauss(double t, double nu, double lambda, int give_log);
 
-/*   Three parameter distributions, hence associated with dpq3 */
+double dztnbinom(double x, double size, double prob, int give_log);
+double pztnbinom(double q, double size, double prob, int lower_tail, int log_p);
+double qztnbinom(double p, double size, double prob, int lower_tail, int log_p);
+double rnbinom(double size, double prob);
+
+/*   Three parameter distributions */
 double dburr(double x, double shape1, double shape2, double scale, int give_log);
 double pburr(double q, double shape1, double shape2, double scale, int lower_tail, int log_p);
 double qburr(double p, double shape1, double shape2, double scale, int lower_tail, int log_p);
@@ -190,7 +195,7 @@ double rtrgamma(double shape1, double shape2, double scale);
 double mtrgamma(double order, double shape1, double shape2, double scale, int give_log);
 double levtrgamma(double limit, double shape1, double shape2, double scale, double order, int give_log);
 
-/*   Four parameter distributions, hence associated with dpq4 */
+/*   Four parameter distributions */
 double dgenbeta(double x, double shape1, double shape2, double shape3, double scale, int give_log);
 double pgenbeta(double q, double shape1, double shape2, double shape3, double scale, int lower_tail, int log_p);
 double qgenbeta(double p, double shape1, double shape2, double shape3, double scale, int lower_tail, int log_p);
