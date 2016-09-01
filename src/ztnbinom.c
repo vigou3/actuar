@@ -24,6 +24,7 @@
 #include <Rmath.h>
 #include "locale.h"
 #include "dpq.h"
+#include "actuar.h"
 
 /* The Zero truncated negative binomial distribution has
  *
@@ -35,14 +36,21 @@
  *    parametrization of the logarithmic distribution used by
  *    {d,p,q,r}logarithmic();
  * 2. prob == 1 is point mass at x = 1.
-*/
+ */
 
 double dztnbinom(double x, double size, double prob, int give_log)
 {
-    /* We compute Pr[X = 0] dbinom_raw() [as would eventually dnbinom()]
-     * to take advantage of all the optimizations for small/large values of
-     * 'prob' and 'size' (and also to skip some validity tests).
+    /* We compute Pr[X = 0] with dbinom_raw() [as would eventually
+     * dnbinom()] to take advantage of all the optimizations for
+     * small/large values of 'prob' and 'size' (and also to skip some
+     * validity tests).
      */
+
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(size) || ISNAN(prob))
+	return x + size + prob;
+#endif
+    if (prob <= 0 || prob > 1 || size < 0) return R_NaN;
 
     if (x < 1 || !R_FINITE(x)) return ACT_D__0;
 
@@ -55,11 +63,17 @@ double dztnbinom(double x, double size, double prob, int give_log)
     double lp0 = dbinom_raw(size, size, prob, 1 - prob, /*give_log*/1);
 
     /* limiting case as prob approches 1 handled automatically */
-    return ACT_D_val(dnbinom(x, size, prob, /*give_log*/0)/(-expm1m(lp0)));
+    return ACT_D_val(dnbinom(x, size, prob, /*give_log*/0)/(-expm1(lp0)));
 }
 
 double pztnbinom(double q, double size, double prob, int lower_tail, int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(size) || ISNAN(prob))
+	return q + size + prob;
+#endif
+    if (prob <= 0 || prob > 1 || size < 0) return R_NaN;
+
     if (q < 1) return ACT_DT_0;
     if (!R_FINITE(q)) return ACT_DT_1;
 
@@ -76,6 +90,12 @@ double pztnbinom(double q, double size, double prob, int lower_tail, int log_p)
 
 double qztnbinom(double p, double size, double prob, int lower_tail, int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(size) || ISNAN(prob))
+	return p + size + prob;
+#endif
+    if (prob <= 0 || prob > 1 || size < 0) return R_NaN;
+
     /* limiting case as size approches zero is logarithmic */
     if (size == 0) return qlogarithmic(p, 1 - prob, lower_tail, log_p);
 
@@ -105,8 +125,10 @@ double qztnbinom(double p, double size, double prob, int lower_tail, int log_p)
     return qnbinom(p + p0 * (0.5 - p + 0.5), size, prob, /*l._t.*/1, /*log_p*/0);
 }
 
-double rnbinom(double size, double prob)
+double rztnbinom(double size, double prob)
 {
+    if (!R_FINITE(prob) || prob <= 0 || prob > 1 || size < 0) return R_NaN;
+
     /* limiting case as size approches zero is logarithmic */
     if (size == 0) return rlogarithmic(1 - prob);
 
