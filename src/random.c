@@ -134,6 +134,7 @@ SEXP actuar_do_random1(int code, SEXP args, SEXPTYPE type)
             RAND1(1, rinvexp);
             RAND1(2, rlogarithmic);
             RAND1(3, rztpois);
+            RAND1(4, rztgeom);
         default:
             error(_("internal error in actuar_do_random1"));
         }

@@ -13,7 +13,7 @@ export(## Credibility theory
     mexp, levexp, mgfexp,
     dlogarithmic, plogarithmic, qlogarithmic, rlogarithmic,
     dztpois, pztpois, qztpois, rztpois,
-    dztnbinom, pztnbinom, qztnbinom, rztnbinom,
+    dztgeom, pztgeom, qztgeom, rztgeom,
     ## Two parameter distributions
     munif, levunif, mgfunif,
     mnorm, mgfnorm,
@@ -35,6 +35,7 @@ export(## Credibility theory
     mweibull, levweibull,
     minvGauss, levinvGauss, mgfinvGauss, #notation from SuppDists package
     minvgauss, levinvgauss, mgfinvgauss,
+    dztnbinom, pztnbinom, qztnbinom, rztnbinom,
     ## Three parameter distributions
     dburr, pburr, qburr, rburr, mburr, levburr,
     dgenpareto, pgenpareto, qgenpareto, rgenpareto, mgenpareto, levgenpareto,

@@ -54,7 +54,7 @@ double dztnbinom(double x, double size, double prob, int give_log)
 
     if (x < 1 || !R_FINITE(x)) return ACT_D__0;
 
-    /* limiting case as size approches zero is logarithmic */
+    /* limiting case as size approaches zero is logarithmic */
     if (size == 0) return dlogarithmic(x, 1 - prob, give_log);
 
     /* limiting case as prob approaches one is point mass at one */
@@ -62,7 +62,6 @@ double dztnbinom(double x, double size, double prob, int give_log)
 
     double lp0 = dbinom_raw(size, size, prob, 1 - prob, /*give_log*/1);
 
-    /* limiting case as prob approches 1 handled automatically */
     return ACT_D_val(dnbinom(x, size, prob, /*give_log*/0)/(-expm1(lp0)));
 }
 
@@ -77,7 +76,7 @@ double pztnbinom(double q, double size, double prob, int lower_tail, int log_p)
     if (q < 1) return ACT_DT_0;
     if (!R_FINITE(q)) return ACT_DT_1;
 
-    /* limiting case as size approches zero is logarithmic */
+    /* limiting case as size approaches zero is logarithmic */
     if (size == 0) return plogarithmic(q, 1 - prob, lower_tail, log_p);
 
     /* limiting case as prob approaches one is point mass at one */
@@ -96,10 +95,10 @@ double qztnbinom(double p, double size, double prob, int lower_tail, int log_p)
 #endif
     if (prob <= 0 || prob > 1 || size < 0) return R_NaN;
 
-    /* limiting case as size approches zero is logarithmic */
+    /* limiting case as size approaches zero is logarithmic */
     if (size == 0) return qlogarithmic(p, 1 - prob, lower_tail, log_p);
 
-    /* limiting case as p approaches one is point mass at one */
+    /* limiting case as prob approaches one is point mass at one */
     if (prob == 1)
     {
 	/* simplified ACT_Q_P01_boundaries macro */
@@ -129,10 +128,10 @@ double rztnbinom(double size, double prob)
 {
     if (!R_FINITE(prob) || prob <= 0 || prob > 1 || size < 0) return R_NaN;
 
-    /* limiting case as size approches zero is logarithmic */
+    /* limiting case as size approaches zero is logarithmic */
     if (size == 0) return rlogarithmic(1 - prob);
 
-    /* limiting case as p approaches one is point mass at one */
+    /* limiting case as prob approaches one is point mass at one */
     if (prob == 1) return 1.0;
 
     double p0 = dbinom_raw(size, size, prob, 1 - prob, /*give_log*/0);

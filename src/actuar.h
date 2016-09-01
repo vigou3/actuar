@@ -61,6 +61,11 @@ double pztpois(double q, double lambda, int lower_tail, int log_p);
 double qztpois(double p, double lambda, int lower_tail, int log_p);
 double rztpois(double lambda);
 
+double dztgeom(double x, double prob, int give_log);
+double pztgeom(double q, double prob, int lower_tail, int log_p);
+double qztgeom(double p, double prob, int lower_tail, int log_p);
+double rztgeom(double prob);
+
 /*   Two parameter distributions */
 double munif(double order, double min, double max, int give_log);
 double levunif(double limit, double min, double max, double order, int give_log);
