@@ -88,6 +88,9 @@ DPQTAB dpq_tab[] = {
     {"dztnbinom",       actuar_do_dpq2,        53},
     {"pztnbinom",       actuar_do_dpq2,        54},
     {"qztnbinom",       actuar_do_dpq2,        55},
+    {"dztbinom",        actuar_do_dpq2,        56},
+    {"pztbinom",        actuar_do_dpq2,        57},
+    {"qztbinom",        actuar_do_dpq2,        58},
     /* Three parameter distributions */
     {"dburr",           actuar_do_dpq3,         1},
     {"pburr",           actuar_do_dpq3,         2},
@@ -168,6 +171,7 @@ RANDOMTAB random_tab[] = {
     {"rpareto",         actuar_do_random2,     8, REALSXP},
     {"rpareto1",        actuar_do_random2,     9, REALSXP},
     {"rztnbinom",       actuar_do_random2,    10, INTSXP},
+    {"rztbinom",        actuar_do_random2,    11, INTSXP},
     /* Three parameter distributions */
     {"rburr",           actuar_do_random3,     1, REALSXP},
     {"rgenpareto",      actuar_do_random3,     2, REALSXP},

@@ -36,6 +36,7 @@ export(## Credibility theory
     minvGauss, levinvGauss, mgfinvGauss, #notation from SuppDists package
     minvgauss, levinvgauss, mgfinvgauss,
     dztnbinom, pztnbinom, qztnbinom, rztnbinom,
+    dztbinom, pztbinom, qztbinom, rztbinom,
     ## Three parameter distributions
     dburr, pburr, qburr, rburr, mburr, levburr,
     dgenpareto, pgenpareto, qgenpareto, rgenpareto, mgenpareto, levgenpareto,

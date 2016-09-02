@@ -164,6 +164,11 @@ double pztnbinom(double q, double size, double prob, int lower_tail, int log_p);
 double qztnbinom(double p, double size, double prob, int lower_tail, int log_p);
 double rztnbinom(double size, double prob);
 
+double dztbinom(double x, double size, double prob, int give_log);
+double pztbinom(double q, double size, double prob, int lower_tail, int log_p);
+double qztbinom(double p, double size, double prob, int lower_tail, int log_p);
+double rztbinom(double size, double prob);
+
 /*   Three parameter distributions */
 double dburr(double x, double shape1, double shape2, double scale, int give_log);
 double pburr(double q, double shape1, double shape2, double scale, int lower_tail, int log_p);

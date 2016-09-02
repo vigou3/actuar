@@ -1,0 +1,21 @@
+### ===== actuar: An R Package for Actuarial Science =====
+###
+### Definition of the {d,p,q,r}ztbinom functions to compute
+### characteristics of the Zero Truncated Binomial distribution.
+###
+### See Appendix B of Klugman, Panjer & Willmot, Loss Models, Second
+### Edition, Wiley, 2004.
+###
+### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
+
+dztbinom <- function (x, size, prob, log = FALSE)
+    .External("actuar_do_dpq", "dztbinom", x, size, prob, log)
+
+pztbinom <- function(q, size, prob, lower.tail = TRUE, log.p = FALSE)
+    .External("actuar_do_dpq", "pztbinom", q, size, prob, lower.tail, log.p)
+
+qztbinom <- function(p, size, prob, lower.tail = TRUE, log.p = FALSE)
+    .External("actuar_do_dpq", "qztbinom", p, size, prob, lower.tail, log.p)
+
+rztbinom <- function(n, size, prob)
+    .External("actuar_do_random", "rztbinom", n, size, prob)
