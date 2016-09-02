@@ -94,7 +94,7 @@ double qztpois(double p, double lambda, int lower_tail, int log_p)
     ACT_Q_P01_boundaries(p, 1, R_PosInf);
     p = ACT_D_qIv(p);
 
-    return qpois(p + exp(-lambda) * (0.5 - p + 0.5), lambda, /*l._t.*/1, /*log_p*/0);
+    return qpois(p + exp(-lambda) * (1 - p), lambda, /*l._t.*/1, /*log_p*/0);
 }
 
 double rztpois(double lambda)
