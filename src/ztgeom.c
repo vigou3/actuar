@@ -1,0 +1,109 @@
+/*  ===== actuar: An R Package for Actuarial Science =====
+ *
+ *  Functions to compute probability function, cumulative distribution
+ *  and quantile functions, and to simulate random variates for the
+ *  zero truncated geometric distribution. See
+ *  ../R/ZeroTruncatedGeometric.R for details.
+ *
+ *  Zero truncated distributions have density
+ *
+ *      Pr[Z = x] = Pr[X = x]/(1 - Pr[X = 0]),
+ *
+ *  and distribution function
+ *
+ *      Pr[Z <= x] = (Pr[X <= x] - Pr[X = 0])/(1 - Pr[X = 0])
+ *
+ *  or, alternatively, survival function
+ *
+ *      Pr[Z > x] = (1 - Pr[X > x])/(1 - Pr[X = 0]).
+ *
+ *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
+ */
+
+#include <R.h>
+#include <Rmath.h>
+#include "locale.h"
+#include "dpq.h"
+#include "actuar.h"
+
+/* The zero truncated geometric distribution has
+ *
+ *   F(0) = Pr[X = 0] = prob.
+ *
+ * Limiting case: prob == 1 is point mass at x = 1.
+ */
+
+double dztgeom(double x, double prob, int give_log)
+{
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(prob))
+	return x + prob;
+#endif
+    if (prob <= 0 || prob > 1) return R_NaN;
+
+    if (x < 1 || !R_FINITE(x)) return ACT_D__0;
+
+    /* limiting case as prob approaches one is point mass at one */
+    if (prob == 1) return (x == 1) ? ACT_D__1 : ACT_D__0;
+
+    return ACT_D_val(dgeom(x, prob, /*give_log*/0)/(1 - prob));
+}
+
+double pztgeom(double q, double prob, int lower_tail, int log_p)
+{
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(prob))
+	return q + prob;
+#endif
+    if (prob <= 0 || prob > 1) return R_NaN;
+
+    if (q < 1) return ACT_DT_0;
+    if (!R_FINITE(q)) return ACT_DT_1;
+
+    /* limiting case as prob approaches one is point mass at one */
+    if (prob == 1) return (q >= 1) ? ACT_D__1 : ACT_D__0;
+
+    return ACT_DT_Cval(pgeom(q, prob, /*l._t.*/0, /*log_p*/0)/(1 - prob));
+}
+
+double qztgeom(double p, double prob, int lower_tail, int log_p)
+{
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(prob))
+	return p + prob;
+#endif
+    if (prob <= 0 || prob > 1) return R_NaN;
+
+    /* limiting case as prob approaches one is point mass at one */
+    if (prob == 1)
+    {
+	/* simplified ACT_Q_P01_boundaries macro */
+	if (log_p)
+	{
+	    if (p > 0)
+		return R_NaN;
+	    return 1.0;
+	}
+	else /* !log_p */
+	{
+	    if (p < 0 || p > 1)
+		return R_NaN;
+	    return 1.0;
+	}
+    }
+
+    ACT_Q_P01_boundaries(p, 1, R_PosInf);
+    p = ACT_D_qIv(p);
+
+    return qgeom(p + (1 - prob) * (1 - p), prob, /*l._t.*/1, /*log_p*/0);
+}
+
+double rztgeom(double prob)
+{
+    if (!R_FINITE(prob) || prob <= 0 || prob > 1) return R_NaN;
+
+    /* limiting case as p approaches one is point mass at one */
+    if (prob == 1) return 1.0;
+
+    return qgeom(runif(1 - prob, 1), prob, /*l._t.*/1, /*log_p*/0);
+}
