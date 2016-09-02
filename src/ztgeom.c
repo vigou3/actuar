@@ -48,28 +48,28 @@ double dztgeom(double x, double prob, int give_log)
     return ACT_D_val(dgeom(x, prob, /*give_log*/0)/(1 - prob));
 }
 
-double pztgeom(double q, double prob, int lower_tail, int log_p)
+double pztgeom(double x, double prob, int lower_tail, int log_p)
 {
 #ifdef IEEE_754
-    if (ISNAN(q) || ISNAN(prob))
-	return q + prob;
+    if (ISNAN(x) || ISNAN(prob))
+	return x + prob;
 #endif
     if (prob <= 0 || prob > 1) return R_NaN;
 
-    if (q < 1) return ACT_DT_0;
-    if (!R_FINITE(q)) return ACT_DT_1;
+    if (x < 1) return ACT_DT_0;
+    if (!R_FINITE(x)) return ACT_DT_1;
 
     /* limiting case as prob approaches one is point mass at one */
-    if (prob == 1) return (q >= 1) ? ACT_D__1 : ACT_D__0;
+    if (prob == 1) return (x >= 1) ? ACT_D__1 : ACT_D__0;
 
-    return ACT_DT_Cval(pgeom(q, prob, /*l._t.*/0, /*log_p*/0)/(1 - prob));
+    return ACT_DT_Cval(pgeom(x, prob, /*l._t.*/0, /*log_p*/0)/(1 - prob));
 }
 
-double qztgeom(double p, double prob, int lower_tail, int log_p)
+double qztgeom(double x, double prob, int lower_tail, int log_p)
 {
 #ifdef IEEE_754
-    if (ISNAN(p) || ISNAN(prob))
-	return p + prob;
+    if (ISNAN(x) || ISNAN(prob))
+	return x + prob;
 #endif
     if (prob <= 0 || prob > 1) return R_NaN;
 
@@ -79,22 +79,22 @@ double qztgeom(double p, double prob, int lower_tail, int log_p)
 	/* simplified ACT_Q_P01_boundaries macro */
 	if (log_p)
 	{
-	    if (p > 0)
+	    if (x > 0)
 		return R_NaN;
 	    return 1.0;
 	}
 	else /* !log_p */
 	{
-	    if (p < 0 || p > 1)
+	    if (x < 0 || x > 1)
 		return R_NaN;
 	    return 1.0;
 	}
     }
 
-    ACT_Q_P01_boundaries(p, 1, R_PosInf);
-    p = ACT_D_qIv(p);
+    ACT_Q_P01_boundaries(x, 1, R_PosInf);
+    x = ACT_D_qIv(x);
 
-    return qgeom(p + (1 - prob) * (1 - p), prob, /*l._t.*/1, /*log_p*/0);
+    return qgeom(x + (1 - prob) * (1 - x), prob, /*l._t.*/1, /*log_p*/0);
 }
 
 double rztgeom(double prob)

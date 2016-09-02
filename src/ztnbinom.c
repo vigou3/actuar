@@ -65,38 +65,38 @@ double dztnbinom(double x, double size, double prob, int give_log)
     return ACT_D_val(dnbinom(x, size, prob, /*give_log*/0)/(-expm1(lp0)));
 }
 
-double pztnbinom(double q, double size, double prob, int lower_tail, int log_p)
+double pztnbinom(double x, double size, double prob, int lower_tail, int log_p)
 {
 #ifdef IEEE_754
-    if (ISNAN(q) || ISNAN(size) || ISNAN(prob))
-	return q + size + prob;
+    if (ISNAN(x) || ISNAN(size) || ISNAN(prob))
+	return x + size + prob;
 #endif
     if (prob <= 0 || prob > 1 || size < 0) return R_NaN;
 
-    if (q < 1) return ACT_DT_0;
-    if (!R_FINITE(q)) return ACT_DT_1;
+    if (x < 1) return ACT_DT_0;
+    if (!R_FINITE(x)) return ACT_DT_1;
 
     /* limiting case as size approaches zero is logarithmic */
-    if (size == 0) return plogarithmic(q, 1 - prob, lower_tail, log_p);
+    if (size == 0) return plogarithmic(x, 1 - prob, lower_tail, log_p);
 
     /* limiting case as prob approaches one is point mass at one */
-    if (prob == 1) return (q >= 1) ? ACT_D__1 : ACT_D__0;
+    if (prob == 1) return (x >= 1) ? ACT_D__1 : ACT_D__0;
 
     double lp0 = dbinom_raw(size, size, prob, 1 - prob, /*give_log*/1);
 
-    return ACT_DT_Cval(pnbinom(q, size, prob, /*l._t.*/0, /*log_p*/0)/(-expm1(lp0)));
+    return ACT_DT_Cval(pnbinom(x, size, prob, /*l._t.*/0, /*log_p*/0)/(-expm1(lp0)));
 }
 
-double qztnbinom(double p, double size, double prob, int lower_tail, int log_p)
+double qztnbinom(double x, double size, double prob, int lower_tail, int log_p)
 {
 #ifdef IEEE_754
-    if (ISNAN(p) || ISNAN(size) || ISNAN(prob))
-	return p + size + prob;
+    if (ISNAN(x) || ISNAN(size) || ISNAN(prob))
+	return x + size + prob;
 #endif
     if (prob <= 0 || prob > 1 || size < 0) return R_NaN;
 
     /* limiting case as size approaches zero is logarithmic */
-    if (size == 0) return qlogarithmic(p, 1 - prob, lower_tail, log_p);
+    if (size == 0) return qlogarithmic(x, 1 - prob, lower_tail, log_p);
 
     /* limiting case as prob approaches one is point mass at one */
     if (prob == 1)
@@ -104,24 +104,24 @@ double qztnbinom(double p, double size, double prob, int lower_tail, int log_p)
 	/* simplified ACT_Q_P01_boundaries macro */
 	if (log_p)
 	{
-	    if (p > 0)
+	    if (x > 0)
 		return R_NaN;
 	    return 1.0;
 	}
 	else /* !log_p */
 	{
-	    if (p < 0 || p > 1)
+	    if (x < 0 || x > 1)
 		return R_NaN;
 	    return 1.0;
 	}
     }
 
-    ACT_Q_P01_boundaries(p, 1, R_PosInf);
-    p = ACT_D_qIv(p);
+    ACT_Q_P01_boundaries(x, 1, R_PosInf);
+    x = ACT_D_qIv(x);
 
     double p0 = dbinom_raw(size, size, prob, 1 - prob, /*give_log*/0);
 
-    return qnbinom(p + p0 * (1 - p), size, prob, /*l._t.*/1, /*log_p*/0);
+    return qnbinom(x + p0 * (1 - x), size, prob, /*l._t.*/1, /*log_p*/0);
 }
 
 double rztnbinom(double size, double prob)

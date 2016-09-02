@@ -48,28 +48,28 @@ double dztpois(double x, double lambda, int give_log)
     return ACT_D_exp(dpois(x, lambda, /*give_log*/1) - ACT_Log1_Exp(-lambda));
 }
 
-double pztpois(double q, double lambda, int lower_tail, int log_p)
+double pztpois(double x, double lambda, int lower_tail, int log_p)
 {
 #ifdef IEEE_754
-    if (ISNAN(q) || ISNAN(lambda))
-	return q + lambda;
+    if (ISNAN(x) || ISNAN(lambda))
+	return x + lambda;
 #endif
     if (lambda < 0) return R_NaN;
 
-    if (q < 1) return ACT_DT_0;
-    if (!R_FINITE(q)) return ACT_DT_1;
+    if (x < 1) return ACT_DT_0;
+    if (!R_FINITE(x)) return ACT_DT_1;
 
     /* limiting case as lambda approaches zero is point mass at one */
-    if (lambda == 0) return (q >= 1) ? ACT_D__1 : ACT_D__0;
+    if (lambda == 0) return (x >= 1) ? ACT_D__1 : ACT_D__0;
 
-    return ACT_DT_Cval(ppois(q, lambda, /*l._t.*/0, /*log_p*/0)/(-expm1(-lambda)));
+    return ACT_DT_Cval(ppois(x, lambda, /*l._t.*/0, /*log_p*/0)/(-expm1(-lambda)));
 }
 
-double qztpois(double p, double lambda, int lower_tail, int log_p)
+double qztpois(double x, double lambda, int lower_tail, int log_p)
 {
 #ifdef IEEE_754
-    if (ISNAN(p) || ISNAN(lambda))
-	return p + lambda;
+    if (ISNAN(x) || ISNAN(lambda))
+	return x + lambda;
 #endif
     if (lambda < 0 || !R_FINITE(lambda)) return R_NaN;
 
@@ -79,22 +79,22 @@ double qztpois(double p, double lambda, int lower_tail, int log_p)
 	/* simplified ACT_Q_P01_boundaries macro */
 	if (log_p)
 	{
-	    if (p > 0)
+	    if (x > 0)
 		return R_NaN;
 	    return 1.0;
 	}
 	else /* !log_p */
 	{
-	    if (p < 0 || p > 1)
+	    if (x < 0 || x > 1)
 		return R_NaN;
 	    return 1.0;
 	}
     }
 
-    ACT_Q_P01_boundaries(p, 1, R_PosInf);
-    p = ACT_D_qIv(p);
+    ACT_Q_P01_boundaries(x, 1, R_PosInf);
+    x = ACT_D_qIv(x);
 
-    return qpois(p + exp(-lambda) * (1 - p), lambda, /*l._t.*/1, /*log_p*/0);
+    return qpois(x + exp(-lambda) * (1 - x), lambda, /*l._t.*/1, /*log_p*/0);
 }
 
 double rztpois(double lambda)
