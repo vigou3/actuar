@@ -24,7 +24,6 @@
 #include <Rmath.h>
 #include "locale.h"
 #include "dpq.h"
-#include "actuar.h"
 
 /* The zero truncated geometric distribution has
  *
