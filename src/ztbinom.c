@@ -49,7 +49,7 @@ double dztbinom(double x, double size, double prob, int give_log)
     if (ISNAN(x) || ISNAN(size) || ISNAN(prob))
 	return x + size + prob;
 #endif
-    if (prob <= 0 || prob > 1 || size < 1) return R_NaN;
+    if (prob < 0 || prob > 1 || size < 1) return R_NaN;
 
     if (x < 1 || !R_FINITE(x)) return ACT_D__0;
 
@@ -67,7 +67,7 @@ double pztbinom(double x, double size, double prob, int lower_tail, int log_p)
     if (ISNAN(x) || ISNAN(size) || ISNAN(prob))
 	return x + size + prob;
 #endif
-    if (prob <= 0 || prob > 1 || size < 1) return R_NaN;
+    if (prob < 0 || prob > 1 || size < 1) return R_NaN;
 
     if (x < 1) return ACT_DT_0;
     if (!R_FINITE(x)) return ACT_DT_1;
@@ -86,7 +86,7 @@ double qztbinom(double x, double size, double prob, int lower_tail, int log_p)
     if (ISNAN(x) || ISNAN(size) || ISNAN(prob))
 	return x + size + prob;
 #endif
-    if (prob <= 0 || prob > 1 || size < 1) return R_NaN;
+    if (prob < 0 || prob > 1 || size < 1) return R_NaN;
 
     /* limiting cases as size -> 1 or prob -> 0 are point mass at one */
     if (size == 1 || prob == 0)
@@ -116,12 +116,12 @@ double qztbinom(double x, double size, double prob, int lower_tail, int log_p)
 
 double rztbinom(double size, double prob)
 {
-    if (!R_FINITE(prob) || prob <= 0 || prob > 1 || size < 0) return R_NaN;
+    if (!R_FINITE(prob) || prob < 0 || prob > 1 || size < 0) return R_NaN;
 
     /* limiting cases as size -> 1 or prob -> 0 are point mass at one */
     if (size == 1 || prob == 0) return 1.0;
 
     double p0 = dbinom_raw(0, size, prob, 1 - prob, /*give_log*/0);
 
-    return qnbinom(runif(p0, 1), size, prob, /*l._t.*/1, /*log_p*/0);
+    return qbinom(runif(p0, 1), size, prob, /*l._t.*/1, /*log_p*/0);
 }
