@@ -111,7 +111,7 @@ double qztbinom(double x, double size, double prob, int lower_tail, int log_p)
 
     double p0 = dbinom_raw(0, size, prob, 1 - prob, /*give_log*/0);
 
-    return qbinom(x + p0 * (1 - x), size, prob, /*l._t.*/1, /*log_p*/0);
+    return qbinom(p0 + (1 - p0) * x, size, prob, /*l._t.*/1, /*log_p*/0);
 }
 
 double rztbinom(double size, double prob)
