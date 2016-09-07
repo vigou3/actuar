@@ -25,7 +25,7 @@ rztnbinom(n, size, prob)
     taken to be the number required.}
   \item{size}{target for number of successful trials, or dispersion
     parameter. Must be positive, need not be integer.}
-  \item{prob}{parameter. \code{0 <= prob < 1}}.
+  \item{prob}{parameter. \code{0 < prob <= 1}}.
   \item{log, log.p}{logical; if \code{TRUE}, probabilities
     \eqn{p} are returned as \eqn{\log(p)}{log(p)}.}
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
@@ -40,21 +40,21 @@ rztnbinom(n, size, prob)
     P[Z <= x] = (P[X <= x] - P[X = 0])/(1 - P[X = 0])},
   for \eqn{x = 1, 2, \ldots}, has a zero truncated negative binomial
   distribution when the random variable \eqn{X} has a
-  \link[=NegBinomial]{negative binomial distribution}.
+  \link[=NegBinomial]{negative binomial} distribution.
 
   The zero truncated negative binomial distribution with \code{size}
   \eqn{= r} and \code{prob} \eqn{= p} has probability mass function
   \deqn{
-    P[X = x] = \frac{\Gamma(x+r) p^r (1-p)^x}{\Gamma(r) x! (1-p^r)}}{
-    [\Gamma(x+r) p^r (1-p)^x]/[\Gamma(n) x! (1-p^r)]}
+    P[X = x] = \frac{\Gamma(x + r) p^r (1 - p)^x}{\Gamma(r) x! (1 - p^r)}}{
+    [\Gamma(x + r) p^r (1 - p)^x]/[\Gamma(n) x! (1 - p^r)]}
   for \eqn{x = 1, 2, \ldots}, \eqn{r \ge 0} and \eqn{0 < p \le 1}.
 
-  The mean is \eqn{r(1-p)/(p(1-p^r))} and the variance is
-  \eqn{[r(1-p)(1 - p^r(1 + r(1-p))]/[p(1-p^r)^2]}.
+  The mean is \eqn{r(1 - p)/(p(1 - p^r))} and the variance is
+  \eqn{[r(1 - p)(1 - p^r(1 + r(1 - p))]/[p(1 - p^r)^2]}.
 
   In the terminology of Klugman et al. (2012), the zero truncated
   negative binomial is a member of the \eqn{(a, b, 1)} family of
-  distributions with \eqn{a = 1-p} and \eqn{b = (r-1)(1-p)}.
+  distributions with \eqn{a = 1 - p} and \eqn{b = (r - 1)(1 - p)}.
 
   The limiting case \code{size == 0} is the
   \link[=Logarithmic]{logarithmic} distribution with parameter \code{1 -
@@ -88,8 +88,8 @@ rztnbinom(n, size, prob)
   Functions \code{\{d,p,q\}ztnbinom} use their equivalent
   \code{\{d,p,q\}nbinom} function for all but the trivial input values.
 
-  \code{rztnbinom} uses a simple inversion algorithm as suggested by
-  Peter Dalgaard on the r-help mailing list %
+  \code{rztnbinom} uses the simple inversion algorithm suggested by
+  Peter Dalgaard on the r-help mailing list on 1 May 2005 %
   (\url{https://stat.ethz.ch/pipermail/r-help/2005-May/070680.html}).
 }
 \references{
@@ -111,7 +111,9 @@ rztnbinom(n, size, prob)
 }
 \examples{
 ## Example 6.3 of Klugman et al. (2012)
-dztnbinom(c(1, 2, 3), size = 2.5, prob = 1/(1 + 0.5))
+p <- 1/(1 + 0.5)
+dztnbinom(c(1, 2, 3), size = 2.5, prob = p)
+dnbinom(c(1, 2, 3), 2.5, p)/pnbinom(0, 2.5, p, lower = FALSE) # same
 
 ## Limiting cases
 pztnbinom(1, 2, prob = 1)        # point mass at 1
@@ -120,10 +122,10 @@ dztnbinom(2, size = 0, 0.25)     # == dlogarithmic(2, 0.75)
 
 qztnbinom(pztnbinom(1:10, 2.5, 0.3), 2.5, 0.3)
 
-x <- rztnbinom(10000, size = 2.5, prob = 0.4)
+x <- rztnbinom(1000, size = 2.5, prob = 0.4)
 y <- sort(unique(x))
 plot(y, table(x)/length(x), type = "h", lwd = 2,
-     pch = 19, col = "black", ylab = "p(x)",
+     pch = 19, col = "black", xlab = "x", ylab = "p(x)",
      main = "Empirical vs theoretical probabilities")
 points(y, dztnbinom(y, size = 2.5, prob = 0.4),
        pch = 19, col = "red")
