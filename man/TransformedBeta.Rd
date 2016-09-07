@@ -122,5 +122,49 @@ ptrbeta(qtrbeta(p, 2, 3, 4, 5), 2, 3, 4, 5)
 qpearson6(0.3, 2, 3, 4, 5, lower.tail = FALSE)
 mtrbeta(2, 2, 3, 4, 5) - mtrbeta(1, 2, 3, 4, 5) ^ 2
 levtrbeta(10, 2, 3, 4, 5, order = 2)
+
+## r = 0
+shape1 <- 1/3
+shape2 <- 3
+shape3 <- 2
+scale <- 0.5
+order <- 2
+limit <- 10
+levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order)
+levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order, neg2 = TRUE)
+
+## r = 1
+shape1 <- 1/3
+shape2 <- 3/2.5
+shape3 <- 3
+scale <- 0.5
+order <- 2
+limit <- 10
+levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order)
+levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order, neg2 = TRUE)
+
+## r = 2
+shape1 <- 1/3
+shape2 <- 3/4
+shape3 <- 4
+scale <- 0.5
+order <- 2
+limit <- 10
+levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order)
+levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order, neg2 = TRUE)
+
+## r = 3
+shape1 <- 1/3
+shape2 <- 3/6
+shape3 <- 5
+scale <- 0.5
+order <- 2
+limit <- 10
+levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order)
+levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order, neg2 = TRUE)
+
+system.time(levtrbeta(rep.int(limit, 1E6), shape1, shape2, shape3, scale = scale, order = order))
+system.time(levtrbeta(rep.int(limit, 1E6), shape1, shape2, shape3, scale = scale, order = order, neg2 = TRUE))
+
 }
 \keyword{distribution}

@@ -1,4 +1,5 @@
 \name{ZeroTruncatedNegativeBinomial}
+\alias{ZeroTruncatedNegativeBinomial}
 \alias{ZTNegativeBinomial}
 \alias{ZTNegBinomial}
 \alias{dztnbinom}
@@ -44,10 +45,11 @@ rztnbinom(n, size, prob)
 
   The zero truncated negative binomial distribution with \code{size}
   \eqn{= r} and \code{prob} \eqn{= p} has probability mass function
-  \deqn{
-    P[X = x] = \frac{\Gamma(x + r) p^r (1 - p)^x}{\Gamma(r) x! (1 - p^r)}}{
-    [\Gamma(x + r) p^r (1 - p)^x]/[\Gamma(n) x! (1 - p^r)]}
-  for \eqn{x = 1, 2, \ldots}, \eqn{r \ge 0} and \eqn{0 < p \le 1}.
+  \deqn{%
+    P[X = x] = \frac{\Gamma(x + r) p^r (1 - p)^x}{\Gamma(r) x! (1 - p^r)}}{%
+    P[X = x] = [\Gamma(x + r) p^r (1 - p)^x]/[\Gamma(n) x! (1 - p^r)]}
+  for \eqn{x = 1, 2, \ldots}, \eqn{r \ge 0} and \eqn{0 < p < 1}, and
+  \eqn{P[X = 1] = 1} when \eqn{p = 1}.
 
   The mean is \eqn{r(1 - p)/(p(1 - p^r))} and the variance is
   \eqn{[r(1 - p)(1 - p^r(1 + r(1 - p))]/[p(1 - p^r)^2]}.
@@ -104,7 +106,7 @@ rztnbinom(n, size, prob)
 
   \code{\link{dztgeom}} for the zero truncated geometric and
   \code{\link{dlogarithmic}} for the logarithmic, which are a special
-  casese of the zero truncated negative binomial.
+  case of the zero truncated negative binomial.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca}

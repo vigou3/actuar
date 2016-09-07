@@ -32,7 +32,9 @@ rlogarithmic(n, prob)
 \details{
   The Logarithmic (or log-series) distribution with parameter
   \code{prob} \eqn{= \theta}{= p} has probability mass function
-  \deqn{P[X = x] = \frac{a \theta^x}{x}}{P[X = x] = a p^x / x},
+  \deqn{%
+    P[X = x] = \frac{a \theta^x}{x}}{%
+    P[X = x] = a p^x / x},
   with \eqn{a = -1/\log(1 - \theta)}{a = -1/log(1 - p)} and for \eqn{x =
     1, 2, \ldots}, \eqn{0 \le p < 1}.
 

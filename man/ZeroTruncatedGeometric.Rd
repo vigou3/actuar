@@ -1,0 +1,109 @@
+\name{ZeroTruncatedGeometric}
+\alias{ZeroTruncatedGeometric}
+\alias{ZTGeometric}
+\alias{dztgeom}
+\alias{pztgeom}
+\alias{qztgeom}
+\alias{rztgeom}
+\title{The Zero Truncated Geometric Distribution}
+\description{
+  Density function, distribution function, quantile function and random
+  generation for the zero truncated geometric distribution with
+  parameter \code{prob}.
+}
+\usage{
+dztgeom(x, prob, log = FALSE)
+pztgeom(q, prob, lower.tail = TRUE, log.p = FALSE)
+qztgeom(p, prob, lower.tail = TRUE, log.p = FALSE)
+rztgeom(n, prob)
+}
+\arguments{
+  \item{x}{vector of (strictly positive integer) quantiles.}
+  \item{q}{vector of quantiles.}
+  \item{p}{vector of probabilities.}
+  \item{n}{number of observations. If \code{length(n) > 1}, the length is
+    taken to be the number required.}
+  \item{prob}{parameter. \code{0 < prob <= 1}}.
+  \item{log, log.p}{logical; if \code{TRUE}, probabilities
+    \eqn{p} are returned as \eqn{\log(p)}{log(p)}.}
+  \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
+    \eqn{P[X \le x]}, otherwise, \eqn{P[X > x]}.}
+}
+\details{
+  The random variable \eqn{Z} with probability mass function
+  \deqn{P[Z = x] = \frac{P[X = x]}{1 - P[X = 0]}}{%
+    P[Z = x] = P[X = x]/(1 - P[X = 0])}
+  and distribution function
+  \deqn{P[Z \le x] = \frac{P[X \le x] - P[X = 0]}{1 - P[X = 0]}}{%
+    P[Z <= x] = (P[X <= x] - P[X = 0])/(1 - P[X = 0])},
+  for \eqn{x = 1, 2, \ldots}, has a zero truncated geometric
+  distribution when the random variable \eqn{X} has a
+  \link[=Geometric]{geometric} distribution.
+
+  The zero truncated geometric distribution with \code{prob} \eqn{= p}
+  has probability mass function
+  \deqn{%
+    P[X = x] = p (1 - p)^{x - 1}}{%
+    P[X = x] = p (1 - p)^(x - 1)}
+  for \eqn{x = 1, 2, \ldots} and \eqn{0 < p < 1}, and
+  \eqn{P[X = 1] = 1} when \eqn{p = 1}.
+
+  The mean is \eqn{1/p} and the variance is \eqn{(1 - p)/p^2}.
+
+  In the terminology of Klugman et al. (2012), the zero truncated
+  geometric is a member of the \eqn{(a, b, 1)} family of
+  distributions with \eqn{a = 1 - p} and \eqn{b = 0}.
+
+  If an element of \code{x} is not integer, the result of
+  \code{dztgeom} is zero, with a warning.
+
+  The quantile is defined as the smallest value \eqn{x} such that
+  \eqn{F(x) \ge p}, where \eqn{F} is the distribution function.
+}
+\value{
+  \code{dztgeom} gives the probability mass function,
+  \code{pztgeom} gives the distribution function,
+  \code{qztgeom} gives the quantile function, and
+  \code{rztgeom} generates random deviates.
+
+  Invalid \code{size} or \code{prob} will result in return value
+  \code{NaN}, with a warning.
+
+  The length of the result is determined by \code{n} for
+  \code{rztgeom}, and is the maximum of the lengths of the
+  numerical arguments for the other functions.
+}
+\note{
+  Functions \code{\{d,p,q\}ztgeom} use their equivalent
+  \code{\{d,p,q\}geom} function for all but the trivial input values.
+
+  \code{rztgeom} uses the simple inversion algorithm suggested by
+  Peter Dalgaard on the r-help mailing list on 1 May 2005 %
+  (\url{https://stat.ethz.ch/pipermail/r-help/2005-May/070680.html}).
+}
+\references{
+  Johnson, N. L., Kemp, A. W. and Kotz, S. (2005), \emph{Univariate
+  Discrete Distributions, Third Edition}, Wiley.
+
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
+  \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
+}
+\seealso{
+  \code{\link{dgeom}} for the geometric distribution.
+
+  \code{\link{dztnbinom}} for the zero truncated negative binomial, of
+  which the zero truncated geometric is a special case.
+}
+\author{
+  Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
+}
+\examples{
+p <- 1/(1 + 0.5)
+dztgeom(c(1, 2, 3), prob = p)
+dgeom(c(1, 2, 3), p)/pgeom(0, p, lower = FALSE) # same
+
+pztgeom(1, prob = 1)        # point mass at 1
+
+qztgeom(pztgeom(1:10, 0.3), 0.3)
+}
+\keyword{distribution}
