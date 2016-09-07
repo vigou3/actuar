@@ -2,6 +2,28 @@
 \title{actuar News}
 \encoding{UTF-8}
 
+\section{CHANGES IN VERSION 2.0-0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Support functions \{d,p,q,r\}logarithmic() for the logarithmic
+      (or log-series) distribution.
+      \item Support functions \{d,p,q,r\}ztpois() for the zero truncated
+      Poisson distribution.
+      \item Support functions \{d,p,q,r\}ztnbinom() for the zero truncated
+      negative binomial distribution.
+      \item Support functions \{d,p,q,r\}ztgeom() for the zero truncated
+      geometric distribution.
+      \item Support functions \{d,p,q,r\}ztbinom() for the zero truncated
+      binomial distribution.
+    }
+  }
+  \subsection{BUG FIX}{
+    \itemize{
+    }
+  }
+}
+
+
 \section{CHANGES IN VERSION 1.2-2}{
   \subsection{BUG FIX}{
     \itemize{
