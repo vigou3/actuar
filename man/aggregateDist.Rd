@@ -101,6 +101,9 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   distribution \eqn{X}; the first element \strong{must} be \eqn{f_X(0) =
     \Pr[X = 0]}{fx(0) = Pr[X = 0]}.
 
+  If the length of \code{p0} is greater than one, only the first element
+  is used, with a warning.
+
   The recursion will fail to start if the expected number of claims is
   too large. One may divide the appropriate parameter of the frequency
   distribution by \eqn{2^n} and convolve the resulting distribution

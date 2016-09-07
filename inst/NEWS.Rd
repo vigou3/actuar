@@ -17,6 +17,13 @@
       binomial distribution.
     }
   }
+  \subsection{USER VISIBLE CHANGES}{
+    \itemize{
+      \item In aggregateDist() with "recursive" method, if the length
+      'p0' is greater than one, only the first element is used, with a
+      warning.
+    }
+  }
   \subsection{BUG FIX}{
     \itemize{
     }

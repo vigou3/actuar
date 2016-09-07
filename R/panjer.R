@@ -19,9 +19,17 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     else
         0.5 - tol + 0.5
 
-    ## Check whether p0 is a valid probability or not.
-    if ( !is.null(p0) ) if ( (p0 < 0) | (p0 > 1) )
-        stop("'p0' must be a valid probability (between 0 and 1)")
+    ## Check whether p0 is a valid probability.
+    if ( !is.null(p0) )
+    {
+        if (length(p0) > 1L)
+        {
+            p0 <- p0[1]
+            warning("'p0' has many elements: only the first used")
+        }
+        if ( (p0 < 0) || (p0 > 1) )
+            stop("'p0' must be a valid probability (between 0 and 1)")
+    }
 
     ## Argument '...' should contain the values of the parameters of
     ## 'dist'.
