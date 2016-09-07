@@ -48,7 +48,7 @@ rztbinom(n, size, prob)
 
   In the terminology of Klugman et al. (2012), the zero truncated
   binomial is a member of the \eqn{(a, b, 1)} family of
-  distributions with \eqn{a = -p/(1-p)} and \eqn{b = (n+1)q/(1-p)}.
+  distributions with \eqn{a = -p/(1-p)} and \eqn{b = (n+1)p/(1-p)}.
 
   If an element of \code{x} is not integer, the result of
   \code{dztbinom} is zero, with a warning.
@@ -78,9 +78,6 @@ rztbinom(n, size, prob)
   (\url{https://stat.ethz.ch/pipermail/r-help/2005-May/070680.html}).
 }
 \references{
-  Johnson, N. L., Kemp, A. W. and Kotz, S. (2005), \emph{Univariate
-  Discrete Distributions, Third Edition}, Wiley.
-
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
   \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
@@ -98,14 +95,15 @@ pztbinom(1, 2, prob = 0)        # point mass at 1
 
 qztbinom(pztbinom(1:10, 10, 0.6), 10, 0.6)
 
-x <- rztbinom(1000, size = 10, prob = 0.4)
-y <- sort(unique(x))
-plot(y, table(x)/length(x), type = "h", lwd = 2,
-     pch = 19, col = "black", xlab = "x", ylab = "p(x)",
-     main = "Empirical vs theoretical probabilities")
-points(y, dztbinom(y, size = 10, prob = 0.4),
-       pch = 19, col = "red")
-legend("topright", c("empirical", "theoretical"),
-       lty = c(1, NA), pch = c(NA, 19), col = c("black", "red"))
+n <- 8; p <- 0.3
+x <- 0:n
+title <- paste("ZT Binomial(", n, ", ", p,
+               ") and Binomial(", n, ", ", p,") PDF",
+               sep = "")
+plot(x, dztbinom(x, n, p), type = "h", lwd = 2, ylab = "p(x)",
+     main = title)
+points(x, dbinom(x, n, p), pch = 19, col = "red")
+legend("topright", c("ZT binomial probabilities", "Binomial probabilities"),
+       col = c("black", "red"), lty = c(1, 0), lwd = 2, pch = c(NA, 19))
 }
 \keyword{distribution}

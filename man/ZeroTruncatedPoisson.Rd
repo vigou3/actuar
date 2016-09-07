@@ -92,7 +92,7 @@ dpois(1:5, lambda = 1)/ppois(0, 1, lower = FALSE) # same
 
 pztpois(1, lambda = 0)          # point mass at 1
 
-qztpois(pztpois(1:8, 1), 1)
+qztpois(pztpois(1:10, 1), 1)
 
 x <- seq(0, 8)
 plot(x, dztpois(x, 2), type = "h", lwd = 2, ylab = "p(x)",

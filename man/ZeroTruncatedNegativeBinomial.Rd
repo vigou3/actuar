@@ -109,7 +109,6 @@ p <- 1/(1 + 0.5)
 dztnbinom(c(1, 2, 3), size = 2.5, prob = p)
 dnbinom(c(1, 2, 3), 2.5, p)/pnbinom(0, 2.5, p, lower = FALSE) # same
 
-## Limiting cases
 pztnbinom(1, 2, prob = 1)        # point mass at 1
 dztnbinom(2, size = 1, 0.25)     # == dztgeom(2, 0.25)
 dztnbinom(2, size = 0, 0.25)     # == dlogarithmic(2, 0.75)
@@ -124,6 +123,6 @@ plot(y, table(x)/length(x), type = "h", lwd = 2,
 points(y, dztnbinom(y, size = 2.5, prob = 0.4),
        pch = 19, col = "red")
 legend("topright", c("empirical", "theoretical"),
-       lty = c(1, NA), pch = c(NA, 19), col = c("black", "red"))
+       lty = c(1, NA), lwd = 2, pch = c(NA, 19), col = c("black", "red"))
 }
 \keyword{distribution}
