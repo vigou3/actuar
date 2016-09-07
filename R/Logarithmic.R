@@ -12,7 +12,7 @@
 ### NOTE: Klugman, Panjer & Willmot (Loss Models) introduce the
 ### logarithmic distribution as a limiting case of the zero truncated
 ### negative binomial. In this setting, parameter 'p' above would be
-### the probability of *failure* (a.k.a q) of the zero truncted
+### the probability of *failure* (a.k.a q) of the zero truncated
 ### negative binomial.
 ###
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
