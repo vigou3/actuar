@@ -23,7 +23,7 @@ rlogarithmic(n, prob)
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
-  \item{prob}{parameter. \code{0 <= prob < 1}}.
+  \item{prob}{parameter. \code{0 <= prob < 1}.}
   \item{log, log.p}{logical; if \code{TRUE}, probabilities
     \eqn{p} are returned as \eqn{\log(p)}{log(p)}.}
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
@@ -33,9 +33,9 @@ rlogarithmic(n, prob)
   The Logarithmic (or log-series) distribution with parameter
   \code{prob} \eqn{= \theta}{= p} has probability mass function
   \deqn{%
-    P[X = x] = \frac{a \theta^x}{x}}{%
-    P[X = x] = a p^x / x},
-  with \eqn{a = -1/\log(1 - \theta)}{a = -1/log(1 - p)} and for \eqn{x =
+    p(x) = \frac{a \theta^x}{x},}{%
+    p(x) = a p^x / x,}
+  with \eqn{a = -1/\log(1 - \theta)}{a = -1/log(1-p)} and for \eqn{x =
     1, 2, \ldots}, \eqn{0 \le p < 1}.
 
   The logarithmic distribution is the limiting case of the

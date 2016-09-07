@@ -23,36 +23,26 @@ rztgeom(n, prob)
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
-  \item{prob}{parameter. \code{0 < prob <= 1}}.
+  \item{prob}{parameter. \code{0 < prob <= 1}.}
   \item{log, log.p}{logical; if \code{TRUE}, probabilities
     \eqn{p} are returned as \eqn{\log(p)}{log(p)}.}
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
     \eqn{P[X \le x]}, otherwise, \eqn{P[X > x]}.}
 }
 \details{
-  The random variable \eqn{Z} with probability mass function
-  \deqn{P[Z = x] = \frac{P[X = x]}{1 - P[X = 0]}}{%
-    P[Z = x] = P[X = x]/(1 - P[X = 0])}
-  and distribution function
-  \deqn{P[Z \le x] = \frac{P[X \le x] - P[X = 0]}{1 - P[X = 0]}}{%
-    P[Z <= x] = (P[X <= x] - P[X = 0])/(1 - P[X = 0])},
-  for \eqn{x = 1, 2, \ldots}, has a zero truncated geometric
-  distribution when the random variable \eqn{X} has a
-  \link[=Geometric]{geometric} distribution.
-
   The zero truncated geometric distribution with \code{prob} \eqn{= p}
   has probability mass function
   \deqn{%
-    P[X = x] = p (1 - p)^{x - 1}}{%
-    P[X = x] = p (1 - p)^(x - 1)}
+    p(x) = p (1-p)^{x - 1}}{%
+    p(x) = p (1-p)^(x-1)}
   for \eqn{x = 1, 2, \ldots} and \eqn{0 < p < 1}, and
-  \eqn{P[X = 1] = 1} when \eqn{p = 1}.
+  \eqn{p(1) = 1} when \eqn{p = 1}.
 
-  The mean is \eqn{1/p} and the variance is \eqn{(1 - p)/p^2}.
+  The mean is \eqn{1/p} and the variance is \eqn{(1-p)/p^2}.
 
   In the terminology of Klugman et al. (2012), the zero truncated
   geometric is a member of the \eqn{(a, b, 1)} family of
-  distributions with \eqn{a = 1 - p} and \eqn{b = 0}.
+  distributions with \eqn{a = 1-p} and \eqn{b = 0}.
 
   If an element of \code{x} is not integer, the result of
   \code{dztgeom} is zero, with a warning.
@@ -66,16 +56,16 @@ rztgeom(n, prob)
   \code{qztgeom} gives the quantile function, and
   \code{rztgeom} generates random deviates.
 
-  Invalid \code{size} or \code{prob} will result in return value
-  \code{NaN}, with a warning.
+  Invalid \code{prob} will result in return value \code{NaN}, with a
+  warning.
 
   The length of the result is determined by \code{n} for
   \code{rztgeom}, and is the maximum of the lengths of the
   numerical arguments for the other functions.
 }
 \note{
-  Functions \code{\{d,p,q\}ztgeom} use their equivalent
-  \code{\{d,p,q\}geom} function for all but the trivial input values.
+  Functions \code{\{d,p,q\}ztgeom} use \code{\{d,p,q\}geom} for all but
+  the trivial input values and \eqn{p(0)}.
 
   \code{rztgeom} uses the simple inversion algorithm suggested by
   Peter Dalgaard on the r-help mailing list on 1 May 2005 %

@@ -26,37 +26,27 @@ rztnbinom(n, size, prob)
     taken to be the number required.}
   \item{size}{target for number of successful trials, or dispersion
     parameter. Must be positive, need not be integer.}
-  \item{prob}{parameter. \code{0 < prob <= 1}}.
+  \item{prob}{parameter. \code{0 < prob <= 1}.}
   \item{log, log.p}{logical; if \code{TRUE}, probabilities
     \eqn{p} are returned as \eqn{\log(p)}{log(p)}.}
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
     \eqn{P[X \le x]}, otherwise, \eqn{P[X > x]}.}
 }
 \details{
-  The random variable \eqn{Z} with probability mass function
-  \deqn{P[Z = x] = \frac{P[X = x]}{1 - P[X = 0]}}{%
-    P[Z = x] = P[X = x]/(1 - P[X = 0])}
-  and distribution function
-  \deqn{P[Z \le x] = \frac{P[X \le x] - P[X = 0]}{1 - P[X = 0]}}{%
-    P[Z <= x] = (P[X <= x] - P[X = 0])/(1 - P[X = 0])},
-  for \eqn{x = 1, 2, \ldots}, has a zero truncated negative binomial
-  distribution when the random variable \eqn{X} has a
-  \link[=NegBinomial]{negative binomial} distribution.
-
   The zero truncated negative binomial distribution with \code{size}
   \eqn{= r} and \code{prob} \eqn{= p} has probability mass function
   \deqn{%
-    P[X = x] = \frac{\Gamma(x + r) p^r (1 - p)^x}{\Gamma(r) x! (1 - p^r)}}{%
-    P[X = x] = [\Gamma(x + r) p^r (1 - p)^x]/[\Gamma(n) x! (1 - p^r)]}
+    p(x) = \frac{\Gamma(x + r) p^r (1 - p)^x}{\Gamma(r) x! (1 - p^r)}}{%
+    p(x) = [\Gamma(x+r) p^r (1-p)^x]/[\Gamma(n) x! (1-p^r)]}
   for \eqn{x = 1, 2, \ldots}, \eqn{r \ge 0} and \eqn{0 < p < 1}, and
-  \eqn{P[X = 1] = 1} when \eqn{p = 1}.
+  \eqn{p(1) = 1} when \eqn{p = 1}.
 
-  The mean is \eqn{r(1 - p)/(p(1 - p^r))} and the variance is
-  \eqn{[r(1 - p)(1 - p^r(1 + r(1 - p))]/[p(1 - p^r)^2]}.
+  The mean is \eqn{r(1-p)/(p(1-p^r))} and the variance is
+  \eqn{[r(1-p)(1 - p^r(1 + r(1-p))]/[p(1-p^r)^2]}.
 
   In the terminology of Klugman et al. (2012), the zero truncated
   negative binomial is a member of the \eqn{(a, b, 1)} family of
-  distributions with \eqn{a = 1 - p} and \eqn{b = (r - 1)(1 - p)}.
+  distributions with \eqn{a = 1-p} and \eqn{b = (r-1)(1-p)}.
 
   The limiting case \code{size == 0} is the
   \link[=Logarithmic]{logarithmic} distribution with parameter \code{1 -
@@ -87,8 +77,8 @@ rztnbinom(n, size, prob)
   numerical arguments for the other functions.
 }
 \note{
-  Functions \code{\{d,p,q\}ztnbinom} use their equivalent
-  \code{\{d,p,q\}nbinom} function for all but the trivial input values.
+  Functions \code{\{d,p,q\}ztnbinom} use \code{\{d,p,q\}nbinom} for all
+  but the trivial input values and \eqn{p(0)}.
 
   \code{rztnbinom} uses the simple inversion algorithm suggested by
   Peter Dalgaard on the r-help mailing list on 1 May 2005 %
