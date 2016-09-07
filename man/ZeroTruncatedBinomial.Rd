@@ -38,6 +38,10 @@ rztbinom(n, size, prob)
     p(x) = choose(n, x) [p^x (1-p)^(n-x)]/[1 - (1-p)^n]}
   for \eqn{x = 1, \ldots, n} and \eqn{0 < p \le 1}, and \eqn{p(1) = 1}
   when \eqn{p = 0}.
+  The cumulative distribution function is
+  \deqn{P(x) = \frac{F(x) - F(0)}{1 - F(0)},}{%
+    P(x) = [F(x) - F(0)]/[1 - F(0)],}
+  where \eqn{F(x)} is the distribution function of the standard binomial.
 
   The mean is \eqn{np/(1 - (1-p)^n)} and the variance is
   \eqn{np[(1-p) - (1-p+np)(1-p)^n]/[1 - (1-p)^n]^2}.
@@ -50,7 +54,7 @@ rztbinom(n, size, prob)
   \code{dztbinom} is zero, with a warning.
 
   The quantile is defined as the smallest value \eqn{x} such that
-  \eqn{F(x) \ge p}, where \eqn{F} is the distribution function.
+  \eqn{P(x) \ge p}, where \eqn{P} is the distribution function.
 }
 \value{
   \code{dztbinom} gives the probability mass function,

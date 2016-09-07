@@ -40,6 +40,11 @@ rztnbinom(n, size, prob)
     p(x) = [\Gamma(x+r) p^r (1-p)^x]/[\Gamma(n) x! (1-p^r)]}
   for \eqn{x = 1, 2, \ldots}, \eqn{r \ge 0} and \eqn{0 < p < 1}, and
   \eqn{p(1) = 1} when \eqn{p = 1}.
+  The cumulative distribution function is
+  \deqn{P(x) = \frac{F(x) - F(0)}{1 - F(0)},}{%
+    P(x) = [F(x) - F(0)]/[1 - F(0)],}
+  where \eqn{F(x)} is the distribution function of the standard negative
+  binomial.
 
   The mean is \eqn{r(1-p)/(p(1-p^r))} and the variance is
   \eqn{[r(1-p)(1 - p^r(1 + r(1-p))]/[p(1-p^r)^2]}.
@@ -61,11 +66,11 @@ rztnbinom(n, size, prob)
   \code{dztnbinom} is zero, with a warning.
 
   The quantile is defined as the smallest value \eqn{x} such that
-  \eqn{F(x) \ge p}, where \eqn{F} is the distribution function.
+  \eqn{P(x) \ge p}, where \eqn{P} is the distribution function.
 }
 \value{
-  \code{dztnbinom} gives the probability mass function,
-  \code{pztnbinom} gives the distribution function,
+  \code{dztnbinom} gives the (log) probability mass function,
+  \code{pztnbinom} gives the (log) distribution function,
   \code{qztnbinom} gives the quantile function, and
   \code{rztnbinom} generates random deviates.
 
@@ -85,9 +90,6 @@ rztnbinom(n, size, prob)
   (\url{https://stat.ethz.ch/pipermail/r-help/2005-May/070680.html}).
 }
 \references{
-  Johnson, N. L., Kemp, A. W. and Kotz, S. (2005), \emph{Univariate
-  Discrete Distributions, Third Edition}, Wiley.
-
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
   \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
