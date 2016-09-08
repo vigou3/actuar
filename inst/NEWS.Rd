@@ -45,7 +45,7 @@
   }
 }
 
-\section{OLDER NEWS}{
+\note{
   News for actuar 1.2-2 and earlier can be found in file
   \file{NEWS.1.Rd}.
 }
