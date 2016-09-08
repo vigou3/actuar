@@ -62,8 +62,15 @@ aggregateDist <-
             if (is.null(model.freq) || !is.character(model.freq))
                 stop("frequency distribution must be supplied as a character string")
             dist <- match.arg(tolower(model.freq),
-                              c("poisson", "geometric", "negative binomial",
-                                "binomial", "logarithmic"))
+                              c("poisson",
+                                "geometric",
+                                "negative binomial",
+                                "binomial",
+                                "logarithmic",
+                                "zero truncated poisson",
+                                "zero truncated geometric",
+                                "zero truncated negative binomial",
+                                "zero truncated binomial"))
             FUN <- panjer(fx = model.sev, dist = dist, p0 = p0,
                           x.scale = x.scale, ..., convolve = convolve,
                           tol = tol, maxit = maxit, echo = echo)

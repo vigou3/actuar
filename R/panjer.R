@@ -14,22 +14,36 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     ## accuracy level so that the user specified level is attained
     ## *after* the additional convolutions (without getting too high).
     tol <- if (convolve > 0)
-        min((0.5 - tol + 0.5)^(0.5 ^ convolve),
-            0.5 - sqrt(.Machine$double.eps) + 0.5)
-    else
-        0.5 - tol + 0.5
+               min((0.5 - tol + 0.5)^(0.5 ^ convolve),
+                   0.5 - sqrt(.Machine$double.eps) + 0.5)
+           else
+               0.5 - tol + 0.5
 
-    ## Check whether p0 is a valid probability.
-    if ( !is.null(p0) )
+    ## Check if p0 is a valid probability.
+    if (!is.null(p0))
     {
         if (length(p0) > 1L)
         {
-            p0 <- p0[1]
+            p0 <- p0[1L]
             warning("'p0' has many elements: only the first used")
         }
-        if ( (p0 < 0) || (p0 > 1) )
+        if ((p0 < 0) || (p0 > 1))
             stop("'p0' must be a valid probability (between 0 and 1)")
     }
+
+    ## Treat trivial case where 'p0 == 1' and hence F_S(0) = 1.
+    if (identical(p0, 1))
+    {
+        FUN <- approxfun(0, 1, method = "constant",
+                         yleft = 0, yright = 1, f = 0)
+        class(FUN) <- c("ecdf", "stepfun", class(FUN))
+        assign("fs", 1, envir = environment(FUN))
+        assign("x.scale", x.scale, envir = environment(FUN))
+        return(FUN)
+    }
+
+    ## The call to .External below requires 'p1' to be initialized.
+    p1 <- 0
 
     ## Argument '...' should contain the values of the parameters of
     ## 'dist'.
@@ -39,6 +53,16 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     ## b, 1) families of distributions. Assign parameters 'a' and 'b'
     ## depending of the chosen distribution and compute f_S(0) in
     ## every case, and p1 if p0 is specified in argument.
+    ##
+    ## At this point, either p0 is NULL or 0 <= p0 < 1.
+    if (startsWith(dist, "zero truncated"))
+    {
+        if ( !(is.null(p0) || identical(p0, 0)) )
+            warning("value of 'p0' is ignored with a zero truncated distribution")
+        dist = sub("zero truncated ", "", dist) # drop "zero truncated" prefix
+        p0 <- 0
+    }
+
     if (dist == "geometric")
     {
         dist <- "negative binomial"
@@ -53,56 +77,56 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
         a <- 0
         b <- lambda
         if (is.null(p0))
-            fs0 <- exp(-lambda * (1 - fx[1]))
-        else
+            fs0 <- exp(lambda * (fx[1L] - 1))
+        else  # 0 <= p0 < 1
         {
-            fs0 <- p0 + (1 - p0) * (exp(lambda * fx[1]) - 1)/(exp(lambda) - 1)
-            p1 <- (1 - p0) * lambda/(exp(lambda) - 1)
+            fs0 <- p0 + (1 - p0) * pgfztpois(fx[1L], lambda)
+            p1 <- (1 - p0) * dztpois(1, lambda)
         }
     }
     else if (dist == "negative binomial")
     {
         if (!all(c("prob", "size") %in% names(par)))
             stop("value of 'prob' or 'size' missing")
-        beta <- 1/(par$prob) - 1
+        p <- par$prob
         r <- par$size
-        a <- beta/(1 + beta)
+        a <- 1 - p
         b <- (r - 1) * a
         if (is.null(p0))
-            fs0 <- (1 - beta * (fx[1] - 1))^(-r)
-        else
+            fs0 <- exp(-r * log1p(-a/p * (fx[1L] - 1)))
+        else  # 0 <= p0 < 1
         {
-            fs0 <- p0 + (1 - p0) * ((1 + beta * (1 - fx[1]))^(-r) - (1 + beta)^(-r))/(1 - (1 + beta)^(-r))
-            p1 <- (1 - p0) * r * beta/((1 + beta)^(r + 1) - (1 + beta))
+            fs0 <- p0 + (1 - p0) * pgfztnbinom(fx[1L], r, p)
+            p1 <- (1 - p0) * dztnbinom(1, r, p)
         }
     }
     else if (dist == "binomial")
     {
         if (!all(c("prob", "size") %in% names(par)))
             stop("value of 'prob' or 'size' missing")
-        m <- par$size
-        q <- par$prob
-        a <- - q/(1 - q)
-        b <- -(m + 1)*a
+        a <- - p/(1 - p)
+        b <- -(n + 1) * a
         if (is.null(p0))
-            fs0 <- (1 + q * (fx[1] - 1))^m
-        else
+            fs0 <- exp(n * log1p(p * (fx[1L] - 1)))
+        else  # 0 <= p0 < 1
         {
-            fs0 <- p0 + (1 - p0)*((1 + q * (fx[1] - 1))^m - (1 - q)^m)/(1 - (1 - q)^m)
-            p1 <- (1 - p0) * m * (1 - q)^(m - 1) * q/(1 - (1 - q)^m)
+            fs0 <- p0 + (1 - p0) * pgfztbinom(fx[1L], n, p)
+            p1 <- (1 - p0) * dztbinom(1, n, p)
         }
     }
     else if (dist == "logarithmic")
     {
-        if (is.null(p0))
-            stop("'p0' must be specified with the logarithmic distribution")
         if (!"prob" %in% names(par))
             stop("value of 'prob' missing")
-        beta <- (1/par$prob) - 1
-        a <- beta/(1 + beta)
+        a <- prob
         b <- -a
-        fs0 <- p0 + (1 - p0)*(1 - log(1 - beta * (fx[1] - 1))/log(1 + beta))
-        p1 <- beta/((1 + beta) * log(1 + beta))
+        if (is.null(p0) || identical(p0, 0)) # logarithmic always "zero truncated"
+            fs0 <- pgflogarithmic(fx[1L], prob)
+        else # 0 < p0 < 1; quite unusual "zero modified logarithmic"
+        {
+            fs0 <- p0 + (1 - p0) * pgflogarithmic(fx[1L], prob)
+            p1 <- (1 - p0) * dlogarithmic(1, prob)
+        }
     }
     else
         stop("frequency distribution not in the (a, b, 0) or (a, b, 1) families")
@@ -114,11 +138,7 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     if (identical(fs0, 0))
         stop("Pr[S = 0] is numerically equal to 0; impossible to start the recursion")
 
-    ## Recursive calculations are done in C. The call to .External
-    ## requires p1 to be initialized.
-    if (is.null(p0))
-        p1 = 0
-
+    ## Recursive calculations in C.
     fs <- .External("actuar_do_panjer", p0, p1, fs0, fx, a, b, convolve, tol, maxit, echo)
 
     FUN <- approxfun((0:(length(fs) - 1)) * x.scale, pmin(cumsum(fs), 1),
