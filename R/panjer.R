@@ -78,7 +78,7 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
         b <- lambda
         if (is.null(p0))
             fs0 <- exp(lambda * (fx[1L] - 1))
-        else  # 0 <= p0 < 1
+        else  # 0 <= p0 < 1; zero truncated/modified Poisson
         {
             fs0 <- p0 + (1 - p0) * pgfztpois(fx[1L], lambda)
             p1 <- (1 - p0) * dztpois(1, lambda)
@@ -88,13 +88,13 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     {
         if (!all(c("prob", "size") %in% names(par)))
             stop("value of 'prob' or 'size' missing")
-        p <- par$prob
         r <- par$size
+        p <- par$prob
         a <- 1 - p
         b <- (r - 1) * a
         if (is.null(p0))
             fs0 <- exp(-r * log1p(-a/p * (fx[1L] - 1)))
-        else  # 0 <= p0 < 1
+        else  # 0 <= p0 < 1; zero truncated/modified neg. binomial
         {
             fs0 <- p0 + (1 - p0) * pgfztnbinom(fx[1L], r, p)
             p1 <- (1 - p0) * dztnbinom(1, r, p)
@@ -104,11 +104,13 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     {
         if (!all(c("prob", "size") %in% names(par)))
             stop("value of 'prob' or 'size' missing")
-        a <- - p/(1 - p)
+        n <- par$size
+        p <- par$prob
+        a <- p/(p - 1)                  # equivalent to -p/(1 - p)
         b <- -(n + 1) * a
         if (is.null(p0))
             fs0 <- exp(n * log1p(p * (fx[1L] - 1)))
-        else  # 0 <= p0 < 1
+        else  # 0 <= p0 < 1; zero truncated/modified binomial
         {
             fs0 <- p0 + (1 - p0) * pgfztbinom(fx[1L], n, p)
             p1 <- (1 - p0) * dztbinom(1, n, p)
@@ -118,7 +120,7 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     {
         if (!"prob" %in% names(par))
             stop("value of 'prob' missing")
-        a <- prob
+        a <- par$prob
         b <- -a
         if (is.null(p0) || identical(p0, 0)) # logarithmic always "zero truncated"
             fs0 <- pgflogarithmic(fx[1L], prob)
