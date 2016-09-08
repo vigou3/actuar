@@ -50,8 +50,8 @@ coverage(pdf, cdf, deductible = 0, franchise = FALSE,
   \code{\link{formals}} may very well not work as expected.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
-  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
+  \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and

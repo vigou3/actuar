@@ -4,8 +4,7 @@
 ### moments for the Beta distribution (as defined in R). The
 ### noncentral beta distribution is _not_ supported.
 ###
-### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
+### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Wiley.
 ###
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 

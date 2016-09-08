@@ -11,8 +11,7 @@
 ###
 ###   Pr[X <= x] = 1 - pgamma(x^shape2, shape1, scale = scale^shape2).
 ###
-### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
+### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Wiley.
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 

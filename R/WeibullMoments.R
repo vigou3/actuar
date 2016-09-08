@@ -3,8 +3,7 @@
 ### Definition of the {m,lev}weibull functions to compute raw and
 ### limited moments for the Weibull distribution (as defined in R).
 ###
-### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
+### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Wiley.
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 

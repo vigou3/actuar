@@ -7,8 +7,7 @@
 ###
 ###   Pr[X <= x] = exp(-scale/x), x > 0.
 ###
-### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
+### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Wiley.
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 

@@ -34,16 +34,16 @@ mgfgamma(x, shape, rate = 1, scale = 1/rate, log = FALSE)
   \code{levgamma} gives the \eqn{k}th moment of the limited loss
   variable, and
   \code{mgfgamma} gives the moment generating function in \code{x}.
-  
+
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \seealso{
   \code{\link[stats]{GammaDist}}
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
-  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
- 
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
+  \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
+
   Johnson, N. L. and Kotz, S. (1970), \emph{Continuous Univariate
     Distributions, Volume 1}, Wiley.
 }

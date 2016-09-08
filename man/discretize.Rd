@@ -42,7 +42,7 @@ discretise(cdf, from, to, step = 1,
   limited expected value at \eqn{x}, \eqn{h} the step, \eqn{p_x}{p[x]}
   the probability mass at \eqn{x} in the discretized distribution and
   set \eqn{a =} \code{from} and \eqn{b =} \code{to}.
-  
+
   Method \code{"upper"} is the forward difference of the cdf \eqn{F}:
   \deqn{p_x = F(x + h) - F(x)}{p[x] = F(x + h) - F(x)}
   for \eqn{x = a, a + h, \dots, b - step}.
@@ -50,7 +50,7 @@ discretise(cdf, from, to, step = 1,
   Method \code{"lower"} is the backward difference of the cdf \eqn{F}:
   \deqn{p_x = F(x) - F(x - h)}{p[x] = F(x) - F(x - h)} for \eqn{x = a +
     h, \dots, b} and \eqn{p_a = F(a)}{p[a] = F(a)}.
-  
+
   Method \code{"rounding"} has the true cdf pass through the
   midpoints of the intervals \eqn{[x - h/2, x + h/2)}:
   \deqn{p_x = F(x + h/2) - F(x - h/2)}{p[x] = F(x + h/2) - F(x - h/2)}
@@ -74,8 +74,8 @@ discretise(cdf, from, to, step = 1,
   \code{\link{aggregateDist}}.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
-  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
+  \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca}

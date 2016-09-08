@@ -2,8 +2,7 @@
 ###
 ### Histogram for grouped data
 ###
-### See Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
+### See Klugman, Panjer & Willmot, Loss Models, Wiley.
 ###
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>, Mathieu Pigeon
 

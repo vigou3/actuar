@@ -4,8 +4,8 @@
 ### function for data with deductible, limit, coinsurance and
 ### inflation.
 ###
-### See Chapter 5 of Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
+### See Chapter 8 of Klugman, Panjer & Willmot, Loss Models, Fourth
+### Edition, Wiley, 2012.
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 

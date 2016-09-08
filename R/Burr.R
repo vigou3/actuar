@@ -6,8 +6,7 @@
 ###
 ###   Pr[X <= x] = 1 - (1/(1 + (x/scale)^shape2))^shape1, x > 0.
 ###
-### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
+### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Wiley.
 ###
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 

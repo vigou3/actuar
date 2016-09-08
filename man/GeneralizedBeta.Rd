@@ -40,7 +40,7 @@ levgenbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
   \item{order}{order of the moment.}
   \item{limit}{limit of the loss variable.}
 }
-\details{ 
+\details{
   The Generalized Beta distribution with parameters \code{shape1} \eqn{=
     \alpha}{= a}, \code{shape2} \eqn{= \beta}{= b}, \code{shape3}
   \eqn{= \tau}{= c} and \code{scale} \eqn{= \theta}{= s}, has
@@ -80,8 +80,8 @@ levgenbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
   defined on page 251 of Johnson et al, 1995.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
-  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
+  \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 
   Johnson, N. L., Kotz, S. and Balakrishnan, N. (1995)
   \emph{Continuous Univariate Distributions, Volume 2}, Wiley.

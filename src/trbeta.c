@@ -22,7 +22,7 @@
  * when b < 0, b is not an integer, and a > 1 + floor(-b).
  *
  * See Appendix A of Klugman, Panjer & Willmot, Loss Models,
- * Second Edition, Wiley, 2004 for the formula.
+ * Fourth Edition, Wiley, 2012 for the formula.
  */
 
 double actuar_pbetanegb(double x, double a, double b)

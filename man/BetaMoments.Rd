@@ -36,8 +36,8 @@ levbeta(limit, shape1, shape2, order = 1)
   functions \code{{d,p,q,r}beta}.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2008),
-  \emph{Loss Models, From Data to Decisions, Third Edition}, Wiley.
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
+  \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca} and

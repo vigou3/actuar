@@ -8,8 +8,7 @@
 ###
 ### where Y has a Beta distribution with parameters shape1 and shape2.
 ###
-### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
+### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Wiley.
 ###
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
