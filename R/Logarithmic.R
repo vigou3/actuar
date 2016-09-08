@@ -28,3 +28,7 @@ qlogarithmic <- function(p, prob, lower.tail = TRUE, log.p = FALSE)
 
 rlogarithmic <- function(n, prob)
     .External("actuar_do_random", "rlogarithmic", n, prob)
+
+## not exported; for internal use in panjer()
+pgflogarithmic <- function(x, prob)
+    log1p(-prob * z)/log1p(-prob)

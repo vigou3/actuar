@@ -19,3 +19,7 @@ qztpois <- function(p, lambda, lower.tail = TRUE, log.p = FALSE)
 
 rztpois <- function(n, lambda)
     .External("actuar_do_random", "rztpois", n, lambda)
+
+## not exported; for internal use in panjer()
+pgfztpois <- function(x, lambda)
+    expm1(lambda * x)/expm1(lambda)

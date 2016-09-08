@@ -20,3 +20,7 @@ qztnbinom <- function(p, size, prob, lower.tail = TRUE, log.p = FALSE)
 
 rztnbinom <- function(n, size, prob)
     .External("actuar_do_random", "rztnbinom", n, size, prob)
+
+## not exported; for internal use in panjer()
+pgfztnbinom <- function(x, size, prob)
+    expm1(-size * log1p(x * (prob - 1)))/expm1(-size * log(prob))
