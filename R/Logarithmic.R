@@ -31,4 +31,4 @@ rlogarithmic <- function(n, prob)
 
 ## not exported; for internal use in panjer()
 pgflogarithmic <- function(x, prob)
-    log1p(-prob * z)/log1p(-prob)
+    log1p(-prob * x)/log1p(-prob)
