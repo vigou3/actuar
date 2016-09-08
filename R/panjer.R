@@ -123,11 +123,11 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
         a <- par$prob
         b <- -a
         if (is.null(p0) || identical(p0, 0)) # logarithmic always "zero truncated"
-            fs0 <- pgflogarithmic(fx[1L], prob)
+            fs0 <- pgflogarithmic(fx[1L], a)
         else # 0 < p0 < 1; quite unusual "zero modified logarithmic"
         {
-            fs0 <- p0 + (1 - p0) * pgflogarithmic(fx[1L], prob)
-            p1 <- (1 - p0) * dlogarithmic(1, prob)
+            fs0 <- p0 + (1 - p0) * pgflogarithmic(fx[1L], a)
+            p1 <- (1 - p0) * dlogarithmic(1, a)
         }
     }
     else
