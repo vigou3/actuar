@@ -34,7 +34,7 @@ void actuar_matpow(double *x, int n, int k, double *z);
 void actuar_solve(double *A, double *B, int n, int p, double *z);
 
 /*   Distribution function */
-double actuar_pbetanegb(double x, double a, double b); /* <- trbeta.c */
+/* double actuar_pbetanegb(double x, double a, double b); /\* <- trbeta.c *\/ */
 
 /*   Sampling */
 int SampleSingleValue(int n, double *p);
@@ -226,6 +226,10 @@ double pphtype(double x, double *pi, double *T, int m, int lower_tail, int log_p
 double rphtype(double *pi, double **Q, double *rates, int m);
 double mphtype(double order, double *pi, double *T, int m, int give_log);
 double mgfphtype(double x, double *pi, double *T, int m, int give_log);
+
+/*    Temporary */
+double actuar_pbetanegb1(double x, double a, double b, double foo);
+double actuar_pbetanegb2(double x, double a, double b, double foo);
 
 
 /* Definitions for the tables linking the first group of functions to

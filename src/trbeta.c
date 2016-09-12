@@ -25,13 +25,13 @@
  * Fourth Edition, Wiley, 2012 for the formula.
  */
 
-double actuar_pbetanegb(double x, double a, double b)
+double actuar_pbetanegb1(double x, double a, double b, double foo)
 {
     double r = floor(-b);
 
     /* Return NaN if b is integer or if a is too small for the value
      * of b. */
-    if (b == (int) b || a - r - 1 <= 0)
+    if (!(ACT_nonint(b) && a - r - 1 > 0))
 	return R_NaN;
 
     /* Most of the effort is spent on computing the sum that is
@@ -81,56 +81,13 @@ double actuar_pbetanegb(double x, double a, double b)
 	   (double) s * exp(lasum + log(ap) + lgammafn(ap) - lbsum + lgammafn(bp) + pbeta(x, ap, bp, 1, 1)));
 }
 
-double actuar_pbetanegb1(double x, double a, double b)
+double actuar_pbetanegb2(double x, double a, double b, double foo)
 {
     double r = floor(-b);
 
     /* Return NaN if b is integer or if a is too small for the value
      * of b. */
-    if (b == (int) b || a - r - 1 <= 0)
-	return R_NaN;
-
-    /* Most of the effort is spent on computing the sum that is
-     * alternating since b < 0 in the denominators. The terms are
-     * calculated in the log scale, except for the denominators [b(b +
-     * 1) ... (b + r)]. This product is computed (and accumulated)
-     * separately to 1) avoid changing the sign of b to work with
-     * logs; 2) take care of the sign of the product automatically. */
-    int i;
-    double ap = a, bp = b;		/* copies of a and b */
-    double sum, lasum, bprod;
-    double lx = log(x), lx1m = log1p(-x);
-
-    /* Computation of the first term in the alternating sum. */
-    ap--;				 /* a - 1 */
-    sum = exp(ap * lx + bp * lx1m) / bp; /* holds the sum of negative terms */
-    bp++;				 /* b + 1 */
-
-    lasum = 0.;
-    bprod = bp;
-
-    /* Other terms in the alternating sum iff r > 0. */
-    for (i = 0; i < r; i++)
-    {
-	lasum += log(ap);	/* log(a - 1) + ... + log(a - i - 1) */
-	bprod *= bp;		/* b (b + 1) ... (b + i + 1) */
-	ap--;
-	sum += exp(lasum + ap * lx + bp * lx1m) / bprod;
-	bp++;
-    }
-
-    return(-gammafn(a + b) * sum +
-	   exp(lasum + log(ap) + lgammafn(ap) + lgammafn(bp) + pbeta(x, ap, bp, 1, 1)) / bprod);
-}
-
-
-double actuar_pbetanegb2(double x, double a, double b)
-{
-    double r = floor(-b);
-
-    /* Return NaN if b is integer or if a is too small for the value
-     * of b. */
-    if (b == (int) b || a - r - 1 <= 0)
+    if (!(ACT_nonint(b) && a - r - 1 > 0))
 	return R_NaN;
 
     /* There are two quantities to accumulate in order to compute the
@@ -140,22 +97,31 @@ double actuar_pbetanegb2(double x, double a, double b)
      * scale. */
     int i;
     double ap = a, bp = b;		/* copies of a and b */
-    double c, sum, ratio;
-    double lx = log(x), lx1m = log1p(-x), x1 = exp(lx1m - lx);
+    double lx = log(x);	                /* log(x) */
+    double lx1m = log1p(-x);		/* log(1 - x) */;
+    double x1 = exp(lx1m - lx);         /* (1 - x)/x */
+    double c, tmp, sum, ratio;
 
     /* Computation of the first term in the alternating sum. */
     ap--;			       /* a - 1 */
-    c = exp(ap * lx + bp * lx1m) / bp; /* (x^(a - 1) (1 - x)^b) / b */
+    c = exp(ap * lx + bp * lx1m)/bp;   /* (x^(a - 1) (1 - x)^b) / b */
     sum = c;			       /* first term */
-    ratio = 1. / bp;		       /* 1 / b */
+    ratio = 1/bp;		       /* 1 / b */
     bp++;			       /* b + 1 */
 
-    /* Other terms in the alternating sum iff r > 0. */
+    /* Other terms in the alternating sum iff r > 0.
+     * Relies on the fact that each new term in the sum is
+     *
+     *  previous term * (a - i - 1)(1 - x)/[(b + i + 1) x]
+     *
+     * for i = 0, ..., r - 1
+     */
     for (i = 0; i < r; i++)
     {
-	c *= (ap / bp) * x1;	       /* new term in the sum */
+	tmp = ap/bp;		/* (a - i - 1)/(b + i + 1) */
+	c *= tmp * x1;		/* new term in the sum  */
 	sum += c;
-	ratio *= ap / bp;
+	ratio *= tmp;
 	ap--;
 	bp++;
     }
@@ -163,7 +129,6 @@ double actuar_pbetanegb2(double x, double a, double b)
     return(-gammafn(a + b) * sum
 	   + (ratio * ap) * exp(lgammafn(ap) + lgammafn(bp) + pbeta(x, ap, bp, 1, 1)));
 }
-
 
 double dtrbeta(double x, double shape1, double shape2, double shape3,
                double scale, int give_log)
@@ -322,8 +287,8 @@ double levtrbeta(double limit, double shape1, double shape2, double shape3,
     u = exp(-log1pexp(-shape2 * (log(limit) - log(scale))));
 
     if (b < 0)
-	tmp = give_log ? actuar_pbetanegb2(u, a, b) / gammafn(shape1 + shape3)
-	    : actuar_pbetanegb(u, a, b) / gammafn(shape1 + shape3);
+	tmp = give_log ? actuar_pbetanegb2(u, a, b, 0/*foo*/) / gammafn(shape1 + shape3)
+	    : actuar_pbetanegb1(u, a, b, 0/*foo*/) / gammafn(shape1 + shape3);
     else
 	tmp = beta(a, b) * pbeta(u, a, b, 1, 0);
 

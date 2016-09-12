@@ -150,6 +150,9 @@ DPQTAB dpq_tab[] = {
     {"pphtype",         actuar_do_dpqphtype2,  2},
     {"mphtype",         actuar_do_dpqphtype2,  3},
     {"mgfphtype",       actuar_do_dpqphtype2,  4},
+    /* temporary */
+    {"actuar_pbetanegb1",         actuar_do_dpq2,        101},
+    {"actuar_pbetanegb2",         actuar_do_dpq2,        102},
     {0, 0, 0}
 };
 
