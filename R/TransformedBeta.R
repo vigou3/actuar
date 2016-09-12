@@ -39,15 +39,16 @@ mtrbeta <-
 
 levtrbeta <-
     function (limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
-              order = 1, neg2 = FALSE)
-    .External("actuar_do_dpq", "levtrbeta", limit, shape1, shape2, shape3, scale,
-              order, neg2)
+              order = 1)
+    .External("actuar_do_dpq", "levtrbeta", limit, shape1, shape2, shape3, scale, order, FALSE)
 
-## Temporary
-pbetanegb1 <- function (x, a, b)
-        .External("actuar_do_dpq", "actuar_pbetanegb1", x, a, b, 0)
-pbetanegb2 <- function (x, a, b)
-        .External("actuar_do_dpq", "actuar_pbetanegb2", x, a, b, 0)
+
+## Utility function to compute the incomplete beta function when b <
+## 0, b != -1, -2, ... and a > 1+ floor(-b). Used mostly at the C
+## level for levtrbeta(). Not exported.
+pbetanegb <- function (x, a, b)
+    .External("actuar_do_dpq", "pbetanegb", x, a, b, FALSE)
+
 
 ## Aliases
 dpearson6 <- dtrbeta

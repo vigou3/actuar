@@ -1,11 +1,17 @@
 /*  ===== actuar: An R Package for Actuarial Science =====
  *
- *  Functions to compute density, cumulative distribution and quantile
- *  functions, raw and limited moments and to simulate random variates
- *  for the transformed beta distribution. See ../R/TransformedBeta.R for
- *  details.
+ * Function to compute a scaled version of the beta distribution
+ * function when the second parameter is a negative non integer. More
+ * precisely, the function computes the value of
  *
- *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
+ *   gamma(a) gamma(b) pbeta(x, a, b)
+ *
+ * when b < 0, b != -1, -2, ... and a > 1 + floor(-b).
+ *
+ * See Appendix A of Klugman, Panjer & Willmot, Loss Models,
+ * Fourth Edition, Wiley, 2012 for the formula.
+ *
+ *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
 
 #include <R.h>
@@ -13,76 +19,13 @@
 #include "locale.h"
 #include "dpq.h"
 
-/* Function to compute a scaled version of the beta distribution
- * function when the second parameter is a negative non integer. More
- * precisely, the function computes the value of
- *
- *   gamma(a) gamma(b) pbeta(x, a, b)
- *
- * when b < 0, b is not an integer, and a > 1 + floor(-b).
- *
- * See Appendix A of Klugman, Panjer & Willmot, Loss Models,
- * Fourth Edition, Wiley, 2012 for the formula.
- */
-
-double actuar_pbetanegb1(double x, double a, double b, double foo)
+double pbetanegb(double x, double a, double b, double foo /*unused*/)
 {
-    double r = floor(-b);
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(a) || ISNAN(b))
+	return x + a + b;
+#endif
 
-    /* Return NaN if b is integer or if a is too small for the value
-     * of b. */
-    if (!(ACT_nonint(b) && a - r - 1 > 0))
-	return R_NaN;
-
-    /* Most of the effort is spent on computing the sum that is
-     * alternating since b < 0 in the denominators. The terms are
-     * calculated in the log scale. Furthermore, negative and
-     * positive terms are accumulated in separate variables and the
-     * sum (the difference, actually) is done at the end. */
-    int i, s;
-    double ap = a, bp = b;		/* copies of a and b */
-    double res1, res2, lasum, lbsum;
-    double lx = log(x), lx1m = log1p(-x);
-
-    /* lasum and lbsum will hold log[(a - 1)(a - 2) ... (a - r)] and
-     * log[(-b)(-b - 1)...(-b - r)], respectively */
-    lasum = 0.;			/* initialize to 0 */
-    lbsum = log(-bp);		/* initialize to log(-b) */
-
-    /* Computation of the first term in the alternating sum. Sign is
-     * negative. */
-    ap--;			/* a - 1 */
-    res1 = exp(ap * lx + bp * lx1m - lbsum); /* holds the sum of negative terms */
-    bp++;			/* b + 1 */
-
-    /* Simplest case with only the first term. */
-    if (r == 0.)
- 	return(-gammafn(a + b) * (-res1)
-	       - exp(log(ap) + lgammafn(ap) - lbsum + lgammafn(bp) + pbeta(x, ap, bp, 1, 1)));
-
-    /* Other terms in the alternating sum iff r > 0. */
-    res2 = 0.;			/* holds the sum of positive terms */
-    s = -1;			/* sign of computed term; previous one was negative */
-
-    for (i = 0; i < r; i++)
-    {
-	s = -s;			/* sign change */
-	lasum += log(ap);	/* log(a - 1) + ... + log(a - i - 1) */
-	lbsum += log(-bp);	/* log(-b) + ... + log(-b - i - 1) */
-	ap--;
-	if (s > 0)		/* positive terms */
-	    res2 += exp(lasum + ap * lx + bp * lx1m - lbsum);
-	else			/* negative terms */
-	    res1 += exp(lasum + ap * lx + bp * lx1m - lbsum);
-	bp++;
-    }
-
-    return(-gammafn(a + b) * (res2 - res1) +
-	   (double) s * exp(lasum + log(ap) + lgammafn(ap) - lbsum + lgammafn(bp) + pbeta(x, ap, bp, 1, 1)));
-}
-
-double actuar_pbetanegb2(double x, double a, double b, double foo)
-{
     double r = floor(-b);
 
     /* Return NaN if b is integer or if a is too small for the value
@@ -127,8 +70,20 @@ double actuar_pbetanegb2(double x, double a, double b, double foo)
     }
 
     return(-gammafn(a + b) * sum
-	   + (ratio * ap) * exp(lgammafn(ap) + lgammafn(bp) + pbeta(x, ap, bp, 1, 1)));
+	   + (ratio * ap) * exp(lgammafn(ap) + lgammafn(bp) +
+				pbeta(x, ap, bp, /*l._t.*/1, /*give_log*/1)));
 }
+
+
+/*  ===== actuar: An R Package for Actuarial Science =====
+ *
+ *  Functions to compute density, cumulative distribution and quantile
+ *  functions, raw and limited moments and to simulate random variates
+ *  for the transformed beta distribution. See ../R/TransformedBeta.R for
+ *  details.
+ *
+ *  AUTHORS: Mathieu Pigeon and Vincent Goulet <vincent.goulet@act.ulaval.ca>
+ */
 
 double dtrbeta(double x, double shape1, double shape2, double shape3,
                double scale, int give_log)
@@ -140,8 +95,10 @@ double dtrbeta(double x, double shape1, double shape2, double shape3,
      *  with u = v/(1 + v) = 1/(1 + 1/v), v = (x/scale)^shape2.
      */
 
-    double tmp, logu, log1mu;
-
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(shape3) || ISNAN(scale))
+	return x + shape1 + shape2 + shape3 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(shape3) ||
@@ -166,6 +123,8 @@ double dtrbeta(double x, double shape1, double shape2, double shape3,
 	    shape2 / (scale * beta(shape3, shape1));
     }
 
+    double tmp, logu, log1mu;
+
     tmp = shape2 * (log(x) - log(scale));
     logu = - log1pexp(-tmp);
     log1mu = - log1pexp(tmp);
@@ -177,8 +136,10 @@ double dtrbeta(double x, double shape1, double shape2, double shape3,
 double ptrbeta(double q, double shape1, double shape2, double shape3,
                double scale, int lower_tail, int log_p)
 {
-    double u;
-
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(shape3) || ISNAN(scale))
+	return q + shape1 + shape2 + shape3 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(shape3) ||
@@ -192,7 +153,7 @@ double ptrbeta(double q, double shape1, double shape2, double shape3,
     if (q <= 0)
         return ACT_DT_0;
 
-    u = exp(-log1pexp(-shape2 * (log(q) - log(scale))));
+    double u = exp(-log1pexp(-shape2 * (log(q) - log(scale))));
 
     return pbeta(u, shape3, shape1, lower_tail, log_p);
 }
@@ -200,6 +161,10 @@ double ptrbeta(double q, double shape1, double shape2, double shape3,
 double qtrbeta(double p, double shape1, double shape2, double shape3,
                double scale, int lower_tail, int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(shape3) || ISNAN(scale))
+	return p + shape1 + shape2 + shape3 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(shape3) ||
@@ -235,8 +200,10 @@ double rtrbeta(double shape1, double shape2, double shape3, double scale)
 double mtrbeta(double order, double shape1, double shape2, double shape3,
                double scale, int give_log)
 {
-    double tmp;
-
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(shape3) || ISNAN(scale))
+	return order + shape1 + shape2 + shape3 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(shape3) ||
@@ -252,7 +219,7 @@ double mtrbeta(double order, double shape1, double shape2, double shape3,
         order >= shape1 * shape2)
         return R_PosInf;
 
-    tmp = order / shape2;
+    double tmp = order / shape2;
 
     return R_pow(scale, order) * beta(shape3 + tmp, shape1 - tmp)
         / beta(shape1, shape3);
@@ -261,8 +228,10 @@ double mtrbeta(double order, double shape1, double shape2, double shape3,
 double levtrbeta(double limit, double shape1, double shape2, double shape3,
                  double scale, double order, int give_log)
 {
-    double u, tmp, a, b, r;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(shape3) || ISNAN(scale) || ISNAN(order))
+	return limit + shape1 + shape2 + shape3 + scale + order;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(shape3) ||
@@ -274,11 +243,13 @@ double levtrbeta(double limit, double shape1, double shape2, double shape3,
         scale  <= 0.0)
         return R_NaN;
 
-    if (order  <= - shape3 * shape2)
+    if (order <= - shape3 * shape2)
         return R_PosInf;
 
     if (limit <= 0.0)
         return 0.0;
+
+    double u, a, b, r, tmp;
 
     r = order / shape2;
     a = shape3 + r;
@@ -286,11 +257,8 @@ double levtrbeta(double limit, double shape1, double shape2, double shape3,
 
     u = exp(-log1pexp(-shape2 * (log(limit) - log(scale))));
 
-    if (b < 0)
-	tmp = give_log ? actuar_pbetanegb2(u, a, b, 0/*foo*/) / gammafn(shape1 + shape3)
-	    : actuar_pbetanegb1(u, a, b, 0/*foo*/) / gammafn(shape1 + shape3);
-    else
-	tmp = beta(a, b) * pbeta(u, a, b, 1, 0);
+    tmp = (b < 0) ? pbetanegb(u, a, b, 0) / gammafn(shape1 + shape3)
+	: beta(a, b) * pbeta(u, a, b, 1, 0);
 
     return R_pow(scale, order) * tmp / beta(shape1, shape3)
 	+ ACT_DLIM__0(limit, order) * pbeta(u, shape3, shape1, 0, 0);

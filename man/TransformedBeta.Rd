@@ -16,7 +16,7 @@
 \title{The Transformed Beta Distribution}
 \description{
   Density function, distribution function, quantile function, random generation,
-  raw moments and limited moments for the Transformed Beta distribution
+  raw moments and limited moments for the transformed beta distribution
   with parameters \code{shape1}, \code{shape2}, \code{shape3} and
   \code{scale}.
 }
@@ -48,7 +48,7 @@ levtrbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
   \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Transformed Beta distribution with parameters \code{shape1} \eqn{=
+  The transformed beta distribution with parameters \code{shape1} \eqn{=
     \alpha}{= a}, \code{shape2} \eqn{= \gamma}{= b}, \code{shape3}
   \eqn{= \tau}{= c} and \code{scale} \eqn{= \theta}{= s}, has
   density:
@@ -62,35 +62,40 @@ levtrbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
   (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
   by \R's \code{\link{gamma}()} and defined in its help.)
 
-  The Transformed Beta is the distribution of the random variable
+  The transformed beta is the distribution of the random variable
   \deqn{\theta \left(\frac{X}{1 - X}\right)^{1/\gamma},}{%
     s (X/(1 - X))^(1/b),}
-  where \eqn{X} has a Beta distribution with parameters \eqn{\tau}{c}
+  where \eqn{X} has a beta distribution with parameters \eqn{\tau}{c}
   and \eqn{\alpha}{a}.
 
-  The Transformed Beta distribution defines a family of distributions
+  The transformed beta distribution defines a family of distributions
   with the following special cases:
   \itemize{
     \item A \link[=dburr]{Burr} distribution when \code{shape3 == 1};
-    \item A \link[=dllogis]{Loglogistic} distribution when \code{shape1
+    \item A \link[=dllogis]{loglogistic} distribution when \code{shape1
       == shape3 == 1};
-    \item A \link[=dparalogis]{Paralogistic} distribution when
+    \item A \link[=dparalogis]{paralogistic} distribution when
     \code{shape3 == 1} and \code{shape2 == shape1};
-    \item A \link[=dgenpareto]{Generalized Pareto} distribution when
+    \item A \link[=dgenpareto]{generalized Pareto} distribution when
     \code{shape2 == 1};
     \item A \link[=dpareto]{Pareto} distribution when \code{shape2 ==
       shape3 == 1};
-    \item An \link[=dinvburr]{Inverse Burr} distribution when
+    \item An \link[=dinvburr]{inverse Burr} distribution when
     \code{shape1 == 1};
-    \item An \link[=dinvpareto]{Inverse Pareto} distribution when
+    \item An \link[=dinvpareto]{inverse Pareto} distribution when
     \code{shape2 == shape1 == 1};
-    \item An \link[=dinvparalogis]{Inverse Paralogistic} distribution
+    \item An \link[=dinvparalogis]{inverse paralogistic} distribution
     when \code{shape1 == 1} and \code{shape3 == shape2}.
   }
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+  \eqn{E[X^k]}, \eqn{-\tau\gamma < k < \alpha\gamma}{-shape3 * shape2 <
+  k < shape1 * shape2}.
+
+  The \eqn{k}th limited moment at some limit
+  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]},
+  \eqn{k > -\tau\gamma}{k > -shape3 * shape2} and \eqn{\alpha -
+  k/\gamma}{shape1 - k/shape2} not a negative integer.
 }
 \value{
   \code{dtrbeta} gives the density,
@@ -104,10 +109,19 @@ levtrbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
+  \code{levtrbeta} computes the limited expected value for \eqn{\alpha -
+    k/\gamma < 0}{shape1 - k/shape2 < 0} using the formula for the
+  incomplete beta function when the second parameter is negative
+  given in the introduction of Appendix A of Klugman et al. (2012).
+
   Distribution also known as the Generalized Beta of the Second
-  Kind and Pearson Type VI.
+  Kind and Pearson Type VI. See also Kleiber and Kotz (2003) for
+  other names and parametrizations.
 }
 \references{
+  Kleiber, C. and Kotz, S. (2003), \emph{Statistical Size Distributions
+  in Economics and Actuarial Sciences}, Wiley.
+
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
   \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
@@ -121,50 +135,11 @@ p <- (1:10)/10
 ptrbeta(qtrbeta(p, 2, 3, 4, 5), 2, 3, 4, 5)
 qpearson6(0.3, 2, 3, 4, 5, lower.tail = FALSE)
 mtrbeta(2, 2, 3, 4, 5) - mtrbeta(1, 2, 3, 4, 5) ^ 2
-levtrbeta(10, 2, 3, 4, 5, order = 2)
 
-## r = 0
-shape1 <- 1/3
-shape2 <- 3
-shape3 <- 2
-scale <- 0.5
-order <- 2
-limit <- 10
-levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order)
-levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order, neg2 = TRUE)
+## case with shape1 - order/shape2 > 0
+levtrbeta(10, 2, 3, 4, scale = 1, order = 2)
 
-## r = 1
-shape1 <- 1/3
-shape2 <- 3/2.5
-shape3 <- 3
-scale <- 0.5
-order <- 2
-limit <- 10
-levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order)
-levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order, neg2 = TRUE)
-
-## r = 2
-shape1 <- 1/3
-shape2 <- 3/4
-shape3 <- 4
-scale <- 0.5
-order <- 2
-limit <- 10
-levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order)
-levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order, neg2 = TRUE)
-
-## r = 3
-shape1 <- 1/3
-shape2 <- 3/6
-shape3 <- 5
-scale <- 0.5
-order <- 2
-limit <- 10
-levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order)
-levtrbeta(limit, shape1, shape2, shape3, scale = scale, order = order, neg2 = TRUE)
-
-system.time(levtrbeta(rep.int(limit, 1E6), shape1, shape2, shape3, scale = scale, order = order))
-system.time(levtrbeta(rep.int(limit, 1E6), shape1, shape2, shape3, scale = scale, order = order, neg2 = TRUE))
-
+## case with shape1 - order/shape2 < 0
+levtrbeta(10, 1/3, 0.75, 4, scale = 0.5, order = 2)
 }
 \keyword{distribution}
