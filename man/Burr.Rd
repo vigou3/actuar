@@ -65,8 +65,12 @@ levburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   }
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}.
+  \eqn{E[X^k]}{E[X^k]}, , \eqn{-\gamma < k < \alpha\gamma}{-shape2 < k <
+  shape1 * shape2}.
+
+  The \eqn{k}th limited moment at some limit \eqn{d} is \eqn{E[\min(X,
+  d)^k]}{E[min(X, d)^k]}, \eqn{k > -\gamma}{k > -shape2}
+  and \eqn{\alpha - k/\gamma}{shape1 - k/shape2} not a negative integer.
 }
 \value{
   \code{dburr} gives the density,
@@ -80,10 +84,18 @@ levburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
+  \code{levbuff} computes the limited expected value for \eqn{\alpha -
+    k/\gamma < 0}{shape1 - k/shape2 < 0} using the formula implemented
+  in \code{\link{pbetanegb}}.
+
   Distribution also known as the Burr Type XII or Singh-Maddala
-  distribution.
+  distribution. See also Kleiber and Kotz (2003) for alternative names
+  and parametrizations.
 }
 \references{
+  Kleiber, C. and Kotz, S. (2003), \emph{Statistical Size Distributions
+  in Economics and Actuarial Sciences}, Wiley.
+
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
   \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
@@ -95,7 +107,14 @@ levburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
 exp(dburr(1, 2, 3, log = TRUE))
 p <- (1:10)/10
 pburr(qburr(p, 2, 3, 2), 2, 3, 2)
+
+## variance
 mburr(2, 2, 3, 1) - mburr(1, 2, 3, 1) ^ 2
+
+## case with shape1 - order/shape2 > 0
 levburr(10, 2, 3, 1, order = 2)
+
+## case with shape1 - order/shape2 < 0
+levburr(10, 1.5, 0.5, 1, order = 2)
 }
 \keyword{distribution}
