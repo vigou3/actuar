@@ -38,7 +38,7 @@ levparalogis(limit, shape, rate = 1, scale = 1/rate,
   \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Paralogistic distribution with parameters \code{shape} \eqn{=
+  The paralogistic distribution with parameters \code{shape} \eqn{=
     \alpha}{= a} and \code{scale} \eqn{= \theta}{= s} has density:
   \deqn{f(x) = \frac{\alpha^2 (x/\theta)^\alpha}{%
       x [1 + (x/\theta)^\alpha)^{\alpha + 1}}}{%
@@ -46,8 +46,12 @@ levparalogis(limit, shape, rate = 1, scale = 1/rate,
   for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0} and \eqn{\theta > 0}{b > 0}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+  \eqn{E[X^k]}{E[X^k]}, \eqn{-\alpha < k < \alpha^2}{-shape < k <
+  shape^2}.
+
+  The \eqn{k}th limited moment at some limit \eqn{d} is \eqn{E[\min(X,
+  d)^k]}{E[min(X, d)^k]}, \eqn{k > -\alpha}{k > -shape}
+  and \eqn{\alpha - k/\alpha}{shape - k/shape} not a negative integer.
 }
 \value{
   \code{dparalogis} gives the density,
@@ -60,7 +64,18 @@ levparalogis(limit, shape, rate = 1, scale = 1/rate,
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
+\note{
+  \code{levparalogis} computes the limited expected value for
+  \eqn{\alpha - k/\alpha < 0}{shape - k/shape < 0} using the formula
+  implemented in \code{\link{pbetanegb}}.
+
+  See Kleiber and Kotz (2003) for alternative names and
+  parametrizations.
+}
 \references{
+  Kleiber, C. and Kotz, S. (2003), \emph{Statistical Size Distributions
+  in Economics and Actuarial Sciences}, Wiley.
+
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
   \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
@@ -72,7 +87,14 @@ levparalogis(limit, shape, rate = 1, scale = 1/rate,
 exp(dparalogis(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 pparalogis(qparalogis(p, 2, 3), 2, 3)
+
+## variance
 mparalogis(2, 2, 3) - mparalogis(1, 2, 3)^2
+
+## case with shape - order/shape > 0
 levparalogis(10, 2, 3, order = 2)
+
+## case with shape - order/shape < 0
+levparalogis(10, 1.25, 3, order = 2)
 }
 \keyword{distribution}

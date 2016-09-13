@@ -12,6 +12,7 @@
 #include <Rmath.h>
 #include "locale.h"
 #include "dpq.h"
+#include "actuar.h"
 
 double dparalogis(double x, double shape, double scale, int give_log)
 {
@@ -22,8 +23,10 @@ double dparalogis(double x, double shape, double scale, int give_log)
      *  with u = 1/(1 + v), v = (x/scale)^shape.
      */
 
-    double tmp, logu, log1mu;
-
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(shape) || ISNAN(scale))
+	return x + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
@@ -42,6 +45,8 @@ double dparalogis(double x, double shape, double scale, int give_log)
 	return ACT_D_val(1.0 / scale);
     }
 
+    double tmp, logu, log1mu;
+
     tmp = shape * (log(x) - log(scale));
     logu = - log1pexp(tmp);
     log1mu = - log1pexp(-tmp);
@@ -52,8 +57,10 @@ double dparalogis(double x, double shape, double scale, int give_log)
 double pparalogis(double q, double shape, double scale, int lower_tail,
                   int log_p)
 {
-    double u;
-
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(shape) || ISNAN(scale))
+	return q + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
@@ -63,7 +70,7 @@ double pparalogis(double q, double shape, double scale, int lower_tail,
     if (q <= 0)
         return ACT_DT_0;
 
-    u = exp(-log1pexp(shape * (log(q) - log(scale))));
+    double u = exp(-log1pexp(shape * (log(q) - log(scale))));
 
     return ACT_DT_Cval(R_pow(u, shape));
 }
@@ -71,8 +78,10 @@ double pparalogis(double q, double shape, double scale, int lower_tail,
 double qparalogis(double p, double shape, double scale, int lower_tail,
                   int log_p)
 {
-    double tmp;
-
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(shape) || ISNAN(scale))
+	return p + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
@@ -82,7 +91,7 @@ double qparalogis(double p, double shape, double scale, int lower_tail,
     ACT_Q_P01_boundaries(p, 0, R_PosInf);
     p = ACT_D_qIv(p);
 
-    tmp = 1.0 / shape;
+    double tmp = 1.0 / shape;
 
     return scale * R_pow(R_pow(ACT_D_Cval(p), -tmp) - 1.0, tmp);
 }
@@ -104,8 +113,10 @@ double rparalogis(double shape, double scale)
 
 double mparalogis(double order, double shape, double scale, int give_log)
 {
-    double tmp;
-
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(shape) || ISNAN(scale))
+	return order + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
@@ -117,7 +128,7 @@ double mparalogis(double order, double shape, double scale, int give_log)
         order >= shape * shape)
         return R_PosInf;
 
-    tmp = order / shape;
+    double tmp = order / shape;
 
     return R_pow(scale, order) * gammafn(1.0 + tmp) * gammafn(shape - tmp)
         / gammafn(shape);
@@ -126,8 +137,10 @@ double mparalogis(double order, double shape, double scale, int give_log)
 double levparalogis(double limit, double shape, double scale, double order,
                     int give_log)
 {
-    double u, tmp1, tmp2, tmp3;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(shape) || ISNAN(scale) || ISNAN(order))
+	return limit + shape + scale + order;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
@@ -141,13 +154,17 @@ double levparalogis(double limit, double shape, double scale, double order,
     if (limit <= 0.0)
         return 0.0;
 
-    tmp1 = order / shape;
-    tmp2 = 1.0 + tmp1;
-    tmp3 = shape - tmp1;
+    double u, a, b, r, tmp;
+
+    r = order / shape;
+    a = 1.0 + r;
+    b = shape - r;
 
     u = exp(-log1pexp(shape * (log(limit) - log(scale))));
 
-    return R_pow(scale, order) * gammafn(tmp2) * gammafn(tmp3)
-        * pbeta(0.5 - u + 0.5, tmp2, tmp3, 1, 0) / gammafn(shape)
+    tmp = (b < 0) ? pbetanegb(0.5 - u + 0.5, a, b, 0) / gammafn(shape + 1.0)
+	: beta(a, b) * pbeta(0.5 - u + 0.5, a, b, 1, 0);
+
+    return R_pow(scale, order) * tmp / beta(shape, 1.0)
         + ACT_DLIM__0(limit, order) * R_pow(u, shape);
 }
