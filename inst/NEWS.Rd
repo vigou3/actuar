@@ -5,15 +5,15 @@
 \section{CHANGES IN actuar VERSION 2.0-0}{
   \subsection{NEW FEATURES}{
     \itemize{
-      \item{Support functions \code{<d,p,q,r>logarithmic} for the
+      \item{Support functions \code{[dpqr]logarithmic} for the
 	logarithmic (or log-series) distribution.}
-      \item{Support functions \code{<d,p,q,r>ztpois} for the zero
+      \item{Support functions \code{[dpqr]ztpois} for the zero
 	truncated Poisson distribution.}
-      \item{Support functions \code{<d,p,q,r>ztnbinom} for the zero
+      \item{Support functions \code{[dpqr]ztnbinom} for the zero
 	truncated negative binomial distribution.}
-      \item{Support functions \code{<d,p,q,r>ztgeom} for the zero
+      \item{Support functions \code{[dpqr]ztgeom} for the zero
 	truncated geometric distribution.}
-      \item{Support functions \code{<d,p,q,r>ztbinom} for the zero
+      \item{Support functions \code{[dpqr]ztbinom} for the zero
 	truncated binomial distribution.}
       \item{\code{aggregateDist} now accepts
         \code{"zero truncated binomial"},

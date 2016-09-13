@@ -258,7 +258,7 @@
 
   \subsection{NEW FEATURES -- LOSS DISTRIBUTIONS}{
     \itemize{
-      \item Functions \code{<d,p,q,r>foo()} to compute the density
+      \item Functions \code{[dpqr]foo()} to compute the density
       function, cumulative distribution function, quantile function of,
       and to generate variates from, all probability distributions of
       Appendix A of Klugman et al. (2004), \emph{Loss Models, Second
