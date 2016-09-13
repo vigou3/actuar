@@ -55,7 +55,7 @@ levinvburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   where \eqn{X} has a beta distribution with parameters \eqn{\tau}{a}
   and \eqn{1}.
 
-  The Inverse Burr distribution has the following special cases:
+  The inverse Burr distribution has the following special cases:
   \itemize{
     \item A \link[=dllogis]{Loglogistic} distribution when \code{shape1
       == 1};

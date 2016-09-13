@@ -34,7 +34,7 @@ levinvpareto(limit, shape, scale, order = 1)
   \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Inverse Pareto distribution with parameters \code{shape} \eqn{=
+  The inverse Pareto distribution with parameters \code{shape} \eqn{=
     \tau}{= a} and \code{scale} \eqn{= \theta}{= s} has density:
   \deqn{f(x) = \frac{\tau \theta x^{\tau - 1}}{%
       (x + \theta)^{\tau + 1}}}{%
