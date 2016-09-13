@@ -115,7 +115,7 @@ levtrbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
 
   Distribution also known as the Generalized Beta of the Second
   Kind and Pearson Type VI. See also Kleiber and Kotz (2003) for
-  other names and parametrizations.
+  alternative names and parametrizations.
 }
 \references{
   Kleiber, C. and Kotz, S. (2003), \emph{Statistical Size Distributions
@@ -133,7 +133,9 @@ exp(dtrbeta(2, 2, 3, 4, 5, log = TRUE))
 p <- (1:10)/10
 ptrbeta(qtrbeta(p, 2, 3, 4, 5), 2, 3, 4, 5)
 qpearson6(0.3, 2, 3, 4, 5, lower.tail = FALSE)
-mtrbeta(2, 2, 3, 4, 5) - mtrbeta(1, 2, 3, 4, 5) ^ 2
+
+## variance
+mtrbeta(2, 2, 3, 4, 5) - mtrbeta(1, 2, 3, 4, 5)^2
 
 ## case with shape1 - order/shape2 > 0
 levtrbeta(10, 2, 3, 4, scale = 1, order = 2)
