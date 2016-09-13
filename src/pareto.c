@@ -11,6 +11,7 @@
 #include <Rmath.h>
 #include "locale.h"
 #include "dpq.h"
+#include "actuar.h"
 
 double dpareto(double x, double shape, double scale, int give_log)
 {
@@ -21,8 +22,10 @@ double dpareto(double x, double shape, double scale, int give_log)
      *  with u = 1/(1 + v), v = x/scale.
      */
 
-    double tmp, logu, log1mu;
-
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(shape) || ISNAN(scale))
+	return x + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
@@ -35,6 +38,8 @@ double dpareto(double x, double shape, double scale, int give_log)
     /* handle x == 0 separately */
     if (x == 0.0) return ACT_D_val(shape / scale);
 
+    double tmp, logu, log1mu;
+
     tmp = log(x) - log(scale);
     logu = - log1pexp(tmp);
     log1mu = - log1pexp(-tmp);
@@ -44,8 +49,10 @@ double dpareto(double x, double shape, double scale, int give_log)
 
 double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
 {
-    double u;
-
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(shape) || ISNAN(scale))
+	return q + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
@@ -55,13 +62,17 @@ double ppareto(double q, double shape, double scale, int lower_tail, int log_p)
     if (q <= 0)
         return ACT_DT_0;
 
-    u = exp(-log1pexp(log(q) - log(scale)));
+    double u = exp(-log1pexp(log(q) - log(scale)));
 
     return ACT_DT_Cval(R_pow(u, shape));
 }
 
 double qpareto(double p, double shape, double scale, int lower_tail, int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(shape) || ISNAN(scale))
+	return p + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
@@ -87,6 +98,10 @@ double rpareto(double shape, double scale)
 
 double mpareto(double order, double shape, double scale, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(shape) || ISNAN(scale))
+	return order + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
@@ -105,8 +120,10 @@ double mpareto(double order, double shape, double scale, int give_log)
 double levpareto(double limit, double shape, double scale, double order,
                  int give_log)
 {
-    double u, tmp1, tmp2;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(shape) || ISNAN(scale) || ISNAN(order))
+	return limit + shape + scale + order;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
@@ -120,12 +137,16 @@ double levpareto(double limit, double shape, double scale, double order,
     if (limit <= 0.0)
         return 0.0;
 
-    tmp1 = 1.0 + order;
-    tmp2 = shape - order;
+    double u, a, b, tmp;
+
+    a = 1.0 + order;
+    b = shape - order;
 
     u = exp(-log1pexp(log(limit) - log(scale)));
 
-    return R_pow(scale, order) * gammafn(tmp1) * gammafn(tmp2)
-        * pbeta(0.5 - u + 0.5, tmp1, tmp2, 1, 0) / gammafn(shape)
+    tmp = (b < 0) ? pbetanegb(0.5 - u + 0.5, a, b, 0) / gammafn(shape + 1.0)
+	: beta(a, b) * pbeta(0.5 - u + 0.5, a, b, 1, 0);
+
+    return R_pow(scale, order) * tmp / beta(shape, 1.0)
         + ACT_DLIM__0(limit, order) * R_pow(u, shape);
 }

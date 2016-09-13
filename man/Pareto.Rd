@@ -48,8 +48,12 @@ levpareto(limit, shape, scale, order = 1)
   for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0} and \eqn{\theta}{s > 0}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+  \eqn{E[X^k]}, \eqn{-1 < k < \alpha}{-1 < k < shape}.
+
+  The \eqn{k}th limited moment at some limit
+  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]},
+  \eqn{k > -1} and \eqn{\alpha - k}{shape - k} not a
+  negative integer.
 }
 \value{
   \code{dpareto} gives the density,
@@ -62,9 +66,18 @@ levpareto(limit, shape, scale, order = 1)
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
+  \code{levpareto} computes the limited expected value for
+  \eqn{\alpha - k < 0}{shape1 - k < 0} using the formula implemented
+  in \code{\link{pbetanegb}}.
+
   Distribution also known as the Pareto Type II or Lomax distribution.
+  See also Kleiber and Kotz (2003) for alternative names and
+  parametrizations.
 }
 \references{
+  Kleiber, C. and Kotz, S. (2003), \emph{Statistical Size Distributions
+  in Economics and Actuarial Sciences}, Wiley.
+
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
   \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
@@ -76,7 +89,14 @@ levpareto(limit, shape, scale, order = 1)
 exp(dpareto(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 ppareto(qpareto(p, 2, 3), 2, 3)
-mpareto(1, 2, 3)
-levpareto(10, 2, 3, order = 1)
+
+## variance
+mpareto(2, 4, 1) - mpareto(1, 4, 1)^2
+
+## case with shape - order > 0
+levpareto(10, 3, scale = 1, order = 2)
+
+## case with shape - order < 0
+levpareto(10, 1.5, scale = 1, order = 2)
 }
 \keyword{distribution}
