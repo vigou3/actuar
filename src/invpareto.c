@@ -13,6 +13,7 @@
 #include <R_ext/Applic.h>
 #include "locale.h"
 #include "dpq.h"
+#include "actuar.h"
 
 double dinvpareto(double x, double shape, double scale, int give_log)
 {
@@ -23,8 +24,10 @@ double dinvpareto(double x, double shape, double scale, int give_log)
      *  with u = v/(1 + v) = 1/(1 + 1/v), v = x/scale.
      */
 
-    double tmp, logu, log1mu;
-
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(shape) || ISNAN(scale))
+	return x + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
@@ -43,6 +46,8 @@ double dinvpareto(double x, double shape, double scale, int give_log)
 	return ACT_D_val(1.0 / scale);
     }
 
+    double tmp, logu, log1mu;
+
     tmp = log(x) - log(scale);
     logu = - log1pexp(-tmp);
     log1mu = - log1pexp(tmp);
@@ -53,8 +58,10 @@ double dinvpareto(double x, double shape, double scale, int give_log)
 double pinvpareto(double q, double shape, double scale, int lower_tail,
                   int log_p)
 {
-    double u;
-
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(shape) || ISNAN(scale))
+	return q + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
@@ -64,7 +71,7 @@ double pinvpareto(double q, double shape, double scale, int lower_tail,
     if (q <= 0)
         return ACT_DT_0;
 
-    u = exp(-log1pexp(log(scale) - log(q)));
+    double u = exp(-log1pexp(log(scale) - log(q)));
 
     return ACT_DT_val(R_pow(u, shape));
 }
@@ -72,6 +79,10 @@ double pinvpareto(double q, double shape, double scale, int lower_tail,
 double qinvpareto(double p, double shape, double scale, int lower_tail,
                   int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(shape) || ISNAN(scale))
+	return p + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
@@ -97,6 +108,10 @@ double rinvpareto(double shape, double scale)
 
 double minvpareto(double order, double shape, double scale, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(shape) || ISNAN(scale))
+	return order + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
@@ -129,10 +144,10 @@ static void fn(double *x, int n, void *ex)
 double levinvpareto(double limit, double shape, double scale, double order,
                     int give_log)
 {
-    double u;
-    double ex[3], lower, upper, epsabs, epsrel, result, abserr, *work;
-    int neval, ier, subdiv, lenw, last, *iwork;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(shape) || ISNAN(scale) || ISNAN(order))
+	return limit + shape + scale + order;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
@@ -145,6 +160,10 @@ double levinvpareto(double limit, double shape, double scale, double order,
 
     if (limit <= 0.0)
         return 0.0;
+
+    double u;
+    double ex[3], lower, upper, epsabs, epsrel, result, abserr, *work;
+    int neval, ier, subdiv, lenw, last, *iwork;
 
     /* Parameters for the integral are pretty much fixed here */
     ex[0] = shape; ex[1] = scale; ex[2] = order;
