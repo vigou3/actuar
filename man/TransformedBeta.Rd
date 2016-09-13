@@ -16,7 +16,7 @@
 \title{The Transformed Beta Distribution}
 \description{
   Density function, distribution function, quantile function, random generation,
-  raw moments and limited moments for the transformed beta distribution
+  raw moments and limited moments for the Transformed Beta distribution
   with parameters \code{shape1}, \code{shape2}, \code{shape3} and
   \code{scale}.
 }
@@ -110,9 +110,8 @@ levtrbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
 }
 \note{
   \code{levtrbeta} computes the limited expected value for \eqn{\alpha -
-    k/\gamma < 0}{shape1 - k/shape2 < 0} using the formula for the
-  incomplete beta function when the second parameter is negative
-  given in the introduction of Appendix A of Klugman et al. (2012).
+    k/\gamma < 0}{shape1 - k/shape2 < 0} using the formula implemented
+  in \code{\link{pbetanegb}}.
 
   Distribution also known as the Generalized Beta of the Second
   Kind and Pearson Type VI. See also Kleiber and Kotz (2003) for

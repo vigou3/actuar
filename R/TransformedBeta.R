@@ -43,13 +43,6 @@ levtrbeta <-
     .External("actuar_do_dpq", "levtrbeta", limit, shape1, shape2, shape3, scale, order, FALSE)
 
 
-## Utility function to compute the incomplete beta function when b <
-## 0, b != -1, -2, ... and a > 1+ floor(-b). Used mostly at the C
-## level for levtrbeta(). Not exported.
-pbetanegb <- function (x, a, b)
-    .External("actuar_do_dpq", "pbetanegb", x, a, b, FALSE)
-
-
 ## Aliases
 dpearson6 <- dtrbeta
 ppearson6 <- ptrbeta
