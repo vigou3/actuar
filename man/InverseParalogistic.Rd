@@ -38,7 +38,7 @@ levinvparalogis(limit, shape, rate = 1, scale = 1/rate,
   \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Inverse Paralogistic distribution with parameters \code{shape}
+  The inverse paralogistic distribution with parameters \code{shape}
   \eqn{= \tau}{= a} and \code{scale} \eqn{= \theta}{= s} has density:
   \deqn{f(x) = \frac{\tau^2 (x/\theta)^{\tau^2}}{%
       x [1 + (x/\theta)^\tau]^{\tau + 1}}}{%
@@ -46,8 +46,12 @@ levinvparalogis(limit, shape, rate = 1, scale = 1/rate,
   for \eqn{x > 0}, \eqn{\tau > 0}{a > 0} and \eqn{\theta > 0}{b > 0}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+  \eqn{E[X^k]}{E[X^k]}, \eqn{-\tau^2 < k < \tau}{-shape^2 < k <
+  shape}.
+
+  The \eqn{k}th limited moment at some limit \eqn{d} is \eqn{E[\min(X,
+  d)^k]}{E[min(X, d)^k]}, \eqn{k > -\tau^2}{k > -shape^2}
+  and \eqn{1 - k/\tau}{1 - k/shape} not a negative integer.
 }
 \value{
   \code{dinvparalogis} gives the density,
@@ -60,7 +64,18 @@ levinvparalogis(limit, shape, rate = 1, scale = 1/rate,
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
+\note{
+  \code{levinvparalogis} computes the limited expected value for \eqn{1
+    - k/\tau < 0}{1 - k/shape < 0} using the formula implemented in
+  \code{\link{pbetanegb}}.
+
+  See Kleiber and Kotz (2003) for alternative names and
+  parametrizations.
+}
 \references{
+  Kleiber, C. and Kotz, S. (2003), \emph{Statistical Size Distributions
+  in Economics and Actuarial Sciences}, Wiley.
+
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
   \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
@@ -72,7 +87,14 @@ levinvparalogis(limit, shape, rate = 1, scale = 1/rate,
 exp(dinvparalogis(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 pinvparalogis(qinvparalogis(p, 2, 3), 2, 3)
+
+## first negative moment
 minvparalogis(-1, 2, 2)
+
+## case with 1 - order/shape > 0
 levinvparalogis(10, 2, 2, order = 1)
+
+## case with 1 - order/shape < 0
+levinvparalogis(10, 2/3, 2, order = 1)
 }
 \keyword{distribution}
