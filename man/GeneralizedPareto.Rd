@@ -46,18 +46,17 @@ levgenpareto(limit, shape1, shape2, rate = 1, scale = 1/rate,
   \deqn{f(x) = \frac{\Gamma(\alpha + \tau)}{\Gamma(\alpha)\Gamma(\tau)}
     \frac{\theta^\alpha x^{\tau - 1}}{%
       (x + \theta)^{\alpha + \tau}}}{%
-    f(x) = Gamma(a + b)/(Gamma(a) * Gamma(b)) (s^a x^(b - 1))/%
-    (x + s)^(a + b)}
+    f(x) = Gamma(a + b)/(Gamma(a) * Gamma(b)) *
+           (s^a x^(b - 1))/(x + s)^(a + b)}
   for \eqn{x > 0}, \eqn{\alpha > 0}{a > 0}, \eqn{\tau > 0}{b > 0} and
   \eqn{\theta > 0}{s > 0}.
-  (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
+  (Here \eqn{\Gamma(\alpha)} is the function implemented
   by \R's \code{\link{gamma}()} and defined in its help.)
 
   The Generalized Pareto is the distribution of the random variable
-  \deqn{\theta \left(\frac{X}{1 - X}\right),}{%
-    s (X/(1 - X)),}
-  where \eqn{X} has a Beta distribution with parameters \eqn{\alpha}{a}
-  and \eqn{\tau}{b}.
+  \deqn{\theta \left(\frac{X}{1 - X}\right),}{\theta (X/(1 - X)),}
+  where \eqn{X} has a Beta distribution with parameters \eqn{\alpha}
+  and \eqn{\tau}.
 
   The Generalized Pareto distribution has the following special cases:
   \itemize{
@@ -66,6 +65,14 @@ levgenpareto(limit, shape1, shape2, rate = 1, scale = 1/rate,
     \item An \link[=dinvpareto]{Inverse Pareto} distribution when
     \code{shape1 == 1}.
   }
+
+  The \eqn{k}th raw moment of the random variable \eqn{X} is
+  \eqn{E[X^k]}, \eqn{-\tau < k < \alpha}{-shape2 < k < shape1}.
+
+  The \eqn{k}th limited moment at some limit
+  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]},
+  \eqn{k > -\tau}{k > -shape2} and \eqn{\alpha - k}{shape1 - k} not a
+  negative integer.
 }
 \value{
   \code{dgenpareto} gives the density,
@@ -79,9 +86,17 @@ levgenpareto(limit, shape1, shape2, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  Distribution also known as the Beta of the Second Kind.
+  \code{levgenpareto} computes the limited expected value for
+  \eqn{\alpha - k < 0}{shape1 - k < 0} using the formula implemented
+  in \code{\link{pbetanegb}}.
+
+  Distribution also known as the Beta of the Second Kind. See also
+  Kleiber and Kotz (2003) for alternative names and parametrizations.
 }
 \references{
+  Kleiber, C. and Kotz, S. (2003), \emph{Statistical Size Distributions
+  in Economics and Actuarial Sciences}, Wiley.
+
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
   \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
@@ -94,7 +109,14 @@ exp(dgenpareto(3, 3, 4, 4, log = TRUE))
 p <- (1:10)/10
 pgenpareto(qgenpareto(p, 3, 3, 1), 3, 3, 1)
 qgenpareto(.3, 3, 4, 4, lower.tail = FALSE)
-mgenpareto(1, 3, 2, 1) ^ 2
-levgenpareto(10, 3, 3, 3, order = 2)
+
+## variance
+mgenpareto(2, 3, 2, 1) - mgenpareto(1, 3, 2, 1)^2
+
+## case with shape1 - order > 0
+levgenpareto(10, 3, 3, scale = 1, order = 2)
+
+## case with shape1 - order < 0
+levgenpareto(10, 1.5, 3, scale = 1, order = 2)
 }
 \keyword{distribution}
