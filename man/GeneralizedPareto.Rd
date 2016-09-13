@@ -55,7 +55,7 @@ levgenpareto(limit, shape1, shape2, rate = 1, scale = 1/rate,
 
   The Generalized Pareto is the distribution of the random variable
   \deqn{\theta \left(\frac{X}{1 - X}\right),}{\theta (X/(1 - X)),}
-  where \eqn{X} has a Beta distribution with parameters \eqn{\alpha}
+  where \eqn{X} has a beta distribution with parameters \eqn{\alpha}
   and \eqn{\tau}.
 
   The Generalized Pareto distribution has the following special cases:

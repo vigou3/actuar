@@ -51,7 +51,7 @@ levburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   The Burr is the distribution of the random variable
   \deqn{\theta \left(\frac{X}{1 - X}\right)^{1/\gamma},}{%
     s (X/(1 - X))^(1/b),}
-  where \eqn{X} has a Beta distribution with parameters \eqn{1}
+  where \eqn{X} has a beta distribution with parameters \eqn{1}
   and \eqn{\alpha}{a}.
 
   The Burr distribution has the following special cases:
@@ -65,7 +65,7 @@ levburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   }
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]}, , \eqn{-\gamma < k < \alpha\gamma}{-shape2 < k <
+  \eqn{E[X^k]}{E[X^k]}, \eqn{-\gamma < k < \alpha\gamma}{-shape2 < k <
   shape1 * shape2}.
 
   The \eqn{k}th limited moment at some limit \eqn{d} is \eqn{E[\min(X,
@@ -84,7 +84,7 @@ levburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  \code{levbuff} computes the limited expected value for \eqn{\alpha -
+  \code{levburr} computes the limited expected value for \eqn{\alpha -
     k/\gamma < 0}{shape1 - k/shape2 < 0} using the formula implemented
   in \code{\link{pbetanegb}}.
 
