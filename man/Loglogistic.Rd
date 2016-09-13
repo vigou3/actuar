@@ -38,7 +38,7 @@ levllogis(limit, shape, rate = 1, scale = 1/rate,
   \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Loglogistic distribution with parameters \code{shape} \eqn{=
+  The loglogistic distribution with parameters \code{shape} \eqn{=
     \gamma}{= a} and \code{scale} \eqn{= \theta}{= s} has density:
   \deqn{f(x) = \frac{\gamma (x/\theta)^\gamma}{%
       x [1 + (x/\theta)^\gamma]^2}}{%
@@ -46,8 +46,11 @@ levllogis(limit, shape, rate = 1, scale = 1/rate,
   for \eqn{x > 0}, \eqn{\gamma > 0}{a > 0} and \eqn{\theta > 0}{b > 0}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+  \eqn{E[X^k]}, \eqn{-\gamma < k < \gamma}{-shape < k < shape}.
+
+  The \eqn{k}th limited moment at some limit \eqn{d} is \eqn{E[\min(X,
+  d)^k]}{E[min(X, d)^k]}, \eqn{k > -\gamma}{k > -shape}
+  and \eqn{1 - k/\gamma}{1 - k/shape} not a negative integer.
 }
 \value{
   \code{dllogis} gives the density,
@@ -61,9 +64,17 @@ levllogis(limit, shape, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  Also known as the Fisk distribution.
+  \code{levllogis} computes the limited expected value for \eqn{1 -
+    k/\gamma < 0}{1 - k/shape < 0} using the formula implemented
+  in \code{\link{pbetanegb}}.
+
+  Also known as the Fisk distribution. See also Kleiber and Kotz (2003)
+  for alternative names and parametrizations.
 }
 \references{
+  Kleiber, C. and Kotz, S. (2003), \emph{Statistical Size Distributions
+  in Economics and Actuarial Sciences}, Wiley.
+
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
   \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
@@ -75,7 +86,14 @@ levllogis(limit, shape, rate = 1, scale = 1/rate,
 exp(dllogis(2, 3, 4, log = TRUE))
 p <- (1:10)/10
 pllogis(qllogis(p, 2, 3), 2, 3)
+
+## mean
 mllogis(1, 2, 3)
+
+## case with 1 - order/shape > 0
 levllogis(10, 2, 3, order = 1)
+
+## case with 1 - order/shape < 0
+levllogis(10, 2/3, 3, order = 1)
 }
 \keyword{distribution}
