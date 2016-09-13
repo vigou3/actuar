@@ -92,10 +92,9 @@ levtrbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
   \eqn{E[X^k]}, \eqn{-\tau\gamma < k < \alpha\gamma}{-shape3 * shape2 <
   k < shape1 * shape2}.
 
-  The \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]},
-  \eqn{k > -\tau\gamma}{k > -shape3 * shape2} and \eqn{\alpha -
-  k/\gamma}{shape1 - k/shape2} not a negative integer.
+  The \eqn{k}th limited moment at some limit \eqn{d} is \eqn{E[\min(X,
+  d)^k]}{E[min(X, d)^k]}, \eqn{k > -\tau\gamma}{k > -shape3 * shape2}
+  and \eqn{\alpha - k/\gamma}{shape1 - k/shape2} not a negative integer.
 }
 \value{
   \code{dtrbeta} gives the density,
