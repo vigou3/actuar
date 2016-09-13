@@ -40,7 +40,7 @@ levinvburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Inverse Burr distribution with parameters \code{shape1} \eqn{=
+  The inverse Burr distribution with parameters \code{shape1} \eqn{=
     \tau}{= a}, \code{shape2} \eqn{= \gamma}{= b} and \code{scale}
   \eqn{= \theta}{= s}, has density:
   \deqn{f(x) = \frac{\tau \gamma (x/\theta)^{\gamma \tau}}{%
@@ -49,10 +49,10 @@ levinvburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   for \eqn{x > 0}, \eqn{\tau > 0}{a > 0}, \eqn{\gamma > 0}{b > 0} and
   \eqn{\theta > 0}{s > 0}.
 
-  The Inverse Burr is the distribution of the random variable
+  The inverse Burr is the distribution of the random variable
   \deqn{\theta \left(\frac{X}{1 - X}\right)^{1/\gamma},}{%
     s (X/(1 - X))^(1/b),}
-  where \eqn{X} has a Beta distribution with parameters \eqn{\tau}{a}
+  where \eqn{X} has a beta distribution with parameters \eqn{\tau}{a}
   and \eqn{1}.
 
   The Inverse Burr distribution has the following special cases:
@@ -66,8 +66,12 @@ levinvburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   }
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+  \eqn{E[X^k]}{E[X^k]}, \eqn{-\tau\gamma < k < \gamma}{-shape1 * shape2
+  < k < shape2}.
+
+  The \eqn{k}th limited moment at some limit \eqn{d} is \eqn{E[\min(X,
+  d)^k]}{E[min(X, d)^k]}, \eqn{k > -\tau\gamma}{k > -shape1 * shape2}
+  and \eqn{1 - k/\gamma}{1 - k/shape2} not a negative integer.
 }
 \value{
   \code{dinvburr} gives the density,
@@ -81,9 +85,17 @@ levinvburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  Also known as the Dagum distribution.
+  \code{levinvburr} computes the limited expected value for \eqn{1 -
+    k/\gamma < 0}{1 - k/shape2 < 0} using the formula implemented in
+  \code{\link{pbetanegb}}.
+
+  Also known as the Dagum distribution. See also Kleiber and Kotz (2003)
+  for alternative names and parametrizations.
 }
 \references{
+  Kleiber, C. and Kotz, S. (2003), \emph{Statistical Size Distributions
+  in Economics and Actuarial Sciences}, Wiley.
+
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
   \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
@@ -95,7 +107,14 @@ levinvburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
 exp(dinvburr(2, 2, 3, 1, log = TRUE))
 p <- (1:10)/10
 pinvburr(qinvburr(p, 2, 3, 1), 2, 3, 1)
+
+## variance
 minvburr(2, 2, 3, 1) - minvburr(1, 2, 3, 1) ^ 2
+
+## case with 1 - order/shape2 > 0
 levinvburr(10, 2, 3, 1, order = 2)
+
+## case with 1 - order/shape2 < 0
+levinvburr(10, 1.5, 0.5, 1, order = 2)
 }
 \keyword{distribution}

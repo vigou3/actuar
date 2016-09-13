@@ -11,6 +11,7 @@
 #include <Rmath.h>
 #include "locale.h"
 #include "dpq.h"
+#include "actuar.h"
 
 double dinvburr(double x, double shape1, double shape2, double scale,
                 int give_log)
@@ -22,8 +23,10 @@ double dinvburr(double x, double shape1, double shape2, double scale,
      *  with u = v/(1 + v) = 1/(1 + 1/v), v = (x/scale)^shape2.
      */
 
-    double tmp, logu, log1mu;
-
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(scale))
+	return x + shape1 + shape2 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(scale)  ||
@@ -44,6 +47,8 @@ double dinvburr(double x, double shape1, double shape2, double scale,
 	return ACT_D_val(1.0 / scale);
     }
 
+    double tmp, logu, log1mu;
+
     tmp = shape2 * (log(x) - log(scale));
     logu = - log1pexp(-tmp);
     log1mu = - log1pexp(tmp);
@@ -55,8 +60,10 @@ double dinvburr(double x, double shape1, double shape2, double scale,
 double pinvburr(double q, double shape1, double shape2, double scale,
                 int lower_tail, int log_p)
 {
-    double u;
-
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(scale))
+	return q + shape1 + shape2 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(scale)  ||
@@ -68,7 +75,7 @@ double pinvburr(double q, double shape1, double shape2, double scale,
     if (q <= 0)
         return ACT_DT_0;
 
-    u = exp(-log1pexp(shape2 * (log(scale) - log(q))));
+    double u = exp(-log1pexp(shape2 * (log(scale) - log(q))));
 
     return ACT_DT_val(R_pow(u, shape1));
 }
@@ -76,6 +83,10 @@ double pinvburr(double q, double shape1, double shape2, double scale,
 double qinvburr(double p, double shape1, double shape2, double scale,
                 int lower_tail, int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(scale))
+	return p + shape1 + shape2 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(scale)  ||
@@ -106,8 +117,10 @@ double rinvburr(double shape1, double shape2, double scale)
 double minvburr(double order, double shape1, double shape2, double scale,
                 int give_log)
 {
-    double tmp;
-
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(scale))
+	return order + shape1 + shape2 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(scale)  ||
@@ -117,11 +130,11 @@ double minvburr(double order, double shape1, double shape2, double scale,
         scale  <= 0.0)
         return R_NaN;
 
-    if (order  <= - shape1 * shape2 ||
-        order  >= shape2)
+    if (order <= - shape1 * shape2 ||
+        order >= shape2)
 	return R_PosInf;
 
-    tmp = order / shape2;
+    double tmp = order / shape2;
 
     return R_pow(scale, order) * gammafn(shape1 + tmp) * gammafn(1.0 - tmp)
         / gammafn(shape1);
@@ -130,8 +143,10 @@ double minvburr(double order, double shape1, double shape2, double scale,
 double levinvburr(double limit, double shape1, double shape2, double scale,
                   double order, int give_log)
 {
-    double u, tmp1, tmp2, tmp3;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(scale) || ISNAN(order))
+	return limit + shape1 + shape2 + scale + order;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(scale)  ||
@@ -147,13 +162,17 @@ double levinvburr(double limit, double shape1, double shape2, double scale,
     if (limit <= 0.0)
         return 0.0;
 
-    tmp1 = order / shape2;
-    tmp2 = shape1 + tmp1;
-    tmp3 = 1.0 - tmp1;
+    double u, a, b, r, tmp;
+
+    r = order / shape2;
+    a = shape1 + r;
+    b = 1.0 - r;
 
     u = exp(-log1pexp(shape2 * (log(scale) - log(limit))));
 
-    return R_pow(scale, order) * gammafn(tmp2) * gammafn(tmp3)
-        * pbeta(u, tmp2, tmp3, 1, 0) / gammafn(shape1)
-        + ACT_DLIM__0(limit, order) * (0.5 - R_pow(u, shape1) + 0.5);
+    tmp = (b < 0) ? pbetanegb(u, a, b, 0) / gammafn(shape1 + 1.0)
+	: beta(a, b) * pbeta(u, a, b, 1, 0);
+
+    return R_pow(scale, order) * tmp / beta(shape1, 1.0)
+	+ ACT_DLIM__0(limit, order) * (0.5 - R_pow(u, shape1) + 0.5);
 }
