@@ -7,7 +7,7 @@
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Wiley.
 ###
-### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
+### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 pbetanegb <- function (x, a, b)
     .External("actuar_do_dpq", "pbetanegb", x, a, b, FALSE)
