@@ -12,6 +12,7 @@
 #include <Rmath.h>
 #include "locale.h"
 #include "dpq.h"
+#include "actuar.h"
 
 double dinvtrgamma(double x, double shape1, double shape2, double scale,
                    int give_log)
@@ -142,19 +143,19 @@ double levinvtrgamma(double limit, double shape1, double shape2, double scale,
         scale  <= 0.0)
         return R_NaN;
 
-    if (order >= shape1 * shape2)
-	return R_PosInf;
+    /* if (order >= shape1 * shape2) */
+    /* 	return R_PosInf; */
 
     if (limit <= 0.0)
         return 0.0;
 
-    double u, tmp;
+    double u, a;
 
-    tmp = shape1 - order / shape2;
+    a = shape1 - order / shape2;
+    Rprintf("a = %f\n", a);
 
     u = exp(shape2 * (log(scale) - log(limit)));
 
-    return R_pow(scale, order) * gammafn(tmp)
-        * pgamma(u, tmp, 1.0, 0, 0) / gammafn(shape1)
+    return R_pow(scale, order) * pgammanega_scaled(u, a, 0) / gammafn(shape1)
         + ACT_DLIM__0(limit, order) * pgamma(u, shape1, 1.0, 1, 0);
 }

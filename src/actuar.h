@@ -38,6 +38,7 @@ double pbetanegb(double x, double a, double b, int foo);
 
 /* Temporary */
 double expint_E1(double x, double foo, int bar);
+double pgammanega_scaled(double x, double a, int foo);
 
 /*   Sampling */
 int SampleSingleValue(int n, double *p);
