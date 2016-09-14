@@ -16,7 +16,6 @@
 
 #include <R.h>
 #include <Rmath.h>
-#include "locale.h"
 #include "dpq.h"
 
 double pbetanegb(double x, double a, double b, double foo /*unused*/)
