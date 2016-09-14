@@ -50,7 +50,7 @@ export(## Credibility theory
     ## Phase-type distributions
     dphtype, pphtype, rphtype, mphtype, mgfphtype,
     ## Loss distributions
-    grouped.data, ogive, emm, mde, elev, coverage,
+    grouped.data, ogive, emm, mde, elev, coverage
 )
 
 ### Imports
