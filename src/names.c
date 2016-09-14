@@ -152,6 +152,8 @@ DPQTAB dpq_tab[] = {
     {"mgfphtype",       actuar_do_dpqphtype2,  4},
     /* Utility */
     {"pbetanegb",       actuar_do_dpq2,        101},
+    /* Temporary */
+    {"expint_E1",         actuar_do_dpq1,        100},
     {0, 0, 0}
 };
 

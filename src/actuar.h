@@ -36,6 +36,9 @@ void actuar_solve(double *A, double *B, int n, int p, double *z);
 /*   Distribution function */
 double pbetanegb(double x, double a, double b, int foo);
 
+/* Temporary */
+double expint_E1(double x, double foo, int bar);
+
 /*   Sampling */
 int SampleSingleValue(int n, double *p);
 

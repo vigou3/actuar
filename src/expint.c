@@ -1,64 +1,41 @@
 /*  ===== actuar: An R Package for Actuarial Science =====
  *
+ *  Functions to compute the exponential integral
  *
- * Copyright (C) 2007 Brian Gough
- * Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002 Gerard Jungman
+ *     int_x^infty exp(-t)/t dt
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or (at
- * your option) any later version.
+ *  The code in this file is adapted from code in the GNU Scientific
+ *  Library (GSL) v2.2.1 <https://www.gnu.org/software/gsl/>
  *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ *  Copyright (C) 2016 Vincent Goulet
+ *  Copyright (C) 2007 Brian Gough
+ *  Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002 Gerard Jungman
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 3 of the License, or (at
+ *  your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful, but
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ *  AUTHOR for the GSL: G. Jungman
+ *  AUTHOR for actuar: Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
 
-/* Author: G. Jungman */
+#include <R.h>
+#include <Rmath.h>
+#include "locale.h"
 
-#include <config.h>
-#include <gsl/gsl_math.h>
+#define LOG_DOUBLE_XMIN   (-7.0839641853226408e+02)
 
-/* gsl_machine.h */
-#define GSL_DBL_EPSILON        2.2204460492503131e-16
-#define GSL_LOG_DBL_MIN   (-7.0839641853226408e+02)
-
-/* gsl_nan.h */
-# define GSL_POSINF INFINITY
-
-/* #include <gsl/gsl_errno.h> */
-/* err/gsl_errno.h */
-#define GSL_ERROR(reason, gsl_errno) \
-       do { \
-       gsl_error (reason, __FILE__, __LINE__, gsl_errno) ; \
-       return gsl_errno ; \
-       } while (0)
-#define GSL_ERROR_VAL(reason, gsl_errno, value) \
-       do { \
-       gsl_error (reason, __FILE__, __LINE__, gsl_errno) ; \
-       return value ; \
-       } while (0)
-
-#include <gsl/gsl_sf_expint.h>
-/* #include <gsl/gsl_sf_gamma.h> */
-
-/* #include "error.h" */
-/* specfun/error.h */
-#define OVERFLOW_ERROR(result) do { (result)->val = GSL_POSINF; (result)->err = GSL_POSINF; GSL_ERROR ("overflow", GSL_EOVRFLW); } while(0)
-
-#define UNDERFLOW_ERROR(result) do { (result)->val = 0.0; (result)->err = GSL_DBL_MIN; GSL_ERROR ("underflow", GSL_EUNDRFLW); } while(0)
-
-#define DOMAIN_ERROR(result) do { (result)->val = GSL_NAN; (result)->err = GSL_NAN; GSL_ERROR ("domain error", GSL_EDOM); } while(0)
-
-/* #include "check.h" */
-
-
-/* specfun/gsl_sf_result.h */
+/*  */
 struct gsl_sf_result_struct {
   double val;
   double err;
@@ -66,8 +43,7 @@ struct gsl_sf_result_struct {
 typedef struct gsl_sf_result_struct gsl_sf_result;
 
 
-/* specfunc/chebyshev.h: data for a Chebyshev series over a given interval */
-
+/* Data for a Chebyshev series over a given interval */
 struct cheb_series_struct {
   double * c;   /* coefficients                */
   int order;    /* order of expansion          */
@@ -77,7 +53,6 @@ struct cheb_series_struct {
 };
 typedef struct cheb_series_struct cheb_series;
 
-/*-*-*-*-*-*-*-*-*-*-*-* Private Section *-*-*-*-*-*-*-*-*-*-*-*/
 
 /*
  Chebyshev expansions: based on SLATEC e1.f, W. Fullerton
@@ -328,7 +303,6 @@ static cheb_series AE14_cs = {
   13
 };
 
-/* specfun/cheb_eval_e.c */
 static inline int
 cheb_eval_e(const cheb_series * cs,
             const double x,
@@ -357,112 +331,68 @@ cheb_eval_e(const cheb_series * cs,
   }
 
   result->val = d;
-  result->err = GSL_DBL_EPSILON * e + fabs(cs->c[cs->order]);
+  result->err = DOUBLE_EPS * e + fabs(cs->c[cs->order]);
 
-  return GSL_SUCCESS;
+  return 0;
 }
 
-
-/* implementation for E1, allowing for scaling by exp(x) */
-static
-int expint_E1_impl(const double x, gsl_sf_result * result, const int scale)
+double expint_E1(double x, double foo, int bar)
 {
-  const double xmaxt = -GSL_LOG_DBL_MIN;      /* XMAXT = -LOG (R1MACH(1)) */
-  const double xmax  = xmaxt - log(xmaxt);    /* XMAX = XMAXT - LOG(XMAXT) */
+    const double xmaxt = -LOG_DOUBLE_XMIN;      /* XMAXT = -LOG(DOUBLE_XMIN) */
+    const double xmax  = xmaxt - log(xmaxt);    /* XMAX = XMAXT - LOG(XMAXT) */
 
-  /* CHECK_POINTER(result) */
-
-  if(x < -xmax && !scale) {
-      OVERFLOW_ERROR(result);
-  }
-  else if(x <= -10.0) {
-    const double s = 1.0/x * ( scale ? 1.0 : exp(-x) );
-    gsl_sf_result result_c;
-    cheb_eval_e(&AE11_cs, 20.0/x+1.0, &result_c);
-    result->val  = s * (1.0 + result_c.val);
-    result->err  = s * result_c.err;
-    result->err += 2.0 * GSL_DBL_EPSILON * (fabs(x) + 1.0) * fabs(result->val);
-    return GSL_SUCCESS;
-  }
-  else if(x <= -4.0) {
-    const double s = 1.0/x * ( scale ? 1.0 : exp(-x) );
-    gsl_sf_result result_c;
-    cheb_eval_e(&AE12_cs, (40.0/x+7.0)/3.0, &result_c);
-    result->val  = s * (1.0 + result_c.val);
-    result->err  = s * result_c.err;
-    result->err += 2.0 * GSL_DBL_EPSILON * fabs(result->val);
-    return GSL_SUCCESS;
-  }
-  else if(x <= -1.0) {
-    const double ln_term = -log(fabs(x));
-    const double scale_factor = ( scale ? exp(x) : 1.0 );
-    gsl_sf_result result_c;
-    cheb_eval_e(&E11_cs, (2.0*x+5.0)/3.0, &result_c);
-    result->val  = scale_factor * (ln_term + result_c.val);
-    result->err  = scale_factor * (result_c.err + GSL_DBL_EPSILON * fabs(ln_term));
-    result->err += 2.0 * GSL_DBL_EPSILON * fabs(result->val);
-    return GSL_SUCCESS;
-  }
-  else if(x == 0.0) {
-    DOMAIN_ERROR(result);
-  }
-  else if(x <= 1.0) {
-    const double ln_term = -log(fabs(x));
-    const double scale_factor = ( scale ? exp(x) : 1.0 );
-    gsl_sf_result result_c;
-    cheb_eval_e(&E12_cs, x, &result_c);
-    result->val  = scale_factor * (ln_term - 0.6875 + x + result_c.val);
-    result->err  = scale_factor * (result_c.err + GSL_DBL_EPSILON * fabs(ln_term));
-    result->err += 2.0 * GSL_DBL_EPSILON * fabs(result->val);
-    return GSL_SUCCESS;
-  }
-  else if(x <= 4.0) {
-    const double s = 1.0/x * ( scale ? 1.0 : exp(-x) );
-    gsl_sf_result result_c;
-    cheb_eval_e(&AE13_cs, (8.0/x-5.0)/3.0, &result_c);
-    result->val  = s * (1.0 + result_c.val);
-    result->err  = s * result_c.err;
-    result->err += 2.0 * GSL_DBL_EPSILON * fabs(result->val);
-    return GSL_SUCCESS;
-  }
-  else if(x <= xmax || scale) {
-    const double s = 1.0/x * ( scale ? 1.0 : exp(-x) );
-    gsl_sf_result result_c;
-    cheb_eval_e(&AE14_cs, 8.0/x-1.0, &result_c);
-    result->val  = s * (1.0 +  result_c.val);
-    result->err  = s * (GSL_DBL_EPSILON + result_c.err);
-    result->err += 2.0 * (x + 1.0) * GSL_DBL_EPSILON * fabs(result->val);
-    if(result->val == 0.0)
-      UNDERFLOW_ERROR(result);
-    else
-      return GSL_SUCCESS;
-  }
-  else {
-    UNDERFLOW_ERROR(result);
-  }
-}
-
-/*-*-*-*-*-*-*-*-*-*-*-* Functions with Error Codes *-*-*-*-*-*-*-*-*-*-*-*/
-
-
-int gsl_sf_expint_E1_e(const double x, gsl_sf_result * result)
-{
-  return expint_E1_impl(x, result, 0);
-}
-
-
-/*-*-*-*-*-*-*-*-*-* Functions w/ Natural Prototypes *-*-*-*-*-*-*-*-*-*-*/
-
-/* specfun/eval.h: evaluate a function discarding the status value in a modifiable way */
-#define EVAL_RESULT(fn) \
-   gsl_sf_result result; \
-   int status = fn; \
-   if (status != GSL_SUCCESS) { \
-     GSL_ERROR_VAL(#fn, status, result.val); \
-   } ; \
-   return result.val;
-
-double gsl_sf_expint_E1(const double x)
-{
-  EVAL_RESULT(gsl_sf_expint_E1_e(x, &result));
+    if (x < -xmax) {
+	error(_("overflow in expint"));
+	return R_PosInf;
+    }
+    else if (x <= -10.0) {
+	const double s = 1.0/x * exp(-x);
+	gsl_sf_result result_c;
+	cheb_eval_e(&AE11_cs, 20.0/x+1.0, &result_c);
+	return s * (1.0 + result_c.val);
+    }
+    else if (x <= -4.0) {
+	const double s = 1.0/x * exp(-x);
+	gsl_sf_result result_c;
+	cheb_eval_e(&AE12_cs, (40.0/x+7.0)/3.0, &result_c);
+	return s * (1.0 + result_c.val);
+    }
+    else if (x <= -1.0) {
+	const double ln_term = -log(fabs(x));
+	gsl_sf_result result_c;
+	cheb_eval_e(&E11_cs, (2.0*x+5.0)/3.0, &result_c);
+	return ln_term + result_c.val;
+    }
+    else if (x == 0.0) {
+	error(_("invalid input domain in expint"));
+	return R_NaN;
+    }
+    else if (x <= 1.0) {
+	const double ln_term = -log(fabs(x));
+	gsl_sf_result result_c;
+	cheb_eval_e(&E12_cs, x, &result_c);
+	return ln_term - 0.6875 + x + result_c.val;
+    }
+    else if (x <= 4.0) {
+	const double s = 1.0/x * exp(-x);
+	gsl_sf_result result_c;
+	cheb_eval_e(&AE13_cs, (8.0/x-5.0)/3.0, &result_c);
+	return s * (1.0 + result_c.val);
+    }
+    else if (x <= xmax) {
+	const double s = 1.0/x * exp(-x);
+	gsl_sf_result result_c;
+	cheb_eval_e(&AE14_cs, 8.0/x-1.0, &result_c);
+	double res = s * (1.0 +  result_c.val);
+	if (res == 0.0) {
+	    error(_("underflow in expint"));
+	    return 0.0;
+	}
+	else
+	    return res;
+    }
+    else {
+	error(_("underflow in expint"));
+	return 0.0;
+    }
 }

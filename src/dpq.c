@@ -171,6 +171,7 @@ SEXP actuar_do_dpq1(int code, SEXP args)
     case 13:  return DPQ1_1(args, dztgeom);
     case 14:  return DPQ1_2(args, pztgeom);
     case 15:  return DPQ1_2(args, qztgeom);
+    case 100:  return DPQ1_1(args, expint_E1);
     default:
         error(_("internal error in actuar_do_dpq1"));
     }
