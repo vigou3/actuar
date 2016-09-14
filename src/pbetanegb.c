@@ -18,7 +18,7 @@
 #include <Rmath.h>
 #include "dpq.h"
 
-double pbetanegb(double x, double a, double b, double foo /*unused*/)
+double pbetanegb(double x, double a, double b, int foo /*unused*/)
 {
 #ifdef IEEE_754
     if (ISNAN(x) || ISNAN(a) || ISNAN(b))
