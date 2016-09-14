@@ -34,7 +34,7 @@ mgfinvgauss(x, nu, lambda, log= FALSE)
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]}, the \eqn{k}th limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)^k]} and the moment generating function is
-  \eqn{E[e^{xX}]}.
+  \eqn{E[e^{xX}]}, \eqn{k = 1, 2, \dots}.
 
   The moment generating function is defined for \code{x <= lambda/(2 *
     nu^2)}.

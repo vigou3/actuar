@@ -41,7 +41,7 @@ levgenbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
   \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Generalized Beta distribution with parameters \code{shape1} \eqn{=
+  The generalized beta distribution with parameters \code{shape1} \eqn{=
     \alpha}{= a}, \code{shape2} \eqn{= \beta}{= b}, \code{shape3}
   \eqn{= \tau}{= c} and \code{scale} \eqn{= \theta}{= s}, has
   density:
@@ -49,20 +49,21 @@ levgenbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
     (x/\theta)^{\alpha \tau} (1 - (x/\theta)^\tau)^{\beta - 1}
     \frac{\tau}{x}}{%
       f(x) = Gamma(a + b)/(Gamma(a) * Gamma(b))
-      (c (x/s)^(ac) [1 - (x/s)^c]^(b - 1))/x}
+             (c (x/s)^(ac) [1 - (x/s)^c]^(b - 1))/x}
   for \eqn{0 < x < \theta}{0 < x < s}, \eqn{\alpha > 0}{a > 0},
   \eqn{\beta > 0}{b > 0}, \eqn{\tau > 0}{c > 0} and \eqn{\theta > 0}{s >
     0}. (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
   by \R's \code{\link{gamma}()} and defined in its help.)
 
-  The Generalized Beta is the distribution of the random variable
+  The generalized beta is the distribution of the random variable
   \deqn{\theta X^{1/\tau},}{s X^(1/c),}
-  where \eqn{X} has a Beta distribution with parameters \eqn{\alpha}{a}
+  where \eqn{X} has a beta distribution with parameters \eqn{\alpha}{a}
   and \eqn{\beta}{b}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}.
+  \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]}, \eqn{k > -\alpha\tau}{k
+  > -shape1 * shape3}.
 }
 \value{
   \code{dgenbeta} gives the density,
@@ -80,11 +81,11 @@ levgenbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
   defined on page 251 of Johnson et al, 1995.
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
-  \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
-
   Johnson, N. L., Kotz, S. and Balakrishnan, N. (1995)
   \emph{Continuous Univariate Distributions, Volume 2}, Wiley.
+
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
+  \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca}

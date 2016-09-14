@@ -14,11 +14,15 @@
 
 double mnorm(double order, double mean, double sd, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(mean) || ISNAN(sd))
+	return order + mean + sd;
+#endif
     if (!R_FINITE(mean)  ||
         !R_FINITE(sd)    ||
         !R_FINITE(order) ||
         sd <= 0.0 ||
-        (int) order != order)
+        ACT_nonint(order))
         return R_NaN;
 
     /* Trivial case */
@@ -41,6 +45,10 @@ double mnorm(double order, double mean, double sd, int give_log)
 
 double mgfnorm(double x, double mean, double sd, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(mean) || ISNAN(sd))
+	return x + mean + sd;
+#endif
     if (!R_FINITE(mean) ||
         !R_FINITE(sd)   ||
         sd <= 0.0)

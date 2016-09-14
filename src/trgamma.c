@@ -23,8 +23,10 @@ double dtrgamma(double x, double shape1, double shape2, double scale,
      *  with u = (x/scale)^shape2.
      */
 
-    double logu;
-
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(scale))
+	return x + shape1 + shape2 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(scale)  ||
@@ -47,7 +49,7 @@ double dtrgamma(double x, double shape1, double shape2, double scale,
 	    shape2 / (scale * gammafn(shape1));
     }
 
-    logu = shape2 * (log(x) - log(scale));
+    double logu = shape2 * (log(x) - log(scale));
 
     return ACT_D_exp(log(shape2) + shape1 * logu - exp(logu)
                    - log(x) - lgammafn(shape1));
@@ -56,8 +58,10 @@ double dtrgamma(double x, double shape1, double shape2, double scale,
 double ptrgamma(double q, double shape1, double shape2, double scale,
                 int lower_tail, int log_p)
 {
-    double u;
-
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(scale))
+	return q + shape1 + shape2 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(scale)  ||
@@ -69,7 +73,7 @@ double ptrgamma(double q, double shape1, double shape2, double scale,
     if (q <= 0)
         return ACT_DT_0;
 
-    u = exp(shape2 * (log(q) - log(scale)));
+    double u = exp(shape2 * (log(q) - log(scale)));
 
     return pgamma(u, shape1, 1.0, lower_tail, log_p);
 }
@@ -77,6 +81,10 @@ double ptrgamma(double q, double shape1, double shape2, double scale,
 double qtrgamma(double p, double shape1, double shape2, double scale,
                 int lower_tail, int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(scale))
+	return p + shape1 + shape2 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(scale)  ||
@@ -108,6 +116,10 @@ double rtrgamma(double shape1, double shape2, double scale)
 double mtrgamma(double order, double shape1, double shape2, double scale,
                 int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(scale))
+	return order + shape1 + shape2 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(scale) ||
@@ -127,8 +139,10 @@ double mtrgamma(double order, double shape1, double shape2, double scale,
 double levtrgamma(double limit, double shape1, double shape2, double scale,
                   double order, int give_log)
 {
-    double u, tmp;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(scale) || ISNAN(order))
+	return limit + shape1 + shape2 + scale + order;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(scale)  ||
@@ -143,6 +157,8 @@ double levtrgamma(double limit, double shape1, double shape2, double scale,
 
     if (limit <= 0.0)
         return 0.0;
+
+    double u, tmp;
 
     tmp = shape1 + order / shape2;
 

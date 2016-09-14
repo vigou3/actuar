@@ -13,6 +13,10 @@
 
 double mchisq(double order, double df, double ncp, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(df) || ISNAN(ncp))
+	return order + df + ncp;
+#endif
     if (!R_FINITE(df)    ||
         !R_FINITE(ncp)   ||
         !R_FINITE(order) ||
@@ -56,6 +60,10 @@ double mchisq(double order, double df, double ncp, int give_log)
 
 double levchisq(double limit, double df, double ncp, double order, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(df) || ISNAN(ncp) || ISNAN(order))
+	return limit + df + ncp + order;
+#endif
     if (!R_FINITE(df)    ||
         !R_FINITE(ncp)   ||
         !R_FINITE(order) ||
@@ -86,6 +94,10 @@ double levchisq(double limit, double df, double ncp, double order, int give_log)
 
 double mgfchisq(double x, double df, double ncp, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(df) || ISNAN(ncp))
+	return x + df + ncp;
+#endif
     if (!R_FINITE(df)  ||
         !R_FINITE(ncp) ||
         df <= 0.0 ||

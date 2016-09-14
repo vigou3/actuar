@@ -35,7 +35,7 @@ levpareto1(limit, shape, min, order = 1)
   \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Single-parameter Pareto distribution with parameter \code{shape}
+  The single-parameter Pareto distribution with parameter \code{shape}
   \eqn{= \alpha}{= a} has density:
   \deqn{f(x) = \frac{\alpha \theta^\alpha}{x^{\alpha + 1}}}{%
     f(x) = a b^a/x^(a + 1)}
@@ -47,8 +47,9 @@ levpareto1(limit, shape, min, order = 1)
   advance.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+  \eqn{E[X^k]}{E[X^k]}, \eqn{k < \alpha}{k < shape} and the \eqn{k}th
+  limited moment at some limit \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X,
+  d)^k]}, \eqn{x \ge \theta}{x \ge min}.
 }
 \value{
   \code{dpareto1} gives the density,

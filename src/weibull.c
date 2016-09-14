@@ -13,6 +13,10 @@
 
 double mweibull(double order, double shape, double scale, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(shape) || ISNAN(scale))
+	return order + shape + scale;
+#endif
     if (!R_FINITE(scale) ||
         !R_FINITE(shape) ||
         !R_FINITE(order) ||
@@ -29,8 +33,10 @@ double mweibull(double order, double shape, double scale, int give_log)
 double levweibull(double limit, double shape, double scale, double order,
                   int give_log)
 {
-    double u, tmp;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(shape) || ISNAN(scale) || ISNAN(order))
+	return limit + shape + scale + order;
+#endif
     if (!R_FINITE(scale) ||
         !R_FINITE(shape) ||
         !R_FINITE(order) ||
@@ -43,6 +49,8 @@ double levweibull(double limit, double shape, double scale, double order,
 
     if (limit <= 0.0)
         return 0.0;
+
+    double u, tmp;
 
     tmp = 1.0 + order / shape;
 

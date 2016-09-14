@@ -34,7 +34,7 @@ levlgamma(limit, shapelog, ratelog, order = 1)
   \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Loggamma distribution with parameters \code{shapelog} \eqn{=
+  The loggamma distribution with parameters \code{shapelog} \eqn{=
     \alpha}{= a} and \code{ratelog} \eqn{= \lambda}{= b} has density:
   \deqn{f(x) = \frac{\lambda^\alpha}{\Gamma(\alpha)}%
     \frac{(\log x)^{\alpha - 1}}{x^{\lambda + 1}}}{%
@@ -44,14 +44,15 @@ levlgamma(limit, shapelog, ratelog, order = 1)
   (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
   by \R's \code{\link{gamma}()} and defined in its help.)
 
-  The Loggamma is the distribution of the random variable
-  \eqn{e^X}{exp(X)},  where \eqn{X} has a Gamma distribution with
+  The loggamma is the distribution of the random variable
+  \eqn{e^X}{exp(X)},  where \eqn{X} has a gamma distribution with
   shape parameter \eqn{alpha}{a} and scale parameter
   \eqn{1/\lambda}{1/b}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}, \eqn{k < \lambda}{k
+  < ratelog}.
 }
 \value{
   \code{dlgamma} gives the density,

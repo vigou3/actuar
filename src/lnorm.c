@@ -13,6 +13,10 @@
 
 double mlnorm(double order, double logmean, double logsd, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(logmean) || ISNAN(logsd))
+	return order + logmean + logsd;
+#endif
     if (!R_FINITE(logmean) ||
         !R_FINITE(logsd)   ||
         !R_FINITE(order)   ||
@@ -25,8 +29,10 @@ double mlnorm(double order, double logmean, double logsd, int give_log)
 double levlnorm(double limit, double logmean, double logsd, double order,
                 int give_log)
 {
-    double u;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(logmean) || ISNAN(logsd) || ISNAN(order))
+	return limit + logmean + logsd + order;
+#endif
     if (!R_FINITE(logmean) ||
         !R_FINITE(logsd)   ||
         !R_FINITE(order)   ||
@@ -36,7 +42,7 @@ double levlnorm(double limit, double logmean, double logsd, double order,
     if (limit <= 0.0)
         return 0.0;
 
-    u = (log(limit) - logmean)/logsd;
+    double u = (log(limit) - logmean)/logsd;
 
     return exp(order * (logmean + 0.5 * order * R_pow(logsd, 2.0))) *
         pnorm(u - order * logsd, 0., 1.0, 1, 0) +

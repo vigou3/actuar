@@ -40,7 +40,7 @@ mgfinvgamma(x, shape, rate =1, scale = 1/rate, log =FALSE)
   \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Inverse Gamma distribution with parameters \code{shape} \eqn{=
+  The inverse gamma distribution with parameters \code{shape} \eqn{=
     \alpha}{= a} and \code{scale} \eqn{= \theta}{= s} has density:
   \deqn{f(x) = \frac{u^\alpha e^{-u}}{x \Gamma(\alpha)}, %
     \quad u = \theta/x}{%
@@ -54,7 +54,8 @@ mgfinvgamma(x, shape, rate =1, scale = 1/rate, log =FALSE)
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}, \eqn{k <
+  \alpha}{k < shape}.
 
   The moment generating function is given by \eqn{E[e^{xX}]}.
 }
@@ -71,9 +72,13 @@ mgfinvgamma(x, shape, rate =1, scale = 1/rate, log =FALSE)
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  Also known as the Vinci distribution.
+  Also known as the Vinci distribution. See also Kleiber and
+  Kotz (2003) for alternative names and parametrizations.
 }
 \references{
+  Kleiber, C. and Kotz, S. (2003), \emph{Statistical Size Distributions
+  in Economics and Actuarial Sciences}, Wiley.
+
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
   \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }

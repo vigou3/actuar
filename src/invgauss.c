@@ -13,6 +13,10 @@
 
 double minvGauss(double order, double nu, double lambda, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(nu) || ISNAN(lambda))
+	return order + nu + lambda;
+#endif
     if (!R_FINITE(nu) ||
         !R_FINITE(lambda) ||
         !R_FINITE(order) ||
@@ -38,8 +42,10 @@ double minvGauss(double order, double nu, double lambda, int give_log)
 double levinvGauss(double limit, double nu, double lambda, double order,
                    int give_log)
 {
-    double tmp, y, z;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(nu) || ISNAN(lambda) || ISNAN(order))
+	return limit + nu + lambda + order;
+#endif
     if (!R_FINITE(nu)     ||
         !R_FINITE(lambda) ||
         !R_FINITE(order)  ||
@@ -52,6 +58,8 @@ double levinvGauss(double limit, double nu, double lambda, double order,
         return 0.0;
 
     /* From R, order == 1 */
+    double tmp, y, z;
+
     tmp = sqrt(lambda/limit);
     y = (limit + nu)/nu;
     z = (limit - nu)/nu;
@@ -62,6 +70,10 @@ double levinvGauss(double limit, double nu, double lambda, double order,
 
 double mgfinvGauss(double x, double nu, double lambda, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(nu) || ISNAN(lambda))
+	return x + nu + lambda;
+#endif
     if (!R_FINITE(nu) ||
         !R_FINITE(lambda) ||
         nu <= 0.0 ||

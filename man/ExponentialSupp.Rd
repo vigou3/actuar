@@ -26,7 +26,7 @@ mgfexp(x, rate = 1, log = FALSE)
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]}, the \eqn{k}th limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]} and the moment
-  generating function is \eqn{E[e^{xX}]}.
+  generating function is \eqn{E[e^{xX}]}, \eqn{k > -1}.
 }
 \value{
   \code{mexp} gives the \eqn{k}th raw moment,
@@ -40,11 +40,11 @@ mgfexp(x, rate = 1, log = FALSE)
   \code{\link[stats]{Exponential}}
 }
 \references{
-  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
-  \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
-
   Johnson, N. L. and Kotz, S. (1970), \emph{Continuous Univariate
     Distributions, Volume 1}, Wiley.
+
+  Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
+  \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca},

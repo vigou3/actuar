@@ -39,7 +39,7 @@ levtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
   \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Transformed Gamma distribution with parameters \code{shape1} \eqn{=
+  The transformed gamma distribution with parameters \code{shape1} \eqn{=
     \alpha}{= a}, \code{shape2} \eqn{= \tau}{= b} and \code{scale}
   \eqn{= \theta}{= s} has density:
   \deqn{f(x) = \frac{\tau u^\alpha e^{-u}}{x \Gamma(\alpha)}, %
@@ -50,16 +50,16 @@ levtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
   (Here \eqn{\Gamma(\alpha)}{Gamma(a)} is the function implemented
   by \R's \code{\link{gamma}()} and defined in its help.)
 
-  The Transformed Gamma is the distribution of the random variable
+  The transformed gamma is the distribution of the random variable
   \eqn{\theta X^{1/\tau},}{s X^(1/b),}
-  where \eqn{X} has a Gamma distribution with shape parameter
+  where \eqn{X} has a gamma distribution with shape parameter
   \eqn{\alpha}{a} and scale parameter \eqn{1} or, equivalently, of the
   random variable
   \eqn{Y^{1/\tau}}{Y^(1/b)}
-  with \eqn{Y} a Gamma distribution with shape parameter \eqn{\alpha}{a}
+  with \eqn{Y} a gamma distribution with shape parameter \eqn{\alpha}{a}
   and scale parameter \eqn{\theta^\tau}{s^b}.
 
-  The Transformed Gamma probability distribution defines a family of
+  The transformed gamma probability distribution defines a family of
   distributions with the following special cases:
   \itemize{
     \item A \link[=dgamma]{Gamma} distribution when \code{shape2 == 1};
@@ -71,7 +71,8 @@ levtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}, \eqn{k >
+  -\alpha\tau}{k > -shape1 * shape2}.
 }
 \value{
   \code{dtrgamma} gives the density,
@@ -85,9 +86,13 @@ levtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  Distribution also known as the Generalized Gamma.
+  Distribution also known as the Generalized Gamma. See also Kleiber and
+  Kotz (2003) for alternative names and parametrizations.
 }
 \references{
+  Kleiber, C. and Kotz, S. (2003), \emph{Statistical Size Distributions
+  in Economics and Actuarial Sciences}, Wiley.
+
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
   \emph{Loss Models, From Data to Decisions, Fourth Edition}, Wiley.
 }

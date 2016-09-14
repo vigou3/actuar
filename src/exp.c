@@ -13,6 +13,10 @@
 
 double mexp(double order, double scale, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(scale))
+	return order + scale;
+#endif
     if (!R_FINITE(scale) ||
         !R_FINITE(order) ||
         scale <= 0.0)
@@ -26,6 +30,10 @@ double mexp(double order, double scale, int give_log)
 
 double levexp(double limit, double scale, double order, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(scale) || ISNAN(order))
+	return limit + scale + order;
+#endif
     if (!R_FINITE(scale) ||
         !R_FINITE(order) ||
         scale <= 0.0)
@@ -49,6 +57,10 @@ double levexp(double limit, double scale, double order, int give_log)
 
 double mgfexp(double x, double scale, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(scale))
+	return x + scale;
+#endif
     if (!R_FINITE(scale) ||
         scale <= 0.0 ||
         scale * x > 1.0)

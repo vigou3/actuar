@@ -23,8 +23,10 @@ double dgenbeta(double x, double shape1, double shape2, double shape3,
      *  with u = (x/scale)^shape3.
      */
 
-    double tmp, logu, log1mu;
-
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(shape3) || ISNAN(scale))
+	return x + shape1 + shape2 + shape3 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(shape3) ||
@@ -39,7 +41,7 @@ double dgenbeta(double x, double shape1, double shape2, double shape3,
         return ACT_D__0;
     if (x == 0.0)
     {
-        tmp = shape1 * shape3;
+        double tmp = shape1 * shape3;
         if (tmp > 1) return(ACT_D__0);
         if (tmp < 1) return(R_PosInf);
         /* tmp == 1 : */ return(ACT_D_val(shape3/beta(shape1, shape2)));
@@ -51,6 +53,8 @@ double dgenbeta(double x, double shape1, double shape2, double shape3,
         /* shape2 == 1 : */ return(ACT_D_val(shape1 * shape3));
     }
 
+    double logu, log1mu;
+
     logu = shape3 * (log(x) - log(scale));
     log1mu = log1p(-exp(logu));
 
@@ -61,8 +65,10 @@ double dgenbeta(double x, double shape1, double shape2, double shape3,
 double pgenbeta(double q, double shape1, double shape2, double shape3,
                double scale, int lower_tail, int log_p)
 {
-    double u;
-
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(shape3) || ISNAN(scale))
+	return q + shape1 + shape2 + shape3 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(shape3) ||
@@ -78,7 +84,7 @@ double pgenbeta(double q, double shape1, double shape2, double shape3,
     if (q >= scale)
         return ACT_DT_1;
 
-    u = exp(shape3 * (log(q) - log(scale)));
+    double u = exp(shape3 * (log(q) - log(scale)));
 
     return pbeta(u, shape1, shape2, lower_tail, log_p);
 }
@@ -86,6 +92,10 @@ double pgenbeta(double q, double shape1, double shape2, double shape3,
 double qgenbeta(double p, double shape1, double shape2, double shape3,
                double scale, int lower_tail, int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(shape3) || ISNAN(scale))
+	return p + shape1 + shape2 + shape3 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(shape3) ||
@@ -121,8 +131,10 @@ double rgenbeta(double shape1, double shape2, double shape3, double scale)
 double mgenbeta(double order, double shape1, double shape2, double shape3,
                double scale, int give_log)
 {
-    double tmp;
-
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(shape3) || ISNAN(scale))
+	return order + shape1 + shape2 + shape3 + scale;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(shape3) ||
@@ -137,7 +149,7 @@ double mgenbeta(double order, double shape1, double shape2, double shape3,
     if (order  <= - shape1 * shape3)
 	return R_PosInf;
 
-    tmp = order / shape3;
+    double tmp = order / shape3;
 
     return R_pow(scale, order) * beta(shape1 + tmp, shape2)
         / beta(shape1, shape2);
@@ -146,8 +158,10 @@ double mgenbeta(double order, double shape1, double shape2, double shape3,
 double levgenbeta(double limit, double shape1, double shape2, double shape3,
                  double scale, double order, int give_log)
 {
-    double u, tmp;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(shape3) || ISNAN(scale) || ISNAN(order))
+	return limit + shape1 + shape2 + shape3 + scale + order;
+#endif
     if (!R_FINITE(shape1) ||
         !R_FINITE(shape2) ||
         !R_FINITE(shape3) ||
@@ -159,11 +173,13 @@ double levgenbeta(double limit, double shape1, double shape2, double shape3,
         scale  <= 0.0)
         return R_NaN;
 
-    if (order  <= - shape1 * shape3)
+    if (order <= - shape1 * shape3)
 	return R_PosInf;
 
     if (limit <= 0.0)
         return 0.0;
+
+    double u, tmp;
 
     tmp = order / shape3;
 

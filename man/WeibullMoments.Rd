@@ -20,7 +20,8 @@ levweibull(limit, shape, scale = 1, order = 1)
 \details{
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}, \eqn{k >
+  -\tau}{k > -shape}.
 }
 \value{
   \code{mweibull} gives the \eqn{k}th raw moment and
@@ -31,7 +32,7 @@ levweibull(limit, shape, scale = 1, order = 1)
 }
 \seealso{
   \code{\link{Weibull}} for details on the Weibull distribution and
-  functions \code{{d,p,q,r}weibull}.
+  functions \code{[dpqr]weibull}.
 }
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),

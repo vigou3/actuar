@@ -15,6 +15,10 @@
 
 double dpareto1(double x, double shape, double min, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(shape) || ISNAN(min))
+	return x + shape + min;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(min)   ||
         shape <= 0.0 ||
@@ -29,6 +33,10 @@ double dpareto1(double x, double shape, double min, int give_log)
 
 double ppareto1(double q, double shape, double min, int lower_tail, int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(shape) || ISNAN(min))
+	return q + shape + min;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(min)   ||
         shape <= 0.0 ||
@@ -43,6 +51,10 @@ double ppareto1(double q, double shape, double min, int lower_tail, int log_p)
 
 double qpareto1(double p, double shape, double min, int lower_tail, int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(shape) || ISNAN(min))
+	return p + shape + min;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(min)   ||
         shape <= 0.0 ||
@@ -68,6 +80,10 @@ double rpareto1(double shape, double min)
 
 double mpareto1(double order, double shape, double min, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(shape) || ISNAN(min))
+	return order + shape + min;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(min)   ||
         !R_FINITE(order) ||
@@ -84,8 +100,10 @@ double mpareto1(double order, double shape, double min, int give_log)
 double levpareto1(double limit, double shape, double min, double order,
                   int give_log)
 {
-    double tmp;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(shape) || ISNAN(min) || ISNAN(order))
+	return limit + shape + min + order;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(min)   ||
         !R_FINITE(order) ||
@@ -96,7 +114,7 @@ double levpareto1(double limit, double shape, double min, double order,
     if (limit <= min)
         return 0.0;
 
-    tmp = shape - order;
+    double tmp = shape - order;
 
     return shape * R_pow(min, order) / tmp
         - order * R_pow(min, shape) / (tmp * R_pow(limit, tmp));

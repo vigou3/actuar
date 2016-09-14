@@ -13,6 +13,10 @@
 
 double mgamma(double order, double shape, double scale, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(shape) || ISNAN(scale))
+	return order + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
@@ -29,6 +33,10 @@ double mgamma(double order, double shape, double scale, int give_log)
 double levgamma(double limit, double shape, double scale, double order,
                 int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(shape) || ISNAN(scale) || ISNAN(order))
+	return limit + shape + scale + order;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
@@ -54,6 +62,10 @@ double levgamma(double limit, double shape, double scale, double order,
 
 double mgfgamma(double x, double shape, double scale, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(shape) || ISNAN(scale))
+	return x + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||

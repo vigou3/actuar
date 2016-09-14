@@ -14,6 +14,10 @@
 
 double dlgamma(double x, double shapelog, double ratelog, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(shapelog) || ISNAN(ratelog))
+	return x + shapelog + ratelog;
+#endif
     if (!R_FINITE(shapelog) ||
         !R_FINITE(ratelog)  ||
         shapelog <= 0.0 ||
@@ -29,6 +33,10 @@ double dlgamma(double x, double shapelog, double ratelog, int give_log)
 double plgamma(double q, double shapelog, double ratelog, int lower_tail,
                int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(shapelog) || ISNAN(ratelog))
+	return q + shapelog + ratelog;
+#endif
     if (!R_FINITE(shapelog) ||
         !R_FINITE(ratelog)  ||
         shapelog <= 0.0 ||
@@ -44,6 +52,10 @@ double plgamma(double q, double shapelog, double ratelog, int lower_tail,
 double qlgamma(double p, double shapelog, double ratelog, int lower_tail,
                int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(shapelog) || ISNAN(ratelog))
+	return p + shapelog + ratelog;
+#endif
     if (!R_FINITE(shapelog) ||
         !R_FINITE(ratelog)  ||
         shapelog <= 0.0 ||
@@ -69,6 +81,10 @@ double rlgamma(double shapelog, double ratelog)
 
 double mlgamma(double order, double shapelog, double ratelog, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(shapelog) || ISNAN(ratelog))
+	return order + shapelog + ratelog;
+#endif
     if (!R_FINITE(shapelog) ||
         !R_FINITE(ratelog) ||
         !R_FINITE(order) ||
@@ -85,8 +101,10 @@ double mlgamma(double order, double shapelog, double ratelog, int give_log)
 double levlgamma(double limit, double shapelog, double ratelog, double order,
                  int give_log)
 {
-    double u;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(shapelog) || ISNAN(ratelog) || ISNAN(order))
+	return limit + shapelog + ratelog + order;
+#endif
     if (!R_FINITE(shapelog) ||
         !R_FINITE(ratelog) ||
         !R_FINITE(limit) ||
@@ -102,7 +120,7 @@ double levlgamma(double limit, double shapelog, double ratelog, double order,
     if (limit <= 1.0)
         return 0.0;
 
-    u = log(limit);
+    double u = log(limit);
 
     return R_pow(1.0 - order / ratelog, -shapelog)
         * pgamma(u * (ratelog - order), shapelog, 1.0, 1, 0)

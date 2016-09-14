@@ -35,17 +35,14 @@ levinvexp(limit, rate = 1, scale = 1/rate, order)
   \item{limit}{limit of the loss variable.}
 }
 \details{
-  The Inverse Exponential distribution with parameter \code{scale}
+  The inverse exponential distribution with parameter \code{scale}
   \eqn{= \theta}{= s} has density:
   \deqn{f(x) = \frac{\theta e^{-\theta/x}}{x^2}}{f(x) = s exp(-s/x)/x^2}
   for \eqn{x > 0} and \eqn{\theta > 0}{s > 0}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
-
-  For numerical evaluation purposes, \code{levinvexp} requires that
-  \code{order < 1}.
+  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}, \eqn{k < 1}.
 }
 \value{
   \code{dinvexp} gives the density,

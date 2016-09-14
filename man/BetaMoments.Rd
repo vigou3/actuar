@@ -19,9 +19,10 @@ levbeta(limit, shape1, shape2, order = 1)
 \details{
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}.
+  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}, \eqn{k > -\alpha}{k
+    > -shape1}.
 
-  The noncentral Beta distribution is not supported.
+  The noncentral beta distribution is not supported.
 }
 \value{
   \code{mbeta} gives the \eqn{k}th raw moment and
@@ -32,8 +33,8 @@ levbeta(limit, shape1, shape2, order = 1)
   warning.
 }
 \seealso{
-  \code{\link[stats]{Beta}} for details on the Beta distribution and
-  functions \code{{d,p,q,r}beta}.
+  \code{\link[stats]{Beta}} for details on the beta distribution and
+  functions \code{[dpqr]beta}.
 }
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),

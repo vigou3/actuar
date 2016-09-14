@@ -22,8 +22,10 @@ double dinvexp(double x, double scale, int give_log)
      *  with u = scale/x.
      */
 
-    double logu;
-
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(scale))
+	return x + scale;
+#endif
     if (!R_FINITE(scale) || scale <= 0.0)
         return R_NaN;
 
@@ -31,28 +33,34 @@ double dinvexp(double x, double scale, int give_log)
     if (!R_FINITE(x) || x <= 0.0)
         return ACT_D__0;
 
-    logu = log(scale) - log(x);
+    double logu = log(scale) - log(x);
 
     return ACT_D_exp(logu - exp(logu) - log(x));
 }
 
 double pinvexp(double q, double scale, int lower_tail, int log_p)
 {
-    double u;
-
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(scale))
+	return q + scale;
+#endif
     if (!R_FINITE(scale) || scale <= 0.0)
         return R_NaN;
 
     if (q <= 0)
         return ACT_DT_0;
 
-    u = exp(log(scale) - log(q));
+    double u = exp(log(scale) - log(q));
 
     return ACT_DT_val(exp(-u));
 }
 
 double qinvexp(double p, double scale, int lower_tail, int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(scale))
+	return p + scale;
+#endif
     if (!R_FINITE(scale) || scale <= 0.0)
         return R_NaN;
 
@@ -72,6 +80,10 @@ double rinvexp(double scale)
 
 double minvexp(double order, double scale, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(scale))
+	return order + scale;
+#endif
     if (!R_FINITE(scale) ||
         !R_FINITE(order) ||
         scale <= 0.0)
@@ -85,8 +97,10 @@ double minvexp(double order, double scale, int give_log)
 
 double levinvexp(double limit, double scale, double order, int give_log)
 {
-    double u, tmp;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(scale) || ISNAN(order))
+	return limit + scale + order;
+#endif
     if (!R_FINITE(scale) ||
         R_FINITE(order) ||
         scale <= 0.0)
@@ -97,6 +111,8 @@ double levinvexp(double limit, double scale, double order, int give_log)
 
     if (limit <= 0.0)
         return 0.0;
+
+    double u, tmp;
 
     tmp = 1.0 - order;
 

@@ -22,8 +22,10 @@ double dinvweibull(double x, double shape, double scale, int give_log)
      *  with u = (scale/x)^shape.
      */
 
-    double logu;
-
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(shape) || ISNAN(scale))
+	return x + shape + scale;
+#endif
     if (!R_FINITE(scale) ||
         !R_FINITE(shape) ||
         scale <= 0.0 ||
@@ -34,7 +36,7 @@ double dinvweibull(double x, double shape, double scale, int give_log)
     if (!R_FINITE(x) || x <= 0.0)
         return ACT_D__0;
 
-    logu = shape * (log(scale) - log(x));
+    double logu = shape * (log(scale) - log(x));
 
     return ACT_D_exp(log(shape) + logu - exp(logu) - log(x));
 }
@@ -42,8 +44,10 @@ double dinvweibull(double x, double shape, double scale, int give_log)
 double pinvweibull(double q, double shape, double scale, int lower_tail,
                    int log_p)
 {
-    double u;
-
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(shape) || ISNAN(scale))
+	return q + shape + scale;
+#endif
     if (!R_FINITE(scale) ||
         !R_FINITE(shape) ||
         scale <= 0.0 ||
@@ -53,7 +57,7 @@ double pinvweibull(double q, double shape, double scale, int lower_tail,
     if (q <= 0)
         return ACT_DT_0;
 
-    u = exp(shape * (log(scale) - log(q)));
+    double u = exp(shape * (log(scale) - log(q)));
 
     return ACT_DT_val(exp(-u));
 }
@@ -61,6 +65,10 @@ double pinvweibull(double q, double shape, double scale, int lower_tail,
 double qinvweibull(double p, double shape, double scale, int lower_tail,
                    int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(shape) || ISNAN(scale))
+	return p + shape + scale;
+#endif
     if (!R_FINITE(scale) ||
         !R_FINITE(shape) ||
         scale <= 0.0 ||
@@ -86,6 +94,10 @@ double rinvweibull(double shape, double scale)
 
 double minvweibull(double order, double shape, double scale, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(shape) || ISNAN(scale))
+	return order + shape + scale;
+#endif
     if (!R_FINITE(scale) ||
         !R_FINITE(shape) ||
         !R_FINITE(order) ||
@@ -102,8 +114,10 @@ double minvweibull(double order, double shape, double scale, int give_log)
 double levinvweibull(double limit, double shape, double scale, double order,
                      int give_log)
 {
-    double u, tmp;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(shape) || ISNAN(scale) || ISNAN(order))
+	return limit + shape + scale + order;
+#endif
     if (!R_FINITE(scale) ||
         !R_FINITE(shape) ||
         !R_FINITE(order) ||
@@ -116,6 +130,8 @@ double levinvweibull(double limit, double shape, double scale, double order,
 
     if (limit <= 0.0)
         return 0.0;
+
+    double u, tmp;
 
     tmp = 1.0 - order / shape;
 

@@ -22,8 +22,10 @@ double dinvgamma(double x, double shape, double scale, int give_log)
      *  with u = scale/x.
      */
 
-    double logu;
-
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(shape) || ISNAN(scale))
+	return x + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
@@ -34,7 +36,7 @@ double dinvgamma(double x, double shape, double scale, int give_log)
     if (!R_FINITE(x) || x <= 0.0)
         return ACT_D__0;
 
-    logu = log(scale) - log(x);
+    double logu = log(scale) - log(x);
 
     return ACT_D_exp(shape * logu - exp(logu) - log(x) - lgammafn(shape));
 }
@@ -42,8 +44,10 @@ double dinvgamma(double x, double shape, double scale, int give_log)
 double pinvgamma(double q, double shape, double scale, int lower_tail,
                  int log_p)
 {
-    double u;
-
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(shape) || ISNAN(scale))
+	return q + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
@@ -53,7 +57,7 @@ double pinvgamma(double q, double shape, double scale, int lower_tail,
     if (q <= 0)
         return ACT_DT_0;
 
-    u = exp(log(scale) - log(q));
+    double u = exp(log(scale) - log(q));
 
     return pgamma(u, shape, 1.0, !lower_tail, log_p);
 }
@@ -61,6 +65,10 @@ double pinvgamma(double q, double shape, double scale, int lower_tail,
 double qinvgamma(double p, double shape, double scale, int lower_tail,
                  int log_p)
 {
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(shape) || ISNAN(scale))
+	return p + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
@@ -86,6 +94,10 @@ double rinvgamma(double shape, double scale)
 
 double minvgamma(double order, double shape, double scale, int give_log)
 {
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(shape) || ISNAN(scale))
+	return order + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
@@ -102,8 +114,10 @@ double minvgamma(double order, double shape, double scale, int give_log)
 double levinvgamma(double limit, double shape, double scale, double order,
                    int give_log)
 {
-    double u, tmp;
-
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(shape) || ISNAN(scale) || ISNAN(order))
+	return limit + shape + scale + order;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         !R_FINITE(order) ||
@@ -117,6 +131,8 @@ double levinvgamma(double limit, double shape, double scale, double order,
     if (limit <= 0.0)
         return 0.0;
 
+    double u, tmp;
+
     tmp = shape - order;
 
     u = exp(log(scale) - log(limit));
@@ -128,8 +144,10 @@ double levinvgamma(double limit, double shape, double scale, double order,
 
 double mgfinvgamma(double x, double shape, double scale, int give_log)
 {
-    double tmp;
-
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(shape) || ISNAN(scale))
+	return x + shape + scale;
+#endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
@@ -140,7 +158,7 @@ double mgfinvgamma(double x, double shape, double scale, int give_log)
     if (x == 0.0)
         return ACT_D_exp(0.0);
 
-    tmp = -scale * x;
+    double tmp = -scale * x;
 
     return ACT_D_exp(M_LN2 + shape * log(tmp)/2.0 +
                    log(bessel_k(sqrt(4 * tmp), shape, 1)) -
