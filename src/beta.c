@@ -14,7 +14,7 @@
 double mbeta(double order, double shape1, double shape2, int give_log)
 {
 #ifdef IEEE_754
-    if (ISNAN(order) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(scale))
+    if (ISNAN(order) || ISNAN(shape1) || ISNAN(shape2))
 	return order + shape1 + shape2;
 #endif
     if (!R_FINITE(shape1) ||
@@ -34,7 +34,7 @@ double levbeta(double limit, double shape1, double shape2, double order,
                 int give_log)
 {
 #ifdef IEEE_754
-    if (ISNAN(limit) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(scale) || ISNAN(order))
+    if (ISNAN(limit) || ISNAN(shape1) || ISNAN(shape2) || ISNAN(order))
 	return limit + shape1 + shape2 + order;
 #endif
     if (!R_FINITE(shape1) ||
