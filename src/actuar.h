@@ -34,7 +34,7 @@ void actuar_matpow(double *x, int n, int k, double *z);
 void actuar_solve(double *A, double *B, int n, int p, double *z);
 
 /*   Distribution function */
-double pbetanegb(double x, double a, double b, double foo); /* <- trbeta.c */
+double pbetanegb(double x, double a, double b, double foo);
 
 /*   Sampling */
 int SampleSingleValue(int n, double *p);
