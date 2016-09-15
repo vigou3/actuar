@@ -22,6 +22,29 @@
 	\code{"zero truncated poisson"}
 	for argument \code{model.freq} with the \code{"recursive"}
 	method.}
+      \item{Extended range of admissible values for many limited
+	expected value functions thanks to new C-level function
+	\code{expint}, \code{betaint} and \code{gammaint}. These provide
+	special integrals presented in the introduction of Appendix A of
+	Klugman et al. (2012).
+
+	Concerned functions are:
+	\code{levtrbeta},
+	\code{levgenpareto},
+	\code{levburr},
+	\code{levinvburr},
+	\code{levpareto},
+	\code{levinvpareto},
+	\code{levllogis},
+	\code{levparalogis},
+	\code{levinvparalogis} in the Transformed Beta family, and
+	\code{levinvtrgamma},
+	\code{levinvgamma},
+	\code{levinvweibull} in the Transformed Gamma family.}
+      \item{Functions \code{expint}, \code{betaint} and \code{gammaint}
+	to compute to special integrals mentioned above. These are
+	merely convenience R interfaces to the C level functions. They
+	are \emph{not} exported by the package.}
     }
   }
   \subsection{USER VISIBLE CHANGES}{
