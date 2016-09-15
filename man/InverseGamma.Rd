@@ -53,9 +53,9 @@ mgfinvgamma(x, shape, rate =1, scale = 1/rate, log =FALSE)
   \link[=dinvexp]{Inverse Exponential} distribution.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}, \eqn{k <
-  \alpha}{k < shape}.
+  \eqn{E[X^k]}{E[X^k]}, \eqn{k < \alpha}{k < shape}, and the \eqn{k}th
+  limited moment at some limit \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X,
+  d)^k]}, all \eqn{k}.
 
   The moment generating function is given by \eqn{E[e^{xX}]}.
 }
@@ -72,6 +72,9 @@ mgfinvgamma(x, shape, rate =1, scale = 1/rate, log =FALSE)
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
+  \code{levinvgamma} computes the limited expected value using
+  \code{\link{gammaint}}.
+
   Also known as the Vinci distribution. See also Kleiber and
   Kotz (2003) for alternative names and parametrizations.
 }

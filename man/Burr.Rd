@@ -84,9 +84,8 @@ levburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  \code{levburr} computes the limited expected value for \eqn{\alpha -
-    k/\gamma < 0}{shape1 - k/shape2 < 0} using the formula implemented
-  in \code{\link{pbetanegb}}.
+  \code{levburr} computes the limited expected value using
+  \code{\link{betaint}}.
 
   Distribution also known as the Burr Type XII or Singh-Maddala
   distribution. See also Kleiber and Kotz (2003) for alternative names

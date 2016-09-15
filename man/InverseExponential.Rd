@@ -41,8 +41,9 @@ levinvexp(limit, rate = 1, scale = 1/rate, order)
   for \eqn{x > 0} and \eqn{\theta > 0}{s > 0}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}, \eqn{k < 1}.
+  \eqn{E[X^k]}{E[X^k]}, \eqn{k < 1}, and the \eqn{k}th limited moment at
+  some limit \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}, all
+  \eqn{k}.
 }
 \value{
   \code{dinvexp} gives the density,
@@ -53,6 +54,10 @@ levinvexp(limit, rate = 1, scale = 1/rate, order)
   \code{levinvexp} calculates the \eqn{k}th limited moment.
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
+}
+\note{
+  \code{levinvexp} computes the limited expected value using
+  \code{\link{gammaint}}.
 }
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),

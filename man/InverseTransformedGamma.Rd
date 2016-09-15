@@ -75,7 +75,7 @@ levinvtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]}, \eqn{k < \alpha\tau}{k < shape1 * shape2}, and
   the \eqn{k}th limited moment at some limit \eqn{d} is \eqn{E[\min(X,
-  d)^k]}{E[min(X, d)^k]}, \eqn{k < \alpha\tau}{k < shape1 * shape2}.
+  d)^k]}{E[min(X, d)^k]} for all \eqn{k}.
 }
 \value{
   \code{dinvtrgamma} gives the density,
@@ -89,6 +89,9 @@ levinvtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
+  \code{levinvtrgamma} computes the limited expected value using
+  \code{\link{gammaint}}.
+
   Distribution also known as the Inverse Generalized Gamma. See also Kleiber and
   Kotz (2003) for alternative names and parametrizations.
 }

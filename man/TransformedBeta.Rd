@@ -108,9 +108,8 @@ levtrbeta(limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  \code{levtrbeta} computes the limited expected value for \eqn{\alpha -
-    k/\gamma < 0}{shape1 - k/shape2 < 0} using the formula implemented
-  in \code{\link{pbetanegb}}.
+  \code{levtrbeta} computes the limited expected value using
+  \code{\link{betaint}}.
 
   Distribution also known as the Generalized Beta of the Second
   Kind and Pearson Type VI. See also Kleiber and Kotz (2003) for

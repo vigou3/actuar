@@ -66,9 +66,8 @@ levpareto(limit, shape, scale, order = 1)
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  \code{levpareto} computes the limited expected value for
-  \eqn{\alpha - k < 0}{shape1 - k < 0} using the formula implemented
-  in \code{\link{pbetanegb}}.
+  \code{levpareto} computes the limited expected value using
+  \code{\link{betaint}}.
 
   Distribution also known as the Pareto Type II or Lomax distribution.
   See also Kleiber and Kotz (2003) for alternative names and

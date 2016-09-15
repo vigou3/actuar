@@ -64,9 +64,8 @@ levllogis(limit, shape, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  \code{levllogis} computes the limited expected value for \eqn{1 -
-    k/\gamma < 0}{1 - k/shape < 0} using the formula implemented
-  in \code{\link{pbetanegb}}.
+  \code{levllogis} computes the limited expected value using
+  \code{\link{betaint}}.
 
   Also known as the Fisk distribution. See also Kleiber and Kotz (2003)
   for alternative names and parametrizations.

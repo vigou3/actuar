@@ -54,9 +54,9 @@ levinvweibull(limit, shape, rate = 1, scale = 1/rate,
   \link[=dinvexp]{Inverse Exponential} distribution.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]} and the \eqn{k}th limited moment at some limit
-  \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]}, \eqn{k <
-  \tau}{k < shape}.
+  \eqn{E[X^k]}{E[X^k]}, \eqn{k < \tau}{k < shape}, and the \eqn{k}th
+  limited moment at some limit \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X,
+  d)^k]}, all \eqn{k}.
 }
 \value{
   \code{dinvweibull} gives the density,
@@ -70,6 +70,9 @@ levinvweibull(limit, shape, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
+  \code{levinvweibull} computes the limited expected value using
+  \code{\link{gammaint}}.
+
   Distribution also knonw as the log-Gompertz. See also Kleiber and
   Kotz (2003) for alternative names and parametrizations.
 }

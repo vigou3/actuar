@@ -65,9 +65,8 @@ levparalogis(limit, shape, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  \code{levparalogis} computes the limited expected value for
-  \eqn{\alpha - k/\alpha < 0}{shape - k/shape < 0} using the formula
-  implemented in \code{\link{pbetanegb}}.
+  \code{levparalogis} computes the limited expected value using
+  \code{\link{betaint}}.
 
   See Kleiber and Kotz (2003) for alternative names and
   parametrizations.

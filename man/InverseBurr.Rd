@@ -85,9 +85,8 @@ levinvburr(limit, shape1, shape2, rate = 1, scale = 1/rate,
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  \code{levinvburr} computes the limited expected value for \eqn{1 -
-    k/\gamma < 0}{1 - k/shape2 < 0} using the formula implemented in
-  \code{\link{pbetanegb}}.
+  \code{levinvburr} computes the limited expected value using
+  \code{\link{betaint}}.
 
   Also known as the Dagum distribution. See also Kleiber and Kotz (2003)
   for alternative names and parametrizations.
