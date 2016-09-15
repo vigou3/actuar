@@ -115,8 +115,8 @@ gammaint(x, a)
 ###
 ### Exponential integral
 ###
-expint(1.275)                    # 0.1408099 in Abramowitz and Stegun
-expint(10)                       # 4.15697e-6 in Abramowitz and Stegun
+actuar:::expint(1.275)           # 0.1408099 in Abramowitz and Stegun
+actuar:::expint(10)              # 4.15697e-6 in Abramowitz and Stegun
 
 ###
 ### Incomplete beta related integral
@@ -126,13 +126,13 @@ a <- 7
 
 ## case with b > 0
 b <- 2
-betaint(x, a, b)
+actuar:::betaint(x, a, b)
 gamma(a) * gamma(b) * pbeta(x, a, b)    # same
 
 ## case with b < 0
 b <- -2.2
 r <- floor(-b)        # r = 2
-betaint(x, a, b)
+actuar:::betaint(x, a, b)
 
 ## "manual" calculation
 s <- (x^(a-1) * (1-x)^b)/b +
@@ -149,12 +149,12 @@ x <- 1.2
 
 ## case with a > 0
 a <- 1.5
-gammaint(x, a)
-gamma(a) * pgamma(x, a)                 # same
+actuar:::gammaint(x, a)
+gamma(a) * pgamma(x, a, lower = FALSE)  # same
 
 ## case with a < 0 non integer
 a <- -1.5
-gammaint(x, a)
+actuar:::gammaint(x, a)
 
 ## "manual" calculation
 (((gamma(a+2)*pgamma(x, a+2, 1, lower = FALSE)
@@ -163,10 +163,10 @@ gammaint(x, a)
 
 ## case with a < 0 integer
 a <- -2
-gammaint(x, a)
+actuar:::gammaint(x, a)
 
 ## "manual" calculation
-(((expint(x) -(x^(a+1) * exp(-x)))/(a+1))
+(((actuar:::expint(x) -(x^(a+1) * exp(-x)))/(a+1))
     - (x^a * exp(-x)))/a
 }
 \keyword{distribution}
