@@ -5,6 +5,7 @@
 
 /* Functions accessed from .External() */
 SEXP actuar_do_dpq(SEXP args);
+SEXP actuar_do_dpq0(int code, SEXP args);
 SEXP actuar_do_dpq1(int code, SEXP args);
 SEXP actuar_do_dpq2(int code, SEXP args);
 SEXP actuar_do_dpq3(int code, SEXP args);
@@ -33,12 +34,13 @@ double actuar_expmprod(double *x, double *M, double *y, int n);
 void actuar_matpow(double *x, int n, int k, double *z);
 void actuar_solve(double *A, double *B, int n, int p, double *z);
 
-/*   Distribution function */
-double pbetanegb(double x, double a, double b, int foo);
-
-/* Temporary */
-double expint_E1(double x, double foo, int bar);
-double pgammanega_scaled(double x, double a, int foo);
+/*   Special integrals */
+double expint(double x, double foo, int bar);
+double expint_E1(double x);
+double gammaint(double x, double a, int foo);
+double gammaint_raw(double x, double a);
+double betaint(double x, double a, double b, int foo);
+double betaint_raw(double x, double a, double b);
 
 /*   Sampling */
 int SampleSingleValue(int n, double *p);

@@ -178,17 +178,11 @@ double levtrbeta(double limit, double shape1, double shape2, double shape3,
     if (limit <= 0.0)
         return 0.0;
 
-    double u, a, b, r, tmp;
+    double u = exp(-log1pexp(-shape2 * (log(limit) - log(scale))));
+    double tmp = order / shape2;
 
-    r = order / shape2;
-    a = shape3 + r;
-    b = shape1 - r;
-
-    u = exp(-log1pexp(-shape2 * (log(limit) - log(scale))));
-
-    tmp = (b < 0) ? pbetanegb(u, a, b, 0) / gammafn(shape1 + shape3)
-	: beta(a, b) * pbeta(u, a, b, 1, 0);
-
-    return R_pow(scale, order) * tmp / beta(shape1, shape3)
+    return R_pow(scale, order)
+	* betaint_raw(u, shape3 + tmp, shape1 - tmp)
+	/ (gammafn(shape1) * gammafn(shape3))
 	+ ACT_DLIM__0(limit, order) * pbeta(u, shape3, shape1, 0, 0);
 }

@@ -137,16 +137,10 @@ double levpareto(double limit, double shape, double scale, double order,
     if (limit <= 0.0)
         return 0.0;
 
-    double u, a, b, tmp;
+    double u = exp(-log1pexp(log(limit) - log(scale)));
 
-    a = 1.0 + order;
-    b = shape - order;
-
-    u = exp(-log1pexp(log(limit) - log(scale)));
-
-    tmp = (b < 0) ? pbetanegb(0.5 - u + 0.5, a, b, 0) / gammafn(shape + 1.0)
-	: beta(a, b) * pbeta(0.5 - u + 0.5, a, b, 1, 0);
-
-    return R_pow(scale, order) * tmp / beta(shape, 1.0)
+    return R_pow(scale, order)
+	* betaint_raw(0.5 - u + 0.5, 1.0 + order, shape - order)
+	/ gammafn(shape)
         + ACT_DLIM__0(limit, order) * R_pow(u, shape);
 }

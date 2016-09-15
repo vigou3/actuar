@@ -163,16 +163,10 @@ double levgenpareto(double limit, double shape1, double shape2, double scale,
     if (limit <= 0.0)
         return 0.0;
 
-    double u, a, b, tmp;
+    double u = exp(-log1pexp(log(scale) - log(limit)));
 
-    a = shape2 + order;
-    b = shape1 - order;
-
-    u = exp(-log1pexp(log(scale) - log(limit)));
-
-    tmp = (b < 0) ? pbetanegb(u, a, b, 0) / gammafn(shape1 + shape2)
-	: beta(a, b) * pbeta(u, a, b, 1, 0);
-
-    return R_pow(scale, order) * tmp / beta(shape1, shape2)
+    return R_pow(scale, order)
+	* betaint_raw(u, shape2 + order, shape1 - order)
+	/ (gammafn(shape1) * gammafn(shape2))
         + ACT_DLIM__0(limit, order) * pbeta(u, shape2, shape1, 0, 0);
 }

@@ -49,6 +49,69 @@
 #include "locale.h"
 
 
+/* Functions for special integrals with "zero parameter" */
+#define if_NA_dpq0_set(y, x)		    \
+        if      (ISNA (x)) y = NA_REAL;     \
+        else if (ISNAN(x)) y = R_NaN;
+
+static SEXP dpq0_1(SEXP sx, SEXP sI, double (*f)())
+{
+    SEXP sy;
+    int i, nx, sxo = OBJECT(sx);
+    double xi, *x, *y;
+    int i_1;
+    Rboolean naflag = FALSE;
+
+    if (!isNumeric(sx))
+        error(_("invalid arguments"));
+
+    nx = LENGTH(sx);
+    if (nx == 0)
+        return(allocVector(REALSXP, 0));
+    PROTECT(sx = coerceVector(sx, REALSXP));
+    PROTECT(sy = allocVector(REALSXP, nx));
+    x = REAL(sx);
+    y = REAL(sy);
+
+    i_1 = asInteger(sI);
+
+    for (i = 0; i < nx; i++)
+    {
+        xi = x[i];
+        if_NA_dpq0_set(y[i], xi)
+        else
+        {
+            y[i] = f(xi, i_1);
+            if (ISNAN(y[i])) naflag = TRUE;
+        }
+    }
+
+    if (naflag)
+        warning(R_MSG_NA);
+
+    SET_ATTRIB(sy, duplicate(ATTRIB(sx)));
+    SET_OBJECT(sy, sxo);
+    UNPROTECT(2);
+
+    return sy;
+}
+
+#define DPQ0_1(A, FUN) dpq0_1(CAR(A), CADR(A), FUN);
+
+SEXP actuar_do_dpq0(int code, SEXP args)
+{
+    switch (code)
+    {
+    case 101: return DPQ0_1(args, expint);   /* special integral */
+    default:
+        error(_("internal error in actuar_do_dpq0"));
+    }
+
+    return args;                /* never used; to keep -Wall happy */
+}
+
+
+
 /* Functions for one parameter distributions */
 #define if_NA_dpq1_set(y, x, a)                         \
         if      (ISNA (x) || ISNA (a)) y = NA_REAL;     \
@@ -171,7 +234,7 @@ SEXP actuar_do_dpq1(int code, SEXP args)
     case 13:  return DPQ1_1(args, dztgeom);
     case 14:  return DPQ1_2(args, pztgeom);
     case 15:  return DPQ1_2(args, qztgeom);
-    case 100:  return DPQ1_1(args, expint_E1);
+    case 101: return DPQ1_1(args, gammaint); /* special integral */
     default:
         error(_("internal error in actuar_do_dpq1"));
     }
@@ -362,7 +425,7 @@ SEXP actuar_do_dpq2(int code, SEXP args)
     case 56:  return DPQ2_1(args, dztbinom);
     case 57:  return DPQ2_2(args, pztbinom);
     case 58:  return DPQ2_2(args, qztbinom);
-    case 101:  return DPQ2_1(args, pbetanegb); /* utility */
+    case 101: return DPQ2_1(args, betaint); /* special integral */
     default:
         error(_("internal error in actuar_do_dpq2"));
     }

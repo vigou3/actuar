@@ -12,6 +12,7 @@
 #include <Rmath.h>
 #include "locale.h"
 #include "dpq.h"
+#include "actuar.h"
 
 double dinvweibull(double x, double shape, double scale, int give_log)
 {
@@ -131,12 +132,8 @@ double levinvweibull(double limit, double shape, double scale, double order,
     if (limit <= 0.0)
         return 0.0;
 
-    double u, tmp;
+    double u = exp(shape * (log(scale) - log(limit)));
 
-    tmp = 1.0 - order / shape;
-
-    u = exp(shape * (log(scale) - log(limit)));
-
-    return R_pow(scale, order) * gammafn(tmp) * pgamma(u, tmp, 1.0, 0, 0)
+    return R_pow(scale, order) * gammaint_raw(u, 1.0 - order/shape)
         + ACT_DLIM__0(limit, order) * (0.5 - exp(-u) + 0.5);
 }

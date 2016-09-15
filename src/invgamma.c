@@ -12,6 +12,7 @@
 #include <Rmath.h>
 #include "locale.h"
 #include "dpq.h"
+#include "actuar.h"
 
 double dinvgamma(double x, double shape, double scale, int give_log)
 {
@@ -131,14 +132,9 @@ double levinvgamma(double limit, double shape, double scale, double order,
     if (limit <= 0.0)
         return 0.0;
 
-    double u, tmp;
+    double u = exp(log(scale) - log(limit));
 
-    tmp = shape - order;
-
-    u = exp(log(scale) - log(limit));
-
-    return R_pow(scale, order) * gammafn(shape - order)
-        * pgamma(u, tmp, 1.0, 0, 0) / gammafn(shape)
+    return R_pow(scale, order) * gammaint_raw(u, shape - order) / gammafn(shape)
         + ACT_DLIM__0(limit, order) * pgamma(u, shape, 1.0, 1, 0);
 }
 

@@ -1,12 +1,22 @@
 /*  ===== actuar: An R Package for Actuarial Science =====
  *
- *  Function to compute a scaled version of the beta distribution
- *  function when the second parameter is a negative non integer. More
- *  precisely, the function computes the value of
+ *  Function to compute the integral
  *
- *    gamma(a) gamma(b) pbeta(x, a, b)
+ *    B(a, b; x) = gammafn(a + b) int_0^x t^(a-1) (1-t)^(b-1) dt
  *
- *  when b < 0, b != -1, -2, ... and a > 1 + floor(-b).
+ *  for a > 0, b != -1, -2, ... and 0 < x < 1. When b > 0,
+ *
+ *    B(a, b; x) = gammafn(a) gammafn(b) pbeta(x, a, b).
+ *
+ *  When b < 0 and b != -1, -2, ... and a > 1 + floor(-b),
+ *
+ *    B(a, b; x)
+ *    = -gammafn(a + b) {(x^(a-1) (1-x)^b)/b
+ *        + [(a-1) x^(a-2) (1-x)^(b+1)]/[b(b+1)]
+ *        + ...
+ *        + [(a-1)...(a-r) x^(a-r-1) (1-x)^(b+r)]/[b(b+1)...(b+r)]}
+ *      + [(a-1)...(a-r-1)]/[b(b+1)...(b+r)] gammafn(a-r-1)
+ *        * gammafn(b+r+1) pbeta(x, a-r-1, b+r+1)
  *
  *  See Appendix A of Klugman, Panjer & Willmot, Loss Models,
  *  Fourth Edition, Wiley, 2012 for the formula.
@@ -18,18 +28,16 @@
 #include <Rmath.h>
 #include "dpq.h"
 
-double pbetanegb(double x, double a, double b, int foo /*unused*/)
+double betaint_raw(double x, double a, double b)
 {
-#ifdef IEEE_754
-    if (ISNAN(x) || ISNAN(a) || ISNAN(b))
-	return x + a + b;
-#endif
+/* Here, assume that (x, a, b) are not NA, 0 < x < 1 and a > 0. */
+
+    if (b > 0)
+	return gammafn(a) * gammafn(b) * pbeta(x, a, b, /*l._t.*/1, /*give_log*/0);
 
     double r = floor(-b);
 
-    /* Return NaN if b is integer or if a is too small for the value
-     * of b. */
-    if (!(ACT_nonint(b) && a - r - 1 > 0))
+    if (! (ACT_nonint(b) && a - r - 1 > 0))
 	return R_NaN;
 
     /* There are two quantities to accumulate in order to compute the
@@ -54,7 +62,7 @@ double pbetanegb(double x, double a, double b, int foo /*unused*/)
     /* Other terms in the alternating sum iff r > 0.
      * Relies on the fact that each new term in the sum is
      *
-     *  previous term * (a - i - 1)(1 - x)/[(b + i + 1) x]
+     *  [previous term] * (a - i - 1)(1 - x)/[(b + i + 1) x]
      *
      * for i = 0, ..., r - 1
      */
@@ -72,3 +80,21 @@ double pbetanegb(double x, double a, double b, int foo /*unused*/)
 	   + (ratio * ap) * exp(lgammafn(ap) + lgammafn(bp) +
 				pbeta(x, ap, bp, /*l._t.*/1, /*give_log*/1)));
 }
+
+
+/* The function called by actuar_do_dpq(). The fourth argument is a
+ * placeholder to fit into the scheme of dpq.c */
+double betaint(double x, double a, double b, int foo)
+{
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(a) || ISNAN(b))
+	return x + a + b;
+#endif
+    if (a < 0 || x <= 0 || x >= 1)
+	return R_NaN;
+
+    return betaint_raw(x, a, b);
+}
+
+
+

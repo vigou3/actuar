@@ -151,21 +151,11 @@ double levinvparalogis(double limit, double shape, double scale, double order,
     if (order <= -shape * shape)
 	return R_PosInf;
 
-    double u, a, b, r, tmp;
+    double u = exp(-log1pexp(shape * (log(scale) - log(limit))));
+    double tmp = order / shape;
 
-    r = order / shape;
-    a = shape + r;
-    b = 1.0 - r;
-
-    u = exp(-log1pexp(shape * (log(scale) - log(limit))));
-
-    tmp = (b < 0) ? pbetanegb(u, a, b, 0) / gammafn(shape + 1.0)
-	: beta(a, b) * pbeta(u, a, b, 1, 0);
-
-    return R_pow(scale, order) * tmp / beta(shape, 1.0)
-	+ ACT_DLIM__0(limit, order) * (0.5 - R_pow(u, shape) + 0.5);
-
-    /* return R_pow(scale, order) * gammafn(a) * gammafn(b) */
-    /*     * pbeta(u, a, b, 1, 0) / gammafn(shape) */
-    /*     + ACT_DLIM__0(limit, order) * (0.5 - R_pow(u, shape) + 0.5); */
+    return R_pow(scale, order)
+        * betaint_raw(u, shape + tmp, 1.0 - tmp)
+	/ gammafn(shape)
+        + ACT_DLIM__0(limit, order) * (0.5 - R_pow(u, shape) + 0.5);
 }

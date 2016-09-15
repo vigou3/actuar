@@ -144,17 +144,10 @@ double levllogis(double limit, double shape, double scale, double order,
     if (limit <= 0.0)
         return 0;
 
-    double u, a, b, r, tmp;
+    double u = exp(-log1pexp(shape * (log(scale) - log(limit))));
+    double tmp = order / shape;
 
-    r = order / shape;
-    a = 1.0 + r;
-    b = 1.0 - r;
-
-    u = exp(-log1pexp(shape * (log(scale) - log(limit))));
-
-    tmp = (b < 0) ? pbetanegb(u, a, b, 0)
-	: gammafn(a) * gammafn(b) * pbeta(u, a, b, 1, 0);
-
-    return R_pow(scale, order) * tmp
+    return R_pow(scale, order)
+	* betaint_raw(u, 1.0 + tmp, 1.0 - tmp)
         + ACT_DLIM__0(limit, order) * (0.5 - u + 0.5);
 }

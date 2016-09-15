@@ -150,10 +150,10 @@ DPQTAB dpq_tab[] = {
     {"pphtype",         actuar_do_dpqphtype2,  2},
     {"mphtype",         actuar_do_dpqphtype2,  3},
     {"mgfphtype",       actuar_do_dpqphtype2,  4},
-    /* Utility */
-    {"pbetanegb",       actuar_do_dpq2,        101},
-    /* Temporary */
-    {"expint_E1",         actuar_do_dpq1,        100},
+    /* Special integrals */
+    {"expint",          actuar_do_dpq0,        101},
+    {"gammaint",        actuar_do_dpq1,        101},
+    {"betaint",         actuar_do_dpq2,        101},
     {0, 0, 0}
 };
 

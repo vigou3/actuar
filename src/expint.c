@@ -35,7 +35,8 @@
 
 #define LOG_DOUBLE_XMIN   (-7.0839641853226408e+02)
 
-/*  */
+/* Structure to hold results of cheb_eval_e(). Original name from
+ * GSL. */
 struct gsl_sf_result_struct {
   double val;
   double err;
@@ -303,6 +304,7 @@ static cheb_series AE14_cs = {
   13
 };
 
+/* Taken from specfun/cheb_eval_e.c in GSL sources */
 static inline int
 cheb_eval_e(const cheb_series * cs,
             const double x,
@@ -336,13 +338,14 @@ cheb_eval_e(const cheb_series * cs,
   return 0;
 }
 
-double expint_E1(double x, double foo, int bar)
+/* Adapted from specfun/expint.c in GSL sources */
+double expint_E1(double x)
 {
     const double xmaxt = -LOG_DOUBLE_XMIN;      /* XMAXT = -LOG(DOUBLE_XMIN) */
     const double xmax  = xmaxt - log(xmaxt);    /* XMAX = XMAXT - LOG(XMAXT) */
 
     if (x < -xmax) {
-	error(_("overflow in expint"));
+	error(_("overflow in expint_E1"));
 	return R_PosInf;
     }
     else if (x <= -10.0) {
@@ -364,7 +367,7 @@ double expint_E1(double x, double foo, int bar)
 	return ln_term + result_c.val;
     }
     else if (x == 0.0) {
-	error(_("invalid input domain in expint"));
+	error(_("invalid input domain in expint_E1"));
 	return R_NaN;
     }
     else if (x <= 1.0) {
@@ -385,14 +388,26 @@ double expint_E1(double x, double foo, int bar)
 	cheb_eval_e(&AE14_cs, 8.0/x-1.0, &result_c);
 	double res = s * (1.0 +  result_c.val);
 	if (res == 0.0) {
-	    error(_("underflow in expint"));
+	    error(_("underflow in expint_E1"));
 	    return 0.0;
 	}
 	else
 	    return res;
     }
     else {
-	error(_("underflow in expint"));
+	error(_("underflow in expint_E1"));
 	return 0.0;
     }
+}
+
+/* Interface for actuar_do_dpq(). Second argument is a placeholder to
+ * fit into the scheme of dpq.c */
+double expint(double x, int foo)
+{
+#ifdef IEEE_754
+    if (ISNAN(x))
+	return x;
+#endif
+
+    return expint_E1(x);
 }

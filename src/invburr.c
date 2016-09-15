@@ -162,17 +162,11 @@ double levinvburr(double limit, double shape1, double shape2, double scale,
     if (limit <= 0.0)
         return 0.0;
 
-    double u, a, b, r, tmp;
+    double u = exp(-log1pexp(shape2 * (log(scale) - log(limit))));
+    double tmp = order / shape2;
 
-    r = order / shape2;
-    a = shape1 + r;
-    b = 1.0 - r;
-
-    u = exp(-log1pexp(shape2 * (log(scale) - log(limit))));
-
-    tmp = (b < 0) ? pbetanegb(u, a, b, 0) / gammafn(shape1 + 1.0)
-	: beta(a, b) * pbeta(u, a, b, 1, 0);
-
-    return R_pow(scale, order) * tmp / beta(shape1, 1.0)
+    return R_pow(scale, order)
+	* betaint_raw(u, shape1 + tmp, 1.0 - tmp)
+	/ gammafn(shape1)
 	+ ACT_DLIM__0(limit, order) * (0.5 - R_pow(u, shape1) + 0.5);
 }

@@ -9,7 +9,12 @@
 ###
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-pbetanegb <- function (x, a, b)
-    .External("actuar_do_dpq", "pbetanegb", x, a, b, FALSE)
+betaint <- function(x, a, b)
+    .External("actuar_do_dpq", "betaint", x, a, b, FALSE)
 
+expint <- function(x)
+    .External("actuar_do_dpq", "expint", x, FALSE)
+
+gammaint <- function(x, a)
+    .External("actuar_do_dpq", "gammaint", x, a, FALSE)
 

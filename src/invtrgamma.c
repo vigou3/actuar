@@ -143,19 +143,11 @@ double levinvtrgamma(double limit, double shape1, double shape2, double scale,
         scale  <= 0.0)
         return R_NaN;
 
-    /* if (order >= shape1 * shape2) */
-    /* 	return R_PosInf; */
-
     if (limit <= 0.0)
         return 0.0;
 
-    double u, a;
+    double u = exp(shape2 * (log(scale) - log(limit)));
 
-    a = shape1 - order / shape2;
-    Rprintf("a = %f\n", a);
-
-    u = exp(shape2 * (log(scale) - log(limit)));
-
-    return R_pow(scale, order) * pgammanega_scaled(u, a, 0) / gammafn(shape1)
+    return R_pow(scale, order) * gammaint_raw(u, shape1 - order/shape2) / gammafn(shape1)
         + ACT_DLIM__0(limit, order) * pgamma(u, shape1, 1.0, 1, 0);
 }
