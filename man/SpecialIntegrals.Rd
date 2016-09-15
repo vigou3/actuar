@@ -22,13 +22,13 @@ gammaint(x, a)
 \details{
   Function \code{expint} computes the exponential integral
   \deqn{
-    G(0; x) = E_1(x) = \int_x^\infty \frac{e^{-t}}{t}\, dt}{%
-    G(0; x) = E_1(x) = int_x^Inf \exp(-t)/t dt}
+    E_1(x) = \int_x^\infty \frac{e^{-t}}{t}\, dt}{%
+    E_1(x) = int_x^Inf \exp(-t)/t dt}
   for \eqn{x \neq}{x != 0} a real number.
 
   Function \code{betaint} computes the integral
   \deqn{
-    B(a, b; x) = \Gamma(a + b) \int_0^x t^(a-1) (1-t)^(b-1) dt}{%
+    B(a, b; x) = \Gamma(a + b) \int_0^x t^{a-1} (1-t)^{b-1} dt}{%
     B(a, b; x) = Gamma(a + b) int_0^x t^(a-1) (1-t)^(b-1) dt}
   for \eqn{a > 0}, \eqn{b \neq -1, -2, \ldots}{b != -1, -2, \ldots} and
   \eqn{0 < x < 1}.
@@ -54,8 +54,8 @@ gammaint(x, a)
 	  \Gamma(a-r-1) \\
       & & \times \Gamma(b+r+1) B_x(a-r-1, b+r+1),
       \end{array}}{%
-    Gamma(a) Gamma(b) B_x(a, b)
-    = -Gamma(a + b) \{(x^(a-1) (1-x)^b)/b
+    B(a, b; x)
+    = -Gamma(a+b) \{(x^(a-1) (1-x)^b)/b
         + [(a-1) x^(a-2) (1-x)^(b+1)]/[b(b+1)]
         + \dots
 	+ [(a-1)\dots(a-r) x^(a-r-1) (1-x)^(b+r)]/[b(b+1)\dots(b+r)]\}
@@ -75,12 +75,12 @@ gammaint(x, a)
   where \eqn{\Gamma(\alpha; x)}{Gamma(a; x)} is \code{pgamma(x, a)}.
   When \eqn{\alpha \le 0}{a <= 0},
   \deqn{
-    G(\alpha; x) = -\frac{x^\alpha * e^{-x}}{\alpha}
+    G(\alpha; x) = -\frac{x^\alpha e^{-x}}{\alpha}
       + \frac{1}{\alpha} G(\alpha + 1; x)}{%
     G(a; x) = -(x^a * exp(-x))/a + G(a + 1; x)/a}
   which can be repeated until \eqn{\alpha + k}{a + k} is a positive
   number. If \eqn{\alpha = 0, -1, -2, \ldots}{a = 0, -1, -2, \ldots}
-  this requires \eqn{G(0; x)}, the exponential integral above.
+  this requires \eqn{G(0; x) = E_1(x)}, the exponential integral above.
 
   These function are mostly mostly used at the C level to compute the
   limited expected value for distributions of the transformed beta
@@ -97,9 +97,10 @@ gammaint(x, a)
   The C implementation of \code{expint} is based on code from the GNU
   Software Library \url{https://www.gnu.org/software/gsl/}.
 
-  The rationale for these function in the package is explained in the
+  The need for these functions in the package is well explained in the
   introduction of Appendix A of Klugman et al. (2012). See also chapter
-  5 and 6 of Abramowitz and Stegun (1972).
+  5 and 6 of Abramowitz and Stegun (1972) for definitions and sample
+  values.
 }
 \references{
   Abramowitz, M. and Stegun, I. A. (1972), \emph{Handbook of Mathematical
