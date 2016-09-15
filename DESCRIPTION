@@ -1,7 +1,7 @@
 Package: actuar
 Type: Package
 Title: Actuarial Functions and Heavy Tailed Distributions
-Version: 2.0-0
+Version: 2.0-1
 Date: 2016-06-29
 Author: Vincent Goulet, Sébastien Auclair, Christophe Dutang, Xavier Milhaud, Tommy Ouellet, Louis-Philippe Pouliot, Mathieu Pigeon
 Maintainer: Vincent Goulet <vincent.goulet@act.ulaval.ca>
