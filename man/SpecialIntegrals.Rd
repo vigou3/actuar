@@ -5,10 +5,11 @@
 \alias{gammaint}
 \title{The Exponential Integral and Two Other Special Integrals}
 \description{
-  The exponential integral \eqn{E_1(x)} and two integrals related to the
-  incomplete beta function and the incomplete gamma function. These
-  functions merely provide R interfaces to the C level functions. They
-  are not exported by the package.
+  The exponential integral \eqn{E_1(x)}, the (\dQuote{beta integral})
+  related to the incomplete beta function and the  (\dQuote{gamma
+    integral}) related incomplete gamma function. These functions merely
+  provide R interfaces to the C level functions. They are not exported
+  by the package.
 }
 \usage{
 expint(x)
@@ -26,7 +27,7 @@ gammaint(x, a)
     E_1(x) = int_x^Inf \exp(-t)/t dt}
   for \eqn{x \neq}{x != 0} a real number.
 
-  Function \code{betaint} computes the integral
+  Function \code{betaint} computes the \dQuote{beta integral}
   \deqn{
     B(a, b; x) = \Gamma(a + b) \int_0^x t^{a-1} (1-t)^{b-1} dt}{%
     B(a, b; x) = Gamma(a + b) int_0^x t^(a-1) (1-t)^(b-1) dt}
@@ -63,7 +64,7 @@ gammaint(x, a)
         * Gamma(b+r+1) I_x(a-r-1, b+r+1),}
   where \eqn{r = [-b]}{r = floor(-b)}.
 
-  Function \code{gammaint} computes the integral
+  Function \code{gammaint} computes the \dQuote{gamma integral}
   \deqn{
     G(\alpha; x) = \int_x^\infty t^{\alpha - 1} e^{-t}\, dt}{%
     G(a; x) = int_x^Inf t^(a - 1) exp(-t) dt}
@@ -82,7 +83,7 @@ gammaint(x, a)
   number. If \eqn{\alpha = 0, -1, -2, \ldots}{a = 0, -1, -2, \ldots}
   this requires \eqn{G(0; x) = E_1(x)}, the exponential integral above.
 
-  These function are mostly mostly used at the C level to compute the
+  These function are mostly mostly used (at the C level) to compute the
   limited expected value for distributions of the transformed beta
   (\code{betaint}) and transformed gamma (\code{gammaint} and
   \code{expint}) families; see, for example, \code{\link{levtrbeta}} and
@@ -120,7 +121,7 @@ actuar:::expint(1.275)           # 0.1408099 in Abramowitz and Stegun
 actuar:::expint(10)              # 4.15697e-6 in Abramowitz and Stegun
 
 ###
-### Incomplete beta related integral
+### Beta integral
 ###
 x <- 0.3
 a <- 7
@@ -144,7 +145,7 @@ s <- (x^(a-1) * (1-x)^b)/b +
     gamma(b+r+1)*pbeta(x, a-r-1, b+r+1)
 
 ###
-### Incomplete gamma related integral
+### Gamma integral
 ###
 x <- 1.2
 
