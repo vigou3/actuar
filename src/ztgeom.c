@@ -92,7 +92,7 @@ double qztgeom(double x, double prob, int lower_tail, int log_p)
     }
 
     ACT_Q_P01_boundaries(x, 1, R_PosInf);
-    x = ACT_D_qIv(x);
+    x = ACT_DT_qIv(x);
 
     return qgeom(prob + (1 - prob) * x, prob, /*l._t.*/1, /*log_p*/0);
 }

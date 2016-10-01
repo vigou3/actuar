@@ -92,7 +92,7 @@ double qztpois(double x, double lambda, int lower_tail, int log_p)
     }
 
     ACT_Q_P01_boundaries(x, 1, R_PosInf);
-    x = ACT_D_qIv(x);
+    x = ACT_DT_qIv(x);
 
     double p0c = -expm1(-lambda);
 

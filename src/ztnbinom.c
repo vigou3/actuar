@@ -117,7 +117,7 @@ double qztnbinom(double x, double size, double prob, int lower_tail, int log_p)
     }
 
     ACT_Q_P01_boundaries(x, 1, R_PosInf);
-    x = ACT_D_qIv(x);
+    x = ACT_DT_qIv(x);
 
     double p0 = dbinom_raw(size, size, prob, 1 - prob, /*give_log*/0);
 
