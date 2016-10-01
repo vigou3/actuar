@@ -15,7 +15,7 @@
  *
  *  or, alternatively, survival function
  *
- *      Pr[Z > x] = (1 - Pr[X > x])/(1 - Pr[X = 0]).
+ *      Pr[Z > x] = Pr[X > x]/(1 - Pr[X = 0]).
  *
  *  AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
