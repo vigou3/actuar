@@ -80,7 +80,7 @@ double pztnbinom(double x, double size, double prob, int lower_tail, int log_p)
     if (size == 0) return plogarithmic(x, 1 - prob, lower_tail, log_p);
 
     /* limiting case as prob approaches one is point mass at one */
-    if (prob == 1) return (x >= 1) ? ACT_D__1 : ACT_D__0;
+    if (prob == 1) return (x >= 1) ? ACT_DT_1 : ACT_DT_0;
 
     double lp0 = dbinom_raw(size, size, prob, 1 - prob, /*give_log*/1);
 

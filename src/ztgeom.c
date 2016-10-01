@@ -60,7 +60,7 @@ double pztgeom(double x, double prob, int lower_tail, int log_p)
     if (!R_FINITE(x)) return ACT_DT_1;
 
     /* limiting case as prob approaches one is point mass at one */
-    if (prob == 1) return (x >= 1) ? ACT_D__1 : ACT_D__0;
+    if (prob == 1) return (x >= 1) ? ACT_DT_1 : ACT_DT_0;
 
     return ACT_DT_Cval(pgeom(x, prob, /*l._t.*/0, /*log_p*/0)/(1 - prob));
 }

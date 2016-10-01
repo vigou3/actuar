@@ -73,7 +73,7 @@ double pztbinom(double x, double size, double prob, int lower_tail, int log_p)
     if (!R_FINITE(x)) return ACT_DT_1;
 
     /* limiting cases as size -> 1 or prob -> 0 are point mass at one */
-    if (size == 1 || prob == 0) return (x >= 1) ? ACT_D__1 : ACT_D__0;
+    if (size == 1 || prob == 0) return (x >= 1) ? ACT_DT_1 : ACT_DT_0;
 
     double lp0 = dbinom_raw(0, size, prob, 1 - prob, /*give_log*/1);
 
