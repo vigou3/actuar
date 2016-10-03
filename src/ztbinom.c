@@ -25,7 +25,7 @@
 #include "locale.h"
 #include "dpq.h"
 
-/* The Zero truncated binomial distribution has
+/* The binomial distribution has
  *
  *   F(0) = Pr[X = 0] = (1 - prob)^size.
  *

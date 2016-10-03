@@ -25,7 +25,7 @@
 #include "locale.h"
 #include "dpq.h"
 
-/* The zero truncated geometric distribution has
+/* The geometric distribution has
  *
  *   F(0) = Pr[X = 0] = prob.
  *

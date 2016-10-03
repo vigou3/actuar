@@ -26,7 +26,7 @@
 #include "dpq.h"
 #include "actuar.h"
 
-/* The Zero truncated negative binomial distribution has
+/* The negative binomial distribution has
  *
  *   F(0) = Pr[X = 0] = prob^size.
  *
