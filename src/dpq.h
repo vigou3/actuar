@@ -26,6 +26,8 @@
 #define ACT_D_qIv(p)      (log_p  ? exp(p) : (p))         /*  p  in qF(p,..) */
 #define ACT_DT_qIv(p)	  (log_p ? (lower_tail ? exp(p) : - expm1(p)) \
 			       : ACT_D_Lval(p))   	  /*  1 - p  in qF(p,..) */
+#define ACT_DT_1mqIv(p)	  (log_p ? (lower_tail ? - expm1(p) : exp(p)) \
+			       : ACT_D_Cval(p))   	  /*  1 - p  in qF(p,..) */
 #define ACT_D_exp(x)      (log_p  ?  (x)   : exp(x))      /* exp(x) */
 #define ACT_D_Clog(p)     (log_p  ? log1p(-(p)) : (0.5 - (p) + 0.5)) /* [log](1-p) */
 

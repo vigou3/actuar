@@ -98,7 +98,7 @@ double pzmnbinom(double x, double size, double prob, double p0m, int lower_tail,
 
     double lp0 = dbinom_raw(size, size, prob, 1 - prob, /*give_log*/1);
 
-    return ACT_DT_Cval((1 - p0m) * pnbinom(x, size, prob, /*l._t.*/0, /*log_p*/0) / (-expm1(lp0)));
+    return ACT_DT_Cval((1 - p0m) * pnbinom(x, size, prob, /*l._t.*/0, /*log_p*/0)/(-expm1(lp0)));
 }
 
 double qzmnbinom(double x, double size, double prob, double p0m, int lower_tail, int log_p)
@@ -131,11 +131,11 @@ double qzmnbinom(double x, double size, double prob, double p0m, int lower_tail,
     }
 
     ACT_Q_P01_boundaries(x, 0, R_PosInf);
-    x = ACT_DT_qIv(x);
+    x = ACT_DT_1mqIv(x);
 
     double p0 = dbinom_raw(size, size, prob, 1 - prob, /*give_log*/0);
 
-    return qnbinom(p0 + (1 - p0) * (x - p0m)/(1 - p0m), size, prob, /*l._t.*/1, /*log_p*/0);
+    return qnbinom((1 - p0) * x/(1 - p0m), size, prob, /*l._t.*/0, /*log_p*/0);
 }
 
 /* ALGORITHM FOR GENERATION OF RANDOM VARIATES

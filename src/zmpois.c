@@ -110,11 +110,11 @@ double qzmpois(double x, double lambda, double p0m, int lower_tail, int log_p)
     }
 
     ACT_Q_P01_boundaries(x, 0, R_PosInf);
-    x = ACT_DT_qIv(x);
+    x = ACT_DT_1mqIv(x);
 
-    double p0c = -expm1(-lambda); /* 1 - Pr[Poisson = 0] */
+    double p0c = -expm1(-lambda); /* 1 - p0 */
 
-    return qpois(p0c * (x - p0m)/(1 - p0m) + (1 - p0c), lambda, /*l._t.*/1, /*log_p*/0);
+    return qpois(p0c * x/(1 - p0m), lambda, /*l._t.*/0, /*log_p*/0);
 }
 
 /* ALGORITHM FOR GENERATION OF RANDOM VARIATES
