@@ -106,7 +106,11 @@ double qzmlogarithmic(double x, double p, double p0m, int lower_tail, int log_p)
     ACT_Q_P01_boundaries(x, 1.0, R_PosInf);
     x = ACT_DT_qIv(x);
 
-    return qlogarithmic((x - p0m)/(1 - p0m), p, /*l._t.*/1, /*log_p*/0);
+    /* avoid rounding errors below if x was given in log form */
+    if (log_p)
+	p0m = exp(log(p0m));
+
+    return (x <= p0m) ? 0.0 : qlogarithmic((x - p0m)/(1 - p0m), p, /*l._t.*/1, /*log_p*/0);
 }
 
 /* ALGORITHM FOR GENERATION OF RANDOM VARIATES
