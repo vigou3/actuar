@@ -66,10 +66,10 @@ double plogarithmic(double x, double p, int lower_tail, int log_p)
     int i;
     double s, pk;
 
-    pk = -p/log1p(-p);		/* Pr[X = 1] */
+    pk = -p/log1p(-p);		      /* Pr[X = 1] */
     s = pk;
 
-    if (x == 1) return s;	/* simple case */
+    if (x == 1) return ACT_DT_val(s); /* simple case */
 
     for (i = 1; i < x; i++)
     {
