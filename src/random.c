@@ -243,6 +243,7 @@ SEXP actuar_do_random2(int code, SEXP args, SEXPTYPE type)
             RAND2( 9, rpareto1);
             RAND2(10, rztnbinom);
             RAND2(11, rztbinom);
+            RAND2(12, rzmpois);
         default:
             error(_("internal error in actuar_do_random2"));
         }
@@ -349,6 +350,8 @@ SEXP actuar_do_random3(int code, SEXP args, SEXPTYPE type)
             RAND3(3, rinvburr);
             RAND3(4, rinvtrgamma);
             RAND3(5, rtrgamma);
+            RAND3(6, rzmnbinom);
+            RAND3(7, rzmnbinom2); /* tmp */
         default:
             error(_("internal error in actuar_do_random3"));
         }

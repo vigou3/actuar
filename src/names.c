@@ -91,6 +91,9 @@ DPQTAB dpq_tab[] = {
     {"dztbinom",        actuar_do_dpq2,        56},
     {"pztbinom",        actuar_do_dpq2,        57},
     {"qztbinom",        actuar_do_dpq2,        58},
+    {"dzmpois",         actuar_do_dpq2,        59},
+    {"pzmpois",         actuar_do_dpq2,        60},
+    {"qzmpois",         actuar_do_dpq2,        61},
     /* Three parameter distributions */
     {"dburr",           actuar_do_dpq3,         1},
     {"pburr",           actuar_do_dpq3,         2},
@@ -128,6 +131,9 @@ DPQTAB dpq_tab[] = {
     {"levchisq",        actuar_do_dpq3,        34},
     {"levinvGauss",     actuar_do_dpq3,        35},
     {"levunif",         actuar_do_dpq3,        36},
+    {"dzmnbinom",       actuar_do_dpq3,        37},
+    {"pzmnbinom",       actuar_do_dpq3,        38},
+    {"qzmnbinom",       actuar_do_dpq3,        39},
     /* Four parameter distributions */
     {"dtrbeta",         actuar_do_dpq4,        1},
     {"ptrbeta",         actuar_do_dpq4,        2},
@@ -176,12 +182,15 @@ RANDOMTAB random_tab[] = {
     {"rpareto1",        actuar_do_random2,     9, REALSXP},
     {"rztnbinom",       actuar_do_random2,    10, INTSXP},
     {"rztbinom",        actuar_do_random2,    11, INTSXP},
+    {"rzmpois",         actuar_do_random2,    12, INTSXP},
     /* Three parameter distributions */
     {"rburr",           actuar_do_random3,     1, REALSXP},
     {"rgenpareto",      actuar_do_random3,     2, REALSXP},
     {"rinvburr",        actuar_do_random3,     3, REALSXP},
     {"rinvtrgamma",     actuar_do_random3,     4, REALSXP},
     {"rtrgamma",        actuar_do_random3,     5, REALSXP},
+    {"rzmnbinom",       actuar_do_random3,     6, INTSXP},
+    {"rzmnbinom2",       actuar_do_random3,     7, INTSXP}, /* tmp */
     /* Four parameter distributions */
     {"rtrbeta",         actuar_do_random4,     1, REALSXP},
     {"rgenbeta",        actuar_do_random4,     2, REALSXP},

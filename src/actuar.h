@@ -175,6 +175,11 @@ double pztbinom(double q, double size, double prob, int lower_tail, int log_p);
 double qztbinom(double p, double size, double prob, int lower_tail, int log_p);
 double rztbinom(double size, double prob);
 
+double dzmpois(double x, double lambda, double p0m, int give_log);
+double pzmpois(double q, double lambda, double p0m, int lower_tail, int log_p);
+double qzmpois(double p, double lambda, double p0m, int lower_tail, int log_p);
+double rzmpois(double lambda, double p0m);
+
 /*   Three parameter distributions */
 double dburr(double x, double shape1, double shape2, double scale, int give_log);
 double pburr(double q, double shape1, double shape2, double scale, int lower_tail, int log_p);
@@ -210,6 +215,12 @@ double qtrgamma(double p, double shape1, double shape2, double scale, int lower_
 double rtrgamma(double shape1, double shape2, double scale);
 double mtrgamma(double order, double shape1, double shape2, double scale, int give_log);
 double levtrgamma(double limit, double shape1, double shape2, double scale, double order, int give_log);
+
+double dzmnbinom(double x, double size, double prob, double p0m, int give_log);
+double pzmnbinom(double q, double size, double prob, double p0m, int lower_tail, int log_p);
+double qzmnbinom(double p, double size, double prob, double p0m, int lower_tail, int log_p);
+double rzmnbinom(double size, double prob, double p0m);
+double rzmnbinom2(double size, double prob, double p0m); /* tmp */
 
 /*   Four parameter distributions */
 double dgenbeta(double x, double shape1, double shape2, double shape3, double scale, int give_log);

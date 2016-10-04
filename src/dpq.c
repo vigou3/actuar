@@ -425,6 +425,9 @@ SEXP actuar_do_dpq2(int code, SEXP args)
     case 56:  return DPQ2_1(args, dztbinom);
     case 57:  return DPQ2_2(args, pztbinom);
     case 58:  return DPQ2_2(args, qztbinom);
+    case 59:  return DPQ2_1(args, dzmpois);
+    case 60:  return DPQ2_2(args, pzmpois);
+    case 61:  return DPQ2_2(args, qzmpois);
     case 101: return DPQ2_1(args, betaint); /* special integral */
     default:
         error(_("internal error in actuar_do_dpq2"));
@@ -606,6 +609,9 @@ SEXP actuar_do_dpq3(int code, SEXP args)
     case 34:  return DPQ3_1(args, levchisq);
     case 35:  return DPQ3_1(args, levinvGauss); /* notation from SuppDists */
     case 36:  return DPQ3_1(args, levunif);
+    case 37:  return DPQ3_1(args, dzmnbinom);
+    case 38:  return DPQ3_2(args, pzmnbinom);
+    case 39:  return DPQ3_2(args, qzmnbinom);
     default:
         error(_("internal error in actuar_do_dpq3"));
     }
