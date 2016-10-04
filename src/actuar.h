@@ -175,6 +175,11 @@ double pztbinom(double q, double size, double prob, int lower_tail, int log_p);
 double qztbinom(double p, double size, double prob, int lower_tail, int log_p);
 double rztbinom(double size, double prob);
 
+double dzmlogarithmic(double x, double p, double p0m, int give_log);
+double pzmlogarithmic(double x, double p, double p0m, int lower_tail, int log_p);
+double qzmlogarithmic(double x, double p, double p0m, int lower_tail, int log_p);
+double rzmlogarithmic(double p, double p0m);
+
 double dzmpois(double x, double lambda, double p0m, int give_log);
 double pzmpois(double q, double lambda, double p0m, int lower_tail, int log_p);
 double qzmpois(double p, double lambda, double p0m, int lower_tail, int log_p);

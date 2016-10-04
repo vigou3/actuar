@@ -64,7 +64,7 @@ double dzmnbinom(double x, double size, double prob, double p0m, int give_log)
     /* NOTE: from now on x > 0 */
 
     /* limiting case as size approaches zero is zero modified logarithmic */
-    /* if (size == 0) return dzmlogarithmic(x, 1 - prob, p0m, give_log); */
+    if (size == 0) return dzmlogarithmic(x, 1 - prob, p0m, give_log);
 
     /* limiting case as prob approaches one is mass (1-p0m) at one */
     if (prob == 1) return (x == 1) ? ACT_D_Clog(p0m) : ACT_D__0;
@@ -91,7 +91,7 @@ double pzmnbinom(double x, double size, double prob, double p0m, int lower_tail,
     if (p0m == 1) return ACT_DT_1;
 
     /* limiting case as size approaches zero is zero modified logarithmic */
-    /* if (size == 0) return pzmlogarithmic(x, 1 - prob, p0m, lower_tail, log_p); */
+    if (size == 0) return pzmlogarithmic(x, 1 - prob, p0m, lower_tail, log_p);
 
     /* limiting case as prob approaches one is mass (1-p0m) at one */
     if (prob == 1) return ACT_DT_1;
@@ -110,9 +110,9 @@ double qzmnbinom(double x, double size, double prob, double p0m, int lower_tail,
     if (prob <= 0 || prob > 1 || size < 0 || p0m < 0 || p0m > 1) return R_NaN;
 
     /* limiting case as size approaches zero is zero modified logarithmic */
-    /* if (size == 0) return qzmlogarithmic(x, 1 - prob, p0m, lower_tail, log_p); */
+    if (size == 0) return qzmlogarithmic(x, 1 - prob, p0m, lower_tail, log_p);
 
-    /* limiting case as prob approaches one is point mass at one */
+    /* limiting case as prob approaches one is mass (1-p0m) at one */
     if (prob == 1)
     {
 	/* simplified ACT_Q_P01_boundaries macro */
@@ -161,7 +161,7 @@ double rzmnbinom(double size, double prob, double p0m)
     if (!R_FINITE(prob) || prob <= 0 || prob > 1 || size < 0 || p0m < 0 || p0m > 1) return R_NaN;
 
     /* limiting case as size approaches zero is zero modified logarithmic */
-    /* if (size == 0) return rzmlogarithmic(1 - prob, p0m); */
+    if (size == 0) return rzmlogarithmic(1 - prob, p0m);
 
     /* limiting case as prob approaches one is mass (1-p0m) at one */
     if (prob == 1) return (runif(0, 1) <= p0m) ? 0.0 : 1.0;
