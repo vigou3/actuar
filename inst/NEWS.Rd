@@ -5,16 +5,21 @@
 \section{CHANGES IN actuar VERSION 2.0-0}{
   \subsection{NEW FEATURES}{
     \itemize{
-      \item{Support functions \code{[dpqr]logarithmic} for the
-	logarithmic (or log-series) distribution.}
-      \item{Support functions \code{[dpqr]ztpois} for the zero
-	truncated Poisson distribution.}
-      \item{Support functions \code{[dpqr]ztnbinom} for the zero
-	truncated negative binomial distribution.}
-      \item{Support functions \code{[dpqr]ztgeom} for the zero
-	truncated geometric distribution.}
-      \item{Support functions \code{[dpqr]ztbinom} for the zero
-	truncated binomial distribution.}
+      \item{Support functions \code{[dpqr]logarithmic} and
+	\code{[dpqr]zmlogarithmic} for the logarithmic (or log-series)
+	and zero-modified logarithmic distributions.}
+      \item{Support functions \code{[dpqr]ztpois} and
+	\code{[dpqr]zmpois} for the zero-truncated and zero-modified
+	Poisson distributions.}
+      \item{Support functions \code{[dpqr]ztnbinom} and
+	\code{[dpqr]zmnbinom} for the zero-truncated and zero-modified
+	negative binomial distributions.}
+      \item{Support functions \code{[dpqr]ztgeom} and
+	\code{[dpqr]zmgeom} for the zero-truncated and zero-modified
+	geometric distributions.}
+      \item{Support functions \code{[dpqr]ztbinom} and
+	\code{[dpqr]zmbinom} for the zero-truncated and zero-modified
+	binomial distributions.}
       \item{\code{aggregateDist} now accepts
         \code{"zero-truncated binomial"},
 	\code{"zero-truncated geometric"},
