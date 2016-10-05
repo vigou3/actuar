@@ -30,7 +30,7 @@ rlogarithmic(n, prob)
     \eqn{P[X \le x]}, otherwise, \eqn{P[X > x]}.}
 }
 \details{
-  The Logarithmic (or log-series) distribution with parameter
+  The logarithmic (or log-series) distribution with parameter
   \code{prob} \eqn{= \theta}{= p} has probability mass function
   \deqn{%
     p(x) = \frac{a \theta^x}{x},}{%
@@ -38,11 +38,11 @@ rlogarithmic(n, prob)
   with \eqn{a = -1/\log(1 - \theta)}{a = -1/log(1-p)} and for \eqn{x =
     1, 2, \ldots}, \eqn{0 \le p < 1}.
 
-  The logarithmic distribution is the limiting case of the
-  \link[=ZTNegBinomial]{zero truncated negative binomial distribution}
-  with \code{size} parameter equal to \eqn{0}. Note that in this
-  context, parameter \code{prob} generally corresponds to the
-  probability of \emph{failure} of the zero truncated negative binomial.
+  The logarithmic distribution is the limiting case of the zero
+  truncated negative binomial distribution with \code{size} parameter
+  equal to \eqn{0}. Note that in this context, parameter \code{prob}
+  generally corresponds to the probability of \emph{failure} of the zero
+  truncated negative binomial.
 
   If an element of \code{x} is not integer, the result of
   \code{dlogarithmic} is zero, with a warning.
@@ -88,7 +88,7 @@ rlogarithmic(n, prob)
   Springer-Verlag. \url{http://luc.devroye.org/rnbookindex.html}
 }
 \seealso{
-  \code{\link{dztnbinom}} for the zero truncated negative binomial
+  \code{\link{dztnbinom}} for the zero-truncated negative binomial
   distribution.
 }
 \author{

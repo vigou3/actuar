@@ -2,10 +2,10 @@
  *
  *  Functions to compute probability function, cumulative distribution
  *  and quantile functions, and to simulate random variates for the
- *  zero modified geometric distribution. See
+ *  zero-modified geometric distribution. See
  *  ../R/ZeroModifiedGeometric.R for details.
  *
- *  Zero modified distributions are discrete mixtures between a
+ *  Zero-modified distributions are discrete mixtures between a
  *  degenerate distribution at zero and the corresponding,
  *  non-modified, distribution. As a mixture, they have density
  *

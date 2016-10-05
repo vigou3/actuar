@@ -5,10 +5,10 @@
 \alias{pztbinom}
 \alias{qztbinom}
 \alias{rztbinom}
-\title{The Zero Truncated Binomial Distribution}
+\title{The Zero-Truncated Binomial Distribution}
 \description{
   Density function, distribution function, quantile function and random
-  generation for the zero truncated binomial distribution with
+  generation for the Zero-Truncated Binomial distribution with
   parameters \code{size} and \code{prob}.
 }
 \usage{
@@ -31,7 +31,7 @@ rztbinom(n, size, prob)
     \eqn{P[X \le x]}, otherwise, \eqn{P[X > x]}.}
 }
 \details{
-  The zero truncated binomial distribution with \code{size}
+  The zero-truncated binomial distribution with \code{size}
   \eqn{= n} and \code{prob} \eqn{= p} has probability mass function
   \deqn{%
     p(x) = {n \choose x} \frac{p^x (1 - p)^{n-x}}{1 - (1 - p)^n}}{%
@@ -46,7 +46,7 @@ rztbinom(n, size, prob)
   The mean is \eqn{np/(1 - (1-p)^n)} and the variance is
   \eqn{np[(1-p) - (1-p+np)(1-p)^n]/[1 - (1-p)^n]^2}.
 
-  In the terminology of Klugman et al. (2012), the zero truncated
+  In the terminology of Klugman et al. (2012), the zero-truncated
   binomial is a member of the \eqn{(a, b, 1)} family of
   distributions with \eqn{a = -p/(1-p)} and \eqn{b = (n+1)p/(1-p)}.
 

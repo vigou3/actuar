@@ -2,10 +2,10 @@
  *
  *  Functions to compute probability function, cumulative distribution
  *  and quantile functions, and to simulate random variates for the
- *  zero truncated geometric distribution. See
+ *  zero-truncated geometric distribution. See
  *  ../R/ZeroTruncatedGeometric.R for details.
  *
- *  Zero truncated distributions have density
+ *  Zero-truncated distributions have density
  *
  *      Pr[Z = x] = Pr[X = x]/(1 - Pr[X = 0]),
  *

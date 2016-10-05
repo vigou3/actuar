@@ -6,10 +6,10 @@
 \alias{pztnbinom}
 \alias{qztnbinom}
 \alias{rztnbinom}
-\title{The Zero Truncated Negative Binomial Distribution}
+\title{The Zero-Truncated Negative Binomial Distribution}
 \description{
   Density function, distribution function, quantile function and random
-  generation for the zero truncated negative binomial distribution with
+  generation for the Zero-Truncated Negative Binomial distribution with
   parameters \code{size} and \code{prob}.
 }
 \usage{
@@ -33,7 +33,7 @@ rztnbinom(n, size, prob)
     \eqn{P[X \le x]}, otherwise, \eqn{P[X > x]}.}
 }
 \details{
-  The zero truncated negative binomial distribution with \code{size}
+  The zero-truncated negative binomial distribution with \code{size}
   \eqn{= r} and \code{prob} \eqn{= p} has probability mass function
   \deqn{%
     p(x) = \frac{\Gamma(x + r) p^r (1 - p)^x}{\Gamma(r) x! (1 - p^r)}}{%
@@ -49,7 +49,7 @@ rztnbinom(n, size, prob)
   The mean is \eqn{r(1-p)/(p(1-p^r))} and the variance is
   \eqn{[r(1-p)(1 - p^r(1 + r(1-p))]/[p(1-p^r)^2]}.
 
-  In the terminology of Klugman et al. (2012), the zero truncated
+  In the terminology of Klugman et al. (2012), the zero-truncated
   negative binomial is a member of the \eqn{(a, b, 1)} family of
   distributions with \eqn{a = 1-p} and \eqn{b = (r-1)(1-p)}.
 
@@ -60,7 +60,7 @@ rztnbinom(n, size, prob)
   Unlike the standard negative binomial functions, parametrization
   through the mean \code{mu} is not supported to avoid ambiguity as
   to whether \code{mu} is the mean of the underlying negative binomial
-  or the mean of the zero truncated distribution.
+  or the mean of the zero-truncated distribution.
 
   If an element of \code{x} is not integer, the result of
   \code{dztnbinom} is zero, with a warning.
@@ -96,9 +96,9 @@ rztnbinom(n, size, prob)
 \seealso{
   \code{\link{dnbinom}} for the negative binomial distribution.
 
-  \code{\link{dztgeom}} for the zero truncated geometric and
-  \code{\link{dlogarithmic}} for the logarithmic, which are a special
-  case of the zero truncated negative binomial.
+  \code{\link{dztgeom}} for the zero-truncated geometric and
+  \code{\link{dlogarithmic}} for the logarithmic, which are special
+  cases of the zero-truncated negative binomial.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca}

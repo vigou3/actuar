@@ -16,10 +16,10 @@
       \item{Support functions \code{[dpqr]ztbinom} for the zero
 	truncated binomial distribution.}
       \item{\code{aggregateDist} now accepts
-        \code{"zero truncated binomial"},
-	\code{"zero truncated geometric"},
-	\code{"zero truncated negative binomial"} and
-	\code{"zero truncated poisson"}
+        \code{"zero-truncated binomial"},
+	\code{"zero-truncated geometric"},
+	\code{"zero-truncated negative binomial"} and
+	\code{"zero-truncated poisson"}
 	for argument \code{model.freq} with the \code{"recursive"}
 	method.}
       \item{Extended range of admissible values for many limited

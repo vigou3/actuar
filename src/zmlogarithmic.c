@@ -9,7 +9,7 @@
  *  degenerate distribution at zero and a logarithmic distribution.
  *  The density is
  *
- *      Pr[Z = x] = p0m 1(x) + (1 - p0m) Pr[X = 0]
+ *      Pr[Z = x] = p0m 1(x) + (1 - p0m) Pr[X = x]
  *
  *  or, alternatively, Pr[Z = 0] = p0m and
  *

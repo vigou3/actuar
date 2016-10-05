@@ -5,10 +5,11 @@
 \alias{pztpois}
 \alias{qztpois}
 \alias{rztpois}
-\title{The Zero Truncated Poisson Distribution}
+\title{The Zero-Truncated Poisson Distribution}
 \description{
-  Density function, distribution function, quantile function, random generation
-  for the zero truncated Poisson distribution with parameter \code{lambda}.
+  Density function, distribution function, quantile function, random
+  generation for the Zero-Truncated Poisson distribution with parameter
+  \code{lambda}.
 }
 \usage{
 dztpois(x, lambda, log = FALSE)
@@ -28,7 +29,7 @@ rztpois(n, lambda)
     \eqn{P[X \le x]}{P[X <= x]}, otherwise, \eqn{P[X > x]}.}
 }
 \details{
-  The zero truncated Poisson distribution has probability mass function
+  The zero-truncated Poisson distribution has probability mass function
   \deqn{%
     p(x) = \frac{e^{-/lambda} \lambda^x}{x! (1 - e^{-\lambda})}
     = \frac{\lambda^x}{x! (e^{\lambda} - 1)}}{%
@@ -45,7 +46,7 @@ rztpois(n, lambda)
   \eqn{\lambda[1 - (\lambda+1)e^{-\lambda}]/(1 - e^{-\lambda})^2}{%
     \lambda[1 - (\lambda+1)exp(-\lambda)]/(1 - exp(-\lambda))^2}.
 
-  In the terminology of Klugman et al. (2012), the zero truncated
+  In the terminology of Klugman et al. (2012), the zero-truncated
   Poisson is a member of the \eqn{(a, b, 1)} family of distributions
   with \eqn{a = 0} and \eqn{b = \lambda}.
 
@@ -96,7 +97,7 @@ qztpois(pztpois(1:10, 1), 1)
 
 x <- seq(0, 8)
 plot(x, dztpois(x, 2), type = "h", lwd = 2, ylab = "p(x)",
-     main = "Zero Truncated Poisson(2) and Poisson(2) PDF")
+     main = "Zero-Truncated Poisson(2) and Poisson(2) PDF")
 points(x, dpois(x, 2), pch = 19, col = "red")
 legend("topright", c("ZT Poisson probabilities", "Poisson probabilities"),
        col = c("black", "red"), lty = c(1, 0), lwd = 2, pch = c(NA, 19))

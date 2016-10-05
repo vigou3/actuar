@@ -5,10 +5,10 @@
 \alias{pztgeom}
 \alias{qztgeom}
 \alias{rztgeom}
-\title{The Zero Truncated Geometric Distribution}
+\title{The Zero-Truncated Geometric Distribution}
 \description{
   Density function, distribution function, quantile function and random
-  generation for the zero truncated geometric distribution with
+  generation for the Zero-Truncated Geometric distribution with
   parameter \code{prob}.
 }
 \usage{
@@ -30,7 +30,7 @@ rztgeom(n, prob)
     \eqn{P[X \le x]}, otherwise, \eqn{P[X > x]}.}
 }
 \details{
-  The zero truncated geometric distribution with \code{prob} \eqn{= p}
+  The zero-truncated geometric distribution with \code{prob} \eqn{= p}
   has probability mass function
   \deqn{%
     p(x) = p (1-p)^{x - 1}}{%
@@ -44,7 +44,7 @@ rztgeom(n, prob)
 
   The mean is \eqn{1/p} and the variance is \eqn{(1-p)/p^2}.
 
-  In the terminology of Klugman et al. (2012), the zero truncated
+  In the terminology of Klugman et al. (2012), the zero-truncated
   geometric is a member of the \eqn{(a, b, 1)} family of
   distributions with \eqn{a = 1-p} and \eqn{b = 0}.
 
@@ -82,8 +82,8 @@ rztgeom(n, prob)
 \seealso{
   \code{\link{dgeom}} for the geometric distribution.
 
-  \code{\link{dztnbinom}} for the zero truncated negative binomial, of
-  which the zero truncated geometric is a special case.
+  \code{\link{dztnbinom}} for the zero-truncated negative binomial, of
+  which the zero-truncated geometric is a special case.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
