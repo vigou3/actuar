@@ -19,6 +19,3 @@ qzmnbinom <- function(p, size, prob, p0, lower.tail = TRUE, log.p = FALSE)
 
 rzmnbinom <- function(n, size, prob, p0)
     .External("actuar_do_random", "rzmnbinom", n, size, prob, p0)
-
-rzmnbinom2 <- function(n, size, prob, p0)
-    .External("actuar_do_random", "rzmnbinom2", n, size, prob, p0)
