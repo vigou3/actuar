@@ -225,7 +225,11 @@ double dzmnbinom(double x, double size, double prob, double p0m, int give_log);
 double pzmnbinom(double q, double size, double prob, double p0m, int lower_tail, int log_p);
 double qzmnbinom(double p, double size, double prob, double p0m, int lower_tail, int log_p);
 double rzmnbinom(double size, double prob, double p0m);
-double rzmnbinom2(double size, double prob, double p0m); /* tmp */
+
+double dzmbinom(double x, double size, double prob, double p0m, int give_log);
+double pzmbinom(double q, double size, double prob, double p0m, int lower_tail, int log_p);
+double qzmbinom(double p, double size, double prob, double p0m, int lower_tail, int log_p);
+double rzmbinom(double size, double prob, double p0m);
 
 /*   Four parameter distributions */
 double dgenbeta(double x, double shape1, double shape2, double shape3, double scale, int give_log);

@@ -615,6 +615,9 @@ SEXP actuar_do_dpq3(int code, SEXP args)
     case 37:  return DPQ3_1(args, dzmnbinom);
     case 38:  return DPQ3_2(args, pzmnbinom);
     case 39:  return DPQ3_2(args, qzmnbinom);
+    case 40:  return DPQ3_1(args, dzmbinom);
+    case 41:  return DPQ3_2(args, pzmbinom);
+    case 42:  return DPQ3_2(args, qzmbinom);
     default:
         error(_("internal error in actuar_do_dpq3"));
     }

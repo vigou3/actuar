@@ -137,6 +137,9 @@ DPQTAB dpq_tab[] = {
     {"dzmnbinom",       actuar_do_dpq3,        37},
     {"pzmnbinom",       actuar_do_dpq3,        38},
     {"qzmnbinom",       actuar_do_dpq3,        39},
+    {"dzmbinom",        actuar_do_dpq3,        40},
+    {"pzmbinom",        actuar_do_dpq3,        41},
+    {"qzmbinom",        actuar_do_dpq3,        42},
     /* Four parameter distributions */
     {"dtrbeta",         actuar_do_dpq4,        1},
     {"ptrbeta",         actuar_do_dpq4,        2},
@@ -194,7 +197,7 @@ RANDOMTAB random_tab[] = {
     {"rinvtrgamma",     actuar_do_random3,     4, REALSXP},
     {"rtrgamma",        actuar_do_random3,     5, REALSXP},
     {"rzmnbinom",       actuar_do_random3,     6, INTSXP},
-    {"rzmnbinom2",       actuar_do_random3,     7, INTSXP}, /* tmp */
+    {"rzmbinom",        actuar_do_random3,     7, INTSXP},
     /* Four parameter distributions */
     {"rtrbeta",         actuar_do_random4,     1, REALSXP},
     {"rgenbeta",        actuar_do_random4,     2, REALSXP},
