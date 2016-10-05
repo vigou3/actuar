@@ -37,12 +37,17 @@ export(## Credibility theory
     minvgauss, levinvgauss, mgfinvgauss,
     dztnbinom, pztnbinom, qztnbinom, rztnbinom,
     dztbinom, pztbinom, qztbinom, rztbinom,
+    dzmlogarithmic, pzmlogarithmic, qzmlogarithmic, rzmlogarithmic,
+    dzmpois, pzmpois, qzmpois, rzmpois,
+    dzmgeom, pzmgeom, qzmgeom, rzmgeom,
     ## Three parameter distributions
     dburr, pburr, qburr, rburr, mburr, levburr,
     dgenpareto, pgenpareto, qgenpareto, rgenpareto, mgenpareto, levgenpareto,
     dinvburr, pinvburr, qinvburr, rinvburr, minvburr, levinvburr,
     dinvtrgamma, pinvtrgamma, qinvtrgamma, rinvtrgamma, minvtrgamma, levinvtrgamma,
     dtrgamma, ptrgamma, qtrgamma, rtrgamma, mtrgamma, levtrgamma,
+    dzmnbinom, pzmnbinom, qzmnbinom, rzmnbinom,
+    dzmbinom, pzmbinom, qzmbinom, rzmbinom,
     ## Four parameter distributions
     dgenbeta, pgenbeta, qgenbeta, rgenbeta, mgenbeta, levgenbeta,
     dtrbeta, ptrbeta, qtrbeta, rtrbeta, mtrbeta, levtrbeta,

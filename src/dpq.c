@@ -431,6 +431,9 @@ SEXP actuar_do_dpq2(int code, SEXP args)
     case 62:  return DPQ2_1(args, dzmpois);
     case 63:  return DPQ2_2(args, pzmpois);
     case 64:  return DPQ2_2(args, qzmpois);
+    case 65:  return DPQ2_1(args, dzmgeom);
+    case 66:  return DPQ2_2(args, pzmgeom);
+    case 67:  return DPQ2_2(args, qzmgeom);
     case 101: return DPQ2_1(args, betaint); /* special integral */
     default:
         error(_("internal error in actuar_do_dpq2"));

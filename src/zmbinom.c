@@ -158,7 +158,7 @@ double rzmbinom(double size, double prob, double p0m)
     /* p0m < p0: choice of algorithm depends on difference p0 - p0m */
     if (p0 - p0m < ACT_DIFFMAX_REJECTION)
     {
-	rejection method
+	/* rejection method */
 	for (;;)
 	{
 	    x = rbinom(size, prob);

@@ -185,6 +185,12 @@ double pzmpois(double q, double lambda, double p0m, int lower_tail, int log_p);
 double qzmpois(double p, double lambda, double p0m, int lower_tail, int log_p);
 double rzmpois(double lambda, double p0m);
 
+double dzmgeom(double x, double prob, double p0m, int give_log);
+double pzmgeom(double q, double prob, double p0m, int lower_tail, int log_p);
+double qzmgeom(double p, double prob, double p0m, int lower_tail, int log_p);
+double rzmgeom(double prob, double p0m);
+double rzmgeom2(double prob, double p0m);
+
 /*   Three parameter distributions */
 double dburr(double x, double shape1, double shape2, double scale, int give_log);
 double pburr(double q, double shape1, double shape2, double scale, int lower_tail, int log_p);
