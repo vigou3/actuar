@@ -44,7 +44,7 @@ aggregateDist(method = c("recursive", "convolution", "normal",
     \code{\link{simul}} for details) or \code{NULL}. Ignored with
     \code{normal} and \code{npower} methods.}
   \item{p0}{arbitrary probability at zero for the frequency
-    distribution. Creates a zero modified or zero truncated
+    distribution. Creates a zero-modified or zero-truncated
     distribution if not \code{NULL}. Used only with \code{"recursive"}
     method.}
   \item{x.scale}{value of an amount of 1 in the severity model (monetary
@@ -95,16 +95,30 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   \code{"poisson"},
   and \code{p0} must be \code{NULL}.
 
-  To use a distribution from the \eqn{(a, b, 1)} family,
+  To use a zero-truncated distribution from the \eqn{(a, b, 1)} family,
   \code{model.freq} may be one of the strings above together with
-  \code{p0} set to some probability that the frequency distribution
-  takes the value \eqn{0}. As a shortcut for zero truncated
-  distributions, \code{model.freq} may also be one of
-  \code{"zero truncated binomial"},
-  \code{"zero truncated geometric"},
-  \code{"zero truncated negative binomial"},
-  \code{"zero truncated poisson"} or
-  \code{"logarithmic"}.
+  \code{p0 = 0}. As a shortcut, \code{model.freq} may also be one of
+  \code{"zero-truncated binomial"},
+  \code{"zero-truncated geometric"},
+  \code{"zero-truncated negative binomial"},
+  \code{"zero-truncated poisson"} or
+  \code{"logarithmic"},
+  and \code{p0} is then ignored (with a warning if non \code{NULL}).
+
+  (Note: since the logarithmic distribution is always zero-truncated.
+  \code{model.freq = "logarithmic"} may be used with either \code{p0 =
+  NULL} or \code{p0 = 0}.)
+
+  To use a zero-modified distribution from the \eqn{(a, b, 1)} family,
+  \code{model.freq} may be one of standard frequency distributions
+  mentioned above with \code{p0} set to some probability that the
+  distribution takes the value \eqn{0}. It is equivalent, but more
+  explicit, to set \code{model.freq} to one of
+  \code{"zero-modified binomial"},
+  \code{"zero-modified geometric"},
+  \code{"zero-modified negative binomial"},
+  \code{"zero-modified poisson"} or
+  \code{"zero-modified logarithmic"}.
 
   The parameters of the frequency distribution must be specified using
   names identical to the arguments of the appropriate function
@@ -112,11 +126,6 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   \code{\link{dpois}} or \code{\link{dlogarithmic}}. In the latter case,
   do take note that the parametrization of \code{dlogarithmic} is
   different from Appendix B of Klugman et al. (2012).
-
-  \code{model.freq = "logarithmic"} may be used with either \code{p0 =
-  NULL} or \code{p0 = 0} since the distribution is always zero
-  truncated. Using some value \code{0 < p0 < 1} results in a zero
-  modified logarithmic distribution.
 
   If the length of \code{p0} is greater than one, only the first element
   is used, with a warning.
@@ -231,16 +240,20 @@ plot(Fs)
 Fs(knots(Fs))		      # cdf evaluated at its knots
 diff(Fs)                      # probability mass function
 
-## Recursive method (zero truncated distribution). Using 'fx' above
+## Recursive method (zero-truncated distribution). Using 'fx' above
 ## would mean that both Pr[N = 0] = 0 and Pr[X = 0] = 0, therefore
 ## Pr[S = 0] = 0 and recursions would not start.
 fx <- discretize(pexp(x, 1), from = 0, to = 100, method = "upper")
 fx[1L] # non zero
-aggregateDist("recursive", model.freq = "zero truncated poisson",
+aggregateDist("recursive", model.freq = "zero-truncated poisson",
               model.sev = fx, lambda = 3, x.scale = 25)
 
-## Recursive method (zero modified distribution)
+## Recursive method (zero-modified distribution)
 aggregateDist("recursive", model.freq = "negative binomial",
+              model.sev = fx, p0 = 0.05, size = 2.5, prob = 0.4)
+
+## Equivalent more explicit call
+aggregateDist("recursive", model.freq = "zero-modified negative binomial",
               model.sev = fx, p0 = 0.05, size = 2.5, prob = 0.4)
 
 ## Recursive method (high frequency)

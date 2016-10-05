@@ -55,13 +55,16 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     ## every case, and p1 if p0 is specified in argument.
     ##
     ## At this point, either p0 is NULL or 0 <= p0 < 1.
-    if (startsWith(dist, "zero truncated"))
+    if (startsWith(dist, "zero-truncated"))
     {
         if ( !(is.null(p0) || identical(p0, 0)) )
             warning("value of 'p0' is ignored with a zero truncated distribution")
-        dist = sub("zero truncated ", "", dist) # drop "zero truncated" prefix
+        dist = sub("zero-truncated ", "", dist) # drop "zero truncated" prefix
         p0 <- 0
     }
+
+    if (startsWith(dist, "zero-modified"))
+        dist = sub("zero-modified ", "", dist) # drop "zero modified" prefix
 
     if (dist == "geometric")
     {
@@ -76,9 +79,9 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
         lambda <- par$lambda
         a <- 0
         b <- lambda
-        if (is.null(p0))
+        if (is.null(p0)) # standard Poisson
             fs0 <- exp(lambda * (fx[1L] - 1))
-        else  # 0 <= p0 < 1; zero truncated/modified Poisson
+        else  # 0 <= p0 < 1; zero-truncated/modified Poisson
         {
             fs0 <- p0 + (1 - p0) * pgfztpois(fx[1L], lambda)
             p1 <- (1 - p0) * dztpois(1, lambda)
@@ -92,9 +95,9 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
         p <- par$prob
         a <- 1 - p
         b <- (r - 1) * a
-        if (is.null(p0))
+        if (is.null(p0)) # standard negative binomial
             fs0 <- exp(-r * log1p(-a/p * (fx[1L] - 1)))
-        else  # 0 <= p0 < 1; zero truncated/modified neg. binomial
+        else  # 0 <= p0 < 1; zero-truncated/modified neg. binomial
         {
             fs0 <- p0 + (1 - p0) * pgfztnbinom(fx[1L], r, p)
             p1 <- (1 - p0) * dztnbinom(1, r, p)
@@ -108,9 +111,9 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
         p <- par$prob
         a <- p/(p - 1)                  # equivalent to -p/(1 - p)
         b <- -(n + 1) * a
-        if (is.null(p0))
+        if (is.null(p0)) # standard binomial
             fs0 <- exp(n * log1p(p * (fx[1L] - 1)))
-        else  # 0 <= p0 < 1; zero truncated/modified binomial
+        else  # 0 <= p0 < 1; zero-truncated/modified binomial
         {
             fs0 <- p0 + (1 - p0) * pgfztbinom(fx[1L], n, p)
             p1 <- (1 - p0) * dztbinom(1, n, p)
@@ -122,9 +125,9 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
             stop("value of 'prob' missing")
         a <- par$prob
         b <- -a
-        if (is.null(p0) || identical(p0, 0)) # logarithmic always "zero truncated"
+        if (is.null(p0) || identical(p0, 0)) # standard logarithmic
             fs0 <- pgflogarithmic(fx[1L], a)
-        else # 0 < p0 < 1; quite unusual "zero modified logarithmic"
+        else # 0 < p0 < 1; zero-modified logarithmic
         {
             fs0 <- p0 + (1 - p0) * pgflogarithmic(fx[1L], a)
             p1 <- (1 - p0) * dlogarithmic(1, a)

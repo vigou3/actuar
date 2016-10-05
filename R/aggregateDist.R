@@ -67,10 +67,15 @@ aggregateDist <-
                                 "negative binomial",
                                 "binomial",
                                 "logarithmic",
-                                "zero truncated poisson",
-                                "zero truncated geometric",
-                                "zero truncated negative binomial",
-                                "zero truncated binomial"))
+                                "zero-truncated poisson",
+                                "zero-truncated geometric",
+                                "zero-truncated negative binomial",
+                                "zero-truncated binomial"
+                                "zero-modified logarithmic",
+                                "zero-modified poisson",
+                                "zero-modified geometric",
+                                "zero-modified negative binomial",
+                                "zero-modified binomial"))
             FUN <- panjer(fx = model.sev, dist = dist, p0 = p0,
                           x.scale = x.scale, ..., convolve = convolve,
                           tol = tol, maxit = maxit, echo = echo)

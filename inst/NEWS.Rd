@@ -23,8 +23,13 @@
       \item{\code{aggregateDist} now accepts
         \code{"zero-truncated binomial"},
 	\code{"zero-truncated geometric"},
-	\code{"zero-truncated negative binomial"} and
-	\code{"zero-truncated poisson"}
+	\code{"zero-truncated negative binomial"},
+	\code{"zero-truncated poisson"},
+	\code{"zero-modified binomial"},
+	\code{"zero-modified geometric"},
+	\code{"zero-modified negative binomial"},
+	\code{"zero-modified poisson"} and
+	\code{"zero-modified logarithmic"}
 	for argument \code{model.freq} with the \code{"recursive"}
 	method.}
       \item{Extended range of admissible values for many limited
