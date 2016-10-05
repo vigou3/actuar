@@ -189,37 +189,3 @@ double rzmnbinom(double size, double prob, double p0m)
     	return qnbinom(runif((p0 - p0m)/(1 - p0m), 1), size, prob, 1, 0);
     }
 }
-
-double rzmnbinom2(double size, double prob, double p0m)
-{
-    if (!R_FINITE(prob) || prob <= 0 || prob > 1 || size < 0 || p0m < 0 || p0m > 1) return R_NaN;
-
-    /* limiting case as size approaches zero is zero modified logarithmic */
-    /* if (size == 0) return rzmlogarithmic(1 - prob, p0m); */
-
-    /* limiting case as prob approaches one is mass (1-p0m) at one */
-    if (prob == 1) return (runif(0, 1) <= p0m) ? 0.0 : 1.0;
-
-    double x, p0 = dbinom_raw(size, size, prob, 1 - prob, /*give_log*/0);
-
-    /* p0m >= p0: generate from mixture */
-    if (p0m >= p0)
-	return (runif(0, 1) * (1 - p0) < (1 - p0m)) ? rnbinom(size, prob) : 0.0;
-
-    /* p0m < p0: choice of algorithm depends on difference between probabilities */
-    /* if (p0 - p0m < 0.95) */
-    /* { */
-    /* 	/\* rejection method to get the right proportion of zeros *\/ */
-    /* 	for (;;) */
-    /* 	{ */
-    /* 	    x = rnbinom(size, prob); */
-    /* 	    if (x != 0 || /\* x == 0 and*\/ runif(0, p0) <= p0m) */
-    /* 		return x; */
-    /* 	} */
-    /* } */
-    /* else */
-    {
-	/* inversion method */
-	return qnbinom(runif((p0 - p0m)/(1 - p0m), 1), size, prob, 1, 0);
-    }
-}
