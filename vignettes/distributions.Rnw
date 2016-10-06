@@ -1,0 +1,634 @@
+\documentclass[x11names]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+  \usepackage{amsmath}
+  \usepackage[round]{natbib}
+  \usepackage[english]{babel}
+  \usepackage[scaled=0.9]{helvet}
+  \usepackage[sc]{mathpazo}
+  \usepackage{framed,booktabs,paralist}
+  \usepackage[noae]{Sweave}
+
+  %\VignetteIndexEntry{Loss distributions modeling}
+  %\VignettePackage{actuar}
+
+  \title{Inventory of continuous and discrete distributions provided
+    in \pkg{actuar}}
+  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
+    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
+    Mathieu Pigeon \\ École d'actuariat, Université Laval}
+  \date{}
+
+  %% Colors
+  \usepackage{xcolor}
+  \definecolor{link}{rgb}{0,0.4,0.6}             % internal links
+  \definecolor{url}{rgb}{0.6,0,0}                % external links
+  \definecolor{citation}{rgb}{0,0.5,0}           % citations
+  \definecolor{codebg}{named}{LightYellow1}      % R code background
+
+  %% Hyperlinks
+  \usepackage{hyperref}
+  \hypersetup{%
+    pdfauthor={Vincent Goulet},
+    colorlinks = {true},
+    linktocpage = {true},
+    urlcolor = {url},
+    linkcolor = {link},
+    citecolor = {citation},
+    pdfpagemode = {UseOutlines},
+    pdfstartview = {Fit},
+    bookmarksopen = {true},
+    bookmarksnumbered = {true},
+    bookmarksdepth = {subsubsection}}
+
+  %% Sweave environments redefined to have a color background (using
+  %% environment snugshade* of package framed).
+  \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+  \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
+  \fvset{listparameters={\setlength{\topsep}{0pt}}}
+  \renewenvironment{Schunk}{%
+    \setlength{\topsep}{0pt}
+    \colorlet{shadecolor}{codebg}
+    \begin{snugshade*}}%
+    {\end{snugshade*}}
+
+  %% Some new commands
+  \newcommand{\E}[1]{E[ #1 ]}
+  \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
+  \newcommand{\LAS}{\mathrm{LAS}}
+  \newcommand{\mat}[1]{\mathbf{#1}}
+  \newcommand{\proglang}[1]{\textsf{#1}}
+  \newcommand{\pkg}[1]{\textbf{#1}}
+  \newcommand{\code}[1]{\texttt{#1}}
+
+  \bibliographystyle{plainnat}
+
+<<echo=FALSE>>=
+library(actuar)
+options(width = 60, digits = 4)
+@
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+\label{sec:introduction}
+
+\proglang{R} already includes functions to compute the probability
+density function (pdf), the cumulative distribution function (cdf) and
+the quantile function of a fair number of probability laws, as well as
+functions to generate variates from these laws. For some root
+\code{foo}, the utility functions are named \code{dfoo}, \code{pfoo},
+\code{qfoo} and \code{rfoo}, respectively.
+
+The \pkg{actuar} package provides \code{d}, \code{p}, \code{q} and
+\code{r} functions for a large number of continuous probability laws
+useful for loss severity modeling, as well as zero-truncated and
+zero-modified extensions to the most usual discrete probability laws
+and used in loss frequency modeling.
+
+
+\section{Special integrals}
+\label{sec:special-integrals}
+
+Many of the cumulative distribution functions of
+\autoref{sec:app:continuous} are expressed in terms of incomplete
+gamma function or the incomplete beta function.
+
+The incomplete gamma function is
+\begin{displaymath}
+  \Gamma(\alpha; x) = \frac{1}{\Gamma(\alpha)}
+  \int_0^x t^{\alpha - 1} e^{-t}\, dt, \quad \alpha > 0, x > 0,
+\end{displaymath}
+with
+\begin{displaymath}
+  \Gamma(\alpha) = \int_0^\infty t^{\alpha - 1} e^{-t}\, dt,
+\end{displaymath}
+whereas the (regularized) incomplete beta function is
+\begin{displaymath}
+  \beta(a, b; x) = \frac{1}{\beta(a, b)}
+  \int\limits_0^x t^{a - 1} (1 - t)^{b - 1}\, dt, \quad a > 0, b > 0, 0 < x < 1,
+\end{displaymath}
+with
+\begin{align*}
+  \beta(a, b)
+  &= \int_0^1 t^{a - 1} (1 - t)^{b - 1}\, dt \\
+  &= \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)}.
+\end{align*}
+
+\citet{LossModels4e} also introduce three other integrals that play a
+role in extending the range of admissible values for limited expected
+value functions.
+
+Let
+\begin{equation}
+  \label{eq:gammaint}
+  G(\alpha; x) = \int_x^\infty t^{\alpha - 1} e^{-t}\, dt
+\end{equation}
+for $\alpha$ real and $x > 0$. When $\alpha > 0$, we clearly have
+\begin{equation*}
+  \label{eq:gammaint:apos}
+  G(\alpha; x) = \Gamma(a) [1 - \Gamma(\alpha; x)].
+\end{equation*}
+The integral is also defined for $\alpha \le 0$. Integration by parts
+yields the relationship
+\begin{equation*}
+  G(\alpha; x) = -\frac{x^\alpha e^{-x}}{\alpha}
+  + \frac{1}{\alpha} G(\alpha + 1; x).
+\end{equation*}
+This process can be repeated until $\alpha + k$ is a positive number,
+in which case the right hand side can be evaluated with
+\eqref{eq:gammaint:apos}. If $\alpha = 0, -1, -2, \dots$, this
+calculation requires the value of
+\begin{equation*}
+  \label{eq:expint}
+  G(0; x) = \int_x^\infty \frac{e^{-t}}{t}\, dt = E_1(x),
+\end{equation*}
+which is known in the literature as the \emph{exponential integral}
+\citep[see, for example,]{Abramowitz:1972}.
+
+Neither \citet{LossModels4e} nor \citet{Abramowitz:1972} provide a
+name for the integral \eqref{eq:gammaint}. For the needs of the
+package, we dubbed it the ``\emph{gamma integral}''.
+
+We also let
+\begin{equation}
+  \label{eq:betaint}
+  B(a, b; x) = \Gamma(a + b) \int_0^x t^{a-1} (1-t)^{b-1} dt
+\end{equation}
+for $a > 0$, $b \neq -1, -2, \dots$ and $0 < x < 1$. Again, it is
+clear that when $b > 0$,
+\begin{equation*}
+  B(a, b; x) = \Gamma(a) \Gamma(b) \beta(a, b; x).
+\end{equation*}
+Of more interest here is the case where $b < 0$,
+$b \neq -1, -2, \dots$ and $a > 1 + \lfloor -b\rfloor$. Integration by
+parts of \eqref{eq:betaint} yields
+\begin{equation}
+  \label{eq:betaint:bneg}
+  \begin{split}
+    B(a, b; x)
+    &= \displaystyle
+    -\Gamma(a + b) \left[ \frac{x^{a-1} (1-x)^b}{b}
+      + \frac{(a-1) x^{a-2} (1-x)^{b+1}}{b (b+1)} \right. \\
+    &  \displaystyle\left.
+      + \cdots + \frac{(a-1) \cdots (a-r) x^{a-r-1}
+        (1-x)^{b+r}}{b (b+1) \cdots (b+r)} \right] \\
+    &   \displaystyle
+    + \frac{(a-1) \cdots (a-r-1)}{b (b+1) \cdots (b+r)}
+    \Gamma(a-r-1) \\
+    &  \times \Gamma(b+r+1) \beta(a-r-1, b+r+1),
+  \end{split}
+\end{equation}
+where $r = \lfloor -b\rfloor$. This expression is little found in the
+literature outside of \citet{LossModels:4e}. For the needs of the
+package, we dubbed integral \eqref{eq:betaint} the ``\emph{beta
+  integral}''.
+
+The package contains functions to compute the ``gamma'', exponential
+and ``beta'' integrals. They are mostly used the \porglang{C} level to
+evaluate the limited expected value for distributions of the
+transformed beta and transformed gamma families; see the following
+section. The package also provides the R interfaces \code{gammaint},
+\code{expint} and \code{betaint}, however these functions are not
+exported.
+
+
+\section{Continuous distributions}
+\label{sec:continuous}
+
+The \pkg{actuar} package provides \code{d}, \code{p}, \code{q} and
+\code{r} functions for all the probability laws useful for loss
+severity modeling found in Appendix A of \cite{LossModels4e} and not
+already present in base \proglang{R}, excluding the inverse Gaussian
+and log-$t$ but including the loggamma distribution
+\citep{HoggKlugman}.
+
+\autoref{tab:distributions} lists the supported distributions as
+named in \cite{LossModels4e} along with the root names of the
+\proglang{R} functions. For reference, \autoref{sec:appendix}
+also gives for every distribution the pdf, the cdf and the name of the
+argument corresponding to each parameter in the parametrization of
+\cite{LossModels4e}. One will note that by default all functions
+(except those for the Pareto distribution) use a rate parameter equal
+to the inverse of the scale parameter. This differs from
+\cite{LossModels4e} but is better in line with the functions for the
+gamma, exponential and Weibull distributions in base \proglang{R}.
+
+\begin{table}
+  \centering
+  \begin{tabular}{lll}
+    \toprule
+    Family & Distribution & Root \\
+    \midrule
+    Transformed beta  & Transformed beta & \code{trbeta} \\
+                      & Burr & \code{burr} \\
+                      & Loglogistic & \code{llogis} \\
+                      & Paralogistic & \code{paralogis} \\
+                      & Generalized Pareto & \code{genpareto} \\
+                      & Pareto & \code{pareto} \\
+                      & Inverse Burr & \code{invburr} \\
+                      & Inverse Pareto & \code{invpareto} \\
+                      & Inverse paralogistic & \code{invparalogis} \\
+    \midrule
+    Transformed gamma & Transformed gamma & \code{trgamma} \\
+                      & Inverse transformed gamma & \code{invtrgamma} \\
+                      & Inverse gamma & \code{invgamma} \\
+                      & Inverse Weibull & \code{invweibull} \\
+                      & Inverse exponential & \code{invexp} \\
+    \midrule
+    Other             & Loggamma & \code{lgamma} \\
+                      & Single parameter Pareto & \code{pareto1} \\
+                      & Generalized beta & \code{genbeta} \\
+    \bottomrule
+  \end{tabular}
+  \caption{Probability laws supported by \pkg{actuar} classified by
+    family and root names of the \proglang{R} functions.}
+  \label{tab:distributions}
+\end{table}
+
+In addition to the \code{d}, \code{p}, \code{q} and \code{r}
+functions, the package provides \code{m}, \code{lev} and \code{mgf}
+functions to compute, respectively, theoretical raw moments
+\begin{equation}
+  \label{eq:def:moment}
+  m_k = \E{X^k},
+\end{equation}
+theoretical limited moments
+\begin{equation}
+  \label{eq:def:limited-moment}
+  \E{(X \wedge x)^k} = \E{\min(X, x)^k}
+\end{equation}
+and the moment generating function
+\begin{equation}
+  \label{eq:def:mgf}
+  M_X(t) = \E{e^{tX}},
+\end{equation}
+when it exists. Every probability law of \autoref{tab:distributions}
+is supported, plus the following ones: beta, exponential, chi-square,
+gamma, lognormal, normal (no \code{lev}), uniform and Weibull of base
+\proglang{R} and the inverse Gaussian distribution of package
+\pkg{SuppDists} \citep{SuppDists}. The \code{m} and \code{lev}
+functions are especially useful with estimation methods based on the
+matching of raw or limited moments; see
+\autoref{sec:empirical-moments} for their empirical counterparts.
+The \code{mgf} functions come in handy to compute the adjustment
+coefficient in ruin theory; see the \code{"risk"} vignette.
+
+In addition to the 17 distributions of \autoref{tab:distributions},
+the package provides support for a family of distributions deserving a
+separate presentation. Phase-type distributions \citep{Neuts_81} are
+defined as the distribution of the time until absorption of continuous
+time, finite state Markov processes with $m$ transient states and one
+absorbing state. Let
+\begin{equation}
+  \label{eq:Markov-transition-matrix}
+  \mat{Q} =
+  \begin{bmatrix}
+    \mat{T} & \mat{t} \\
+    \mat{0} & 0
+  \end{bmatrix}
+\end{equation}
+be the transition rates matrix (or intensity matrix) of such a process
+and let $(\pmb{\pi}, \pi_{m + 1})$ be the initial probability vector.
+Here, $\mat{T}$ is an $m \times m$ non-singular matrix with $t_{ii} <
+0$ for $i = 1, \dots, m$ and $t_{ij} \geq 0$ for $i \neq j$, $\mat{t}
+= - \mat{T} \mat{e}$ and $\mat{e}$ is a column vector with all
+components equal to 1. Then the cdf of the time until absorption
+random variable with parameters $\pmb{\pi}$ and $\mat{T}$ is
+\begin{equation}
+  \label{eq:cdf-phtype}
+  F(x) =
+  \begin{cases}
+    \pi_{m + 1}, & x = 0, \\
+    1 - \pmb{\pi} e^{\mat{T} x} \mat{e}, & x > 0
+  \end{cases}
+\end{equation}
+where
+\begin{equation}
+  \label{eq:matrix-exponential}
+  e^{\mat{M}} = \sum_{n = 0}^\infty \frac{\mat{M}^n}{n!}
+\end{equation}
+is the matrix exponential of matrix $\mat{M}$.
+
+The exponential, the Erlang (gamma with integer shape parameter) and
+discrete mixtures thereof are common special cases of phase-type
+distributions.
+
+The package provides \code{d}, \code{p}, \code{r}, \code{m} and
+\code{mgf} functions for phase-type distributions. The root is
+\code{phtype} and parameters $\pmb{\pi}$ and $\mat{T}$ are named
+\code{prob} and \code{rates}, respectively. For the package, function
+\code{pphtype} is central to the evaluation of the probability of
+ruin; see \code{?ruin} and the \code{"risk"} vignette.
+
+The core of all the functions presented in this subsection is written
+in \proglang{C} for speed. The matrix exponential \proglang{C} routine
+is based on \code{expm()} from the package \pkg{Matrix} \citep{Matrix}.
+
+\appendix
+
+\section{Probability laws}
+\label{sec:app:continuous}
+
+This appendix gives the pdf and cdf of the probability laws appearing
+in \autoref{tab:distributions} using the parametrization of
+\cite{LossModels4e} and \cite{HoggKlugman}.
+
+Unless otherwise stated all parameters are strictly positive and the
+functions are defined for $x > 0$.
+
+\subsection{Transformed beta family}
+\label{sec:appendix:transformed-beta}
+
+\subsubsection*{Transformed beta}
+
+\begin{compactitem}[]
+\item Root: \code{trbeta}, \code{pearson6}
+\item Parameters: \code{shape1} ($\alpha$),
+      \code{shape2} ($\gamma$),
+      \code{shape3} ($\tau$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{\gamma u^\tau (1 - u)^\alpha}{x \beta
+    (\alpha, \tau )},
+  \qquad u = \frac{v}{1 + v},
+  \qquad v = \left(\frac{x}{\theta} \right)^\gamma \\
+  F(x) &= \beta (\tau, \alpha ; u)
+\end{align*}
+
+\subsubsection*{Burr}
+
+\begin{compactitem}[]
+\item Root: \code{burr}
+\item Parameters: \code{shape1} ($\alpha$),
+      \code{shape2} ($\gamma$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{\alpha \gamma u^\alpha (1 - u)}{x},
+  \qquad u = \frac{1}{1 + v},
+  \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
+  F(x) &= 1 - u^\alpha
+\end{align*}
+
+\subsubsection*{Loglogistic}
+
+\begin{compactitem}[]
+\item Root: \code{llogis}
+\item Parameters: \code{shape} ($\gamma$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{\gamma u (1 - u)}{x},
+  \qquad u = \frac{v}{1 + v},
+  \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
+  F(x) &= u
+\end{align*}
+
+\subsubsection*{Paralogistic}
+
+\begin{compactitem}[]
+\item Root: \code{paralogis}
+\item Parameters: \code{shape} ($\alpha$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+
+\begin{align*}
+  f(x) &= \frac{\alpha^2 u^\alpha (1 - u)}{x},
+  \qquad u = \frac{1}{1 + v},
+  \qquad v = \left( \frac{x}{\theta} \right)^\alpha \\
+  F(x) &= 1 - u^\alpha
+\end{align*}
+
+\subsubsection*{Generalized Pareto}
+
+\begin{compactitem}[]
+\item Root: \code{genpareto}
+\item Parameters: \code{shape1} ($\alpha$),
+      \code{shape2} ($\tau$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{u^\tau (1 - u)^\alpha}{x \beta (\alpha, \tau )},
+  \qquad u = \frac{v}{1 + v},
+  \qquad v = \frac{x}{\theta} \\
+  F(x) &= \beta (\tau, \alpha ; u)
+\end{align*}
+
+\subsubsection*{Pareto}
+
+\begin{compactitem}[]
+\item Root: \code{pareto}, \code{pareto2}
+\item Parameters: \code{shape} ($\alpha$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{\alpha u^\alpha (1 - u)}{x},
+  \qquad u = \frac{1}{1 + v},
+  \qquad v = \frac{x}{\theta} \\
+  F(x) &= 1 - u^\alpha
+\end{align*}
+
+\subsubsection*{Inverse Burr}
+
+\begin{compactitem}[]
+\item Root: \code{invburr}
+\item Parameters: \code{shape1} ($\tau$),
+      \code{shape2} ($\gamma$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{\tau \gamma u^\tau (1 - u)}{x},
+  \qquad u = \frac{v}{1 + v},
+  \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
+  F(x) &= u^\tau
+\end{align*}
+
+\subsubsection*{Inverse Pareto}
+
+\begin{compactitem}[]
+\item Root: \code{invpareto}
+\item Parameters: \code{shape} ($\tau$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{\tau u^\tau (1 - u)}{x},
+  \qquad u = \frac{v}{1 + v},
+  \qquad v = \frac{x}{\theta} \\
+  F(x) &= u^\tau
+\end{align*}
+
+\subsubsection*{Inverse paralogistic}
+
+\begin{compactitem}[]
+\item Root: \code{invparalogis}
+\item Parameters: \code{shape} ($\tau$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{\tau^2 u^\tau (1 - u)}{x},
+  \qquad u = \frac{v}{1 + v},
+  \qquad v = \left(\frac{x}{\theta} \right)^\tau \\
+  F(x) &= u^\tau
+\end{align*}
+
+\subsection{Transformed gamma family}
+\label{sec:appendix:transformed-gamma}
+
+\subsubsection*{Transformed gamma}
+
+\begin{compactitem}[]
+\item Root: \code{trgamma}
+\item Parameters: \code{shape1} ($\alpha$),
+      \code{shape2} ($\tau$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{\tau u^\alpha e^{-u}}{x \Gamma(\alpha)},
+  \qquad u = \left( \frac{x}{\theta} \right)^\tau \\
+  F(x) &= \Gamma (\alpha ; u)
+\end{align*} \\
+
+\subsubsection*{Inverse transformed gamma}
+
+\begin{compactitem}[]
+\item Root: \code{invtrgamma}
+\item Parameters: \code{shape1} ($\alpha$),
+      \code{shape2} ($\tau$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{\tau u^\alpha e^{-u}}{x\Gamma (\alpha)},
+  \qquad u = \left( \frac{\theta}{x} \right)^\tau \\
+  F(x) &= 1 - \Gamma (\alpha ; u)
+\end{align*}
+
+\subsubsection*{Inverse gamma}
+
+\begin{compactitem}[]
+\item Root: \code{invgamma}
+\item Parameters: \code{shape} ($\alpha$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{u^\alpha e^{-u}}{x\Gamma (\alpha)},
+  \qquad u = \frac{\theta}{x}\\
+  F(x) &= 1 - \Gamma (\alpha ; u)
+\end{align*}
+
+
+\subsubsection*{Inverse Weibull}
+
+\begin{compactitem}[]
+\item Root: \code{invweibull}, \code{lgompertz}
+\item Parameters: \code{shape} ($\tau$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{\tau u e^{-u}}{x},
+  \qquad u = \left( \frac{\theta}{x} \right)^\tau \\
+  F(x) &= e^{-u}
+\end{align*}
+
+\subsubsection*{Inverse exponential}
+
+\begin{compactitem}[]
+\item Root: \code{invexp}
+\item Parameters: \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{u e^{-u}}{x},
+  \qquad u = \frac{\theta}{x} \\
+  F(x) &= e^{-u}
+\end{align*}
+
+\subsection{Other distributions}
+\label{sec:appendix:other}
+
+\subsubsection*{Loggamma}
+
+\begin{compactitem}[]
+\item Root: \code{lgamma}
+\item Parameters: \code{shapelog} ($\alpha$),
+      \code{ratelog}   ($\lambda$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{\lambda^\alpha (\ln x)^{\alpha - 1}}{%
+    x^{\lambda + 1} \Gamma(\alpha)},
+  \qquad x > 1 \\
+  F(x) &= \Gamma( \alpha ; \lambda \ln x), \qquad x > 1
+\end{align*}
+
+\subsubsection*{Single parameter Pareto}
+
+\begin{compactitem}[]
+\item Root: \code{pareto1}
+\item Parameters: \code{shape} ($\alpha$),
+      \code{min}   ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{\alpha
+    \theta^\alpha}{x^{\alpha+1}}, \qquad x > \theta \\
+  F(x) &= 1 - \left( \frac{\theta}{x} \right)^\alpha, \qquad x >
+  \theta
+\end{align*}
+
+Although there appears to be two parameters, only $\alpha$ is a true
+parameter. The value of $\theta$ is the minimum of the distribution
+and is usually set in advance.
+
+\subsubsection*{Generalized beta}
+
+\begin{compactitem}[]
+\item Root: \code{genbeta}
+\item Parameters: \code{shape1} ($\alpha$),
+      \code{shape2} ($\beta$),
+      \code{shape3} ($\tau$),
+      \code{rate}   ($\lambda = 1/\theta$),
+      \code{scale}  ($\theta$)
+\end{compactitem}
+
+\begin{align*}
+  f(x) &= \frac{\tau u^\alpha (1 - u)^{\beta - 1}}{x \beta (\alpha, \beta)},
+  \qquad u = \left( \frac{x}{\theta} \right)^\tau,
+  \qquad 0 < x < \theta \\
+  F(x) &= \beta (\alpha, \beta ; u)
+\end{align*}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% coding: utf-8
+%%% End:

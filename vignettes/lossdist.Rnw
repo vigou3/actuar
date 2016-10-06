@@ -1,12 +1,12 @@
-\documentclass{article}
+\documentclass[x11names]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-  \usepackage{amsmath,color,hyperref}
+  \usepackage{amsmath}
   \usepackage[round]{natbib}
   \usepackage[english]{babel}
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
-  \usepackage{booktabs,paralist}
+  \usepackage{framed,booktabs,paralist}
   \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Loss distributions modeling}
@@ -18,6 +18,39 @@
     Mathieu Pigeon \\ École d'actuariat, Université Laval}
   \date{}
 
+  %% Colors
+  \usepackage{xcolor}
+  \definecolor{link}{rgb}{0,0.4,0.6}             % internal links
+  \definecolor{url}{rgb}{0.6,0,0}                % external links
+  \definecolor{citation}{rgb}{0,0.5,0}           % citations
+  \definecolor{codebg}{named}{LightYellow1}      % R code background
+
+  %% Hyperlinks
+  \usepackage{hyperref}
+  \hypersetup{%
+    pdfauthor={Vincent Goulet},
+    colorlinks = {true},
+    linktocpage = {true},
+    urlcolor = {url},
+    linkcolor = {link},
+    citecolor = {citation},
+    pdfpagemode = {UseOutlines},
+    pdfstartview = {Fit},
+    bookmarksopen = {true},
+    bookmarksnumbered = {true},
+    bookmarksdepth = {subsubsection}}
+
+  %% Sweave environments redefined to have a color background (using
+  %% environment snugshade* of package framed).
+  \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+  \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
+  \fvset{listparameters={\setlength{\topsep}{0pt}}}
+  \renewenvironment{Schunk}{%
+    \setlength{\topsep}{0pt}
+    \colorlet{shadecolor}{codebg}
+    \begin{snugshade*}}%
+    {\end{snugshade*}}
+
   %% Some new commands
   \newcommand{\E}[1]{E[ #1 ]}
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
@@ -27,32 +60,11 @@
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
 
-  %% Redefine Sweave environments with smaller font
-  \RecustomVerbatimEnvironment{Sinput}{Verbatim}{%
-    fontshape=sl,fontsize=\small,xleftmargin=0pt}
-  \RecustomVerbatimEnvironment{Soutput}{Verbatim}{%
-    fontsize=\small,xleftmargin=0pt}
-
   \bibliographystyle{plainnat}
-
-  \definecolor{Red}{rgb}{0.7,0,0}
-  \definecolor{Blue}{rgb}{0,0,0.8}
-  \hypersetup{%
-    hyperindex = {true},
-    colorlinks = {true},
-    linktocpage = {true},
-    plainpages = {false},
-    linkcolor = {Blue},
-    citecolor = {Blue},
-    urlcolor = {Red},
-    pdfstartview = {Fit},
-    pdfpagemode = {UseOutlines},
-    pdfview = {XYZ null null null}
-  }
 
 <<echo=FALSE>>=
 library(actuar)
-options(width = 62, digits = 4)
+options(width = 60, digits = 4)
 @
 
 \begin{document}
@@ -90,20 +102,20 @@ functions to generate variates from these laws. For some root
 
 The \pkg{actuar} package provides \code{d}, \code{p}, \code{q} and
 \code{r} functions for all the probability laws useful for loss
-severity modeling found in Appendix A of \cite{LossModels2e} and not
+severity modeling found in Appendix A of \cite{LossModels4e} and not
 already present in base \proglang{R}, excluding the inverse Gaussian
 and log-$t$ but including the loggamma distribution
 \citep{HoggKlugman}.
 
 Table \ref{tab:distributions} lists the supported distributions as
-named in \cite{LossModels2e} along with the root names of the
+named in \cite{LossModels4e} along with the root names of the
 \proglang{R} functions. For reference, Appendix \ref{sec:appendix}
 also gives for every distribution the pdf, the cdf and the name of the
 argument corresponding to each parameter in the parametrization of
-\cite{LossModels2e}. One will note that by default all functions
+\cite{LossModels4e}. One will note that by default all functions
 (except those for the Pareto distribution) use a rate parameter equal
 to the inverse of the scale parameter. This differs from
-\cite{LossModels2e} but is better in line with the functions for the
+\cite{LossModels4e} but is better in line with the functions for the
 gamma, exponential and Weibull distributions in base \proglang{R}.
 
 \begin{table}
@@ -357,7 +369,7 @@ object to compute the value of $F_n(x)$
 in any $x$.
 
 The approximation of the empirical cdf for grouped data is called an
-ogive \citep{LossModels,HoggKlugman}. It is obtained by joining the
+ogive \citep{LossModels4e,HoggKlugman}. It is obtained by joining the
 known values of $F_n(x)$ at group boundaries with straight line
 segments:
 \begin{equation}
@@ -404,7 +416,7 @@ Fnt(quantile(x))
 This is certainly not the most spectacular feature of \pkg{actuar},
 but it remains useful for illustrations and examples: the package
 includes the individual dental claims and grouped dental claims data
-of \cite{LossModels2e}:
+of \cite{LossModels4e}:
 <<echo=TRUE>>=
 data("dental"); dental
 data("gdental"); gdental
@@ -561,7 +573,7 @@ $X$, $Y^L$ and $Y^P$ will differ if any of the following coverage
 modifications are present for the policy: an ordinary or a franchise
 deductible, a limit, coinsurance or inflation adjustment
 \cite[see][Chapter 5 for precise definitions of these
-terms]{LossModels2e}. Table \ref{tab:coverage} summarizes the
+terms]{LossModels4e}. Table \ref{tab:coverage} summarizes the
 definitions of $Y^L$ and $Y^P$.
 
 \begin{table}
@@ -600,7 +612,7 @@ definitions of $Y^L$ and $Y^P$.
     \bottomrule
   \end{tabular}
   \caption{Coverage modifications for per-loss variable ($Y^L$) and
-    per-payment variable ($Y^P$) as defined in \cite{LossModels2e}.}
+    per-payment variable ($Y^P$) as defined in \cite{LossModels4e}.}
   \label{tab:coverage}
 \end{table}
 
@@ -684,7 +696,7 @@ formulas under various combinations of coverage modifications.
 
 This appendix gives the pdf and cdf of the probability laws appearing
 in Table \ref{tab:distributions} using the parametrization of
-\cite{LossModels2e} and \cite{HoggKlugman}.
+\cite{LossModels4e} and \cite{HoggKlugman}.
 
 In the following,
 \begin{displaymath}
