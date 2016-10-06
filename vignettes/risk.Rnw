@@ -1,22 +1,55 @@
-\documentclass{article}
+\documentclass[x11names]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-  \usepackage{amsmath,color,hyperref}
+  \usepackage{amsmath}
   \usepackage[round]{natbib}
   \usepackage[english]{babel}
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
-  \usepackage{booktabs,paralist}
+  \usepackage{framed,booktabs,paralist}
   \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Risk and ruin theory}
   %\VignettePackage{actuar}
 
-  \title{Risk theory features of \pkg{actuar}}
+  \title{Risk and ruin theory features of \pkg{actuar}}
   \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
     Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
     Mathieu Pigeon \\ École d'actuariat, Université Laval}
   \date{}
+
+  %% Colors
+  \usepackage{xcolor}
+  \definecolor{link}{rgb}{0,0.4,0.6}             % internal links
+  \definecolor{url}{rgb}{0.6,0,0}                % external links
+  \definecolor{citation}{rgb}{0,0.5,0}           % citations
+  \definecolor{codebg}{named}{LightYellow1}      % R code background
+
+  %% Hyperlinks
+  \usepackage{hyperref}
+  \hypersetup{%
+    pdfauthor={Vincent Goulet},
+    colorlinks = {true},
+    linktocpage = {true},
+    urlcolor = {url},
+    linkcolor = {link},
+    citecolor = {citation},
+    pdfpagemode = {UseOutlines},
+    pdfstartview = {Fit},
+    bookmarksopen = {true},
+    bookmarksnumbered = {true},
+    bookmarksdepth = {subsubsection}}
+
+  %% Sweave environments redefined to have a color background (using
+  %% environment snugshade* of package framed).
+  \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+  \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
+  \fvset{listparameters={\setlength{\topsep}{0pt}}}
+  \renewenvironment{Schunk}{%
+    \setlength{\topsep}{0pt}
+    \colorlet{shadecolor}{codebg}
+    \begin{snugshade*}}%
+    {\end{snugshade*}}
 
   %% Some new commands
   \newcommand{\E}[1]{E[ #1 ]}
@@ -28,28 +61,7 @@
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
 
-  %% Redefine Sweave environments with smaller font
-  \RecustomVerbatimEnvironment{Sinput}{Verbatim}{%
-    fontshape=sl,fontsize=\small,xleftmargin=0pt}
-  \RecustomVerbatimEnvironment{Soutput}{Verbatim}{%
-    fontsize=\small,xleftmargin=0pt}
-
   \bibliographystyle{plainnat}
-
-  \definecolor{Red}{rgb}{0.7,0,0}
-  \definecolor{Blue}{rgb}{0,0,0.8}
-  \hypersetup{%
-    hyperindex = {true},
-    colorlinks = {true},
-    linktocpage = {true},
-    plainpages = {false},
-    linkcolor = {Blue},
-    citecolor = {Blue},
-    urlcolor = {Red},
-    pdfstartview = {Fit},
-    pdfpagemode = {UseOutlines},
-    pdfview = {XYZ null null null}
-  }
 
 <<echo=FALSE>>=
 library(actuar)
@@ -74,7 +86,7 @@ that the surplus becomes negative, in which case technical ruin of the
 insurance company occurs.
 
 The interested reader can read more on these subjects in
-\cite{LossModels3e,Gerber_MRT,DenuitCharpentier1,MART}, among others.
+\cite{LossModels4e,Gerber_MRT,DenuitCharpentier1,MART:2e}, among others.
 
 The current version of \pkg{actuar} \citep{actuar} contains four
 visible functions related to the above problems: two for the
@@ -257,10 +269,11 @@ supported.
   This requires the severity distribution to be discrete arithmetic on
   $0, 1, 2, \dots, m$ for some monetary unit and the frequency
   distribution to be a member of either the $(a, b, 0)$ or $(a, b, 1)$
-  family of distributions \citep{LossModels3e}. (These families
+  family of distributions \citep{LossModels4e}. (These families
   contain the Poisson, binomial, negative binomial and logarithmic
-  distributions and their extensions with an arbitrary mass at $x =
-  0$.) The general recursive formula is:
+  distributions and their zero-truncated and zero-modified extensions
+  allowing for a zero or arbitrary mass at $x = 0$.) The general
+  recursive formula is:
   \begin{displaymath}
     f_S(x) = \frac{(p_1 - (a + b)p_0)f_C(x) + \sum_{y=1}^{\min(x,
         m)}(a + by/x)f_C(y)f_S(x - y)}{1 - a f_C(0)},
@@ -314,7 +327,7 @@ supported.
     F_n(x) = \frac{1}{n} \sum_{j = 1}^n I\{x_j \leq x\}.
   \end{equation}
   The simulation itself is done with function \code{simul} (see the
-  \code{"simulation"} vignette)). This function admits very general
+  \code{"simulation"} vignette). This function admits very general
   hierarchical models for both the frequency and the severity
   components.
 \end{enumerate}
@@ -331,7 +344,7 @@ recursive and convolution methods and the true support of $S$.
 
 The recursive method fails when the expected number of claims is so
 large that $f_S(0)$ is numerically equal to zero. One solution
-proposed by \citet{LossModels3e} consists in dividing the appropriate
+proposed by \citet{LossModels4e} consists in dividing the appropriate
 parameter of the frequency distribution by $2^n$, with $n$ such that
 $f_S(0) > 0$ and the recursions can start. One then computes the
 aggregate claim amount distribution using the recursive method and
