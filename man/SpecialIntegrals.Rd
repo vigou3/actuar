@@ -53,7 +53,7 @@ gammaint(x, a)
       & &  \displaystyle
   	  + \frac{(a-1) \cdots (a-r-1)}{b (b+1) \cdots (b+r)}
 	  \Gamma(a-r-1) \\
-      & & \times \Gamma(b+r+1) B_x(a-r-1, b+r+1),
+      & & \times \Gamma(b+r+1) I_x(a-r-1, b+r+1),
       \end{array}}{%
     B(a, b; x)
     = -Gamma(a+b) \{(x^(a-1) (1-x)^b)/b
