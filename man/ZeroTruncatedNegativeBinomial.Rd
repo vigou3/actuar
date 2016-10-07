@@ -50,7 +50,7 @@ rztnbinom(n, size, prob)
   \eqn{[r(1-p)(1 - p^r(1 + r(1-p))]/[p(1-p^r)^2]}.
 
   In the terminology of Klugman et al. (2012), the zero-truncated
-  negative binomial is a member of the \eqn{(a, b, 1)} family of
+  negative binomial is a member of the \eqn{(a, b, 1)} class of
   distributions with \eqn{a = 1-p} and \eqn{b = (r-1)(1-p)}.
 
   The limiting case \code{size == 0} is the

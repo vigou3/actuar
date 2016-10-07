@@ -45,7 +45,7 @@ rztgeom(n, prob)
   The mean is \eqn{1/p} and the variance is \eqn{(1-p)/p^2}.
 
   In the terminology of Klugman et al. (2012), the zero-truncated
-  geometric is a member of the \eqn{(a, b, 1)} family of
+  geometric is a member of the \eqn{(a, b, 1)} class of
   distributions with \eqn{a = 1-p} and \eqn{b = 0}.
 
   If an element of \code{x} is not integer, the result of

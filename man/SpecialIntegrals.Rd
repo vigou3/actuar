@@ -83,7 +83,7 @@ gammaint(x, a)
   number. If \eqn{\alpha = 0, -1, -2, \ldots}{a = 0, -1, -2, \ldots}
   this requires \eqn{G(0; x) = E_1(x)}, the exponential integral above.
 
-  These function are mostly mostly used (at the C level) to compute the
+  These function are mostly used (at the C level) to compute the
   limited expected value for distributions of the transformed beta
   (\code{betaint}) and transformed gamma (\code{gammaint} and
   \code{expint}) families; see, for example, \code{\link{levtrbeta}} and

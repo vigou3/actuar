@@ -54,7 +54,7 @@ rzmbinom(n, size, prob, p0)
   the zero-truncated binomial.
 
   In the terminology of Klugman et al. (2012), the zero-modified
-  binomial is a member of the \eqn{(a, b, 1)} family of
+  binomial is a member of the \eqn{(a, b, 1)} class of
   distributions with \eqn{a = -p/(1-p)} and \eqn{b = (n+1)p/(1-p)}.
 
   The special case \code{p0 == 0} is the zero-truncated binomial.

@@ -47,7 +47,7 @@ rztbinom(n, size, prob)
   \eqn{np[(1-p) - (1-p+np)(1-p)^n]/[1 - (1-p)^n]^2}.
 
   In the terminology of Klugman et al. (2012), the zero-truncated
-  binomial is a member of the \eqn{(a, b, 1)} family of
+  binomial is a member of the \eqn{(a, b, 1)} class of
   distributions with \eqn{a = -p/(1-p)} and \eqn{b = (n+1)p/(1-p)}.
 
   If an element of \code{x} is not integer, the result of

@@ -47,7 +47,7 @@ rztpois(n, lambda)
     \lambda[1 - (\lambda+1)exp(-\lambda)]/(1 - exp(-\lambda))^2}.
 
   In the terminology of Klugman et al. (2012), the zero-truncated
-  Poisson is a member of the \eqn{(a, b, 1)} family of distributions
+  Poisson is a member of the \eqn{(a, b, 1)} class of distributions
   with \eqn{a = 0} and \eqn{b = \lambda}.
 
   If an element of \code{x} is not integer, the result of

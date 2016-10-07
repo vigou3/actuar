@@ -49,7 +49,7 @@ rzmpois(n, lambda, p0)
   the zero-truncated Poisson.
 
   In the terminology of Klugman et al. (2012), the zero-modified
-  Poisson is a member of the \eqn{(a, b, 1)} family of distributions
+  Poisson is a member of the \eqn{(a, b, 1)} class of distributions
   with \eqn{a = 0} and \eqn{b = \lambda}.
 
   The special case \code{p0 == 0} is the zero-truncated Poisson.

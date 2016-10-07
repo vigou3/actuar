@@ -51,7 +51,7 @@ rzmgeom(n, prob, p0)
   the zero-truncated geometric.
 
   In the terminology of Klugman et al. (2012), the zero-modified
-  geometric is a member of the \eqn{(a, b, 1)} family of
+  geometric is a member of the \eqn{(a, b, 1)} class of
   distributions with \eqn{a = 1-p} and \eqn{b = 0}.
 
   The special case \code{p0 == 0} is the zero-truncated geometric.
