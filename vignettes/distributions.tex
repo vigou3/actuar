@@ -391,23 +391,25 @@ in \proglang{R} will be more efficient.
 \label{sec:special-integrals}
 
 Many of the cumulative distribution functions of
-\autoref{sec:app:continuous} are expressed in terms of incomplete
+\autoref{sec:app:continuous} are expressed in terms of the incomplete
 gamma function or the incomplete beta function.
 
 The incomplete gamma function is
-\begin{displaymath}
+\begin{equation}
+  \label{eq:pgamma}
   \Gamma(\alpha; x) = \frac{1}{\Gamma(\alpha)}
   \int_0^x t^{\alpha - 1} e^{-t}\, dt, \quad \alpha > 0, x > 0,
-\end{displaymath}
+\end{equation}
 with
-\begin{displaymath}
+\begin{equation*}
   \Gamma(\alpha) = \int_0^\infty t^{\alpha - 1} e^{-t}\, dt,
-\end{displaymath}
+\end{equation*}
 whereas the (regularized) incomplete beta function is
-\begin{displaymath}
+\begin{equation}
+  \label{eq:pbeta}
   \beta(a, b; x) = \frac{1}{\beta(a, b)}
   \int\limits_0^x t^{a - 1} (1 - t)^{b - 1}\, dt, \quad a > 0, b > 0, 0 < x < 1,
-\end{displaymath}
+\end{equation}
 with
 \begin{align*}
   \beta(a, b)
@@ -425,10 +427,10 @@ Let
   G(\alpha; x) = \int_x^\infty t^{\alpha - 1} e^{-t}\, dt
 \end{equation}
 for $\alpha$ real and $x > 0$. When $\alpha > 0$, we clearly have
-\begin{equation*}
+\begin{equation}
   \label{eq:gammaint:apos}
   G(\alpha; x) = \Gamma(a) [1 - \Gamma(\alpha; x)].
-\end{equation*}
+\end{equation}
 The integral is also defined for $\alpha \le 0$. Integration by parts
 yields the relationship
 \begin{equation*}
@@ -547,9 +549,16 @@ Software Library \citep{GSL}. The \proglang{C} code for
 \section{Main formulas for continuous distributions}
 \label{sec:app:continuous}
 
-This appendix gives the pdf and cdf of the probability laws appearing
-in \autoref{tab:continuous} using the parametrization of
-\cite{LossModels4e} and \cite{HoggKlugman}.
+This appendix gives the following formulas for the distributions of
+\autoref{tab:continuous} using the parametrization of
+\cite{LossModels4e} and \cite{HoggKlugman}; the pdf; the cdf; the raw
+moment of order $k$; the limited moment of order $k$.
+
+In the following, $\Gamma(\alpha; x)$ is the incomplete gamma function
+\eqref{eq:pgamma}, $\beta(a, b; x)$ is the incomplete beta function
+\eqref{eq:pbeta}, $G(\alpha; x)$ is the gamma integral
+\eqref{eq:gammaint} and $B(a, b; x)$ is the beta integral
+\eqref{eq:betaint}.
 
 Unless otherwise stated all parameters are strictly positive and the
 functions are defined for $x > 0$.
@@ -575,7 +584,7 @@ functions are defined for $x > 0$.
     \qquad u = \frac{v}{1 + v},
     \qquad v = \left(\frac{x}{\theta} \right)^\gamma \\
   F(x)
-  &= \beta (\tau, \alpha ; u) \\
+  &= \beta(\tau, \alpha; u) \\ \displaybreak[0]
   \E{X^k}
   &= \frac{%
     \theta^k \Gamma(\tau+k/\gamma) \Gamma(\alpha-k/\gamma)}{%
@@ -583,10 +592,9 @@ functions are defined for $x > 0$.
     \qquad -\tau\gamma < k < \alpha\gamma \\
   \E{(X \wedge x)^k}
   &= \frac{%
-    \theta^k \Gamma(\tau+k/\gamma) \Gamma(\alpha-k/\gamma)}{%
-    \Gamma(\alpha) \Gamma(\tau)}
-    \beta(\tau+k/\gamma, \alpha-k/\gamma; u) \\
-  &\phantom{=} + x^k (1 - F(x)),
+    \theta^k B(\tau+k/\gamma, \alpha-k/\gamma; u)}{%
+    \Gamma(\alpha) \Gamma(\tau)} \\
+  &\phantom{=} + x^k [1 - \beta(\tau, \alpha; u)],
     \qquad k > -\tau\gamma
 \end{align*}
 
@@ -606,7 +614,7 @@ functions are defined for $x > 0$.
     \qquad u = \frac{1}{1 + v},
     \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
   F(x)
-  &= 1 - u^\alpha \\
+  &= 1 - u^\alpha \\ \displaybreak[0]
   \E{X^k}
   &= \frac{%
     \theta^k \Gamma(1+k/\gamma) \Gamma(\alpha-k/\gamma)}{%
@@ -614,9 +622,8 @@ functions are defined for $x > 0$.
     \qquad -\gamma < k < \alpha\gamma \\
   \E{(X \wedge x)^k}
   &= \frac{%
-    \theta^k \Gamma(1+k/\gamma) \Gamma(\alpha-k/\gamma)}{%
-    \Gamma(\alpha)}
-    \beta(1+k/\gamma, \alpha-k/\gamma; 1-u) \\
+    \theta^k B(1+k/\gamma, \alpha-k/\gamma; 1-u)}{%
+    \Gamma(\alpha)} \\
   &\phantom{=} + x^k u^\alpha,
     \qquad k > -\gamma
 \end{align*}
@@ -636,13 +643,12 @@ functions are defined for $x > 0$.
     \qquad u = \frac{v}{1 + v},
     \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
   F(x)
-  &= u \\
+  &= u \\ \displaybreak[0]
   \E{X^k}
   &= \theta^k \Gamma(1+k/\gamma) \Gamma(1-k/\gamma),
     \qquad -\gamma < k < \gamma \\
   \E{(X \wedge x)^k}
-  &= \theta^k \Gamma(1+k/\gamma) \Gamma(1-k/\gamma)
-    \beta(1+k/\gamma, 1-k/\gamma; u) \\
+  &= \theta^k B(1+k/\gamma, 1-k/\gamma; u) \\
   &\phantom{=} + x^k (1 - u),
     \qquad k > -\gamma
 \end{align*}
@@ -656,14 +662,13 @@ functions are defined for $x > 0$.
       \code{scale}  ($\theta$)
 \end{itemize}
 
-
 \begin{align*}
   f(x)
   &= \frac{\alpha^2 u^\alpha (1 - u)}{x},
     \qquad u = \frac{1}{1 + v},
     \qquad v = \left( \frac{x}{\theta} \right)^\alpha \\
   F(x)
-  &= 1 - u^\alpha \\
+  &= 1 - u^\alpha \\ \displaybreak[0]
   \E{X^k}
   &= \frac{%
     \theta^k \Gamma(1+k/\alpha) \Gamma(\alpha-k/\alpha)}{%
@@ -671,12 +676,10 @@ functions are defined for $x > 0$.
     \qquad -\alpha < k < \alpha^2 \\
   \E{(X \wedge x)^k}
   &= \frac{%
-    \theta^k \Gamma(1+k/\alpha) \Gamma(\alpha-k/\alpha)}{%
-    \Gamma(\alpha)}
-    \beta(1+k/\alpha, \alpha-k/\alpha; 1-u) \\
+    \theta^k B(1+k/\alpha, \alpha-k/\alpha; 1-u)}{%
+    \Gamma(\alpha)} \\
   &\phantom{=} + x^k u^\alpha,
     \qquad k > -\alpha
-
 \end{align*}
 
 \subsubsection*{Generalized Pareto}
@@ -695,7 +698,7 @@ functions are defined for $x > 0$.
     \qquad u = \frac{v}{1 + v},
     \qquad v = \frac{x}{\theta} \\
   F(x)
-  &= \beta (\tau, \alpha ; u) \\
+  &= \beta(\tau, \alpha; u) \\ \displaybreak[0]
   \E{X^k}
   &= \frac{%
     \theta^k \Gamma(\tau+k) \Gamma(\alpha-k)}{%
@@ -703,10 +706,9 @@ functions are defined for $x > 0$.
     \qquad -\tau < k < \alpha \\
   \E{(X \wedge x)^k}
   &= \frac{%
-    \theta^k \Gamma(\tau+k) \Gamma(\alpha-k)}{%
-    \Gamma(\alpha) \Gamma(\tau)}
-    \beta(\tau+k, \alpha-k; u) \\
-  &\phantom{=} + x^k (1 - F(x)),
+    \theta^k B(\tau+k, \alpha-k; u)}{%
+    \Gamma(\alpha) \Gamma(\tau)} \\
+  &\phantom{=} + x^k [1 - \beta(\tau, \alpha; u)],
     \qquad k > -\tau
 \end{align*}
 
@@ -724,7 +726,7 @@ functions are defined for $x > 0$.
     \qquad u = \frac{1}{1 + v},
     \qquad v = \frac{x}{\theta} \\
   F(x)
-  &= 1 - u^\alpha \\
+  &= 1 - u^\alpha \\ \displaybreak[0]
   \E{X^k}
   &= \frac{%
     \theta^k \Gamma(1+k) \Gamma(\alpha-k)}{%
@@ -732,9 +734,8 @@ functions are defined for $x > 0$.
     \qquad -1 < k < \alpha \\
   \E{(X \wedge x)^k}
   &= \frac{%
-    \theta^k \Gamma(1+k) \Gamma(\alpha-k)}{%
-    \Gamma(\alpha)}
-    \beta(1+k, \alpha-k; 1-u) \\
+    \theta^k B(1+k, \alpha-k; 1-u)}{%
+    \Gamma(\alpha)} \\
   &\phantom{=} + x^k u^\alpha,
     \qquad k > -1
 \end{align*}
@@ -755,7 +756,7 @@ functions are defined for $x > 0$.
     \qquad u = \frac{v}{1 + v},
     \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
   F(x)
-  &= u^\tau \\
+  &= u^\tau \\ \displaybreak[0]
   \E{X^k}
   &= \frac{%
     \theta^k \Gamma(\tau+k/\gamma) \Gamma(1-k/\gamma)}{%
@@ -763,9 +764,8 @@ functions are defined for $x > 0$.
     \qquad -\gamma < k < \alpha\gamma \\
   \E{(X \wedge x)^k}
   &= \frac{%
-    \theta^k \Gamma(\tau+k/\gamma) \Gamma(1-k/\gamma)}{%
-    \Gamma(\tau)}
-    \beta(\tau+k/\gamma, 1-k/\gamma; u) \\
+    \theta^k B(\tau+k/\gamma, 1-k/\gamma; u)}{%
+    \Gamma(\tau)} \\
   &\phantom{=} + x^k (1-u^\tau),
     \qquad k > -\tau\gamma
 \end{align*}
@@ -784,14 +784,14 @@ functions are defined for $x > 0$.
     \qquad u = \frac{v}{1 + v},
     \qquad v = \frac{x}{\theta} \\
   F(x)
-  &= u^\tau \\
+  &= u^\tau \\ \displaybreak[0]
   \E{X^k}
   &= \frac{%
     \theta^k \Gamma(\tau+k) \Gamma(1-k)}{%
     \Gamma(\tau)},
     \qquad -\tau < k < 1 \\
   \E{(X \wedge x)^k}
-  &= \theta^k \tau \int_0^u y^{\tau+k-1} (1 - y)^{-k}/, dy
+  &= \theta^k \tau \int_0^u y^{\tau+k-1} (1 - y)^{-k}\, dy \\
   &\phantom{=} + x^k (1-u^\tau),
     \qquad k > -\tau
 \end{align*}
@@ -811,7 +811,7 @@ functions are defined for $x > 0$.
     \qquad u = \frac{v}{1 + v},
     \qquad v = \left(\frac{x}{\theta} \right)^\tau \\
   F(x)
-  &= u^\tau \\
+  &= u^\tau \\ \displaybreak[0]
   \E{X^k}
   &= \frac{%
     \theta^k \Gamma(\tau+k/\tau) \Gamma(1-k/\tau)}{%
@@ -819,9 +819,8 @@ functions are defined for $x > 0$.
     \qquad -\tau^2 < k < \tau \\
   \E{(X \wedge x)^k}
   &= \frac{%
-    \theta^k \Gamma(\tau+k/\tau) \Gamma(1-k/\tau)}{%
-    \Gamma(\tau)}
-    \beta(\tau+k/\tau, 1-k/\tau; u) \\
+    \theta^k B(\tau+k/\tau, 1-k/\tau; u)}{%
+    \Gamma(\tau)} \\
   &\phantom{=} + x^k (1-u^\tau),
     \qquad k > -\tau^2
 \end{align*}
@@ -840,10 +839,20 @@ functions are defined for $x > 0$.
 \end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{\tau u^\alpha e^{-u}}{x \Gamma(\alpha)},
-  \qquad u = \left( \frac{x}{\theta} \right)^\tau \\
-  F(x) &= \Gamma (\alpha ; u)
-\end{align*} \\
+  f(x)
+  &= \frac{\tau u^\alpha e^{-u}}{x \Gamma(\alpha)},
+    \qquad u = \left( \frac{x}{\theta} \right)^\tau \\
+  F(x)
+  &= \Gamma (\alpha ; u) \\ \displaybreak[0]
+  \E{X^k}
+  &= \frac{\theta^k \Gamma(\alpha+k/\tau)}{\Gamma(\alpha)}
+    \qquad k > -\alpha\tau \\
+  \E{(X \wedge x)^k}
+  &= \frac{\theta^k \Gamma(\alpha+k/\tau)}{\Gamma(\alpha)}
+    \Gamma(\alpha+k/\tau; u) \\
+  &\phantom{=} + x^k [1 - \Gamma(\alpha; u)],
+    \qquad k > -\alpha\tau
+\end{align*}
 
 \subsubsection*{Inverse transformed gamma}
 
@@ -856,9 +865,18 @@ functions are defined for $x > 0$.
 \end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{\tau u^\alpha e^{-u}}{x\Gamma (\alpha)},
-  \qquad u = \left( \frac{\theta}{x} \right)^\tau \\
-  F(x) &= 1 - \Gamma (\alpha ; u)
+  f(x)
+  &= \frac{\tau u^\alpha e^{-u}}{x\Gamma (\alpha)},
+    \qquad u = \left( \frac{\theta}{x} \right)^\tau \\
+  F(x)
+  &= 1 - \Gamma (\alpha ; u) \\ \displaybreak[0]
+  \E{X^k}
+  &= \frac{\theta^k \Gamma(\alpha-k/\tau)}{\Gamma(\alpha)}
+    \qquad k < \alpha\tau \\
+  \E{(X \wedge x)^k}
+  &= \frac{\theta^k G(\alpha-k/\tau; u)}{\Gamma(\alpha)}
+    + x^k \Gamma(\alpha; u),
+    \qquad \text{all }k
 \end{align*}
 
 \subsubsection*{Inverse gamma}
@@ -871,9 +889,18 @@ functions are defined for $x > 0$.
 \end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{u^\alpha e^{-u}}{x\Gamma (\alpha)},
-  \qquad u = \frac{\theta}{x}\\
-  F(x) &= 1 - \Gamma (\alpha ; u)
+  f(x)
+  &= \frac{u^\alpha e^{-u}}{x\Gamma (\alpha)},
+    \qquad u = \frac{\theta}{x}\\
+  F(x)
+  &= 1 - \Gamma (\alpha ; u) \\ \displaybreak[0]
+  \E{X^k}
+  &= \frac{\theta^k \Gamma(\alpha-k)}{\Gamma(\alpha)}
+    \qquad k < \alpha \\
+  \E{(X \wedge x)^k}
+  &= \frac{\theta^k G(\alpha-k; u)}{\Gamma(\alpha)}
+    + x^k \Gamma(\alpha; u),
+    \qquad \text{all }k
 \end{align*}
 
 
@@ -887,9 +914,18 @@ functions are defined for $x > 0$.
 \end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{\tau u e^{-u}}{x},
-  \qquad u = \left( \frac{\theta}{x} \right)^\tau \\
-  F(x) &= e^{-u}
+  f(x)
+  &= \frac{\tau u e^{-u}}{x},
+    \qquad u = \left( \frac{\theta}{x} \right)^\tau \\
+  F(x)
+  &= e^{-u} \\ \displaybreak[0]
+  \E{X^k}
+  &= \theta^k \Gamma(1-k/\tau)
+    \qquad k < \tau \\
+  \E{(X \wedge x)^k}
+  &= \theta^k G(1-k/\tau; u)
+    + x^k (1 - e^{-u}),
+    \qquad \text{all }k
 \end{align*}
 
 \subsubsection*{Inverse exponential}
@@ -901,9 +937,18 @@ functions are defined for $x > 0$.
 \end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{u e^{-u}}{x},
-  \qquad u = \frac{\theta}{x} \\
-  F(x) &= e^{-u}
+  f(x)
+  &= \frac{u e^{-u}}{x},
+    \qquad u = \frac{\theta}{x} \\
+  F(x)
+  &= e^{-u} \\ \displaybreak[0]
+  \E{X^k}
+  &= \theta^k \Gamma(1-k)
+    \qquad k < 1 \\
+  \E{(X \wedge x)^k}
+  &= \theta^k G(1-k; u)
+    + x^k (1 - e^{-u}),
+    \qquad \text{all }k
 \end{align*}
 
 \subsection{Other distributions}
@@ -918,10 +963,20 @@ functions are defined for $x > 0$.
 \end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{\lambda^\alpha (\ln x)^{\alpha - 1}}{%
+  f(x)
+  &= \frac{\lambda^\alpha (\ln x)^{\alpha - 1}}{%
     x^{\lambda + 1} \Gamma(\alpha)},
   \qquad x > 1 \\
-  F(x) &= \Gamma( \alpha ; \lambda \ln x), \qquad x > 1
+  F(x)
+  &= \Gamma( \alpha ; \lambda \ln x), \qquad x > 1 \\ \displaybreak[0]
+  \E{X^k}
+  &= \left( \frac{\lambda}{\lambda - x} \right)^\alpha,
+    \qquad k < \lambda \\
+  \E{(X \wedge x)^k}
+  &= \left( \frac{\lambda}{\lambda - x} \right)^\alpha
+    \Gamma(\alpha; (\lambda - k) \ln x) \\
+  &\phantom{=} + x^k \Gamma(\alpha; \lambda \ln x),
+    \qquad k < \lambda
 \end{align*}
 
 \subsubsection*{Single parameter Pareto}
@@ -933,10 +988,20 @@ functions are defined for $x > 0$.
 \end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{\alpha
-    \theta^\alpha}{x^{\alpha+1}}, \qquad x > \theta \\
-  F(x) &= 1 - \left( \frac{\theta}{x} \right)^\alpha, \qquad x >
-  \theta
+  f(x)
+  &= \frac{\alpha
+    \theta^\alpha}{x^{\alpha+1}},
+    \qquad x > \theta \\
+  F(x)
+  &= 1 - \left( \frac{\theta}{x} \right)^\alpha,
+    \qquad x > \theta \\ \displaybreak[0]
+  \E{X^k}
+  &= \frac{\alpha \theta^k}{\alpha - k},
+    \qquad k < \alpha \\
+  \E{(X \wedge x)^k}
+  &= \frac{\alpha \theta^k}{\alpha - k} -
+    \frac{k \theta^\alpha}{(\alpha - k) x^{\alpha-k}},
+    \qquad x \geq \theta
 \end{align*}
 
 Although there appears to be two parameters, only $\alpha$ is a true
@@ -947,18 +1012,30 @@ and is usually set in advance.
 
 \begin{itemize}
 \item Root: \code{genbeta}
-\item Parameters: \code{shape1} ($\alpha$),
-      \code{shape2} ($\beta$),
+\item Parameters: \code{shape1} ($a$),
+      \code{shape2} ($b$),
       \code{shape3} ($\tau$),
       \code{rate}   ($\lambda = 1/\theta$),
        \code{scale}  ($\theta$)
 \end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{\tau u^\alpha (1 - u)^{\beta - 1}}{x \beta (\alpha, \beta)},
-  \qquad u = \left( \frac{x}{\theta} \right)^\tau,
-  \qquad 0 < x < \theta \\
-  F(x) &= \beta (\alpha, \beta ; u)
+  f(x)
+  &= \frac{\tau u^a (1 - u)^{b - 1}}{x \beta (a, b)},
+    \qquad u = \left( \frac{x}{\theta} \right)^\tau,
+    \qquad 0 < x < \theta \\
+  F(x)
+  &= \beta (a, b ; u) \\ \displaybreak[0]
+  \E{X^k}
+  &= \frac{%
+    \theta^k \beta(a+k/\tau, b)}{\beta(a, b)},
+    \qquad k > -a\tau \\
+  \E{(X \wedge x)^k}
+  &= \frac{%
+    \theta^k \beta(a+k/\tau, b)}{\beta(a, b)}
+    \beta(a+k/\tau, b; u) \\
+  &\phantom{=} + x^k [1 - \beta(a, b; u)],
+    \qquad k > -\tau\gamma
 \end{align*}
 
 \bibliography{actuar}
