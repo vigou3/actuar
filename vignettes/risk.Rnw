@@ -269,7 +269,7 @@ supported.
   This requires the severity distribution to be discrete arithmetic on
   $0, 1, 2, \dots, m$ for some monetary unit and the frequency
   distribution to be a member of either the $(a, b, 0)$ or $(a, b, 1)$
-  family of distributions \citep{LossModels4e}. (These families
+  class of distributions \citep{LossModels4e}. (These classes
   contain the Poisson, binomial, negative binomial and logarithmic
   distributions and their zero-truncated and zero-modified extensions
   allowing for a zero or arbitrary mass at $x = 0$.) The general
@@ -641,15 +641,15 @@ Fortunately, phase-type distributions have come to the rescue since
 the early 1990s. \cite{AsmussenRolski_91} first show that in the
 classical Cramér--Lundberg model where interarrival times are
 Exponential$(\lambda)$ distributed, if claim amounts are
-Phase-type$(\pmb{\pi}, \mat{T})$ distributed, then $\psi(u) = 1
-- F(u)$, where $F$ is Phase-type$(\pmb{\pi}_+, \mat{Q})$ with
+Phase-type$(\mat{\pi}, \mat{T})$ distributed, then $\psi(u) = 1
+- F(u)$, where $F$ is Phase-type$(\mat{\pi}_+, \mat{Q})$ with
 \begin{equation}
   \label{eq:prob-ruin:cramer-lundberg}
   \begin{split}
-    \pmb{\pi}_+
-    &= - \frac{\lambda}{c}\, \pmb{\pi} \mat{T}^{-1} \\
+    \mat{\pi}_+
+    &= - \frac{\lambda}{c}\, \mat{\pi} \mat{T}^{-1} \\
     \mat{Q}
-    &= \mat{T} + \mat{t} \pmb{\pi}_+,
+    &= \mat{T} + \mat{t} \mat{\pi}_+,
   \end{split}
 \end{equation}
 and $\mat{t} = -\mat{T} \mat{e}$, $\mat{e}$ is a column vector with
@@ -660,10 +660,10 @@ In the more general Sparre~Andersen model where interarrival times can
 have any Phase-type$(\mat{\nu}, \mat{S})$ distribution,
 \cite{AsmussenRolski_91} also show that using the same claim severity
 assumption as above, one still has $\psi(u) = 1 - F(u)$ where $F$ is
-Phase-type$(\pmb{\pi}_+, \mat{Q})$, but with parameters
+Phase-type$(\mat{\pi}_+, \mat{Q})$, but with parameters
 \begin{equation}
   \label{eq:prob-ruin:sparre:pi+}
-  \pmb{\pi}_+  = \frac{\mat{e}^\prime (\mat{Q} - \mat{T})}{%
+  \mat{\pi}_+  = \frac{\mat{e}^\prime (\mat{Q} - \mat{T})}{%
     c \mat{e}^\prime \mat{t}}
 \end{equation}
 and $\mat{Q}$ solution of
@@ -672,7 +672,7 @@ and $\mat{Q}$ solution of
   \begin{split}
     \mat{Q}
     &= \Psi(\mat{Q}) \\
-    &= \mat{T} - \mat{t} \pmb{\pi}
+    &= \mat{T} - \mat{t} \mat{\pi}
     \left[
       (\mat{I}_n \otimes \mat{\nu})
       (\mat{Q} \oplus \mat{S})^{-1}
