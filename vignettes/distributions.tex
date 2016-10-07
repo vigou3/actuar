@@ -6,7 +6,8 @@
   \usepackage[english]{babel}
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
-  \usepackage{framed,booktabs,paralist}
+  \usepackage{framed,booktabs}
+  \usepackage[inline,shortlabels]{enumitem}
   \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Loss distributions modeling}
@@ -51,6 +52,10 @@
     \colorlet{shadecolor}{codebg}
     \begin{snugshade*}}%
     {\end{snugshade*}}
+
+  %% Compact, sans label itemize environment for the appendices.
+  \setlist[itemize]{label={},leftmargin=0pt,align=left,nosep}
+
 
   %% Some new commands
   \newcommand{\E}[1]{E[ #1 ]}
@@ -346,10 +351,11 @@ corresponding distribution from the $(a, b, 0)$ class.
 Let $p^M(k)$ and $P^M(k)$ denote the probability mass function and
 cumulative distribution function, respectively, of a zero-modified
 distribution. Seen as a mixture, a zero-modified distribution has pmf
-\begin{equation*}
+\begin{equation}
+  \label{eq:mixture}
   p^M(k) = \left(1 - \frac{1 - p_0^M}{1 - p0} \right) \mathbb{1}_{\{k = 0\}}(k)
   + \frac{1 - p_0^M}{1 - p0} p(k),
-\end{equation*}
+\end{equation}
 where $\mathbb{1}_{\mathcal{A}}(k)$ is the pmf of a degenerate
 distribution placing all its probability when $k \in \mathcal{A}$. The
 pmf can also be expressed as $p^M(0) = p_0^M$ and
@@ -492,22 +498,53 @@ provides the R interfaces \code{gammaint}, \code{expint} and
 The core of all the functions presented in this documents is written
 in \proglang{C} for speed.
 
+The distribution function of the continuous distributions use
+\code{pbeta} and \code{pgamma} to compute the incomplete beta and
+incomplete gamma functions, respectively. The pmf, cdf and quantile
+functions for the zero-truncated and zero-modified distributions use
+the internal \proglang{R} functions for the corresponding standard
+distributions for all but the trivial input values.
 
+Generation of random variates from zero-truncated distributions uses
+the simple inversion algorithm suggested by Peter Dalgaard on the
+\code{r-help} mailing list on 1 May 2005\footnote{%
+  \url{https://stat.ethz.ch/pipermail/r-help/2005-May/070680.html}}.
+Let $u$ be a random number from a uniform distribution on $(p_0, 1)$.
+Then
+\begin{equation*}
+  x = P^{-1}(u)
+\end{equation*}
+is distributed according to the zero-truncated version of the
+distribution with cdf $P(k)$.
 
-The matrix exponential \proglang{C} routine
-is based on \code{expm()} from the package \pkg{Matrix} \citep{Matrix}.
+For zero-modified distributions, we generate variates from the
+discrete mixture \eqref{eq:mixture} when $p_0^M \geq p_0$. When
+$p_0^M < p_0$, we can use either of two methods:
+\begin{enumerate*}[i)]
+\item the classical rejection method with an envelope that differs
+  from the target distribution only at zero (meaning that only zeros
+  are rejected);
+\item the inverse method on a restricted range explained above.
+\end{enumerate*}
+Which approach is faster depends on the relative speeds of the
+standard random generation function and of the standard quantile
+function, and on the proportion of zeros that are rejected using the
+rejection algorithm. Based on the difference $p_0 - p_0^M$, we
+determined cutoff points, different for each zero-modified
+distribution, between the two methods.
+
+The matrix exponential \proglang{C} routine needed in \code{dphtype}
+and \code{pphtype} is based on \code{expm} from the package
+\pkg{Matrix} \citep{Matrix}.
 
 The C implementation of \code{expint} is based on code from the GNU
 Software Library \citep{GSL}. The \proglang{C} code for
 \code{gammaint} and \code{betaint} was written by the second author.
 
 
-
-
-
 \appendix
 
-\section{Probability laws}
+\section{Main formulas for continuous distributions}
 \label{sec:app:continuous}
 
 This appendix gives the pdf and cdf of the probability laws appearing
@@ -522,151 +559,271 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Transformed beta}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{trbeta}, \code{pearson6}
 \item Parameters: \code{shape1} ($\alpha$),
       \code{shape2} ($\gamma$),
       \code{shape3} ($\tau$),
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{\gamma u^\tau (1 - u)^\alpha}{x \beta
+  f(x)
+  &= \frac{\gamma u^\tau (1 - u)^\alpha}{x \beta
     (\alpha, \tau )},
-  \qquad u = \frac{v}{1 + v},
-  \qquad v = \left(\frac{x}{\theta} \right)^\gamma \\
-  F(x) &= \beta (\tau, \alpha ; u)
+    \qquad u = \frac{v}{1 + v},
+    \qquad v = \left(\frac{x}{\theta} \right)^\gamma \\
+  F(x)
+  &= \beta (\tau, \alpha ; u) \\
+  \E{X^k}
+  &= \frac{%
+    \theta^k \Gamma(\tau+k/\gamma) \Gamma(\alpha-k/\gamma)}{%
+    \Gamma(\alpha) \Gamma(\tau)},
+    \qquad -\tau\gamma < k < \alpha\gamma \\
+  \E{(X \wedge x)^k}
+  &= \frac{%
+    \theta^k \Gamma(\tau+k/\gamma) \Gamma(\alpha-k/\gamma)}{%
+    \Gamma(\alpha) \Gamma(\tau)}
+    \beta(\tau+k/\gamma, \alpha-k/\gamma; u) \\
+  &\phantom{=} + x^k (1 - F(x)),
+    \qquad k > -\tau\gamma
 \end{align*}
 
 \subsubsection*{Burr}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{burr}
 \item Parameters: \code{shape1} ($\alpha$),
       \code{shape2} ($\gamma$),
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{\alpha \gamma u^\alpha (1 - u)}{x},
-  \qquad u = \frac{1}{1 + v},
-  \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
-  F(x) &= 1 - u^\alpha
+  f(x)
+  &= \frac{\alpha \gamma u^\alpha (1 - u)}{x},
+    \qquad u = \frac{1}{1 + v},
+    \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
+  F(x)
+  &= 1 - u^\alpha \\
+  \E{X^k}
+  &= \frac{%
+    \theta^k \Gamma(1+k/\gamma) \Gamma(\alpha-k/\gamma)}{%
+    \Gamma(\alpha)},
+    \qquad -\gamma < k < \alpha\gamma \\
+  \E{(X \wedge x)^k}
+  &= \frac{%
+    \theta^k \Gamma(1+k/\gamma) \Gamma(\alpha-k/\gamma)}{%
+    \Gamma(\alpha)}
+    \beta(1+k/\gamma, \alpha-k/\gamma; 1-u) \\
+  &\phantom{=} + x^k u^\alpha,
+    \qquad k > -\gamma
 \end{align*}
 
 \subsubsection*{Loglogistic}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{llogis}
 \item Parameters: \code{shape} ($\gamma$),
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{\gamma u (1 - u)}{x},
-  \qquad u = \frac{v}{1 + v},
-  \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
-  F(x) &= u
+  f(x)
+  &= \frac{\gamma u (1 - u)}{x},
+    \qquad u = \frac{v}{1 + v},
+    \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
+  F(x)
+  &= u \\
+  \E{X^k}
+  &= \theta^k \Gamma(1+k/\gamma) \Gamma(1-k/\gamma),
+    \qquad -\gamma < k < \gamma \\
+  \E{(X \wedge x)^k}
+  &= \theta^k \Gamma(1+k/\gamma) \Gamma(1-k/\gamma)
+    \beta(1+k/\gamma, 1-k/\gamma; u) \\
+  &\phantom{=} + x^k (1 - u),
+    \qquad k > -\gamma
 \end{align*}
 
 \subsubsection*{Paralogistic}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{paralogis}
 \item Parameters: \code{shape} ($\alpha$),
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 
 \begin{align*}
-  f(x) &= \frac{\alpha^2 u^\alpha (1 - u)}{x},
-  \qquad u = \frac{1}{1 + v},
-  \qquad v = \left( \frac{x}{\theta} \right)^\alpha \\
-  F(x) &= 1 - u^\alpha
+  f(x)
+  &= \frac{\alpha^2 u^\alpha (1 - u)}{x},
+    \qquad u = \frac{1}{1 + v},
+    \qquad v = \left( \frac{x}{\theta} \right)^\alpha \\
+  F(x)
+  &= 1 - u^\alpha \\
+  \E{X^k}
+  &= \frac{%
+    \theta^k \Gamma(1+k/\alpha) \Gamma(\alpha-k/\alpha)}{%
+    \Gamma(\alpha)},
+    \qquad -\alpha < k < \alpha^2 \\
+  \E{(X \wedge x)^k}
+  &= \frac{%
+    \theta^k \Gamma(1+k/\alpha) \Gamma(\alpha-k/\alpha)}{%
+    \Gamma(\alpha)}
+    \beta(1+k/\alpha, \alpha-k/\alpha; 1-u) \\
+  &\phantom{=} + x^k u^\alpha,
+    \qquad k > -\alpha
+
 \end{align*}
 
 \subsubsection*{Generalized Pareto}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{genpareto}
 \item Parameters: \code{shape1} ($\alpha$),
       \code{shape2} ($\tau$),
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{u^\tau (1 - u)^\alpha}{x \beta (\alpha, \tau )},
-  \qquad u = \frac{v}{1 + v},
-  \qquad v = \frac{x}{\theta} \\
-  F(x) &= \beta (\tau, \alpha ; u)
+  f(x)
+  &= \frac{u^\tau (1 - u)^\alpha}{x \beta (\alpha, \tau )},
+    \qquad u = \frac{v}{1 + v},
+    \qquad v = \frac{x}{\theta} \\
+  F(x)
+  &= \beta (\tau, \alpha ; u) \\
+  \E{X^k}
+  &= \frac{%
+    \theta^k \Gamma(\tau+k) \Gamma(\alpha-k)}{%
+    \Gamma(\alpha) \Gamma(\tau)},
+    \qquad -\tau < k < \alpha \\
+  \E{(X \wedge x)^k}
+  &= \frac{%
+    \theta^k \Gamma(\tau+k) \Gamma(\alpha-k)}{%
+    \Gamma(\alpha) \Gamma(\tau)}
+    \beta(\tau+k, \alpha-k; u) \\
+  &\phantom{=} + x^k (1 - F(x)),
+    \qquad k > -\tau
 \end{align*}
 
 \subsubsection*{Pareto}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{pareto}, \code{pareto2}
 \item Parameters: \code{shape} ($\alpha$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{\alpha u^\alpha (1 - u)}{x},
-  \qquad u = \frac{1}{1 + v},
-  \qquad v = \frac{x}{\theta} \\
-  F(x) &= 1 - u^\alpha
+  f(x)
+  &= \frac{\alpha u^\alpha (1 - u)}{x},
+    \qquad u = \frac{1}{1 + v},
+    \qquad v = \frac{x}{\theta} \\
+  F(x)
+  &= 1 - u^\alpha \\
+  \E{X^k}
+  &= \frac{%
+    \theta^k \Gamma(1+k) \Gamma(\alpha-k)}{%
+    \Gamma(\alpha)},
+    \qquad -1 < k < \alpha \\
+  \E{(X \wedge x)^k}
+  &= \frac{%
+    \theta^k \Gamma(1+k) \Gamma(\alpha-k)}{%
+    \Gamma(\alpha)}
+    \beta(1+k, \alpha-k; 1-u) \\
+  &\phantom{=} + x^k u^\alpha,
+    \qquad k > -1
 \end{align*}
 
 \subsubsection*{Inverse Burr}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{invburr}
 \item Parameters: \code{shape1} ($\tau$),
       \code{shape2} ($\gamma$),
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{\tau \gamma u^\tau (1 - u)}{x},
-  \qquad u = \frac{v}{1 + v},
-  \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
-  F(x) &= u^\tau
+  f(x)
+  &= \frac{\tau \gamma u^\tau (1 - u)}{x},
+    \qquad u = \frac{v}{1 + v},
+    \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
+  F(x)
+  &= u^\tau \\
+  \E{X^k}
+  &= \frac{%
+    \theta^k \Gamma(\tau+k/\gamma) \Gamma(1-k/\gamma)}{%
+    \Gamma(\tau)},
+    \qquad -\gamma < k < \alpha\gamma \\
+  \E{(X \wedge x)^k}
+  &= \frac{%
+    \theta^k \Gamma(\tau+k/\gamma) \Gamma(1-k/\gamma)}{%
+    \Gamma(\tau)}
+    \beta(\tau+k/\gamma, 1-k/\gamma; u) \\
+  &\phantom{=} + x^k (1-u^\tau),
+    \qquad k > -\tau\gamma
 \end{align*}
 
 \subsubsection*{Inverse Pareto}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{invpareto}
 \item Parameters: \code{shape} ($\tau$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{\tau u^\tau (1 - u)}{x},
-  \qquad u = \frac{v}{1 + v},
-  \qquad v = \frac{x}{\theta} \\
-  F(x) &= u^\tau
+  f(x)
+  &= \frac{\tau u^\tau (1 - u)}{x},
+    \qquad u = \frac{v}{1 + v},
+    \qquad v = \frac{x}{\theta} \\
+  F(x)
+  &= u^\tau \\
+  \E{X^k}
+  &= \frac{%
+    \theta^k \Gamma(\tau+k) \Gamma(1-k)}{%
+    \Gamma(\tau)},
+    \qquad -\tau < k < 1 \\
+  \E{(X \wedge x)^k}
+  &= \theta^k \tau \int_0^u y^{\tau+k-1} (1 - y)^{-k}/, dy
+  &\phantom{=} + x^k (1-u^\tau),
+    \qquad k > -\tau
 \end{align*}
 
 \subsubsection*{Inverse paralogistic}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{invparalogis}
 \item Parameters: \code{shape} ($\tau$),
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
-  f(x) &= \frac{\tau^2 u^\tau (1 - u)}{x},
-  \qquad u = \frac{v}{1 + v},
-  \qquad v = \left(\frac{x}{\theta} \right)^\tau \\
-  F(x) &= u^\tau
+  f(x)
+  &= \frac{\tau^2 u^\tau (1 - u)}{x},
+    \qquad u = \frac{v}{1 + v},
+    \qquad v = \left(\frac{x}{\theta} \right)^\tau \\
+  F(x)
+  &= u^\tau \\
+  \E{X^k}
+  &= \frac{%
+    \theta^k \Gamma(\tau+k/\tau) \Gamma(1-k/\tau)}{%
+    \Gamma(\tau)},
+    \qquad -\tau^2 < k < \tau \\
+  \E{(X \wedge x)^k}
+  &= \frac{%
+    \theta^k \Gamma(\tau+k/\tau) \Gamma(1-k/\tau)}{%
+    \Gamma(\tau)}
+    \beta(\tau+k/\tau, 1-k/\tau; u) \\
+  &\phantom{=} + x^k (1-u^\tau),
+    \qquad k > -\tau^2
 \end{align*}
 
 \subsection{Transformed gamma family}
@@ -674,13 +831,13 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Transformed gamma}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{trgamma}
 \item Parameters: \code{shape1} ($\alpha$),
       \code{shape2} ($\tau$),
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
   f(x) &= \frac{\tau u^\alpha e^{-u}}{x \Gamma(\alpha)},
@@ -690,13 +847,13 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Inverse transformed gamma}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{invtrgamma}
 \item Parameters: \code{shape1} ($\alpha$),
       \code{shape2} ($\tau$),
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
   f(x) &= \frac{\tau u^\alpha e^{-u}}{x\Gamma (\alpha)},
@@ -706,12 +863,12 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Inverse gamma}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{invgamma}
 \item Parameters: \code{shape} ($\alpha$),
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
   f(x) &= \frac{u^\alpha e^{-u}}{x\Gamma (\alpha)},
@@ -722,12 +879,12 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Inverse Weibull}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{invweibull}, \code{lgompertz}
 \item Parameters: \code{shape} ($\tau$),
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
   f(x) &= \frac{\tau u e^{-u}}{x},
@@ -737,11 +894,11 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Inverse exponential}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{invexp}
 \item Parameters: \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
   f(x) &= \frac{u e^{-u}}{x},
@@ -754,11 +911,11 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Loggamma}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{lgamma}
 \item Parameters: \code{shapelog} ($\alpha$),
       \code{ratelog}   ($\lambda$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
   f(x) &= \frac{\lambda^\alpha (\ln x)^{\alpha - 1}}{%
@@ -769,11 +926,11 @@ functions are defined for $x > 0$.
 
 \subsubsection*{Single parameter Pareto}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{pareto1}
 \item Parameters: \code{shape} ($\alpha$),
       \code{min}   ($\theta$)
-\end{compactitem}
+\end{itemize}
 
 \begin{align*}
   f(x) &= \frac{\alpha
@@ -788,14 +945,14 @@ and is usually set in advance.
 
 \subsubsection*{Generalized beta}
 
-\begin{compactitem}[]
+\begin{itemize}
 \item Root: \code{genbeta}
 \item Parameters: \code{shape1} ($\alpha$),
       \code{shape2} ($\beta$),
       \code{shape3} ($\tau$),
       \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
+       \code{scale}  ($\theta$)
+\end{itemize}
 
 \begin{align*}
   f(x) &= \frac{\tau u^\alpha (1 - u)^{\beta - 1}}{x \beta (\alpha, \beta)},
