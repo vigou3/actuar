@@ -1,7 +1,7 @@
 \documentclass[x11names]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-  \usepackage{amsmath}
+  \usepackage{amsmath,bm}
   \usepackage[round]{natbib}
   \usepackage[english]{babel}
   \usepackage[scaled=0.9]{helvet}
@@ -56,17 +56,13 @@
   \newcommand{\E}[1]{E[ #1 ]}
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
   \newcommand{\LAS}{\mathrm{LAS}}
-  \newcommand{\mat}[1]{\mathbf{#1}}
+  \newcommand{\mat}[1]{\bm{#1}}
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
 
   \bibliographystyle{plainnat}
 
-<<echo=FALSE>>=
-library(actuar)
-options(width = 60, digits = 4)
-@
 
 \begin{document}
 
@@ -86,7 +82,303 @@ The \pkg{actuar} package provides \code{d}, \code{p}, \code{q} and
 \code{r} functions for a large number of continuous probability laws
 useful for loss severity modeling, as well as zero-truncated and
 zero-modified extensions to the most usual discrete probability laws
-and used in loss frequency modeling.
+used in loss frequency modeling.
+
+
+\section{Continuous distributions}
+\label{sec:continuous}
+
+The \pkg{actuar} package provides \code{d}, \code{p}, \code{q} and
+\code{r} functions for all the probability laws found in Appendix A of
+\cite{LossModels4e} and not already present in base \proglang{R},
+excluding the inverse Gaussian and log-$t$ but including the loggamma
+distribution \citep{HoggKlugman}. They mostly fall under the unmbrella
+of extreme value distributions.
+
+\autoref{tab:continuous} lists the supported distributions as
+named in \cite{LossModels4e} along with the root names of the
+\proglang{R} functions. For reference, \autoref{sec:app:continuous}
+also gives for every distribution the pdf, the cdf and the name of the
+argument corresponding to each parameter in the parametrization of
+\cite{LossModels4e}. One will note that by default all functions
+(except those for the Pareto distribution) use a rate parameter equal
+to the inverse of the scale parameter. This differs from
+\cite{LossModels4e} but is better in line with the functions for the
+gamma, exponential and Weibull distributions in base \proglang{R}.
+
+\begin{table}
+  \centering
+  \begin{tabular}{lll}
+    \toprule
+    Family & Distribution & Root \\
+    \midrule
+    Transformed beta  & Transformed beta & \code{trbeta} \\
+                      & Burr & \code{burr} \\
+                      & Loglogistic & \code{llogis} \\
+                      & Paralogistic & \code{paralogis} \\
+                      & Generalized Pareto & \code{genpareto} \\
+                      & Pareto & \code{pareto} \\
+                      & Inverse Burr & \code{invburr} \\
+                      & Inverse Pareto & \code{invpareto} \\
+                      & Inverse paralogistic & \code{invparalogis} \\
+    \midrule
+    Transformed gamma & Transformed gamma & \code{trgamma} \\
+                      & Inverse transformed gamma & \code{invtrgamma} \\
+                      & Inverse gamma & \code{invgamma} \\
+                      & Inverse Weibull & \code{invweibull} \\
+                      & Inverse exponential & \code{invexp} \\
+    \midrule
+    Other             & Loggamma & \code{lgamma} \\
+                      & Single parameter Pareto & \code{pareto1} \\
+                      & Generalized beta & \code{genbeta} \\
+    \bottomrule
+  \end{tabular}
+  \caption{Probability laws supported by \pkg{actuar} classified by
+    family and root names of the \proglang{R} functions.}
+  \label{tab:continuous}
+\end{table}
+
+In addition to the \code{d}, \code{p}, \code{q} and \code{r}
+functions, the package provides \code{m}, \code{lev} and \code{mgf}
+functions to compute, respectively, theoretical raw moments
+\begin{equation}
+  \label{eq:def:moment}
+  m_k = \E{X^k},
+\end{equation}
+theoretical limited moments
+\begin{equation}
+  \label{eq:def:limited-moment}
+  \E{(X \wedge x)^k} = \E{\min(X, x)^k}
+\end{equation}
+and the moment generating function
+\begin{equation}
+  \label{eq:def:mgf}
+  M_X(t) = \E{e^{tX}},
+\end{equation}
+when it exists. Every probability law of \autoref{tab:continuous}
+is supported, plus the following ones: beta, exponential, chi-square,
+gamma, lognormal, normal (no \code{lev}), uniform and Weibull of base
+\proglang{R} and the inverse Gaussian distribution of package
+\pkg{SuppDists} \citep{SuppDists}. The \code{m} and \code{lev}
+functions are especially useful with estimation methods based on the
+matching of raw or limited moments; see the \code{"lossdist"} vignette
+for their empirical counterparts. The \code{mgf} functions come in
+handy to compute the adjustment coefficient in ruin theory; see the
+\code{"risk"} vignette.
+
+
+\section{Phase-type distributions}
+\label{sec:phase-type}
+
+In addition to the 17 distributions of \autoref{tab:continuous},
+the package provides support for a family of distributions deserving a
+separate presentation. Phase-type distributions \citep{Neuts_81} are
+defined as the distribution of the time until absorption of continuous
+time, finite state Markov processes with $m$ transient states and one
+absorbing state. Let
+\begin{equation}
+  \label{eq:Markov-transition-matrix}
+  \mat{Q} =
+  \begin{bmatrix}
+    \mat{T} & \mat{t} \\
+    \mat{0} & 0
+  \end{bmatrix}
+\end{equation}
+be the transition rates matrix (or intensity matrix) of such a process
+and let $(\pmb{\pi}, \pi_{m + 1})$ be the initial probability vector.
+Here, $\mat{T}$ is an $m \times m$ non-singular matrix with $t_{ii} <
+0$ for $i = 1, \dots, m$ and $t_{ij} \geq 0$ for $i \neq j$, $\mat{t}
+= - \mat{T} \mat{e}$ and $\mat{e}$ is a column vector with all
+components equal to 1. Then the cdf of the time until absorption
+random variable with parameters $\pmb{\pi}$ and $\mat{T}$ is
+\begin{equation}
+  \label{eq:cdf-phtype}
+  F(x) =
+  \begin{cases}
+    \pi_{m + 1}, & x = 0, \\
+    1 - \pmb{\pi} e^{\mat{T} x} \mat{e}, & x > 0
+  \end{cases}
+\end{equation}
+where
+\begin{equation}
+  \label{eq:matrix-exponential}
+  e^{\mat{M}} = \sum_{n = 0}^\infty \frac{\mat{M}^n}{n!}
+\end{equation}
+is the matrix exponential of matrix $\mat{M}$.
+
+The exponential, the Erlang (gamma with integer shape parameter) and
+discrete mixtures thereof are common special cases of phase-type
+distributions.
+
+The package provides \code{d}, \code{p}, \code{r}, \code{m} and
+\code{mgf} functions for phase-type distributions. The root is
+\code{phtype} and parameters $\mat{\pi}$ and $\mat{T}$ are named
+\code{prob} and \code{rates}, respectively. For the package, function
+\code{pphtype} is central to the evaluation of the probability of
+ruin; see \code{?ruin} and the \code{"risk"} vignette.
+
+
+\section{Discrete distributions}
+\label{sec:discrete}
+
+The package introduces support functions for counting distributions
+commonly used in loss frequency modeling. A counting distribution is a
+discrete distribution defined on the non-negative integers
+$0, 1, 2, \dots$.
+
+Let $N$ be the counting random variable. We denote $p_k$ the
+probability that the random variable $N$ takes the value $k$, that is:
+\begin{equation*}
+  p_k = \Pr[N = k].
+\end{equation*}
+
+\citet{LossModels4e} classify counting distributions in two main
+classes. A discrete random variable is a member of the $(a, b, 0)$
+class of distributions if there exists constants $a$ and $b$ such that
+\begin{equation*}
+  \frac{p_k}{p_{k - 1}} = a + \frac{b}{k}, \quad k = 1, 2, \dots.
+\end{equation*}
+The probability at zero, $p_0$ is set such that the probabilities sum
+to $1$. The members of this class are the Poisson, the binomial, the
+negative binomial and its special case, the geometric. These
+distributions are all well supported in base \proglang{R} with
+\code{d}, \code{p}, \code{q} and \code{r} functions.
+
+The second class of distributions is the $(a, b, 1)$ class. A discrete
+random variable is a member of the $(a, b, 0)$ class of distributions
+if there exists constants $a$ and $b$ such that
+\begin{equation*}
+  \frac{p_k}{p_{k - 1}} = a + \frac{b}{k}, \quad k = 2, 3, \dots.
+\end{equation*}
+One will note that recursions start at $k = 2$ for the $(a, b, 1)$
+class. Therefore, the probability at zero can be any arbitrary number
+$0 \leq p_0 \leq 1$.
+
+Setting $p_0 = 0$ defines a subclass of so-called
+\emph{zero-truncated} distributions. The members of this subclass are
+the zero-truncated Poisson, the zero-truncated binomial, the
+zero-truncated negative binomial and the zero-truncated geometric.
+
+Let $p(k)$ denote the probability mass function (pmf) of a member of
+the $(a, b, 0)$ class of distributions, and let $p^T(k)$ denote the
+pmf of a corresponding member of the $(a, b, 1)$ class. The cumulative
+distributions functions are $P(k)$ and $P^T(k)$.
+
+Zero-truncated distributions have probability mass function
+$p^T(0) = 0$ and
+\begin{equation*}
+  p^T(k) = \frac{p(k)}{1 - p_0}, \quad k = 1, 2, \dots.
+\end{equation*}
+The distribution function is, for all $k = 0, 1, 2, \dots$,
+\begin{equation*}
+  P^T(k)
+  = \frac{P(k) - P(0)}{1 - P(0)}
+  = \frac{P(k) - p_0}{1 - p_0},
+\end{equation*}
+or, alternatively, the survival function $\bar{P}^T(k) = 1 - P^T(k)$
+is
+\begin{equation*}
+  \bar{P}^T(k)
+  = \frac{\bar{P}(k)}{\bar{P}(0)}
+  = \frac{\bar{P}(k)}{1 - p_0}.
+\end{equation*}
+
+Package \pkg{actuar} introduces \code{d}, \code{p}, \code{q} and
+\code{r} functions for the zero-truncated Poisson, zero-truncated
+binomial, zero-truncated negative binomial and zero-truncated
+geometric distributions. \autoref{tab:discrete} lists the root names
+of the functions.
+
+\begin{table}
+  \centering
+  \begin{tabular}{ll}
+    \toprule
+    Distribution & Root \\
+    \midrule
+    Zero-truncated Poisson & \code{ztpois} \\
+    Zero-truncated binomial & \code{ztbinom} \\
+    Zero-truncated negative binomial & \code{ztnbinom} \\
+    Zero-truncated geometric & \code{ztgeom} \\
+    Logarithmic & \code{logarithmic} \\
+    \addlinespace[6pt]
+    Zero-modified Poisson & \code{zmpois} \\
+    Zero-modified binomial & \code{zmbinom} \\
+    Zero-modified negative binomial & \code{zmnbinom} \\
+    Zero-modified geometric & \code{zmgeom} \\
+    Zero-modified logarithmic & \code{zmlogarithmic} \\
+    \bottomrule
+  \end{tabular}
+  \caption{Members of the $(a, b, 1)$ class of discrete distributions
+    supported by \pkg{actuar} and root names of the \proglang{R}
+    functions.}
+  \label{tab:discrete}
+\end{table}
+
+Also included in \autoref{tab:discrete} is the logarithmic (or
+log-series) distribution. The logarithmic distribution with parameter
+$\theta$ has pmf
+\begin{equation*}
+  p(k) = \frac{a \theta^x}{k}, \quad k = 1, 2, \dots,
+\end{equation*}
+with $a = -1/\log(1 - \theta)$ and for $0 \leq \theta < 1$. This is
+the standard parametrization in the literature
+\citep{Johnson:discrete:2005}.
+
+The logarithmic distribution is always defined on the strictly
+positive integers. As such, it is not qualifed as ``zero-truncated'',
+but it nevertheless belongs to the $(a, b, 1)$ class of distributions,
+more specifically to the subclass with $p_0 = 0$.
+
+Actually, the logarithmic distribution is the limiting case of the
+zero-truncated negative binomial distribution with size parameter
+equal to zero. Note that in this context and using the parametrization
+above, we have $\theta = 1 - p$, where $p$ is the probability of
+success for the zero-truncated negative binomial. This differs from
+the presentation in \citet{LossModels4e}.
+
+Another subclass of the $(a, b, 1)$ class of distributions is obtained
+by setting $p_0$ to some arbitrary number $p_0^M$ subject to
+$0 < p_0^M \leq 1$. The members of this subclass are called
+\emph{zero-modified} distributions. Zero-modified distributions are
+discrete mixtures between a degenerate distribution at zero and the
+corresponding distribution from the $(a, b, 0)$ class.
+
+Let $p^M(k)$ and $P^M(k)$ denote the probability mass function and
+cumulative distribution function, respectively, of a zero-modified
+distribution. Seen as a mixture, a zero-modified distribution has pmf
+\begin{equation*}
+  p^M(k) = \left(1 - \frac{1 - p_0^M}{1 - p0} \right) \mathbb{1}_{\{k = 0\}}(k)
+  + \frac{1 - p_0^M}{1 - p0} p(k),
+\end{equation*}
+where $\mathbb{1}_{\mathcal{A}}(k)$ is the pmf of a degenerate
+distribution placing all its probability when $k \in \mathcal{A}$. The
+pmf can also be expressed as $p^M(0) = p_0^M$ and
+\begin{equation*}
+  p^M(k) = (1 - p_0^M)\, \frac{p(k)}{1 - p_0}, \quad k = 1, 2, \dots.
+\end{equation*}
+The distribution function is, for all $k = 0, 1, 2, \dots$,
+\begin{equation*}
+  P^M(k)
+  = p_0^M + (1 - p_0^M)\, \frac{P(k) - P(0)}{1 - P(0)}
+  = p_0^M + (1 - p_0^M)\, \frac{P(k) - p_0}{1 - p_0}
+\end{equation*}
+and the survival function is
+\begin{equation*}
+  \bar{P}^T(k)
+  = (1 - p_0^M)\, \frac{\bar{P}(k)}{\bar{P}(0)}
+  = (1 - p_0^M)\, \frac{\bar{P}(k)}{1 - p_0}.
+\end{equation*}
+
+The members of the subclass are the zero-modified Poisson,
+zero-modified binomial, zero-modified negative binomial and
+zero-modified geometric, together with the zero-modified logarithmic
+as a limiting case of the zero-modified negative binomial.
+\autoref{tab:discrete} lists the root names of the support functions
+provided in \pkg{actuar}.
+
+Quite obviously, zero-truncated distributions are zero-modified
+distributions with $p_0^M = 0$. However, using the dedicated functions
+in \proglang{R} will be more efficient.
 
 
 \section{Special integrals}
@@ -146,13 +438,13 @@ calculation requires the value of
   G(0; x) = \int_x^\infty \frac{e^{-t}}{t}\, dt = E_1(x),
 \end{equation*}
 which is known in the literature as the \emph{exponential integral}
-\citep[see, for example,]{Abramowitz:1972}.
+\citep{Abramowitz:1972}.
 
 Neither \citet{LossModels4e} nor \citet{Abramowitz:1972} provide a
 name for the integral \eqref{eq:gammaint}. For the needs of the
-package, we dubbed it the ``\emph{gamma integral}''.
+package, we dubbed it the \emph{gamma integral}.
 
-We also let
+Let also
 \begin{equation}
   \label{eq:betaint}
   B(a, b; x) = \Gamma(a + b) \int_0^x t^{a-1} (1-t)^{b-1} dt
@@ -182,150 +474,36 @@ parts of \eqref{eq:betaint} yields
   \end{split}
 \end{equation}
 where $r = \lfloor -b\rfloor$. This expression is little found in the
-literature outside of \citet{LossModels:4e}. For the needs of the
-package, we dubbed integral \eqref{eq:betaint} the ``\emph{beta
-  integral}''.
+literature outside of \citet{LossModels4e}. For the needs of
+\pkg{actuar}, we dubbed \eqref{eq:betaint} the \emph{beta
+  integral}.
 
-The package contains functions to compute the ``gamma'', exponential
-and ``beta'' integrals. They are mostly used the \porglang{C} level to
-evaluate the limited expected value for distributions of the
-transformed beta and transformed gamma families; see the following
-section. The package also provides the R interfaces \code{gammaint},
-\code{expint} and \code{betaint}, however these functions are not
-exported.
+The package contains functions to compute the gamma, exponential
+and beta integrals. They are mostly used at the \proglang{C} level
+to evaluate the limited expected value for distributions of the
+transformed beta and transformed gamma families. The package also
+provides the R interfaces \code{gammaint}, \code{expint} and
+\code{betaint}, however these functions are not exported.
 
 
-\section{Continuous distributions}
-\label{sec:continuous}
+\section{Implementation}
+\label{sec:implementation}
 
-The \pkg{actuar} package provides \code{d}, \code{p}, \code{q} and
-\code{r} functions for all the probability laws useful for loss
-severity modeling found in Appendix A of \cite{LossModels4e} and not
-already present in base \proglang{R}, excluding the inverse Gaussian
-and log-$t$ but including the loggamma distribution
-\citep{HoggKlugman}.
+The core of all the functions presented in this documents is written
+in \proglang{C} for speed.
 
-\autoref{tab:distributions} lists the supported distributions as
-named in \cite{LossModels4e} along with the root names of the
-\proglang{R} functions. For reference, \autoref{sec:appendix}
-also gives for every distribution the pdf, the cdf and the name of the
-argument corresponding to each parameter in the parametrization of
-\cite{LossModels4e}. One will note that by default all functions
-(except those for the Pareto distribution) use a rate parameter equal
-to the inverse of the scale parameter. This differs from
-\cite{LossModels4e} but is better in line with the functions for the
-gamma, exponential and Weibull distributions in base \proglang{R}.
 
-\begin{table}
-  \centering
-  \begin{tabular}{lll}
-    \toprule
-    Family & Distribution & Root \\
-    \midrule
-    Transformed beta  & Transformed beta & \code{trbeta} \\
-                      & Burr & \code{burr} \\
-                      & Loglogistic & \code{llogis} \\
-                      & Paralogistic & \code{paralogis} \\
-                      & Generalized Pareto & \code{genpareto} \\
-                      & Pareto & \code{pareto} \\
-                      & Inverse Burr & \code{invburr} \\
-                      & Inverse Pareto & \code{invpareto} \\
-                      & Inverse paralogistic & \code{invparalogis} \\
-    \midrule
-    Transformed gamma & Transformed gamma & \code{trgamma} \\
-                      & Inverse transformed gamma & \code{invtrgamma} \\
-                      & Inverse gamma & \code{invgamma} \\
-                      & Inverse Weibull & \code{invweibull} \\
-                      & Inverse exponential & \code{invexp} \\
-    \midrule
-    Other             & Loggamma & \code{lgamma} \\
-                      & Single parameter Pareto & \code{pareto1} \\
-                      & Generalized beta & \code{genbeta} \\
-    \bottomrule
-  \end{tabular}
-  \caption{Probability laws supported by \pkg{actuar} classified by
-    family and root names of the \proglang{R} functions.}
-  \label{tab:distributions}
-\end{table}
 
-In addition to the \code{d}, \code{p}, \code{q} and \code{r}
-functions, the package provides \code{m}, \code{lev} and \code{mgf}
-functions to compute, respectively, theoretical raw moments
-\begin{equation}
-  \label{eq:def:moment}
-  m_k = \E{X^k},
-\end{equation}
-theoretical limited moments
-\begin{equation}
-  \label{eq:def:limited-moment}
-  \E{(X \wedge x)^k} = \E{\min(X, x)^k}
-\end{equation}
-and the moment generating function
-\begin{equation}
-  \label{eq:def:mgf}
-  M_X(t) = \E{e^{tX}},
-\end{equation}
-when it exists. Every probability law of \autoref{tab:distributions}
-is supported, plus the following ones: beta, exponential, chi-square,
-gamma, lognormal, normal (no \code{lev}), uniform and Weibull of base
-\proglang{R} and the inverse Gaussian distribution of package
-\pkg{SuppDists} \citep{SuppDists}. The \code{m} and \code{lev}
-functions are especially useful with estimation methods based on the
-matching of raw or limited moments; see
-\autoref{sec:empirical-moments} for their empirical counterparts.
-The \code{mgf} functions come in handy to compute the adjustment
-coefficient in ruin theory; see the \code{"risk"} vignette.
-
-In addition to the 17 distributions of \autoref{tab:distributions},
-the package provides support for a family of distributions deserving a
-separate presentation. Phase-type distributions \citep{Neuts_81} are
-defined as the distribution of the time until absorption of continuous
-time, finite state Markov processes with $m$ transient states and one
-absorbing state. Let
-\begin{equation}
-  \label{eq:Markov-transition-matrix}
-  \mat{Q} =
-  \begin{bmatrix}
-    \mat{T} & \mat{t} \\
-    \mat{0} & 0
-  \end{bmatrix}
-\end{equation}
-be the transition rates matrix (or intensity matrix) of such a process
-and let $(\pmb{\pi}, \pi_{m + 1})$ be the initial probability vector.
-Here, $\mat{T}$ is an $m \times m$ non-singular matrix with $t_{ii} <
-0$ for $i = 1, \dots, m$ and $t_{ij} \geq 0$ for $i \neq j$, $\mat{t}
-= - \mat{T} \mat{e}$ and $\mat{e}$ is a column vector with all
-components equal to 1. Then the cdf of the time until absorption
-random variable with parameters $\pmb{\pi}$ and $\mat{T}$ is
-\begin{equation}
-  \label{eq:cdf-phtype}
-  F(x) =
-  \begin{cases}
-    \pi_{m + 1}, & x = 0, \\
-    1 - \pmb{\pi} e^{\mat{T} x} \mat{e}, & x > 0
-  \end{cases}
-\end{equation}
-where
-\begin{equation}
-  \label{eq:matrix-exponential}
-  e^{\mat{M}} = \sum_{n = 0}^\infty \frac{\mat{M}^n}{n!}
-\end{equation}
-is the matrix exponential of matrix $\mat{M}$.
-
-The exponential, the Erlang (gamma with integer shape parameter) and
-discrete mixtures thereof are common special cases of phase-type
-distributions.
-
-The package provides \code{d}, \code{p}, \code{r}, \code{m} and
-\code{mgf} functions for phase-type distributions. The root is
-\code{phtype} and parameters $\pmb{\pi}$ and $\mat{T}$ are named
-\code{prob} and \code{rates}, respectively. For the package, function
-\code{pphtype} is central to the evaluation of the probability of
-ruin; see \code{?ruin} and the \code{"risk"} vignette.
-
-The core of all the functions presented in this subsection is written
-in \proglang{C} for speed. The matrix exponential \proglang{C} routine
+The matrix exponential \proglang{C} routine
 is based on \code{expm()} from the package \pkg{Matrix} \citep{Matrix}.
+
+The C implementation of \code{expint} is based on code from the GNU
+Software Library \citep{GSL}. The \proglang{C} code for
+\code{gammaint} and \code{betaint} was written by the second author.
+
+
+
+
 
 \appendix
 
@@ -333,7 +511,7 @@ is based on \code{expm()} from the package \pkg{Matrix} \citep{Matrix}.
 \label{sec:app:continuous}
 
 This appendix gives the pdf and cdf of the probability laws appearing
-in \autoref{tab:distributions} using the parametrization of
+in \autoref{tab:continuous} using the parametrization of
 \cite{LossModels4e} and \cite{HoggKlugman}.
 
 Unless otherwise stated all parameters are strictly positive and the
@@ -626,9 +804,13 @@ and is usually set in advance.
   F(x) &= \beta (\alpha, \beta ; u)
 \end{align*}
 
+\bibliography{actuar}
+
+
 \end{document}
 
 %%% Local Variables:
 %%% mode: latex
 %%% coding: utf-8
+%%% TeX-master: t
 %%% End:
