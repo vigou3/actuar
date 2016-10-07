@@ -36,7 +36,7 @@ rlogarithmic(n, prob)
     p(x) = \frac{a \theta^x}{x},}{%
     p(x) = a p^x / x,}
   with \eqn{a = -1/\log(1 - \theta)}{a = -1/log(1-p)} and for \eqn{x =
-    1, 2, \ldots}, \eqn{0 \le p < 1}.
+    1, 2, \ldots}, \eqn{0 \le \theta < 1}{0 \le p < 1}.
 
   The logarithmic distribution is the limiting case of the zero
   truncated negative binomial distribution with \code{size} parameter
