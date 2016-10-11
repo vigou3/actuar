@@ -55,7 +55,7 @@ double dzmgeom(double x, double prob, double p0m, int give_log)
     /* limiting case as prob approaches one is point mass (1-p0m) at one */
     if (prob == 1) return (x == 1) ? ACT_D_Clog(p0m) : ACT_D__0;
 
-    return ACT_D_val((1 - p0m) * dgeom(x, prob, /*give_log*/0)/(1 - prob));
+    return ACT_D_val((1 - p0m) * dgeom(x - 1, prob, /*give_log*/0));
 }
 
 double pzmgeom(double x, double prob, double p0m, int lower_tail, int log_p)
@@ -74,7 +74,7 @@ double pzmgeom(double x, double prob, double p0m, int lower_tail, int log_p)
     /* limiting case as prob approaches one is mass (1-p0m) at one */
     if (prob == 1) return ACT_DT_1;
 
-    return ACT_DT_Cval((1 - p0m) * pgeom(x, prob, /*l._t.*/0, /*log_p*/0)/(1 - prob));
+    return ACT_DT_Cval((1 - p0m) * pgeom(x - 1, prob, /*l._t.*/0, /*log_p*/0));
 }
 
 double qzmgeom(double x, double prob, double p0m, int lower_tail, int log_p)
@@ -121,6 +121,7 @@ double rzmgeom(double prob, double p0m)
 
     /* limiting case as p approaches one is mass (1-p0m) at one */
     if (prob == 1) return (runif(0, 1) <= p0m) ? 0.0 : 1.0;
+
 
     return qgeom(runif((prob - p0m)/(1 - p0m), 1), prob, 1, 0);
 }
