@@ -70,7 +70,7 @@ aggregateDist <-
                                 "zero-truncated poisson",
                                 "zero-truncated geometric",
                                 "zero-truncated negative binomial",
-                                "zero-truncated binomial"
+                                "zero-truncated binomial",
                                 "zero-modified logarithmic",
                                 "zero-modified poisson",
                                 "zero-modified geometric",
