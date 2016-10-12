@@ -36,8 +36,8 @@ mgumbel(order, alpha, beta)
   The Gumbel distribution with parameters \code{alpha} \eqn{=
     \alpha}{= a} and \code{beta} \eqn{= \beta}{= b} has distribution
   function:
-  \deqn{F(x) = \exp(-\exp(-(x - \alpha)/\beta))}{%
-    F(x) = exp(-exp(-(x - a)/b)),}
+  \deqn{F(x) = \exp[-\exp(-(x - \alpha)/\beta)]}{%
+    F(x) = exp[-exp(-(x - a)/b)],}
   for \eqn{-\infty < x < \infty}{-Inf < x < Inf}, \eqn{-\infty < a <
     \infty}{-Inf < a < Inf} and \eqn{\beta > 0}{b > 0}.
 

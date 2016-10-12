@@ -77,28 +77,29 @@
 \label{sec:introduction}
 
 \proglang{R} already includes functions to compute the probability
-density function (pdf), the cumulative distribution function (cdf) and
-the quantile function of a fair number of probability laws, as well as
-functions to generate variates from these laws. For some root
-\code{foo}, the utility functions are named \code{dfoo}, \code{pfoo},
-\code{qfoo} and \code{rfoo}, respectively.
+density function (pdf) or the probability mass function (pmf), the
+cumulative distribution function (cdf) and the quantile function of a
+fair number of probability distributions, as well as functions to
+generate variates from these distributions. For some root \code{foo},
+the support functions are named \code{dfoo}, \code{pfoo}, \code{qfoo}
+and \code{rfoo}, respectively.
 
-The \pkg{actuar} package provides \code{d}, \code{p}, \code{q} and
-\code{r} functions for a large number of continuous probability laws
+Package \pkg{actuar} provides \code{d}, \code{p}, \code{q} and
+\code{r} functions for a large number of continuous distributions
 useful for loss severity modeling, as well as zero-truncated and
-zero-modified extensions to the most usual discrete probability laws
-used in loss frequency modeling.
+zero-modified extensions to the most usual discrete distributions
+commonly used in loss frequency modeling.
 
 
 \section{Continuous distributions}
 \label{sec:continuous}
 
-The \pkg{actuar} package provides \code{d}, \code{p}, \code{q} and
-\code{r} functions for all the probability laws found in Appendix A of
-\cite{LossModels4e} and not already present in base \proglang{R},
-excluding the inverse Gaussian and log-$t$ but including the loggamma
-distribution \citep{HoggKlugman}. They mostly fall under the unmbrella
-of extreme value distributions.
+The \pkg{actuar} package provides support functions for all the
+probability laws found in Appendix~A of \cite{LossModels4e} and not
+already present in base \proglang{R}, excluding the inverse Gaussian
+and log-$t$ but including the loggamma distribution
+\citep{HoggKlugman}. They mostly fall under the unmbrella of extreme
+value distributions.
 
 \autoref{tab:continuous} lists the supported distributions as
 named in \cite{LossModels4e} along with the root names of the
@@ -134,6 +135,7 @@ gamma, exponential and Weibull distributions in base \proglang{R}.
                       & Inverse exponential & \code{invexp} \\
     \midrule
     Other             & Loggamma & \code{lgamma} \\
+                      & Gumbel & \code{gumbel} \\
                       & Single parameter Pareto & \code{pareto1} \\
                       & Generalized beta & \code{genbeta} \\
     \bottomrule
@@ -175,7 +177,7 @@ handy to compute the adjustment coefficient in ruin theory; see the
 \section{Phase-type distributions}
 \label{sec:phase-type}
 
-In addition to the 17 distributions of \autoref{tab:continuous},
+In addition to the 18 distributions of \autoref{tab:continuous},
 the package provides support for a family of distributions deserving a
 separate presentation. Phase-type distributions \citep{Neuts_81} are
 defined as the distribution of the time until absorption of continuous
@@ -272,7 +274,7 @@ distributions functions are $P(k)$ and $P^T(k)$.
 Zero-truncated distributions have probability mass function
 $p^T(0) = 0$ and
 \begin{equation*}
-  p^T(k) = \frac{p(k)}{1 - p_0}, \quad k = 1, 2, \dots.
+  p_k^T = \frac{p_k}{1 - p_0}, \quad k = 1, 2, \dots.
 \end{equation*}
 The distribution function is, for all $k = 0, 1, 2, \dots$,
 \begin{equation*}
@@ -546,13 +548,13 @@ Software Library \citep{GSL}. The \proglang{C} code for
 
 \appendix
 
-\section{Main formulas for continuous distributions}
+\section{Characteristics of continuous distributions}
 \label{sec:app:continuous}
 
-This appendix gives the following formulas for the distributions of
-\autoref{tab:continuous} using the parametrization of
-\cite{LossModels4e} and \cite{HoggKlugman}; the pdf; the cdf; the raw
-moment of order $k$; the limited moment of order $k$.
+This appendix gives the following formulas for the pdf, the cdf, the
+raw moment of order $k$ and the limited moment of order $k$ for the
+distributions of \autoref{tab:continuous} using the parametrization of
+\cite{LossModels4e} and \cite{HoggKlugman}.
 
 In the following, $\Gamma(\alpha; x)$ is the incomplete gamma function
 \eqref{eq:pgamma}, $\beta(a, b; x)$ is the incomplete beta function
@@ -564,7 +566,7 @@ Unless otherwise stated all parameters are strictly positive and the
 functions are defined for $x > 0$.
 
 \subsection{Transformed beta family}
-\label{sec:appendix:transformed-beta}
+\label{sec:app:continuous:transformed-beta}
 
 \subsubsection*{Transformed beta}
 
@@ -576,7 +578,6 @@ functions are defined for $x > 0$.
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\gamma u^\tau (1 - u)^\alpha}{x \beta
@@ -607,7 +608,6 @@ functions are defined for $x > 0$.
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\alpha \gamma u^\alpha (1 - u)}{x},
@@ -636,7 +636,6 @@ functions are defined for $x > 0$.
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\gamma u (1 - u)}{x},
@@ -661,7 +660,6 @@ functions are defined for $x > 0$.
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\alpha^2 u^\alpha (1 - u)}{x},
@@ -691,7 +689,6 @@ functions are defined for $x > 0$.
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{u^\tau (1 - u)^\alpha}{x \beta (\alpha, \tau )},
@@ -719,7 +716,6 @@ functions are defined for $x > 0$.
 \item Parameters: \code{shape} ($\alpha$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\alpha u^\alpha (1 - u)}{x},
@@ -749,7 +745,6 @@ functions are defined for $x > 0$.
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\tau \gamma u^\tau (1 - u)}{x},
@@ -777,7 +772,6 @@ functions are defined for $x > 0$.
 \item Parameters: \code{shape} ($\tau$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\tau u^\tau (1 - u)}{x},
@@ -804,7 +798,6 @@ functions are defined for $x > 0$.
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\tau^2 u^\tau (1 - u)}{x},
@@ -826,7 +819,7 @@ functions are defined for $x > 0$.
 \end{align*}
 
 \subsection{Transformed gamma family}
-\label{sec:appendix:transformed-gamma}
+\label{sec:app:continuous:transformed-gamma}
 
 \subsubsection*{Transformed gamma}
 
@@ -837,7 +830,6 @@ functions are defined for $x > 0$.
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\tau u^\alpha e^{-u}}{x \Gamma(\alpha)},
@@ -863,7 +855,6 @@ functions are defined for $x > 0$.
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\tau u^\alpha e^{-u}}{x\Gamma (\alpha)},
@@ -887,7 +878,6 @@ functions are defined for $x > 0$.
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{u^\alpha e^{-u}}{x\Gamma (\alpha)},
@@ -912,7 +902,6 @@ functions are defined for $x > 0$.
       \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\tau u e^{-u}}{x},
@@ -935,7 +924,6 @@ functions are defined for $x > 0$.
 \item Parameters: \code{rate}   ($\lambda = 1/\theta$),
       \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{u e^{-u}}{x},
@@ -952,7 +940,7 @@ functions are defined for $x > 0$.
 \end{align*}
 
 \subsection{Other distributions}
-\label{sec:appendix:other}
+\label{sec:app:continuous:other}
 
 \subsubsection*{Loggamma}
 
@@ -961,7 +949,6 @@ functions are defined for $x > 0$.
 \item Parameters: \code{shapelog} ($\alpha$),
       \code{ratelog}   ($\lambda$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\lambda^\alpha (\ln x)^{\alpha - 1}}{%
@@ -979,6 +966,26 @@ functions are defined for $x > 0$.
     \qquad k < \lambda
 \end{align*}
 
+\subsubsection*{Gumbel}
+
+\begin{itemize}
+\item Root: \code{gumbel}
+\item Parameters: \code{alpha} ($-\infty < \alpha < \infty$),
+      \code{beta}  ($\beta$)
+\end{itemize}
+\begin{align*}
+  f(x)
+  &= \frac{e^{-(u + e^{-u})}}{\beta},
+    \qquad u = \frac{x - \alpha}{\beta},
+    \qquad -\infty < x < \infty \\
+  F(x)
+  &= \exp[-\exp(-u)] \\ \displaybreak[0]
+  \E{X}
+  &= \alpha + \gamma \beta, \qquad \gamma \approx 0.57721566490153 \\
+  \VAR{X}
+  &= \frac{\pi^2 \beta^2}{6}
+\end{align*}
+
 \subsubsection*{Single parameter Pareto}
 
 \begin{itemize}
@@ -986,7 +993,6 @@ functions are defined for $x > 0$.
 \item Parameters: \code{shape} ($\alpha$),
       \code{min}   ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\alpha
@@ -1018,7 +1024,6 @@ and is usually set in advance.
       \code{rate}   ($\lambda = 1/\theta$),
        \code{scale}  ($\theta$)
 \end{itemize}
-
 \begin{align*}
   f(x)
   &= \frac{\tau u^a (1 - u)^{b - 1}}{x \beta (a, b)},
@@ -1038,6 +1043,287 @@ and is usually set in advance.
     \qquad k > -\tau\gamma
 \end{align*}
 
+
+\section{Discrete distributions}
+\label{sec:app:discrete}
+
+\subsection[The (a, b, 0) class]{The $(a, b, 0)$ class}
+\label{sec:app:discrete:a-b-0}
+
+The distributions in this section are all supported in base
+\proglang{R}.
+
+Defined on $k = 0, 1, 2, \dots$.
+
+\subsubsection{Poisson}
+
+\begin{itemize}
+\item Root: \code{pois}
+\item Parameter: \code{lambda} ($\lambda > 0$)
+\end{itemize}
+\begin{align*}
+  a &= 0, \qquad b = \lambda, \qquad p_0 = e^{-\lambda} \\
+  p_k &= \frac{e^{-\lambda} \lambda^k}{k!}
+\end{align*}
+
+\begin{itemize}
+\item Limiting case: $p_k = \mathbb{1}_0(k)$ [$\lambda = 0$]
+\end{itemize}
+
+\subsubsection{Negative binomial}
+
+\begin{itemize}
+\item Root: \code{nbinom}
+\item Parameters: \code{size} ($r \geq 0$),
+  \code{prob} ($0 < p \leq 1$),
+  \code{mu} ($r(1 - p)/p$)
+\end{itemize}
+\begin{align*}
+  a &= 1 - p, \qquad b = (r - 1)(1 - p), \qquad p_0 = p^r \\
+  p_k &= \binom{r+k-1}{k} p^r (1 - p)^k
+\end{align*}
+
+\begin{itemize}
+\item Special case: Geometric$(p)$ [$r = 1$]
+\item Limiting cases: $p_k = \mathbb{1}_0(k)$ [$r = 0$ or $p = 1$]
+\end{itemize}
+
+\subsubsection{Geometric}
+
+\begin{itemize}
+\item Root: \code{geom}
+\item Parameter: \code{prob} ($0 < p \leq 1$)
+\end{itemize}
+\begin{align*}
+  a &= 1 - p, \qquad b = 0, \qquad p_0 = p \\
+  p_k &= p (1 - p)^k
+\end{align*}
+
+\begin{itemize}
+\item Limiting case: $p_k = \mathbb{1}_0(k)$ [$p = 1$]
+\end{itemize}
+
+\subsubsection{Binomial}
+
+\begin{itemize}
+\item Root: \code{binom}
+\item Parameters: \code{size} ($n = 0, 1, 2, \dots$),
+  \code{prob} ($0 \leq p \leq 1$)
+\end{itemize}
+\begin{align*}
+  a &= -\frac{p}{1 - p}, \qquad b = \frac{(n + 1)p}{1 - p}, \qquad p_0 = (1 - p)^n \\
+  p_k &= \binom{n}{k} p^k (1 - p)^{n - k}, \quad
+        k = 1, 2, \dots, n
+\end{align*}
+
+\begin{itemize}
+\item Special case: Bernoulli$(p)$ [$n = 1$]
+\item Limiting cases: $p_k = \mathbb{1}_0(k)$ [$n = 0$ or $p = 0$],
+  Degenerate$(n)$ [$p = 1$]
+\end{itemize}
+
+
+\subsection[The zero-truncated (a, b, 0) class]{The zero-truncated $(a, b, 1)$ class}
+\label{sec:app:discrete:zt}
+
+Support provided by \pkg{actuar}.
+
+Defined on $k = 1, 2, \dots$.
+
+Corresponding distribution from the $(a, b, 0)$ class.
+
+\subsubsection{Zero-truncated Poisson}
+
+\begin{itemize}
+\item Root: \code{ztpois}
+\item Parameter: \code{lambda} ($\lambda > 0$)
+\end{itemize}
+\begin{align*}
+  a &= 0, \qquad b = \lambda, \qquad
+      p_1 = \frac{\lambda}{e^\lambda - 1} \\
+  p_k &= \frac{\lambda^k}{k! (e^\lambda - 1)}
+\end{align*}
+
+\begin{itemize}
+\item Limiting case: $p_k = \mathbb{1}_1(k)$ [$\lambda = 0$]
+\end{itemize}
+
+\subsubsection{Zero-truncated negative binomial}
+
+\begin{itemize}
+\item Root: \code{ztnbinom}
+\item Parameters: \code{size} ($r \geq 0$),
+  \code{prob} ($0 < p \leq 1$)
+\end{itemize}
+\begin{align*}
+  a &= 1 - p, \qquad b = (r - 1)(1 - p), \qquad
+      p_1 = \frac{r p^r (1 - p)}{1 - p^r} \\
+  p_k &= \binom{r+k-1}{k} \frac{p^r (1 - p)^k}{1 - p^r}
+\end{align*}
+
+\begin{itemize}
+\item Special cases:  Logarithmic$(1 - p)$ [$r = 0$],
+  Zero-truncated geometric$(p)$ [$r = 1$]
+\item Limiting case: $p_k = \mathbb{1}_1(k)$ [$p = 1$]
+\end{itemize}
+
+\subsubsection{Zero-truncated geometric}
+
+\begin{itemize}
+\item Root: \code{ztgeom}
+\item Parameter: \code{prob} ($0 < p \leq 1$)
+\end{itemize}
+\begin{align*}
+  a &= 1 - p, \qquad b = 0, \qquad p_1 = p \\
+  p_k &= p (1 - p)^{k - 1}
+\end{align*}
+
+\begin{itemize}
+\item Limiting case: $p_k = \mathbb{1}_1(k)$ [$p = 1$]
+\end{itemize}
+
+\subsubsection{Zero-truncated binomial}
+
+\begin{itemize}
+\item Root: \code{ztbinom}
+\item Parameters: \code{size} ($n = 0, 1, 2, \dots$),
+  \code{prob} ($0 \leq p \leq 1$)
+\end{itemize}
+\begin{align*}
+  a &= -\frac{p}{1 - p}, \qquad b = \frac{(n + 1)p}{1 - p}, \qquad
+      p_1 = \frac{m p (1 - p)^{n - 1}}{1 - (1 - p)^n} \\
+  p_k &= \binom{n}{k} \frac{p^k (1 - p)^{n - k}}{1 - (1 - p)^n}, \quad
+        k = 1, 2, \dots, n
+\end{align*}
+
+\begin{itemize}
+\item Limiting cases: $p_k = \mathbb{1}_1(k)$ [$n = 0$ or $p = 0$]
+\end{itemize}
+
+\subsubsection{Logarithmic}
+
+\begin{itemize}
+\item Root: \code{logarithmic}
+\item Parameter: \code{prob} ($0 \leq p < 1$)
+\end{itemize}
+\begin{align*}
+  a &= p, \qquad b = -p, \qquad
+      p_1 = - \frac{p}{\log (1 - p)} \\
+  p_k &= - \frac{p^k}{k \log (1 - p)}
+\end{align*}
+
+\begin{itemize}
+\item Limiting case: $p_k = \mathbb{1}_1(k)$ [$p = 0$]
+\end{itemize}
+
+
+
+
+\subsection[The zero-modified (a, b, 0) class]{The zero-modified $(a, b, 1)$ class}
+\label{sec:app:discrete:zm}
+
+Support provided by \pkg{actuar}.
+
+Unless otherwise stated defined on $k = 0, 1, 2, \dots$ but $p_0^M$ arbitrary
+
+Corresponding distribution from the $(a, b, 0)$ class.
+
+\subsubsection{Zero-modified Poisson}
+
+\begin{itemize}
+\item Root: \code{zmpois}
+\item Parameters: \code{lambda} ($\lambda > 0$),
+  \code{p0} ($0 \leq p_0^M \leq 1$)
+\end{itemize}
+\begin{align*}
+  a &= 0, \qquad b = \lambda, \qquad
+      p_1 = \frac{(1 - p_0^M) \lambda}{e^\lambda - 1} \\
+  p_k &= \frac{(1 - p_0^M) \lambda^k}{k! (e^\lambda - 1)}
+\end{align*}
+
+\begin{itemize}
+\item Limiting case:
+  $p_k = p_0^M \mathbb{1}_0(k) + (1 - p_0^M) \mathbb{1}_1(k)$ [$\lambda = 0$]
+\end{itemize}
+
+\subsubsection{Zero-modified negative binomial}
+
+\begin{itemize}
+\item Root: \code{zmnbinom}
+\item Parameters: \code{size} ($r \geq 0$),
+  \code{prob} ($0 < p \leq 1$),
+  \code{p0} ($0 \leq p_0^M \leq 1$)
+\end{itemize}
+\begin{align*}
+  a &= 1 - p, \qquad b = (r - 1)(1 - p), \qquad
+      p_1 = \frac{(1 - p_0^M) r p^r (1 - p)}{1 - p^r} \\
+  p_k &= \binom{r+k-1}{k} \frac{(1 - p_0^M) p^r (1 - p)^k}{1 - p^r}
+\end{align*}
+
+\begin{itemize}
+\item Special cases: Zero-modified logarithmic$(1 - p)$ [$r = 0$],
+  Zero-modified geometric$(p)$ [$r = 1$]
+\item Limiting case:
+  $p_k = p_0^M \mathbb{1}_0(k) + (1 - p_0^M) \mathbb{1}_1(k)$ [$p = 1$]
+\end{itemize}
+
+\subsubsection{Zero-modified geometric}
+
+\begin{itemize}
+\item Root: \code{zmgeom}
+\item Parameters: \code{prob} ($0 < p \leq 1$),
+  \code{p0} ($0 \leq p_0^M \leq 1$)
+\end{itemize}
+\begin{align*}
+  a &= 1 - p, \qquad b = 0, \qquad p_1 = (1 - p_0^M) p \\
+  p_k &= (1 - p_0^M) p (1 - p)^{k - 1}
+\end{align*}
+
+\begin{itemize}
+\item Limiting case: mixture
+  $p_0^M \mathbb{1}_0(k) + (1 - p_0^M) \mathbb{1}_1(k)$ [$p = 1$]
+\end{itemize}
+
+\subsubsection{Zero-modified binomial}
+
+\begin{itemize}
+\item Root: \code{zmbinom}
+\item Parameters: \code{size} ($n = 0, 1, 2, \dots$),
+  \code{prob} ($0 \leq p \leq 1$),
+  \code{p0} ($0 \leq p_0^M \leq 1$)
+\end{itemize}
+\begin{align*}
+  a &= -\frac{p}{1 - p}, \qquad b = \frac{(n + 1)p}{1 - p}, \qquad
+      p_1^M = \frac{m (1 - p_0^M) p (1 - p)^{n - 1}}{1 - (1 - p)^n} \\
+  p_k &= \binom{n}{k} \frac{(1 - p_0^M) p^k (1 - p)^{n - k}}{1 - (1 - p)^n}, \quad
+        k = 1, 2, \dots, n
+\end{align*}
+
+\begin{itemize}
+\item Limiting cases: mixture
+  $p_0^M \mathbb{1}_0(k) + (1 - p_0^M) \mathbb{1}_1(k)$ [$n = 0$ or $p = 0$]
+\end{itemize}
+
+\subsubsection{Zero-modified logarithmic}
+
+\begin{itemize}
+\item Root: \code{logarithmic}
+\item Parameters: \code{prob} ($0 \leq p < 1$),
+  \code{p0} ($0 \leq p_0^M \leq 1$)
+\end{itemize}
+\begin{align*}
+  a &= p, \qquad b = -p, \qquad
+      p_1 = - \frac{(1 - p_0^M) p}{\log (1 - p)} \\
+  p_k &= - \frac{(1 - p_0^M) p^k}{k \log (1 - p)}
+\end{align*}
+
+\begin{itemize}
+\item Limiting case:
+  $p_k = p_0^M \mathbb{1}_0(k) + (1 - p_0^M) \mathbb{1}_1(k)$ [$p = 0$]
+\end{itemize}
+
+
+%% References
 \bibliography{actuar}
 
 
