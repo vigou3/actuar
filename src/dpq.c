@@ -102,7 +102,7 @@ SEXP actuar_do_dpq0(int code, SEXP args)
 {
     switch (code)
     {
-    case 101: return DPQ0_1(args, expint);   /* special integral */
+    case 201: return DPQ0_1(args, expint);   /* special integral */
     default:
         error(_("internal error in actuar_do_dpq0"));
     }
@@ -219,22 +219,22 @@ SEXP actuar_do_dpq1(int code, SEXP args)
 {
     switch (code)
     {
-    case  1:  return DPQ1_1(args, mexp);
-    case  2:  return DPQ1_1(args, dinvexp);
-    case  3:  return DPQ1_2(args, pinvexp);
-    case  4:  return DPQ1_2(args, qinvexp);
-    case  5:  return DPQ1_1(args, minvexp);
-    case  6:  return DPQ1_1(args, mgfexp);
-    case  7:  return DPQ1_1(args, dlogarithmic);
-    case  8:  return DPQ1_2(args, plogarithmic);
-    case  9:  return DPQ1_2(args, qlogarithmic);
-    case 10:  return DPQ1_1(args, dztpois);
-    case 11:  return DPQ1_2(args, pztpois);
-    case 12:  return DPQ1_2(args, qztpois);
-    case 13:  return DPQ1_1(args, dztgeom);
-    case 14:  return DPQ1_2(args, pztgeom);
-    case 15:  return DPQ1_2(args, qztgeom);
-    case 101: return DPQ1_1(args, gammaint); /* special integral */
+    case   1: return DPQ1_1(args, mexp);
+    case   2: return DPQ1_1(args, dinvexp);
+    case   3: return DPQ1_2(args, pinvexp);
+    case   4: return DPQ1_2(args, qinvexp);
+    case   5: return DPQ1_1(args, minvexp);
+    case   6: return DPQ1_1(args, mgfexp);
+    case 101: return DPQ1_1(args, dlogarithmic);
+    case 102: return DPQ1_2(args, plogarithmic);
+    case 103: return DPQ1_2(args, qlogarithmic);
+    case 104: return DPQ1_1(args, dztpois);
+    case 105: return DPQ1_2(args, pztpois);
+    case 106: return DPQ1_2(args, qztpois);
+    case 107: return DPQ1_1(args, dztgeom);
+    case 108: return DPQ1_2(args, pztgeom);
+    case 109: return DPQ1_2(args, qztgeom);
+    case 201: return DPQ1_1(args, gammaint); /* special integral */
     default:
         error(_("internal error in actuar_do_dpq1"));
     }
@@ -364,77 +364,80 @@ static SEXP dpq2_2(SEXP sx, SEXP sa, SEXP sb, SEXP sI, SEXP sJ, double (*f)())
 
 SEXP actuar_do_dpq2(int code, SEXP args)
 {
-
     switch (code)
     {
-    case  1:  return DPQ2_1(args, mgamma);
-    case  2:  return DPQ2_1(args, dinvgamma);
-    case  3:  return DPQ2_2(args, pinvgamma);
-    case  4:  return DPQ2_2(args, qinvgamma);
-    case  5:  return DPQ2_1(args, minvgamma);
-    case  6:  return DPQ2_1(args, dinvparalogis);
-    case  7:  return DPQ2_2(args, pinvparalogis);
-    case  8:  return DPQ2_2(args, qinvparalogis);
-    case  9:  return DPQ2_1(args, minvparalogis);
-    case 10:  return DPQ2_1(args, dinvpareto);
-    case 11:  return DPQ2_2(args, pinvpareto);
-    case 12:  return DPQ2_2(args, qinvpareto);
-    case 13:  return DPQ2_1(args, minvpareto);
-    case 14:  return DPQ2_1(args, dinvweibull);
-    case 15:  return DPQ2_2(args, pinvweibull);
-    case 16:  return DPQ2_2(args, qinvweibull);
-    case 17:  return DPQ2_1(args, minvweibull);
-    case 18:  return DPQ2_1(args, dlgamma);
-    case 19:  return DPQ2_2(args, plgamma);
-    case 20:  return DPQ2_2(args, qlgamma);
-    case 21:  return DPQ2_2(args, mlgamma);
-    case 22:  return DPQ2_1(args, dllogis);
-    case 23:  return DPQ2_2(args, pllogis);
-    case 24:  return DPQ2_2(args, qllogis);
-    case 25:  return DPQ2_1(args, mllogis);
-    case 26:  return DPQ2_1(args, mlnorm);
-    case 27:  return DPQ2_1(args, dparalogis);
-    case 28:  return DPQ2_2(args, pparalogis);
-    case 29:  return DPQ2_2(args, qparalogis);
-    case 30:  return DPQ2_1(args, mparalogis);
-    case 31:  return DPQ2_1(args, dpareto);
-    case 32:  return DPQ2_2(args, ppareto);
-    case 33:  return DPQ2_2(args, qpareto);
-    case 34:  return DPQ2_1(args, mpareto);
-    case 35:  return DPQ2_1(args, dpareto1);
-    case 36:  return DPQ2_2(args, ppareto1);
-    case 37:  return DPQ2_2(args, qpareto1);
-    case 38:  return DPQ2_1(args, mpareto1);
-    case 39:  return DPQ2_1(args, mweibull);
-    case 40:  return DPQ2_1(args, levexp);
-    case 41:  return DPQ2_1(args, levinvexp);
-    case 42:  return DPQ2_1(args, mbeta);
-    case 43:  return DPQ2_1(args, mgfgamma);
-    case 44:  return DPQ2_1(args, mgfnorm);
-    case 45:  return DPQ2_1(args, mgfunif);
-    case 46:  return DPQ2_1(args, mgfinvgamma);
-    case 47:  return DPQ2_1(args, mnorm);
-    case 48:  return DPQ2_1(args, mchisq);
-    case 49:  return DPQ2_1(args, mgfchisq);
-    case 50:  return DPQ2_1(args, minvGauss); /* notation from SuppDists */
-    case 51:  return DPQ2_1(args, mgfinvGauss);
-    case 52:  return DPQ2_1(args, munif);
-    case 53:  return DPQ2_1(args, dztnbinom);
-    case 54:  return DPQ2_2(args, pztnbinom);
-    case 55:  return DPQ2_2(args, qztnbinom);
-    case 56:  return DPQ2_1(args, dztbinom);
-    case 57:  return DPQ2_2(args, pztbinom);
-    case 58:  return DPQ2_2(args, qztbinom);
-    case 59:  return DPQ2_1(args, dzmlogarithmic);
-    case 60:  return DPQ2_2(args, pzmlogarithmic);
-    case 61:  return DPQ2_2(args, qzmlogarithmic);
-    case 62:  return DPQ2_1(args, dzmpois);
-    case 63:  return DPQ2_2(args, pzmpois);
-    case 64:  return DPQ2_2(args, qzmpois);
-    case 65:  return DPQ2_1(args, dzmgeom);
-    case 66:  return DPQ2_2(args, pzmgeom);
-    case 67:  return DPQ2_2(args, qzmgeom);
-    case 101: return DPQ2_1(args, betaint); /* special integral */
+    case   1: return DPQ2_1(args, mgamma);
+    case   2: return DPQ2_1(args, dinvgamma);
+    case   3: return DPQ2_2(args, pinvgamma);
+    case   4: return DPQ2_2(args, qinvgamma);
+    case   5: return DPQ2_1(args, minvgamma);
+    case   6: return DPQ2_1(args, dinvparalogis);
+    case   7: return DPQ2_2(args, pinvparalogis);
+    case   8: return DPQ2_2(args, qinvparalogis);
+    case   9: return DPQ2_1(args, minvparalogis);
+    case  10: return DPQ2_1(args, dinvpareto);
+    case  11: return DPQ2_2(args, pinvpareto);
+    case  12: return DPQ2_2(args, qinvpareto);
+    case  13: return DPQ2_1(args, minvpareto);
+    case  14: return DPQ2_1(args, dinvweibull);
+    case  15: return DPQ2_2(args, pinvweibull);
+    case  16: return DPQ2_2(args, qinvweibull);
+    case  17: return DPQ2_1(args, minvweibull);
+    case  18: return DPQ2_1(args, dlgamma);
+    case  19: return DPQ2_2(args, plgamma);
+    case  20: return DPQ2_2(args, qlgamma);
+    case  21: return DPQ2_2(args, mlgamma);
+    case  22: return DPQ2_1(args, dllogis);
+    case  23: return DPQ2_2(args, pllogis);
+    case  24: return DPQ2_2(args, qllogis);
+    case  25: return DPQ2_1(args, mllogis);
+    case  26: return DPQ2_1(args, mlnorm);
+    case  27: return DPQ2_1(args, dparalogis);
+    case  28: return DPQ2_2(args, pparalogis);
+    case  29: return DPQ2_2(args, qparalogis);
+    case  30: return DPQ2_1(args, mparalogis);
+    case  31: return DPQ2_1(args, dpareto);
+    case  32: return DPQ2_2(args, ppareto);
+    case  33: return DPQ2_2(args, qpareto);
+    case  34: return DPQ2_1(args, mpareto);
+    case  35: return DPQ2_1(args, dpareto1);
+    case  36: return DPQ2_2(args, ppareto1);
+    case  37: return DPQ2_2(args, qpareto1);
+    case  38: return DPQ2_1(args, mpareto1);
+    case  39: return DPQ2_1(args, mweibull);
+    case  40: return DPQ2_1(args, levexp);
+    case  41: return DPQ2_1(args, levinvexp);
+    case  42: return DPQ2_1(args, mbeta);
+    case  43: return DPQ2_1(args, mgfgamma);
+    case  44: return DPQ2_1(args, mgfnorm);
+    case  45: return DPQ2_1(args, mgfunif);
+    case  46: return DPQ2_1(args, mgfinvgamma);
+    case  47: return DPQ2_1(args, mnorm);
+    case  48: return DPQ2_1(args, mchisq);
+    case  49: return DPQ2_1(args, mgfchisq);
+    case  50: return DPQ2_1(args, minvGauss); /* notation from SuppDists */
+    case  51: return DPQ2_1(args, mgfinvGauss);
+    case  52: return DPQ2_1(args, munif);
+    case  53: return DPQ2_1(args, dgumbel);
+    case  54: return DPQ2_2(args, pgumbel);
+    case  55: return DPQ2_2(args, qgumbel);
+    case  56: return DPQ2_1(args, mgumbel);
+    case 101: return DPQ2_1(args, dztnbinom);
+    case 102: return DPQ2_2(args, pztnbinom);
+    case 103: return DPQ2_2(args, qztnbinom);
+    case 104: return DPQ2_1(args, dztbinom);
+    case 105: return DPQ2_2(args, pztbinom);
+    case 106: return DPQ2_2(args, qztbinom);
+    case 107: return DPQ2_1(args, dzmlogarithmic);
+    case 108: return DPQ2_2(args, pzmlogarithmic);
+    case 109: return DPQ2_2(args, qzmlogarithmic);
+    case 110: return DPQ2_1(args, dzmpois);
+    case 111: return DPQ2_2(args, pzmpois);
+    case 112: return DPQ2_2(args, qzmpois);
+    case 113: return DPQ2_1(args, dzmgeom);
+    case 114: return DPQ2_2(args, pzmgeom);
+    case 115: return DPQ2_2(args, qzmgeom);
+    case 201: return DPQ2_1(args, betaint); /* special integral */
     default:
         error(_("internal error in actuar_do_dpq2"));
     }
@@ -579,48 +582,48 @@ SEXP actuar_do_dpq3(int code, SEXP args)
 {
     switch (code)
     {
-    case  1:  return DPQ3_1(args, dburr);
-    case  2:  return DPQ3_2(args, pburr);
-    case  3:  return DPQ3_2(args, qburr);
-    case  4:  return DPQ3_1(args, mburr);
-    case  5:  return DPQ3_1(args, dgenpareto);
-    case  6:  return DPQ3_2(args, pgenpareto);
-    case  7:  return DPQ3_2(args, qgenpareto);
-    case  8:  return DPQ3_1(args, mgenpareto);
-    case  9:  return DPQ3_1(args, dinvburr);
-    case 10:  return DPQ3_2(args, pinvburr);
-    case 11:  return DPQ3_2(args, qinvburr);
-    case 12:  return DPQ3_1(args, minvburr);
-    case 13:  return DPQ3_1(args, dinvtrgamma);
-    case 14:  return DPQ3_2(args, pinvtrgamma);
-    case 15:  return DPQ3_2(args, qinvtrgamma);
-    case 16:  return DPQ3_1(args, minvtrgamma);
-    case 17:  return DPQ3_1(args, dtrgamma);
-    case 18:  return DPQ3_2(args, ptrgamma);
-    case 19:  return DPQ3_2(args, qtrgamma);
-    case 20:  return DPQ3_1(args, mtrgamma);
-    case 21:  return DPQ3_1(args, levgamma);
-    case 22:  return DPQ3_1(args, levinvgamma);
-    case 23:  return DPQ3_1(args, levinvparalogis);
-    case 24:  return DPQ3_1(args, levinvpareto);
-    case 25:  return DPQ3_1(args, levinvweibull);
-    case 26:  return DPQ3_1(args, levlgamma);
-    case 27:  return DPQ3_1(args, levllogis);
-    case 28:  return DPQ3_1(args, levlnorm);
-    case 29:  return DPQ3_1(args, levparalogis);
-    case 30:  return DPQ3_1(args, levpareto);
-    case 31:  return DPQ3_1(args, levpareto1);
-    case 32:  return DPQ3_1(args, levweibull);
-    case 33:  return DPQ3_1(args, levbeta);
-    case 34:  return DPQ3_1(args, levchisq);
-    case 35:  return DPQ3_1(args, levinvGauss); /* notation from SuppDists */
-    case 36:  return DPQ3_1(args, levunif);
-    case 37:  return DPQ3_1(args, dzmnbinom);
-    case 38:  return DPQ3_2(args, pzmnbinom);
-    case 39:  return DPQ3_2(args, qzmnbinom);
-    case 40:  return DPQ3_1(args, dzmbinom);
-    case 41:  return DPQ3_2(args, pzmbinom);
-    case 42:  return DPQ3_2(args, qzmbinom);
+    case   1:  return DPQ3_1(args, dburr);
+    case   2:  return DPQ3_2(args, pburr);
+    case   3:  return DPQ3_2(args, qburr);
+    case   4:  return DPQ3_1(args, mburr);
+    case   5:  return DPQ3_1(args, dgenpareto);
+    case   6:  return DPQ3_2(args, pgenpareto);
+    case   7:  return DPQ3_2(args, qgenpareto);
+    case   8:  return DPQ3_1(args, mgenpareto);
+    case   9:  return DPQ3_1(args, dinvburr);
+    case  10:  return DPQ3_2(args, pinvburr);
+    case  11:  return DPQ3_2(args, qinvburr);
+    case  12:  return DPQ3_1(args, minvburr);
+    case  13:  return DPQ3_1(args, dinvtrgamma);
+    case  14:  return DPQ3_2(args, pinvtrgamma);
+    case  15:  return DPQ3_2(args, qinvtrgamma);
+    case  16:  return DPQ3_1(args, minvtrgamma);
+    case  17:  return DPQ3_1(args, dtrgamma);
+    case  18:  return DPQ3_2(args, ptrgamma);
+    case  19:  return DPQ3_2(args, qtrgamma);
+    case  20:  return DPQ3_1(args, mtrgamma);
+    case  21:  return DPQ3_1(args, levgamma);
+    case  22:  return DPQ3_1(args, levinvgamma);
+    case  23:  return DPQ3_1(args, levinvparalogis);
+    case  24:  return DPQ3_1(args, levinvpareto);
+    case  25:  return DPQ3_1(args, levinvweibull);
+    case  26:  return DPQ3_1(args, levlgamma);
+    case  27:  return DPQ3_1(args, levllogis);
+    case  28:  return DPQ3_1(args, levlnorm);
+    case  29:  return DPQ3_1(args, levparalogis);
+    case  30:  return DPQ3_1(args, levpareto);
+    case  31:  return DPQ3_1(args, levpareto1);
+    case  32:  return DPQ3_1(args, levweibull);
+    case  33:  return DPQ3_1(args, levbeta);
+    case  34:  return DPQ3_1(args, levchisq);
+    case  35:  return DPQ3_1(args, levinvGauss); /* notation from SuppDists */
+    case  36:  return DPQ3_1(args, levunif);
+    case 101:  return DPQ3_1(args, dzmnbinom);
+    case 102:  return DPQ3_2(args, pzmnbinom);
+    case 103:  return DPQ3_2(args, qzmnbinom);
+    case 104:  return DPQ3_1(args, dzmbinom);
+    case 105:  return DPQ3_2(args, pzmbinom);
+    case 106:  return DPQ3_2(args, qzmbinom);
     default:
         error(_("internal error in actuar_do_dpq3"));
     }

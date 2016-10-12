@@ -132,9 +132,9 @@ SEXP actuar_do_random1(int code, SEXP args, SEXPTYPE type)
         switch (code)
         {
             RAND1(1, rinvexp);
-            RAND1(2, rlogarithmic);
-            RAND1(3, rztpois);
-            RAND1(4, rztgeom);
+            RAND1(101, rlogarithmic);
+            RAND1(102, rztpois);
+            RAND1(103, rztgeom);
         default:
             error(_("internal error in actuar_do_random1"));
         }
@@ -232,20 +232,21 @@ SEXP actuar_do_random2(int code, SEXP args, SEXPTYPE type)
         GetRNGstate();
         switch (code)
         {
-            RAND2( 1, rinvgamma);
-            RAND2( 2, rinvparalogis);
-            RAND2( 3, rinvpareto);
-            RAND2( 4, rinvweibull);
-            RAND2( 5, rlgamma);
-            RAND2( 6, rllogis);
-            RAND2( 7, rparalogis);
-            RAND2( 8, rpareto);
-            RAND2( 9, rpareto1);
-            RAND2(10, rztnbinom);
-            RAND2(11, rztbinom);
-            RAND2(12, rzmlogarithmic);
-            RAND2(13, rzmpois);
-            RAND2(14, rzmgeom);
+            RAND2(  1, rinvgamma);
+            RAND2(  2, rinvparalogis);
+            RAND2(  3, rinvpareto);
+            RAND2(  4, rinvweibull);
+            RAND2(  5, rlgamma);
+            RAND2(  6, rllogis);
+            RAND2(  7, rparalogis);
+            RAND2(  8, rpareto);
+            RAND2(  9, rpareto1);
+            RAND2( 10, rgumbel);
+            RAND2(101, rztnbinom);
+            RAND2(102, rztbinom);
+            RAND2(103, rzmlogarithmic);
+            RAND2(104, rzmpois);
+            RAND2(105, rzmgeom);
         default:
             error(_("internal error in actuar_do_random2"));
         }
@@ -347,13 +348,13 @@ SEXP actuar_do_random3(int code, SEXP args, SEXPTYPE type)
         GetRNGstate();
         switch (code)
         {
-            RAND3(1, rburr);
-            RAND3(2, rgenpareto);
-            RAND3(3, rinvburr);
-            RAND3(4, rinvtrgamma);
-            RAND3(5, rtrgamma);
-            RAND3(6, rzmnbinom);
-            RAND3(7, rzmbinom);
+            RAND3(  1, rburr);
+            RAND3(  2, rgenpareto);
+            RAND3(  3, rinvburr);
+            RAND3(  4, rinvtrgamma);
+            RAND3(  5, rtrgamma);
+            RAND3(101, rzmnbinom);
+            RAND3(102, rzmbinom);
         default:
             error(_("internal error in actuar_do_random3"));
         }

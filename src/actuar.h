@@ -165,6 +165,12 @@ double minvGauss(double order, double nu, double lambda, int give_log);
 double levinvGauss(double limit, double nu, double lambda, double order, int give_log);
 double mgfinvGauss(double t, double nu, double lambda, int give_log);
 
+double dgumbel(double x, double alpha, double beta, int give_log);
+double pgumbel(double q, double alpha, double beta, int lower_tail, int log_p);
+double qgumbel(double p, double alpha, double beta, int lower_tail, int log_p);
+double rgumbel(double alpha, double beta);
+double mgumbel(double order, double alpha, double beta, int give_log);
+
 double dztnbinom(double x, double size, double prob, int give_log);
 double pztnbinom(double q, double size, double prob, int lower_tail, int log_p);
 double qztnbinom(double p, double size, double prob, int lower_tail, int log_p);

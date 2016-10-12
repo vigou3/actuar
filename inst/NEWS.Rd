@@ -5,6 +5,8 @@
 \section{CHANGES IN actuar VERSION 2.0-0}{
   \subsection{NEW FEATURES}{
     \itemize{
+      \item{Support functions \code{[dpqrm]gumbel} for the Gumbel
+	extreme value distribution.}
       \item{Support functions \code{[dpqr]logarithmic} and
 	\code{[dpqr]zmlogarithmic} for the logarithmic (or log-series)
 	and zero-modified logarithmic distributions.}
