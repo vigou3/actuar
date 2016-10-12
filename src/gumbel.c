@@ -12,7 +12,6 @@
 #include <Rmath.h>
 #include "locale.h"
 #include "dpq.h"
-#include "actuar.h"
 
 double dgumbel(double x, double alpha, double beta, int give_log)
 {
