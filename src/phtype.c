@@ -145,7 +145,7 @@ double mphtype(double order, double *pi, double *T, int m, int give_log)
      * (-1)^order * order! * sum(pi * T^(-order))
      */
 
-    if (order < 0.0 || (int) order != order)
+    if (order < 0.0 || ACT_nonint(order))
         return R_NaN;
 
     int i, j;
