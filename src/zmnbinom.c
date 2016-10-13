@@ -164,13 +164,13 @@ double rzmnbinom(double size, double prob, double p0m)
     if (size == 0) return rzmlogarithmic(1 - prob, p0m);
 
     /* limiting case as prob approaches one is mass (1-p0m) at one */
-    if (prob == 1) return (runif(0, 1) <= p0m) ? 0.0 : 1.0;
+    if (prob == 1) return (unif_rand() <= p0m) ? 0.0 : 1.0;
 
     double x, p0 = dbinom_raw(size, size, prob, 1 - prob, /*give_log*/0);
 
     /* p0m >= p0: generate from mixture */
     if (p0m >= p0)
-	return (runif(0, 1) * (1 - p0) < (1 - p0m)) ? rnbinom(size, prob) : 0.0;
+	return (unif_rand() * (1 - p0) < (1 - p0m)) ? rnbinom(size, prob) : 0.0;
 
     /* p0m < p0: choice of algorithm depends on difference p0 - p0m */
     if (p0 - p0m < ACT_DIFFMAX_REJECTION)

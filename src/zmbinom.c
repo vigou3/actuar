@@ -147,13 +147,13 @@ double rzmbinom(double size, double prob, double p0m)
     if (!R_FINITE(prob) || prob < 0 || prob > 1 || size < 0 || p0m < 0 || p0m > 1) return R_NaN;
 
     /* limiting cases as size -> 1 or prob -> 0 are mass (1-p0m) at one */
-    if (size == 1 || prob == 0) return (runif(0, 1) <= p0m) ? 0.0 : 1.0;
+    if (size == 1 || prob == 0) return (unif_rand() <= p0m) ? 0.0 : 1.0;
 
     double x, p0 = dbinom_raw(0, size, prob, 1 - prob, /*give_log*/0);
 
     /* p0m >= p0: generate from mixture */
     if (p0m >= p0)
-	return (runif(0, 1) * (1 - p0) < (1 - p0m)) ? rbinom(size, prob) : 0.0;
+	return (unif_rand() * (1 - p0) < (1 - p0m)) ? rbinom(size, prob) : 0.0;
 
     /* p0m < p0: choice of algorithm depends on difference p0 - p0m */
     if (p0 - p0m < ACT_DIFFMAX_REJECTION)

@@ -120,7 +120,7 @@ double rzmgeom(double prob, double p0m)
     if (!R_FINITE(prob) || prob <= 0 || prob > 1 || p0m < 0 || p0m > 1) return R_NaN;
 
     /* limiting case as p approaches one is mass (1-p0m) at one */
-    if (prob == 1) return (runif(0, 1) <= p0m) ? 0.0 : 1.0;
+    if (prob == 1) return (unif_rand() <= p0m) ? 0.0 : 1.0;
 
 
     return qgeom(runif((prob - p0m)/(1 - p0m), 1), prob, 1, 0);

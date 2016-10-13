@@ -140,13 +140,13 @@ double rzmpois(double lambda, double p0m)
     if (lambda < 0 || !R_FINITE(lambda) || p0m < 0 || p0m > 1) return R_NaN;
 
     /* limiting case as lambda approaches zero is mass (1-p0m) at one */
-    if (lambda == 0) return (runif(0, 1) <= p0m) ? 0.0 : 1.0;
+    if (lambda == 0) return (unif_rand() <= p0m) ? 0.0 : 1.0;
 
     double x, p0 = exp(-lambda);
 
     /* p0m >= p0: generate from mixture */
     if (p0m >= p0)
-	return (runif(0, 1) * (1 - p0) < (1 - p0m)) ? rpois(lambda) : 0.0;
+	return (unif_rand() * (1 - p0) < (1 - p0m)) ? rpois(lambda) : 0.0;
 
     /* p0m < p0: choice of algorithm depends on difference p0 - p0m */
     if (p0 - p0m < ACT_DIFFMAX_REJECTION)

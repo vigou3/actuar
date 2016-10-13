@@ -122,5 +122,5 @@ double rzmlogarithmic(double p, double p0m)
 {
     if (p < 0 || p >= 1 || p0m < 0 || p0m > 1) return R_NaN;
 
-    return (runif(0, 1) < p0m) ? 0.0 : rlogarithmic(p);
+    return (unif_rand() < p0m) ? 0.0 : rlogarithmic(p);
 }
