@@ -35,6 +35,7 @@ export(## Credibility theory
     mweibull, levweibull,
     minvGauss, levinvGauss, mgfinvGauss, #notation from SuppDists package
     minvgauss, levinvgauss, mgfinvgauss,
+    dgumbel, pgumbel, qgumbel, rgumbel, mgumbel,
     dztnbinom, pztnbinom, qztnbinom, rztnbinom,
     dztbinom, pztbinom, qztbinom, rztbinom,
     dzmlogarithmic, pzmlogarithmic, qzmlogarithmic, rzmlogarithmic,
