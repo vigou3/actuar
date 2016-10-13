@@ -91,6 +91,7 @@ DPQTAB dpq_tab[] = {
     {"mgumbel",         actuar_do_dpq2,        56},
     {"dinvgauss",       actuar_do_dpq2,        57},
     {"pinvgauss",       actuar_do_dpq2,        58},
+    {"qinvgauss",       actuar_do_dpq2,        59},
     {"dztnbinom",       actuar_do_dpq2,        101},
     {"pztnbinom",       actuar_do_dpq2,        102},
     {"qztnbinom",       actuar_do_dpq2,        103},

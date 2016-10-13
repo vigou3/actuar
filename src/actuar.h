@@ -173,6 +173,8 @@ double mgumbel(double order, double alpha, double beta, int give_log);
 
 double dinvgauss(double x, double mu, double phi, int give_log);
 double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p);
+double qinvgauss(double q, double mu, double phi, int lower_tail, int log_p,
+		 double tol, int maxit, int echo);
 
 double dztnbinom(double x, double size, double prob, int give_log);
 double pztnbinom(double q, double size, double prob, int lower_tail, int log_p);

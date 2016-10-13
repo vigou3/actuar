@@ -48,6 +48,11 @@
 #include "actuar.h"
 #include "locale.h"
 
+/* Additional access macros */
+#define CAD5R(e) CAR(CDR(CDR(CDR(CDR(CDR(e))))))
+#define CAD6R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(e)))))))
+#define CAD7R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(e))))))))
+
 
 /* Functions for special integrals with "zero parameter" */
 #define if_NA_dpq0_set(y, x)		    \
@@ -359,8 +364,49 @@ static SEXP dpq2_2(SEXP sx, SEXP sa, SEXP sb, SEXP sI, SEXP sJ, double (*f)())
     return sy;
 }
 
+/* This is needed for qinvgauss that has three additional parameters
+ * for the tolerance, the maximum number of iterations and echoing of
+ * the iterations. */
+static SEXP dpq2_5(SEXP sx, SEXP sa, SEXP sb, SEXP sI, SEXP sJ,
+		   SEXP sT, SEXP sM, SEXP sE, double (*f)())
+{
+    SEXP sy;
+    int i, ix, ia, ib, n, nx, na, nb,
+        sxo = OBJECT(sx), sao = OBJECT(sa), sbo = OBJECT(sb);
+    double xi, ai, bi, *x, *a, *b, *y;
+    int i_1, i_2, i_4, i_5;
+    double d_3;
+    Rboolean naflag = FALSE;
+
+    SETUP_DPQ2;
+
+    i_1 = asInteger(sI);
+    i_2 = asInteger(sJ);
+    d_3 = asReal(sT);
+    i_4 = asInteger(sM);
+    i_5 = asInteger(sE);
+
+    mod_iterate2(nx, na, nb, ix, ia, ib)
+    {
+        xi = x[ix];
+        ai = a[ia];
+        bi = b[ib];
+        if_NA_dpq2_set(y[i], xi, ai, bi)
+        else
+        {
+            y[i] = f(xi, ai, bi, i_1, i_2, d_3, i_4, i_5);
+            if (ISNAN(y[i])) naflag = TRUE;
+        }
+    }
+
+    FINISH_DPQ2;
+
+    return sy;
+}
+
 #define DPQ2_1(A, FUN) dpq2_1(CAR(A), CADR(A), CADDR(A), CADDDR(A), FUN);
 #define DPQ2_2(A, FUN) dpq2_2(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), FUN)
+#define DPQ2_5(A, FUN) dpq2_5(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), CAD5R(A), CAD6R(A), CAD7R(A), FUN)
 
 SEXP actuar_do_dpq2(int code, SEXP args)
 {
@@ -424,6 +470,7 @@ SEXP actuar_do_dpq2(int code, SEXP args)
     case  56: return DPQ2_1(args, mgumbel);
     case  57: return DPQ2_1(args, dinvgauss);
     case  58: return DPQ2_2(args, pinvgauss);
+    case  59: return DPQ2_5(args, qinvgauss);
     case 101: return DPQ2_1(args, dztnbinom);
     case 102: return DPQ2_2(args, pztnbinom);
     case 103: return DPQ2_2(args, qztnbinom);
@@ -576,7 +623,6 @@ static SEXP dpq3_2(SEXP sx, SEXP sa, SEXP sb, SEXP sc, SEXP sI, SEXP sJ, double 
     return sy;
 }
 
-#define CAD5R(e) CAR(CDR(CDR(CDR(CDR(CDR(e))))))
 #define DPQ3_1(A, FUN) dpq3_1(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), FUN);
 #define DPQ3_2(A, FUN) dpq3_2(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), CAD5R(A), FUN)
 
@@ -777,7 +823,6 @@ static SEXP dpq4_2(SEXP sx, SEXP sa, SEXP sb, SEXP sc, SEXP sd, SEXP sI, SEXP sJ
     return sy;
 }
 
-#define CAD6R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(e)))))))
 #define DPQ4_1(A, FUN) dpq4_1(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), CAD5R(A), FUN);
 #define DPQ4_2(A, FUN) dpq4_2(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), CAD5R(A), CAD6R(A), FUN)
 
@@ -922,7 +967,6 @@ static SEXP dpq5_1(SEXP sx, SEXP sa, SEXP sb, SEXP sc, SEXP sd, SEXP se, SEXP sI
     return sy;
 }
 
-#define CAD7R(e) CAR(CDR(CDR(CDR(CDR(CDR(CDR(CDR(e))))))))
 #define DPQ5_1(A, FUN) dpq5_1(CAR(A), CADR(A), CADDR(A), CADDDR(A), CAD4R(A), CAD5R(A), CAD6R(A), FUN);
 
 SEXP actuar_do_dpq5(int code, SEXP args)

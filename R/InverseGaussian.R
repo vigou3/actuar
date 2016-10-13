@@ -14,8 +14,14 @@
 dinvgauss <- function(x, mean, shape = 1, dispersion = 1/shape, log = FALSE)
     .External("actuar_do_dpq", "dinvgauss", x, mean, dispersion, log)
 
-pinvgauss <- function(x, mean, shape = 1, dispersion = 1/shape,
+pinvgauss <- function(q, mean, shape = 1, dispersion = 1/shape,
                       lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "pinvgauss", x, mean, dispersion,
-                      lower.tail, log.p)
+    .External("actuar_do_dpq", "pinvgauss", q, mean, dispersion,
+              lower.tail, log.p)
+
+qinvgauss <- function(p, mean, shape = 1, dispersion = 1/shape,
+                      lower.tail = TRUE, log.p = FALSE,
+                      tol = 1e-14, maxit = 100, echo = FALSE, trace = echo)
+    .External("actuar_do_dpq", "qinvgauss", p, mean, dispersion,
+              lower.tail, log.p, tol, maxit, trace)
 

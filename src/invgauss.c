@@ -87,7 +87,20 @@ double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
     return ACT_D_exp(a + (lower_tail ? log1p(exp(b - a)) : ACT_Log1_Exp(b - a)));
 }
 
-double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p)
+/* Needed by qinvgauss() for Newton-Raphson iterations. */
+double nrstep(double x, double p, double logp, double phi)
+{
+    double logF, dlogp;
+
+    logF = pinvgauss(x, 1, phi, /*l._t.*/1, /*log.p*/1);
+    dlogp = logp - logF;
+
+    return ((fabs(dlogp) < 1e-5) ? dlogp * exp(logp - log1p(-dlogp/2)) :
+	    p - exp(logF)) / dinvgauss(x, 1, phi, 0);
+}
+
+double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
+		 double tol, int maxit, int echo)
 {
 #ifdef IEEE_754
     if (ISNAN(p) || ISNAN(mu) || ISNAN(phi))
@@ -100,13 +113,17 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p)
     if (!R_FINITE(phi))
 	return 1.0;
 
+    /* must be able to do at least one iteration */
+    if (maxit < 1)
+	error(_("maximum number of iterations must be at least 1"));
+
     ACT_Q_P01_boundaries(p, 0, R_PosInf);
 
-    double logp;
-    double mode, kappa, x, xt;
+    int i = 1;
+    double logp, kappa, mode, x, dx, s;
 
     /* same as ACT_DT_qIv macro, but to set both p and logp */
-    if (log.p)
+    if (log_p)
     {
 	if (lower_tail)
 	{
@@ -142,17 +159,53 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p)
     if (logp < -11.51)		/* small left tail probability */
 	x = 1/phi/R_pow_di(qnorm(logp, 0, 1, /*l._t.*/1, /*log.p*/1), 2);
     else if (logp > -1e-5)	/* small right tail probability */
-	x = qgamma(logp, 1/phi, phi, /*l._t.*/1, /*log.p*/1)
+	x = qgamma(logp, 1/phi, phi, /*l._t.*/1, /*log.p*/1);
     else			/* use the mode otherwise */
 	x = mode;
 
-    /* set up Newton iterations */
-    xt = x;
+    /* if echoing iterations, start by printing the header and the
+     * first value */
+    if (echo)
+        Rprintf("iter\tadjustment\tquantile\n%d\t   ----   \t%.8g\n",
+                0, x);
 
+    /* first Newton-Raphson outside the loop to retain the sign of
+     * the adjustment */
+    dx = nrstep(x, p, logp, phi);
+    s = sign(dx);
+    x += dx;
 
+    if (echo)
+	Rprintf("%d\t%-14.8g\t%.8g\n", i, dx, x);
 
-    return ACT_D_exp(a + (lower_tail ? log1p(exp(b - a)) : ACT_Log1_Exp(b - a)));
+    /* now do the iterations */
+    do
+    {
+	i++;
+	if (i > maxit)
+	{
+	    warning(_("maximum number of iterations exceeded"));
+	    break;
+	}
+
+	dx = nrstep(x, p, logp, phi);
+
+	/* change of sign indicates that machine precision has been overstepped */
+	if (dx * s < 0)
+	    dx = 0;
+	else
+	    x += dx;
+
+	if (echo)
+	    Rprintf("%d\t%-14.8g\t%.8g\n", i, dx, x);
+
+    } while (fabs(dx) > tol);
+
+    return x * mu;
 }
+
+
+
 
 double minvGauss(double order, double nu, double lambda, int give_log)
 {
