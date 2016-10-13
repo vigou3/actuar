@@ -242,6 +242,7 @@ SEXP actuar_do_random2(int code, SEXP args, SEXPTYPE type)
             RAND2(  8, rpareto);
             RAND2(  9, rpareto1);
             RAND2( 10, rgumbel);
+            RAND2( 11, rinvgauss);
             RAND2(101, rztnbinom);
             RAND2(102, rztbinom);
             RAND2(103, rzmlogarithmic);

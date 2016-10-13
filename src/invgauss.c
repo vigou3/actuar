@@ -204,8 +204,21 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
     return x * mu;
 }
 
+double rinvgauss(double mu, double phi)
+{
+    if (mu <= 0.0 || phi <= 0.0)
+        return R_NaN;
 
+    double y, x;
 
+    /* convert to mean = 1 */
+    phi *= mu;
+
+    y = R_pow_di(rnorm(0, 1), 2);
+    x = 1 + phi/2 * (y - sqrt(4 * y/phi + R_pow_di(y, 2)));
+
+    return mu * ((unif_rand() <= 1/(1 + x)) ? x : 1/x);
+}
 
 double minvGauss(double order, double nu, double lambda, int give_log)
 {

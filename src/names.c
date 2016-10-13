@@ -197,6 +197,7 @@ RANDOMTAB random_tab[] = {
     {"rpareto",         actuar_do_random2,     8, REALSXP},
     {"rpareto1",        actuar_do_random2,     9, REALSXP},
     {"rgumbel",         actuar_do_random2,    10, REALSXP},
+    {"rinvgauss",       actuar_do_random2,    11, REALSXP},
     {"rztnbinom",       actuar_do_random2,   101, INTSXP},
     {"rztbinom",        actuar_do_random2,   102, INTSXP},
     {"rzmlogarithmic",  actuar_do_random2,   103, INTSXP},

@@ -25,3 +25,5 @@ qinvgauss <- function(p, mean, shape = 1, dispersion = 1/shape,
     .External("actuar_do_dpq", "qinvgauss", p, mean, dispersion,
               lower.tail, log.p, tol, maxit, trace)
 
+rinvgauss <- function(n, mean, shape = 1, dispersion = 1/shape)
+    .External("actuar_do_random", "rinvgauss", n, mean, dispersion)
