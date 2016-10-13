@@ -27,15 +27,11 @@ double dinvgauss(double x, double mu, double phi, int give_log)
     if (mu <= 0.0 || phi <= 0.0)
         return R_NaN;
 
-    if (!R_FINITE(x) || x < 0.0)
-	return ACT_D__0;
-
-    /* handle x == 0 separately */
-    if (x == 0)
-	return R_FINITE(phi) ? ACT_D__0 : R_PosInf;
-
-    /* limiting case phi = Inf and x > 0 */
+    /* limiting case phi = Inf */
     if (!R_FINITE(phi))
+	return (x == 0) ? R_PosInf : ACT_D__0;
+
+    if (!R_FINITE(x) || x <= 0.0)
 	return ACT_D__0;
 
     /* limiting case mu = Inf */
@@ -59,16 +55,12 @@ double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
     if (mu <= 0.0 || phi <= 0.0)
         return R_NaN;
 
-    if (q < 0)
-        return ACT_DT_0;
-
-    /* handle x == 0 separately */
-    if (q == 0)
-	return R_FINITE(phi) ? ACT_DT_0 : ACT_DT_1;
-
-    /* limiting cases phi = Inf and q > 0, and q = Inf */
-    if (!R_FINITE(phi) || !R_FINITE(q))
+    /* limiting case phi = Inf */
+    if (!R_FINITE(phi))
 	return ACT_DT_1;
+
+    if (q <= 0)
+        return ACT_DT_0;
 
     /* limiting case mu = Inf */
     if (!R_FINITE(mu))
@@ -86,7 +78,7 @@ double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
 	    return ACT_D_exp(1/phim - M_LN_SQRT_PI - log(2*phim) - 1.5 * log1p(r) - r);
     }
 
-    /* all other probabilities rely on pnorm() */
+    /* all other probabilities */
     double a, b, r = sqrt(q * phi);
 
     a = pnorm((qm - 1)/r, 0, 1, lower_tail, /* log_p */1);
@@ -95,6 +87,72 @@ double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
     return ACT_D_exp(a + (lower_tail ? log1p(exp(b - a)) : ACT_Log1_Exp(b - a)));
 }
 
+double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p)
+{
+#ifdef IEEE_754
+    if (ISNAN(p) || ISNAN(mu) || ISNAN(phi))
+	return p + mu + phi;
+#endif
+    if (mu <= 0.0 || phi <= 0.0)
+        return R_NaN;
+
+    /* limiting case phi = Inf */
+    if (!R_FINITE(phi))
+	return 1.0;
+
+    ACT_Q_P01_boundaries(p, 0, R_PosInf);
+
+    double logp;
+    double mode, kappa, x, xt;
+
+    /* same as ACT_DT_qIv macro, but to set both p and logp */
+    if (log.p)
+    {
+	if (lower_tail)
+	{
+	    logp = p;
+	    p = exp(p);
+	}
+	else
+	{
+	    p = -expm1(p);
+	    logp = log(p);
+	}
+    }
+    else
+    {
+	p = ACT_D_Lval(p);
+	logp = log(p);
+    }
+
+    /* convert to mean = 1 */
+    phi *= mu;
+
+    /* mode */
+    kappa = 1.5 * phi;
+    if (kappa <= 1e3)
+	mode = sqrt(1 + kappa * kappa) - kappa;
+    else			/* Taylor series correction */
+    {
+	double k = 1/2/kappa;
+	mode = k * (1 - k * k);
+    }
+
+    /* starting value */
+    if (logp < -11.51)		/* small left tail probability */
+	x = 1/phi/R_pow_di(qnorm(logp, 0, 1, /*l._t.*/1, /*log.p*/1), 2);
+    else if (logp > -1e-5)	/* small right tail probability */
+	x = qgamma(logp, 1/phi, phi, /*l._t.*/1, /*log.p*/1)
+    else			/* use the mode otherwise */
+	x = mode;
+
+    /* set up Newton iterations */
+    xt = x;
+
+
+
+    return ACT_D_exp(a + (lower_tail ? log1p(exp(b - a)) : ACT_Log1_Exp(b - a)));
+}
 
 double minvGauss(double order, double nu, double lambda, int give_log)
 {
