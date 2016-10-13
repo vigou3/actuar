@@ -11,6 +11,91 @@
 #include "locale.h"
 #include "dpq.h"
 
+double dinvgauss(double x, double mu, double phi, int give_log)
+{
+    /*  We work with the density expressed as
+     *
+     *  (2 pi phi x^3)^(-1/2) exp(- u^2/(2 phi x))
+     *
+     *  with u = (x - mu)/mu.
+     */
+
+#ifdef IEEE_754
+    if (ISNAN(x) || ISNAN(mu) || ISNAN(phi))
+	return x + mu + phi;
+#endif
+    if (mu <= 0.0 || phi <= 0.0)
+        return R_NaN;
+
+    if (!R_FINITE(x) || x < 0.0)
+	return ACT_D__0;
+
+    /* handle x == 0 separately */
+    if (x == 0)
+	return R_FINITE(phi) ? ACT_D__0 : R_PosInf;
+
+    /* limiting case phi = Inf and x > 0 */
+    if (!R_FINITE(phi))
+	return ACT_D__0;
+
+    /* limiting case mu = Inf */
+    if (!R_FINITE(mu))
+	return ACT_D_exp(-(log(phi) + 3 * log(x) + 1/phi/x)/2 - M_LN_SQRT_2PI);
+
+    /* standard cases */
+    double xm = x/mu;
+    double phim = phi * mu;
+
+    return ACT_D_exp(-(log(phim) + 3 * log(xm) + R_pow_di(xm - 1, 2)/phim/xm)/2
+		     - M_LN_SQRT_2PI - log(mu));
+}
+
+double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
+{
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(mu) || ISNAN(phi))
+	return q + mu + phi;
+#endif
+    if (mu <= 0.0 || phi <= 0.0)
+        return R_NaN;
+
+    if (q < 0)
+        return ACT_DT_0;
+
+    /* handle x == 0 separately */
+    if (q == 0)
+	return R_FINITE(phi) ? ACT_DT_0 : ACT_DT_1;
+
+    /* limiting cases phi = Inf and q > 0, and q = Inf */
+    if (!R_FINITE(phi) || !R_FINITE(q))
+	return ACT_DT_1;
+
+    /* limiting case mu = Inf */
+    if (!R_FINITE(mu))
+	return pchisq(1/q/phi, 1, !lower_tail, log_p);
+
+    /* standard cases */
+    double qm = q/mu;
+    double phim = phi * mu;
+
+    /* approximation for (survival) probabilities in the far right tail */
+    if (!lower_tail && qm > 1e6)
+    {
+	double r = qm/2/phim;
+	if (r > 5e5)
+	    return ACT_D_exp(1/phim - M_LN_SQRT_PI - log(2*phim) - 1.5 * log1p(r) - r);
+    }
+
+    /* all other probabilities rely on pnorm() */
+    double a, b, r = sqrt(q * phi);
+
+    a = pnorm((qm - 1)/r, 0, 1, lower_tail, /* log_p */1);
+    b = 2/phim + pnorm(-(qm + 1)/r, 0, 1, /* l._t. */1, /* log_p */1);
+
+    return ACT_D_exp(a + (lower_tail ? log1p(exp(b - a)) : ACT_Log1_Exp(b - a)));
+}
+
+
 double minvGauss(double order, double nu, double lambda, int give_log)
 {
 #ifdef IEEE_754
