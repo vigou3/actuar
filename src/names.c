@@ -82,7 +82,7 @@ DPQTAB dpq_tab[] = {
     {"mnorm",           actuar_do_dpq2,        47},
     {"mchisq",          actuar_do_dpq2,        48},
     {"mgfchisq",        actuar_do_dpq2,        49},
-    {"minvGauss",       actuar_do_dpq2,        50},
+    {"minvGauss",       actuar_do_dpq2,        50}, /* deprecated v2.0-0 */
     {"mgfinvGauss",     actuar_do_dpq2,        51},
     {"munif",           actuar_do_dpq2,        52},
     {"dgumbel",         actuar_do_dpq2,        53},
@@ -92,6 +92,7 @@ DPQTAB dpq_tab[] = {
     {"dinvgauss",       actuar_do_dpq2,        57},
     {"pinvgauss",       actuar_do_dpq2,        58},
     {"qinvgauss",       actuar_do_dpq2,        59},
+    {"minvgauss",       actuar_do_dpq2,        60},
     {"dztnbinom",       actuar_do_dpq2,        101},
     {"pztnbinom",       actuar_do_dpq2,        102},
     {"qztnbinom",       actuar_do_dpq2,        103},

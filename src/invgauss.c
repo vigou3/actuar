@@ -113,11 +113,15 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
     if (!R_FINITE(phi))
 	return 1.0;
 
+    /* limiting case mu = Inf */
+    if (!R_FINITE(mu))
+	return 1/phi/qchisq(p, 1, !lower_tail, log_p);
+
+    ACT_Q_P01_boundaries(p, 0, R_PosInf);
+
     /* must be able to do at least one iteration */
     if (maxit < 1)
 	error(_("maximum number of iterations must be at least 1"));
-
-    ACT_Q_P01_boundaries(p, 0, R_PosInf);
 
     int i = 1;
     double logp, kappa, mode, x, dx, s;
@@ -218,6 +222,42 @@ double rinvgauss(double mu, double phi)
     x = 1 + phi/2 * (y - sqrt(4 * y/phi + R_pow_di(y, 2)));
 
     return mu * ((unif_rand() <= 1/(1 + x)) ? x : 1/x);
+}
+
+double minvgauss(double order, double mu, double phi, int give_log)
+{
+#ifdef IEEE_754
+    if (ISNAN(order) || ISNAN(mu) || ISNAN(phi))
+	return order + mu + phi;
+#endif
+    if (mu <= 0.0 || phi <= 0.0 ||
+	order < 0 || ACT_nonint(order))
+        return R_NaN;
+
+    /* trivial case */
+    if (order == 0.0)
+        return 0.0;
+
+    /* limiting case phi = Inf */
+    if (!R_FINITE(phi))
+	return 0.0;
+
+    /* limiting case mu = Inf */
+    if (!R_FINITE(mu))
+	return R_PosInf;
+
+    int i, k = order;
+    double term, z, phir = phi * mu/2;
+
+    z = term = 1.0;		/* first term (i = 0) */
+
+    for (i = 1; i < k; i++)
+    {
+	term *= ((k + i - 1) * (k - i)/i) * phir;
+	z += term;
+    }
+
+    return R_pow_di(mu, k) * z;
 }
 
 double minvGauss(double order, double nu, double lambda, int give_log)

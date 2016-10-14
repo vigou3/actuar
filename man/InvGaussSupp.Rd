@@ -1,6 +1,6 @@
 \name{InvGaussSupp}
 \alias{InvGaussSupp}
-\alias{minvGauss}
+\alias{minvGauss-deprecated}
 \alias{levinvGauss}
 \alias{mgfinvGauss}
 \alias{minvgauss}

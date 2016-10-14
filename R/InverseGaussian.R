@@ -27,3 +27,23 @@ qinvgauss <- function(p, mean, shape = 1, dispersion = 1/shape,
 
 rinvgauss <- function(n, mean, shape = 1, dispersion = 1/shape)
     .External("actuar_do_random", "rinvgauss", n, mean, dispersion)
+
+minvgauss <- function(order, mean, shape = 1, dispersion = 1/shape)
+    .External("actuar_do_dpq", "minvgauss", order, mean, dispersion, FALSE)
+
+levinvGauss <- function(limit, nu, lambda, order = 1)
+    .External("actuar_do_dpq", "levinvGauss", limit,  nu, lambda, order, FALSE)
+
+mgfinvGauss <- function(x, nu, lambda, log = FALSE)
+    .External("actuar_do_dpq", "mgfinvGauss", x, nu, lambda, log)
+
+## Functions deprecated in actuar v2.0-0
+minvGauss <- function(order, nu, lambda)
+{
+    .Deprecated("minvgauss", package = "actuar")
+    .External("actuar_do_dpq", "minvGauss", order, nu, lambda, FALSE)
+}
+
+## aliases
+levinvgauss <- levinvGauss
+mgfinvgauss <- mgfinvGauss

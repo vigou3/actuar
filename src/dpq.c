@@ -461,7 +461,7 @@ SEXP actuar_do_dpq2(int code, SEXP args)
     case  47: return DPQ2_1(args, mnorm);
     case  48: return DPQ2_1(args, mchisq);
     case  49: return DPQ2_1(args, mgfchisq);
-    case  50: return DPQ2_1(args, minvGauss); /* notation from SuppDists */
+    case  50: return DPQ2_1(args, minvGauss); /* deprecated v2.0-0 */
     case  51: return DPQ2_1(args, mgfinvGauss);
     case  52: return DPQ2_1(args, munif);
     case  53: return DPQ2_1(args, dgumbel);
@@ -471,6 +471,7 @@ SEXP actuar_do_dpq2(int code, SEXP args)
     case  57: return DPQ2_1(args, dinvgauss);
     case  58: return DPQ2_2(args, pinvgauss);
     case  59: return DPQ2_5(args, qinvgauss);
+    case  60: return DPQ2_1(args, minvgauss);
     case 101: return DPQ2_1(args, dztnbinom);
     case 102: return DPQ2_2(args, pztnbinom);
     case 103: return DPQ2_2(args, qztnbinom);

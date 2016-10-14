@@ -161,7 +161,7 @@ double levpareto1(double limit, double shape, double scale, double order, int gi
 double mweibull(double order, double scale, double shape, int give_log);
 double levweibull(double limit, double scale, double shape, double order, int give_log);
 
-double minvGauss(double order, double nu, double lambda, int give_log);
+double minvGauss(double order, double nu, double lambda, int give_log); /* deprecated v2.0-0 */
 double levinvGauss(double limit, double nu, double lambda, double order, int give_log);
 double mgfinvGauss(double t, double nu, double lambda, int give_log);
 
@@ -176,6 +176,7 @@ double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p);
 double qinvgauss(double q, double mu, double phi, int lower_tail, int log_p,
 		 double tol, int maxit, int echo);
 double rinvgauss(double mu, double phi);
+double minvgauss(double order, double mean, double phi, int give_log);
 
 double dztnbinom(double x, double size, double prob, int give_log);
 double pztnbinom(double q, double size, double prob, int lower_tail, int log_p);
