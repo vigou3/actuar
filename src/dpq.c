@@ -462,7 +462,7 @@ SEXP actuar_do_dpq2(int code, SEXP args)
     case  48: return DPQ2_1(args, mchisq);
     case  49: return DPQ2_1(args, mgfchisq);
     case  50: return DPQ2_1(args, minvGauss); /* deprecated v2.0-0 */
-    case  51: return DPQ2_1(args, mgfinvGauss);
+    case  51: return DPQ2_1(args, mgfinvGauss); /* deprecated v2.0-0 */
     case  52: return DPQ2_1(args, munif);
     case  53: return DPQ2_1(args, dgumbel);
     case  54: return DPQ2_2(args, pgumbel);
@@ -472,6 +472,7 @@ SEXP actuar_do_dpq2(int code, SEXP args)
     case  58: return DPQ2_2(args, pinvgauss);
     case  59: return DPQ2_5(args, qinvgauss);
     case  60: return DPQ2_1(args, minvgauss);
+    case  61: return DPQ2_1(args, mgfinvgauss);
     case 101: return DPQ2_1(args, dztnbinom);
     case 102: return DPQ2_2(args, pztnbinom);
     case 103: return DPQ2_2(args, qztnbinom);
@@ -665,8 +666,9 @@ SEXP actuar_do_dpq3(int code, SEXP args)
     case  32:  return DPQ3_1(args, levweibull);
     case  33:  return DPQ3_1(args, levbeta);
     case  34:  return DPQ3_1(args, levchisq);
-    case  35:  return DPQ3_1(args, levinvGauss); /* notation from SuppDists */
+    case  35:  return DPQ3_1(args, levinvGauss);  /* deprecated v2.0-0 */
     case  36:  return DPQ3_1(args, levunif);
+    case  37:  return DPQ3_1(args, levinvgauss);
     case 101:  return DPQ3_1(args, dzmnbinom);
     case 102:  return DPQ3_2(args, pzmnbinom);
     case 103:  return DPQ3_2(args, qzmnbinom);

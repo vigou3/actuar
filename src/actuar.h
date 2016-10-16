@@ -177,6 +177,8 @@ double qinvgauss(double q, double mu, double phi, int lower_tail, int log_p,
 		 double tol, int maxit, int echo);
 double rinvgauss(double mu, double phi);
 double minvgauss(double order, double mean, double phi, int give_log);
+double levinvgauss(double limit, double mean, double phi, double order, int give_log);
+double mgfinvgauss(double t, double mean, double phi, int give_log);
 
 double dztnbinom(double x, double size, double prob, int give_log);
 double pztnbinom(double q, double size, double prob, int lower_tail, int log_p);

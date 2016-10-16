@@ -83,7 +83,7 @@ DPQTAB dpq_tab[] = {
     {"mchisq",          actuar_do_dpq2,        48},
     {"mgfchisq",        actuar_do_dpq2,        49},
     {"minvGauss",       actuar_do_dpq2,        50}, /* deprecated v2.0-0 */
-    {"mgfinvGauss",     actuar_do_dpq2,        51},
+    {"mgfinvGauss",     actuar_do_dpq2,        51}, /* deprecated v2.0-0 */
     {"munif",           actuar_do_dpq2,        52},
     {"dgumbel",         actuar_do_dpq2,        53},
     {"pgumbel",         actuar_do_dpq2,        54},
@@ -93,6 +93,7 @@ DPQTAB dpq_tab[] = {
     {"pinvgauss",       actuar_do_dpq2,        58},
     {"qinvgauss",       actuar_do_dpq2,        59},
     {"minvgauss",       actuar_do_dpq2,        60},
+    {"mgfinvgauss",     actuar_do_dpq2,        61},
     {"dztnbinom",       actuar_do_dpq2,        101},
     {"pztnbinom",       actuar_do_dpq2,        102},
     {"qztnbinom",       actuar_do_dpq2,        103},
@@ -143,8 +144,9 @@ DPQTAB dpq_tab[] = {
     {"levweibull",      actuar_do_dpq3,        32},
     {"levbeta",         actuar_do_dpq3,        33},
     {"levchisq",        actuar_do_dpq3,        34},
-    {"levinvGauss",     actuar_do_dpq3,        35},
+    {"levinvGauss",     actuar_do_dpq3,        35}, /* deprecated v2.0-0 */
     {"levunif",         actuar_do_dpq3,        36},
+    {"levinvgauss",     actuar_do_dpq3,        37},
     {"dzmnbinom",       actuar_do_dpq3,       101},
     {"pzmnbinom",       actuar_do_dpq3,       102},
     {"qzmnbinom",       actuar_do_dpq3,       103},

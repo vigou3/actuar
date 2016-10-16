@@ -260,6 +260,77 @@ double minvgauss(double order, double mu, double phi, int give_log)
     return R_pow_di(mu, k) * z;
 }
 
+/* The lev function is very similar to the pdf. It can be written a
+ *
+ *   levinvgauss(x; mu, phi) = mu [pnorm((xm - 1)/r)
+ *                                 - exp(2/phim) pnorm((xm + 1)/r)]
+ *                             + x (1 - pinvgauss(x; mu, phi)
+ *
+ * where xm = x/mu, phim = phi * mu, r = sqrt(x * phi).
+ */
+double levinvgauss(double limit, double mu, double phi, double order,
+                   int give_log)
+{
+#ifdef IEEE_754
+    if (ISNAN(limit) || ISNAN(mu) || ISNAN(phi) || ISNAN(order))
+	return limit + mu + phi + order;
+#endif
+    if (mu <= 0.0 || phi < 0.0 || order != 1.0)
+        return R_NaN;
+
+    if (limit <= 0.0 || !R_FINITE(phi))
+        return 0.0;
+
+    if (!R_FINITE(limit) || !R_FINITE(mu))
+	return mu;
+
+    /* calculations very similar to those in pinvgauss(); we do
+     * everything here and avoid calling the latter */
+    double a, ap, b;
+    double xm = limit/mu, phim = phi * mu, r = sqrt(limit * phi);
+    double x = (xm - 1)/r;
+
+    a  = pnorm(x, 0, 1, /*l._t.*/1, /* log_p */1);
+    ap = pnorm(x, 0, 1, /*l._t.*/0, /* log_p */1);
+    b = 2/phim + pnorm(-(xm + 1)/r, 0, 1, /* l._t. */1, /* log_p */1);
+
+    return mu * exp(a + ACT_Log1_Exp(b - a))
+	+ limit * exp(ap + ACT_Log1_Exp(b - ap));
+}
+
+double mgfinvgauss(double t, double mu, double phi, int give_log)
+{
+#ifdef IEEE_754
+    if (ISNAN(t) || ISNAN(mu) || ISNAN(phi))
+	return t + mu + phi;
+#endif
+    if (mu <= 0.0 || phi < 0.0 ||
+        t > 1/phi/(2.0 * mu * mu))
+        return R_NaN;
+
+    /* trivial case */
+    if (t == 0.0)
+        return ACT_D__1;
+
+    /* limiting case phi = Inf */
+    if (!R_FINITE(phi))
+	return ACT_D__0;
+
+    /* limiting case mu = Inf */
+    if (!R_FINITE(mu))
+	return R_PosInf;
+
+    /* convert to mean = 1 */
+    phi *= mu;
+    t *= mu;
+
+    return ACT_D_exp((1 - sqrt(1 - 2 * phi * t))/phi);
+}
+
+
+/*
+ * DEPRECATED VERSIONS
+ */
 double minvGauss(double order, double nu, double lambda, int give_log)
 {
 #ifdef IEEE_754
