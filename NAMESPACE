@@ -33,9 +33,9 @@ export(## Credibility theory
     dpareto2, ppareto2, qpareto2, rpareto2, mpareto2, levpareto2, # aliases
     dpareto1, ppareto1, qpareto1, rpareto1, mpareto1, levpareto1,
     mweibull, levweibull,
-    minvGauss, levinvGauss, mgfinvGauss, #notation from SuppDists package
-    minvgauss, levinvgauss, mgfinvgauss,
+    minvGauss, levinvGauss, mgfinvGauss, # deprecated v2.0-0
     dgumbel, pgumbel, qgumbel, rgumbel, mgumbel,
+    dinvgauss, pinvgauss, qinvgauss, rinvgauss, minvgauss, levinvgauss, mgfinvgauss,
     dztnbinom, pztnbinom, qztnbinom, rztnbinom,
     dztbinom, pztbinom, qztbinom, rztbinom,
     dzmlogarithmic, pzmlogarithmic, qzmlogarithmic, rzmlogarithmic,

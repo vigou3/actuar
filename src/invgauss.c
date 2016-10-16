@@ -27,12 +27,12 @@ double dinvgauss(double x, double mu, double phi, int give_log)
     if (mu <= 0.0 || phi <= 0.0)
         return R_NaN;
 
-    /* limiting case phi = Inf */
-    if (!R_FINITE(phi))
-	return (x == 0) ? R_PosInf : ACT_D__0;
-
-    if (!R_FINITE(x) || x <= 0.0)
+    if (!R_FINITE(x) || x < 0.0)
 	return ACT_D__0;
+
+    /* limiting case phi = Inf */
+    if (x == 0)
+	return R_FINITE(phi) ? ACT_D__0 : R_PosInf;
 
     /* limiting case mu = Inf */
     if (!R_FINITE(mu))
@@ -55,12 +55,15 @@ double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
     if (mu <= 0.0 || phi <= 0.0)
         return R_NaN;
 
-    /* limiting case phi = Inf */
-    if (!R_FINITE(phi))
-	return ACT_DT_1;
-
-    if (q <= 0)
+    if (q < 0)
         return ACT_DT_0;
+
+    /* limiting case phi = Inf */
+    if (q == 0)
+	return R_FINITE(phi) ? ACT_DT_0 : ACT_DT_1;
+
+    if (!R_FINITE(q))
+	return ACT_DT_1;
 
     /* limiting case mu = Inf */
     if (!R_FINITE(mu))
