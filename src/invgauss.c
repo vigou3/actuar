@@ -3,7 +3,15 @@
  *  Functions to calculate raw and limited moments for the inverse gaussian
  *  distribution. See ../R/InvGaussSupp.R for details.
  *
- *  AUTHORS: Christophe Dutang and Vincent Goulet <vincent.goulet@act.ulaval.ca>
+ *  The code for functions [dpqr]invgauss() is a C implementation of
+ *  functions of the same functions in package statmod; see:
+ *
+ *     Giner, G. and Smyth, G. K. (2016), "statmod: Probability
+ *     Calculations for the Inverse Gaussian Distribution", R
+ *     Journal, vol. 8, no 1, p. 339-351.
+ *     https://journal.r-project.org/archive/2016-1/giner-smyth.pdf
+ *
+ *  AUTHOR (C implementation): Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
 
 #include <R.h>

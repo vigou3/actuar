@@ -4,12 +4,18 @@
 ### raw and limited moments, and the moment generating function for
 ### the Inverse Gaussian distribution.
 ###
-### See Part 2 of Chhikara and Folks, The inverse Gaussian
-### distribution: theory, methodology and application, Decker, 1989;
-### Part 1 of Seshadri, The inverse Gaussian distribution: statistical
-### theory and applications, Springer, 1989
+### Functions [dpq]invgauss rely on C implementations of functions of
+### the same name in package statmod. See:
 ###
-### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
+### Giner, G. and Smyth, G. K. (2016), "statmod: Probability
+###   Calculations for the Inverse Gaussian Distribution", R Journal,
+###   vol. 8, no 1, p. 339-351.
+###   https://journal.r-project.org/archive/2016-1/giner-smyth.pdf
+###
+### Chhikara, R. S. and Folk, T. L. (1989), The Inverse Gaussian
+###   Distribution: Theory, Methodology and Applications}, Decker.
+###
+### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dinvgauss <- function(x, mean, shape = 1, dispersion = 1/shape, log = FALSE)
     .External("actuar_do_dpq", "dinvgauss", x, mean, dispersion, log)
