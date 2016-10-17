@@ -1,7 +1,7 @@
 \documentclass[x11names]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-  \usepackage{amsmath,bm}
+  \usepackage{amsmath}
   \usepackage[round]{natbib}
   \usepackage[english]{babel}
   \usepackage[scaled=0.9]{helvet}
@@ -10,7 +10,7 @@
   \usepackage[shortlabels]{enumitem}
   \usepackage[noae]{Sweave}
 
-  %\VignetteIndexEntry{Loss distributions modeling}
+  %\VignetteIndexEntry{Additional continuous and discrete distributions}
   %\VignettePackage{actuar}
 
   \title{Inventory of continuous and discrete distributions provided
@@ -56,11 +56,14 @@
   %% Compact, sans label itemize environment for the appendices.
   \setlist[itemize]{label={},leftmargin=0pt,align=left,nosep}
 
+  %% Flush left enumerate environment.
+  \setlist[enumerate]{leftmargin=*,align=left}
+
   %% Some new commands
   \newcommand{\E}[1]{E[ #1 ]}
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
   \newcommand{\LAS}{\mathrm{LAS}}
-  \newcommand{\mat}[1]{\bm{#1}}
+  \newcommand{\mat}[1]{\mathbold{#1}} % with mathpazo
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
@@ -85,9 +88,12 @@ functions are named \code{dfoo}, \code{pfoo}, \code{qfoo} and
 
 Package \pkg{actuar} provides \code{d}, \code{p}, \code{q} and
 \code{r} functions for a large number of continuous distributions
-useful for loss severity modeling, as well as for zero-truncated and
-zero-modified extensions to the discrete distributions commonly used
-in loss frequency modeling.
+useful for loss severity modeling; for phase-type distributions useful
+in ruin theory; for zero-truncated and zero-modified extensions of the
+discrete distributions commonly used in loss frequency modeling. The
+package also introduces support functions to compute raw moments,
+limited moments and the moment generating function (when it exists) of
+continuous distributions.
 
 
 \section{Additional continuous distributions}
@@ -97,19 +103,18 @@ The package provides support functions for all the probability
 distributions found in Appendix~A of \cite{LossModels4e} and not
 already present in base \proglang{R}, excluding the log-$t$, but
 including the loggamma distribution \citep{HoggKlugman}. These
-distributions mostly fall under the unmbrella of extreme value or
+distributions mostly fall under the umbrella of extreme value or
 heavy tailed distributions.
 
 \autoref{tab:continuous} lists the distributions supported by
-\pkg{actuar} as named in \cite{LossModels4e} along with the root names
-of the \proglang{R} functions. \autoref{sec:app:continuous} details
-the formulas implemented and the name of the argument corresponding to
-each parameter in the parametrization of \cite{LossModels4e}. One will
-note that, by default, all functions (except those for the Pareto
-distribution) use a rate parameter equal to the inverse of the scale
-parameter. This differs from \cite{LossModels4e} but is better in line
-with the functions for the gamma, exponential and Weibull
-distributions in base \proglang{R}.
+\pkg{actuar} --- using the nomenclature of \cite{LossModels4e} ---
+along with the root names of the \proglang{R} functions.
+\autoref{sec:app:continuous} details the formulas implemented and the
+name of the argument corresponding to each parameter. By default, all
+functions (except those for the Pareto distribution) use a rate
+parameter equal to the inverse of the scale parameter. This differs
+from \cite{LossModels4e} but is better in line with the functions for
+the gamma, exponential and Weibull distributions in base \proglang{R}.
 
 \begin{table}
   \centering
@@ -277,7 +282,7 @@ corresponding member of the $(a, b, 0)$ class. We have
   p_k^T =
   \begin{cases}
     0, & k = 0 \\
-    \frac{p_k}{1 - p_0}, & k = 1, 2, \dots.
+    \displaystyle\frac{p_k}{1 - p_0}, & k = 1, 2, \dots.
   \end{cases}
 \end{equation*}
 
@@ -338,15 +343,14 @@ the standard parametrization in the literature
 \citep{Johnson:discrete:2005}.
 
 The logarithmic distribution is always defined on the strictly
-positive integers. As such, it is not qualifed as ``zero-truncated'',
+positive integers. As such, it is not qualified as ``zero-truncated'',
 but it nevertheless belongs to the $(a, b, 1)$ class of distributions,
-more specifically to the subclass with $p_0 = 0$.
-
-Actually, the logarithmic distribution is the limiting case of the
-zero-truncated negative binomial distribution with size parameter
-equal to zero and $\theta = 1 - p$, where $p$ is the probability of
-success for the zero-truncated negative binomial. Note that this
-differs from the presentation in \citet{LossModels4e}.
+more specifically to the subclass with $p_0 = 0$. Actually, the
+logarithmic distribution is the limiting case of the zero-truncated
+negative binomial distribution with size parameter equal to zero and
+$\theta = 1 - p$, where $p$ is the probability of success for the
+zero-truncated negative binomial. Note that this differs from the
+presentation in \citet{LossModels4e}.
 
 Another subclass of the $(a, b, 1)$ class of distributions is obtained
 by setting $p_0$ to some arbitrary number $p_0^M$ subject to
@@ -504,14 +508,15 @@ provides the R interfaces \code{gammaint}, \code{expint} and
 \section{Implementation}
 \label{sec:implementation}
 
-The core of all the functions presented in this documents is written
-in \proglang{C} for speed.
+The core of all the functions presented in this document is written in
+\proglang{C} for speed.
 
-The distribution function of the continuous distributions use
-\code{pbeta} and \code{pgamma} to compute the incomplete beta and
+The cdf of the continuous distributions of \autoref{tab:continuous}
+use \code{pbeta} and \code{pgamma} to compute the incomplete beta and
 incomplete gamma functions, respectively. Functions \code{dinvgauss},
-\code{pinvgauss} and \code{qinvgauss} rely on C implementations of
-functions of the same name from package \pkg{statmod} \citep{statmod}.
+\code{pinvgauss} and \code{qinvgauss} rely on \proglang{C}
+implementations of functions of the same name from package
+\pkg{statmod} \citep{statmod}.
 
 The matrix exponential \proglang{C} routine needed in \code{dphtype}
 and \code{pphtype} is based on \code{expm} from package
@@ -521,10 +526,10 @@ The C implementation of \code{expint} is based on code from the GNU
 Software Library \citep{GSL}. The \proglang{C} code for
 \code{gammaint} and \code{betaint} was written by the second author.
 
-The pmf, cdf and quantile functions for the zero-truncated and
-zero-modified distributions use the internal \proglang{R} functions
-for the corresponding standard distribution for all but the trivial
-input values.
+For all but the trivial input values, the pmf, cdf and quantile
+functions for the zero-truncated and zero-modified distributions of
+\autoref{tab:discrete} use the internal \proglang{R} functions for the
+corresponding standard distribution.
 
 Generation of random variates from zero-truncated distributions uses
 the following simple inversion algorithm on a restricted range
@@ -546,7 +551,7 @@ $p_0^M < p_0$, we can use either of two methods:
 \item the classical rejection method with an envelope that differs
   from the target distribution only at zero (meaning that only zeros
   are rejected);
-\item the inverse method on a restricted range explained above.
+\item the inversion method on a restricted range explained above.
 \end{enumerate}
 Which approach is faster depends on the relative speeds of the
 standard random generation function and the standard quantile
@@ -561,10 +566,12 @@ the two methods.
 \section{Continuous distributions}
 \label{sec:app:continuous}
 
-This appendix gives the following formulas for the pdf, the cdf, the
-raw moment of order $k$ and the limited moment of order $k$ for the
-distributions of \autoref{tab:continuous} using the parametrization of
-\cite{LossModels4e} and \cite{HoggKlugman}.
+This appendix gives the root name and the parameters of the
+\proglang{R} support functions for the distributions of
+\autoref{tab:continuous}, as well as the formulas for the pdf, the
+cdf, the raw moment of order $k$ and the limited moment of order
+$k$ using the parametrization of \cite{LossModels4e} and
+\cite{HoggKlugman}.
 
 In the following, $\Gamma(\alpha; x)$ is the incomplete gamma function
 \eqref{eq:pgamma}, $\beta(a, b; x)$ is the incomplete beta function
@@ -572,8 +579,8 @@ In the following, $\Gamma(\alpha; x)$ is the incomplete gamma function
 \eqref{eq:gammaint} and $B(a, b; x)$ is the beta integral
 \eqref{eq:betaint}.
 
-Unless otherwise stated all parameters are strictly positive and the
-functions are defined for $x > 0$.
+Unless otherwise stated, all parameters are finite and strictly
+positive, and the functions are defined for $x > 0$.
 
 \subsection{Transformed beta family}
 \label{sec:app:continuous:transformed-beta}
@@ -1028,9 +1035,6 @@ functions are defined for $x > 0$.
     \qquad t \leq \frac{1}{2 \phi \mu^2}
 \end{align*}
 
-
-
-
 \subsubsection{Single parameter Pareto}
 
 \begin{itemize}
@@ -1091,6 +1095,25 @@ and is usually set in advance.
 \section{Phase-type distributions}
 \label{sec:app:phase-type}
 
+Consider a continuous-time Markov process with $m$ transient
+states and one absorbing state. Let
+\begin{equation}
+  \label{eq:Markov-transition-matrix}
+  \mat{Q} =
+  \begin{bmatrix}
+    \mat{T} & \mat{t} \\
+    \mat{0} & 0
+  \end{bmatrix}
+\end{equation}
+be the transition rates matrix (or intensity matrix) of such a process
+and let $(\mat{\pi}, \pi_{m + 1})$ be the initial probability vector.
+Here, $\mat{T}$ is an $m \times m$ non-singular matrix with
+$t_{ii} < 0$ for $i = 1, \dots, m$ and $t_{ij} \geq 0$ for $i \neq j$;
+$\mat{\pi}$ is an $1 \times m$ vector of probabilities such that
+$\mat{\pi} \mat{e} + \pi_{m + 1} = 1$; $\mat{t} = -\mat{T} \mat{e}$;
+$\mat{e} = [1]_{m \times 1}$ is a column vector of ones. %
+\bigskip
+
 \begin{itemize}
 \item Root: \code{phtype}
 \item Parameters: \code{prob} ($\mat{\pi}_{1 \times m}$),
@@ -1116,28 +1139,32 @@ and is usually set in advance.
   &= \mat{\pi} (-t \mat{I} - \mat{T})^{-1} \mat{t}
     + (1 - \mat{\pi} \mat{e})
 \end{align*}
-Above, $\mat{T}$ is an $m \times m$ non-singular matrix with
-$t_{ii} < 0$ for $i = 1, \dots, m$ and $t_{ij} \geq 0$ for $i \neq j$;
-$\mat{\pi}$ is an $1 \times m$ vector of probabilities;
-$\mat{t} = -\mat{T} \mat{e}$; $\mat{e} = [1]_{m \times 1}$.
 
 
 \section{Discrete distributions}
 \label{sec:app:discrete}
 
+This appendix gives the root name and the parameters of the
+\proglang{R} support functions for the members of the $(a, b, 0)$ and
+$(a, b, 1)$ discrete distributions as defined in \cite{LossModels4e};
+the values of $a$, $b$ and $p_0$ in the representation; the pmf; the
+relationship between the distributions, when there are any.
+
 \subsection[The (a, b, 0) class]{The $(a, b, 0)$ class}
 \label{sec:app:discrete:a-b-0}
 
 The distributions in this section are all supported in base
-\proglang{R}.
+\proglang{R}. Their pmf can be computed recursively by fixing $p_0$ to
+the specified value and then using $p_k = (a + b/k) p_{k - 1}$, for
+$k = 1, 2, \dots$.
 
-Defined on $k = 0, 1, 2, \dots$.
+All parameters are finite.
 
 \subsubsection{Poisson}
 
 \begin{itemize}
 \item Root: \code{pois}
-\item Parameter: \code{lambda} ($\lambda > 0$)
+\item Parameter: \code{lambda} ($\lambda \geq 0$)
 \end{itemize}
 \begin{align*}
   a &= 0, \qquad b = \lambda, \qquad p_0 = e^{-\lambda} \\
@@ -1190,24 +1217,24 @@ Defined on $k = 0, 1, 2, \dots$.
 \end{itemize}
 
 
-\subsection[The zero-truncated (a, b, 0) class]{The zero-truncated $(a, b, 1)$ class}
+\subsection[The zero-truncated (a, b, 1) class]{The zero-truncated $(a, b, 1)$ class}
 \label{sec:app:discrete:zt}
 
-Support provided by \pkg{actuar}.
+Package \pkg{actuar} provides support for the distributions in this
+section. Zero-truncated distributions have probability at zero
+$p_0^T = 0$. Their pmf can be computed recursively by fixing $p_1$ to
+the value specified below and then using $p_k = (a + b/k) p_{k - 1}$,
+for $k = 2, 3, \dots$. The distributions are all defined on
+$k = 1, 2, \dots$.
 
-Defined on $k = 1, 2, \dots$.
-
-Corresponding distribution from the $(a, b, 0)$ class.
-
-Note that all distributions have as limiting case degenerate
-distribution in $1$ when the parameters are such that the denominator
-of $p_1$ (if appropriate) is zero.
+The limiting case of zero-truncated distributions when $p_1$ is
+infinite is a point mass in $k = 1$.
 
 \subsubsection{Zero-truncated Poisson}
 
 \begin{itemize}
 \item Root: \code{ztpois}
-\item Parameter: \code{lambda} ($\lambda > 0$)
+\item Parameter: \code{lambda} ($\lambda \geq 0$)
 \end{itemize}
 \begin{align*}
   a &= 0, \qquad b = \lambda, \qquad
@@ -1271,20 +1298,21 @@ of $p_1$ (if appropriate) is zero.
 \end{align*}
 
 
-\subsection[The zero-modified (a, b, 0) class]{The zero-modified $(a, b, 1)$ class}
+\subsection[The zero-modified (a, b, 1) class]{The zero-modified $(a, b, 1)$ class}
 \label{sec:app:discrete:zm}
 
-Support provided by \pkg{actuar}.
+Package \pkg{actuar} provides support for the distributions in this
+section. Zero-modified distributions have an arbitrary probability at
+zero $p_0^M \neq p_0$, where $p_0$ is the probability at zero for the
+corresponding member of the $(a, b, 0)$ class. Their pmf can be
+computed recursively by fixing $p_1$ to the value specified below and
+then using $p_k = (a + b/k) p_{k - 1}$, for $k = 2, 3, \dots$. The
+distributions are all defined on $k = 0, 1, 2, \dots$.
 
-Unless otherwise stated defined on $k = 0, 1, 2, \dots$ but $p_0^M$ arbitrary
-
-Corresponding distribution from the $(a, b, 0)$ class.
-
-The limiting case of zero-modified distributions when the parameters
-are such that the denominator of $p_1$ (if appropriate) is zero is a
-discrete mixture between a degenerate distribution in $0$ (with
-probability $p^M$) and a degenerate distribution in $1$ (with
-probability $1 - p^M$).
+The limiting case of zero-modified distributions when $p_1$ is
+infinite is a discrete mixture between a point mass in $k = 0$ (with
+probability $p_0^M$) and a point mass in $k = 1$ (with probability
+$1 - p_0^M$).
 
 \subsubsection{Zero-modified Poisson}
 

@@ -6,7 +6,8 @@
   \usepackage[english]{babel}
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
-  \usepackage{framed,booktabs,paralist}
+  \usepackage{framed,booktabs}
+  \usepackage[shortlabels]{enumitem}
   \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Loss distributions modeling}
@@ -51,11 +52,14 @@
     \begin{snugshade*}}%
     {\end{snugshade*}}
 
+  %% Flush left enumerate environment.
+  \setlist[enumerate]{leftmargin=*,align=left}
+
   %% Some new commands
   \newcommand{\E}[1]{E[ #1 ]}
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
   \newcommand{\LAS}{\mathrm{LAS}}
-  \newcommand{\mat}[1]{\mathbf{#1}}
+  \newcommand{\mat}[1]{\mathbold{#1}} % with mathpazo
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
@@ -74,15 +78,20 @@ options(width = 60, digits = 4)
 \section{Introduction}
 \label{sec:introduction}
 
-One important task of actuaries is the modeling of claim amount
-distributions for ratemaking, loss reserving or other risk evaluation
-purposes. Package \pkg{actuar} \citep{actuar} offers many functions
-for loss distributions modeling. The following subsections detail the
-following \pkg{actuar} features:
+One important task of actuaries is the modeling of claim amount and
+claim count distributions for ratemaking, loss reserving or other risk
+evaluation purposes. Package \pkg{actuar} features many support
+functions for loss distributions modeling:
 \begin{enumerate}
-\item introduction of 18 additional probability laws and utility
-  functions to get raw moments, limited moments and the moment
-  generating function;
+\item support for 19 additional continuous distributions useful for
+  loss severity modeling;
+\item support for phase-type distributions useful in ruin
+  theory;
+\item support functions to compute raw moments, limited moments and
+  the moment generating function (when it exists) of continuous
+  distributions;
+\item support for zero-truncated and zero-modified extensions of the
+  discrete distributions commonly used in loss frequency modeling;
 \item fairly extensive support of grouped data;
 \item calculation of the empirical raw and limited moments;
 \item minimum distance estimation using three different measures;
@@ -90,144 +99,8 @@ following \pkg{actuar} features:
   inflation, coinsurance).
 \end{enumerate}
 
-\section{Probability laws}
-\label{sec:probability-laws}
-
-\proglang{R} already includes functions to compute the probability
-density function (pdf), the cumulative distribution function (cdf) and
-the quantile function of a fair number of probability laws, as well as
-functions to generate variates from these laws. For some root
-\code{foo}, the utility functions are named \code{dfoo}, \code{pfoo},
-\code{qfoo} and \code{rfoo}, respectively.
-
-The \pkg{actuar} package provides \code{d}, \code{p}, \code{q} and
-\code{r} functions for all the probability laws useful for loss
-severity modeling found in Appendix A of \cite{LossModels4e} and not
-already present in base \proglang{R}, excluding the inverse Gaussian
-and log-$t$ but including the loggamma distribution
-\citep{HoggKlugman}.
-
-Table \ref{tab:distributions} lists the supported distributions as
-named in \cite{LossModels4e} along with the root names of the
-\proglang{R} functions. For reference, Appendix \ref{sec:appendix}
-also gives for every distribution the pdf, the cdf and the name of the
-argument corresponding to each parameter in the parametrization of
-\cite{LossModels4e}. One will note that by default all functions
-(except those for the Pareto distribution) use a rate parameter equal
-to the inverse of the scale parameter. This differs from
-\cite{LossModels4e} but is better in line with the functions for the
-gamma, exponential and Weibull distributions in base \proglang{R}.
-
-\begin{table}
-  \centering
-  \begin{tabular}{lll}
-    \toprule
-    Family & Distribution & Root \\
-    \midrule
-    Transformed beta  & Transformed beta & \code{trbeta} \\
-                      & Burr & \code{burr} \\
-                      & Loglogistic & \code{llogis} \\
-                      & Paralogistic & \code{paralogis} \\
-                      & Generalized Pareto & \code{genpareto} \\
-                      & Pareto & \code{pareto} \\
-                      & Inverse Burr & \code{invburr} \\
-                      & Inverse Pareto & \code{invpareto} \\
-                      & Inverse paralogistic & \code{invparalogis} \\
-    \midrule
-    Transformed gamma & Transformed gamma & \code{trgamma} \\
-                      & Inverse transformed gamma & \code{invtrgamma} \\
-                      & Inverse gamma & \code{invgamma} \\
-                      & Inverse Weibull & \code{invweibull} \\
-                      & Inverse exponential & \code{invexp} \\
-    \midrule
-    Other             & Loggamma & \code{lgamma} \\
-                      & Single parameter Pareto & \code{pareto1} \\
-                      & Generalized beta & \code{genbeta} \\
-    \bottomrule
-  \end{tabular}
-  \caption{Probability laws supported by \pkg{actuar} classified by
-    family and root names of the \proglang{R} functions.}
-  \label{tab:distributions}
-\end{table}
-
-In addition to the \code{d}, \code{p}, \code{q} and \code{r}
-functions, the package provides \code{m}, \code{lev} and \code{mgf}
-functions to compute, respectively, theoretical raw moments
-\begin{equation}
-  \label{eq:def:moment}
-  m_k = \E{X^k},
-\end{equation}
-theoretical limited moments
-\begin{equation}
-  \label{eq:def:limited-moment}
-  \E{(X \wedge x)^k} = \E{\min(X, x)^k}
-\end{equation}
-and the moment generating function
-\begin{equation}
-  \label{eq:def:mgf}
-  M_X(t) = \E{e^{tX}},
-\end{equation}
-when it exists. Every probability law of Table \ref{tab:distributions}
-is supported, plus the following ones: beta, exponential, chi-square,
-gamma, lognormal, normal (no \code{lev}), uniform and Weibull of base
-\proglang{R} and the inverse Gaussian distribution of package
-\pkg{SuppDists} \citep{SuppDists}. The \code{m} and \code{lev}
-functions are especially useful with estimation methods based on the
-matching of raw or limited moments; see
-Section~\ref{sec:empirical-moments} for their empirical counterparts.
-The \code{mgf} functions come in handy to compute the adjustment
-coefficient in ruin theory; see the \code{"risk"} vignette.
-
-In addition to the 17 distributions of Table \ref{tab:distributions},
-the package provides support for a family of distributions deserving a
-separate presentation. Phase-type distributions \citep{Neuts_81} are
-defined as the distribution of the time until absorption of continuous
-time, finite state Markov processes with $m$ transient states and one
-absorbing state. Let
-\begin{equation}
-  \label{eq:Markov-transition-matrix}
-  \mat{Q} =
-  \begin{bmatrix}
-    \mat{T} & \mat{t} \\
-    \mat{0} & 0
-  \end{bmatrix}
-\end{equation}
-be the transition rates matrix (or intensity matrix) of such a process
-and let $(\pmb{\pi}, \pi_{m + 1})$ be the initial probability vector.
-Here, $\mat{T}$ is an $m \times m$ non-singular matrix with $t_{ii} <
-0$ for $i = 1, \dots, m$ and $t_{ij} \geq 0$ for $i \neq j$, $\mat{t}
-= - \mat{T} \mat{e}$ and $\mat{e}$ is a column vector with all
-components equal to 1. Then the cdf of the time until absorption
-random variable with parameters $\pmb{\pi}$ and $\mat{T}$ is
-\begin{equation}
-  \label{eq:cdf-phtype}
-  F(x) =
-  \begin{cases}
-    \pi_{m + 1}, & x = 0, \\
-    1 - \pmb{\pi} e^{\mat{T} x} \mat{e}, & x > 0
-  \end{cases}
-\end{equation}
-where
-\begin{equation}
-  \label{eq:matrix-exponential}
-  e^{\mat{M}} = \sum_{n = 0}^\infty \frac{\mat{M}^n}{n!}
-\end{equation}
-is the matrix exponential of matrix $\mat{M}$.
-
-The exponential, the Erlang (gamma with integer shape parameter) and
-discrete mixtures thereof are common special cases of phase-type
-distributions.
-
-The package provides \code{d}, \code{p}, \code{r}, \code{m} and
-\code{mgf} functions for phase-type distributions. The root is
-\code{phtype} and parameters $\pmb{\pi}$ and $\mat{T}$ are named
-\code{prob} and \code{rates}, respectively. For the package, function
-\code{pphtype} is central to the evaluation of the probability of
-ruin; see \code{?ruin} and the \code{"risk"} vignette.
-
-The core of all the functions presented in this subsection is written
-in \proglang{C} for speed. The matrix exponential \proglang{C} routine
-is based on \code{expm()} from the package \pkg{Matrix} \citep{Matrix}.
+Vignette \code{"distributions"} covers the points 1--4 above in great
+detail. This document concentrates on points 5--8.
 
 
 \section{Grouped data}
@@ -297,16 +170,16 @@ following extraction operations are supported.
 \begin{enumerate}[i)]
 \item Extraction of the vector of group boundaries (the first column):
 <<echo=TRUE>>=
-x[, 1]                                  # group boundaries
+x[, 1]                             # group boundaries
 @
 \item Extraction of the vector or matrix of group frequencies (the
   second and third columns):
 <<echo=TRUE>>=
-x[, -1]                                 # group frequencies
+x[, -1]                            # group frequencies
 @
 \item Extraction of a subset of the whole object (first three lines):
 <<echo=TRUE>>=
-x[1:3,]                                 # first 3 groups
+x[1:3,]                            # first 3 groups
 @
 \end{enumerate}
 Notice how extraction results in a simple vector or matrix if either
@@ -316,12 +189,12 @@ As for replacement operations, the package implements the following.
 \begin{enumerate}[i)]
 \item Replacement of one or more group frequencies:
 <<echo=TRUE>>=
-x[1, 2] <- 22; x                        # frequency replacement
-x[1, c(2, 3)] <- c(22, 19); x           # frequency replacement
+x[1, 2] <- 22; x                   # frequency replacement
+x[1, c(2, 3)] <- c(22, 19); x      # frequency replacement
 @
 \item Replacement of the boundaries of one or more groups:
 <<echo=TRUE>>=
-x[1, 1] <- c(0, 20); x                  # boundary replacement
+x[1, 1] <- c(0, 20); x             # boundary replacement
 x[c(3, 4), 1] <- c(55, 110, 160); x
 @
 \end{enumerate}
@@ -388,9 +261,9 @@ knots $c_0, c_1, \dots, c_r$ of the ogive and a graph (see Figure
 \ref{fig:ogive}):
 <<echo=TRUE, fig=FALSE>>=
 Fnt <- ogive(x)
-knots(Fnt)                              # group boundaries
-Fnt(knots(Fnt))                         # ogive at group boundaries
-plot(Fnt)                               # plot of the ogive
+knots(Fnt)                         # group boundaries
+Fnt(knots(Fnt))                    # ogive at group boundaries
+plot(Fnt)                          # plot of the ogive
 @
 \begin{figure}[t]
   \centering
@@ -429,8 +302,8 @@ The package provides two functions useful for estimation based on
 moments. First, function \code{emm} computes the $k$th empirical
 moment of a sample, whether in individual or grouped data form:
 <<echo=TRUE>>=
-emm(dental, order = 1:3)                # first three moments
-emm(gdental, order = 1:3)               # idem
+emm(dental, order = 1:3)           # first three moments
+emm(gdental, order = 1:3)          # idem
 @
 
 Second, in the same spirit as \code{ecdf} and \code{ogive},
@@ -440,12 +313,12 @@ any limit. Again, there are methods for individual and grouped data
 (see Figure \ref{fig:elev} for the graphs):
 <<echo=TRUE, fig=FALSE>>=
 lev <- elev(dental)
-lev(knots(lev))                         # ELEV at data points
-plot(lev, type = "o", pch = 19)         # plot of the ELEV function
+lev(knots(lev))                    # ELEV at data points
+plot(lev, type = "o", pch = 19)    # plot of the ELEV function
 
 lev <- elev(gdental)
-lev(knots(lev))                         # ELEV at data points
-plot(lev, type = "o", pch = 19)         # plot of the ELEV function
+lev(knots(lev))                    # ELEV at data points
+plot(lev, type = "o", pch = 19)    # plot of the ELEV function
 @
 \begin{figure}[t]
   \centering
@@ -523,9 +396,12 @@ dental data set, as per Example 2.21 of \cite{LossModels}:
 op <- options(warn = -1)                # hide warnings from mde()
 @
 <<echo=TRUE>>=
-mde(gdental, pexp, start = list(rate = 1/200), measure = "CvM")
-mde(gdental, pexp, start = list(rate = 1/200), measure = "chi-square")
-mde(gdental, levexp, start = list(rate = 1/200), measure = "LAS")
+mde(gdental, pexp, start = list(rate = 1/200),
+    measure = "CvM")
+mde(gdental, pexp, start = list(rate = 1/200),
+    measure = "chi-square")
+mde(gdental, levexp, start = list(rate = 1/200),
+    measure = "LAS")
 @
 <<echo=FALSE>>=
 options(op)                             # restore warnings
@@ -550,8 +426,9 @@ parameter values:
 <<echo=TRUE>>=
 pparetolog <- function(x, logshape, logscale)
     ppareto(x, exp(logshape), exp(logscale))
-( p <- mde(gdental, pparetolog, start = list(logshape = log(3),
-                                logscale = log(600)), measure = "CvM") )
+(p <- mde(gdental, pparetolog,
+          start = list(logshape = log(3),
+                       logscale = log(600)), measure = "CvM"))
 @
 The actual estimators of the parameters are obtained with
 <<echo=TRUE>>=
@@ -652,7 +529,8 @@ Assume $X$ has a gamma distribution. Then an \proglang{R} function to
 compute the pdf \eqref{eq:pdf-YP} in any $y$ for a deductible $d = 1$
 and a limit $u = 10$ is obtained with \code{coverage} as follows:
 <<echo=TRUE>>=
-f <- coverage(pdf = dgamma, cdf = pgamma, deductible = 1, limit = 10)
+f <- coverage(pdf = dgamma, cdf = pgamma,
+              deductible = 1, limit = 10)
 f
 f(0, shape = 5, rate = 1)
 f(5, shape = 5, rate = 1)
@@ -681,334 +559,11 @@ fitdistr(y, f, start = list(shape = 2, rate = 0.5))
 options(op)                             # restore warnings
 @
 
-The vignette \code{"coverage"} contains more detailed pdf and cdf
+Vignette \code{"coverage"} contains more detailed pdf and cdf
 formulas under various combinations of coverage modifications.
 
 
 \bibliography{actuar}
-
-
-\appendix
-
-
-\section{Probability laws}
-\label{sec:appendix}
-
-This appendix gives the pdf and cdf of the probability laws appearing
-in Table \ref{tab:distributions} using the parametrization of
-\cite{LossModels4e} and \cite{HoggKlugman}.
-
-In the following,
-\begin{displaymath}
-  \Gamma(\alpha; x) = \frac{1}{\Gamma(\alpha)}
-  \int_0^x t^{\alpha - 1} e^{-t}\, dt, \quad \alpha > 0, x > 0
-\end{displaymath}
-with
-\begin{displaymath}
-  \Gamma(\alpha) = \int_0^\infty t^{\alpha - 1} e^{-t}\, dt
-\end{displaymath}
-is the incomplete gamma function, whereas
-\begin{displaymath}
-  \beta(a, b; x) = \frac{1}{\beta(a, b)}
-  \int\limits_0^x t^{a - 1} (1 - t)^{b - 1}\, dt, \quad a > 0, b > 0, 0 < x < 1
-\end{displaymath}
-with
-\begin{align*}
-  \beta(a, b)
-  &= \int_0^1 t^{a - 1} (1 - t)^{b - 1}\, dt \\
-  &= \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)}
-\end{align*}
-is the (regularized) incomplete beta function.
-
-Unless otherwise stated all parameters are strictly positive and the
-functions are defined for $x > 0$.
-
-\subsection{Transformed beta family}
-\label{sec:appendix:transformed-beta}
-
-\subsubsection*{Transformed beta}
-
-\begin{compactitem}[]
-\item Root: \code{trbeta}, \code{pearson6}
-\item Parameters: \code{shape1} ($\alpha$),
-      \code{shape2} ($\gamma$),
-      \code{shape3} ($\tau$),
-      \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{\gamma u^\tau (1 - u)^\alpha}{x \beta
-    (\alpha, \tau )},
-  \qquad u = \frac{v}{1 + v},
-  \qquad v = \left(\frac{x}{\theta} \right)^\gamma \\
-  F(x) &= \beta (\tau, \alpha ; u)
-\end{align*}
-
-\subsubsection*{Burr}
-
-\begin{compactitem}[]
-\item Root: \code{burr}
-\item Parameters: \code{shape1} ($\alpha$),
-      \code{shape2} ($\gamma$),
-      \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{\alpha \gamma u^\alpha (1 - u)}{x},
-  \qquad u = \frac{1}{1 + v},
-  \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
-  F(x) &= 1 - u^\alpha
-\end{align*}
-
-\subsubsection*{Loglogistic}
-
-\begin{compactitem}[]
-\item Root: \code{llogis}
-\item Parameters: \code{shape} ($\gamma$),
-      \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{\gamma u (1 - u)}{x},
-  \qquad u = \frac{v}{1 + v},
-  \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
-  F(x) &= u
-\end{align*}
-
-\subsubsection*{Paralogistic}
-
-\begin{compactitem}[]
-\item Root: \code{paralogis}
-\item Parameters: \code{shape} ($\alpha$),
-      \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-
-\begin{align*}
-  f(x) &= \frac{\alpha^2 u^\alpha (1 - u)}{x},
-  \qquad u = \frac{1}{1 + v},
-  \qquad v = \left( \frac{x}{\theta} \right)^\alpha \\
-  F(x) &= 1 - u^\alpha
-\end{align*}
-
-\subsubsection*{Generalized Pareto}
-
-\begin{compactitem}[]
-\item Root: \code{genpareto}
-\item Parameters: \code{shape1} ($\alpha$),
-      \code{shape2} ($\tau$),
-      \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{u^\tau (1 - u)^\alpha}{x \beta (\alpha, \tau )},
-  \qquad u = \frac{v}{1 + v},
-  \qquad v = \frac{x}{\theta} \\
-  F(x) &= \beta (\tau, \alpha ; u)
-\end{align*}
-
-\subsubsection*{Pareto}
-
-\begin{compactitem}[]
-\item Root: \code{pareto}, \code{pareto2}
-\item Parameters: \code{shape} ($\alpha$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{\alpha u^\alpha (1 - u)}{x},
-  \qquad u = \frac{1}{1 + v},
-  \qquad v = \frac{x}{\theta} \\
-  F(x) &= 1 - u^\alpha
-\end{align*}
-
-\subsubsection*{Inverse Burr}
-
-\begin{compactitem}[]
-\item Root: \code{invburr}
-\item Parameters: \code{shape1} ($\tau$),
-      \code{shape2} ($\gamma$),
-      \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{\tau \gamma u^\tau (1 - u)}{x},
-  \qquad u = \frac{v}{1 + v},
-  \qquad v = \left( \frac{x}{\theta} \right)^\gamma \\
-  F(x) &= u^\tau
-\end{align*}
-
-\subsubsection*{Inverse Pareto}
-
-\begin{compactitem}[]
-\item Root: \code{invpareto}
-\item Parameters: \code{shape} ($\tau$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{\tau u^\tau (1 - u)}{x},
-  \qquad u = \frac{v}{1 + v},
-  \qquad v = \frac{x}{\theta} \\
-  F(x) &= u^\tau
-\end{align*}
-
-\subsubsection*{Inverse paralogistic}
-
-\begin{compactitem}[]
-\item Root: \code{invparalogis}
-\item Parameters: \code{shape} ($\tau$),
-      \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{\tau^2 u^\tau (1 - u)}{x},
-  \qquad u = \frac{v}{1 + v},
-  \qquad v = \left(\frac{x}{\theta} \right)^\tau \\
-  F(x) &= u^\tau
-\end{align*}
-
-\subsection{Transformed gamma family}
-\label{sec:appendix:transformed-gamma}
-
-\subsubsection*{Transformed gamma}
-
-\begin{compactitem}[]
-\item Root: \code{trgamma}
-\item Parameters: \code{shape1} ($\alpha$),
-      \code{shape2} ($\tau$),
-      \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{\tau u^\alpha e^{-u}}{x \Gamma(\alpha)},
-  \qquad u = \left( \frac{x}{\theta} \right)^\tau \\
-  F(x) &= \Gamma (\alpha ; u)
-\end{align*} \\
-
-\subsubsection*{Inverse transformed gamma}
-
-\begin{compactitem}[]
-\item Root: \code{invtrgamma}
-\item Parameters: \code{shape1} ($\alpha$),
-      \code{shape2} ($\tau$),
-      \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{\tau u^\alpha e^{-u}}{x\Gamma (\alpha)},
-  \qquad u = \left( \frac{\theta}{x} \right)^\tau \\
-  F(x) &= 1 - \Gamma (\alpha ; u)
-\end{align*}
-
-\subsubsection*{Inverse gamma}
-
-\begin{compactitem}[]
-\item Root: \code{invgamma}
-\item Parameters: \code{shape} ($\alpha$),
-      \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{u^\alpha e^{-u}}{x\Gamma (\alpha)},
-  \qquad u = \frac{\theta}{x}\\
-  F(x) &= 1 - \Gamma (\alpha ; u)
-\end{align*}
-
-
-\subsubsection*{Inverse Weibull}
-
-\begin{compactitem}[]
-\item Root: \code{invweibull}, \code{lgompertz}
-\item Parameters: \code{shape} ($\tau$),
-      \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{\tau u e^{-u}}{x},
-  \qquad u = \left( \frac{\theta}{x} \right)^\tau \\
-  F(x) &= e^{-u}
-\end{align*}
-
-\subsubsection*{Inverse exponential}
-
-\begin{compactitem}[]
-\item Root: \code{invexp}
-\item Parameters: \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{u e^{-u}}{x},
-  \qquad u = \frac{\theta}{x} \\
-  F(x) &= e^{-u}
-\end{align*}
-
-\subsection{Other distributions}
-\label{sec:appendix:other}
-
-\subsubsection*{Loggamma}
-
-\begin{compactitem}[]
-\item Root: \code{lgamma}
-\item Parameters: \code{shapelog} ($\alpha$),
-      \code{ratelog}   ($\lambda$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{\lambda^\alpha (\ln x)^{\alpha - 1}}{%
-    x^{\lambda + 1} \Gamma(\alpha)},
-  \qquad x > 1 \\
-  F(x) &= \Gamma( \alpha ; \lambda \ln x), \qquad x > 1
-\end{align*}
-
-\subsubsection*{Single parameter Pareto}
-
-\begin{compactitem}[]
-\item Root: \code{pareto1}
-\item Parameters: \code{shape} ($\alpha$),
-      \code{min}   ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{\alpha
-    \theta^\alpha}{x^{\alpha+1}}, \qquad x > \theta \\
-  F(x) &= 1 - \left( \frac{\theta}{x} \right)^\alpha, \qquad x >
-  \theta
-\end{align*}
-
-Although there appears to be two parameters, only $\alpha$ is a true
-parameter. The value of $\theta$ is the minimum of the distribution
-and is usually set in advance.
-
-\subsubsection*{Generalized beta}
-
-\begin{compactitem}[]
-\item Root: \code{genbeta}
-\item Parameters: \code{shape1} ($\alpha$),
-      \code{shape2} ($\beta$),
-      \code{shape3} ($\tau$),
-      \code{rate}   ($\lambda = 1/\theta$),
-      \code{scale}  ($\theta$)
-\end{compactitem}
-
-\begin{align*}
-  f(x) &= \frac{\tau u^\alpha (1 - u)^{\beta - 1}}{x \beta (\alpha, \beta)},
-  \qquad u = \left( \frac{x}{\theta} \right)^\tau,
-  \qquad 0 < x < \theta \\
-  F(x) &= \beta (\alpha, \beta ; u)
-\end{align*}
 
 \end{document}
 
