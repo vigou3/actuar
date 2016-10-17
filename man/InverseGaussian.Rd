@@ -56,9 +56,9 @@ mgfinvgauss(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
     \mu} and \code{shape} \eqn{= \lambda} has density:
   \deqn{f(x) = \left( \frac{\lambda}{2 \pi x^3} \right)^{1/2}
     \exp\left( -\frac{\lambda(x - \mu)^2}{2 \mu^2 x} \right),}{%
-    f(x) = sqrt(\lambda/(2 \pi x^3))
-    exp(-(\lambda (x - \mu)^2)/(2 \mu^2 x)),}
-  for \eqn{x > 0}, \eqn{\mu > 0} and \eqn{\lambda > 0}.
+    f(x) = sqrt(\lambda/(2 \pi x^3)) *
+           exp(-(\lambda (x - \mu)^2)/(2 \mu^2 x)),}
+  for \eqn{x \ge 0}, \eqn{\mu > 0} and \eqn{\lambda > 0}.
 
   The limiting case \eqn{\mu = \infty}{\mu = Inf} has a well defined
   density function and distribution function, but has no finite moments.
@@ -66,13 +66,13 @@ mgfinvgauss(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
   The limiting case \eqn{\lambda = 0}{\lambda = 0} is an infinite spike
   in \eqn{x = 0}.
 
-  If \eqn{X} is IG\eqn{(\mu, \lambda)}, then \eqn{X/\mu} is IG\eqn{(1,
-  \lambda/\mu)}.
+  If the random variable \eqn{X} is IG\eqn{(\mu, \lambda)}, then
+  \eqn{X/\mu} is IG\eqn{(1, \lambda/\mu)}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]}, \eqn{k = 1, 2, \dots}, the limited expected
-  value at some limit \eqn{d} is \eqn{E[\min(X, d)]} and the moment
-  generating function is \eqn{E[e^{tX}]}.
+  value at some limit \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]} and
+  the moment generating function is \eqn{E[e^{tX}]}.
 
   The moment generating function of the inverse guassian is defined for
     \code{t <= shape/(2 * mean^2)}.
@@ -90,8 +90,8 @@ mgfinvgauss(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
 }
 \note{
   Functions \code{dinvgauss}, \code{pinvgauss} and \code{qinvgauss} are
-  C implementations of the the same functions in package \pkg{statmod};
-  see Giner and Smyth (2016).
+  C implementations of functions of the same name in package
+  \pkg{statmod}; see Giner and Smyth (2016).
 
   Devroye (1986, chapter 4) provides a nice presentation of the
   algorithm to generate random variates from an inverse gaussian
@@ -99,7 +99,7 @@ mgfinvgauss(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
 }
 \references{
   Giner, G. and Smyth, G. K. (2016), \dQuote{\pkg{statmod}: Probability
-    Calulations for the Inverse Gaussian Distribution}, \emph{R
+    Calculations for the Inverse Gaussian Distribution}, \emph{R
     Journal}, vol. 8, no 1, p. 339-351.
   \url{https://journal.r-project.org/archive/2016-1/giner-smyth.pdf}
 
