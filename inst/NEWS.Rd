@@ -72,6 +72,9 @@
 	distribution. Basically, any value of \code{prob} for the
 	logarithmic parameter in previous versions of actuar should now
 	be \code{1 - prob}.}
+      \item{The first argument of the \code{mgffoo} functions has
+	changed from \code{x} to \code{t} as this is more common
+	notation for moment generating functions.}
     }
   }
   \subsection{BUG FIX}{

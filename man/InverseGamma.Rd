@@ -23,7 +23,7 @@ rinvgamma(n, shape, rate = 1, scale = 1/rate)
 minvgamma(order, shape, rate = 1, scale = 1/rate)
 levinvgamma(limit, shape, rate = 1, scale = 1/rate,
             order = 1)
-mgfinvgamma(x, shape, rate =1, scale = 1/rate, log =FALSE)
+mgfinvgamma(t, shape, rate =1, scale = 1/rate, log =FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
@@ -38,6 +38,7 @@ mgfinvgamma(x, shape, rate =1, scale = 1/rate, log =FALSE)
     \eqn{P[X \le x]}{P[X <= x]}, otherwise, \eqn{P[X > x]}.}
   \item{order}{order of the moment.}
   \item{limit}{limit of the loss variable.}
+  \item{t}{numeric vector.}
 }
 \details{
   The inverse gamma distribution with parameters \code{shape} \eqn{=

@@ -12,5 +12,5 @@
 mnorm <- function(order, mean = 0, sd = 1)
     .External("actuar_do_dpq", "mnorm", order, mean, sd, FALSE)
 
-mgfnorm <- function(x, mean = 0, sd = 1, log = FALSE)
-    .External("actuar_do_dpq", "mgfnorm", x, mean, sd, log)
+mgfnorm <- function(t, mean = 0, sd = 1, log = FALSE)
+    .External("actuar_do_dpq", "mgfnorm", t, mean, sd, log)

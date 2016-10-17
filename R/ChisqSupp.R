@@ -15,5 +15,5 @@ mchisq <- function(order, df, ncp = 0)
 levchisq <- function(limit, df, ncp = 0, order = 1)
     .External("actuar_do_dpq", "levchisq", limit, df, ncp, order, FALSE)
 
-mgfchisq <- function(x, df, ncp = 0, log = FALSE)
-    .External("actuar_do_dpq", "mgfchisq", x, df, ncp, log)
+mgfchisq <- function(t, df, ncp = 0, log = FALSE)
+    .External("actuar_do_dpq", "mgfchisq", t, df, ncp, log)

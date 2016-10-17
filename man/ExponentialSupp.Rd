@@ -12,13 +12,13 @@
 \usage{
 mexp(order, rate = 1)
 levexp(limit, rate = 1, order = 1)
-mgfexp(x, rate = 1, log = FALSE)
+mgfexp(t, rate = 1, log = FALSE)
 }
 \arguments{
   \item{order}{order of the moment.}
   \item{limit}{limit of the loss variable.}
   \item{rate}{vector of rates.}
-  \item{x}{numeric vector.}
+  \item{t}{numeric vector.}
   \item{log}{logical; if \code{TRUE}, the cumulant generating function
     is returned.}
 }

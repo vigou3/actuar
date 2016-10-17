@@ -11,7 +11,7 @@
 \usage{
 mgamma(order, shape, rate = 1, scale = 1/rate)
 levgamma(limit, shape, rate = 1, scale = 1/rate, order = 1)
-mgfgamma(x, shape, rate = 1, scale = 1/rate, log = FALSE)
+mgfgamma(t, shape, rate = 1, scale = 1/rate, log = FALSE)
 }
 \arguments{
   \item{order}{order of the moment.}
@@ -19,7 +19,7 @@ mgfgamma(x, shape, rate = 1, scale = 1/rate, log = FALSE)
   \item{rate}{an alternative way to specify the scale.}
   \item{shape, scale}{shape and scale parameters. Must be strictly
     positive.}
-  \item{x}{numeric vector.}
+  \item{t}{numeric vector.}
   \item{log}{logical; if \code{TRUE}, the cumulant generating function
     is returned.}
 }

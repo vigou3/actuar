@@ -11,13 +11,13 @@
 \usage{
 munif(order, min = 0, max = 1)
 levunif(limit, min = 0, max =1, order = 1)
-mgfunif(x, min = 0, max = 1, log = FALSE)
+mgfunif(t, min = 0, max = 1, log = FALSE)
 }
 \arguments{
   \item{order}{order of the moment.}
   \item{min, max}{lower and upper limits of the distribution. Must be finite.}
   \item{limit}{limit of the random variable.}
-  \item{x}{numeric vector.}
+  \item{t}{numeric vector.}
   \item{log}{logical; if \code{TRUE}, the cumulant generating function
     is returned.}
 }

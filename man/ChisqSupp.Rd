@@ -12,14 +12,14 @@
 \usage{
 mchisq(order, df, ncp = 0)
 levchisq(limit, df, ncp = 0, order = 1)
-mgfchisq(x, df, ncp = 0, log= FALSE)
+mgfchisq(t, df, ncp = 0, log= FALSE)
 }
 \arguments{
   \item{order}{order of the moment.}
   \item{limit}{limit of the loss variable.}
   \item{df}{degrees of freedom (non-negative, but can be non-integer).}
   \item{ncp}{non-centrality parameter (non-negative).}
-  \item{x}{numeric vector.}
+  \item{t}{numeric vector.}
   \item{log}{logical; if \code{TRUE}, the cumulant generating function
     is returned.}
 }

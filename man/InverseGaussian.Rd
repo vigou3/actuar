@@ -29,8 +29,6 @@ mgfinvgauss(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
-  \item{t}{vector. Values at which to evaluate the moment generating
-    function.}
   \item{p}{vector of probabilities.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
@@ -50,6 +48,7 @@ mgfinvgauss(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
     Newton computation of quantiles.}
   \item{echo, trace}{logical; echo the recursions to screen in the
     Newton computation of quantiles.}
+  \item{t}{numeric vector.}
 }
 \details{
   The inverse gaussian distribution with parameters \code{mean} \eqn{=
