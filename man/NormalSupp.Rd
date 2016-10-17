@@ -22,7 +22,7 @@ mgfnorm(t, mean = 0, sd = 1, log = FALSE)
 \details{
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the moment generating function is
-  \eqn{E[e^{xX}]}.
+  \eqn{E[e^{tX}]}.
 
   Only integer moments are supported.
 }

@@ -58,7 +58,7 @@ mgfinvgamma(t, shape, rate =1, scale = 1/rate, log =FALSE)
   limited moment at some limit \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X,
   d)^k]}, all \eqn{k}.
 
-  The moment generating function is given by \eqn{E[e^{xX}]}.
+  The moment generating function is given by \eqn{E[e^{tX}]}.
 }
 \value{
   \code{dinvgamma} gives the density,

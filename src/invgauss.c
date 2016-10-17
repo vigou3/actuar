@@ -274,7 +274,7 @@ double minvgauss(double order, double mu, double phi, int give_log)
 /* The lev function is very similar to the pdf. It can be written a
  *
  *   levinvgauss(x; mu, phi) = mu [pnorm((xm - 1)/r)
- *                                 - exp(2/phim) pnorm((xm + 1)/r)]
+ *                                 - exp(2/phim) pnorm(-(xm + 1)/r)]
  *                             + x (1 - pinvgauss(x; mu, phi)
  *
  * where xm = x/mu, phim = phi * mu, r = sqrt(x * phi).

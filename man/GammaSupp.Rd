@@ -27,7 +27,7 @@ mgfgamma(t, shape, rate = 1, scale = 1/rate, log = FALSE)
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]}, the \eqn{k}th limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X, d)^k]} and the moment
-  generating function is \eqn{E[e^{xX}]}, \eqn{k >
+  generating function is \eqn{E[e^{tX}]}, \eqn{k >
   -\alpha}{k > -shape}.
 }
 \value{

@@ -27,7 +27,7 @@ mgfchisq(t, df, ncp = 0, log= FALSE)
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]}, the \eqn{k}th limited moment at some limit
   \eqn{d} is \eqn{E[\min(X, d)]}{E[min(X, d)]} and the moment generating
-  function is \eqn{E[e^{xX}]}.
+  function is \eqn{E[e^{tX}]}.
 
   Only integer moments are supported for the non central Chi-square
   distribution (\code{ncp > 0}).

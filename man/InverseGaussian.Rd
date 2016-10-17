@@ -52,21 +52,20 @@ mgfinvgauss(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
 }
 \details{
   The inverse gaussian distribution with parameters \code{mean} \eqn{=
-    \mu} and \code{shape} \eqn{= \lambda} has density:
-  \deqn{f(x) = \left( \frac{\lambda}{2 \pi x^3} \right)^{1/2}
-    \exp\left( -\frac{\lambda(x - \mu)^2}{2 \mu^2 x} \right),}{%
-    f(x) = sqrt(\lambda/(2 \pi x^3)) *
-           exp(-(\lambda (x - \mu)^2)/(2 \mu^2 x)),}
-  for \eqn{x \ge 0}, \eqn{\mu > 0} and \eqn{\lambda > 0}.
+    \mu} and \code{dispersion} \eqn{= \phi} has density:
+  \deqn{f(x) = \left( \frac{1}{2 \pi \phi x^3} \right)^{1/2}
+    \exp\left( -\frac{(x - \mu)^2}{2 \mu^2 \phi x} \right),}{%
+    f(x) = sqrt(/(2 \pi \phi x^3)) *
+           exp(-((x - \mu)^2)/(2 \mu^2 \phi x)),}
+  for \eqn{x \ge 0}, \eqn{\mu > 0} and \eqn{\phi > 0}.
 
   The limiting case \eqn{\mu = \infty}{\mu = Inf} has a well defined
   density function and distribution function, but has no finite moments.
 
-  The limiting case \eqn{\lambda = 0}{\lambda = 0} is an infinite spike
-  in \eqn{x = 0}.
+  The limiting case \eqn{\phi = 0} is an infinite spike in \eqn{x = 0}.
 
-  If the random variable \eqn{X} is IG\eqn{(\mu, \lambda)}, then
-  \eqn{X/\mu} is IG\eqn{(1, \lambda/\mu)}.
+  If the random variable \eqn{X} is IG\eqn{(\mu, \phi)}, then
+  \eqn{X/\mu} is IG\eqn{(1, \phi \mu)}{(1, \phi * \mu)}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]}, \eqn{k = 1, 2, \dots}, the limited expected
@@ -74,7 +73,7 @@ mgfinvgauss(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
   the moment generating function is \eqn{E[e^{tX}]}.
 
   The moment generating function of the inverse guassian is defined for
-    \code{t <= shape/(2 * mean^2)}.
+    \code{t <= 1/(2 * mean^2 * phi)}.
 }
 \value{
   \code{dinvgauss} gives the density,
@@ -117,8 +116,8 @@ dinvgauss(c(-1, 0, 1, 2, Inf), mean = Inf, dis = 0.7)
 dinvgauss(c(-1, 0, 1, 2, Inf), mean = 1.5, dis = Inf) # spike at zero
 
 ## Typical graphical representations of the inverse gaussian
-## distribution. First fixed mean and varying dispersion; second
-## varying mean and fixed dispersion.
+## distribution. First fixed mean and varying shape; second
+## varying mean and fixed shape.
 col = c("red", "blue", "green", "cyan", "yellow", "black")
 par = c(0.125, 0.5, 1, 2, 8, 32)
 curve(dinvgauss(x, 1, par[1]), from = 0, to = 2, col = col[1])

@@ -15,15 +15,15 @@ dphtype(x, prob, rates, log = FALSE)
 pphtype(q, prob, rates, lower.tail = TRUE, log.p = FALSE)
 rphtype(n, prob, rates)
 mphtype(order, prob, rates)
-mgfphtype(x, prob, rates, log = FALSE)
+mgfphtype(t, prob, rates, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
   \item{prob}{vector of initial probabilities for each of the transient
-    states of of the underlying Markov chain. The initial probability of
-    the absorbing state is \code{1 - sum(prob)}.} 
+    states of the underlying Markov chain. The initial probability of
+    the absorbing state is \code{1 - sum(prob)}.}
   \item{rates}{square matrix of the rates of transition among the states
     of the underlying Markov chain.}
   \item{log, log.p}{logical; if \code{TRUE}, probabilities/densities
@@ -31,13 +31,14 @@ mgfphtype(x, prob, rates, log = FALSE)
   \item{lower.tail}{logical; if \code{TRUE} (default), probabilities are
     \eqn{P[X \le x]}{P[X <= x]}, otherwise, \eqn{P[X > x]}.}
   \item{order}{order of the moment.}
+  \item{t}{numeric vector.}
 }
 \details{
   The phase-type distribution with parameters \code{prob} \eqn{= \pi}{=
     pi} and \code{rates} \eqn{= \boldsymbol{T}}{= T} has density:%
   \deqn{f(x) = \pi e^{\boldsymbol{T} x} \boldsymbol{t}}{%
-    f(x) = pi \%*\% exp(T * x) \%*\% t}% 
-  for \eqn{x > 0} and \eqn{f(0) = 1 - \pi \boldsymbol{e}}{f(0) = 1 - pi
+    f(x) = pi \%*\% exp(T * x) \%*\% t}%
+  for \eqn{x \ge 0} and \eqn{f(0) = 1 - \pi \boldsymbol{e}}{f(0) = 1 - pi
     \%*\% e}, where %
   \eqn{\boldsymbol{e}}{e} %
   is a column vector with all components equal to one, %
@@ -52,15 +53,15 @@ mgfphtype(x, prob, rates, log = FALSE)
     \frac{\boldsymbol{M}^n}{n!}.}{%
     exp(M) = sum(n = 0:Inf; (M^n)/(n!)).}
 
-  The parameters of the distribution must satisfy 
-  \eqn{\pi \boldsymbol{e} \leq 1}{pi \%*\% e <= 1}, 
-  \eqn{\boldsymbol{T}_{ii} < 0}{T[i, i] < 0}, 
-  \eqn{\boldsymbol{T}_{ij} \geq 0}{T[i, j] >= 0} and 
+  The parameters of the distribution must satisfy
+  \eqn{\pi \boldsymbol{e} \leq 1}{pi \%*\% e <= 1},
+  \eqn{\boldsymbol{T}_{ii} < 0}{T[i, i] < 0},
+  \eqn{\boldsymbol{T}_{ij} \geq 0}{T[i, j] >= 0} and
   \eqn{\boldsymbol{T} \boldsymbol{e} \leq 0}{T \%*\% e <= 0}.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
   \eqn{E[X^k]}{E[X^k]} and the moment generating function is
-  \eqn{E[e^{xX}]}.
+  \eqn{E[e^{tX}]}.
 }
 \value{
   \code{dphasetype} gives the density,
@@ -74,7 +75,7 @@ mgfphtype(x, prob, rates, log = FALSE)
 
 \references{
   \url{http://en.wikipedia.org/wiki/Phase-type_distribution}
-  
+
   Neuts, M. F. (1981), \emph{Generating random variates from a
     distribution of phase type}, WSC '81: Proceedings of the 13th
   conference on Winter simulation, IEEE Press.
