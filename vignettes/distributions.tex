@@ -7,7 +7,7 @@
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
   \usepackage{framed,booktabs}
-  \usepackage[inline,shortlabels]{enumitem}
+  \usepackage[shortlabels]{enumitem}
   \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Loss distributions modeling}
@@ -56,7 +56,6 @@
   %% Compact, sans label itemize environment for the appendices.
   \setlist[itemize]{label={},leftmargin=0pt,align=left,nosep}
 
-
   %% Some new commands
   \newcommand{\E}[1]{E[ #1 ]}
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
@@ -76,41 +75,41 @@
 \section{Introduction}
 \label{sec:introduction}
 
-\proglang{R} already includes functions to compute the probability
-density function (pdf) or the probability mass function (pmf), the
-cumulative distribution function (cdf) and the quantile function of a
-fair number of probability distributions, as well as functions to
-generate variates from these distributions. For some root \code{foo},
-the support functions are named \code{dfoo}, \code{pfoo}, \code{qfoo}
-and \code{rfoo}, respectively.
+\proglang{R} includes functions to compute the probability density
+function (pdf) or the probability mass function (pmf), the cumulative
+distribution function (cdf) and the quantile function, as well as
+functions to generate variates from a fair number of continuous and
+discrete distributions. For some root \code{foo}, the support
+functions are named \code{dfoo}, \code{pfoo}, \code{qfoo} and
+\code{rfoo}, respectively.
 
 Package \pkg{actuar} provides \code{d}, \code{p}, \code{q} and
 \code{r} functions for a large number of continuous distributions
-useful for loss severity modeling, as well as zero-truncated and
-zero-modified extensions to the most usual discrete distributions
-commonly used in loss frequency modeling.
+useful for loss severity modeling, as well as for zero-truncated and
+zero-modified extensions to the discrete distributions commonly used
+in loss frequency modeling.
 
 
-\section{Continuous distributions}
+\section{Additional continuous distributions}
 \label{sec:continuous}
 
-The \pkg{actuar} package provides support functions for all the
-probability laws found in Appendix~A of \cite{LossModels4e} and not
-already present in base \proglang{R}, excluding the inverse Gaussian
-and log-$t$ but including the loggamma distribution
-\citep{HoggKlugman}. They mostly fall under the unmbrella of extreme
-value distributions.
+The package provides support functions for all the probability
+distributions found in Appendix~A of \cite{LossModels4e} and not
+already present in base \proglang{R}, excluding the log-$t$, but
+including the loggamma distribution \citep{HoggKlugman}. These
+distributions mostly fall under the unmbrella of extreme value or
+heavy tailed distributions.
 
-\autoref{tab:continuous} lists the supported distributions as
-named in \cite{LossModels4e} along with the root names of the
-\proglang{R} functions. For reference, \autoref{sec:app:continuous}
-also gives for every distribution the pdf, the cdf and the name of the
-argument corresponding to each parameter in the parametrization of
-\cite{LossModels4e}. One will note that by default all functions
-(except those for the Pareto distribution) use a rate parameter equal
-to the inverse of the scale parameter. This differs from
-\cite{LossModels4e} but is better in line with the functions for the
-gamma, exponential and Weibull distributions in base \proglang{R}.
+\autoref{tab:continuous} lists the distributions supported by
+\pkg{actuar} as named in \cite{LossModels4e} along with the root names
+of the \proglang{R} functions. \autoref{sec:app:continuous} details
+the formulas implemented and the name of the argument corresponding to
+each parameter in the parametrization of \cite{LossModels4e}. One will
+note that, by default, all functions (except those for the Pareto
+distribution) use a rate parameter equal to the inverse of the scale
+parameter. This differs from \cite{LossModels4e} but is better in line
+with the functions for the gamma, exponential and Weibull
+distributions in base \proglang{R}.
 
 \begin{table}
   \centering
@@ -136,48 +135,49 @@ gamma, exponential and Weibull distributions in base \proglang{R}.
     \midrule
     Other             & Loggamma & \code{lgamma} \\
                       & Gumbel & \code{gumbel} \\
+                      & Inverse gaussian & \code{invgauss} \\
                       & Single parameter Pareto & \code{pareto1} \\
                       & Generalized beta & \code{genbeta} \\
     \bottomrule
   \end{tabular}
-  \caption{Probability laws supported by \pkg{actuar} classified by
-    family and root names of the \proglang{R} functions.}
+  \caption{Probability distributions supported by \pkg{actuar}
+    classified by family and root names of the \proglang{R}
+    functions.}
   \label{tab:continuous}
 \end{table}
 
 In addition to the \code{d}, \code{p}, \code{q} and \code{r}
-functions, the package provides \code{m}, \code{lev} and \code{mgf}
-functions to compute, respectively, theoretical raw moments
-\begin{equation}
-  \label{eq:def:moment}
+functions, \pkg{actuar} introduces \code{m}, \code{lev} and \code{mgf}
+functions to compute, respectively, the theoretical raw moments
+\begin{equation*}
   m_k = \E{X^k},
-\end{equation}
-theoretical limited moments
-\begin{equation}
-  \label{eq:def:limited-moment}
+\end{equation*}
+the theoretical limited moments
+\begin{equation*}
   \E{(X \wedge x)^k} = \E{\min(X, x)^k}
-\end{equation}
+\end{equation*}
 and the moment generating function
-\begin{equation}
-  \label{eq:def:mgf}
+\begin{equation*}
   M_X(t) = \E{e^{tX}},
-\end{equation}
-when it exists. Every probability law of \autoref{tab:continuous}
-is supported, plus the following ones: beta, exponential, chi-square,
-gamma, lognormal, normal (no \code{lev}), uniform and Weibull of base
-\proglang{R} and the inverse Gaussian distribution of package
-\pkg{SuppDists} \citep{SuppDists}. The \code{m} and \code{lev}
-functions are especially useful with estimation methods based on the
-matching of raw or limited moments; see the \code{"lossdist"} vignette
-for their empirical counterparts. The \code{mgf} functions come in
-handy to compute the adjustment coefficient in ruin theory; see the
-\code{"risk"} vignette.
+\end{equation*}
+when it exists. Every distribution of \autoref{tab:continuous} is
+supported, along with the following distributions of base
+\proglang{R}: beta, exponential, chi-square, gamma, lognormal, normal
+(no \code{lev}), uniform and Weibull.
+
+The \code{m} and \code{lev} functions are especially useful for
+estimation methods based on the matching of raw or limited moments;
+see the \code{"lossdist"} vignette for their empirical counterparts.
+The \code{mgf} functions come in handy to compute the adjustment
+coefficient in ruin theory; see the \code{"risk"} vignette.
 
 
-\section{Phase-type distributions}
+
+
+\section{Support for phase-type distributions}
 \label{sec:phase-type}
 
-In addition to the 18 distributions of \autoref{tab:continuous},
+In addition to the 19 distributions of \autoref{tab:continuous},
 the package provides support for a family of distributions deserving a
 separate presentation. Phase-type distributions \citep{Neuts_81} are
 defined as the distribution of the time until absorption of continuous
@@ -192,18 +192,18 @@ absorbing state. Let
   \end{bmatrix}
 \end{equation}
 be the transition rates matrix (or intensity matrix) of such a process
-and let $(\pmb{\pi}, \pi_{m + 1})$ be the initial probability vector.
+and let $(\mat{\pi}, \pi_{m + 1})$ be the initial probability vector.
 Here, $\mat{T}$ is an $m \times m$ non-singular matrix with $t_{ii} <
 0$ for $i = 1, \dots, m$ and $t_{ij} \geq 0$ for $i \neq j$, $\mat{t}
 = - \mat{T} \mat{e}$ and $\mat{e}$ is a column vector with all
 components equal to 1. Then the cdf of the time until absorption
-random variable with parameters $\pmb{\pi}$ and $\mat{T}$ is
+random variable with parameters $\mat{\pi}$ and $\mat{T}$ is
 \begin{equation}
   \label{eq:cdf-phtype}
   F(x) =
   \begin{cases}
     \pi_{m + 1}, & x = 0, \\
-    1 - \pmb{\pi} e^{\mat{T} x} \mat{e}, & x > 0
+    1 - \mat{\pi} e^{\mat{T} x} \mat{e}, & x > 0,
   \end{cases}
 \end{equation}
 where
@@ -213,19 +213,22 @@ where
 \end{equation}
 is the matrix exponential of matrix $\mat{M}$.
 
-The exponential, the Erlang (gamma with integer shape parameter) and
-discrete mixtures thereof are common special cases of phase-type
-distributions.
+The exponential distribution, the Erlang (gamma with integer shape
+parameter) and discrete mixtures thereof are common special cases of
+phase-type distributions.
 
 The package provides \code{d}, \code{p}, \code{r}, \code{m} and
 \code{mgf} functions for phase-type distributions. The root is
 \code{phtype} and parameters $\mat{\pi}$ and $\mat{T}$ are named
-\code{prob} and \code{rates}, respectively. For the package, function
-\code{pphtype} is central to the evaluation of the probability of
-ruin; see \code{?ruin} and the \code{"risk"} vignette.
+\code{prob} and \code{rates}, respectively; see also
+\autoref{sec:app:phase-type}.
+
+For the package, function \code{pphtype} is central to the evaluation
+of the probability of ruin; see \code{?ruin} and the \code{"risk"}
+vignette.
 
 
-\section{Discrete distributions}
+\section{Extensions to standard discrete distributions}
 \label{sec:discrete}
 
 The package introduces support functions for counting distributions
@@ -240,19 +243,20 @@ probability that the random variable $N$ takes the value $k$, that is:
 \end{equation*}
 
 \citet{LossModels4e} classify counting distributions in two main
-classes. A discrete random variable is a member of the $(a, b, 0)$
-class of distributions if there exists constants $a$ and $b$ such that
+classes. First, a discrete random variable is a member of the
+$(a, b, 0)$ class of distributions if there exists constants $a$ and
+$b$ such that
 \begin{equation*}
   \frac{p_k}{p_{k - 1}} = a + \frac{b}{k}, \quad k = 1, 2, \dots.
 \end{equation*}
-The probability at zero, $p_0$ is set such that the probabilities sum
-to $1$. The members of this class are the Poisson, the binomial, the
-negative binomial and its special case, the geometric. These
-distributions are all well supported in base \proglang{R} with
-\code{d}, \code{p}, \code{q} and \code{r} functions.
+The probability at zero, $p_0$, is set such that
+$\sum_{k = 0}^\infty p_k = 1$. The members of this class are the
+Poisson, the binomial, the negative binomial and its special case, the
+geometric. These distributions are all well supported in base
+\proglang{R} with \code{d}, \code{p}, \code{q} and \code{r} functions.
 
 The second class of distributions is the $(a, b, 1)$ class. A discrete
-random variable is a member of the $(a, b, 0)$ class of distributions
+random variable is a member of the $(a, b, 1)$ class of distributions
 if there exists constants $a$ and $b$ such that
 \begin{equation*}
   \frac{p_k}{p_{k - 1}} = a + \frac{b}{k}, \quad k = 2, 3, \dots.
@@ -266,35 +270,37 @@ Setting $p_0 = 0$ defines a subclass of so-called
 the zero-truncated Poisson, the zero-truncated binomial, the
 zero-truncated negative binomial and the zero-truncated geometric.
 
-Let $p(k)$ denote the probability mass function (pmf) of a member of
-the $(a, b, 0)$ class of distributions, and let $p^T(k)$ denote the
-pmf of a corresponding member of the $(a, b, 1)$ class. The cumulative
-distributions functions are $P(k)$ and $P^T(k)$.
-
-Zero-truncated distributions have probability mass function
-$p^T(0) = 0$ and
+Let $p_k^T$ denote the probability mass in $k$ for a zero-truncated
+distribution. As above, $p_k$ denotes the probability mass for the
+corresponding member of the $(a, b, 0)$ class. We have
 \begin{equation*}
-  p_k^T = \frac{p_k}{1 - p_0}, \quad k = 1, 2, \dots.
+  p_k^T =
+  \begin{cases}
+    0, & k = 0 \\
+    \frac{p_k}{1 - p_0}, & k = 1, 2, \dots.
+  \end{cases}
 \end{equation*}
-The distribution function is, for all $k = 0, 1, 2, \dots$,
+
+Moreover, let $P(k)$ denotes the cumulative distribution function of a
+member of the $(a, b, 0)$ class. Then the cdf $P^T(k)$ of the
+corresponding zero-truncated distribution is
 \begin{equation*}
   P^T(k)
   = \frac{P(k) - P(0)}{1 - P(0)}
-  = \frac{P(k) - p_0}{1 - p_0},
+  = \frac{P(k) - p_0}{1 - p_0}
 \end{equation*}
-or, alternatively, the survival function $\bar{P}^T(k) = 1 - P^T(k)$
-is
+for all $k = 0, 1, 2, \dots$. Alternatively, the survival function
+$\bar{P}^T(k) = 1 - P^T(k)$ is
 \begin{equation*}
   \bar{P}^T(k)
   = \frac{\bar{P}(k)}{\bar{P}(0)}
   = \frac{\bar{P}(k)}{1 - p_0}.
 \end{equation*}
 
-Package \pkg{actuar} introduces \code{d}, \code{p}, \code{q} and
-\code{r} functions for the zero-truncated Poisson, zero-truncated
-binomial, zero-truncated negative binomial and zero-truncated
-geometric distributions. \autoref{tab:discrete} lists the root names
-of the functions.
+Package \pkg{actuar} provides \code{d}, \code{p}, \code{q} and
+\code{r} functions for the all the zero-truncated distributions
+mentioned above. \autoref{tab:discrete} lists the root names of the
+functions; see \autoref{sec:app:discrete} for additional details.
 
 \begin{table}
   \centering
@@ -321,11 +327,11 @@ of the functions.
   \label{tab:discrete}
 \end{table}
 
-Also included in \autoref{tab:discrete} is the logarithmic (or
-log-series) distribution. The logarithmic distribution with parameter
-$\theta$ has pmf
+An entry of \autoref*{tab:discrete} deserves a few additional words.
+The logarithmic (or log-series) distribution with parameter $\theta$
+has pmf
 \begin{equation*}
-  p(k) = \frac{a \theta^x}{k}, \quad k = 1, 2, \dots,
+  p_k = \frac{a \theta^x}{k}, \quad k = 1, 2, \dots,
 \end{equation*}
 with $a = -1/\log(1 - \theta)$ and for $0 \leq \theta < 1$. This is
 the standard parametrization in the literature
@@ -338,10 +344,9 @@ more specifically to the subclass with $p_0 = 0$.
 
 Actually, the logarithmic distribution is the limiting case of the
 zero-truncated negative binomial distribution with size parameter
-equal to zero. Note that in this context and using the parametrization
-above, we have $\theta = 1 - p$, where $p$ is the probability of
-success for the zero-truncated negative binomial. This differs from
-the presentation in \citet{LossModels4e}.
+equal to zero and $\theta = 1 - p$, where $p$ is the probability of
+success for the zero-truncated negative binomial. Note that this
+differs from the presentation in \citet{LossModels4e}.
 
 Another subclass of the $(a, b, 1)$ class of distributions is obtained
 by setting $p_0$ to some arbitrary number $p_0^M$ subject to
@@ -350,31 +355,32 @@ $0 < p_0^M \leq 1$. The members of this subclass are called
 discrete mixtures between a degenerate distribution at zero and the
 corresponding distribution from the $(a, b, 0)$ class.
 
-Let $p^M(k)$ and $P^M(k)$ denote the probability mass function and
-cumulative distribution function, respectively, of a zero-modified
-distribution. Seen as a mixture, a zero-modified distribution has pmf
+Let $p_k^M$ and $P^M(k)$ denote the pmf and cdf of a zero-modified
+distribution. Written as a mixture, the pmf is
 \begin{equation}
   \label{eq:mixture}
-  p^M(k) = \left(1 - \frac{1 - p_0^M}{1 - p0} \right) \mathbb{1}_{\{k = 0\}}(k)
-  + \frac{1 - p_0^M}{1 - p0} p(k),
+  p_k^M = \left(1 - \frac{1 - p_0^M}{1 - p_0} \right) \mathbb{1}_{\{k = 0\}}
+  + \frac{1 - p_0^M}{1 - p_0}\, p_k.
 \end{equation}
-where $\mathbb{1}_{\mathcal{A}}(k)$ is the pmf of a degenerate
-distribution placing all its probability when $k \in \mathcal{A}$. The
-pmf can also be expressed as $p^M(0) = p_0^M$ and
+Alternatively, we have
 \begin{equation*}
-  p^M(k) = (1 - p_0^M)\, \frac{p(k)}{1 - p_0}, \quad k = 1, 2, \dots.
+  p_k^M =
+  \begin{cases}
+    p_0^M, & k = 0 \\
+    \displaystyle\frac{1 - p_0^M}{1 - p_0}\, p_k, & k = 1, 2, \dots
+  \end{cases}
 \end{equation*}
-The distribution function is, for all $k = 0, 1, 2, \dots$,
+and
 \begin{equation*}
   P^M(k)
-  = p_0^M + (1 - p_0^M)\, \frac{P(k) - P(0)}{1 - P(0)}
-  = p_0^M + (1 - p_0^M)\, \frac{P(k) - p_0}{1 - p_0}
+  = p_0^M + (1 - p_0^M) \frac{P(k) - P(0)}{1 - P(0)}
+  = p_0^M + \frac{1 - p_0^M}{1 - p_0}\, (P(k) - p_0)
 \end{equation*}
-and the survival function is
+for all $k = 0, 1, 2, \dots$. The survival function is
 \begin{equation*}
   \bar{P}^T(k)
   = (1 - p_0^M)\, \frac{\bar{P}(k)}{\bar{P}(0)}
-  = (1 - p_0^M)\, \frac{\bar{P}(k)}{1 - p_0}.
+  = \frac{1 - p_0^M}{1 - p_0}\, \bar{P}(k).
 \end{equation*}
 
 The members of the subclass are the zero-modified Poisson,
@@ -382,7 +388,7 @@ zero-modified binomial, zero-modified negative binomial and
 zero-modified geometric, together with the zero-modified logarithmic
 as a limiting case of the zero-modified negative binomial.
 \autoref{tab:discrete} lists the root names of the support functions
-provided in \pkg{actuar}.
+provided in \pkg{actuar}; see also \autoref{sec:app:discrete}.
 
 Quite obviously, zero-truncated distributions are zero-modified
 distributions with $p_0^M = 0$. However, using the dedicated functions
@@ -467,8 +473,7 @@ clear that when $b > 0$,
 Of more interest here is the case where $b < 0$,
 $b \neq -1, -2, \dots$ and $a > 1 + \lfloor -b\rfloor$. Integration by
 parts of \eqref{eq:betaint} yields
-\begin{equation}
-  \label{eq:betaint:bneg}
+\begin{equation*}
   \begin{split}
     B(a, b; x)
     &= \displaystyle
@@ -482,7 +487,7 @@ parts of \eqref{eq:betaint} yields
     \Gamma(a-r-1) \\
     &  \times \Gamma(b+r+1) \beta(a-r-1, b+r+1),
   \end{split}
-\end{equation}
+\end{equation*}
 where $r = \lfloor -b\rfloor$. This expression is little found in the
 literature outside of \citet{LossModels4e}. For the needs of
 \pkg{actuar}, we dubbed \eqref{eq:betaint} the \emph{beta
@@ -504,14 +509,27 @@ in \proglang{C} for speed.
 
 The distribution function of the continuous distributions use
 \code{pbeta} and \code{pgamma} to compute the incomplete beta and
-incomplete gamma functions, respectively. The pmf, cdf and quantile
-functions for the zero-truncated and zero-modified distributions use
-the internal \proglang{R} functions for the corresponding standard
-distributions for all but the trivial input values.
+incomplete gamma functions, respectively. Functions \code{dinvgauss},
+\code{pinvgauss} and \code{qinvgauss} rely on C implementations of
+functions of the same name from package \pkg{statmod} \citep{statmod}.
+
+The matrix exponential \proglang{C} routine needed in \code{dphtype}
+and \code{pphtype} is based on \code{expm} from package
+\pkg{Matrix} \citep{Matrix}.
+
+The C implementation of \code{expint} is based on code from the GNU
+Software Library \citep{GSL}. The \proglang{C} code for
+\code{gammaint} and \code{betaint} was written by the second author.
+
+The pmf, cdf and quantile functions for the zero-truncated and
+zero-modified distributions use the internal \proglang{R} functions
+for the corresponding standard distribution for all but the trivial
+input values.
 
 Generation of random variates from zero-truncated distributions uses
-the simple inversion algorithm suggested by Peter Dalgaard on the
-\code{r-help} mailing list on 1 May 2005\footnote{%
+the following simple inversion algorithm on a restricted range
+suggested by Peter Dalgaard on the \code{r-help} mailing list on 1 May
+2005\footnote{%
   \url{https://stat.ethz.ch/pipermail/r-help/2005-May/070680.html}}.
 Let $u$ be a random number from a uniform distribution on $(p_0, 1)$.
 Then
@@ -524,31 +542,23 @@ distribution with cdf $P(k)$.
 For zero-modified distributions, we generate variates from the
 discrete mixture \eqref{eq:mixture} when $p_0^M \geq p_0$. When
 $p_0^M < p_0$, we can use either of two methods:
-\begin{enumerate*}[i)]
+\begin{enumerate}[i)]
 \item the classical rejection method with an envelope that differs
   from the target distribution only at zero (meaning that only zeros
   are rejected);
 \item the inverse method on a restricted range explained above.
-\end{enumerate*}
+\end{enumerate}
 Which approach is faster depends on the relative speeds of the
-standard random generation function and of the standard quantile
-function, and on the proportion of zeros that are rejected using the
-rejection algorithm. Based on the difference $p_0 - p_0^M$, we
-determined cutoff points, different for each zero-modified
-distribution, between the two methods.
-
-The matrix exponential \proglang{C} routine needed in \code{dphtype}
-and \code{pphtype} is based on \code{expm} from the package
-\pkg{Matrix} \citep{Matrix}.
-
-The C implementation of \code{expint} is based on code from the GNU
-Software Library \citep{GSL}. The \proglang{C} code for
-\code{gammaint} and \code{betaint} was written by the second author.
+standard random generation function and the standard quantile
+function, and also on the proportion of zeros that are rejected using
+the rejection algorithm. Based on the difference $p_0 - p_0^M$, we
+determined (empirically) distribution-specific cutoff points between
+the two methods.
 
 
 \appendix
 
-\section{Characteristics of continuous distributions}
+\section{Continuous distributions}
 \label{sec:app:continuous}
 
 This appendix gives the following formulas for the pdf, the cdf, the
@@ -568,7 +578,7 @@ functions are defined for $x > 0$.
 \subsection{Transformed beta family}
 \label{sec:app:continuous:transformed-beta}
 
-\subsubsection*{Transformed beta}
+\subsubsection{Transformed beta}
 
 \begin{itemize}
 \item Root: \code{trbeta}, \code{pearson6}
@@ -599,7 +609,7 @@ functions are defined for $x > 0$.
     \qquad k > -\tau\gamma
 \end{align*}
 
-\subsubsection*{Burr}
+\subsubsection{Burr}
 
 \begin{itemize}
 \item Root: \code{burr}
@@ -628,7 +638,7 @@ functions are defined for $x > 0$.
     \qquad k > -\gamma
 \end{align*}
 
-\subsubsection*{Loglogistic}
+\subsubsection{Loglogistic}
 
 \begin{itemize}
 \item Root: \code{llogis}
@@ -652,7 +662,7 @@ functions are defined for $x > 0$.
     \qquad k > -\gamma
 \end{align*}
 
-\subsubsection*{Paralogistic}
+\subsubsection{Paralogistic}
 
 \begin{itemize}
 \item Root: \code{paralogis}
@@ -680,7 +690,7 @@ functions are defined for $x > 0$.
     \qquad k > -\alpha
 \end{align*}
 
-\subsubsection*{Generalized Pareto}
+\subsubsection{Generalized Pareto}
 
 \begin{itemize}
 \item Root: \code{genpareto}
@@ -709,7 +719,7 @@ functions are defined for $x > 0$.
     \qquad k > -\tau
 \end{align*}
 
-\subsubsection*{Pareto}
+\subsubsection{Pareto}
 
 \begin{itemize}
 \item Root: \code{pareto}, \code{pareto2}
@@ -736,7 +746,7 @@ functions are defined for $x > 0$.
     \qquad k > -1
 \end{align*}
 
-\subsubsection*{Inverse Burr}
+\subsubsection{Inverse Burr}
 
 \begin{itemize}
 \item Root: \code{invburr}
@@ -765,7 +775,7 @@ functions are defined for $x > 0$.
     \qquad k > -\tau\gamma
 \end{align*}
 
-\subsubsection*{Inverse Pareto}
+\subsubsection{Inverse Pareto}
 
 \begin{itemize}
 \item Root: \code{invpareto}
@@ -790,7 +800,7 @@ functions are defined for $x > 0$.
     \qquad k > -\tau
 \end{align*}
 
-\subsubsection*{Inverse paralogistic}
+\subsubsection{Inverse paralogistic}
 
 \begin{itemize}
 \item Root: \code{invparalogis}
@@ -821,7 +831,7 @@ functions are defined for $x > 0$.
 \subsection{Transformed gamma family}
 \label{sec:app:continuous:transformed-gamma}
 
-\subsubsection*{Transformed gamma}
+\subsubsection{Transformed gamma}
 
 \begin{itemize}
 \item Root: \code{trgamma}
@@ -846,7 +856,7 @@ functions are defined for $x > 0$.
     \qquad k > -\alpha\tau
 \end{align*}
 
-\subsubsection*{Inverse transformed gamma}
+\subsubsection{Inverse transformed gamma}
 
 \begin{itemize}
 \item Root: \code{invtrgamma}
@@ -870,7 +880,7 @@ functions are defined for $x > 0$.
     \qquad \text{all }k
 \end{align*}
 
-\subsubsection*{Inverse gamma}
+\subsubsection{Inverse gamma}
 
 \begin{itemize}
 \item Root: \code{invgamma}
@@ -894,7 +904,7 @@ functions are defined for $x > 0$.
 \end{align*}
 
 
-\subsubsection*{Inverse Weibull}
+\subsubsection{Inverse Weibull}
 
 \begin{itemize}
 \item Root: \code{invweibull}, \code{lgompertz}
@@ -917,7 +927,7 @@ functions are defined for $x > 0$.
     \qquad \text{all }k
 \end{align*}
 
-\subsubsection*{Inverse exponential}
+\subsubsection{Inverse exponential}
 
 \begin{itemize}
 \item Root: \code{invexp}
@@ -942,7 +952,7 @@ functions are defined for $x > 0$.
 \subsection{Other distributions}
 \label{sec:app:continuous:other}
 
-\subsubsection*{Loggamma}
+\subsubsection{Loggamma}
 
 \begin{itemize}
 \item Root: \code{lgamma}
@@ -966,7 +976,7 @@ functions are defined for $x > 0$.
     \qquad k < \lambda
 \end{align*}
 
-\subsubsection*{Gumbel}
+\subsubsection{Gumbel}
 
 \begin{itemize}
 \item Root: \code{gumbel}
@@ -986,7 +996,42 @@ functions are defined for $x > 0$.
   &= \frac{\pi^2 \beta^2}{6}
 \end{align*}
 
-\subsubsection*{Single parameter Pareto}
+\subsubsection{Inverse gaussian}
+
+\begin{itemize}
+\item Root: \code{invgauss}
+\item Parameters: \code{mean} ($\mu$),
+  \code{shape} ($\lambda = 1/\phi$),
+  \code{dispersion} ($\phi$)
+\end{itemize}
+\begin{align*}
+  f(x)
+  &= \left( \frac{1}{2 \pi \phi x^3} \right)^{1/2}
+    \exp\left\{ -\frac{(x/\mu - 1)^2}{2 \phi \mu^2 x} \right\} \\
+  F(x)
+  &= \Phi\left( \frac{x/\mu - 1}{\sqrt{\phi x}} \right)
+    + e^{2/(\phi\mu)}
+    \Phi\left( -\frac{x/\mu + 1}{\sqrt{\phi x}} \right) \\ \displaybreak[0]
+  \E{X^k}
+  &= \mu^k \sum_{i = 0}^{k - 1} \frac{(k + i - 1)!}{i! (k - i - 1)!}
+    \left( \frac{\phi \mu}{2} \right)^{i} \\
+  \E{X \wedge x}
+  &= \mu
+    \left[
+    \Phi\left( \frac{x/\mu - 1}{\sqrt{\phi x}} \right)
+    - e^{2/(\phi\mu)} \Phi\left(- \frac{x/\mu + 1}{\sqrt{\phi x}} \right)
+    \right] \\
+  &\phantom{=} + x (1 - F(x)) \\
+  M(t)
+  &= \frac{1}{\phi \mu}
+    \exp\left\{ 1 - \sqrt{1 - 2 \phi \mu^2 t} \right\},
+    \qquad t \leq \frac{1}{2 \phi \mu^2}
+\end{align*}
+
+
+
+
+\subsubsection{Single parameter Pareto}
 
 \begin{itemize}
 \item Root: \code{pareto1}
@@ -1009,12 +1054,11 @@ functions are defined for $x > 0$.
     \frac{k \theta^\alpha}{(\alpha - k) x^{\alpha-k}},
     \qquad x \geq \theta
 \end{align*}
-
 Although there appears to be two parameters, only $\alpha$ is a true
 parameter. The value of $\theta$ is the minimum of the distribution
 and is usually set in advance.
 
-\subsubsection*{Generalized beta}
+\subsubsection{Generalized beta}
 
 \begin{itemize}
 \item Root: \code{genbeta}
@@ -1044,6 +1088,40 @@ and is usually set in advance.
 \end{align*}
 
 
+\section{Phase-type distributions}
+\label{sec:app:phase-type}
+
+\begin{itemize}
+\item Root: \code{phtype}
+\item Parameters: \code{prob} ($\mat{\pi}_{1 \times m}$),
+    \code{rates} ($\mat{T}_{m \times m}$)
+\end{itemize}
+
+\begin{align*}
+  f(x)
+  &=
+    \begin{cases}
+      1 - \mat{\pi} \mat{e} & x = 0, \\
+      \mat{\pi} e^{\mat{T} x} \mat{t}, & x > 0
+    \end{cases} \\
+  F(x)
+  &=
+    \begin{cases}
+      1 - \mat{\pi} \mat{e}, & x = 0, \\
+      1 - \mat{\pi} e^{\mat{T} x} \mat{e}, & x > 0
+    \end{cases} \\
+  \E{X^k}
+  &= k! \mat{\pi} (-\mat{T})^{-k} \mat{e} \\
+  M(t)
+  &= \mat{\pi} (-t \mat{I} - \mat{T})^{-1} \mat{t}
+    + (1 - \mat{\pi} \mat{e})
+\end{align*}
+Above, $\mat{T}$ is an $m \times m$ non-singular matrix with
+$t_{ii} < 0$ for $i = 1, \dots, m$ and $t_{ij} \geq 0$ for $i \neq j$;
+$\mat{\pi}$ is an $1 \times m$ vector of probabilities;
+$\mat{t} = -\mat{T} \mat{e}$; $\mat{e} = [1]_{m \times 1}$.
+
+
 \section{Discrete distributions}
 \label{sec:app:discrete}
 
@@ -1066,10 +1144,6 @@ Defined on $k = 0, 1, 2, \dots$.
   p_k &= \frac{e^{-\lambda} \lambda^k}{k!}
 \end{align*}
 
-\begin{itemize}
-\item Limiting case: $p_k = \mathbb{1}_0(k)$ [$\lambda = 0$]
-\end{itemize}
-
 \subsubsection{Negative binomial}
 
 \begin{itemize}
@@ -1084,8 +1158,7 @@ Defined on $k = 0, 1, 2, \dots$.
 \end{align*}
 
 \begin{itemize}
-\item Special case: Geometric$(p)$ [$r = 1$]
-\item Limiting cases: $p_k = \mathbb{1}_0(k)$ [$r = 0$ or $p = 1$]
+\item Special case: Geometric$(p)$ when $r = 1$.
 \end{itemize}
 
 \subsubsection{Geometric}
@@ -1098,10 +1171,6 @@ Defined on $k = 0, 1, 2, \dots$.
   a &= 1 - p, \qquad b = 0, \qquad p_0 = p \\
   p_k &= p (1 - p)^k
 \end{align*}
-
-\begin{itemize}
-\item Limiting case: $p_k = \mathbb{1}_0(k)$ [$p = 1$]
-\end{itemize}
 
 \subsubsection{Binomial}
 
@@ -1117,9 +1186,7 @@ Defined on $k = 0, 1, 2, \dots$.
 \end{align*}
 
 \begin{itemize}
-\item Special case: Bernoulli$(p)$ [$n = 1$]
-\item Limiting cases: $p_k = \mathbb{1}_0(k)$ [$n = 0$ or $p = 0$],
-  Degenerate$(n)$ [$p = 1$]
+\item Special case: Bernoulli$(p)$ when $n = 1$.
 \end{itemize}
 
 
@@ -1132,6 +1199,10 @@ Defined on $k = 1, 2, \dots$.
 
 Corresponding distribution from the $(a, b, 0)$ class.
 
+Note that all distributions have as limiting case degenerate
+distribution in $1$ when the parameters are such that the denominator
+of $p_1$ (if appropriate) is zero.
+
 \subsubsection{Zero-truncated Poisson}
 
 \begin{itemize}
@@ -1143,10 +1214,6 @@ Corresponding distribution from the $(a, b, 0)$ class.
       p_1 = \frac{\lambda}{e^\lambda - 1} \\
   p_k &= \frac{\lambda^k}{k! (e^\lambda - 1)}
 \end{align*}
-
-\begin{itemize}
-\item Limiting case: $p_k = \mathbb{1}_1(k)$ [$\lambda = 0$]
-\end{itemize}
 
 \subsubsection{Zero-truncated negative binomial}
 
@@ -1162,9 +1229,8 @@ Corresponding distribution from the $(a, b, 0)$ class.
 \end{align*}
 
 \begin{itemize}
-\item Special cases:  Logarithmic$(1 - p)$ [$r = 0$],
-  Zero-truncated geometric$(p)$ [$r = 1$]
-\item Limiting case: $p_k = \mathbb{1}_1(k)$ [$p = 1$]
+\item Special cases:  Logarithmic$(1 - p)$ when $r = 0$;
+  Zero-truncated geometric$(p)$ when $r = 1$.
 \end{itemize}
 
 \subsubsection{Zero-truncated geometric}
@@ -1177,10 +1243,6 @@ Corresponding distribution from the $(a, b, 0)$ class.
   a &= 1 - p, \qquad b = 0, \qquad p_1 = p \\
   p_k &= p (1 - p)^{k - 1}
 \end{align*}
-
-\begin{itemize}
-\item Limiting case: $p_k = \mathbb{1}_1(k)$ [$p = 1$]
-\end{itemize}
 
 \subsubsection{Zero-truncated binomial}
 
@@ -1196,10 +1258,6 @@ Corresponding distribution from the $(a, b, 0)$ class.
         k = 1, 2, \dots, n
 \end{align*}
 
-\begin{itemize}
-\item Limiting cases: $p_k = \mathbb{1}_1(k)$ [$n = 0$ or $p = 0$]
-\end{itemize}
-
 \subsubsection{Logarithmic}
 
 \begin{itemize}
@@ -1212,12 +1270,6 @@ Corresponding distribution from the $(a, b, 0)$ class.
   p_k &= - \frac{p^k}{k \log (1 - p)}
 \end{align*}
 
-\begin{itemize}
-\item Limiting case: $p_k = \mathbb{1}_1(k)$ [$p = 0$]
-\end{itemize}
-
-
-
 
 \subsection[The zero-modified (a, b, 0) class]{The zero-modified $(a, b, 1)$ class}
 \label{sec:app:discrete:zm}
@@ -1227,6 +1279,12 @@ Support provided by \pkg{actuar}.
 Unless otherwise stated defined on $k = 0, 1, 2, \dots$ but $p_0^M$ arbitrary
 
 Corresponding distribution from the $(a, b, 0)$ class.
+
+The limiting case of zero-modified distributions when the parameters
+are such that the denominator of $p_1$ (if appropriate) is zero is a
+discrete mixture between a degenerate distribution in $0$ (with
+probability $p^M$) and a degenerate distribution in $1$ (with
+probability $1 - p^M$).
 
 \subsubsection{Zero-modified Poisson}
 
@@ -1240,11 +1298,6 @@ Corresponding distribution from the $(a, b, 0)$ class.
       p_1 = \frac{(1 - p_0^M) \lambda}{e^\lambda - 1} \\
   p_k &= \frac{(1 - p_0^M) \lambda^k}{k! (e^\lambda - 1)}
 \end{align*}
-
-\begin{itemize}
-\item Limiting case:
-  $p_k = p_0^M \mathbb{1}_0(k) + (1 - p_0^M) \mathbb{1}_1(k)$ [$\lambda = 0$]
-\end{itemize}
 
 \subsubsection{Zero-modified negative binomial}
 
@@ -1261,10 +1314,8 @@ Corresponding distribution from the $(a, b, 0)$ class.
 \end{align*}
 
 \begin{itemize}
-\item Special cases: Zero-modified logarithmic$(1 - p)$ [$r = 0$],
-  Zero-modified geometric$(p)$ [$r = 1$]
-\item Limiting case:
-  $p_k = p_0^M \mathbb{1}_0(k) + (1 - p_0^M) \mathbb{1}_1(k)$ [$p = 1$]
+\item Special cases: Zero-modified logarithmic$(1 - p)$ when $r = 0$;
+  Zero-modified geometric$(p)$ when $r = 1$.
 \end{itemize}
 
 \subsubsection{Zero-modified geometric}
@@ -1278,11 +1329,6 @@ Corresponding distribution from the $(a, b, 0)$ class.
   a &= 1 - p, \qquad b = 0, \qquad p_1 = (1 - p_0^M) p \\
   p_k &= (1 - p_0^M) p (1 - p)^{k - 1}
 \end{align*}
-
-\begin{itemize}
-\item Limiting case: mixture
-  $p_0^M \mathbb{1}_0(k) + (1 - p_0^M) \mathbb{1}_1(k)$ [$p = 1$]
-\end{itemize}
 
 \subsubsection{Zero-modified binomial}
 
@@ -1299,11 +1345,6 @@ Corresponding distribution from the $(a, b, 0)$ class.
         k = 1, 2, \dots, n
 \end{align*}
 
-\begin{itemize}
-\item Limiting cases: mixture
-  $p_0^M \mathbb{1}_0(k) + (1 - p_0^M) \mathbb{1}_1(k)$ [$n = 0$ or $p = 0$]
-\end{itemize}
-
 \subsubsection{Zero-modified logarithmic}
 
 \begin{itemize}
@@ -1317,10 +1358,6 @@ Corresponding distribution from the $(a, b, 0)$ class.
   p_k &= - \frac{(1 - p_0^M) p^k}{k \log (1 - p)}
 \end{align*}
 
-\begin{itemize}
-\item Limiting case:
-  $p_k = p_0^M \mathbb{1}_0(k) + (1 - p_0^M) \mathbb{1}_1(k)$ [$p = 0$]
-\end{itemize}
 
 
 %% References
