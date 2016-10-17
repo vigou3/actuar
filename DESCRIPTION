@@ -17,9 +17,9 @@ Description: Actuarial science functionalities, mostly in the
   fields of loss distributions, risk theory (including ruin theory),
   simulation of compound hierarchical models and credibility theory.
   The package also provides support functions for 19 continuous heavy
-  tailed probability distributions commonly used to model insurance
-  losses, and for zero-modified and zero-truncated versions of the
-  discrete distributions commonly used to model loss frequency.
+  tailed probability distributions useful for insurance loss severity
+  modeling, as well as zero-truncated and zero-modified extensions to
+  the discrete distributions commonly used in loss frequency modeling.
 Depends: R (>= 3.3.0)
 Imports: stats, graphics
 Suggests: MASS
