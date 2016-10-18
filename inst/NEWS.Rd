@@ -5,40 +5,17 @@
 \section{CHANGES IN actuar VERSION 2.0-0}{
   \subsection{NEW FEATURES}{
     \itemize{
+      \item{Support functions \code{[dpqrm,lev,mgf]invgaussian} for the
+	inverse gaussian distribution. The first three functions are C
+	(read: faster) implementations of functions of the same name in
+	package \pkg{statmod}.}
       \item{Support functions \code{[dpqrm]gumbel} for the Gumbel
 	extreme value distribution.}
-      \item{Support functions \code{[dpqr]logarithmic} and
-	\code{[dpqr]zmlogarithmic} for the logarithmic (or log-series)
-	and zero-modified logarithmic distributions.}
-      \item{Support functions \code{[dpqr]ztpois} and
-	\code{[dpqr]zmpois} for the zero-truncated and zero-modified
-	Poisson distributions.}
-      \item{Support functions \code{[dpqr]ztnbinom} and
-	\code{[dpqr]zmnbinom} for the zero-truncated and zero-modified
-	negative binomial distributions.}
-      \item{Support functions \code{[dpqr]ztgeom} and
-	\code{[dpqr]zmgeom} for the zero-truncated and zero-modified
-	geometric distributions.}
-      \item{Support functions \code{[dpqr]ztbinom} and
-	\code{[dpqr]zmbinom} for the zero-truncated and zero-modified
-	binomial distributions.}
-      \item{\code{aggregateDist} now accepts
-        \code{"zero-truncated binomial"},
-	\code{"zero-truncated geometric"},
-	\code{"zero-truncated negative binomial"},
-	\code{"zero-truncated poisson"},
-	\code{"zero-modified binomial"},
-	\code{"zero-modified geometric"},
-	\code{"zero-modified negative binomial"},
-	\code{"zero-modified poisson"} and
-	\code{"zero-modified logarithmic"}
-	for argument \code{model.freq} with the \code{"recursive"}
-	method.}
       \item{Extended range of admissible values for many limited
-	expected value functions thanks to new C-level function
+	expected value functions thanks to new C-level functions
 	\code{expint}, \code{betaint} and \code{gammaint}. These provide
 	special integrals presented in the introduction of Appendix A of
-	Klugman et al. (2012).
+	Klugman et al. (2012); see also	\code{vignette("distributions")}.
 
 	Concerned functions are:
 	\code{levtrbeta},
@@ -54,13 +31,49 @@
 	\code{levinvgamma},
 	\code{levinvweibull} in the Transformed Gamma family.}
       \item{Functions \code{expint}, \code{betaint} and \code{gammaint}
-	to compute to special integrals mentioned above. These are
+	to compute to the special integrals mentioned above. These are
 	merely convenience R interfaces to the C level functions. They
 	are \emph{not} exported by the package.}
+      \item{Support functions \code{[dpqr]logarithmic} and
+	\code{[dpqr]zmlogarithmic} for the logarithmic (or log-series)
+	and zero-modified logarithmic distributions.}
+      \item{Support functions \code{[dpqr]ztpois} and
+	\code{[dpqr]zmpois} for the zero-truncated and zero-modified
+	Poisson distributions.}
+      \item{Support functions \code{[dpqr]ztnbinom} and
+	\code{[dpqr]zmnbinom} for the zero-truncated and zero-modified
+	negative binomial distributions.}
+      \item{Support functions \code{[dpqr]ztgeom} and
+	\code{[dpqr]zmgeom} for the zero-truncated and zero-modified
+	geometric distributions.}
+      \item{Support functions \code{[dpqr]ztbinom} and
+	\code{[dpqr]zmbinom} for the zero-truncated and zero-modified
+	binomial distributions.}
+      \item{New vignette \code{"distributions"} reviews in great detail
+	the continuous and discrete distributions provided in the
+	package.}
+      \item{\code{aggregateDist} now accepts
+        \code{"zero-truncated binomial"},
+	\code{"zero-truncated geometric"},
+	\code{"zero-truncated negative binomial"},
+	\code{"zero-truncated poisson"},
+	\code{"zero-modified binomial"},
+	\code{"zero-modified geometric"},
+	\code{"zero-modified negative binomial"},
+	\code{"zero-modified poisson"} and
+	\code{"zero-modified logarithmic"}
+	for argument \code{model.freq} with the \code{"recursive"}
+	method.}
     }
   }
   \subsection{USER VISIBLE CHANGES}{
     \itemize{
+      \item{Functions \code{[m,lev,mgf]invGauss} that complemented
+	functions \code{[dpqr]invGauss} of package \pkg{SuppDists} are
+	deprecated.}
+      \item{The  material on probability laws of vignette \code{"lossdist"}
+	has been moved to the new vignette \code{"distributions"} (see
+	the previous section).}
       \item{In \code{aggregateDist} with the \code{"recursive"} method,
 	if the length of \code{p0} is greater than one, only the first
 	element is used, with a warning.}
@@ -73,7 +86,7 @@
 	logarithmic parameter in previous versions of actuar should now
 	be \code{1 - prob}.}
       \item{The first argument of the \code{mgffoo} functions has
-	changed from \code{x} to \code{t} as this is more common
+	changed from \code{x} to \code{t}. This is a more common
 	notation for moment generating functions.}
     }
   }
