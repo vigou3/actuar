@@ -1,41 +1,60 @@
-\documentclass{article}
+\documentclass[x11names]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-  \usepackage{amsmath,color,hyperref}
+  \usepackage{amsmath}
   \usepackage[round]{natbib}
   \usepackage[english]{babel}
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
+  \usepackage{framed,booktabs}
   \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Introduction to actuar}
   %\VignettePackage{actuar}
 
   \title{Introduction to \pkg{actuar}}
-  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
-    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
-    Mathieu Pigeon \\ École d'actuariat, Université Laval}
+  \author{Christophe Dutang \\ Université du Mans \\[3ex]
+    Vincent Goulet \\ Université Laval \\[3ex]
+    Mathieu Pigeon \\ Université du Québec à Montréal}
   \date{}
+
+  %% Colors
+  \usepackage{xcolor}
+  \definecolor{link}{rgb}{0,0.4,0.6}             % internal links
+  \definecolor{url}{rgb}{0.6,0,0}                % external links
+  \definecolor{citation}{rgb}{0,0.5,0}           % citations
+  \definecolor{codebg}{named}{LightYellow1}      % R code background
+
+  %% Hyperlinks
+  \usepackage{hyperref}
+  \hypersetup{%
+    pdfauthor={Vincent Goulet},
+    colorlinks = {true},
+    linktocpage = {true},
+    urlcolor = {url},
+    linkcolor = {link},
+    citecolor = {citation},
+    pdfpagemode = {UseOutlines},
+    pdfstartview = {Fit},
+    bookmarksopen = {true},
+    bookmarksnumbered = {true},
+    bookmarksdepth = {subsubsection}}
+
+  %% Sweave environments redefined to have a color background (using
+  %% environment snugshade* of package framed).
+  \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+  \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
+  \fvset{listparameters={\setlength{\topsep}{0pt}}}
+  \renewenvironment{Schunk}{%
+    \setlength{\topsep}{0pt}
+    \colorlet{shadecolor}{codebg}
+    \begin{snugshade*}}%
+    {\end{snugshade*}}
 
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
 
   \bibliographystyle{plainnat}
-
-  \definecolor{Red}{rgb}{0.7,0,0}
-  \definecolor{Blue}{rgb}{0,0,0.8}
-  \hypersetup{%
-    hyperindex = {true},
-    colorlinks = {true},
-    linktocpage = {true},
-    plainpages = {false},
-    linkcolor = {Blue},
-    citecolor = {Blue},
-    urlcolor = {Red},
-    pdfstartview = {Fit},
-    pdfpagemode = {UseOutlines},
-    pdfview = {XYZ null null null}
-  }
 
 \begin{document}
 
@@ -44,18 +63,18 @@
 \section{Introduction}
 \label{sec:introduction}
 
-\pkg{actuar} \citep{actuar} is a package providing additional
-Actuarial Science functionality to the \proglang{R} statistical
+Package \pkg{actuar} \citep{actuar} provides additional
+actuarial science functionality to the \proglang{R} statistical
 system. Although various packages on the Comprehensive \proglang{R}
 Archive Network (CRAN) provide functions useful to actuaries,
 \pkg{actuar} aims to serve as a central location for more specifically
 actuarial functions and data sets. The project was officially launched
 in 2005 and is under active development.
 
-The current feature set of the package can be split in four main
-categories: loss distributions modeling, risk theory (including ruin
-theory), simulation of compound hierarchical models and credibility
-theory.
+The current feature set of the package can be split in five main
+categories: additional probability distributions; loss distributions
+modeling; risk and ruin theory; simulation of compound hierarchical
+models; credibility theory.
 
 As much as possible, the developers have tried to keep the ``user
 interface'' of the various functions of the package consistent.
@@ -73,16 +92,13 @@ summary or plotting functions.
 It is a requirement of the \proglang{R} packaging system that every
 function and data set in a package has a help page. The \pkg{actuar}
 package follows this requirement strictly. In addition to the help
-pages, the package includes vignettes and demonstration scripts;
-running
+pages, the package includes vignettes and demonstration scripts; run
+the following commands at the \proglang{R} prompt to obtain the list
+of each.
 <<echo=TRUE, eval=FALSE>>=
 vignette(package = "actuar")
-@
-and
-<<eval=FALSE>>=
 demo(package = "actuar")
 @
-at the \proglang{R} prompt will give the list of each.
 
 
 \section{Collaboration and citation}
@@ -94,15 +110,12 @@ field will join their efforts to ours and contribute code to the
 by and for the community of developers and users.
 
 If you use \proglang{R} or \pkg{actuar} for actuarial analysis, please
-cite the software in publications. Use
+cite the software in publications. For information on how to cite the
+software, use:
 <<eval=FALSE>>=
 citation()
-@
-or
-<<eval=FALSE>>=
 citation("actuar")
 @
-for information on how to cite the software.
 
 
 \section*{Acknowledgments}

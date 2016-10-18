@@ -1,21 +1,22 @@
 \documentclass[x11names]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-  \usepackage{amsmath,bm}
+  \usepackage{amsmath}
   \usepackage[round]{natbib}
   \usepackage[english]{babel}
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
-  \usepackage{framed,booktabs,paralist}
+  \usepackage{framed}
+  \usepackage[shortlabels]{enumitem}
   \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Risk and ruin theory}
   %\VignettePackage{actuar}
 
   \title{Risk and ruin theory features of \pkg{actuar}}
-  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
-    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
-    Mathieu Pigeon \\ École d'actuariat, Université Laval}
+  \author{Christophe Dutang \\ Université du Mans \\[3ex]
+    Vincent Goulet \\ Université Laval \\[3ex]
+    Mathieu Pigeon \\ Université du Québec à Montréal}
   \date{}
 
   %% Colors
@@ -51,12 +52,15 @@
     \begin{snugshade*}}%
     {\end{snugshade*}}
 
+  %% Flush left enumerate environment.
+  \setlist[enumerate]{leftmargin=*,align=left}
+
   %% Some new commands
   \newcommand{\E}[1]{E[ #1 ]}
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
   \newcommand{\VaR}{\mathrm{VaR}}
   \newcommand{\CTE}{\mathrm{CTE}}
-  \newcommand{\mat}[1]{\bm{#1}}
+  \newcommand{\mat}[1]{\mathbold{#1}} % with mathpazo
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
@@ -799,7 +803,7 @@ and
   \label{eq:beekman:H}
   H(x) = \int_0^x \frac{1 - P(y)}{\mu}\, dy.
 \end{equation}
-In other words, we have (compare with \eqref{eq:cdf-S})
+In other words, we have (compare with \eqref{eq:cdf-S}):
 \begin{equation}
   \label{eq:beekman:prob-ruin-long}
   \psi(u) = 1 - \sum_{n = 0}^\infty  H^{*n}(u) p (1 - p)^n.

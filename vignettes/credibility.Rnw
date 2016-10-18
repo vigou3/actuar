@@ -1,23 +1,56 @@
-\documentclass{article}
+\documentclass[x11names]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-  \usepackage{amsmath,color,hyperref}
+  \usepackage{amsmath}
   \usepackage[round]{natbib}
   \usepackage[english]{babel}
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
-  \usepackage{paralist}
+  \usepackage{framed,booktabs}
   \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Credibility theory}
   %\VignettePackage{actuar}
 
   \title{Credibility theory features of \pkg{actuar}}
-  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
-    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
-    Xavier Milhaud \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
-    Mathieu Pigeon \\ École d'actuariat, Université Laval}
+  \author{Christophe Dutang \\ Université du Mans \\[3ex]
+    Vincent Goulet \\ Université Laval \\[3ex]
+    Xavier Milhaud \\ Université Claude Bernard Lyon 1 \\[3ex]
+    Mathieu Pigeon \\ Université du Québec à Montréal}
   \date{}
+
+  %% Colors
+  \usepackage{xcolor}
+  \definecolor{link}{rgb}{0,0.4,0.6}             % internal links
+  \definecolor{url}{rgb}{0.6,0,0}                % external links
+  \definecolor{citation}{rgb}{0,0.5,0}           % citations
+  \definecolor{codebg}{named}{LightYellow1}      % R code background
+
+  %% Hyperlinks
+  \usepackage{hyperref}
+  \hypersetup{%
+    pdfauthor={Vincent Goulet},
+    colorlinks = {true},
+    linktocpage = {true},
+    urlcolor = {url},
+    linkcolor = {link},
+    citecolor = {citation},
+    pdfpagemode = {UseOutlines},
+    pdfstartview = {Fit},
+    bookmarksopen = {true},
+    bookmarksnumbered = {true},
+    bookmarksdepth = {subsubsection}}
+
+  %% Sweave environments redefined to have a color background (using
+  %% environment snugshade* of package framed).
+  \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+  \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
+  \fvset{listparameters={\setlength{\topsep}{0pt}}}
+  \renewenvironment{Schunk}{%
+    \setlength{\topsep}{0pt}
+    \colorlet{shadecolor}{codebg}
+    \begin{snugshade*}}%
+    {\end{snugshade*}}
 
   %% Some new commands. Commands \E and \VAR redefined to fit within
   %% the author's writing habits...
@@ -27,32 +60,11 @@
   \newcommand{\code}[1]{\texttt{#1}}
   \newcommand{\pt}{{\scriptscriptstyle \Sigma}}
 
-  %% Redefine Sweave environments with smaller font
-  \RecustomVerbatimEnvironment{Sinput}{Verbatim}{%
-    fontshape=sl,fontsize=\small,xleftmargin=0pt}
-  \RecustomVerbatimEnvironment{Soutput}{Verbatim}{%
-    fontsize=\small,xleftmargin=0pt}
-
   \bibliographystyle{plainnat}
-
-  \definecolor{Red}{rgb}{0.7,0,0}
-  \definecolor{Blue}{rgb}{0,0,0.8}
-  \hypersetup{%
-    hyperindex = {true},
-    colorlinks = {true},
-    linktocpage = {true},
-    plainpages = {false},
-    linkcolor = {Blue},
-    citecolor = {Blue},
-    urlcolor = {Red},
-    pdfstartview = {Fit},
-    pdfpagemode = {UseOutlines},
-    pdfview = {XYZ null null null}
-  }
 
 <<echo=FALSE>>=
 library(actuar)
-options(width = 68, digits = 4)
+options(width = 60, digits = 4)
 @
 
 \begin{document}
@@ -245,8 +257,10 @@ into another. This shows that data does not have to be sorted by
 level. The fitted model using the iterative estimators is:
 <<echo=TRUE>>=
 X <- cbind(cohort = c(1, 2, 1, 2, 2), hachemeister)
-fit <- cm(~cohort + cohort:state, data = X, ratios = ratio.1:ratio.12,
-          weights = weight.1:weight.12, method = "iterative")
+fit <- cm(~cohort + cohort:state, data = X,
+          ratios = ratio.1:ratio.12,
+          weights = weight.1:weight.12,
+          method = "iterative")
 fit
 @
 
@@ -339,9 +353,10 @@ hand side (and is ignored if present). For example, fitting the model
 \end{displaymath}
 to the original data set of \cite{Hachemeister_75} is done with
 <<echo=TRUE>>=
-fit <- cm(~state, hachemeister,
-          regformula = ~ time, regdata = data.frame(time = 1:12),
-          ratios = ratio.1:ratio.12, weights = weight.1:weight.12)
+fit <- cm(~state, hachemeister, regformula = ~ time,
+          regdata = data.frame(time = 1:12),
+          ratios = ratio.1:ratio.12,
+          weights = weight.1:weight.12)
 fit
 @
 
@@ -389,10 +404,11 @@ model with the intercept at the barycenter of time. The resulting
 regression coefficients have little meaning, but the predictions are
 sensible:
 <<echo=TRUE>>=
-fit2 <- cm(~state, hachemeister,
-           regformula = ~ time, regdata = data.frame(time = 1:12),
+fit2 <- cm(~state, hachemeister, regformula = ~ time,
+           regdata = data.frame(time = 1:12),
            adj.intercept = TRUE,
-           ratios = ratio.1:ratio.12, weights = weight.1:weight.12)
+           ratios = ratio.1:ratio.12,
+           weights = weight.1:weight.12)
 summary(fit2, newdata = data.frame(time = 13))
 @ %
 Figure~\ref{fig:state4:2} shows the beneficient effect of the

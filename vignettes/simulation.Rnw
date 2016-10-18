@@ -1,58 +1,75 @@
-\documentclass{article}
+\documentclass[x11names]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-  \usepackage{amsmath,amsthm,color,hyperref}
+  \usepackage{amsmath,amsthm}
   \usepackage[round]{natbib}
   \usepackage[english]{babel}
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
-  \usepackage{paralist}
+  \usepackage{framed}
+  \usepackage[shortlabels]{enumitem}
   \usepackage[noae]{Sweave}
 
   %\VignetteIndexEntry{Simulation of compound hierarchical models}
   %\VignettePackage{actuar}
 
   \title{Simulation of compound hierarchical models}
-  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
-    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
-    Mathieu Pigeon \\ École d'actuariat, Université Laval \\[3ex]
-    Louis-Philippe Pouliot \\ École d'actuariat, Université Laval}
+  \author{Christophe Dutang \\ Université du Mans \\[3ex]
+    Vincent Goulet \\ Université Laval \\[3ex]
+    Mathieu Pigeon \\ Université du Québec à Montréal \\[3ex]
+    Louis-Philippe Pouliot \\ Université Laval}
   \date{}
+
+  %% Colors
+  \usepackage{xcolor}
+  \definecolor{link}{rgb}{0,0.4,0.6}             % internal links
+  \definecolor{url}{rgb}{0.6,0,0}                % external links
+  \definecolor{citation}{rgb}{0,0.5,0}           % citations
+  \definecolor{codebg}{named}{LightYellow1}      % R code background
+
+  %% Hyperlinks
+  \usepackage{hyperref}
+  \hypersetup{%
+    pdfauthor={Vincent Goulet},
+    colorlinks = {true},
+    linktocpage = {true},
+    urlcolor = {url},
+    linkcolor = {link},
+    citecolor = {citation},
+    pdfpagemode = {UseOutlines},
+    pdfstartview = {Fit},
+    bookmarksopen = {true},
+    bookmarksnumbered = {true},
+    bookmarksdepth = {subsubsection}}
+
+  %% Sweave environments redefined to have a color background (using
+  %% environment snugshade* of package framed).
+  \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+  \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
+  \fvset{listparameters={\setlength{\topsep}{0pt}}}
+  \renewenvironment{Schunk}{%
+    \setlength{\topsep}{0pt}
+    \colorlet{shadecolor}{codebg}
+    \begin{snugshade*}}%
+    {\end{snugshade*}}
+
+  %% Flush left enumerate environment.
+  \setlist[enumerate]{leftmargin=*,align=left}
+
+  %% Example environment
+  \theoremstyle{definition}
+  \newtheorem{example}{Example}
 
   %% Some new commands
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
 
-  %% Redefine Sweave environments with smaller font
-  \RecustomVerbatimEnvironment{Sinput}{Verbatim}{%
-    fontshape=sl,fontsize=\small,xleftmargin=0pt}
-  \RecustomVerbatimEnvironment{Soutput}{Verbatim}{%
-    fontsize=\small,xleftmargin=0pt}
-
   \bibliographystyle{plainnat}
-
-  \definecolor{Red}{rgb}{0.7,0,0}
-  \definecolor{Blue}{rgb}{0,0,0.8}
-  \hypersetup{%
-    hyperindex = {true},
-    colorlinks = {true},
-    linktocpage = {true},
-    plainpages = {false},
-    linkcolor = {Blue},
-    citecolor = {Blue},
-    urlcolor = {Red},
-    pdfstartview = {Fit},
-    pdfpagemode = {UseOutlines},
-    pdfview = {XYZ null null null}
-  }
-
-  \theoremstyle{definition}
-  \newtheorem{example}{Example}
 
 <<echo=FALSE>>=
 library(actuar)
-options(width = 62, digits = 4)
+options(width = 60, digits = 4)
 @
 
 \begin{document}
@@ -175,12 +192,12 @@ to avoid evaluation of the incomplete calls to the random number
 generation functions. Function \code{simul} builds and executes the
 calls to the random generation functions from the top of the
 hierarchical model to the bottom. At each level, the function
-\begin{inparaenum}[1)]
+\begin{enumerate}[i)]
 \item infers the number of variates to generate from the number of
   nodes list, and
 \item appropriately recycles the mixing parameters simulated
   previously.
-\end{inparaenum}
+\end{enumerate}
 
 The actual names in the list and the expression object can be
 anything; they merely serve to identify the mixing parameters.
@@ -200,14 +217,14 @@ name \code{weights} appears in a model.
 Function \code{simul} can simulate data for structures where both the
 frequency model and the severity model are hierarchical. It has four
 main arguments:
-\begin{inparaenum}[1)]
+\begin{enumerate}[i)]
 \item \code{nodes} for the number of nodes list;
 \item \code{model.freq} for the frequency model;
 \item \code{model.sev} for the severity model;
 \item \code{weights} for the vector of weights in lexicographic
   order, that is all weights of entity 1, then all weights of
   entity 2, and so on.
-\end{inparaenum}
+\end{enumerate}
 
 The function returns the variates in a list of class
 \code{"portfolio"} with a \code{dim} attribute of length two. The list
@@ -404,7 +421,13 @@ One will find more examples of \code{simul} usage in the
 \code{simulation} demo file. Function \code{simul} was used to
 simulate the data in \cite{Goulet_cfs}.
 
-
+%% References
 \bibliography{actuar}
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% coding: utf-8
+%%% TeX-master: t
+%%% End:

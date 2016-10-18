@@ -14,9 +14,9 @@
   %\VignettePackage{actuar}
 
   \title{Loss distributions modeling features of \pkg{actuar}}
-  \author{Christophe Dutang \\ ISFA, Université Claude Bernard Lyon 1 \\[3ex]
-    Vincent Goulet \\ École d'actuariat, Université Laval \\[3ex]
-    Mathieu Pigeon \\ École d'actuariat, Université Laval}
+  \author{Christophe Dutang \\ Université du Mans \\[3ex]
+    Vincent Goulet \\ Université Laval \\[3ex]
+    Mathieu Pigeon \\ Université du Québec à Montréal}
   \date{}
 
   %% Colors
