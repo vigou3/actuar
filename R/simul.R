@@ -13,27 +13,64 @@
 
 simul <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 {
-    ## Sanity checks: 'nodes' must be a named list; at least either of
-    ## 'model.freq' or 'model.sev' should be non-NULL; level names
-    ## (and consequently the number of levels) should be the same
-    ## everywhere.
-    if (missing(nodes) || !is.list(nodes))
-        stop("'nodes' must be a named list")
+    ## Get level names. Each could be NULL.
+    level.names <- names(nodes)
+    freq.names <- names(model.freq)
+    sev.names <- names(model.sev)
 
-    has.freq <- !(is.null(model.freq) || # frequency model present?
-                 all(sapply(model.freq, is.null)))
-    has.sev  <- !(is.null(model.sev) ||  # severity model present?
-                 all(sapply(model.sev, is.null)))
-    if (!has.freq && !has.sev)
-        stop("one of 'model.freq' or 'model.sev' must be non-NULL")
-    if ((has.freq && !identical(names(nodes), names(model.freq))) ||
-        (has.sev  && !identical(names(nodes), names(model.sev))))
-        stop("level names different in 'nodes', 'model.freq' and 'model.sev'")
+    ## 'nodes' must be a named list. One exception is allowed: there
+    ## is only one level. In this case, add a predetermined name if
+    ## there isn't one already and make sure 'nodes' is a list.
+    if (length(nodes) == 1L)
+    {
+        if (is.null(level.names))
+            names(nodes) <- "X"
+        nodes <- as.list(nodes)
+    }
+    else
+    {
+        if (!is.list(nodes) || is.null(level.names))
+            stop("'nodes' must be a named list")
+    }
+
+    ## Determine if frequency and severity models are present. Keep
+    ## for future use.
+    has.freq <- !all(sapply(model.freq, is.null))
+    has.sev  <- !all(sapply(model.sev, is.null))
+
+    ## Check that at least one of 'model.freq' or 'model.sev' is
+    ## present and that the level names match with those of 'nodes'.
+    ## Perhaps is there a fancier way to do all these tests, but the
+    ## version below is at least easy to follow.
+    if (has.freq)
+    {
+        if (has.sev)
+        {
+            if (! (identical(level.names, freq.names) &&
+                   identical(level.names, sev.names)))
+                stop("level names different in 'nodes', 'model.freq' and 'model.sev'")
+        }
+        else
+        {
+            if (!identical(level.names, freq.names))
+                stop("level names different in 'nodes', 'model.freq' and 'model.sev'")
+        }
+    }
+    else
+    {
+        if (has.sev)
+        {
+            if (!identical(level.names, sev.names))
+                stop("level names different in 'nodes', 'model.freq' and 'model.sev'")
+        }
+        else
+            stop("one of 'model.freq' or 'model.sev' must be non-NULL")
+    }
 
     ## The function is written for models with at least two levels
     ## (entity and year). If there is only one, add a dummy level to
     ## avoid scattering the code with conditions.
-    if (length(nodes) < 2)
+    if (length(nodes) < 2L)
     {
         nodes <- c(node = 1, nodes)
         model.freq <-
@@ -43,7 +80,7 @@ simul <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     }
 
     ## Frequently used quantities
-    level.names <- names(nodes)         # level names
+    level.names <- names(nodes)         # need to reset!
     nlevels <- length(nodes)            # number of levels
 
     ## Recycling of the number of nodes (if needed) must be done
@@ -51,8 +88,8 @@ simul <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     ## below we will need to know the total number of nodes in the
     ## portfolio. Furthermore, the recycled list 'nodes' will be
     ## returned by the function.
-    for (i in 2:nlevels)       # first node doesn't need recycling
-        nodes[[i]] <- rep(nodes[[i]], length = sum(nodes[[i - 1]]))
+    for (i in 2L:nlevels)       # first node doesn't need recycling
+        nodes[[i]] <- rep(nodes[[i]], length = sum(nodes[[i - 1L]]))
 
     ## Simulation of the frequency mixing parameters for each level
     ## (e.g. class, contract) and, at the last level, the actual
@@ -203,7 +240,8 @@ simul <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     res[freq0] <- lapply(rep.int(0, length(freq0)), numeric)
     res <- matrix(res, nrow, ncol, byrow = TRUE,
                   dimnames = list(NULL,
-                  paste(level.names[nlevels], seq_len(ncol), sep = ".")))
+                                  paste(level.names[nlevels],
+                                        seq_len(ncol), sep = ".")))
 
     ## Reshape weights as a matrix, if necessary.
     weights <- if (is.null(weights))
@@ -221,10 +259,10 @@ simul <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
     ## is denoted X_{ijkt}, one line of the matrix will contain
     ## subscripts i, j and k. As we move from right to left in the
     ## columns of 'm', the subcripts are increasingly repeated.
-    ncol <- nlevels - 1
+    ncol <- nlevels - 1L
     m <- matrix(1, nrow, ncol,
                 dimnames = list(NULL, head(level.names, ncol)))
-    for (i in seq_len(ncol - 1))    # all but the last column
+    for (i in seq_len(ncol - 1L))    # all but the last column
     {
         ## Vector 'x' will originally contain all subscripts for one
         ## level. These subscripts are then repeated as needed to give
@@ -233,7 +271,7 @@ simul <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
         ## frame. Somewhat unusual, but this is the simplest procedure
         ## I managed to come up with.
         x <- unlist(lapply(nodes[[i]], seq))
-        lapply(nodes[(i + 1):(nlevels - 1)],
+        lapply(nodes[(i + 1L):(nlevels - 1L)],
                function(v) assign("x", rep.int(x, v), envir = parent.frame(2)))
         m[, i] <- x
     }

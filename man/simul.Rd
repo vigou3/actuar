@@ -14,7 +14,7 @@ simul(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 \method{print}{portfolio}(x, \dots)
 }
 \arguments{
-  \item{nodes}{a named list giving the number of "nodes" at each level
+  \item{nodes}{a vector or a named list giving the number of "nodes" at each level
     in the hierarchy of the portfolio. The nodes are listed from top
     (portfolio) to bottom (usually the years of experience).}
   \item{model.freq}{a named vector of expressions specifying the
@@ -29,31 +29,35 @@ simul(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 }
 \details{
   The order and the names of the elements in \code{nodes},
-  \code{model.freq} and \code{model.sev} must match.  At least one of
+  \code{model.freq} and \code{model.sev} must match. At least one of
   \code{model.freq} and \code{model.sev} must be non \code{NULL}.
 
-  \code{nodes} specifies the hierarchical layout of the portfolio.  Each
+  \code{nodes} may be a basic vector, named or not, for non hierarchical
+  models. The rule above still applies, so \code{model.freq} and
+  \code{model.sev} should not be named if \code{nodes} is not.
+
+  \code{nodes} specifies the hierarchical layout of the portfolio. Each
   element of the list is a vector of the number of nodes at a given
-  level.  Vectors are recycled as necessary.
+  level. Vectors are recycled as necessary.
 
   \code{model.freq} and \code{model.sev} specify the simulation models
-  for claim numbers and claim amounts, respectively.  A model is
+  for claim numbers and claim amounts, respectively. A model is
   expressed in a semi-symbolic fashion using an object of mode
-  \code{\link[base]{expression}}.  Each element of the object
+  \code{\link[base]{expression}}. Each element of the object
   must be named and should be a complete call to a random number
-  generation function, with the number of variates omitted.  Hierarchical
+  generation function, with the number of variates omitted. Hierarchical
   (or mixtures of) models are achieved by replacing one or more
   parameters of a distribution at a given level by any combination of
-  the names of the levels above.  If no mixing is to take place at a
+  the names of the levels above. If no mixing is to take place at a
   level, the model for this level can be \code{NULL}.
 
   The argument of the random number generation functions for the number
   of variates to simulate \strong{must} be named \code{n}.
 
   Weights will be used wherever the name \code{"weights"} appears in a
-  model.  It is the user's responsibility to ensure that the length of
+  model. It is the user's responsibility to ensure that the length of
   \code{weights} will match the number of nodes when weights are to be
-  used.  Normally, there should be one weight per node at the lowest
+  used. Normally, there should be one weight per node at the lowest
   level of the model.
 
   Data is generated in lexicographic order, that is by row in the output
@@ -98,7 +102,7 @@ simul(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
   claim amounts.
 }
 \examples{
-## Simple two level (contracts and years) portfolio with frequency model
+## Two level (contracts and years) portfolio with frequency model
 ## Nit|Theta_i ~ Poisson(Theta_i), Theta_i ~ Gamma(2, 3) and severity
 ## model X ~ Lognormal(5, 1)
 simul(nodes = list(contract = 10, year = 5),
@@ -132,5 +136,11 @@ pf 				# print method
 aggregate(pf) 			# aggregate claim amounts
 frequency(pf)  			# frequencies
 severity(pf)			# individual claim amounts
+
+## Standard, non hierarchical, compound model with simplified
+## syntax
+simul(10,
+      model.freq = expression(rpois(2)),
+      model.sev = expression(rgamma(2, 3)))
 }
 \keyword{datagen}

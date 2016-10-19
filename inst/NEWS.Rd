@@ -64,6 +64,9 @@
 	\code{"zero-modified logarithmic"}
 	for argument \code{model.freq} with the \code{"recursive"}
 	method.}
+      \item{\code{simul} now accepts a basic (named or not) vector for
+	argument \code{nodes} when simulating from a standard, non
+	hierarchical, compound model.}
     }
   }
   \subsection{USER VISIBLE CHANGES}{
