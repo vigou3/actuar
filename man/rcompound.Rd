@@ -26,8 +26,8 @@ rcompound(n, model.freq, model.sev)
   for the frequency and the severity random variables, respectively. A
   model is a complete call to a random number generation function, with
   the number of variates omitted. This is similar to
-  \code{\link{simul}}, but a streamlined interface since the calls are
-  not wrapped into \code{\link{expression}}.
+  \code{\link{simul}}, but the calls need not be wrapped into
+  \code{\link{expression}}.
 
   The argument of the random number generation functions for the number
   of variates to simulate \strong{must} be named \code{n}.
@@ -44,6 +44,10 @@ rcompound(n, model.freq, model.sev)
 \examples{
 ## Compound Poisson model with gamma severity.
 rcompound(10, rpois(2), rgamma(2, 3))
+
+## Wrapping the simulation models into expression() is allowed, but
+## not needed.
+rcompound(10, expression(rpois(2)), expression(rgamma(2, 3)))
 
 \dontrun{## Speed comparison between rcompound() and simul().
 ## [Also note the simpler syntax for rcompound().]

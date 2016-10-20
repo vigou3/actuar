@@ -16,6 +16,13 @@ rcompound <- function(n, model.freq, model.sev)
     cl.freq <- substitute(model.freq)
     cl.sev <- substitute(model.sev)
 
+    ## If model expressions are wrapped into 'expression' as in
+    ## 'simul', get rid of the call.
+    if (cl.freq[[1]] == "expression")
+        cl.freq <- cl.freq[[-1]]
+    if (cl.sev[[1]] == "expression")
+        cl.sev <- cl.sev[[-1]]
+
     ## Initialize the output vector. We will use the fact that 'res'
     ## is filled with zeros later.
     res <- numeric(n)
