@@ -5,11 +5,11 @@
 \section{CHANGES IN actuar VERSION 2.0-0}{
   \subsection{NEW FEATURES}{
     \itemize{
-      \item{Support functions \code{[dpqrm,lev,mgf]invgaussian} for the
-	inverse gaussian distribution. The first three functions are C
-	(read: faster) implementations of functions of the same name in
-	package \pkg{statmod}.}
-      \item{Support functions \code{[dpqrm]gumbel} for the Gumbel
+      \item{New support functions \code{[dpqrm,lev,mgf]invgaussian} for
+	the inverse gaussian distribution. The first three functions are
+	C (read: faster) implementations of functions of the same name
+	in package \pkg{statmod}.}
+      \item{New support functions \code{[dpqrm]gumbel} for the Gumbel
 	extreme value distribution.}
       \item{Extended range of admissible values for many limited
 	expected value functions thanks to new C-level functions
@@ -30,23 +30,23 @@
 	\code{levinvtrgamma},
 	\code{levinvgamma},
 	\code{levinvweibull} in the Transformed Gamma family.}
-      \item{Functions \code{expint}, \code{betaint} and \code{gammaint}
-	to compute to the special integrals mentioned above. These are
-	merely convenience R interfaces to the C level functions. They
-	are \emph{not} exported by the package.}
-      \item{Support functions \code{[dpqr]logarithmic} and
+      \item{New functions \code{expint}, \code{betaint} and
+	\code{gammaint} to compute to the special integrals mentioned
+	above. These are merely convenience R interfaces to the C level
+	functions. They are \emph{not} exported by the package.}
+      \item{New support functions \code{[dpqr]logarithmic} and
 	\code{[dpqr]zmlogarithmic} for the logarithmic (or log-series)
 	and zero-modified logarithmic distributions.}
-      \item{Support functions \code{[dpqr]ztpois} and
+      \item{New support functions \code{[dpqr]ztpois} and
 	\code{[dpqr]zmpois} for the zero-truncated and zero-modified
 	Poisson distributions.}
-      \item{Support functions \code{[dpqr]ztnbinom} and
+      \item{New support functions \code{[dpqr]ztnbinom} and
 	\code{[dpqr]zmnbinom} for the zero-truncated and zero-modified
 	negative binomial distributions.}
-      \item{Support functions \code{[dpqr]ztgeom} and
+      \item{New support functions \code{[dpqr]ztgeom} and
 	\code{[dpqr]zmgeom} for the zero-truncated and zero-modified
 	geometric distributions.}
-      \item{Support functions \code{[dpqr]ztbinom} and
+      \item{New support functions \code{[dpqr]ztbinom} and
 	\code{[dpqr]zmbinom} for the zero-truncated and zero-modified
 	binomial distributions.}
       \item{New vignette \code{"distributions"} reviews in great detail
@@ -64,16 +64,19 @@
 	\code{"zero-modified logarithmic"}
 	for argument \code{model.freq} with the \code{"recursive"}
 	method.}
+      \item{New function \code{rcompound} to generate variates from non
+	hierarchical compound models of the form \eqn{S = X_1 + \dots +
+	X_N}. Where function \code{simul} was developed for flexibility,
+	\code{rcompound} aims at execution speed. It uses a simplified
+	version of the syntax of \code{simul} for model specfification.}
       \item{\code{simul} now accepts a basic (named or not) vector for
-	argument \code{nodes} when simulating from a standard, non
-	hierarchical, compound model.}
+	argument \code{nodes} when simulating from a non hierarchical
+	compound model. But really, one should use \code{rcompound} for
+	such cases.}
     }
   }
   \subsection{USER VISIBLE CHANGES}{
     \itemize{
-      \item{Functions \code{[m,lev,mgf]invGauss} that complemented
-	functions \code{[dpqr]invGauss} of package \pkg{SuppDists} are
-	deprecated.}
       \item{The  material on probability laws of vignette \code{"lossdist"}
 	has been moved to the new vignette \code{"distributions"} (see
 	the previous section).}
@@ -91,6 +94,14 @@
       \item{The first argument of the \code{mgffoo} functions has
 	changed from \code{x} to \code{t}. This is a more common
 	notation for moment generating functions.}
+    }
+  }
+  \subsection{DEPRECATED}{
+    \itemize{
+      \item{Functions \code{[m,lev,mgf]invGauss} that complemented
+	functions \code{[dpqr]invGauss} of package \pkg{SuppDists} are
+	deprecated in favor of the new complete set of functions
+	\code{[dpqrm,lev,mgf]invgauss}.}
     }
   }
   \subsection{BUG FIX}{

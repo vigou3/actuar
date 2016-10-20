@@ -34,7 +34,9 @@ simul(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 
   \code{nodes} may be a basic vector, named or not, for non hierarchical
   models. The rule above still applies, so \code{model.freq} and
-  \code{model.sev} should not be named if \code{nodes} is not.
+  \code{model.sev} should not be named if \code{nodes} is not. However,
+  for non hierarchical models, \code{\link{rcompound}} is faster and has
+  a simpler interface.
 
   \code{nodes} specifies the hierarchical layout of the portfolio. Each
   element of the list is a vector of the number of nodes at a given
@@ -100,6 +102,9 @@ simul(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
   \code{\link{simul.summaries}} for the functions to create the
   matrices of aggregate claim amounts, frequencies and individual
   claim amounts.
+
+  \code{\link{rcompound}} for a simpler and much faster way to generate
+  variates from standard, non hierarchical, compound models.
 }
 \examples{
 ## Two level (contracts and years) portfolio with frequency model
@@ -138,7 +143,7 @@ frequency(pf)  			# frequencies
 severity(pf)			# individual claim amounts
 
 ## Standard, non hierarchical, compound model with simplified
-## syntax
+## syntax (function rcompound() is much faster for such cases)
 simul(10,
       model.freq = expression(rpois(2)),
       model.sev = expression(rgamma(2, 3)))

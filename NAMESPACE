@@ -2,10 +2,11 @@
 useDynLib(actuar, .registration = TRUE)
 
 ### Exports
-export(## Credibility theory
+export(
+    ## Credibility theory
     cm,
     ## Simulation of compound models
-    simul, simpf, severity, unroll,
+    simul, simpf, severity, unroll, rcompound,
     ## Risk theory
     aggregateDist, CTE, TVaR, discretize, discretise, VaR, adjCoef, ruin,
     ## One parameter distributions

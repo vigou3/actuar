@@ -120,20 +120,61 @@ models of the form
 where $C_1, C_2, \dots$ are mutually independent and identically
 distributed random variables each independent of $N$.
 
-The package provides function \code{simul} to simulate data from
-compound models like \eqref{eq:definition-S} where both the frequency
-and the severity components can have a hierarchical structure. The
-function also supports weights (or volumes) in the model. We give here
-a brief description of the function and its usage; see
-\cite{Goulet:simpf:2008} for details about the supported models and
-more thorough examples.
+The package provides two functions to simulate data from
+compound models like \eqref{eq:definition-S}:
+\begin{enumerate}
+\item \code{rcompound} for standard, non hierarchical, compound models
+  with, basically, one distribution for $N$ and one for $C$;
+\item \code{simul} for models where both the frequency and the
+  severity components can have a hierarchical structure and where, in
+  addition, each observation may be assigned a weight (or volume).
+\end{enumerate}
+
+Function \code{rcompound} is faster and has a simpler interface for
+standard compound models, but \code{simul} is much more flexible.
+
+The next section briefly describes function \code{rcompound}. The rest
+of the document focuses on the description and usage of \code{simul}.
+\cite{Goulet:simpf:2008} discuss in more details the models
+supported by \code{simul} and give more thorough examples.
+
+
+\section{Simulation from standard compound models}
+\label{sec:rcompound}
+
+Function \code{rcompound} generate variates from the random variable
+$S$ in \eqref{eq:definition-S} where the distribution of both random
+variables $N$ and $C$ is non hierarchical. The function has three
+arguments:
+\begin{enumerate}
+\item \code{n} for the number of variates to generate;
+\item \code{model.freq} for the frequency model (random variable $N$);
+\item \code{model.sev} for the severity model (random variable $C$).
+\end{enumerate}
+
+Arguments \code{model.freq} and \code{model.sev} are simple
+\proglang{R} expressions consisting in calls to a random number
+generation function with the number of variates omitted.
+
+\begin{example}
+  Let $S \sim \text{Compound Poisson}(1.5, G)$, where $1.5$ is the value
+  of the Poisson parameter and $G$ is the cumulative distribution
+  function of a gamma distribution with shape parameter $\alpha = 3$
+  and rate parameter $\lambda = 2$. We obtain variates from $S$ using
+  \code{rcompound} as follows:
+<<echo=TRUE>>=
+rcompound(10, rpois(1.5), rgamma(3, 2))
+@
+  \qed
+\end{example}
 
 
 \section{Description of hierarchical models}
 \label{sec:description}
 
-We need a method to describe hierarchical models in \proglang{R} that
-will meet the following criteria:
+From now on, we consider simulation of data from hierarchical models.
+We need a method to describe these models in \proglang{R} that will
+meet the following criteria:
 \begin{enumerate}
 \item simple and intuitive to go from the mathematical formulation of
   the model to the \proglang{R} formulation and back;
@@ -147,15 +188,16 @@ each level ($I$, $J_1, \dots, J_I$ and $n_{11}, \dots, n_{IJ}$, above)
 and by the probability laws at each level. The number of nodes is
 passed to \code{simul} by means of a named list where each element is
 a vector of the number of nodes at a given level. Vectors are recycled
-when the number of nodes is the same throughout a level. Probability
-models are expressed in a semi-symbolic fashion using an object of
-mode \code{"expression"}. Each element of the object must be named ---
-with names matching those of the number of nodes list --- and should
-be a complete call to an existing random number generation function,
-but with the number of variates omitted. Hierarchical models are
-achieved by replacing one or more parameters of a distribution at a
-given level by any combination of the names of the levels above. If no
-mixing is to take place at a level, the model for this level can be
+when the number of nodes is the same throughout a level.
+
+Probability models are expressed in a semi-symbolic fashion using an
+object of mode \code{"expression"}. Each element of the object must be
+named --- with names matching those of the number of nodes list ---
+and should be a complete call to an existing random number generation
+function, but with the number of variates omitted. Hierarchical models
+are achieved by replacing one or more parameters of a distribution at
+a given level by any combination of the names of the levels above. If
+no mixing is to take place at a level, the model for this level can be
 \code{NULL}.
 
 \begin{example}
@@ -294,7 +336,9 @@ ms <- expression(cohort = rnorm(2, sqrt(0.1)),
                  contract = rnorm(cohort, 1),
                  year = rlnorm(contract, 1))
 wijt <- runif(31, 0.5, 2.5)
-pf <- simul(nodes = nodes, model.freq = mf, model.sev = ms, weights = wijt)
+pf <- simul(nodes = nodes,
+            model.freq = mf, model.sev = ms,
+            weights = wijt)
 @
 
   Object \code{pf} is a list of class \code{"portfolio"} containing,
@@ -410,9 +454,10 @@ wit <- rgamma(15, rep(runif(3, 0, 100), each = 5),
   immediately yield the matrix of observations:
 <<echo=TRUE>>=
 frequency(simul(list(entity = 3, year = 5),
-      expression(entity = rgamma(rgamma(1, 5, 5), rgamma(1, 25, 1)),
-          year = rpois(weights * entity)),
-      weights = wit))
+                expression(entity = rgamma(rgamma(1, 5, 5),
+                                           rgamma(1, 25, 1)),
+                           year = rpois(weights * entity)),
+                weights = wit))
 @
   \qed
 \end{example}
