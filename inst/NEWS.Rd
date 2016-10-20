@@ -64,15 +64,23 @@
 	\code{"zero-modified logarithmic"}
 	for argument \code{model.freq} with the \code{"recursive"}
 	method.}
-      \item{New function \code{rcompound} to generate variates from non
-	hierarchical compound models of the form \eqn{S = X_1 + \dots +
-	X_N}. Where function \code{simul} was developed for flexibility,
-	\code{rcompound} aims at execution speed. It uses a simplified
-	version of the syntax of \code{simul} for model specfification.}
+      \item{New function \code{rmixture} to generate random variates
+	from discrete mixtures, that is from random variables with
+	densities of the form \eqn{f(x) = p_1 f_1(x) + ... + p_n
+	f_n(x)}.}
+      \item{New function \code{rcompound} to generate random variates
+	from (non hierarchical) compound models of the form \eqn{S = X_1
+	+ \dots + X_N}. Where function \code{simul} was developed for
+	flexibility, \code{rcompound} aims at execution speed. It uses a
+	simplified version of the syntax of \code{simul} for model
+	specification.}
       \item{\code{simul} now accepts a basic (named or not) vector for
 	argument \code{nodes} when simulating from a non hierarchical
 	compound model. But really, one should use \code{rcompound} for
 	such cases.}
+      \item{New alias \code{rcomphierarc} for \code{simul} that better
+	fits within the usual naming scheme of random generation
+	functions.}
     }
   }
   \subsection{USER VISIBLE CHANGES}{
@@ -80,6 +88,9 @@
       \item{The  material on probability laws of vignette \code{"lossdist"}
 	has been moved to the new vignette \code{"distributions"} (see
 	the previous section).}
+      \item{The first argument of the \code{mgffoo} functions has
+	changed from \code{x} to \code{t}. This is a more common
+	notation for moment generating functions.}
       \item{In \code{aggregateDist} with the \code{"recursive"} method,
 	if the length of \code{p0} is greater than one, only the first
 	element is used, with a warning.}
@@ -91,9 +102,11 @@
 	distribution. Basically, any value of \code{prob} for the
 	logarithmic parameter in previous versions of actuar should now
 	be \code{1 - prob}.}
-      \item{The first argument of the \code{mgffoo} functions has
-	changed from \code{x} to \code{t}. This is a more common
-	notation for moment generating functions.}
+      \item{The aim of vignette \code{"simulation"} is changed from
+	\dQuote{simulation of compound hierarchical models} to
+	\dQuote{simulation of insurance data with \pkg{actuar}} as it
+	also covers the new functions \code{rmixture} and
+	\code{rcompound}.}
     }
   }
   \subsection{DEPRECATED}{

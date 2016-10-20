@@ -2,8 +2,8 @@
 \alias{rcompound}
 \title{Simulation from Compound Models}
 \description{
-  \code{rcompound} simulates variates from standard (non hierarchical)
-  compound models.
+  Generate random variates from a standard (non hierarchical) compound
+  model.
 }
 \usage{
 rcompound(n, model.freq, model.sev)
@@ -16,7 +16,7 @@ rcompound(n, model.freq, model.sev)
     details).}
 }
 \details{
-  \code{rcompound} generate variates from a random variable of the form
+  \code{rcompound} generates variates from a random variable of the form
   \deqn{S = X_1 + ... X_N,}
   where \eqn{N} is the frequency random variable and \eqn{X_1, X_2,
     \dots} are the severity random variables. The latter are mutually

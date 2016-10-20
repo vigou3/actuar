@@ -10,10 +10,10 @@
   \usepackage[shortlabels]{enumitem}
   \usepackage[noae]{Sweave}
 
-  %\VignetteIndexEntry{Simulation of compound hierarchical models}
+  %\VignetteIndexEntry{Simulation of insurance data}
   %\VignettePackage{actuar}
 
-  \title{Simulation of compound hierarchical models}
+  \title{Simulation of insurance data with \pkg{actuar}}
   \author{Christophe Dutang \\ Université du Mans \\[3ex]
     Vincent Goulet \\ Université Laval \\[3ex]
     Mathieu Pigeon \\ Université du Québec à Montréal \\[3ex]
@@ -41,6 +41,9 @@
     bookmarksopen = {true},
     bookmarksnumbered = {true},
     bookmarksdepth = {subsubsection}}
+
+  %% Help for \autoref
+  \def\exampleautorefname{example}
 
   %% Sweave environments redefined to have a color background (using
   %% environment snugshade* of package framed).
@@ -79,6 +82,165 @@ options(width = 60, digits = 4)
 \section{Introduction}
 \label{sec:introduction}
 
+Package \pkg{actuar} provides functions that greatly facilitates
+generation of random variates from various probability models commonly
+used in actuarial applications. From the simplest to the most
+sophicated, these functions are:
+\begin{enumerate}
+\item \code{rmixture} to simulate from discrete mixtures;
+\item \code{rcompound} to simulate from compound models;
+\item \code{simul} (alias \code{rcomphierarc}\footnote{%
+    Alias introduced in \pkg{actuar} 2.0-0.}) %
+  to simulate from compound models where both the frequency and the
+  severity components can have a hierarchical structure.
+\end{enumerate}
+
+
+\section{Simulation from discrete mixtures}
+\label{sec:rmixture}
+
+A random variable is said to be discrete mixture of the random
+variables with probability density functions $f_1, \dots, f_n$ if its
+density can be written as
+\begin{equation}
+  \label{eq:mixture}
+  f(x) = p_1 f_1(x) + \dots + p_n f_n(x) = \sum_{i = 1}^n p_i f_i(x),
+\end{equation}
+where $p_1, \dots, p_n$ are probabilities such that
+$\sum_{i = 1}^n p_i = 1$.
+
+Function \code{rmixture} makes it easy to generate random variates
+from such mixtures. The arguments of the function are:
+\begin{enumerate}
+\item \code{n} the number of variates to generate;
+\item \code{probs} a vector of values that will be internally
+  normalized to create the probabilities $p_1, \dots, p_n$;
+\item \code{models} a vector of expressions specifying the simulation
+  models $f_1, \dots, f_n$.
+\end{enumerate}
+
+The specification of simulation models uses the syntax of \code{simul}
+that is explained in greater detail in \autoref{sec:simul}. In a
+nutshell, the models are expressed in a semi-symbolic fashion using an
+object of mode \code{"expression"} where each element is a complete
+call to a random number generation function, with the number of
+variates omitted.
+
+The following example should clarify this concept.
+
+\begin{example}
+  Let $X$ be a mixture between two exponentials: one with mean $1/3$
+  and one with mean $1/7$. The first exponential has twice as much
+  weight as the second one in the mixture. Therefore, the density of
+  $X$ is
+  \begin{equation*}
+    f(x) = \frac{2}{3} (3 e^{-3x}) + \frac{1}{3} (7 e^{-7x}) \\
+    = 2 e^{-3x} + \frac{7}{3} e^{-7x}.
+  \end{equation*}
+  We generate $10$ random variates from this density using
+  \code{rmixture} with the following expression.
+<<echo=TRUE>>=
+rmixture(10, probs = c(2, 1),
+         models = expression(rexp(3), rexp(7)))
+@
+  \qed
+\end{example}
+
+See also \autoref{ex:comppois} for a more involved usage or
+\code{rmixture} to simulate from compound Poisson models.
+
+
+\section{Simulation from compound models}
+\label{sec:rcompound}
+
+Actuaries often need to simulate separately the frequency and the
+severity of claims for compound models of the form
+\begin{equation}
+  \label{eq:definition-S}
+  S = C_1 + \dots + C_N,
+\end{equation}
+where $C_1, C_2, \dots$ are the mutually independent and identically
+distributed random variables of the claim amounts, and each is
+independent of the frequency random variable $N$.
+
+Function \code{rcompound} generates variates from the random variable
+$S$ in \eqref{eq:definition-S} when the distribution of both random
+variables $N$ and $C$ is non hierarchical (for the more general
+hierarchical case, see \autoref{sec:simul}). The function has three
+arguments:
+\begin{enumerate}
+\item \code{n} the number of variates to generate;
+\item \code{model.freq} the frequency model (random variable $N$);
+\item \code{model.sev} the severity model (random variable $C$).
+\end{enumerate}
+
+Arguments \code{model.freq} and \code{model.sev} are simple
+\proglang{R} expressions consisting in calls to a random number
+generation function with the number of variates omitted. This is of
+course similar to argument \code{models} of \code{rmixture}, only with
+a slightly simpler syntax since one does not need to wrap the calls in
+\code{expression}.
+
+\begin{example}
+  Let $S \sim \text{Compound Poisson}(1.5, G)$, where $1.5$ is the
+  value of the Poisson parameter and $G$ is the cumulative
+  distribution function of a gamma distribution with shape parameter
+  $\alpha = 3$ and rate parameter $\lambda = 2$. We obtain variates
+  from the random variable $S$ using \code{rcompound} as follows:
+<<echo=TRUE>>=
+rcompound(10, rpois(1.5), rgamma(3, 2))
+@
+  \qed
+\end{example}
+
+\begin{example}
+  \label{ex:comppois}
+  By Theorem~9.7 of \cite{LossModels4e}, the sum of compound Poisson
+  random variables is itself compound Poisson with Poisson parameter
+  equal to the sum of the Poisson parameters and severity distribution
+  equal to the mixture of the severity models.
+
+  Let $S = S_1 + S_2 + S_3$, where $S_1$ is compound Poisson with
+  $\lambda = 2$ and severity Gamma$(3, 1)$; $S_2$ is compound Poisson
+  with $\lambda = 1$ and severity Gamma$(5, 4)$; $S_3$ is compound
+  Poisson with $\lambda = 0.5$ and severity Lognormal$(2, 1)$. By the
+  aforementioned theorem, $S$ is compound Poisson with
+  $\lambda = 2 + 1 + 0.5 = 3.5$ and severity
+  \begin{equation*}
+    f(x) = \frac{4}{7}
+    \left(
+      \frac{1}{\Gamma(3)} x^2 e^{-x}
+    \right)
+    + \frac{2}{7}
+    \left(
+      \frac{4^5}{\Gamma(5)} x^4 e^{-4x}
+    \right)
+    + \frac{1}{7} \phi(\ln x - 2).
+  \end{equation*}
+
+  Combining \code{rcompound} and \code{rmixture} we can generate variates
+  of $S$ using one elegant expression as follows.
+<<echo=TRUE>>=
+x <- rcompound(1e5, rpois(3.5),
+               rmixture(probs = c(2, 1, 0.5),
+                        expression(rgamma(3),
+                                   rgamma(5, 4),
+                                   rlnorm(2, 1))))
+@
+
+  One can verify that the theoretical mean of $S$ is $6 + 5/4 +
+  e^{5/2}/2 = 13.34$. Now, the empirical mean based on the above
+  sample of size $10^5$ is:
+<<echo=TRUE>>=
+mean(x)
+@
+  \qed
+\end{example}
+
+
+\section{Simulation from compound hierarchical models}
+\label{sec:simul}
+
 Hierarchical probability models are widely used for data classified in
 a tree-like structure and in Bayesian inference. The main
 characteristic of such models is to have the probability law at some
@@ -110,71 +272,20 @@ rpois(n, rgamma(n, 3, rgamma(n, 2, 2)))
 However, for categorical data common in actuarial applications there
 will usually be many categories --- or \emph{nodes} --- at each level.
 Simulation is then complicated by the need to always use the correct
-parameters for each variate. Furthermore, actuaries often need to
+parameters for each variate. Furthermore, one may need to
 simulate both the frequency and the severity of claims for compound
-models of the form
-\begin{equation}
-  \label{eq:definition-S}
-  S = C_1 + \dots + C_N,
-\end{equation}
-where $C_1, C_2, \dots$ are mutually independent and identically
-distributed random variables each independent of $N$.
+models of the form \eqref{eq:definition-S}.
 
-The package provides two functions to simulate data from
-compound models like \eqref{eq:definition-S}:
-\begin{enumerate}
-\item \code{rcompound} for standard, non hierarchical, compound models
-  with, basically, one distribution for $N$ and one for $C$;
-\item \code{simul} for models where both the frequency and the
-  severity components can have a hierarchical structure and where, in
-  addition, each observation may be assigned a weight (or volume).
-\end{enumerate}
-
-Function \code{rcompound} is faster and has a simpler interface for
-standard compound models, but \code{simul} is much more flexible.
-
-The next section briefly describes function \code{rcompound}. The rest
-of the document focuses on the description and usage of \code{simul}.
+This section briefly describes function \code{simul} and its usage.
 \cite{Goulet:simpf:2008} discuss in more details the models
-supported by \code{simul} and give more thorough examples.
+supported by the function and give more thorough examples.
 
+\subsection{Description of hierarchical models}
+\label{sec:simul:description}
 
-\section{Simulation from standard compound models}
-\label{sec:rcompound}
-
-Function \code{rcompound} generate variates from the random variable
-$S$ in \eqref{eq:definition-S} where the distribution of both random
-variables $N$ and $C$ is non hierarchical. The function has three
-arguments:
-\begin{enumerate}
-\item \code{n} for the number of variates to generate;
-\item \code{model.freq} for the frequency model (random variable $N$);
-\item \code{model.sev} for the severity model (random variable $C$).
-\end{enumerate}
-
-Arguments \code{model.freq} and \code{model.sev} are simple
-\proglang{R} expressions consisting in calls to a random number
-generation function with the number of variates omitted.
-
-\begin{example}
-  Let $S \sim \text{Compound Poisson}(1.5, G)$, where $1.5$ is the value
-  of the Poisson parameter and $G$ is the cumulative distribution
-  function of a gamma distribution with shape parameter $\alpha = 3$
-  and rate parameter $\lambda = 2$. We obtain variates from $S$ using
-  \code{rcompound} as follows:
-<<echo=TRUE>>=
-rcompound(10, rpois(1.5), rgamma(3, 2))
-@
-  \qed
-\end{example}
-
-
-\section{Description of hierarchical models}
-\label{sec:description}
-
-From now on, we consider simulation of data from hierarchical models.
-We need a method to describe these models in \proglang{R} that will
-meet the following criteria:
+We consider simulation of data from hierarchical models. We need a
+method to describe these models in \proglang{R} that will meet the
+following criteria:
 \begin{enumerate}
 \item simple and intuitive to go from the mathematical formulation of
   the model to the \proglang{R} formulation and back;
@@ -234,7 +345,7 @@ to avoid evaluation of the incomplete calls to the random number
 generation functions. Function \code{simul} builds and executes the
 calls to the random generation functions from the top of the
 hierarchical model to the bottom. At each level, the function
-\begin{enumerate}[i)]
+\begin{enumerate}
 \item infers the number of variates to generate from the number of
   nodes list, and
 \item appropriately recycles the mixing parameters simulated
@@ -247,14 +358,13 @@ Furthermore, any random generation function can be used. The only
 constraint is that the name of the number of variates argument is
 \code{n}.
 
-Function \code{simul} also supports usage of weights in models. These
+In addition, \code{simul} supports usage of weights in models. These
 usually modify the frequency parameters to take into account the
 ``size'' of an entity. Weights are used in simulation wherever the
 name \code{weights} appears in a model.
 
-
-\section{Usage}
-\label{sec:usage}
+\subsection[Usage of simul]{Usage of \code{simul}}
+\label{sec:simul:usage}
 
 Function \code{simul} can simulate data for structures where both the
 frequency model and the severity model are hierarchical. It has four
@@ -463,8 +573,8 @@ frequency(simul(list(entity = 3, year = 5),
 \end{example}
 
 One will find more examples of \code{simul} usage in the
-\code{simulation} demo file. Function \code{simul} was used to
-simulate the data in \cite{Goulet_cfs}.
+\code{simulation} demo file. The function was used to simulate the
+data in \cite{Goulet_cfs}.
 
 %% References
 \bibliography{actuar}

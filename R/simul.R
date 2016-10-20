@@ -290,6 +290,10 @@ simul <- function(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 ### Alias for backward compatibility (with actuar <= 0.9-4)
 simpf <- simul
 
+### Alias to fit within the usual naming scheme of random generation
+### functions (introduced in actuar 2.0-0)
+rcomphierarc <- simul
+
 ### 'print' method for 'portfolio' objects
 print.portfolio <- function(x, ...)
 {

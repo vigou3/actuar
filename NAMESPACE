@@ -6,7 +6,7 @@ export(
     ## Credibility theory
     cm,
     ## Simulation of compound models
-    simul, simpf, severity, unroll, rcompound,
+    simul, simpf, rcomphierarc, severity, unroll, rcompound, rmixture,
     ## Risk theory
     aggregateDist, CTE, TVaR, discretize, discretise, VaR, adjCoef, ruin,
     ## One parameter distributions
