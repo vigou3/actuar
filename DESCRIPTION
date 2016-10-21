@@ -13,7 +13,7 @@ Authors@R: c(person("Vincent", "Goulet", role = c("cre", "aut"),
 	     person("Louis-Philippe", "Pouliot", role = "ctb"),
 	     person("Mathieu", "Pigeon", role = "aut",
 	            email = "pigeon.mathieu.2@uqam.ca"))
-Description: Actuarial science functionalities, mostly in the
+Description: Various actuarial science functionalities, mostly in the
   fields of loss distributions, risk theory (including ruin theory),
   simulation of compound hierarchical models and credibility theory.
   The package also provides support functions for 19 continuous heavy
