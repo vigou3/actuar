@@ -82,10 +82,10 @@ options(width = 60, digits = 4)
 \section{Introduction}
 \label{sec:introduction}
 
-Package \pkg{actuar} provides functions that greatly facilitates
-generation of random variates from various probability models commonly
-used in actuarial applications. From the simplest to the most
-sophicated, these functions are:
+Package \pkg{actuar} provides functions to facilitate the generation
+of random variates from various probability models commonly used in
+actuarial applications. From the simplest to the most sophisticated,
+these functions are:
 \begin{enumerate}
 \item \code{rmixture} to simulate from discrete mixtures;
 \item \code{rcompound} to simulate from compound models;
@@ -99,15 +99,15 @@ sophicated, these functions are:
 \section{Simulation from discrete mixtures}
 \label{sec:rmixture}
 
-A random variable is said to be discrete mixture of the random
+A random variable is said to be a discrete mixture of the random
 variables with probability density functions $f_1, \dots, f_n$ if its
 density can be written as
 \begin{equation}
   \label{eq:mixture}
   f(x) = p_1 f_1(x) + \dots + p_n f_n(x) = \sum_{i = 1}^n p_i f_i(x),
 \end{equation}
-where $p_1, \dots, p_n$ are probabilities such that
-$\sum_{i = 1}^n p_i = 1$.
+where $p_1, \dots, p_n$ are probabilities (or weights) such that
+$p_i \geq 0$ and $\sum_{i = 1}^n p_i = 1$.
 
 Function \code{rmixture} makes it easy to generate random variates
 from such mixtures. The arguments of the function are:
@@ -116,13 +116,13 @@ from such mixtures. The arguments of the function are:
 \item \code{probs} a vector of values that will be internally
   normalized to create the probabilities $p_1, \dots, p_n$;
 \item \code{models} a vector of expressions specifying the simulation
-  models $f_1, \dots, f_n$.
+  models corresponding to the densities $f_1, \dots, f_n$.
 \end{enumerate}
 
-The specification of simulation models uses the syntax of \code{simul}
-that is explained in greater detail in \autoref{sec:simul}. In a
-nutshell, the models are expressed in a semi-symbolic fashion using an
-object of mode \code{"expression"} where each element is a complete
+The specification of simulation models follows the syntax of
+\code{simul} (explained in greater detail in \autoref{sec:simul}). In
+a nutshell, the models are expressed in a semi-symbolic fashion using
+an object of mode \code{"expression"} where each element is a complete
 call to a random number generation function, with the number of
 variates omitted.
 
@@ -137,8 +137,8 @@ The following example should clarify this concept.
     f(x) = \frac{2}{3} (3 e^{-3x}) + \frac{1}{3} (7 e^{-7x}) \\
     = 2 e^{-3x} + \frac{7}{3} e^{-7x}.
   \end{equation*}
-  We generate $10$ random variates from this density using
-  \code{rmixture} with the following expression.
+  The following expression generates $10$ random variates from this
+  density using \code{rmixture}.
 <<echo=TRUE>>=
 rmixture(10, probs = c(2, 1),
          models = expression(rexp(3), rexp(7)))
@@ -146,8 +146,9 @@ rmixture(10, probs = c(2, 1),
   \qed
 \end{example}
 
-See also \autoref{ex:comppois} for a more involved usage or
-\code{rmixture} to simulate from compound Poisson models.
+See also \autoref{ex:comppois} for a more involved application
+combining simulation from a mixture and simulation from a compound
+Poisson model.
 
 
 \section{Simulation from compound models}
@@ -160,14 +161,13 @@ severity of claims for compound models of the form
   S = C_1 + \dots + C_N,
 \end{equation}
 where $C_1, C_2, \dots$ are the mutually independent and identically
-distributed random variables of the claim amounts, and each is
-independent of the frequency random variable $N$.
+distributed random variables of the claim amounts, each independent of
+the frequency random variable $N$.
 
 Function \code{rcompound} generates variates from the random variable
-$S$ in \eqref{eq:definition-S} when the distribution of both random
-variables $N$ and $C$ is non hierarchical (for the more general
-hierarchical case, see \autoref{sec:simul}). The function has three
-arguments:
+$S$ when the distribution of both random variables $N$ and $C$ is non
+hierarchical; for the more general hierarchical case, see
+\autoref{sec:simul}. The function has three arguments:
 \begin{enumerate}
 \item \code{n} the number of variates to generate;
 \item \code{model.freq} the frequency model (random variable $N$);
@@ -182,8 +182,8 @@ a slightly simpler syntax since one does not need to wrap the calls in
 \code{expression}.
 
 \begin{example}
-  Let $S \sim \text{Compound Poisson}(1.5, G)$, where $1.5$ is the
-  value of the Poisson parameter and $G$ is the cumulative
+  Let $S \sim \text{Compound Poisson}(1.5, F)$, where $1.5$ is the
+  value of the Poisson parameter and $F$ is the cumulative
   distribution function of a gamma distribution with shape parameter
   $\alpha = 3$ and rate parameter $\lambda = 2$. We obtain variates
   from the random variable $S$ using \code{rcompound} as follows:
@@ -195,17 +195,17 @@ rcompound(10, rpois(1.5), rgamma(3, 2))
 
 \begin{example}
   \label{ex:comppois}
-  By Theorem~9.7 of \cite{LossModels4e}, the sum of compound Poisson
-  random variables is itself compound Poisson with Poisson parameter
-  equal to the sum of the Poisson parameters and severity distribution
-  equal to the mixture of the severity models.
+  Theorem~9.7 of \cite{LossModels4e} states that the sum of compound
+  Poisson random variables is itself compound Poisson with Poisson
+  parameter equal to the sum of the Poisson parameters and severity
+  distribution equal to the mixture of the severity models.
 
   Let $S = S_1 + S_2 + S_3$, where $S_1$ is compound Poisson with
-  $\lambda = 2$ and severity Gamma$(3, 1)$; $S_2$ is compound Poisson
+  mean frequency $\lambda = 2$ and severity Gamma$(3, 1)$; $S_2$ is compound Poisson
   with $\lambda = 1$ and severity Gamma$(5, 4)$; $S_3$ is compound
-  Poisson with $\lambda = 0.5$ and severity Lognormal$(2, 1)$. By the
+  Poisson with $\lambda = 1/2$ and severity Lognormal$(2, 1)$. By the
   aforementioned theorem, $S$ is compound Poisson with
-  $\lambda = 2 + 1 + 0.5 = 3.5$ and severity
+  $\lambda = 2 + 1 + 1/2 = 7/2$ and severity density
   \begin{equation*}
     f(x) = \frac{4}{7}
     \left(
@@ -218,8 +218,8 @@ rcompound(10, rpois(1.5), rgamma(3, 2))
     + \frac{1}{7} \phi(\ln x - 2).
   \end{equation*}
 
-  Combining \code{rcompound} and \code{rmixture} we can generate variates
-  of $S$ using one elegant expression as follows.
+  Combining \code{rcompound} and \code{rmixture} we can generate
+  variates of $S$ using the one following elegant expression.
 <<echo=TRUE>>=
 x <- rcompound(1e5, rpois(3.5),
                rmixture(probs = c(2, 1, 0.5),
@@ -229,7 +229,7 @@ x <- rcompound(1e5, rpois(3.5),
 @
 
   One can verify that the theoretical mean of $S$ is $6 + 5/4 +
-  e^{5/2}/2 = 13.34$. Now, the empirical mean based on the above
+  (e^{5/2})/2 = 13.34$. Now, the empirical mean based on the above
   sample of size $10^5$ is:
 <<echo=TRUE>>=
 mean(x)
@@ -369,7 +369,7 @@ name \code{weights} appears in a model.
 Function \code{simul} can simulate data for structures where both the
 frequency model and the severity model are hierarchical. It has four
 main arguments:
-\begin{enumerate}[i)]
+\begin{enumerate}
 \item \code{nodes} for the number of nodes list;
 \item \code{model.freq} for the frequency model;
 \item \code{model.sev} for the severity model;
