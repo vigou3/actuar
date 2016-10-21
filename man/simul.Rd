@@ -1,15 +1,20 @@
 \name{simul}
 \alias{simul}
 \alias{simpf}
+\alias{rcomphierarc}
 \alias{print.portfolio}
 \title{Simulation from Compound Hierarchical Models}
 \description{
-  \code{simul} simulates data for insurance applications allowing
-  hierarchical structures and separate models for the frequency and
-  severity of claims distributions.
+  Simulate data for insurance applications allowing hierarchical
+  structures and separate models for the frequency and severity of
+  claims distributions.
+
+  \code{rcomphierarc} is an alias for \code{simul}.
 }
 \usage{
 simul(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
+
+rcomphierarc(nodes, model.freq = NULL, model.sev = NULL, weights = NULL)
 
 \method{print}{portfolio}(x, \dots)
 }
