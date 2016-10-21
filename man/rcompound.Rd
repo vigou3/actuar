@@ -1,19 +1,23 @@
 \name{rcompound}
 \alias{rcompound}
+\alias{rcomppois}
 \title{Simulation from Compound Models}
 \description{
-  Generate random variates from a standard (non hierarchical) compound
-  model.
+  \code{rcompound} generates random variates from a compound model.
+
+  \code{rcomppois} is a simplified version for a common case.
 }
 \usage{
 rcompound(n, model.freq, model.sev)
-}
+
+rcomppois(n, lambda, model.sev)}
 \arguments{
   \item{n}{number of observations. If \code{length(n) > 1}, the length is
     taken to be the number required.}
   \item{model.freq, model.sev}{expressions specifying the frequency and
     severity simulation models with the number of variates omitted (see
     details).}
+  \item{lambda}{Poisson parameter}
 }
 \details{
   \code{rcompound} generates variates from a random variable of the form
@@ -31,6 +35,10 @@ rcompound(n, model.freq, model.sev)
 
   The argument of the random number generation functions for the number
   of variates to simulate \strong{must} be named \code{n}.
+
+  \code{rcomppois} generates variates from the common Compound Poisson
+  model, that is when random variable \eqn{N} is Poisson distributed
+  with mean \code{lambda}.
 }
 \value{
   A vector of aggregate amounts \eqn{S_1, \dots, S_n}.
@@ -44,6 +52,7 @@ rcompound(n, model.freq, model.sev)
 \examples{
 ## Compound Poisson model with gamma severity.
 rcompound(10, rpois(2), rgamma(2, 3))
+rcomppois(10, 2, rgamma(2, 3))          # same
 
 ## Wrapping the simulation models into expression() is allowed, but
 ## not needed.
@@ -56,7 +65,7 @@ system.time(simul(1e6, expression(rpois(2)), expression(rgamma(2, 3))))}
 ## The severity can itself be a compound model. It makes sense
 ## in such a case to use a zero-truncated frequency distribution
 ## for the second level model.
-rcompound(10, rpois(2),
+rcomppois(10, 2,
           rcompound(rztnbinom(1.5, 0.7), rlnorm(1.2, 1)))
 }
 \keyword{datagen}

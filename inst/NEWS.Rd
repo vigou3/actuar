@@ -70,10 +70,10 @@
 	f_n(x)}.}
       \item{New function \code{rcompound} to generate random variates
 	from (non hierarchical) compound models of the form \eqn{S = X_1
-	+ \dots + X_N}. Where function \code{simul} was developed for
-	flexibility, \code{rcompound} aims at execution speed. It uses a
-	simplified version of the syntax of \code{simul} for model
-	specification.}
+	+ \dots + X_N}. Designed to be quite faster than \code{simul}
+	for non hierarchical models.}
+    \item{New function code{rcomppois} that is a simplified version of
+	\code{rcompound} for the very common compound Poisson case.}
       \item{\code{simul} now accepts a basic (named or not) vector for
 	argument \code{nodes} when simulating from a non hierarchical
 	compound model. But really, one should use \code{rcompound} for

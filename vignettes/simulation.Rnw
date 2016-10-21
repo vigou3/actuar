@@ -88,7 +88,9 @@ actuarial applications. From the simplest to the most sophisticated,
 these functions are:
 \begin{enumerate}
 \item \code{rmixture} to simulate from discrete mixtures;
-\item \code{rcompound} to simulate from compound models;
+\item \code{rcompound} to simulate from compound models (and a
+  simplified version, \code{rcompois} to simulate from the very common
+  compound Poisson model);
 \item \code{simul} (alias \code{rcomphierarc}\footnote{%
     Alias introduced in \pkg{actuar} 2.0-0.}) %
   to simulate from compound models where both the frequency and the
@@ -181,14 +183,22 @@ course similar to argument \code{models} of \code{rmixture}, only with
 a slightly simpler syntax since one does not need to wrap the calls in
 \code{expression}.
 
+Function \code{rcomppois} is a simplified interface for the common
+case where $N$ has a Poisson distribution and, therefore, $S$ is
+compound Poisson. In this function, argument \code{model.freq} is
+replaced by \code{lambda} that takes the value of the Poisson
+parameter.
+
 \begin{example}
   Let $S \sim \text{Compound Poisson}(1.5, F)$, where $1.5$ is the
   value of the Poisson parameter and $F$ is the cumulative
   distribution function of a gamma distribution with shape parameter
   $\alpha = 3$ and rate parameter $\lambda = 2$. We obtain variates
-  from the random variable $S$ using \code{rcompound} as follows:
+  from the random variable $S$ using \code{rcompound} or
+  \code{rcompois} as follows:
 <<echo=TRUE>>=
 rcompound(10, rpois(1.5), rgamma(3, 2))
+rcomppois(10, 1.5, rgamma(3, 2))
 @
   \qed
 \end{example}
@@ -218,10 +228,10 @@ rcompound(10, rpois(1.5), rgamma(3, 2))
     + \frac{1}{7} \phi(\ln x - 2).
   \end{equation*}
 
-  Combining \code{rcompound} and \code{rmixture} we can generate
+  Combining \code{rcomppois} and \code{rmixture} we can generate
   variates of $S$ using the one following elegant expression.
 <<echo=TRUE>>=
-x <- rcompound(1e5, rpois(3.5),
+x <- rcomppois(1e5, 3.5,
                rmixture(probs = c(2, 1, 0.5),
                         expression(rgamma(3),
                                    rgamma(5, 4),
