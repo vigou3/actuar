@@ -1,52 +1,143 @@
 ### ===== actuar: An R Package for Actuarial Science =====
 ###
-### Creation of grouped data objects
+### Creation of grouped data objects.
 ###
 ### See Klugman, Panjer & Willmot, Loss Models, Wiley, 1998.
 ###
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
-### Mathieu Pigeon, Louis-Philippe Pouliot
+###          Mathieu Pigeon, Louis-Philippe Pouliot
+###
+### CREDITS: Manipulation and creation of names taken in part from
+###          base R function data.frame(). Arguments, 'breaks',
+###          'nclass' and their treatment taken from base R function
+###          hist().
 
-grouped.data <- function(..., right = TRUE, row.names = NULL,
-                         check.rows = FALSE, check.names = TRUE)
+grouped.data <- function(..., breaks = "Sturges",
+                         include.lowest = TRUE, right = TRUE,
+                         nclass = NULL, group = FALSE,
+                         row.names = NULL, check.rows = FALSE,
+                         check.names = TRUE)
 {
-    ## Utility function
+    ## Utility function to format numbers.
     numform <- function(x, w)
         formatC(x, digits = 2, width = w, format = "fg")
 
-    ## The function must be called with at least two arguments. The
-    ## first is the vector of group boundaries. The others are vectors
-    ## of group frequencies. All arguments will be converted to data
-    ## frames.
+    ## Keep the calls in '...' in object 'ox', and the evaluated
+    ## elements in '...' in object 'x'.
+    ox <- as.list(substitute(list(...)))[-1L]
     x <- list(...)
-    xnames <- names(x)                  # preserve names
-    y <- as.data.frame(x[-1])           # group frequencies
-    x <- as.data.frame(x[[1]])          # group boundaries
-    nx <- nrow(x)
-    ny <- nrow(y)
+    xlen <- length(x)                   # number of arguments in '...'
+    use.br <- !missing(breaks)          # 'breaks' specified
 
-    ## There must be exactly one group boundary more than frequencies.
-    if (nx - ny != 1)
-        stop("invalid number of group boundaries and frequencies")
-
-    ## Replace missing frequencies by zeros.
-    nax <- is.na(x)
-    if (any(nax))
+    ## If any elements of '...' are unnamed, set names based on the
+    ## variable name provided in the function call (e.g. f(x) -> "x")
+    ## or from the deparsed expression (e.g. f(1:3) -> "1:3").
+    xnames <- names(x)
+    if(length(xnames) != xlen)
+	xnames <- character(xlen)
+    no.xn <- !nzchar(xnames)
+    if (any(no.xn))
     {
-        x[nax] <- 0
-        warning("missing frequencies replaced by zeros")
+        for (i in which(no.xn))
+            xnames[i] <- deparse(ox[[i]], nlines = 1L)[1L]
+        names(x) <- xnames
+    }
+
+    ## The function must be called in either of two main ways:
+    ##
+    ## 1. INDIVIDUAL DATA
+    ##
+    ##    The call has one or more elements in '...' and either
+    ##    'breaks' or 'nclass' is provided or 'group' is TRUE. In this
+    ##    case, elements of '...' are grouped using graphics:::hist
+    ##    automatically accoding to the first element of '...', or
+    ##    with group boundaries 'breaks' if the latter is a vector.
+    ##
+    ## 2. GROUPED DATA
+    ##
+    ##    The call has at least two elements in '...'. The first is
+    ##    then the vector of group boundaries and the others are
+    ##    vectors of group frequencies.
+
+    ## Single argument implies individual data.
+    if (xlen == 1L)
+        group <- TRUE
+
+    ## Avoid using calling 'hist' with 'nclass' specified.
+    if (use.br)
+    {
+        if (!missing(nclass))
+            warning("'nclass' not used when 'breaks' is specified")
+        if (!(missing(group) || group))
+            warning("'group' ignored when 'breaks' is specified")
+        group <- TRUE
+    }
+    else if (!is.null(nclass) && length(nclass) == 1L)
+    {
+        breaks <- nclass
+        if (!(missing(group) || group))
+            warning("'group' ignored when 'nclass' is specified")
+        group <- TRUE
+    }
+
+    if (group)        # individual data in argument; group with 'hist'
+    {
+        ## Set group boudaries (and the first set of group
+        ## frequencies) using the first argument in '...'.
+        y <- hist(x[[1]], plot = FALSE, breaks = breaks,
+                  include.lowest = include.lowest,
+                  right = right)
+        br <- y$breaks
+        y <- y$counts
+
+        ## If there are other vectors in '...', compute group
+        ## frequencies using 'hist' with the group boundaries
+        ## determined above. If 'breaks' were set automatically, there
+        ## is a great risk of error, but we can't do much better.
+        if (xlen > 1)
+        {
+            f <- function(x, br)
+                hist(x, plot = FALSE, breaks = br,
+                     include.lowest = include.lowest,
+                     right = right)$counts
+            y <- cbind(y, sapply(x[-1], f, br = br))
+        }
+
+        y <- as.data.frame(y)
+        x <- as.data.frame(br)
+        names(y) <- xnames
+        xnames <- ""
+        nx <- nrow(x)
+    }
+    else              # group boundaries and frequencies in argument
+    {
+        y <- as.data.frame(x[-1L])      # group frequencies
+        x <- as.data.frame(x[[1L]])     # group boundaries
+        nx <- nrow(x)
+
+        ## There must be exactly one more group boundary than frequencies.
+        if (nx - nrow(y) != 1L)
+            stop("invalid number of group boundaries and frequencies")
+
+        ## Replace missing frequencies by zeros.
+        nax <- is.na(x)
+        if (any(nax))
+        {
+            x[nax] <- 0
+            warning("missing frequencies replaced by zeros")
+        }
     }
 
     ## Return a data frame with formatted group boundaries in the
     ## first column.
-    w <- max(nchar(x[-1, ]))            # longest upper boundary
+    w <- max(nchar(x[-1L, ]))            # longest upper boundary
     xfmt <- paste(if (right) "(" else "[",
-                  numform(x[-nx, ], -1), ", ", numform(x[-1, ], w),
+                  numform(x[-nx, ], -1), ", ", numform(x[-1L, ], w),
                   if (right) "]" else ")",
                   sep = "")
     res <- data.frame(xfmt, y, row.names = row.names, check.rows = check.rows,
                       check.names = check.names)
-    names(res) <- c(xnames[1], names(y))
+    names(res) <- c(xnames[1L], names(y))
     class(res) <- c("grouped.data", "data.frame")
     environment(res) <- new.env()
     assign("cj", unlist(x, use.names = FALSE), environment(res))
