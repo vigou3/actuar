@@ -55,7 +55,7 @@ ogive.default <- function(x, y = NULL,
     x <- eval(expression(cj), envir = environment(x))
 
     ## Create an object of class 'ogive'.
-    res <- .ogiveObject(x, y)
+    res <- .ogiveFUN(x, y)
     class(res) <- c("ogive", class(res))
     attr(res, "call") <- Call
     res
@@ -73,13 +73,13 @@ ogive.grouped.data <- function(x, ...)
     x <- eval(expression(cj), envir = environment(x))
 
     ## Create an object of class 'ogive'.
-    res <- .ogiveObject(x, y)
+    res <- .ogiveFUN(x, y)
     class(res) <- c("ogive", class(res))
     attr(res, "call") <- Call
     res
 }
 
-.ogiveObject <- function(x, y)
+.ogiveFUN <- function(x, y)
     approxfun(x, cumsum(c(0, y)) / sum(y), yleft = 0, yright = 1,
               method = "linear", ties = "ordered")
 
