@@ -79,7 +79,7 @@ ogive.grouped.data <- function(x, ...)
 {
     FUN <- approxfun(x, cumsum(c(0, y)) / sum(y), yleft = 0, yright = 1,
                      method = "linear", ties = "ordered")
-    class(FUN) <- c("ogive", class(res))
+    class(FUN) <- c("ogive", class(FUN))
     FUN
 }
 
