@@ -2,77 +2,61 @@
 ###
 ### Ogive for grouped data.
 ###
-### The function can compute the ogive from either of three types of
-### arguments.
-###
-### 1. An object of class 'grouped.data' (one argument).
-###
-### 2. A vector of class boundaries and a vector of class frequencies
-###    (two arguments). The second vector must be one element shorter
-###    than the first.
-###
-### 3. A vector of individual data (one argument). Data is grouped
-###    using graphics:::hist.
+### A default method exists for either a vector of individual data or
+### two vectors of group boundaries and group frequencies. It first
+### creates a grouped data object using 'grouped.data' and then
+### dispatches to the main method to get the ogive.
 ###
 ### For the definition of the ogive, see Klugman, Panjer & Willmot,
 ### Loss Models, Wiley, 1998.
 ###
-### More details on the admissible arguments can be found in
-### ./grouped.data.R.
+### More details on the admissible arguments for the default method
+### are to be found in ./grouped.data.R.
 ###
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
-###          Mathieu Pigeon
+### Mathieu Pigeon
 ###
 ### CREDITS: Arguments, 'breaks', 'nclass' and their treatment taken
-###          from R function hist().
+### from R function hist().
 
-ogive <- function(..., breaks = "Sturges", nclass = NULL,
-                  group = FALSE)
+ogive <- function(x, ...)
 {
-    xlist <- list(...)                  # evaluated arguments in '...'
-    n <- length(xlist)                  # number of arguments in '...'
-    use.br <- !missing(breaks)          # 'breaks' specified
+    Call <- match.call()
+    UseMethod("ogive")
+}
+
+ogive.default <- function(x, y = NULL,
+                          breaks = "Sturges", nclass = NULL, ...)
+{
+    chkDots(...)           # method does not use '...'
 
     ## Avoid using calling 'hist' with 'nclass' specified.
-    if (use.br)
+    if (!missing(breaks))
     {
         if (!missing(nclass))
             warning("'nclass' not used when 'breaks' is specified")
-        if (!(missing(group) || group))
-            warning("'group' ignored when 'breaks' is specified")
-        group <- TRUE
     }
     else if (!is.null(nclass) && length(nclass) == 1L)
-    {
         breaks <- nclass
-        if (!(missing(group) || group))
-            warning("'group' ignored when 'nclass' is specified")
-        group <- TRUE
-    }
 
-    x <- xlist[[1L]]
+    ## Create the "grouped.data" object.
+    x <- if (is.null(y))   # one argument: individual data
+             grouped.data(x, breaks = breaks)
+         else              # two arguments: boundaries and frequencies
+             grouped.data(x, y)
 
-    if (inherits(x, "grouped.data"))
-    {
-        if (n > 1L)
-            warning("multiple data sets not supported;\nonly the first one is used")
-        y <- x[, 2L]
-        x <- eval(expression(cj), envir = environment(x))
-    }
-    else if (n == 1L || group)
-    {
-        if (n > 1L)
-            warning("multiple data sets not supported;\nonly the first one is used")
-        y <- hist(x, plot = FALSE, breaks = breaks)
-        x <- y$breaks
-        y <- y$counts
-    }
-    else
-    {
-        y <- xlist[[2L]]
-        if (length(x) - length(y) != 1L)
-            stop("invalid number of group boundaries and frequencies")
-    }
+    ## Get the ogive from the "grouped.data" method.
+    ogive.grouped.data(x)
+}
+
+ogive.grouped.data <- function(x, ...)
+{
+    chkDots(...)                      # method does not use '...'
+
+    ## Group frequencies in the second column of the data frame; group
+    ## boundaries in the environment of 'x'.
+    y <- x[, 2L]
+    x <- eval(expression(cj), envir = environment(x))
 
     ## Create an object of class 'ogive'.
     res <- approxfun(x, cumsum(c(0, y)) / sum(y), yleft = 0, yright = 1,

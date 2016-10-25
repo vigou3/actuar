@@ -6,13 +6,14 @@
 \alias{plot.ogive}
 \title{Ogive for Grouped Data}
 \description{
-  Compute a smoothed empirical distribution function from either a
-  grouped.data object, a provided set of group boundaries and group
-  frequencies, or from individual data using automatic or specified
-  breakpoints.
+  Compute a smoothed empirical distribution function for grouped data.
 }
 \usage{
-ogive(\dots, breaks = "Sturges", nclass = NULL, group = FALSE)
+ogive(x, \dots)
+
+\method{ogive}{default}(x, y = NULL, breaks = "Sturges", nclass = NULL, \dots)
+
+\method{ogive}{grouped.data}(x, \dots)
 
 \method{print}{ogive}(x, digits = getOption("digits") - 2, \dots)
 
@@ -23,19 +24,19 @@ ogive(\dots, breaks = "Sturges", nclass = NULL, group = FALSE)
 \method{plot}{ogive}(x, main = NULL, xlab = "x", ylab = "F(x)", \dots)
 }
 \arguments{
-  \item{\dots}{in \code{ogive}: a single object inheriting from class
-    \code{"grouped.data"}, or one vector of group boundaries and one
-    vector of group frequencies, or a single vector of individual data.
-    In the methods: arguments to be passed to subsequent methods.}
-  \item{breaks, nclass, group}{arguments passed to \code{\link{hist}}
-    for the grouping of individual data; see also
-    \code{\link{grouped.data}}.}
-  \item{x}{an object of class \code{"ogive"}.}
+  \item{x}{for the generic and all but the default method, an object of
+    class \code{"grouped.data"}; for the default method, a vector of
+    individual data if \code{y} is \code{NULL}, a vector of group
+    boundaries otherwise.}
+  \item{y}{a vector of group frequencies.}
+  \item{breaks, nclass}{arguments passed to \code{\link{grouped.data}};
+    used only for individual data (when \code{y} is \code{NULL}).}
   \item{digits}{number of significant digits to use, see
     \code{\link{print}}.}
   \item{Fn, object}{an \R object inheriting from \code{"ogive"}.}
   \item{main}{main title.}
   \item{xlab, ylab}{labels of x and y axis.}
+  \item{\dots}{arguments to be passed to subsequent methods.}
 }
 \details{
   The ogive is a linear interpolation of the empirical cumulative
@@ -82,10 +83,16 @@ Fn(c(80, 200, 2000))           # linear interpolations
 
 plot(Fn)                       # graphical representation
 
-## Alternative: create ogive directly from individual data
+## Alternative 1: create ogive directly from individual data
 ## without first creating a grouped data object.
 ogive(dental)                  # automatic class boundaries
 ogive(dental, breaks = c(0, 50, 200, 500, 1500, 2000))
+
+## Alternative 2: create ogive from set of group boundaries and
+## group frequencies.
+cj <- c(0, 25, 50, 100, 250, 500, 1000)
+nj <- c(30, 31, 57, 42, 45, 10)
+ogive(cj, nj)
 }
 \keyword{dplot}
 \keyword{hplot}
