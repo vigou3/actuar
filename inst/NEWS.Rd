@@ -81,6 +81,16 @@
       \item{New alias \code{rcomphierarc} for \code{simul} that better
 	fits within the usual naming scheme of random generation
 	functions.}
+      \item{Functions \code{grouped.data} and \code{ogive} now accept
+	individual data in argument. The former will group the data
+	using \code{hist} (therefore, all the algorithms to
+	compute the number of breakpoints available  in \code{hist} are
+	also available in \code{grouped.data}). \code{ogive} will first
+	create a grouped data object and then compute the ogive.
+
+	While the two functions are not guaranteed to be backward
+	compatible (the number and position of the arguments have
+	changed), standard calls should not be affected.}
     }
   }
   \subsection{USER VISIBLE CHANGES}{
