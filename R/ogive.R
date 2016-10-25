@@ -1,25 +1,75 @@
 ### ===== actuar: An R Package for Actuarial Science =====
 ###
-### Ogive for grouped data
+### Ogive for grouped data.
 ###
-### See Klugman, Panjer & Willmot, Loss Models, Wiley, 1998.
+### The function can compute the ogive from either of three types of
+### arguments.
+###
+### 1. An object of class 'grouped.data' (one argument).
+###
+### 2. A vector of class boundaries and a vector of class frequencies
+###    (two arguments). The second vector must be one element shorter
+###    than the first.
+###
+### 3. A vector of individual data (one argument). Data is grouped
+###    using graphics:::hist.
+###
+### For the definition of the ogive, see Klugman, Panjer & Willmot,
+### Loss Models, Wiley, 1998.
+###
+### More details on the admissible arguments can be found in
+### ./grouped.data.R.
 ###
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
-### Mathieu Pigeon
+###          Mathieu Pigeon
+###
+### CREDITS: Arguments, 'breaks', 'nclass' and their treatment taken
+###          from R function hist().
 
-ogive <- function(x, y = NULL)
+ogive <- function(..., breaks = "Sturges", nclass = NULL,
+                  group = FALSE)
 {
-    ## Can compute the ogive either from an object of class
-    ## 'grouped.data', or from a vector of class boundaries and a
-    ## vector of class frequencies. The second vector is one element
-    ## shorter than the first.
+    xlist <- list(...)                  # evaluated arguments in '...'
+    n <- length(xlist)                  # number of arguments in '...'
+    use.br <- !missing(breaks)          # 'breaks' specified
+
+    ## Avoid using calling 'hist' with 'nclass' specified.
+    if (use.br)
+    {
+        if (!missing(nclass))
+            warning("'nclass' not used when 'breaks' is specified")
+        if (!(missing(group) || group))
+            warning("'group' ignored when 'breaks' is specified")
+        group <- TRUE
+    }
+    else if (!is.null(nclass) && length(nclass) == 1L)
+    {
+        breaks <- nclass
+        if (!(missing(group) || group))
+            warning("'group' ignored when 'nclass' is specified")
+        group <- TRUE
+    }
+
+    x <- xlist[[1L]]
+
     if (inherits(x, "grouped.data"))
     {
+        if (n > 1L)
+            warning("multiple data sets not supported;\nonly the first one is used")
         y <- x[, 2L]
         x <- eval(expression(cj), envir = environment(x))
     }
+    else if (n == 1L || group)
+    {
+        if (n > 1L)
+            warning("multiple data sets not supported;\nonly the first one is used")
+        y <- hist(x, plot = FALSE, breaks = breaks)
+        x <- y$breaks
+        y <- y$counts
+    }
     else
     {
+        y <- xlist[[2L]]
         if (length(x) - length(y) != 1L)
             stop("invalid number of group boundaries and frequencies")
     }
