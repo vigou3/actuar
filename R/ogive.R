@@ -30,6 +30,10 @@ ogive.default <- function(x, y = NULL,
 {
     chkDots(...)           # method does not use '...'
 
+    ## Get call from generic or set one here.
+    if (!exists("Call", inherits = FALSE))
+        Call <- match.call()
+
     ## Avoid using calling 'hist' with 'nclass' specified.
     if (!missing(breaks))
     {
@@ -45,12 +49,22 @@ ogive.default <- function(x, y = NULL,
          else              # two arguments: boundaries and frequencies
              grouped.data(x, y)
 
-    ## Get the ogive from the "grouped.data" method.
-    ogive.grouped.data(x)
+    ## Group frequencies in the second column of the data frame; group
+    ## boundaries in the environment of 'x'.
+    y <- x[, 2L]
+    x <- eval(expression(cj), envir = environment(x))
+
+    ## Create an object of class 'ogive'.
+    res <- .ogiveObject(x, y)
+    class(res) <- c("ogive", class(res))
+    attr(res, "call") <- Call
+    res
 }
 
 ogive.grouped.data <- function(x, ...)
 {
+    if (!exists("Call", inherits = FALSE))
+        Call <- match.call()
     chkDots(...)                      # method does not use '...'
 
     ## Group frequencies in the second column of the data frame; group
@@ -59,12 +73,15 @@ ogive.grouped.data <- function(x, ...)
     x <- eval(expression(cj), envir = environment(x))
 
     ## Create an object of class 'ogive'.
-    res <- approxfun(x, cumsum(c(0, y)) / sum(y), yleft = 0, yright = 1,
-                     method = "linear", ties = "ordered")
+    res <- .ogiveObject(x, y)
     class(res) <- c("ogive", class(res))
-    attr(res, "call") <- sys.call()
+    attr(res, "call") <- Call
     res
 }
+
+.ogiveObject <- function(x, y)
+    approxfun(x, cumsum(c(0, y)) / sum(y), yleft = 0, yright = 1,
+              method = "linear", ties = "ordered")
 
 ### Essentially identical to stats::print.ecdf().
 print.ogive <- function(x, digits = getOption("digits") - 2, ...)
@@ -120,6 +137,6 @@ plot.ogive <- function(x, main = NULL, xlab = "x", ylab = "F(x)", ...)
 
     kn <- knots(x)
     Fn <- x(kn)
-    plot(kn, Fn,  ..., type = "o", pch = 16,
+    plot(kn, Fn, ..., type = "o", pch = 16,
          main = main, xlab = xlab, ylab = ylab)
 }
