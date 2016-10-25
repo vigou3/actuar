@@ -28,11 +28,9 @@ ogive <- function(x, ...)
 ogive.default <- function(x, y = NULL,
                           breaks = "Sturges", nclass = NULL, ...)
 {
-    chkDots(...)           # method does not use '...'
-
-    ## Get call from generic or set one here.
     if (!exists("Call", inherits = FALSE))
         Call <- match.call()
+    chkDots(...)           # method does not use '...'
 
     ## Avoid using calling 'hist' with 'nclass' specified.
     if (!missing(breaks))
@@ -56,7 +54,6 @@ ogive.default <- function(x, y = NULL,
 
     ## Create an object of class 'ogive'.
     res <- .ogiveFUN(x, y)
-    class(res) <- c("ogive", class(res))
     attr(res, "call") <- Call
     res
 }
@@ -74,14 +71,17 @@ ogive.grouped.data <- function(x, ...)
 
     ## Create an object of class 'ogive'.
     res <- .ogiveFUN(x, y)
-    class(res) <- c("ogive", class(res))
     attr(res, "call") <- Call
     res
 }
 
 .ogiveFUN <- function(x, y)
-    approxfun(x, cumsum(c(0, y)) / sum(y), yleft = 0, yright = 1,
-              method = "linear", ties = "ordered")
+{
+    FUN <- approxfun(x, cumsum(c(0, y)) / sum(y), yleft = 0, yright = 1,
+                     method = "linear", ties = "ordered")
+    class(FUN) <- c("ogive", class(res))
+    FUN
+}
 
 ### Essentially identical to stats::print.ecdf().
 print.ogive <- function(x, digits = getOption("digits") - 2, ...)
