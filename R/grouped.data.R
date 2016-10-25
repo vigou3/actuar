@@ -20,11 +20,11 @@
 ### Models, Wiley, 1998.
 ###
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
-###          Mathieu Pigeon, Louis-Philippe Pouliot
+### Mathieu Pigeon, Louis-Philippe Pouliot
 ###
 ### CREDITS: Manipulation and creation of names taken in part from R
-###          function data.frame(). Arguments, 'breaks', 'nclass' and
-###          their treatment taken from R function hist().
+### function data.frame(). Arguments, 'breaks', 'nclass' and their
+### treatment taken from R function hist().
 
 grouped.data <- function(..., breaks = "Sturges",
                          include.lowest = TRUE, right = TRUE,
