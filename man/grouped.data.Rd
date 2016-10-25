@@ -2,15 +2,15 @@
 \alias{grouped.data}
 \title{Grouped data}
 \description{
-  Creation of grouped data objects, either from a provided set of group
+  Creation of grouped data objects, from either a provided set of group
   boundaries and group frequencies, or from individual data using
   automatic or specified breakpoints.
 }
 \usage{
 grouped.data(\dots, breaks = "Sturges", include.lowest = TRUE,
-             right = TRUE, row.names = NULL,
-             nclass = NULL, group = FALSE,
-             check.rows = FALSE, check.names = TRUE)
+             right = TRUE, nclass = NULL, group = FALSE,
+             row.names = NULL, check.rows = FALSE,
+             check.names = TRUE)
 }
 \arguments{
   \item{\dots}{these arguments are either of the form \code{value} or

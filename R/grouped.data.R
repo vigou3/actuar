@@ -2,15 +2,29 @@
 ###
 ### Creation of grouped data objects.
 ###
-### See Klugman, Panjer & Willmot, Loss Models, Wiley, 1998.
+### The function can create a grouped data object from two types of
+### arguments.
+###
+### 1. Individual data. The call has at least two elements in '...'.
+###    The first is then the vector of group boundaries and the others
+###    are vectors (or a matrix) of group frequencies.
+###
+### 2. Group boundaries and frequencies. The call has one or more
+###    elements in '...' and either 'breaks' or 'nclass' is provided
+###    or 'group' is TRUE. In this case, elements of '...' are grouped
+###    using graphics:::hist automatically based on the first element
+###    of '...', or with group boundaries 'breaks' if the latter is a
+###    vector.
+###
+### For details on grouped data, see Klugman, Panjer & Willmot, Loss
+### Models, Wiley, 1998.
 ###
 ### AUTHORS: Vincent Goulet <vincent.goulet@act.ulaval.ca>,
 ###          Mathieu Pigeon, Louis-Philippe Pouliot
 ###
-### CREDITS: Manipulation and creation of names taken in part from
-###          base R function data.frame(). Arguments, 'breaks',
-###          'nclass' and their treatment taken from base R function
-###          hist().
+### CREDITS: Manipulation and creation of names taken in part from R
+###          function data.frame(). Arguments, 'breaks', 'nclass' and
+###          their treatment taken from R function hist().
 
 grouped.data <- function(..., breaks = "Sturges",
                          include.lowest = TRUE, right = TRUE,
@@ -42,22 +56,6 @@ grouped.data <- function(..., breaks = "Sturges",
             xnames[i] <- deparse(ox[[i]], nlines = 1L)[1L]
         names(x) <- xnames
     }
-
-    ## The function must be called in either of two main ways:
-    ##
-    ## 1. INDIVIDUAL DATA
-    ##
-    ##    The call has one or more elements in '...' and either
-    ##    'breaks' or 'nclass' is provided or 'group' is TRUE. In this
-    ##    case, elements of '...' are grouped using graphics:::hist
-    ##    automatically accoding to the first element of '...', or
-    ##    with group boundaries 'breaks' if the latter is a vector.
-    ##
-    ## 2. GROUPED DATA
-    ##
-    ##    The call has at least two elements in '...'. The first is
-    ##    then the vector of group boundaries and the others are
-    ##    vectors of group frequencies.
 
     ## Single argument implies individual data.
     if (xlen == 1L)
