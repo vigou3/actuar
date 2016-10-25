@@ -1,5 +1,7 @@
 \name{ogive}
 \alias{ogive}
+\alias{ogive.default}
+\alias{ogive.grouped.data}
 \alias{print.ogive}
 \alias{summary.ogive}
 \alias{knots.ogive}
