@@ -84,11 +84,11 @@
       \item{Functions \code{grouped.data} and \code{ogive} now accept
 	individual data in argument. The former will group the data
 	using \code{hist} (therefore, all the algorithms to
-	compute the number of breakpoints available  in \code{hist} are
+	compute the number of breakpoints available in \code{hist} are
 	also available in \code{grouped.data}). \code{ogive} will first
 	create a grouped data object and then compute the ogive.
 
-	While the two functions are not guaranteed to be backward
+	While there is no guarantee that the two functions are backward
 	compatible (the number and position of the arguments have
 	changed), standard calls should not be affected.}
     }
@@ -117,6 +117,9 @@
 	\dQuote{simulation of insurance data with \pkg{actuar}} as it
 	also covers the new functions \code{rmixture} and
 	\code{rcompound}.}
+      \item{Vignette \code{"lossdist"} is renamed to \code{"modeling"}
+	and it is revised to cover the new functionalities of
+	\code{grouped.data} and \code{ogive}.}
     }
   }
   \subsection{DEPRECATED}{

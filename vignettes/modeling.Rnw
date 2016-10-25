@@ -1,9 +1,10 @@
 \documentclass[x11names]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-  \usepackage{amsmath}
+  \usepackage{amsmath,amsthm}
   \usepackage[round]{natbib}
   \usepackage[english]{babel}
+  \usepackage[autolanguage]{numprint}
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
   \usepackage{framed,booktabs}
@@ -13,7 +14,7 @@
   %\VignetteIndexEntry{Loss distributions modeling}
   %\VignettePackage{actuar}
 
-  \title{Loss distributions modeling features of \pkg{actuar}}
+  \title{Loss modeling features of \pkg{actuar}}
   \author{Christophe Dutang \\ Université du Mans \\[3ex]
     Vincent Goulet \\ Université Laval \\[3ex]
     Mathieu Pigeon \\ Université du Québec à Montréal}
@@ -41,6 +42,9 @@
     bookmarksnumbered = {true},
     bookmarksdepth = {subsubsection}}
 
+  %% Help for \autoref
+  \def\exampleautorefname{example}
+
   %% Sweave environments redefined to have a color background (using
   %% environment snugshade* of package framed).
   \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
@@ -54,6 +58,12 @@
 
   %% Flush left enumerate environment.
   \setlist[enumerate]{leftmargin=*,align=left}
+
+  %% Example environment
+  \theoremstyle{definition}
+  \newtheorem{example}{Example}
+  \theoremstyle{remark}
+  \newtheorem{rem}{Remark}
 
   %% Some new commands
   \newcommand{\E}[1]{E[ #1 ]}
@@ -83,18 +93,17 @@ claim count distributions for ratemaking, loss reserving or other risk
 evaluation purposes. Package \pkg{actuar} features many support
 functions for loss distributions modeling:
 \begin{enumerate}
-\item support for 19 additional continuous distributions useful for
+\item support for heavy tail continuous distributions useful in
   loss severity modeling;
-\item support for phase-type distributions useful in ruin
-  theory;
-\item support functions to compute raw moments, limited moments and
-  the moment generating function (when it exists) of continuous
-  distributions;
+\item support for phase-type distributions for ruin theory;
+\item functions to compute raw moments, limited moments and the moment
+  generating function (when it exists) of continuous distributions;
 \item support for zero-truncated and zero-modified extensions of the
   discrete distributions commonly used in loss frequency modeling;
-\item fairly extensive support of grouped data;
-\item calculation of the empirical raw and limited moments;
-\item minimum distance estimation using three different measures;
+\item extensive support of grouped data;
+\item functions to compute empirical raw and limited moments;
+\item support for minimum distance estimation using three different
+  measures;
 \item treatment of coverage modifications (deductibles, limits,
   inflation, coinsurance).
 \end{enumerate}
@@ -110,63 +119,120 @@ Grouped data is data represented in an interval-frequency manner.
 Typically, a grouped data set will report that there were $n_j$ claims
 in the interval $(c_{j - 1}, c_j]$, $j = 1, \dots, r$ (with the
 possibility that $c_r = \infty$). This representation is much more
-compact than an individual data set --- where the value of each claim is
-known --- but it also carries far less information. Now that storage
-space in computers has almost become a non issue, grouped data has
-somewhat fallen out of fashion.
+compact than an individual data set --- where the value of each claim
+is known --- but it also carries far less information. Now that
+storage space in computers has essentially become a non issue, grouped
+data has somewhat fallen out of fashion. Still, grouped data remains
+useful as a means to represent data, if only graphically --- for
+example, a histogram is nothing but a density approximation for
+grouped data. Moreover, various parameter estimation techniques rely
+on grouped data.
 
-Still, grouped data remains in use in some fields of actuarial
-practice and also of interest in teaching. For this reason,
-\pkg{actuar} provides facilities to store, manipulate and summarize
-grouped data. A standard storage method is needed since there are many
-ways to represent grouped data in the computer: using a list or a
-matrix, aligning the $n_j$s with the $c_{j - 1}$s or with the $c_j$s,
-omitting $c_0$ or not, etc. Moreover, with appropriate extraction,
-replacement and summary methods, manipulation of grouped data
-becomes similar to that of individual data.
+For these reasons, \pkg{actuar} provides facilities to store,
+manipulate and summarize grouped data. A standard storage method is
+needed since there are many ways to represent grouped data in the
+computer: using a list or a matrix, aligning $n_j$ with
+$c_{j - 1}$ or with $c_j$, omitting $c_0$ or not, etc. With
+appropriate extraction, replacement and summary methods, manipulation
+of grouped data becomes similar to that of individual data.
 
-First, function \code{grouped.data} creates a grouped data object
-similar to --- and inheriting from --- a data frame. The input of the
-function is a vector of group boundaries $c_0, c_1, \dots, c_r$ and
-one or more vectors of group frequencies $n_1, \dots, n_r$. Note that
-there should be one group boundary more than group frequencies.
-Furthermore, the function assumes that the intervals are contiguous.
-For example, the following data
-\begin{center}
-  \begin{tabular}{lcc}
-    \toprule
-    Group & Frequency (Line 1) & Frequency (Line 2) \\
-    \midrule
-    $(0, 25]$    & 30 & 26 \\
-    $(25, 50]$   & 31 & 33 \\
-    $(50, 100]$  & 57 & 31 \\
-    $(100, 150]$ & 42 & 19 \\
-    $(150, 250]$ & 65 & 16 \\
-    $(250, 500]$ & 84 & 11 \\
-    \bottomrule
-  \end{tabular}
-\end{center}
-is entered and represented in \proglang{R} as
+Function \code{grouped.data} creates a grouped data object
+similar to --- and inheriting from --- a data frame. The function
+accepts two types of input:
+\begin{enumerate}
+\item a vector of group boundaries $c_0, c_1, \dots, c_r$ and one or
+  more vectors of group frequencies $n_1, \dots, n_r$ (note that there
+  should be one more group boundary than group frequencies);
+\item individual data $x_1, \dots, x_n$ and either a vector of
+  breakpoints $c_1, \dots, c_r$, a number $r$ of breakpoints or an
+  algorithm to determine the latter.
+\end{enumerate}
+In the second case, \code{grouped.data} will group the individual data
+using function \code{hist}. The function always assumes that the intervals
+are contiguous.
+
+\begin{example}
+  \label{ex:grouped.data-1}
+  Consider the following already grouped data set:
+  \begin{center}
+    \begin{tabular}{lcc}
+      \toprule
+      Group & Frequency (Line 1) & Frequency (Line 2) \\
+      \midrule
+      $(0, 25]$    & 30 & 26 \\
+      $(25, 50]$   & 31 & 33 \\
+      $(50, 100]$  & 57 & 31 \\
+      $(100, 150]$ & 42 & 19 \\
+      $(150, 250]$ & 65 & 16 \\
+      $(250, 500]$ & 84 & 11 \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  We can conveniently and unambiguously store this data set in
+  \proglang{R} as follows:
 <<echo=TRUE>>=
 x <- grouped.data(Group = c(0, 25, 50, 100, 150, 250, 500),
                   Line.1 = c(30, 31, 57, 42, 65, 84),
                   Line.2 = c(26, 33, 31, 19, 16, 11))
 @
 
-Object \code{x} is stored internally as a list with class
+   Internally, object \code{x} is a list with class
 <<echo=TRUE>>=
 class(x)
 @
-With a suitable \code{print} method, these objects can be displayed in
-an unambiguous manner:
+
+  The package provides a suitable \code{print} method to display
+  grouped data objects in an intuitive manner:
 <<echo=TRUE>>=
 x
 @
+  \qed
+\end{example}
 
-Second, the package supports the most common extraction and
+\begin{example}
+  \label{ex:grouped.data-2}
+  Consider Data Set~B of \citet[Table~11.2]{LossModels4e}:
+  \begin{center}
+    \begin{tabular}{*{10}{r}}
+       27 &  82 & 115 & 126 & 155 &  161 &  243 &  294 &  340 &   384 \\
+      457 & 680 & 855 & 877 & 974 & \numprint{1193}
+                                  & \numprint{1340}
+                                  & \numprint{1884}
+                                  & \numprint{2558}
+                                  & \numprint{15743}
+    \end{tabular}
+  \end{center}
+  We can represent this data set as grouped data using either an automatic
+  or a suggested number of groups (see \code{?hist} for details):
+<<echo=TRUE>>=
+y <- c(  27,   82,  115,   126, 155, 161, 243,  294,
+        340,  384,  457,   680, 855, 877, 974, 1193,
+       1340, 1884, 2558, 15743)
+grouped.data(y)                         # automatic
+grouped.data(y, breaks = 5)             # suggested
+@
+
+  The above grouping methods use equi-spaced breaks. This is rarely
+  appropriate for heavily skewed insurance data. For this reason,
+  \code{grouped.data} also supports specified breakpoints (or group
+  boundaries):
+<<echo=TRUE>>=
+grouped.data(y, breaks = c(0, 100, 200, 350, 750,
+                           1200, 2500, 5000, 16000))
+@
+  \qed
+\end{example}
+
+The package supports the most common extraction and
 replacement methods for \code{"grouped.data"} objects using the
 usual \code{[} and \code{[<-} operators. In particular, the
-following extraction operations are supported.
+following extraction operations are supported. (In the following,
+object \code{x} is the grouped data object of \autoref{ex:grouped.data-1}.)
+<<echo=FALSE>>=
+x <- grouped.data(Group = c(0, 25, 50, 100, 150, 250, 500),
+                  Line.1 = c(30, 31, 57, 42, 65, 84),
+                  Line.2 = c(26, 33, 31, 19, 16, 11))
+@
 \begin{enumerate}[i)]
 \item Extraction of the vector of group boundaries (the first column):
 <<echo=TRUE>>=
@@ -211,12 +277,12 @@ is made simple with a method for the \code{mean} function:
 mean(x)
 @
 Higher empirical moments can be computed with \code{emm}; see
-Section~\ref{sec:empirical-moments}.
+\autoref{sec:empirical-moments}.
 
 The \proglang{R} function \code{hist} splits individual data into
 groups and draws an histogram of the frequency distribution. The
 package introduces a method for already grouped data. Only the first
-frequencies column is considered (see Figure \ref{fig:histogram} for
+frequencies column is considered (see \autoref{fig:histogram} for
 the resulting graph):
 <<echo=TRUE, fig=FALSE>>=
 hist(x[, -3])
@@ -230,8 +296,18 @@ hist(x[, -3])
   \label{fig:histogram}
 \end{figure}
 
+\begin{rem}
+  One will note that for an individual data set like \code{y} of
+  \autoref{ex:grouped.data-2}, the following two expressions yield the
+  same result:
+<<echo=TRUE, fig=FALSE>>=
+hist(y)               # histogram method for individual data
+hist(grouped.data(y)) # histogram method for grouped data
+@
+\end{rem}
+
 \proglang{R} has a function \code{ecdf} to compute the empirical
-cdf of an individual data set,
+cdf $F_n(x)$ of an individual data set:
 \begin{equation}
   \label{eq:ecdf}
   F_n(x) = \frac{1}{n} \sum_{j = 1}^n I\{x_j \leq x\},
@@ -254,13 +330,22 @@ segments:
     1, & x > c_r.
   \end{cases}
 \end{equation}
-The package includes a function \code{ogive} that otherwise behaves
-exactly like \code{ecdf}. In particular, methods for functions
-\code{knots} and \code{plot} allow, respectively, to obtain the
-knots $c_0, c_1, \dots, c_r$ of the ogive and a graph (see Figure
-\ref{fig:ogive}):
+The package includes a generic function \code{ogive} with methods for
+individual and for grouped data. The function behaves
+exactly like \code{ecdf}.
+
+\begin{example}
+  \label{ex:ogive}
+  Consider first the grouped data set of \autoref{ex:grouped.data-1}.
+  Function \code{ogive} returns a function to compute the ogive
+  $\tilde{F}_n(x)$ in any point:
+<<echo=TRUE>>=
+(Fnt <- ogive(x))
+@
+  Methods for functions \code{knots} and \code{plot} allow,
+  respectively, to obtain the knots $c_0, c_1, \dots, c_r$ of the
+  ogive and to draw a graph (see \autoref{fig:ogive}):
 <<echo=TRUE, fig=FALSE>>=
-Fnt <- ogive(x)
 knots(Fnt)                         # group boundaries
 Fnt(knots(Fnt))                    # ogive at group boundaries
 plot(Fnt)                          # plot of the ogive
@@ -274,9 +359,24 @@ plot(Fnt)
   \label{fig:ogive}
 \end{figure}
 
+  To add further symmetry between functions \code{hist} and
+  \code{ogive}, the latter also accepts in argument a vector individual
+  data. It will call \code{grouped.data} and then computes the ogive.
+  (Below, \code{y} is the individual data set of
+  \autoref{ex:grouped.data-2}.)
+<<echo=TRUE>>=
+(Fnt <- ogive(y))
+knots(Fnt)
+@
+  \qed
+\end{example}
+
 Finally, a method of function \code{quantile} for grouped data objects
-returns linearly smoothed quantiles, that is the inverse of the ogive
+returns linearly smoothed quantiles, that is, the inverse of the ogive
 evaluated at various points:
+<<echo=FALSE>>=
+Fnt <- ogive(x)
+@
 <<echo=TRUE>>=
 quantile(x)
 Fnt(quantile(x))
@@ -310,7 +410,7 @@ Second, in the same spirit as \code{ecdf} and \code{ogive},
 function \code{elev} returns a function to compute the empirical
 limited expected value --- or first limited moment --- of a sample for
 any limit. Again, there are methods for individual and grouped data
-(see Figure \ref{fig:elev} for the graphs):
+(see \autoref{fig:elev} for the graphs):
 <<echo=TRUE, fig=FALSE>>=
 lev <- elev(dental)
 lev(knots(lev))                    # ELEV at data points
@@ -390,8 +490,10 @@ $F(x)$ or $\E{X \wedge x}$, starting values for the optimization
 procedure and the name of the method to use. The empirical functions
 are computed with \code{ecdf}, \code{ogive} or \code{elev}.
 
-The expressions below fit an exponential distribution to the grouped
-dental data set, as per Example 2.21 of \cite{LossModels}:
+\begin{example}
+  \label{ex:mde}
+  The expressions below fit an exponential distribution to the grouped
+  dental data set, as per example~2.21 of \cite{LossModels}:
 <<echo=FALSE>>=
 op <- options(warn = -1)                # hide warnings from mde()
 @
@@ -406,10 +508,13 @@ mde(gdental, levexp, start = list(rate = 1/200),
 <<echo=FALSE>>=
 options(op)                             # restore warnings
 @
+  \qed
+\end{example}
 
-It should be noted that optimization is not always that simple to
-achieve. For example, consider the problem of fitting a Pareto
-distribution to the same data set using the Cramér--von~Mises method:
+It should be noted that optimization is not always as simple to
+achieve as in \autoref{ex:mde}. For example, consider the problem of
+fitting a Pareto distribution to the same data set using the
+Cramér--von~Mises method:
 <<echo=TRUE, eval=FALSE>>=
 mde(gdental, ppareto, start = list(shape = 3, scale = 600),
         measure = "CvM") # no convergence
@@ -433,7 +538,7 @@ pparetolog <- function(x, logshape, logscale)
 The actual estimators of the parameters are obtained with
 <<echo=TRUE>>=
 exp(p$estimate)
-@
+@ %$
 This procedure may introduce additional bias in the estimators, though.
 
 
@@ -449,8 +554,8 @@ not the insurer knows that a loss occurred. Now, the random variables
 $X$, $Y^L$ and $Y^P$ will differ if any of the following coverage
 modifications are present for the policy: an ordinary or a franchise
 deductible, a limit, coinsurance or inflation adjustment
-\cite[see][Chapter 5 for precise definitions of these
-terms]{LossModels4e}. Table \ref{tab:coverage} summarizes the
+\cite[see][chapter~8 for precise definitions of these
+terms]{LossModels4e}. \autoref{tab:coverage} summarizes the
 definitions of $Y^L$ and $Y^P$.
 
 \begin{table}
@@ -503,31 +608,35 @@ above, \code{coverage} returns a function object to compute the pdf or
 cdf of the modified random variable. The function can then be used in
 modeling like any other \code{dfoo} or \code{pfoo} function.
 
-For example, let $Y^P$ represent the amount paid by an insurer for a
-policy with an ordinary deductible $d$ and a limit $u - d$ (or maximum
-covered loss of $u$). Then the definition of $Y^P$ is
-\begin{equation}
-  Y^P =
-  \begin{cases}
-    X - d,            & d \leq X \leq u \\
-    u - d,            & X \geq u
-  \end{cases}
-\end{equation}
-and its pdf is
-\begin{equation}
-  \label{eq:pdf-YP}
-  f_{Y^P}(y)
-  =
-  \begin{cases}
-    0,                               & y = 0 \\
-    \dfrac{f_X(y + d)}{1 - F_X(d)},  & 0 < y < u - d \\
-    \dfrac{1 - F_X(u)}{1 - F_X(d)},  & y = u - d \\
-    0,                               & y > u - d.
-  \end{cases}
-\end{equation}
-Assume $X$ has a gamma distribution. Then an \proglang{R} function to
-compute the pdf \eqref{eq:pdf-YP} in any $y$ for a deductible $d = 1$
-and a limit $u = 10$ is obtained with \code{coverage} as follows:
+\begin{example}
+  \label{ex:coverage}
+  Let $Y^P$ represent the amount paid by an insurer for a policy with
+  an ordinary deductible $d$ and a limit $u - d$ (or maximum covered
+  loss of $u$). Then the definition of $Y^P$ is
+  \begin{equation}
+    Y^P =
+    \begin{cases}
+      X - d,            & d \leq X \leq u \\
+      u - d,            & X \geq u
+    \end{cases}
+  \end{equation}
+  and its pdf is
+  \begin{equation}
+    \label{eq:pdf-YP}
+    f_{Y^P}(y)
+    =
+    \begin{cases}
+      0,                               & y = 0 \\
+      \dfrac{f_X(y + d)}{1 - F_X(d)},  & 0 < y < u - d \\
+      \dfrac{1 - F_X(u)}{1 - F_X(d)},  & y = u - d \\
+      0,                               & y > u - d.
+    \end{cases}
+  \end{equation}
+
+  Assume $X$ has a gamma distribution. Then an \proglang{R} function
+  to compute the pdf \eqref{eq:pdf-YP} in any $y$ for a deductible
+  $d = 1$ and a limit $u = 10$ is obtained with \code{coverage} as
+  follows:
 <<echo=TRUE>>=
 f <- coverage(pdf = dgamma, cdf = pgamma,
               deductible = 1, limit = 10)
@@ -537,15 +646,22 @@ f(5, shape = 5, rate = 1)
 f(9, shape = 5, rate = 1)
 f(12, shape = 5, rate = 1)
 @
+  \qed
+\end{example}
 
-Note how function \code{f} is built specifically for the coverage
-modifications submitted and contains as little useless code as
-possible.
+Note how function \code{f} in the previous example is built
+specifically for the coverage modifications submitted and contains as
+little useless code as possible.
 
-Let object \code{y} contain a sample of claims amounts from policies
-with the above deductible and limit. Then one can fit a gamma
-distribution by maximum likelihood to the claim severity process as
-follows:
+The function returned by \code{coverage} may be used for various
+purposes, most notably parameter estimation, as the following example
+illustrates.
+
+\begin{example}
+  Let object \code{y} contain a sample of claims amounts from policies
+  with the deductible and limit of \autoref{ex:coverage}. One can
+  fit a gamma distribution by maximum likelihood to the claim severity
+  distribution as follows:
 <<echo=FALSE>>=
 x <- rgamma(100, 2, 0.5)
 y <- pmin(x[x > 1], 9)
@@ -558,10 +674,11 @@ fitdistr(y, f, start = list(shape = 2, rate = 0.5))
 <<echo=FALSE>>=
 options(op)                             # restore warnings
 @
+  \qed
+\end{example}
 
-Vignette \code{"coverage"} contains more detailed pdf and cdf
-formulas under various combinations of coverage modifications.
-
+Vignette \code{"coverage"} contains more detailed formulas for the pdf
+and the cdf under various combinations of coverage modifications.
 
 \bibliography{actuar}
 
