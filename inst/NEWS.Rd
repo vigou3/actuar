@@ -1,8 +1,8 @@
 \name{NEWS}
-\title{actuar News}
+\title{\pkg{actuar} News}
 \encoding{UTF-8}
 
-\section{CHANGES IN actuar VERSION 2.0-0}{
+\section{CHANGES IN \pkg{actuar} VERSION 2.0-0}{
   \subsection{NEW FEATURES}{
     \itemize{
       \item{New support functions \code{[dpqrm,lev,mgf]invgaussian} for
@@ -110,7 +110,7 @@
 	parametrization has changed from the one of Klugman et al.
 	(2012) to the standard parametrization for the logarithmic
 	distribution. Basically, any value of \code{prob} for the
-	logarithmic parameter in previous versions of actuar should now
+	logarithmic parameter in previous versions of \pkg{actuar} should now
 	be \code{1 - prob}.}
       \item{The aim of vignette \code{"simulation"} is changed from
 	\dQuote{simulation of compound hierarchical models} to
@@ -134,6 +134,6 @@
 }
 
 \note{
-  News for actuar 1.2-2 and earlier can be found in file
+  News for \pkg{actuar} 1.2-2 and earlier can be found in file
   \file{NEWS.1.Rd}.
 }
