@@ -55,7 +55,7 @@ mgfinvgauss(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
     \mu} and \code{dispersion} \eqn{= \phi} has density:
   \deqn{f(x) = \left( \frac{1}{2 \pi \phi x^3} \right)^{1/2}
     \exp\left( -\frac{(x - \mu)^2}{2 \mu^2 \phi x} \right),}{%
-    f(x) = sqrt(/(2 \pi \phi x^3)) *
+    f(x) = sqrt(1/(2 \pi \phi x^3)) *
            exp(-((x - \mu)^2)/(2 \mu^2 \phi x)),}
   for \eqn{x \ge 0}, \eqn{\mu > 0} and \eqn{\phi > 0}.
 
