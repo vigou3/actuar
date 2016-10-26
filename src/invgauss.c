@@ -2,8 +2,8 @@
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, raw and limited moments and to simulate random variates
- *  for the inverse gaussian distribution. See ../R/InvGaussSupp.R for
- *  details.
+ *  for the inverse gaussian distribution. See ../R/InverseGaussian.R
+ *  for details.
  *
  *  The code for functions [dpqr]invgauss() is a C implementation of
  *  functions of the same functions in package statmod; see:
