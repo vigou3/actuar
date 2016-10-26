@@ -1,7 +1,9 @@
 /*  ===== actuar: An R Package for Actuarial Science =====
  *
- *  Functions to calculate raw and limited moments for the inverse gaussian
- *  distribution. See ../R/InvGaussSupp.R for details.
+ *  Functions to compute density, cumulative distribution and quantile
+ *  functions, raw and limited moments and to simulate random variates
+ *  for the inverse gaussian distribution. See ../R/InvGaussSupp.R for
+ *  details.
  *
  *  The code for functions [dpqr]invgauss() is a C implementation of
  *  functions of the same functions in package statmod; see:
