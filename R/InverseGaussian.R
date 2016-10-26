@@ -1,8 +1,7 @@
 ### ===== actuar: An R Package for Actuarial Science =====
 ###
 ### Definition of the {d,p,q,r,m,lev,mgf}invgauss functions to compute
-### raw and limited moments, and the moment generating function for
-### the Inverse Gaussian distribution.
+### characteristics of the Inverse Gaussian distribution.
 ###
 ### Functions [dpq]invgauss rely on C implementations of functions of
 ### the same name in package statmod. See:
