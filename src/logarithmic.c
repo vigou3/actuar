@@ -73,7 +73,7 @@ double plogarithmic(double x, double p, int lower_tail, int log_p)
 
     for (k = 1; k < x; k++)
     {
-	pk *= p * k / (k + 1.0);
+	pk *= p * k/(k + 1.0);
 	s += pk;
     }
 
@@ -146,8 +146,8 @@ double qlogarithmic(double x, double p, int lower_tail, int log_p)
     P = a * p;
     Q = 1.0/(0.5 - p + 0.5);
     mu = P * Q;
-    sigma = sqrt(P * (1 - P) * Q * Q);
-    gamma = (P * (1 + p - 3*P + 2*P*P) * R_pow_di(Q, 3)) / R_pow_di(sigma, 3);
+    sigma = sqrt(P * (1 - P)) * Q;
+    gamma = (P * (1 + p - 3*P + 2*P*P) * R_pow_di(Q, 3))/R_pow_di(sigma, 3);
 
     /* ## From R sources ##
      * Note : "same" code in qpois.c, qbinom.c, qnbinom.c --
@@ -165,7 +165,7 @@ double qlogarithmic(double x, double p, int lower_tail, int log_p)
     /* ## From R sources ##
      * y := approx.value (Cornish-Fisher expansion) :  */
     z = qnorm(p, 0.0, 1.0, /*lower_tail*/1, /*log_p*/0);
-    y = ACT_forceint(mu + sigma * (z + gamma * (z*z - 1) / 6));
+    y = ACT_forceint(mu + sigma * (z + gamma * (z*z - 1)/6));
 
     z = plogarithmic(y, p, /*lower_tail*/1, /*log_p*/0);
 
