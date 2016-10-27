@@ -154,24 +154,24 @@ double qlogarithmic(double x, double p, int lower_tail, int log_p)
      * FIXME: This is far from optimal [cancellation for p ~= 1, etc]: */
     if (!lower_tail || log_p)
     {
-	p = ACT_DT_qIv(p); /* need check again (cancellation!): */
-	if (p == ACT_DT_0) return 0;
-	if (p == ACT_DT_1) return R_PosInf;
+	x = ACT_DT_qIv(x); /* need check again (cancellation!): */
+	if (x == ACT_DT_0) return 0;
+	if (x == ACT_DT_1) return R_PosInf;
     }
     /* ## From R sources ##
      * temporary hack --- FIXME --- */
-    if (p + 1.01 * DBL_EPSILON >= 1.0) return R_PosInf;
+    if (x + 1.01 * DBL_EPSILON >= 1.0) return R_PosInf;
 
     /* ## From R sources ##
      * y := approx.value (Cornish-Fisher expansion) :  */
-    z = qnorm(p, 0.0, 1.0, /*lower_tail*/1, /*log_p*/0);
+    z = qnorm(x, 0.0, 1.0, /*lower_tail*/1, /*log_p*/0);
     y = ACT_forceint(mu + sigma * (z + gamma * (z*z - 1)/6));
 
     z = plogarithmic(y, p, /*lower_tail*/1, /*log_p*/0);
 
     /* ## From R sources ##
      * fuzz to ensure left continuity: */
-    p *= 1 - 64*DBL_EPSILON;
+    x *= 1 - 64*DBL_EPSILON;
 
     /* ## From R sources ##
      * If the C-F value is not too large a simple search is OK */
