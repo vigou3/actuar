@@ -131,12 +131,12 @@ double ppoisinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
  */
 
 static double
-do_search(double y, double *z, double x, double pr, double incr)
+do_search(double y, double *z, double p, double mu, double phi, double incr)
 {
-    if(*z >= x) {	/* search to the left */
+    if(*z >= p) {	/* search to the left */
 	for(;;) {
 	    if(y == 0 ||
-	       (*z = ppoisinvgauss(y - incr, pr, /*l._t.*/1, /*log_p*/0)) < x)
+	       (*z = ppoisinvgauss(y - incr, mu, phi, /*l._t.*/1, /*log_p*/0)) < p)
 		return y;
 	    y = fmax2(0, y - incr);
 	}
@@ -144,7 +144,7 @@ do_search(double y, double *z, double x, double pr, double incr)
     else {		/* search to the right */
 	for(;;) {
 	    y = y + incr;
-	    if((*z = ppoisinvgauss(y, pr, /*l._t.*/1, /*log_p*/0)) >= x)
+	    if((*z = ppoisinvgauss(y, mu, phi, /*l._t.*/1, /*log_p*/0)) >= p)
 		return y;
 	}
     }
@@ -169,11 +169,13 @@ double qpoisinvgauss(double p, double mu, double phi, int lower_tail, int log_p)
 
     ACT_Q_P01_boundaries(p, 0, R_PosInf);
 
-    double sigma, gamma, z, y;
+    double sigma, sigma2, gamma, z, y;
+    double phim = phi * mu;
 
     /* mu = mu; */
-    sigma = ;			/* std dev */
-    gamma = ;			/* kurtosis */
+    sigma = mu * sqrt(phim + 1);
+    sigma2 = sigma * sigma;
+    gamma = (mu + 3*sigma2*(sigma2/mu - 1))/sigma2/sigma;
 
     /* ## From R sources ##
      * Note : "same" code in qpois.c, qbinom.c, qnbinom.c --
@@ -191,9 +193,9 @@ double qpoisinvgauss(double p, double mu, double phi, int lower_tail, int log_p)
     /* ## From R sources ##
      * y := approx.value (Cornish-Fisher expansion) :  */
     z = qnorm(p, 0.0, 1.0, /*lower_tail*/1, /*log_p*/0);
-    y = ACT_forceint(mu + sigma * (z + gamma * (z*z - 1) / 6));
+    y = ACT_forceint(mu + sigma * (z + gamma * (z*z - 1)/6));
 
-    z = ppoisinvgauss(y, p, /*lower_tail*/1, /*log_p*/0);
+    z = ppoisinvgauss(y, mu, phi, /*lower_tail*/1, /*log_p*/0);
 
     /* ## From R sources ##
      * fuzz to ensure left continuity: */
@@ -201,14 +203,14 @@ double qpoisinvgauss(double p, double mu, double phi, int lower_tail, int log_p)
 
     /* ## From R sources ##
      * If the C-F value is not too large a simple search is OK */
-    if (y < 1e5) return do_search(y, &z, x, p, 1);
+    if (y < 1e5) return do_search(y, &z, p, mu, phi, 1);
     /* ## From R sources ##
      * Otherwise be a bit cleverer in the search */
     {
 	double incr = floor(y * 0.001), oldincr;
 	do {
 	    oldincr = incr;
-	    y = do_search(y, &z, x, p, incr);
+	    y = do_search(y, &z, p, mu, phi, incr);
 	    incr = fmax2(1, floor(incr/100));
 	} while(oldincr > 1 && incr > y*1e-15);
 	return y;

@@ -31,7 +31,7 @@ export(
     dllogis, pllogis, qllogis, rllogis, mllogis, levllogis,
     mlnorm, levlnorm,
     dparalogis, pparalogis, qparalogis, rparalogis, mparalogis, levparalogis,
-    dpareto, ppareto, qpareto, rpareto, mpareto, levpareto, # aliases
+    dpareto, ppareto, qpareto, rpareto, mpareto, levpareto,
     dpareto2, ppareto2, qpareto2, rpareto2, mpareto2, levpareto2, # aliases
     dpareto1, ppareto1, qpareto1, rpareto1, mpareto1, levpareto1,
     mweibull, levweibull,
@@ -43,6 +43,8 @@ export(
     dzmlogarithmic, pzmlogarithmic, qzmlogarithmic, rzmlogarithmic,
     dzmpois, pzmpois, qzmpois, rzmpois,
     dzmgeom, pzmgeom, qzmgeom, rzmgeom,
+    dpoisinvgauss, ppoisinvgauss, qpoisinvgauss, rpoisinvgauss,
+    dpig, ppig, qpig, rpig, # aliases
     ## Three parameter distributions
     dburr, pburr, qburr, rburr, mburr, levburr,
     dgenpareto, pgenpareto, qgenpareto, rgenpareto, mgenpareto, levgenpareto,
