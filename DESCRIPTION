@@ -2,7 +2,7 @@ Package: actuar
 Type: Package
 Title: Actuarial Functions and Heavy Tailed Distributions
 Version: 2.0-0.9000
-Date: 2016-09-20
+Date: 2016-10-27
 Authors@R: c(person("Vincent", "Goulet", role = c("cre", "aut"),
  	            email = "vincent.goulet@act.ulaval.ca"),
 	     person("Sébastien", "Auclair", role = "ctb"),
@@ -13,13 +13,16 @@ Authors@R: c(person("Vincent", "Goulet", role = c("cre", "aut"),
 	     person("Louis-Philippe", "Pouliot", role = "ctb"),
 	     person("Mathieu", "Pigeon", role = "aut",
 	            email = "pigeon.mathieu.2@uqam.ca"))
-Description: Various actuarial science functionalities, mostly in the
-  fields of loss distributions, risk theory (including ruin theory),
-  simulation of compound hierarchical models and credibility theory.
-  The package also provides support functions for 19 continuous heavy
-  tailed probability distributions useful for insurance loss severity
-  modeling, as well as zero-truncated and zero-modified extensions to
-  the discrete distributions commonly used in loss frequency modeling.
+Description: Numerous actuarial science functionalities for modeling of
+  loss distributions; risk theory and ruin theory; simulation
+  of compound models, discrete mixtures and compound hierarchical
+  models; credibility theory. Support for 19 continuous heavy tailed
+  probability distributions useful for insurance loss severity
+  modeling. Support for phase-type distributions used in computation
+  of ruin probabilities. Support for the Poisson-inverse Gaussian
+  distribution and for the zero-truncated and zero-modified
+  extensions of the discrete distributions commonly used in loss
+  frequency modeling.
 Depends: R (>= 3.3.0)
 Imports: stats, graphics
 Suggests: MASS
