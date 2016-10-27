@@ -109,6 +109,9 @@ DPQTAB dpq_tab[] = {
     {"dzmgeom",         actuar_do_dpq2,        113},
     {"pzmgeom",         actuar_do_dpq2,        114},
     {"qzmgeom",         actuar_do_dpq2,        115},
+    {"dpoisinvgauss",   actuar_do_dpq2,        116},
+    {"ppoisinvgauss",   actuar_do_dpq2,        117},
+    {"qpoisinvgauss",   actuar_do_dpq2,        118},
     /* Three parameter distributions */
     {"dburr",           actuar_do_dpq3,         1},
     {"pburr",           actuar_do_dpq3,         2},
@@ -206,6 +209,7 @@ RANDOMTAB random_tab[] = {
     {"rzmlogarithmic",  actuar_do_random2,   103, INTSXP},
     {"rzmpois",         actuar_do_random2,   104, INTSXP},
     {"rzmgeom",         actuar_do_random2,   105, INTSXP},
+    {"rpoisinvgauss",   actuar_do_random2,   106, INTSXP},
     /* Three parameter distributions */
     {"rburr",           actuar_do_random3,     1, REALSXP},
     {"rgenpareto",      actuar_do_random3,     2, REALSXP},

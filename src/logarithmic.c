@@ -63,7 +63,7 @@ double plogarithmic(double x, double p, int lower_tail, int log_p)
     /* limiting case as p approaches zero is point mass at one. */
     if (p == 0) return (x >= 1) ? ACT_DT_1 : ACT_DT_0;
 
-    int i;
+    int k;
     double s, pk;
 
     pk = -p/log1p(-p);		      /* Pr[X = 1] */
@@ -71,9 +71,9 @@ double plogarithmic(double x, double p, int lower_tail, int log_p)
 
     if (x == 1) return ACT_DT_val(s); /* simple case */
 
-    for (i = 1; i < x; i++)
+    for (k = 1; k < x; k++)
     {
-	pk *= p * i / (i + 1.0);
+	pk *= p * k / (k + 1.0);
 	s += pk;
     }
 

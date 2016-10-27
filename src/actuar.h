@@ -206,6 +206,11 @@ double qzmgeom(double p, double prob, double p0m, int lower_tail, int log_p);
 double rzmgeom(double prob, double p0m);
 double rzmgeom2(double prob, double p0m);
 
+double dpoisinvgauss(double x, double mu, double phi, int give_log);
+double ppoisinvgauss(double q, double mu, double phi, int lower_tail, int log_p);
+double qpoisinvgauss(double p, double mu, double phi, int lower_tail, int log_p);
+double rpoisinvgauss(double mu, double phi);
+
 /*   Three parameter distributions */
 double dburr(double x, double shape1, double shape2, double scale, int give_log);
 double pburr(double q, double shape1, double shape2, double scale, int lower_tail, int log_p);

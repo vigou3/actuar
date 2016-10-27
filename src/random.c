@@ -248,6 +248,7 @@ SEXP actuar_do_random2(int code, SEXP args, SEXPTYPE type)
             RAND2(103, rzmlogarithmic);
             RAND2(104, rzmpois);
             RAND2(105, rzmgeom);
+            RAND2(106, rpoisinvgauss);
         default:
             error(_("internal error in actuar_do_random2"));
         }
