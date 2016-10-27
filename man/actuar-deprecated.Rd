@@ -27,6 +27,6 @@ mgfinvGauss(x, nu, lambda, log= FALSE)
   Functions \code{[m,lev,mgf]invGauss} complemented functions
   \code{[dpqr]invGauss} of package \pkg{SuppDists}. From version
   2.0-0, \pkg{actuar} has its own complete set of support functions
-  for the inverse gaussian distribution; see \code{\link{dinvgauss}}.
+  for the inverse Gaussian distribution; see \code{\link{dinvgauss}}.
 }
 \keyword{misc}

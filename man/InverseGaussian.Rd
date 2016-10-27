@@ -51,7 +51,7 @@ mgfinvgauss(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
   \item{t}{numeric vector.}
 }
 \details{
-  The inverse gaussian distribution with parameters \code{mean} \eqn{=
+  The inverse Gaussian distribution with parameters \code{mean} \eqn{=
     \mu} and \code{dispersion} \eqn{= \phi} has density:
   \deqn{f(x) = \left( \frac{1}{2 \pi \phi x^3} \right)^{1/2}
     \exp\left( -\frac{(x - \mu)^2}{2 \mu^2 \phi x} \right),}{%
@@ -92,7 +92,7 @@ mgfinvgauss(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
   \pkg{statmod}; see Giner and Smyth (2016).
 
   Devroye (1986, chapter 4) provides a nice presentation of the
-  algorithm to generate random variates from an inverse gaussian
+  algorithm to generate random variates from an inverse Gaussian
   distribution.
 }
 \references{
@@ -115,7 +115,7 @@ dinvgauss(c(-1, 0, 1, 2, Inf), mean = 1.5, dis = 0.7)
 dinvgauss(c(-1, 0, 1, 2, Inf), mean = Inf, dis = 0.7)
 dinvgauss(c(-1, 0, 1, 2, Inf), mean = 1.5, dis = Inf) # spike at zero
 
-## Typical graphical representations of the inverse gaussian
+## Typical graphical representations of the inverse Gaussian
 ## distribution. First fixed mean and varying shape; second
 ## varying mean and fixed shape.
 col = c("red", "blue", "green", "cyan", "yellow", "black")
