@@ -87,12 +87,13 @@ functions are named \code{dfoo}, \code{pfoo}, \code{qfoo} and
 
 Package \pkg{actuar} provides \code{d}, \code{p}, \code{q} and
 \code{r} functions for a large number of continuous distributions
-useful for loss severity modeling; for phase-type distributions useful
-in ruin theory; for zero-truncated and zero-modified extensions of the
-discrete distributions commonly used in loss frequency modeling. The
-package also introduces support functions to compute raw moments,
-limited moments and the moment generating function (when it exists) of
-continuous distributions.
+useful for loss severity modeling; for phase-type distributions used
+in computation of ruin probabilities; for zero-truncated and
+zero-modified extensions of the discrete distributions commonly used
+in loss frequency modeling; for the heavy tailed Poisson-inverse
+Gaussian discrete distribution. The package also introduces support
+functions to compute raw moments, limited moments and the moment
+generating function (when it exists) of continuous distributions.
 
 
 \section{Additional continuous distributions}
@@ -177,7 +178,6 @@ coefficient in ruin theory; see the \code{"risk"} vignette.
 
 
 
-
 \section{Support for phase-type distributions}
 \label{sec:phase-type}
 
@@ -228,8 +228,10 @@ The package provides \code{d}, \code{p}, \code{r}, \code{m} and
 \autoref{sec:app:phase-type}.
 
 For the package, function \code{pphtype} is central to the evaluation
-of the probability of ruin; see \code{?ruin} and the \code{"risk"}
+of the ruin probabilities; see \code{?ruin} and the \code{"risk"}
 vignette.
+
+
 
 
 \section{Extensions to standard discrete distributions}
@@ -398,6 +400,68 @@ distributions with $p_0^M = 0$. However, using the dedicated functions
 in \proglang{R} will be more efficient.
 
 
+\section{Support for the Poisson-inverse Gaussian distribution}
+\label{sec:pig}
+
+The Poisson-inverse Gaussian distribution arises from a continuous
+mixture between a Poisson distribution and an inverse Gaussian. That
+is, if $X|\Lambda = \lambda sim \text{Poisson}(\lambda)$ and
+$\Lambda \sim \text{IG}(\mu, \phi)$, then the (marginal) random
+variable $X$ with pmf
+\begin{equation*}
+  p_x = \int_0^\infty \frac{\lambda^x e^{-\lambda}}{x!}\, g(\lambda;
+  \mu, \phi)\, d\lambda,
+\end{equation*}
+is said to be a Poisson-inverse Gaussian (PIG) distribution.
+
+The literature proposes many different expressions for the pmf of the
+PIG
+\citep{Holla:PIG:1966,Shaban:PIG:1981,Johnson:discrete:2005,LossModels4e}.
+Using the parametrization for the inverse Gaussian with parameters
+$\mu$ and $\phi$ found in \autoref{sec:app:continuous}, we have:
+\begin{equation}
+  \label{eq:pig:px}
+  \begin{split}
+    p_x &= \sqrt{\frac{2}{\pi \phi}} \frac{e^{(\phi\mu)^{-1}}}{x!}
+    \left[ \frac{1}{2\phi (1 + (2\phi\mu^2)^{-1})}
+    \right]^{-\frac{1}{2}(x - \frac{1}{2})} \\
+    &\phantom{=} \times K_{x - 1/2} \left( \sqrt{\frac{2}{\phi}\left(1
+          + \frac{1}{2\phi\mu^2}\right)} \right),
+  \end{split}
+\end{equation}
+for $x = 0, 1, \dots$, $\mu > 0$, $\phi > 0$ and where
+\begin{equation*}
+  K_\nu(ax) = \frac{a^{-\nu}}{2} \int_0^\infty t^{\nu - 1}
+  e^{- z(t + at^{-1})/2} dt, \quad a^2 z > 0
+\end{equation*}
+is the modified Bessel function of the third kind
+\citep{Bateman:1953:2,Abramowitz:1972}.
+
+One may compute the probabilities $p_x$, $x = 0, 1, \dots$ recursively
+using the following equations:
+\begin{equation}
+  \label{eq:pig:px:recursive}
+  \begin{split}
+    p_0 &= \exp\left\{ \frac{1}{\phi\mu} (1 - \sqrt{1 + 2\phi\mu^2})
+    \right\} \\
+    p_1 &= \frac{\mu}{\sqrt{1 + 2\phi\mu^2}}\, p_0 \\
+    p_x &= \frac{2\phi\mu^2}{1 + 2\phi\mu^2} \left( 1 - \frac{3}{2x}
+    \right) p_{x - 1} + \frac{\mu^2}{1 + 2\phi\mu^2} \frac{1}{x(x -
+      1)}\, p_{x - 2}, \quad x = 2, 3, \dots.
+  \end{split}
+\end{equation}
+
+The first moment of the distribution is obviously $\mu$. The second
+and third central moment are, respectively,
+\begin{align*}
+  \mu_2 &= \sigma^2 = \phi\mu^3 + \mu^2 \\
+  \mu_3 &= 3 \sigma^2 \left( \frac{\sigma^2}{\mu} - 1 \right) + \mu.
+\end{align*}
+The quantile function \code{qpoisinvgauss} make use of the above, so
+it appears fit that the equations appear in this documentation.
+
+
+
 \section{Special integrals}
 \label{sec:special-integrals}
 
@@ -504,7 +568,7 @@ provides the R interfaces \code{gammaint}, \code{expint} and
 \code{betaint}, however these functions are not exported.
 
 
-\section{Implementation}
+\section{Implementation details}
 \label{sec:implementation}
 
 The core of all the functions presented in this document is written in
@@ -532,14 +596,10 @@ corresponding standard distribution.
 
 Generation of random variates from zero-truncated distributions uses
 the following simple inversion algorithm on a restricted range
-\citep{Dalgaard:r-help:2005,Thomopoulos:2013:simulation}.
-Let $u$ be a random number from a uniform distribution on $(p_0, 1)$.
-Then
-\begin{equation*}
-  x = P^{-1}(u)
-\end{equation*}
-is distributed according to the zero-truncated version of the
-distribution with cdf $P(k)$.
+\citep{Dalgaard:r-help:2005,Thomopoulos:2013:simulation}. Let $u$ be a
+random number from a uniform distribution on $(p_0, 1)$. Then
+$x = P^{-1}(u)$ is distributed according to the zero-truncated version
+of the distribution with cdf $P(k)$.
 
 For zero-modified distributions, we generate variates from the
 discrete mixture \eqref{eq:mixture} when $p_0^M \geq p_0$. When
@@ -557,6 +617,11 @@ the rejection algorithm. Based on the difference $p_0 - p_0^M$, we
 determined (empirically) distribution-specific cutoff points between
 the two methods.
 
+Finally, the pmf of the PIG distribution uses \eqref{eq:pig:px},
+relying, at the \proglang{C} level, on \proglang{R}'s function
+\code{bessel\_k} to compute the modified Bessel function of the third
+kind $K_\nu(x)$. The cdf function, however, takes advantage of the
+recursive equations \eqref{eq:pig:px:recursive}.
 
 \appendix
 
@@ -1145,7 +1210,9 @@ This appendix gives the root name and the parameters of the
 \proglang{R} support functions for the members of the $(a, b, 0)$ and
 $(a, b, 1)$ discrete distributions as defined in \cite{LossModels4e};
 the values of $a$, $b$ and $p_0$ in the representation; the pmf; the
-relationship between the distributions, when there are any.
+relationship with other distributions, when there is one. The appendix
+also provides the main characteristics of the Poisson-inverse Gaussian
+distribution.
 
 \subsection[The (a, b, 0) class]{The $(a, b, 0)$ class}
 \label{sec:app:discrete:a-b-0}
@@ -1294,7 +1361,6 @@ infinite is a point mass in $k = 1$.
   p_k &= - \frac{p^k}{k \log (1 - p)}
 \end{align*}
 
-
 \subsection[The zero-modified (a, b, 1) class]{The zero-modified $(a, b, 1)$ class}
 \label{sec:app:discrete:zm}
 
@@ -1382,6 +1448,48 @@ $1 - p_0^M$).
       p_1 = - \frac{(1 - p_0^M) p}{\log (1 - p)} \\
   p_k &= - \frac{(1 - p_0^M) p^k}{k \log (1 - p)}
 \end{align*}
+
+
+\subsection{Other distribution}
+
+\subsubsection{Poisson-inverse Gaussian}
+\label{sec:app:discrete:pig}
+
+\begin{itemize}
+\item Root: \code{poisinvgauss}, \code{pig}
+\item Parameters: \code{mean} ($\mu$),
+  \code{shape} ($\lambda = 1/\phi$),
+  \code{dispersion} ($\phi$)
+\end{itemize}
+\medskip
+
+\noindent%
+Computation of the pmf either directly using
+\begin{align*}
+  p_x &= \sqrt{\frac{2}{\pi \phi}}
+  \frac{e^{(\phi\mu)^{-1}}}{x!}
+  \left[
+    \frac{1}{2\phi (1 + (2\phi\mu^2)^{-1})}
+  \right]^{-\frac{1}{2}(x - \frac{1}{2})} \\
+  &\phantom{=} \times
+  K_{x - 1/2}
+  \left(
+    \sqrt{\frac{2}{\phi}\left(1 + \frac{1}{2\phi\mu^2}\right)}
+  \right), \quad x = 0, 1, \dots,
+\end{align*}
+or recursively using
+\begin{align*}
+  p_0 &= \exp\left\{
+        \frac{1}{\phi\mu} (1 - \sqrt{1 + 2\phi\mu^2})
+        \right\} \\
+  p_1 &= \frac{\mu}{\sqrt{1 + 2\phi\mu^2}}\, p_0 \\
+  p_x &= \frac{2\phi\mu^2}{1 + 2\phi\mu^2}
+        \left( 1 - \frac{3}{2x} \right) p_{x - 1}  + \frac{\mu^2}{1 + 2\phi\mu^2}
+        \frac{1}{x(x - 1)}\, p_{x - 2}, \quad x = 2, 3, \dots.
+\end{align*}
+
+
+
 
 %% References
 \bibliography{actuar}
