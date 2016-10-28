@@ -27,7 +27,11 @@ double dinvgauss(double x, double mu, double phi, int give_log)
      *
      *  (2 pi phi x^3)^(-1/2) exp(- u^2/(2 phi x))
      *
-     *  with u = (x - mu)/mu.
+     *  with u = (x - mu)/mu. The limiting cases are:
+     *
+     *  1. phi = Inf: spike at zero;
+     *  2. mu = Inf: inverse chi-square distribution [a.k.a inverse gamma
+     *               with shape = 1/2, scale = 1/(2 * phi)].
      */
 
 #ifdef IEEE_754
@@ -226,6 +230,14 @@ double rinvgauss(double mu, double phi)
     if (mu <= 0.0 || phi <= 0.0)
         return R_NaN;
 
+    /* limiting case phi = Inf */
+    if (!R_FINITE(phi))
+	return 0.0;
+
+    /* limiting case mu = Inf */
+    if (!R_FINITE(mu))
+	return 1/phi/rchisq(1);
+
     double y, x;
 
     /* convert to mean = 1 */
@@ -256,6 +268,7 @@ double minvgauss(double order, double mu, double phi, int give_log)
 	return 0.0;
 
     /* limiting case mu = Inf */
+    /* [no finite strictly positive, integer moments] */
     if (!R_FINITE(mu))
 	return R_PosInf;
 
@@ -273,13 +286,13 @@ double minvgauss(double order, double mu, double phi, int give_log)
     return R_pow_di(mu, k) * z;
 }
 
-/* The lev function is very similar to the pdf. It can be written a
+/*  The lev function is very similar to the pdf. It can be written as
  *
- *   levinvgauss(x; mu, phi) = mu [pnorm((xm - 1)/r)
+ *    levinvgauss(x; mu, phi) = mu [pnorm((xm - 1)/r)
  *                                 - exp(2/phim) pnorm(-(xm + 1)/r)]
  *                             + x (1 - pinvgauss(x; mu, phi)
  *
- * where xm = x/mu, phim = phi * mu, r = sqrt(x * phi).
+ *  where xm = x/mu, phim = phi * mu, r = sqrt(x * phi).
  */
 double levinvgauss(double limit, double mu, double phi, double order,
                    int give_log)
