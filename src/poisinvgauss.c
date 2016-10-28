@@ -19,8 +19,19 @@ double dpoisinvgauss(double x, double mu, double phi, int give_log)
     /*  We work with the density expressed as
      *
      *  p(x) = sqrt(1/phi) sqrt(1/(pi/2)) exp(1/(phi mu))
+     *         * [sqrt(2 phi (1 + (2 phi mu^2)^(-1)))]^(-(x - 0.5))
+     *         * besselK(sqrt(2/phi (1 + (2 phi mu^2)^(-1))))
+     *
+     *  In the limiting case mu = Inf (see also ./invgauss.c), this
+     *  reduces to
+     *
+     *  p(x) = sqrt(1/phi) sqrt(1/(pi/2)) exp(1/(phi mu))
      *         * [2 phi (1 + (2 phi mu^2)^(-1))]^(-(x - 0.5)/2)
      *         * besselK(sqrt(2/phi (1 + (2 phi mu^2)^(-1))))
+     *
+     *  This is handled "automatically" with terms going to zero when
+     *  mu is Inf. Specific code not worth it since the function
+     *  should rarely be evaluated with mu = Inf in practice.
      */
 
 #ifdef IEEE_754
@@ -38,11 +49,7 @@ double dpoisinvgauss(double x, double mu, double phi, int give_log)
     if (!R_FINITE(phi))
 	return (x == 0) ? ACT_D__1 : ACT_D__0;
 
-    /* limiting case mu = Inf */
-    /* if (!R_FINITE(mu)) */
-    /* 	return ACT_D_exp(-(log(phi) + 3 * log(x) + 1/phi/x)/2 - M_LN_SQRT_2PI); */
-
-    /* standard cases */
+    /* standard cases (and limiting case mu = Inf) */
     double phim = phi * mu, lphi = log(phi);
     double a = 1/(2 * phim * mu), y = x - 0.5;
     double tmp;		      /* log of everything before besselK() */
@@ -60,14 +67,35 @@ double dpoisinvgauss(double x, double mu, double phi, int give_log)
  *  elaborate that successive computations of the probabilities using
  *  the recurrence relationship
  *
- *    p(0) = exp((1 - sqrt(b)))
- *    p(1) = mu p(0) / sqrt(b)
+ *    p(0) = exp((1-b)/(phi mu))
+ *    p(1) = mu p(0)/b
+ *    p(x) = [a (1-1.5/x) p(x-1) + mu^2/(x (x-1)) p(x-2)]/(1+a),
  *
- *  and
+ *  for x = 2, 3, ..., with a = 2 phi mu^2, b = sqrt(1 + a).
  *
- *    p(k) = [a (1 - 1.5/k) p(k - 1) + mu^2/(k (k - 1)) p(k - 2)] / b,
+ *  For the limiting case mu = Inf, the recurrence is rather
  *
- *  for k = 2, 3, ..., with a = 2 phi mu^2, b = 1 + a.
+ *    p(0) = exp(-2/b)
+ *    p(1) = p(0)/b
+ *    p(x) = (1-1.5/x) p(x-1) + p(x-2)/(a x (x-1))
+ *
+ *  with a = 2 phi, b = sqrt(a).
+ *
+ *  The two sets may be unified as follows:
+ *
+ *    p(0) = exp(-A)
+ *    p(1) = p(0)/B
+ *    p(x) = C (1-1.5/x) p(x-1) + p(x-2)/[D x (x-1)]
+ *
+ *  with
+ *
+ *            mu < Inf        mu = Inf
+ *        ----------------    --------
+ *    A   (b - 1)/(phi mu)      2/b
+ *    B   b/mu                  b
+ *    C   a/(1 + a)             1
+ *    D   (1 + a)/mu^2          a
+ *
  */
 
 double ppoisinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
@@ -83,43 +111,61 @@ double ppoisinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
         return ACT_DT_0;
 
     /* limiting case phi = Inf */
-    /* if (!R_FINITE(phi)) */
-    /* 	return ACT_DT_1; */
+    if (!R_FINITE(phi))
+    	return ACT_DT_1;
 
     if (!R_FINITE(q))
 	return ACT_DT_1;
 
+    int x;
+    double a, b, A, B, C, D;
+
+
     /* limiting case mu = Inf */
-    /* if (!R_FINITE(mu)) */
-    /* 	return pchisq(1/q/phi, 1, !lower_tail, log_p); */
+    if (!R_FINITE(mu))
+    {
+	a = 2 * phi;
+	b = sqrt(a);
+	A = 2/b;
+	B = b;
+	C = 1.0;
+	D = a;
+    }
+    else
+    {
+	double ap1, phim = phi * mu;
+	a = 2 * phim * mu;
+	ap1 = 1 + a;
+	b = sqrt(ap1);
+	A = (b - 1)/phim;
+	B = b/mu;
+	C = a/ap1;
+	D = ap1/mu/mu;
+    }
 
-    int k;
-    double s, pk, pkm1, pkm2;
-    double phim = phi * mu;
-    double a = 2 * phim * mu, b = 1 + a;
-    double sqr = sqrt(b), mu2 = mu * mu;
+    double s, px, pxm1, pxm2;
 
-    pkm1 = exp((1 - sqr)/phim);	/* p(0) */
-    s = pkm1;			/* F(0) */
+    s = exp(-A);		/* p(0) */
     if (q == 0) return ACT_DT_val(s);
 
-    pk = (mu/sqr) * pkm1;	/* p(1) */
-    s += pk;			/* F(1) */
+    pxm1 = s;
+    px = pxm1/B;		/* p(1) */
+    s += px;			/* F(1) */
     if (q == 1) return ACT_DT_val(s);
 
-    for (k = 2; k <= q; k++)
+    for (x = 2; x <= q; x++)
     {
-	pkm2 = pkm1;
-	pkm1 = pk;
-	pk = (a * (1-1.5/k) * pkm1 + mu2/k/(k-1) * pkm2)/b;
-	s += pk;
+	pxm2 = pxm1;
+	pxm1 = px;
+	px = C * (1-1.5/x) * pxm1 + pxm2/D/x/(x-1);
+	s += px;
     }
 
     return ACT_DT_val(s);
 }
 
-/* For qpoiinvgauss(), we mostly reuse the code for qnbinom() et al.
- * in the R sources. From src/nmath/qnbinom.c:
+/*  For qpoiinvgauss(), we mostly reuse the code for qnbinom() et al.
+ *  in the R sources. From src/nmath/qnbinom.c:
  *
  *  METHOD
  *
@@ -128,6 +174,10 @@ double ppoisinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
  *	initial value which never seems to be off by more than
  *	1 or 2.	 A search is then conducted of values close to
  *	this initial start point.
+ *
+ *  For the limiting case mu = Inf (that has no finite moments), we
+ *  use instead the quantile of an inverse chi-square distribution as
+ *  starting point.
  */
 
 static double
@@ -160,22 +210,10 @@ double qpoisinvgauss(double p, double mu, double phi, int lower_tail, int log_p)
         return R_NaN;
 
     /* limiting case phi = Inf */
-    /* if (!R_FINITE(phi)) */
-    /* 	return 1.0; */
-
-    /* limiting case mu = Inf */
-    if (!R_FINITE(mu))
-	return 1/phi/qchisq(p, 1, !lower_tail, log_p);
+    if (!R_FINITE(phi))
+    	return 0.0;
 
     ACT_Q_P01_boundaries(p, 0, R_PosInf);
-
-    double sigma, sigma2, gamma, z, y;
-    double phim = phi * mu;
-
-    /* mu = mu; */
-    sigma = mu * sqrt(phim + 1);
-    sigma2 = sigma * sigma;
-    gamma = (mu + 3*sigma2*(sigma2/mu - 1))/sigma2/sigma;
 
     /* ## From R sources ##
      * Note : "same" code in qpois.c, qbinom.c, qnbinom.c --
@@ -190,10 +228,25 @@ double qpoisinvgauss(double p, double mu, double phi, int lower_tail, int log_p)
      * temporary hack --- FIXME --- */
     if (p + 1.01 * DBL_EPSILON >= 1.0) return R_PosInf;
 
-    /* ## From R sources ##
-     * y := approx.value (Cornish-Fisher expansion) :  */
+    double z, y;
+
     z = qnorm(p, 0.0, 1.0, /*lower_tail*/1, /*log_p*/0);
-    y = ACT_forceint(mu + sigma * (z + gamma * (z*z - 1)/6));
+
+    /* limiting case mu = Inf -> inverse chi-square as starting point*/
+    if (!R_FINITE(mu))
+	y = ACT_forceint(1/phi/qchisq(p, 1, !lower_tail, log_p));
+    /* other cases -> Corning-Fisher */
+    else
+    {
+	double sigma, sigma2, gamma;
+	double phim = phi * mu;
+
+	sigma = mu * sqrt(phim + 1);
+	sigma2 = sigma * sigma;
+	gamma = (mu + 3*sigma2*(sigma2/mu - 1))/sigma2/sigma;
+
+	y = ACT_forceint(mu + sigma * (z + gamma * (z*z - 1)/6));
+    }
 
     z = ppoisinvgauss(y, mu, phi, /*lower_tail*/1, /*log_p*/0);
 

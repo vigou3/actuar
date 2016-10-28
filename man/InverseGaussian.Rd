@@ -59,8 +59,10 @@ mgfinvgauss(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
            exp(-((x - \mu)^2)/(2 \mu^2 \phi x)),}
   for \eqn{x \ge 0}, \eqn{\mu > 0} and \eqn{\phi > 0}.
 
-  The limiting case \eqn{\mu = \infty}{\mu = Inf} has a well defined
-  density function and distribution function, but has no finite moments.
+  The limiting case \eqn{\mu = \infty}{\mu = Inf} is an inverse
+  chi-squared distribution (or inverse gamma with \code{shape} \eqn{=
+  1/2} and \code{rate} \eqn{= 2}\code{phi}). This distribution has no
+  finite strictly positive, integer moments.
 
   The limiting case \eqn{\phi = 0} is an infinite spike in \eqn{x = 0}.
 
@@ -106,6 +108,9 @@ mgfinvgauss(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
 
   Devroye, L. (1986), \emph{Non-Uniform Random Variate Generation},
   Springer-Verlag. \url{http://luc.devroye.org/rnbookindex.html}
+}
+\seealso{
+  \code{\link{dinvgamma}} for the inverse gamma distribution.
 }
 \author{
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca}

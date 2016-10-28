@@ -70,6 +70,13 @@ rpoisinvgauss(n, mean, shape = 1, dispersion = 1/shape)
   kind implemented by \R's \code{\link{besselK}()} and defined in its
   help.
 
+  The limiting case \eqn{\mu = \infty}{\mu = Inf} has well defined
+  probability mass and distribution functions, but has no finite
+  strictly positive, integer moments.
+
+  The limiting case \eqn{\phi = 0} is a degenerate distribution in
+  \eqn{x = 0}.
+
   If an element of \code{x} is not integer, the result of
   \code{dpoisinvgauss} is zero, with a warning.
 
