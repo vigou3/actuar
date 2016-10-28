@@ -52,17 +52,18 @@ rpoisinvgauss(n, mean, shape = 1, dispersion = 1/shape)
   \code{\link{dinvgauss}}).
 
   The resulting probability mass function is
-  \deqn{f(x) = \sqrt{\frac{2}{\pi \phi}}
+  \deqn{%
+    p(x) = \sqrt{\frac{2}{\pi \phi}}
     \frac{e^{(\phi\mu)^{-1}}}{x!}
-    \left[
-      \frac{1}{2\phi (1 + (2\phi\mu^2)^{-1})}
-    \right]^{-\frac{1}{2}(x - \frac{1}{2})}
+    \left(
+      \sqrt{2\phi\left(1 + \frac{1}{2\phi\mu^2}\right)}
+    \right)^{-(x - \frac{1}{2})}
     K_{x - 1/2}
     \left(
       \sqrt{\frac{2}{\phi}\left(1 + \frac{1}{2\phi\mu^2}\right)}
     \right),}{%
-    f(x) = sqrt(2/(\pi \phi)) exp(1/(\phi \mu))/x!
-           * [2 \phi (1 + 1/(2 \phi \mu^2))]^(-(x-1/2)/2)
+    p(x) = sqrt(2/(\pi \phi)) exp(1/(\phi \mu))/x!
+           * [\sqrt(2 \phi (1 + 1/(2 \phi \mu^2)))]^(-(x-1/2))
            * K(\sqrt((2/\phi) (1 + 1/(2 \phi \mu^2))); x-1/2),}
   for \eqn{x = 0, 1, \dots}, \eqn{\mu > 0}, \eqn{\phi > 0} and where
   \eqn{K_\nu(x)}{K(x; \nu)} is the modified Bessel function of the third
