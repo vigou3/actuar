@@ -426,7 +426,7 @@ $\mu$ and $\phi$ found in \autoref{sec:app:continuous}, we have:
     \left(
       \sqrt{2\phi \left( 1 + \frac{1}{2\phi\mu^2} \right)}
     \right)^{-(x - \frac{1}{2})} \\
-    &\phantom{=} \times K_{x - 1/2} \left( \sqrt{\frac{2}{\phi}\left(1
+    &\phantom{=} \times K_{x - \frac{1}{2}} \left( \sqrt{\frac{2}{\phi}\left(1
           + \frac{1}{2\phi\mu^2}\right)} \right),
   \end{split}
 \end{equation}
@@ -455,12 +455,28 @@ using the following equations:
 The first moment of the distribution is obviously $\mu$. The second
 and third central moment are, respectively,
 \begin{align*}
-  \mu_2 &= \sigma^2 = \phi\mu^3 + \mu^2 \\
-  \mu_3 &= 3 \sigma^2 \left( \frac{\sigma^2}{\mu} - 1 \right) + \mu.
+  \mu_2 &= \sigma^2 = \phi\mu^3 + \mu \\
+  \mu_3 &= 3 \phi \mu^2 \sigma^2 + \mu.
 \end{align*}
-The quantile function \code{qpoisinvgauss} make use of the above, so
-it appears fit that the equations appear in this documentation.
 
+For the limiting case $\mu = \infty$, the underlying inverse Gaussian
+has an inverse chi-squared distribution. This distribution has no
+finite strictly positive, integer moments, and so neither does the
+Poisson-inverse Gaussian. The pmf reduces to
+\begin{equation*}
+  p_x = \sqrt{\frac{2}{\pi \phi}} \frac{1}{x!}
+  (\sqrt{2\phi})^{-(x - \frac{1}{2})} K_{x - \frac{1}{2}}
+  (\sqrt{2/\phi}),
+  \quad x = 0, 1, \dots
+\end{equation*}
+and the recurrence relations become
+\begin{align*}
+  p_0 &= e^{-\sqrt{2/\phi}} \\
+  p_1 &= \frac{1}{\sqrt{2\phi}}\, p_0 \\
+  p_x &= \left( 1 - \frac{3}{2x} \right) p_{x - 1}
+  + \frac{1}{2\phi} \frac{1}{x(x -
+    1)}\, p_{x - 2}, \quad x = 2, 3, \dots.
+\end{align*}
 
 
 \section{Special integrals}
@@ -1093,10 +1109,16 @@ positive, and the functions are defined for $x > 0$.
     \right] \\
   &\phantom{=} + x (1 - F(x)) \\
   M(t)
-  &= \frac{1}{\phi \mu}
-    \exp\left\{ 1 - \sqrt{1 - 2 \phi \mu^2 t} \right\},
+  &= \exp
+    \left\{
+      \frac{1}{\phi \mu} \left(1 - \sqrt{1 - 2 \phi \mu^2 t}\right)
+    \right\},
     \qquad t \leq \frac{1}{2 \phi \mu^2}
 \end{align*}
+
+\noindent%
+The limiting case $\mu = \infty$ is an inverse gamma distribution
+with $\alpha = 1/2$ and $\lambda = 2\phi$ (or inverse chi-squared).
 
 \subsubsection{Single parameter Pareto}
 
@@ -1469,9 +1491,9 @@ Computation of the pmf either directly using
 \begin{align*}
   p_x &= \sqrt{\frac{2}{\pi \phi}}
   \frac{e^{(\phi\mu)^{-1}}}{x!}
-  \left[
-    \frac{1}{2\phi (1 + (2\phi\mu^2)^{-1})}
-  \right]^{-\frac{1}{2}(x - \frac{1}{2})} \\
+    \left(
+      \sqrt{2\phi \left( 1 + \frac{1}{2\phi\mu^2} \right)}
+    \right)^{-(x - \frac{1}{2})} \\
   &\phantom{=} \times
   K_{x - 1/2}
   \left(
@@ -1489,7 +1511,8 @@ or recursively using
         \frac{1}{x(x - 1)}\, p_{x - 2}, \quad x = 2, 3, \dots.
 \end{align*}
 
-
+\noindent%
+See \autoref{sec:pig} for the formulas for the limiting case $\mu = \infty$.
 
 
 %% References
