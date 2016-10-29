@@ -405,7 +405,8 @@ in \proglang{R} will be more efficient.
 
 The Poisson-inverse Gaussian distribution arises from a continuous
 mixture between a Poisson distribution and an inverse Gaussian. That
-is, if $X|\Lambda = \lambda sim \text{Poisson}(\lambda)$ and
+is, if rgew conditional random variable
+$X|\Lambda = \lambda \sim \text{Poisson}(\lambda)$ and
 $\Lambda \sim \text{IG}(\mu, \phi)$, then the (marginal) random
 variable $X$ with pmf
 \begin{equation*}
@@ -443,7 +444,8 @@ using the following equations:
 \begin{equation}
   \label{eq:pig:px:recursive}
   \begin{split}
-    p_0 &= \exp\left\{ \frac{1}{\phi\mu} (1 - \sqrt{1 + 2\phi\mu^2})
+    p_0 &= \exp\left\{
+      \frac{1}{\phi\mu} \left(1 - \sqrt{1 + 2\phi\mu^2}\right)
     \right\} \\
     p_1 &= \frac{\mu}{\sqrt{1 + 2\phi\mu^2}}\, p_0 \\
     p_x &= \frac{2\phi\mu^2}{1 + 2\phi\mu^2} \left( 1 - \frac{3}{2x}
@@ -455,14 +457,14 @@ using the following equations:
 The first moment of the distribution is obviously $\mu$. The second
 and third central moment are, respectively,
 \begin{align*}
-  \mu_2 &= \sigma^2 = \phi\mu^3 + \mu \\
-  \mu_3 &= 3 \phi \mu^2 \sigma^2 + \mu.
+  \mu_2 &= \sigma^2 = \mu + \phi\mu^3 \\
+  \mu_3 &= \mu + 3 \phi \mu^2 \sigma^2.
 \end{align*}
 
 For the limiting case $\mu = \infty$, the underlying inverse Gaussian
 has an inverse chi-squared distribution. This distribution has no
-finite strictly positive, integer moments, and so neither does the
-Poisson-inverse Gaussian. The pmf reduces to
+finite strictly positive, integer moments, and consequently neither
+does the Poisson-inverse Gaussian. The pmf in this case reduces to
 \begin{equation*}
   p_x = \sqrt{\frac{2}{\pi \phi}} \frac{1}{x!}
   (\sqrt{2\phi})^{-(x - \frac{1}{2})} K_{x - \frac{1}{2}}
@@ -563,13 +565,13 @@ parts of \eqref{eq:betaint} yields
     &= \displaystyle
     -\Gamma(a + b) \left[ \frac{x^{a-1} (1-x)^b}{b}
       + \frac{(a-1) x^{a-2} (1-x)^{b+1}}{b (b+1)} \right. \\
-    &  \displaystyle\left.
+    &\phantom{=} \displaystyle\left.
       + \cdots + \frac{(a-1) \cdots (a-r) x^{a-r-1}
         (1-x)^{b+r}}{b (b+1) \cdots (b+r)} \right] \\
-    &   \displaystyle
+    &\phantom{=} \displaystyle
     + \frac{(a-1) \cdots (a-r-1)}{b (b+1) \cdots (b+r)}
     \Gamma(a-r-1) \\
-    &  \times \Gamma(b+r+1) \beta(a-r-1, b+r+1),
+    &\phantom{=} \times \Gamma(b+r+1) \beta(a-r-1, b+r+1),
   \end{split}
 \end{equation*}
 where $r = \lfloor -b\rfloor$. This expression is little found in the
@@ -1480,14 +1482,10 @@ $1 - p_0^M$).
 
 \begin{itemize}
 \item Root: \code{poisinvgauss}, \code{pig}
-\item Parameters: \code{mean} ($\mu$),
+\item Parameters: \code{mean} ($\mu > 0$),
   \code{shape} ($\lambda = 1/\phi$),
-  \code{dispersion} ($\phi$)
+  \code{dispersion} ($\phi > 0$)
 \end{itemize}
-\medskip
-
-\noindent%
-Computation of the pmf either directly using
 \begin{align*}
   p_x &= \sqrt{\frac{2}{\pi \phi}}
   \frac{e^{(\phi\mu)^{-1}}}{x!}
@@ -1500,10 +1498,11 @@ Computation of the pmf either directly using
     \sqrt{\frac{2}{\phi}\left(1 + \frac{1}{2\phi\mu^2}\right)}
   \right), \quad x = 0, 1, \dots,
 \end{align*}
-or recursively using
+\noindent%
+The probabilities can be computed recursively using:
 \begin{align*}
   p_0 &= \exp\left\{
-        \frac{1}{\phi\mu} (1 - \sqrt{1 + 2\phi\mu^2})
+        \frac{1}{\phi\mu} \left(1 - \sqrt{1 + 2\phi\mu^2}\right)
         \right\} \\
   p_1 &= \frac{\mu}{\sqrt{1 + 2\phi\mu^2}}\, p_0 \\
   p_x &= \frac{2\phi\mu^2}{1 + 2\phi\mu^2}
