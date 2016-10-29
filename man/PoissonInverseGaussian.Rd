@@ -58,7 +58,7 @@ rpoisinvgauss(n, mean, shape = 1, dispersion = 1/shape)
     \left(
       \sqrt{2\phi\left(1 + \frac{1}{2\phi\mu^2}\right)}
     \right)^{-(x - \frac{1}{2})}
-    K_{x - 1/2}
+    K_{x - \frac{1}{2}}
     \left(
       \sqrt{\frac{2}{\phi}\left(1 + \frac{1}{2\phi\mu^2}\right)}
     \right),}{%
@@ -72,7 +72,14 @@ rpoisinvgauss(n, mean, shape = 1, dispersion = 1/shape)
 
   The limiting case \eqn{\mu = \infty}{\mu = Inf} has well defined
   probability mass and distribution functions, but has no finite
-  strictly positive, integer moments.
+  strictly positive, integer moments. The pmf in this case reduces to
+  \deqn{%
+    p(x) = \sqrt{\frac{2}{\pi \phi}}
+    \frac{1}{x!}
+    (\sqrt{2\phi})^{-(x - \frac{1}{2})}
+    K_{x - \frac{1}{2}}(\sqrt{2/\phi}).}{%
+    p(x) = sqrt(2/(\pi \phi)) 1/x! [\sqrt(2 \phi)]^(-(x-1/2))
+           * K(\sqrt(2/\phi); x-1/2).}
 
   The limiting case \eqn{\phi = 0} is a degenerate distribution in
   \eqn{x = 0}.
