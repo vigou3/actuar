@@ -52,15 +52,16 @@ double dpoisinvgauss(double x, double mu, double phi, int give_log)
     /* standard cases (and limiting case mu = Inf) */
     double phim = phi * mu, lphi = log(phi);
     double a = 1/(2 * phim * mu), y = x - 0.5;
-    double tmp;		      /* log of everything before besselK() */
+    double lpx;		      /* log of everything before besselK() */
     double K;		      /* value of the Bessel function */
 
-    tmp = -lphi/2 - M_LN_SQRT_PId2 + 1/phim
-	- y * (M_LN2 + lphi + log1p(a))/2 - lgamma(x + 1);
+    double logA = -lphi/2 - M_LN_SQRT_PId2 + 1/phim;
+    double logB = (M_LN2 + lphi + log1p(a))/2;
 
-    K = bessel_k(sqrt(2 * (1 + a)/phi), y, /*expo*/1);
+    lpx = logA - y * logB - lgamma1p(x);
+    K = bessel_k(exp(logB - lphi), y, /*expo*/1);
 
-    return give_log ? tmp + log(K) : exp(tmp) * K;
+    return give_log ? lpx + log(K) : exp(lpx) * K;
 }
 
 /*  For ppoisinvgauss(), there does not seem to be algorithms much more
@@ -164,6 +165,44 @@ double ppoisinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
     return ACT_DT_val(s);
 }
 
+
+double ppoisinvgauss2(double q, double mu, double phi, int lower_tail, int log_p)
+{
+#ifdef IEEE_754
+    if (ISNAN(q) || ISNAN(mu) || ISNAN(phi))
+	return q + mu + phi;
+#endif
+    if (mu <= 0.0 || phi <= 0.0)
+        return R_NaN;
+
+    if (q < 0)
+        return ACT_DT_0;
+
+    /* limiting case phi = Inf */
+    if (!R_FINITE(phi))
+    	return ACT_DT_1;
+
+    if (!R_FINITE(q))
+	return ACT_DT_1;
+
+    int x;
+    double phim = phi * mu, lphi = log(phi);
+    double a = 1/(2 * phim * mu), y;
+    double s = 0;
+    double logA = -lphi/2 - M_LN_SQRT_PId2 + 1/phim;
+    double logB = (M_LN2 + lphi + log1p(a))/2;
+    double C = exp(logB - lphi);
+
+    for (x = 0; x <= q; x++)
+    {
+	y = x - 0.5;
+	s += exp(logA - y * logB - lgamma1p(x)) * bessel_k(C, y, /*expo*/1);
+    }
+
+    return ACT_D_val(s);
+}
+
+
 /*  For qpoiinvgauss(), we mostly reuse the code for qnbinom() et al.
  *  in the R sources. From src/nmath/qnbinom.c:
  *
@@ -239,11 +278,11 @@ double qpoisinvgauss(double p, double mu, double phi, int lower_tail, int log_p)
     else
     {
 	double sigma, sigma2, gamma;
-	double phim = phi * mu;
+	double phim2 = phi * mu * mu;
 
-	sigma = mu * sqrt(phim + 1);
-	sigma2 = sigma * sigma;
-	gamma = (mu + 3*sigma2*(sigma2/mu - 1))/sigma2/sigma;
+	sigma2 = phim2 * mu + mu;
+	sigma = sqrt(sigma2);
+	gamma = (3 * phim2 * sigma2 + mu)/sigma2/sigma;
 
 	y = ACT_forceint(mu + sigma * (z + gamma * (z*z - 1)/6));
     }
