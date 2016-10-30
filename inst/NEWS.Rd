@@ -5,8 +5,8 @@
 \section{CHANGES IN \pkg{actuar} VERSION 2.0-0}{
   \subsection{NEW FEATURES}{
     \itemize{
-      \item{New support functions \code{[dpqrm,lev,mgf]invgaussian} for
-	the inverse gaussian distribution. The first three functions are
+      \item{New support functions \code{[dpqrm,lev,mgf]invgauss} for
+	the inverse Gaussian distribution. The first three functions are
 	C (read: faster) implementations of functions of the same name
 	in package \pkg{statmod}.}
       \item{New support functions \code{[dpqrm]gumbel} for the Gumbel
@@ -34,6 +34,8 @@
 	\code{gammaint} to compute to the special integrals mentioned
 	above. These are merely convenience R interfaces to the C level
 	functions. They are \emph{not} exported by the package.}
+      \item{New support functions \code{[dpqr]poisinvgauss} for
+	the Poisson-inverse Gaussian discrete distribution.}
       \item{New support functions \code{[dpqr]logarithmic} and
 	\code{[dpqr]zmlogarithmic} for the logarithmic (or log-series)
 	and zero-modified logarithmic distributions.}
