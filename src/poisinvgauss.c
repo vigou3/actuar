@@ -51,7 +51,7 @@ double dpoisinvgauss(double x, double mu, double phi, int give_log)
     double phim = phi * mu, lphi = log(phi);
     double a = 1/(2 * phim * mu), y = x - 0.5;
     double logA, logB;	      /* log of big constants */
-    double lpx;		      /* log of everything before besselK() */
+    double lpx;		      /* log of everything before bessel_k() */
     double K;		      /* value of the Bessel function */
 
     logA = -lphi/2 - M_LN_SQRT_PId2 + 1/phim;
