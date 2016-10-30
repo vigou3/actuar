@@ -403,23 +403,19 @@ in \proglang{R} will be more efficient.
 \section{Support for the Poisson-inverse Gaussian distribution}
 \label{sec:pig}
 
-The Poisson-inverse Gaussian distribution arises from a continuous
+The Poisson-inverse Gaussian distribution results from the continuous
 mixture between a Poisson distribution and an inverse Gaussian. That
-is, if rgew conditional random variable
-$X|\Lambda = \lambda \sim \text{Poisson}(\lambda)$ and
-$\Lambda \sim \text{IG}(\mu, \phi)$, then the (marginal) random
-variable $X$ with pmf
-\begin{equation*}
-  p_x = \int_0^\infty \frac{\lambda^x e^{-\lambda}}{x!}\, g(\lambda;
-  \mu, \phi)\, d\lambda,
-\end{equation*}
-is said to be a Poisson-inverse Gaussian (PIG) distribution.
+is, the Poisson-inverse Gaussian is the (marginal) distribution of the
+random variable $X$ when the conditional random variable
+$X|\Lambda = \lambda$ is Poisson with parameter $\lambda)$ and the
+random variable $\Lambda$ is inverse Gaussian distribution with
+parameters $\mu$ and $\phi$.
 
 The literature proposes many different expressions for the pmf of the
 PIG
 \citep{Holla:PIG:1966,Shaban:PIG:1981,Johnson:discrete:2005,LossModels4e}.
-Using the parametrization for the inverse Gaussian with parameters
-$\mu$ and $\phi$ found in \autoref{sec:app:continuous}, we have:
+Using the parametrization for the inverse Gaussian found in
+\autoref{sec:app:continuous}, we have:
 \begin{equation}
   \label{eq:pig:px}
   \begin{split}
@@ -454,31 +450,18 @@ using the following equations:
   \end{split}
 \end{equation}
 
-The first moment of the distribution is obviously $\mu$. The second
-and third central moment are, respectively,
+The first moment of the distribution is $\mu$. The second and third
+central moment are, respectively,
 \begin{align*}
   \mu_2 &= \sigma^2 = \mu + \phi\mu^3 \\
   \mu_3 &= \mu + 3 \phi \mu^2 \sigma^2.
 \end{align*}
 
 For the limiting case $\mu = \infty$, the underlying inverse Gaussian
-has an inverse chi-squared distribution. This distribution has no
-finite strictly positive, integer moments, and consequently neither
-does the Poisson-inverse Gaussian. The pmf in this case reduces to
-\begin{equation*}
-  p_x = \sqrt{\frac{2}{\pi \phi}} \frac{1}{x!}
-  (\sqrt{2\phi})^{-(x - \frac{1}{2})} K_{x - \frac{1}{2}}
-  (\sqrt{2/\phi}),
-  \quad x = 0, 1, \dots
-\end{equation*}
-and the recurrence relations become
-\begin{align*}
-  p_0 &= e^{-\sqrt{2/\phi}} \\
-  p_1 &= \frac{1}{\sqrt{2\phi}}\, p_0 \\
-  p_x &= \left( 1 - \frac{3}{2x} \right) p_{x - 1}
-  + \frac{1}{2\phi} \frac{1}{x(x -
-    1)}\, p_{x - 2}, \quad x = 2, 3, \dots.
-\end{align*}
+has an inverse chi-squared distribution. The latter has no finite
+strictly positive, integer moments and, consequently, neither does the
+Poisson-inverse Gaussian. See \autoref{sec:app:discrete:pig} for the
+formulas in this case.
 
 
 \section{Special integrals}
@@ -636,11 +619,12 @@ the rejection algorithm. Based on the difference $p_0 - p_0^M$, we
 determined (empirically) distribution-specific cutoff points between
 the two methods.
 
-Finally, the pmf of the PIG distribution uses \eqref{eq:pig:px},
-relying, at the \proglang{C} level, on \proglang{R}'s function
-\code{bessel\_k} to compute the modified Bessel function of the third
-kind $K_\nu(x)$. The cdf function, however, takes advantage of the
-recursive equations \eqref{eq:pig:px:recursive}.
+Finally, computation of the Poisson-inverse Gaussian pmf uses the
+direct expression \eqref{eq:pig:px} --- and the \proglang{C} level
+function \code{bessel\_k} part of \proglang{R}'s API --- rather than
+the recursive equations \eqref{eq:pig:px:recursive}. We thereby take
+advantage of the various optimizations in \code{bessel\_k}, with
+no negative impact on performance.
 
 \appendix
 
@@ -1476,9 +1460,9 @@ $1 - p_0^M$).
 
 
 \subsection{Other distribution}
+\label{sec:app:discrete:pig}
 
 \subsubsection{Poisson-inverse Gaussian}
-\label{sec:app:discrete:pig}
 
 \begin{itemize}
 \item Root: \code{poisinvgauss}, \code{pig}
@@ -1499,7 +1483,7 @@ $1 - p_0^M$).
   \right), \quad x = 0, 1, \dots,
 \end{align*}
 \noindent%
-The probabilities can be computed recursively using:
+Recursively:
 \begin{align*}
   p_0 &= \exp\left\{
         \frac{1}{\phi\mu} \left(1 - \sqrt{1 + 2\phi\mu^2}\right)
@@ -1511,7 +1495,21 @@ The probabilities can be computed recursively using:
 \end{align*}
 
 \noindent%
-See \autoref{sec:pig} for the formulas for the limiting case $\mu = \infty$.
+In the limiting case $\mu = \infty$, the pmf reduces to
+\begin{equation*}
+  p_x = \sqrt{\frac{2}{\pi \phi}} \frac{1}{x!}
+  (\sqrt{2\phi})^{-(x - \frac{1}{2})} K_{x - \frac{1}{2}}
+  (\sqrt{2/\phi}),
+  \quad x = 0, 1, \dots
+\end{equation*}
+and the recurrence relations become
+\begin{align*}
+  p_0 &= \exp\left\{-\sqrt{2/\phi}\right\} \\
+  p_1 &= \frac{1}{\sqrt{2\phi}}\, p_0 \\
+  p_x &= \left( 1 - \frac{3}{2x} \right) p_{x - 1}
+  + \frac{1}{2\phi} \frac{1}{x(x -
+    1)}\, p_{x - 2}, \quad x = 2, 3, \dots.
+\end{align*}
 
 
 %% References
