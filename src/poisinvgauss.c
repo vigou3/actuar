@@ -18,20 +18,18 @@ double dpoisinvgauss(double x, double mu, double phi, int give_log)
 {
     /*  We work with the density expressed as
      *
-     *  p(x) = sqrt(1/phi) sqrt(1/(pi/2)) exp(1/(phi mu))
-     *         * [sqrt(2 phi (1 + (2 phi mu^2)^(-1)))]^(-(x - 0.5))
-     *         * besselK(sqrt(2/phi (1 + (2 phi mu^2)^(-1))))
+     *  p(x) = sqrt(1/phi) sqrt(1/(pi/2)) exp(1/(phi mu))/x!
+     *       * [sqrt(2 phi (1 + (2 phi mu^2)^(-1)))]^(-(x - 0.5))
+     *       * bessel_k(sqrt(2/phi (1 + (2 phi mu^2)^(-1))), x - 0.5)
      *
-     *  In the limiting case mu = Inf (see also ./invgauss.c), this
-     *  reduces to
+     *  or, is essence,
      *
-     *  p(x) = sqrt(1/phi) sqrt(1/(pi/2)) exp(1/(phi mu))
-     *         * [2 phi (1 + (2 phi mu^2)^(-1))]^(-(x - 0.5)/2)
-     *         * besselK(sqrt(2/phi (1 + (2 phi mu^2)^(-1))))
+     *  p(x) = A exp(1/(phi mu))/x! B^(-y) bessel_k(B/phi, y)
      *
-     *  This is handled "automatically" with terms going to zero when
-     *  mu is Inf. Specific code not worth it since the function
-     *  should rarely be evaluated with mu = Inf in practice.
+     *  The limiting case mu = Inf is handled "automatically" with
+     *  terms going to zero when mu is Inf. Specific code not worth it
+     *  since the function should rarely be evaluated with mu = Inf in
+     *  practice.
      */
 
 #ifdef IEEE_754
@@ -52,11 +50,12 @@ double dpoisinvgauss(double x, double mu, double phi, int give_log)
     /* standard cases (and limiting case mu = Inf) */
     double phim = phi * mu, lphi = log(phi);
     double a = 1/(2 * phim * mu), y = x - 0.5;
+    double logA, logB;	      /* log of big constants */
     double lpx;		      /* log of everything before besselK() */
     double K;		      /* value of the Bessel function */
 
-    double logA = -lphi/2 - M_LN_SQRT_PId2 + 1/phim;
-    double logB = (M_LN2 + lphi + log1p(a))/2;
+    logA = -lphi/2 - M_LN_SQRT_PId2 + 1/phim;
+    logB = (M_LN2 + lphi + log1p(a))/2;
 
     lpx = logA - y * logB - lgamma1p(x);
     K = bessel_k(exp(logB - lphi), y, /*expo*/1);
@@ -64,39 +63,11 @@ double dpoisinvgauss(double x, double mu, double phi, int give_log)
     return give_log ? lpx + log(K) : exp(lpx) * K;
 }
 
-/*  For ppoisinvgauss(), there does not seem to be algorithms much more
- *  elaborate that successive computations of the probabilities using
- *  the recurrence relationship
- *
- *    p(0) = exp((1-b)/(phi mu))
- *    p(1) = mu p(0)/b
- *    p(x) = [a (1-1.5/x) p(x-1) + mu^2/(x (x-1)) p(x-2)]/(1+a),
- *
- *  for x = 2, 3, ..., with a = 2 phi mu^2, b = sqrt(1 + a).
- *
- *  For the limiting case mu = Inf, the recurrence is rather
- *
- *    p(0) = exp(-2/b)
- *    p(1) = p(0)/b
- *    p(x) = (1-1.5/x) p(x-1) + p(x-2)/(a x (x-1))
- *
- *  with a = 2 phi, b = sqrt(a).
- *
- *  The two sets may be unified as follows:
- *
- *    p(0) = exp(-A)
- *    p(1) = p(0)/B
- *    p(x) = C (1-1.5/x) p(x-1) + p(x-2)/[D x (x-1)]
- *
- *  with
- *
- *            mu < Inf        mu = Inf
- *        ----------------    --------
- *    A   (b - 1)/(phi mu)      2/b
- *    B   b/mu                  b
- *    C   a/(1 + a)             1
- *    D   (1 + a)/mu^2          a
- *
+/*  For ppoisinvgauss(), there does not seem to be algorithms much
+ *  more elaborate that successive computations of the probabilities.
+ *  Performance wise, the explicit formula used in dpoisinvgauss() is
+ *  on par (and slightly faster in certain cases) with the recursive
+ *  formulas and we get "for free" the optimizations in bessel_k().
  */
 
 double ppoisinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
@@ -119,79 +90,14 @@ double ppoisinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
 	return ACT_DT_1;
 
     int x;
-    double a, b, A, B, C, D;
-
-
-    /* limiting case mu = Inf */
-    if (!R_FINITE(mu))
-    {
-	a = 2 * phi;
-	b = sqrt(a);
-	A = 2/b;
-	B = b;
-	C = 1.0;
-	D = a;
-    }
-    else
-    {
-	double ap1, phim = phi * mu;
-	a = 2 * phim * mu;
-	ap1 = 1 + a;
-	b = sqrt(ap1);
-	A = (b - 1)/phim;
-	B = b/mu;
-	C = a/ap1;
-	D = ap1/mu/mu;
-    }
-
-    double s, px, pxm1, pxm2;
-
-    s = exp(-A);		/* p(0) */
-    if (q == 0) return ACT_DT_val(s);
-
-    pxm1 = s;
-    px = pxm1/B;		/* p(1) */
-    s += px;			/* F(1) */
-    if (q == 1) return ACT_DT_val(s);
-
-    for (x = 2; x <= q; x++)
-    {
-	pxm2 = pxm1;
-	pxm1 = px;
-	px = C * (1-1.5/x) * pxm1 + pxm2/D/x/(x-1);
-	s += px;
-    }
-
-    return ACT_DT_val(s);
-}
-
-
-double ppoisinvgauss2(double q, double mu, double phi, int lower_tail, int log_p)
-{
-#ifdef IEEE_754
-    if (ISNAN(q) || ISNAN(mu) || ISNAN(phi))
-	return q + mu + phi;
-#endif
-    if (mu <= 0.0 || phi <= 0.0)
-        return R_NaN;
-
-    if (q < 0)
-        return ACT_DT_0;
-
-    /* limiting case phi = Inf */
-    if (!R_FINITE(phi))
-    	return ACT_DT_1;
-
-    if (!R_FINITE(q))
-	return ACT_DT_1;
-
-    int x;
     double phim = phi * mu, lphi = log(phi);
-    double a = 1/(2 * phim * mu), y;
-    double s = 0;
-    double logA = -lphi/2 - M_LN_SQRT_PId2 + 1/phim;
-    double logB = (M_LN2 + lphi + log1p(a))/2;
-    double C = exp(logB - lphi);
+    double a = 1/(2 * phim * mu);
+    double logA, logB, C;
+    double y, s = 0;
+
+    logA = -lphi/2 - M_LN_SQRT_PId2 + 1/phim;
+    logB = (M_LN2 + lphi + log1p(a))/2;
+    C = exp(logB - lphi);
 
     for (x = 0; x <= q; x++)
     {
@@ -201,7 +107,6 @@ double ppoisinvgauss2(double q, double mu, double phi, int lower_tail, int log_p
 
     return ACT_D_val(s);
 }
-
 
 /*  For qpoiinvgauss(), we mostly reuse the code for qnbinom() et al.
  *  in the R sources. From src/nmath/qnbinom.c:
