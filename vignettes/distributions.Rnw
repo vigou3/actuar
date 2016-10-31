@@ -1,3 +1,5 @@
+%% NOTE: this file does not contain any R code. The .Rnw extension is
+%% used to that the vignette is picked up by R CMD build.
 \documentclass[x11names]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -57,7 +59,7 @@
   \setlist[itemize]{label={},leftmargin=0pt,align=left,nosep}
 
   %% Flush left enumerate environment.
-  \setlist[enumerate]{leftmargin=*,align=left}
+  \setlist[enumerate]{label=\roman*),labelsep=*,leftmargin=1.5em,align=left}
 
   %% Some new commands
   \newcommand{\E}[1]{E[ #1 ]}
@@ -565,7 +567,8 @@ literature outside of \citet{LossModels4e}. For the needs of
 The package contains functions to compute the gamma, exponential
 and beta integrals. They are mostly used at the \proglang{C} level
 to evaluate the limited expected value for distributions of the
-transformed beta and transformed gamma families. The package also
+transformed beta and transformed gamma families; see
+\autoref{sec:implementation} for details. The package also
 provides the R interfaces \code{gammaint}, \code{expint} and
 \code{betaint}, however these functions are not exported.
 
@@ -578,18 +581,38 @@ The core of all the functions presented in this document is written in
 
 The cdf of the continuous distributions of \autoref{tab:continuous}
 use \code{pbeta} and \code{pgamma} to compute the incomplete beta and
-incomplete gamma functions, respectively. Functions \code{dinvgauss},
-\code{pinvgauss} and \code{qinvgauss} rely on \proglang{C}
-implementations of functions of the same name from package
-\pkg{statmod} \citep{statmod}.
-
-The matrix exponential \proglang{C} routine needed in \code{dphtype}
-and \code{pphtype} is based on \code{expm} from package
-\pkg{Matrix} \citep{Matrix}.
+incomplete gamma functions, respectively. Limited expected value
+functions gain an extended range of admissible values by using
+\code{expint}, \code{betaint} and \code{gammaint} at the \proglang{C}
+level. Affected functions are:
+\begin{enumerate}
+\item \code{levtrbeta},
+  \code{levgenpareto},
+  \code{levburr},
+  \code{levinvburr},
+  \code{levpareto},
+  \code{levinvpareto},
+  \code{levllogis},
+  \code{levparalogis},
+  \code{levinvparalogis} in the transformed beta family that use
+  \code{betaint};
+\item \code{levinvtrgamma},
+  \code{levinvgamma},
+  \code{levinvweibull} in the transformed gamma family that use
+  \code{gammaint}.
+\end{enumerate}
 
 The C implementation of \code{expint} is based on code from the GNU
 Software Library \citep{GSL}. The \proglang{C} code for
 \code{gammaint} and \code{betaint} was written by the second author.
+
+Functions \code{dinvgauss}, \code{pinvgauss} and \code{qinvgauss} rely
+on \proglang{C} implementations of functions of the same name from
+package \pkg{statmod} \citep{statmod}.
+
+The matrix exponential \proglang{C} routine needed in \code{dphtype}
+and \code{pphtype} is based on \code{expm} from package
+\pkg{Matrix} \citep{Matrix}.
 
 For all but the trivial input values, the pmf, cdf and quantile
 functions for the zero-truncated and zero-modified distributions of
@@ -606,7 +629,7 @@ of the distribution with cdf $P(k)$.
 For zero-modified distributions, we generate variates from the
 discrete mixture \eqref{eq:mixture} when $p_0^M \geq p_0$. When
 $p_0^M < p_0$, we can use either of two methods:
-\begin{enumerate}[i)]
+\begin{enumerate}
 \item the classical rejection method with an envelope that differs
   from the target distribution only at zero (meaning that only zeros
   are rejected);
