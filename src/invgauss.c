@@ -206,7 +206,7 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
 	i++;
 	if (i > maxit)
 	{
-	    warning(_("maximum number of iterations exceeded"));
+	    warning(_("maximum number of iterations reached before obtaining convergence"));
 	    break;
 	}
 
