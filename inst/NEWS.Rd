@@ -132,10 +132,6 @@
 	\code{[dpqrm,lev,mgf]invgauss}.}
     }
   }
-  \subsection{BUG FIX}{
-    \itemize{
-    }
-  }
 }
 
 \note{
