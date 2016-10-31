@@ -31,7 +31,7 @@
 	\code{levinvgamma},
 	\code{levinvweibull} in the Transformed Gamma family.}
       \item{New functions \code{expint}, \code{betaint} and
-	\code{gammaint} to compute to the special integrals mentioned
+	\code{gammaint} to compute the special integrals mentioned
 	above. These are merely convenience R interfaces to the C level
 	functions. They are \emph{not} exported by the package.}
       \item{New support functions \code{[dpqr]poisinvgauss} for
@@ -51,9 +51,9 @@
       \item{New support functions \code{[dpqr]ztbinom} and
 	\code{[dpqr]zmbinom} for the zero-truncated and zero-modified
 	binomial distributions.}
-      \item{New vignette \code{"distributions"} reviews in great detail
-	the continuous and discrete distributions provided in the
-	package.}
+      \item{New vignette \code{"distributions"} that reviews in great
+	detail the continuous and discrete distributions provided in the
+	package, along with implementation details.}
       \item{\code{aggregateDist} now accepts
         \code{"zero-truncated binomial"},
 	\code{"zero-truncated geometric"},
@@ -77,7 +77,7 @@
 	models.}
     \item{New function \code{rcomppois} that is a simplified version of
 	\code{rcompound} for the very common compound Poisson case.}
-      \item{\code{simul} now accepts a basic (named or not) vector for
+      \item{\code{simul} now accepts an atomic (named or not) vector for
 	argument \code{nodes} when simulating from a non hierarchical
 	compound model. But really, one should use \code{rcompound} for
 	such cases.}
@@ -98,9 +98,9 @@
   }
   \subsection{USER VISIBLE CHANGES}{
     \itemize{
-      \item{The  material on probability laws of vignette \code{"lossdist"}
-	has been moved to the new vignette \code{"distributions"} (see
-	the previous section).}
+      \item{The  material on probability laws in vignette
+	\code{"lossdist"} has been moved to the new vignette
+	\code{"distributions"} (see the previous section).}
       \item{The first argument of the \code{mgffoo} functions has
 	changed from \code{x} to \code{t}. This is a more common
 	notation for moment generating functions.}
