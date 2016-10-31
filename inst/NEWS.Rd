@@ -17,7 +17,7 @@
 	special integrals presented in the introduction of Appendix A of
 	Klugman et al. (2012); see also	\code{vignette("distributions")}.
 
-	Concerned functions are:
+	Affected functions are:
 	\code{levtrbeta},
 	\code{levgenpareto},
 	\code{levburr},
