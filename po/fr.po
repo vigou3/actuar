@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: actuar 1.1-7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-31 12:39-0400\n"
-"PO-Revision-Date: 2016-10-31 12:40-0400\n"
+"PO-Revision-Date: 2016-10-31 12:53-0400\n"
 "Last-Translator: Vincent Goulet <vincent@vgoulet.act.ulaval.ca>\n"
 "Language-Team: Vincent Goulet <vincent@vgoulet.act.ulaval.ca>\n"
 "Language: fr\n"
@@ -54,15 +54,15 @@ msgstr "erreur interne dans actuar_do_dpqphtype2"
 
 #: expint.c:348
 msgid "overflow in expint_E1"
-msgstr ""
+msgstr "dépassement de capacité dans expint_E1"
 
 #: expint.c:370
 msgid "invalid input domain in expint_E1"
-msgstr ""
+msgstr "domaine en entrée invalide dans expint_E1"
 
 #: expint.c:391 expint.c:398
 msgid "underflow in expint_E1"
-msgstr ""
+msgstr "soupassement de capacité dans expint_E1"
 
 #: hierarc.c:100 invgauss.c:209
 msgid "maximum number of iterations reached before obtaining convergence"
