@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: actuar 1.3-0\n"
-"POT-Creation-Date: 2016-07-05 00:10\n"
+"Project-Id-Version: actuar 2.0-0.9000\n"
+"POT-Creation-Date: 2016-10-31 12:32\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -130,6 +130,15 @@ msgstr ""
 msgid "'order' must be positive"
 msgstr ""
 
+msgid "'nclass' not used when 'breaks' is specified"
+msgstr ""
+
+msgid "'group' ignored when 'breaks' is specified"
+msgstr ""
+
+msgid "'group' ignored when 'nclass' is specified"
+msgstr ""
+
 msgid "invalid number of group boundaries and frequencies"
 msgstr ""
 
@@ -172,16 +181,19 @@ msgstr ""
 msgid "optimization failed"
 msgstr ""
 
+msgid "'p0' has many elements: only the first used"
+msgstr ""
+
 msgid "'p0' must be a valid probability (between 0 and 1)"
+msgstr ""
+
+msgid "value of 'p0' ignored with a zero-truncated distribution"
 msgstr ""
 
 msgid "value of 'lambda' missing"
 msgstr ""
 
 msgid "value of 'prob' or 'size' missing"
-msgstr ""
-
-msgid "'p0' must be specified with the logarithmic distribution"
 msgstr ""
 
 msgid "value of 'prob' missing"
@@ -250,10 +262,10 @@ msgstr ""
 msgid "'nodes' must be a named list"
 msgstr ""
 
-msgid "one of 'model.freq' or 'model.sev' must be non-NULL"
+msgid "level names different in 'nodes', 'model.freq' and 'model.sev'"
 msgstr ""
 
-msgid "level names different in 'nodes', 'model.freq' and 'model.sev'"
+msgid "one of 'model.freq' or 'model.sev' must be non-NULL"
 msgstr ""
 
 msgid "nothing to do"

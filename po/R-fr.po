@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: actuar 2.0-0\n"
 "Report-Msgid-Bugs-To: bugs@r-project.org\n"
-"POT-Creation-Date: 2014-12-11 12:11\n"
-"PO-Revision-Date: 2016-07-05 00:13-0400\n"
+"POT-Creation-Date: 2016-10-31 12:32\n"
+"PO-Revision-Date: 2016-10-31 12:34-0400\n"
 "Last-Translator: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
 "Language-Team: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
 "Language: fr\n"
@@ -147,6 +147,15 @@ msgstr "'lev' doit être une fonction ou une expression contenant 'x'"
 msgid "'order' must be positive"
 msgstr "'order' doit être positif"
 
+msgid "'nclass' not used when 'breaks' is specified"
+msgstr "'nclass' non utilisé quand 'breaks' est fourni"
+
+msgid "'group' ignored when 'breaks' is specified"
+msgstr "'group' ignoré quand 'breaks' est fourni"
+
+msgid "'group' ignored when 'nclass' is specified"
+msgstr "'group' ignoré quand 'breaks' est fourni"
+
 msgid "invalid number of group boundaries and frequencies"
 msgstr "nombre de bornes de groupe et de fréquences incorrect"
 
@@ -190,17 +199,20 @@ msgstr "mesure \"LAS\" requiert un objet de classe \"grouped.data\""
 msgid "optimization failed"
 msgstr "l'optimisation a échoué"
 
+msgid "'p0' has many elements: only the first used"
+msgstr "'p0' contient plusieurs éléments: seul le premier est utilisé"
+
 msgid "'p0' must be a valid probability (between 0 and 1)"
 msgstr "'p0' doit être une probabilité (entre 0 et 1)"
+
+msgid "value of 'p0' ignored with a zero-truncated distribution"
+msgstr "valeur de 'p0' ignorée pour une distribution zéro tronquée"
 
 msgid "value of 'lambda' missing"
 msgstr "valeur de 'lambda' manquante"
 
 msgid "value of 'prob' or 'size' missing"
 msgstr "valeur de 'prob' ou 'size' manquante"
-
-msgid "'p0' must be specified with the logarithmic distribution"
-msgstr "valeur de 'p0' requise pour la distribution logarithmique"
 
 msgid "value of 'prob' missing"
 msgstr "valeur de 'prob' manquante"
@@ -272,11 +284,11 @@ msgstr "paramètres incorrects dans 'par.wait'"
 msgid "'nodes' must be a named list"
 msgstr "'nodes' doit être une liste nommée"
 
-msgid "one of 'model.freq' or 'model.sev' must be non-NULL"
-msgstr "un de 'model.freq' ou 'model.sev' doit être non NULL"
-
 msgid "level names different in 'nodes', 'model.freq' and 'model.sev'"
 msgstr "noms de niveaux différents dans 'nodes', 'model.freq' et 'model.sev'"
+
+msgid "one of 'model.freq' or 'model.sev' must be non-NULL"
+msgstr "un de 'model.freq' ou 'model.sev' doit être non NULL"
 
 msgid "nothing to do"
 msgstr "rien à faire"
@@ -286,3 +298,6 @@ msgstr "valeur de 'by' incorrecte"
 
 msgid "'x' must be a vector or a matrix"
 msgstr "'x' doit être un vecteur ou une matrice"
+
+#~ msgid "'p0' must be specified with the logarithmic distribution"
+#~ msgstr "valeur de 'p0' requise pour la distribution logarithmique"

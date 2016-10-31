@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: actuar 1.1-7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-11 12:11-0500\n"
-"PO-Revision-Date: 2014-12-11 12:25-0500\n"
+"POT-Creation-Date: 2016-10-31 12:39-0400\n"
+"PO-Revision-Date: 2016-10-31 12:40-0400\n"
 "Last-Translator: Vincent Goulet <vincent@vgoulet.act.ulaval.ca>\n"
 "Language-Team: Vincent Goulet <vincent@vgoulet.act.ulaval.ca>\n"
 "Language: fr\n"
@@ -18,29 +18,33 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: dpq.c:73 dpq.c:198 dpq.c:383 dpq.c:567 dpq.c:738 dpqphtype.c:49 random.c:64
-#: random.c:71 random.c:146 random.c:153 random.c:240 random.c:247
-#: random.c:334 random.c:341 randomphtype.c:66 randomphtype.c:73
+#: dpq.c:71 dpq.c:141 dpq.c:276 dpq.c:529 dpq.c:719 dpq.c:889 dpqphtype.c:49
+#: random.c:102 random.c:109 random.c:201 random.c:208 random.c:317
+#: random.c:324 random.c:426 random.c:433 randomphtype.c:70 randomphtype.c:77
 msgid "invalid arguments"
 msgstr "arguments incorrects"
 
-#: dpq.c:166
+#: dpq.c:112
+msgid "internal error in actuar_do_dpq0"
+msgstr "erreur interne dans actuar_do_dpq0"
+
+#: dpq.c:244
 msgid "internal error in actuar_do_dpq1"
 msgstr "erreur interne dans actuar_do_dpq1"
 
-#: dpq.c:350
+#: dpq.c:496
 msgid "internal error in actuar_do_dpq2"
 msgstr "erreur interne dans actuar_do_dpq2"
 
-#: dpq.c:530
+#: dpq.c:682
 msgid "internal error in actuar_do_dpq3"
 msgstr "erreur interne dans actuar_do_dpq3"
 
-#: dpq.c:702
+#: dpq.c:853
 msgid "internal error in actuar_do_dpq4"
 msgstr "erreur interne dans actuar_do_dpq4"
 
-#: dpq.c:835
+#: dpq.c:985
 msgid "internal error in actuar_do_dpq5"
 msgstr "erreur interne dans actuar_do_dpq5"
 
@@ -48,11 +52,27 @@ msgstr "erreur interne dans actuar_do_dpq5"
 msgid "internal error in actuar_do_dpqphtype2"
 msgstr "erreur interne dans actuar_do_dpqphtype2"
 
-#: hierarc.c:100
+#: expint.c:348
+msgid "overflow in expint_E1"
+msgstr ""
+
+#: expint.c:370
+msgid "invalid input domain in expint_E1"
+msgstr ""
+
+#: expint.c:391 expint.c:398
+msgid "underflow in expint_E1"
+msgstr ""
+
+#: hierarc.c:100 invgauss.c:209
 msgid "maximum number of iterations reached before obtaining convergence"
 msgstr "nombre d'itérations maximal atteint avant obtention de la convergence"
 
-#: invpareto.c:170
+#: invgauss.c:142
+msgid "maximum number of iterations must be at least 1"
+msgstr "le nombre d'itérations maximal doit être au moins 1"
+
+#: invpareto.c:189
 msgid "integration failed"
 msgstr "l'intégration a échoué"
 
@@ -62,43 +82,43 @@ msgid ""
 "complete"
 msgstr "nombre de récursions maximal atteint avant obtention de la convergence"
 
-#: random.c:90 random.c:173 random.c:268 random.c:363
+#: random.c:51
 msgid "NAs produced"
 msgstr "production de NA"
 
-#: random.c:102
+#: random.c:139
 msgid "internal error in actuar_do_random1"
 msgstr "erreur interne dans actuar_do_random1"
 
-#: random.c:194
+#: random.c:253
 msgid "internal error in actuar_do_random2"
 msgstr "erreur interne dans actuar_do_random2"
 
-#: random.c:286
+#: random.c:361
 msgid "internal error in actuar_do_random3"
 msgstr "erreur interne dans actuar_do_random3"
 
-#: random.c:379
+#: random.c:467
 msgid "internal error in actuar_do_random4"
 msgstr "erreur interne dans actuar_do_random4"
 
-#: random.c:410
+#: random.c:498
 msgid "internal error in actuar_do_random"
 msgstr "erreur interne dans actuar_do_random"
 
-#: randomphtype.c:93
+#: randomphtype.c:97
 msgid "non-square sub-intensity matrix"
 msgstr "matrice de sous-intensité non carrée"
 
-#: randomphtype.c:97
+#: randomphtype.c:101
 msgid "non-conformable arguments"
 msgstr "arguments non conformes"
 
-#: randomphtype.c:116
+#: randomphtype.c:120
 msgid "internal error in actuar_do_randomphtype2"
 msgstr "erreur interne dans actuar_do_randomphtype2"
 
-#: randomphtype.c:143
+#: randomphtype.c:147
 msgid "internal error in actuar_do_randomphtype"
 msgstr "erreur interne dans actuar_do_randomphtype"
 
@@ -142,6 +162,3 @@ msgstr "valeur incorrecte pour l'argument %d du sous-programme dgesv de Lapack"
 #: util.c:278
 msgid "Lapack routine dgesv: system is exactly singular"
 msgstr "sous-programme Lapack dgesv: le système est exactement singulier"
-
-#~ msgid "NaNs produced"
-#~ msgstr "production de NaN"
