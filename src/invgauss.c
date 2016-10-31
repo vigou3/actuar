@@ -13,6 +13,7 @@
  *     Journal, vol. 8, no 1, p. 339-351.
  *     https://journal.r-project.org/archive/2016-1/giner-smyth.pdf
  *
+ *  AUTHOR (original R implementation): Gordon Smyth
  *  AUTHOR (C implementation): Vincent Goulet <vincent.goulet@act.ulaval.ca>
  */
 
