@@ -18,10 +18,10 @@ rcompound <- function(n, model.freq, model.sev)
 
     ## If model expressions are wrapped into 'expression' as in
     ## 'simul', get rid of the call.
-    if (cl.freq[[1]] == "expression")
-        cl.freq <- cl.freq[[-1]]
-    if (cl.sev[[1]] == "expression")
-        cl.sev <- cl.sev[[-1]]
+    if (cl.freq[[1L]] == "expression")
+        cl.freq <- cl.freq[[-1L]]
+    if (cl.sev[[1L]] == "expression")
+        cl.sev <- cl.sev[[-1L]]
 
     ## Initialize the output vector. We will use the fact that 'res'
     ## is filled with zeros later.
@@ -61,8 +61,8 @@ rcomppois <- function(n, lambda, model.sev)
     cl.sev <- substitute(model.sev)
 
     ## Get rid of the eventual 'expression' call.
-    if (cl.sev[[1]] == "expression")
-        cl.sev <- cl.sev[[-1]]
+    if (cl.sev[[1L]] == "expression")
+        cl.sev <- cl.sev[[-1L]]
 
     ## Initialize the output vector.
     res <- numeric(n)
