@@ -249,7 +249,7 @@ aggregateDist("recursive", model.freq = "zero-truncated poisson",
               model.sev = fx, lambda = 3, x.scale = 25)
 
 ## Recursive method (zero-modified distribution)
-aggregateDist("recursive", model.freq = "negative binomial",
+Fn <- aggregateDist("recursive", model.freq = "negative binomial",
               model.sev = fx, p0 = 0.05, size = 2.5, prob = 0.4)
 
 ## Equivalent more explicit call
@@ -288,3 +288,4 @@ plot(u, 1 - Fs(u), type = "l", main = "Ruin probability")
 }
 \keyword{distribution}
 \keyword{models}
+\encoding{UTF-8}
