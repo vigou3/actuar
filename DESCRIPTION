@@ -13,7 +13,7 @@ Authors@R: c(person("Vincent", "Goulet", role = c("cre", "aut"),
 	     person("Louis-Philippe", "Pouliot", role = "ctb"),
 	     person("Mathieu", "Pigeon", role = "aut",
 	            email = "pigeon.mathieu.2@uqam.ca"))
-Description: Numerous actuarial science functionalities for the
+Description: Functions and data sets for actuarial tasks:
   modeling of loss distributions; risk theory and ruin theory;
   simulation of compound models, discrete mixtures and compound
   hierarchical models; credibility theory. Support for 19 continuous
