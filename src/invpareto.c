@@ -131,11 +131,10 @@ double minvpareto(double order, double shape, double scale, int give_log)
 static void fn(double *x, int n, void *ex)
 {
     int i;
-    double *pars = (double *) ex, shape, scale, order;
+    double *pars = (double *) ex, shape, order;
 
     shape = pars[0];
-    scale = pars[1];
-    order = pars[2];
+    order = pars[1];
 
     for(i = 0; i < n; i++)
 	x[i] = R_pow(x[i], shape + order - 1) * R_pow(1 - x[i], -order);
@@ -162,11 +161,11 @@ double levinvpareto(double limit, double shape, double scale, double order,
         return 0.0;
 
     double u;
-    double ex[3], lower, upper, epsabs, epsrel, result, abserr, *work;
+    double ex[2], lower, upper, epsabs, epsrel, result, abserr, *work;
     int neval, ier, subdiv, lenw, last, *iwork;
 
     /* Parameters for the integral are pretty much fixed here */
-    ex[0] = shape; ex[1] = scale; ex[2] = order;
+    ex[0] = shape; ex[1] = order;
     lower = 0.0; upper = limit / (limit + scale);
     subdiv = 100;
     epsabs = R_pow(DOUBLE_EPS, 0.25);
