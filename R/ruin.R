@@ -25,7 +25,7 @@
 
 ruin <- function(claims = c("exponential", "Erlang", "phase-type"), par.claims,
                  wait = c("exponential", "Erlang", "phase-type"), par.wait,
-                 premium.rate = 1, tol = sqrt(.Machine$double.eps), maxit = 200,
+                 premium.rate = 1, tol = sqrt(.Machine$double.eps), maxit = 200L,
                  echo = FALSE)
 {
     ## Sanity checks

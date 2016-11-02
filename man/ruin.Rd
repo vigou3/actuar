@@ -12,7 +12,7 @@
 ruin(claims = c("exponential", "Erlang", "phase-type"), par.claims,
      wait = c("exponential", "Erlang", "phase-type"), par.wait,
      premium.rate = 1, tol = sqrt(.Machine$double.eps),
-     maxit = 200, echo = FALSE)
+     maxit = 200L, echo = FALSE)
 
 \method{plot}{ruin}(x, from = NULL, to = NULL, add = FALSE,
      xlab = "u", ylab = expression(psi(u)),
@@ -126,6 +126,6 @@ a <- (0.4/5 + 0.6) * lambda
 ruin(claims = "p", par.claims = list(prob = p, rates = r),
      wait   = "e", par.wait   = list(rate = c(5 * a, a), weights =
                                      c(0.4, 0.6)),
-     maxit = 225)
+     maxit = 225L)
 }
 \keyword{models}
