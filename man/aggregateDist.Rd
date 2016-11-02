@@ -288,4 +288,3 @@ plot(u, 1 - Fs(u), type = "l", main = "Ruin probability")
 }
 \keyword{distribution}
 \keyword{models}
-\encoding{UTF-8}
