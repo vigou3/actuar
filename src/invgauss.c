@@ -97,10 +97,9 @@ double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
     }
 
     /* all other probabilities */
-    double a, b, r = sqrt(q * phi);
-
-    a = pnorm((qm - 1)/r, 0, 1, lower_tail, /* log_p */1);
-    b = 2/phim + pnorm(-(qm + 1)/r, 0, 1, /* l._t. */1, /* log_p */1);
+    double r = sqrt(q * phi);
+    double a = pnorm((qm - 1)/r, 0, 1, lower_tail, /* log_p */1);
+    double b = 2/phim + pnorm(-(qm + 1)/r, 0, 1, /* l._t. */1, /* log_p */1);
 
     return ACT_D_exp(a + (lower_tail ? log1p(exp(b - a)) : ACT_Log1_Exp(b - a)));
 }
@@ -108,10 +107,8 @@ double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
 /* Needed by qinvgauss() for Newton-Raphson iterations. */
 double nrstep(double x, double p, double logp, double phi)
 {
-    double logF, dlogp;
-
-    logF = pinvgauss(x, 1, phi, /*l._t.*/1, /*log.p*/1);
-    dlogp = logp - logF;
+    double logF = pinvgauss(x, 1, phi, /*l._t.*/1, /*log.p*/1);
+    double dlogp = logp - logF;
 
     return ((fabs(dlogp) < 1e-5) ? dlogp * exp(logp - log1p(-dlogp/2)) :
 	    p - exp(logF)) / dinvgauss(x, 1, phi, 0);
@@ -141,49 +138,46 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
     if (maxit < 1)
 	error(_("maximum number of iterations must be at least 1"));
 
-    int i = 1;
-    double logp, kappa, mode, x, dx, s;
-
     /* same as ACT_DT_qIv macro, but to set both p and logp */
     if (log_p)
     {
 	if (lower_tail)
 	{
-	    logp = p;
+	    double logp = p;
 	    p = exp(p);
 	}
 	else
 	{
 	    p = -expm1(p);
-	    logp = log(p);
+	    double logp = log(p);
 	}
     }
     else
     {
 	p = ACT_D_Lval(p);
-	logp = log(p);
+	double logp = log(p);
     }
 
     /* convert to mean = 1 */
     phi *= mu;
 
     /* mode */
-    kappa = 1.5 * phi;
+    double kappa = 1.5 * phi;
     if (kappa <= 1e3)
-	mode = sqrt(1 + kappa * kappa) - kappa;
+	double mode = sqrt(1 + kappa * kappa) - kappa;
     else			/* Taylor series correction */
     {
 	double k = 1/2/kappa;
-	mode = k * (1 - k * k);
+	double mode = k * (1 - k * k);
     }
 
     /* starting value */
     if (logp < -11.51)		/* small left tail probability */
-	x = 1/phi/R_pow_di(qnorm(logp, 0, 1, /*l._t.*/1, /*log.p*/1), 2);
+	double x = 1/phi/R_pow_di(qnorm(logp, 0, 1, /*l._t.*/1, /*log.p*/1), 2);
     else if (logp > -1e-5)	/* small right tail probability */
-	x = qgamma(logp, 1/phi, phi, /*l._t.*/1, /*log.p*/1);
+	double x = qgamma(logp, 1/phi, phi, /*l._t.*/1, /*log.p*/1);
     else			/* use the mode otherwise */
-	x = mode;
+	double x = mode;
 
     /* if echoing iterations, start by printing the header and the
      * first value */
@@ -193,14 +187,15 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
 
     /* first Newton-Raphson outside the loop to retain the sign of
      * the adjustment */
-    dx = nrstep(x, p, logp, phi);
-    s = sign(dx);
+    double dx = nrstep(x, p, logp, phi);
+    double s = sign(dx);
     x += dx;
 
     if (echo)
 	Rprintf("%d\t%-14.8g\t%.8g\n", i, dx, x);
 
     /* now do the iterations */
+    int i = 1;
     do
     {
 	i++;
@@ -274,17 +269,17 @@ double minvgauss(double order, double mu, double phi, int give_log)
 	return R_PosInf;
 
     int i, k = order;
-    double term, z, phir = phi * mu/2;
+    double term, s, phir = phi * mu/2;
 
-    z = term = 1.0;		/* first term (i = 0) */
+    s = term = 1.0;		/* first term (i = 0) */
 
     for (i = 1; i < k; i++)
     {
 	term *= ((k + i - 1) * (k - i)/i) * phir;
-	z += term;
+	s += term;
     }
 
-    return R_pow_di(mu, k) * z;
+    return R_pow_di(mu, k) * s;
 }
 
 /*  The lev function is very similar to the pdf. It can be written as
