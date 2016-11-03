@@ -138,46 +138,49 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
     if (maxit < 1)
 	error(_("maximum number of iterations must be at least 1"));
 
+    int i = 1;
+    double logp, kappa, mode, x, dx, s;
+
     /* same as ACT_DT_qIv macro, but to set both p and logp */
     if (log_p)
     {
 	if (lower_tail)
 	{
-	    double logp = p;
+	    logp = p;
 	    p = exp(p);
 	}
 	else
 	{
 	    p = -expm1(p);
-	    double logp = log(p);
+	    logp = log(p);
 	}
     }
     else
     {
 	p = ACT_D_Lval(p);
-	double logp = log(p);
+	logp = log(p);
     }
 
     /* convert to mean = 1 */
     phi *= mu;
 
     /* mode */
-    double kappa = 1.5 * phi;
+    kappa = 1.5 * phi;
     if (kappa <= 1e3)
-	double mode = sqrt(1 + kappa * kappa) - kappa;
+	mode = sqrt(1 + kappa * kappa) - kappa;
     else			/* Taylor series correction */
     {
-	double k = 1/2/kappa;
-	double mode = k * (1 - k * k);
+	k = 1/2/kappa;
+	mode = k * (1 - k * k);
     }
 
     /* starting value */
     if (logp < -11.51)		/* small left tail probability */
-	double x = 1/phi/R_pow_di(qnorm(logp, 0, 1, /*l._t.*/1, /*log.p*/1), 2);
+	x = 1/phi/R_pow_di(qnorm(logp, 0, 1, /*l._t.*/1, /*log.p*/1), 2);
     else if (logp > -1e-5)	/* small right tail probability */
-	double x = qgamma(logp, 1/phi, phi, /*l._t.*/1, /*log.p*/1);
+	x = qgamma(logp, 1/phi, phi, /*l._t.*/1, /*log.p*/1);
     else			/* use the mode otherwise */
-	double x = mode;
+	x = mode;
 
     /* if echoing iterations, start by printing the header and the
      * first value */
@@ -187,15 +190,14 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
 
     /* first Newton-Raphson outside the loop to retain the sign of
      * the adjustment */
-    double dx = nrstep(x, p, logp, phi);
-    double s = sign(dx);
+    dx = nrstep(x, p, logp, phi);
+    s = sign(dx);
     x += dx;
 
     if (echo)
 	Rprintf("%d\t%-14.8g\t%.8g\n", i, dx, x);
 
     /* now do the iterations */
-    int i = 1;
     do
     {
 	i++;
@@ -234,13 +236,11 @@ double rinvgauss(double mu, double phi)
     if (!R_FINITE(mu))
 	return 1/phi/rchisq(1);
 
-    double y, x;
-
     /* convert to mean = 1 */
     phi *= mu;
 
-    y = R_pow_di(rnorm(0, 1), 2);
-    x = 1 + phi/2 * (y - sqrt(4 * y/phi + R_pow_di(y, 2)));
+    double y = R_pow_di(rnorm(0, 1), 2);
+    double x = 1 + phi/2 * (y - sqrt(4 * y/phi + R_pow_di(y, 2)));
 
     return mu * ((unif_rand() <= 1/(1 + x)) ? x : 1/x);
 }
@@ -308,13 +308,11 @@ double levinvgauss(double limit, double mu, double phi, double order,
 
     /* calculations very similar to those in pinvgauss(); we do
      * everything here and avoid calling the latter */
-    double a, ap, b;
     double xm = limit/mu, phim = phi * mu, r = sqrt(limit * phi);
     double x = (xm - 1)/r;
-
-    a  = pnorm(x, 0, 1, /*l._t.*/1, /* log_p */1);
-    ap = pnorm(x, 0, 1, /*l._t.*/0, /* log_p */1);
-    b = 2/phim + pnorm(-(xm + 1)/r, 0, 1, /* l._t. */1, /* log_p */1);
+    double a = pnorm(x, 0, 1, /*l._t.*/1, /* log_p */1);
+    double ap = pnorm(x, 0, 1, /*l._t.*/0, /* log_p */1);
+    double b = 2/phim + pnorm(-(xm + 1)/r, 0, 1, /* l._t. */1, /* log_p */1);
 
     return mu * exp(a + ACT_Log1_Exp(b - a))
 	+ limit * exp(ap + ACT_Log1_Exp(b - ap));
