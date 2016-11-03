@@ -170,7 +170,7 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
 	mode = sqrt(1 + kappa * kappa) - kappa;
     else			/* Taylor series correction */
     {
-	k = 1/2/kappa;
+	double k = 1/2/kappa;
 	mode = k * (1 - k * k);
     }
 
