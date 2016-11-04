@@ -43,11 +43,11 @@ double mnorm(double order, double mean, double sd, int give_log)
     return gammafn(order + 1.0) * res;
 }
 
-double mgfnorm(double x, double mean, double sd, int give_log)
+double mgfnorm(double t, double mean, double sd, int give_log)
 {
 #ifdef IEEE_754
     if (ISNAN(x) || ISNAN(mean) || ISNAN(sd))
-	return x + mean + sd;
+	return t + mean + sd;
 #endif
     if (!R_FINITE(mean) ||
         !R_FINITE(sd)   ||
@@ -55,7 +55,7 @@ double mgfnorm(double x, double mean, double sd, int give_log)
         return R_NaN;
 
     if (x == 0.0)
-        return ACT_D_exp(0.0);
+        return ACT_D__1;
 
-    return ACT_D_exp(x * mean + 0.5 * x * x * sd * sd) ;
+    return ACT_D_exp(t * mean + 0.5 * t * t * sd * sd) ;
 }

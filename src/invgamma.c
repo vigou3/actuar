@@ -138,11 +138,11 @@ double levinvgamma(double limit, double shape, double scale, double order,
         + ACT_DLIM__0(limit, order) * pgamma(u, shape, 1.0, 1, 0);
 }
 
-double mgfinvgamma(double x, double shape, double scale, int give_log)
+double mgfinvgamma(double t, double shape, double scale, int give_log)
 {
 #ifdef IEEE_754
     if (ISNAN(x) || ISNAN(shape) || ISNAN(scale))
-	return x + shape + scale;
+	return t + shape + scale;
 #endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
@@ -152,9 +152,9 @@ double mgfinvgamma(double x, double shape, double scale, int give_log)
         return R_NaN;
 
     if (x == 0.0)
-        return ACT_D_exp(0.0);
+        return ACT_D__1;
 
-    double tmp = -scale * x;
+    double tmp = -scale * t;
 
     return ACT_D_exp(M_LN2 + shape * log(tmp)/2.0 +
                    log(bessel_k(sqrt(4 * tmp), shape, 1)) -
