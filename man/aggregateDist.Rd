@@ -240,6 +240,13 @@ plot(Fs)
 Fs(knots(Fs))		      # cdf evaluated at its knots
 diff(Fs)                      # probability mass function
 
+## Recursive method (high frequency)
+\dontrun{Fs <- aggregateDist("recursive", model.freq = "poisson",
+                    model.sev = fx, lambda = 1000)}
+Fs <- aggregateDist("recursive", model.freq = "poisson",
+                    model.sev = fx, lambda = 250, convolve = 2, maxit = 1500)
+plot(Fs)
+
 ## Recursive method (zero-truncated distribution). Using 'fx' above
 ## would mean that both Pr[N = 0] = 0 and Pr[X = 0] = 0, therefore
 ## Pr[S = 0] = 0 and recursions would not start.
@@ -255,13 +262,6 @@ Fn <- aggregateDist("recursive", model.freq = "negative binomial",
 ## Equivalent more explicit call
 aggregateDist("recursive", model.freq = "zero-modified negative binomial",
               model.sev = fx, p0 = 0.05, size = 2.5, prob = 0.4)
-
-## Recursive method (high frequency)
-\dontrun{Fs <- aggregateDist("recursive", model.freq = "poisson",
-                    model.sev = fx, lambda = 1000)}
-Fs <- aggregateDist("recursive", model.freq = "poisson",
-                    model.sev = fx, lambda = 250, convolve = 2, maxit = 1500)
-plot(Fs)
 
 ## Normal Power approximation
 Fs <- aggregateDist("npower", moments = c(200, 200, 0.5))
