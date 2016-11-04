@@ -5,6 +5,7 @@
 \alias{qgumbel}
 \alias{rgumbel}
 \alias{mgumbel}
+\alias{mgfgumbel}
 \title{The Gumbel Distribution}
 \description{
   Density function, distribution function, quantile function, random
