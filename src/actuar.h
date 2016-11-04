@@ -75,7 +75,7 @@ double rztgeom(double prob);
 /*   Two parameter distributions */
 double munif(double order, double min, double max, int give_log);
 double levunif(double limit, double min, double max, double order, int give_log);
-double mgfunif(double x, double min, double max, int give_log);
+double mgfunif(double t, double min, double max, int give_log);
 
 double mnorm(double order, double mean, double sd, int give_log);
 double mgfnorm(double t, double mean, double sd, int give_log);
@@ -170,6 +170,7 @@ double pgumbel(double q, double alpha, double beta, int lower_tail, int log_p);
 double qgumbel(double p, double alpha, double beta, int lower_tail, int log_p);
 double rgumbel(double alpha, double beta);
 double mgumbel(double order, double alpha, double beta, int give_log);
+double mgfgumbel(double t, double alpha, double beta, int give_log);
 
 double dinvgauss(double x, double mu, double phi, int give_log);
 double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p);

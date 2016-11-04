@@ -24,3 +24,6 @@ rgumbel <- function(n, alpha, beta)
 
 mgumbel <- function(order, alpha, beta)
     .External("actuar_do_dpq", "mgumbel", order, alpha, beta, FALSE)
+
+mgfgumbel <- function(t, alpha, beta, log = FALSE)
+    .External("actuar_do_dpq", "mgfgumbel", t, alpha, beta, log)

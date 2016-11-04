@@ -17,6 +17,7 @@ pgumbel(q, alpha, beta, lower.tail = TRUE, log.p = FALSE)
 qgumbel(p, alpha, beta, lower.tail = TRUE, log.p = FALSE)
 rgumbel(n, alpha, beta)
 mgumbel(order, alpha, beta)
+mgfgumbel(t, alpha, beta, log = FALSE)
 }
 \arguments{
   \item{x, q}{vector of quantiles.}
@@ -31,6 +32,7 @@ mgumbel(order, alpha, beta)
     \eqn{P[X \le x]}{P[X <= x]}, otherwise, \eqn{P[X > x]}.}
   \item{order}{order of the moment. Only values \eqn{1} and \eqn{2} are
     supported.}
+  \item{t}{numeric vector.}
 }
 \details{
   The Gumbel distribution with parameters \code{alpha} \eqn{=
@@ -51,7 +53,8 @@ mgumbel(order, alpha, beta)
   \code{pgumbel} gives the distribution function,
   \code{qgumbel} gives the quantile function,
   \code{rgumbel} generates random deviates,
-  \code{mgumbel} gives the \eqn{k}th raw moment, \eqn{k = 1, 2}.
+  \code{mgumbel} gives the \eqn{k}th raw moment, \eqn{k = 1, 2}, and
+  \code{mgfgamma} gives the moment generating function in \code{t}.
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
