@@ -3,8 +3,7 @@
 ### Definition of the {d,p,q,r}ztpois functions to compute
 ### characteristics of the Zero Truncated Poisson distribution.
 ###
-### See Appendix B of Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
+### See Appendix B of Klugman, Panjer & Willmot, Loss Models, Wiley.
 ###
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
