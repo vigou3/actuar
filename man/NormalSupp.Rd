@@ -28,7 +28,7 @@ mgfnorm(t, mean = 0, sd = 1, log = FALSE)
 }
 \value{
   \code{mnorm} gives the \eqn{k}th raw moment and
-  \code{mgfnorm} gives the moment generating function in \code{x}.
+  \code{mgfnorm} gives the moment generating function in \code{t}.
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
