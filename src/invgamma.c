@@ -154,9 +154,10 @@ double mgfinvgamma(double t, double shape, double scale, int give_log)
     if (t == 0.0)
         return ACT_D__1;
 
-    double tmp = -scale * t;
+    /* rescale and change sign */
+    t = -scale * t;
 
-    return ACT_D_exp(M_LN2 + shape * log(tmp)/2.0 +
-                   log(bessel_k(sqrt(4 * tmp), shape, 1)) -
-                   lgammafn(shape));
+    return ACT_D_exp(M_LN2 + 0.5 * shape * log(t) +
+		     log(bessel_k(sqrt(4 * t), shape, 1)) -
+		     lgammafn(shape));
 }
