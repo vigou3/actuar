@@ -58,7 +58,7 @@ double levexp(double limit, double scale, double order, int give_log)
 double mgfexp(double t, double scale, int give_log)
 {
 #ifdef IEEE_754
-    if (ISNAN(x) || ISNAN(scale))
+    if (ISNAN(t) || ISNAN(scale))
 	return t + scale;
 #endif
     if (!R_FINITE(scale) ||
@@ -66,7 +66,7 @@ double mgfexp(double t, double scale, int give_log)
         scale * t > 1.0)
         return R_NaN;
 
-    if (x == 0.0)
+    if (t == 0.0)
         return ACT_D__1;
 
     return ACT_D_exp(-log1p(-scale * t));

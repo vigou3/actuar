@@ -105,20 +105,20 @@ double mgumbel(double order, double alpha, double beta, int give_log)
     return R_NaN;		/* order != 1 or 2 */
 }
 
-double mgfgumbel(double x, double alpha, double beta, int give_log)
+double mgfgumbel(double t, double alpha, double beta, int give_log)
 {
 #ifdef IEEE_754
-    if (ISNAN(order) || ISNAN(alpha) || ISNAN(beta))
-	return order + alpha + beta;
+    if (ISNAN(t) || ISNAN(alpha) || ISNAN(beta))
+	return t + alpha + beta;
 #endif
     if (!R_FINITE(alpha) ||
         !R_FINITE(beta) ||
         beta <= 0.0 ||
-        beta * x < 1.0)
+        beta * t < 1.0)
         return R_NaN;
 
-    if (x == 0.0)
+    if (t == 0.0)
         return ACT_D__1;
 
-    return ACT_D_exp(alpha * x + lgamma(1 - beta * x));
+    return ACT_D_exp(alpha * t + lgamma(1 - beta * t));
 }

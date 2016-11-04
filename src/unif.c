@@ -60,7 +60,7 @@ double levunif(double limit, double min, double max, double order, int give_log)
 double mgfunif(double t, double min, double max, int give_log)
 {
 #ifdef IEEE_754
-    if (ISNAN(x) || ISNAN(min) || ISNAN(max))
+    if (ISNAN(t) || ISNAN(min) || ISNAN(max))
 	return t + min + max;
 #endif
     if (!R_FINITE(min) ||
@@ -68,7 +68,7 @@ double mgfunif(double t, double min, double max, int give_log)
         min >= max)
         return R_NaN;
 
-    if (x == 0.0)
+    if (t == 0.0)
         return ACT_D__1;
 
     double tmp1, tmp2;

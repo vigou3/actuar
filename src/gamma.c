@@ -63,7 +63,7 @@ double levgamma(double limit, double shape, double scale, double order,
 double mgfgamma(double t, double shape, double scale, int give_log)
 {
 #ifdef IEEE_754
-    if (ISNAN(x) || ISNAN(shape) || ISNAN(scale))
+    if (ISNAN(t) || ISNAN(shape) || ISNAN(scale))
 	return t + shape + scale;
 #endif
     if (!R_FINITE(shape) ||
@@ -73,7 +73,7 @@ double mgfgamma(double t, double shape, double scale, int give_log)
         scale * t > 1.)
         return R_NaN;
 
-    if (x == 0.0)
+    if (t == 0.0)
         return ACT_D__1;
 
     return ACT_D_exp(-shape * log1p(-scale * t));

@@ -95,7 +95,7 @@ double levchisq(double limit, double df, double ncp, double order, int give_log)
 double mgfchisq(double t, double df, double ncp, int give_log)
 {
 #ifdef IEEE_754
-    if (ISNAN(x) || ISNAN(df) || ISNAN(ncp))
+    if (ISNAN(t) || ISNAN(df) || ISNAN(ncp))
 	return t + df + ncp;
 #endif
     if (!R_FINITE(df)  ||
@@ -105,7 +105,7 @@ double mgfchisq(double t, double df, double ncp, int give_log)
         2.0 * t > 1.0)
         return R_NaN;
 
-    if (x == 0.0)
+    if (t == 0.0)
         return ACT_D__1;
 
     return ACT_D_exp(ncp * t / (1.0 - 2.0 * t) - df/2.0 * log1p(-2.0 * t));

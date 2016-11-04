@@ -141,17 +141,17 @@ double levinvgamma(double limit, double shape, double scale, double order,
 double mgfinvgamma(double t, double shape, double scale, int give_log)
 {
 #ifdef IEEE_754
-    if (ISNAN(x) || ISNAN(shape) || ISNAN(scale))
+    if (ISNAN(t) || ISNAN(shape) || ISNAN(scale))
 	return t + shape + scale;
 #endif
     if (!R_FINITE(shape) ||
         !R_FINITE(scale) ||
         shape <= 0.0 ||
         scale <= 0.0 ||
-        x > 0.0 )
+        t > 0.0 )
         return R_NaN;
 
-    if (x == 0.0)
+    if (t == 0.0)
         return ACT_D__1;
 
     double tmp = -scale * t;
