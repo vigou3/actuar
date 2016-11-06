@@ -1058,21 +1058,21 @@ positive, and the functions are defined for $x > 0$.
 \begin{itemize}
 \item Root: \code{gumbel}
 \item Parameters: \code{alpha} ($-\infty < \alpha < \infty$),
-      \code{beta}  ($\beta$)
+      \code{scale}  ($\theta$)
 \end{itemize}
 \begin{align*}
   f(x)
-  &= \frac{e^{-(u + e^{-u})}}{\beta},
-    \qquad u = \frac{x - \alpha}{\beta},
+  &= \frac{e^{-(u + e^{-u})}}{\theta},
+    \qquad u = \frac{x - \alpha}{\theta},
     \qquad -\infty < x < \infty \\
   F(x)
   &= \exp[-\exp(-u)] \\ \displaybreak[0]
   \E{X}
-  &= \alpha + \gamma \beta, \qquad \gamma \approx 0.57721566490153 \\
+  &= \alpha + \gamma \theta, \qquad \gamma \approx 0.57721566490153 \\
   \VAR{X}
-  &= \frac{\pi^2 \beta^2}{6} \\
+  &= \frac{\pi^2 \theta^2}{6} \\
   M(t)
-  &= e^{\alpha t} \Gamma(1 - \beta t)
+  &= e^{\alpha t} \Gamma(1 - \theta t)
 \end{align*}
 
 \subsubsection{Inverse Gaussian}
@@ -1148,7 +1148,7 @@ and is usually set in advance.
       \code{shape2} ($b$),
       \code{shape3} ($\tau$),
       \code{rate}   ($\lambda = 1/\theta$),
-       \code{scale}  ($\theta$)
+      \code{scale}  ($\theta$)
 \end{itemize}
 \begin{align*}
   f(x)

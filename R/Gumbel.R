@@ -4,26 +4,26 @@
 ### characteristics of the Gumbel distribution. The version used in
 ### these functions has cumulative distribution function
 ###
-###   Pr[X <= x] = exp(-exp(-(x - alpha)/beta)), -Inf < x < Inf.
+###   Pr[X <= x] = exp(-exp(-(x - alpha)/scale)), -Inf < x < Inf.
 ###
 ### See Appendix A of Klugman, Panjer & Willmot, Loss Models, Wiley.
 ###
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dgumbel <- function (x, alpha, beta, log = FALSE)
-    .External("actuar_do_dpq", "dgumbel", x, alpha, beta, log)
+dgumbel <- function (x, alpha, scale, log = FALSE)
+    .External("actuar_do_dpq", "dgumbel", x, alpha, scale, log)
 
-pgumbel <- function(q, alpha, beta, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "pgumbel", q, alpha, beta, lower.tail, log.p)
+pgumbel <- function(q, alpha, scale, lower.tail = TRUE, log.p = FALSE)
+    .External("actuar_do_dpq", "pgumbel", q, alpha, scale, lower.tail, log.p)
 
-qgumbel <- function(p, alpha, beta, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "qgumbel", p, alpha, beta, lower.tail, log.p)
+qgumbel <- function(p, alpha, scale, lower.tail = TRUE, log.p = FALSE)
+    .External("actuar_do_dpq", "qgumbel", p, alpha, scale, lower.tail, log.p)
 
-rgumbel <- function(n, alpha, beta)
-    .External("actuar_do_random", "rgumbel", n, alpha, beta)
+rgumbel <- function(n, alpha, scale)
+    .External("actuar_do_random", "rgumbel", n, alpha, scale)
 
-mgumbel <- function(order, alpha, beta)
-    .External("actuar_do_dpq", "mgumbel", order, alpha, beta, FALSE)
+mgumbel <- function(order, alpha, scale)
+    .External("actuar_do_dpq", "mgumbel", order, alpha, scale, FALSE)
 
-mgfgumbel <- function(t, alpha, beta, log = FALSE)
-    .External("actuar_do_dpq", "mgfgumbel", t, alpha, beta, log)
+mgfgumbel <- function(t, alpha, scale, log = FALSE)
+    .External("actuar_do_dpq", "mgfgumbel", t, alpha, scale, log)
