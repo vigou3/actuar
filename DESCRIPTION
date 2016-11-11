@@ -2,7 +2,7 @@ Package: actuar
 Type: Package
 Title: Actuarial Functions and Heavy Tailed Distributions
 Version: 2.0-0
-Date: 2016-11-04
+Date: 2016-11-12
 Authors@R: c(person("Vincent", "Goulet", role = c("cre", "aut"),
  	            email = "vincent.goulet@act.ulaval.ca"),
 	     person("Sébastien", "Auclair", role = "ctb"),
@@ -13,7 +13,7 @@ Authors@R: c(person("Vincent", "Goulet", role = c("cre", "aut"),
 	     person("Louis-Philippe", "Pouliot", role = "ctb"),
 	     person("Mathieu", "Pigeon", role = "aut",
 	            email = "pigeon.mathieu.2@uqam.ca"))
-Description: Functions and data sets for actuarial tasks:
+Description: Functions and data sets for actuarial science:
   modeling of loss distributions; risk theory and ruin theory;
   simulation of compound models, discrete mixtures and compound
   hierarchical models; credibility theory. Support for many additional
