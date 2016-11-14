@@ -233,12 +233,35 @@ summary(Fs)
 c(Fs(0), diff(Fs(25 * 0:21))) # probability mass function
 plot(Fs)
 
-## Recursive method
+## Recursive method (example 9.10 of Klugman et al. (2012))
+fx <- c(0, crossprod(c(2, 1)/3,
+                     matrix(c(0.6, 0.7, 0.4, 0, 0, 0.3), 2, 3)))
 Fs <- aggregateDist("recursive", model.freq = "poisson",
-                    model.sev = fx, lambda = 3, x.scale = 25)
+                    model.sev = fx, lambda = 3)
 plot(Fs)
 Fs(knots(Fs))		      # cdf evaluated at its knots
 diff(Fs)                      # probability mass function
+
+## Recursive method (high frequency)
+fx <- c(0, 0.15, 0.2, 0.25, 0.125, 0.075,
+        0.05, 0.05, 0.05, 0.025, 0.025)
+\dontrun{Fs <- aggregateDist("recursive", model.freq = "poisson",
+                    model.sev = fx, lambda = 1000)}
+Fs <- aggregateDist("recursive", model.freq = "poisson",
+                    model.sev = fx, lambda = 250, convolve = 2, maxit = 1500)
+plot(Fs)
+
+## Recursive method (zero-modified distribution; example 9.11 of
+## Klugman et al. (2012))
+Fn <- aggregateDist("recursive", model.freq = "binomial",
+                    model.sev = c(0.3, 0.5, 0.2), x.scale = 50,
+                    p0 = 0.4, size = 3, prob = 0.3)
+diff(Fn)
+
+## Equivalent but more explicit call
+aggregateDist("recursive", model.freq = "zero-modified binomial",
+              model.sev = c(0.3, 0.5, 0.2), x.scale = 50,
+              p0 = 0.4, size = 3, prob = 0.3)
 
 ## Recursive method (zero-truncated distribution). Using 'fx' above
 ## would mean that both Pr[N = 0] = 0 and Pr[X = 0] = 0, therefore
@@ -246,22 +269,7 @@ diff(Fs)                      # probability mass function
 fx <- discretize(pexp(x, 1), from = 0, to = 100, method = "upper")
 fx[1L] # non zero
 aggregateDist("recursive", model.freq = "zero-truncated poisson",
-              model.sev = fx, lambda = 3, x.scale = 25)
-
-## Recursive method (zero-modified distribution)
-aggregateDist("recursive", model.freq = "negative binomial",
-              model.sev = fx, p0 = 0.05, size = 2.5, prob = 0.4)
-
-## Equivalent more explicit call
-aggregateDist("recursive", model.freq = "zero-modified negative binomial",
-              model.sev = fx, p0 = 0.05, size = 2.5, prob = 0.4)
-
-## Recursive method (high frequency)
-\dontrun{Fs <- aggregateDist("recursive", model.freq = "poisson",
-                    model.sev = fx, lambda = 1000)}
-Fs <- aggregateDist("recursive", model.freq = "poisson",
-                    model.sev = fx, lambda = 250, convolve = 2, maxit = 1500)
-plot(Fs)
+              model.sev = fx, lambda = 3, x.scale = 25, echo=TRUE)
 
 ## Normal Power approximation
 Fs <- aggregateDist("npower", moments = c(200, 200, 0.5))

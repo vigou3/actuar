@@ -60,7 +60,7 @@ static Rboolean randomphtype2(double (*f)(), double *a, double *b,
 SEXP actuar_do_randomphtype2(int code, SEXP args, SEXPTYPE type /* unused */)
 {
     SEXP x, a, b, bdims;
-    int i, n, na, nb, nrow, ncol;
+    int i, n, na, nrow, ncol;
     Rboolean naflag = FALSE;
 
     /* Check validity of arguments */
@@ -96,7 +96,6 @@ SEXP actuar_do_randomphtype2(int code, SEXP args, SEXPTYPE type /* unused */)
     if (nrow != ncol)
         error(_("non-square sub-intensity matrix"));
     na = LENGTH(a);
-    nb = LENGTH(b);
     if (na != nrow)
         error(_("non-conformable arguments"));
 

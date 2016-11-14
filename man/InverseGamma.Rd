@@ -65,10 +65,10 @@ mgfinvgamma(t, shape, rate =1, scale = 1/rate, log =FALSE)
   \code{pinvgamma} gives the distribution function,
   \code{qinvgamma} gives the quantile function,
   \code{rinvgamma} generates random deviates,
-  \code{minvgamma} gives the \eqn{k}th raw moment, and
+  \code{minvgamma} gives the \eqn{k}th raw moment,
   \code{levinvgamma} gives the \eqn{k}th moment of the limited loss
-  variable,
-  \code{mgfinvgamma} gives the moment generating function in \code{x}.
+  variable, and
+  \code{mgfinvgamma} gives the moment generating function in \code{t}.
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }

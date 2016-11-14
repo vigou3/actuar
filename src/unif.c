@@ -57,24 +57,24 @@ double levunif(double limit, double min, double max, double order, int give_log)
         R_pow(limit, order) * (max - limit) / (max - min);
 }
 
-double mgfunif(double x, double min, double max, int give_log)
+double mgfunif(double t, double min, double max, int give_log)
 {
 #ifdef IEEE_754
-    if (ISNAN(x) || ISNAN(min) || ISNAN(max))
-	return x + min + max;
+    if (ISNAN(t) || ISNAN(min) || ISNAN(max))
+	return t + min + max;
 #endif
     if (!R_FINITE(min) ||
         !R_FINITE(max) ||
         min >= max)
         return R_NaN;
 
-    if (x == 0.0)
-        return ACT_D_exp(0.0);
+    if (t == 0.0)
+        return ACT_D__1;
 
     double tmp1, tmp2;
 
-    tmp1 = exp(x * max) - exp(x * min);
-    tmp2 = x * (max - min);
+    tmp1 = exp(t * max) - exp(t * min);
+    tmp2 = t * (max - min);
 
     return ACT_D_exp(log(tmp1) - log(tmp2));
 }

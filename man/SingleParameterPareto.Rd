@@ -47,7 +47,7 @@ levpareto1(limit, shape, min, order = 1)
   advance.
 
   The \eqn{k}th raw moment of the random variable \eqn{X} is
-  \eqn{E[X^k]}{E[X^k]}, \eqn{k < \alpha}{k < shape} and the \eqn{k}th
+  \eqn{E[X^k]}{E[X^k]}, \eqn{k < \alpha}{k < shape} and the \eqn{k}th
   limited moment at some limit \eqn{d} is \eqn{E[\min(X, d)^k]}{E[min(X,
   d)^k]}, \eqn{x \ge \theta}{x \ge min}.
 }

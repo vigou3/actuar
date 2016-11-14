@@ -3,12 +3,11 @@
 ### Definition of the {d,p,q,r}ztgeom functions to compute
 ### characteristics of the Zero Truncated Geometric distribution.
 ###
-### See Appendix B of Klugman, Panjer & Willmot, Loss Models, Second
-### Edition, Wiley, 2004.
+### See Appendix B of Klugman, Panjer & Willmot, Loss Models, Wiley.
 ###
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-dztgeom <- function (x, prob, log = FALSE)
+dztgeom <- function(x, prob, log = FALSE)
     .External("actuar_do_dpq", "dztgeom", x, prob, log)
 
 pztgeom <- function(q, prob, lower.tail = TRUE, log.p = FALSE)

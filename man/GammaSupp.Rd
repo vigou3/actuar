@@ -34,7 +34,7 @@ mgfgamma(t, shape, rate = 1, scale = 1/rate, log = FALSE)
   \code{mgamma} gives the \eqn{k}th raw moment,
   \code{levgamma} gives the \eqn{k}th moment of the limited loss
   variable, and
-  \code{mgfgamma} gives the moment generating function in \code{x}.
+  \code{mgfgamma} gives the moment generating function in \code{t}.
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }

@@ -468,11 +468,12 @@ SEXP actuar_do_dpq2(int code, SEXP args)
     case  54: return DPQ2_2(args, pgumbel);
     case  55: return DPQ2_2(args, qgumbel);
     case  56: return DPQ2_1(args, mgumbel);
-    case  57: return DPQ2_1(args, dinvgauss);
-    case  58: return DPQ2_2(args, pinvgauss);
-    case  59: return DPQ2_5(args, qinvgauss);
-    case  60: return DPQ2_1(args, minvgauss);
-    case  61: return DPQ2_1(args, mgfinvgauss);
+    case  57: return DPQ2_1(args, mgfgumbel);
+    case  58: return DPQ2_1(args, dinvgauss);
+    case  59: return DPQ2_2(args, pinvgauss);
+    case  60: return DPQ2_5(args, qinvgauss);
+    case  61: return DPQ2_1(args, minvgauss);
+    case  62: return DPQ2_1(args, mgfinvgauss);
     case 101: return DPQ2_1(args, dztnbinom);
     case 102: return DPQ2_2(args, pztnbinom);
     case 103: return DPQ2_2(args, qztnbinom);

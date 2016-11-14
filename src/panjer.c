@@ -79,12 +79,13 @@ SEXP actuar_do_panjer(SEXP args)
                 size = size << 1;
             }
 
-            m = fmin2(x, upper); /* upper bound of the sum */
+	    m = x;
+	    if (x > upper) m = upper; /* upper bound of the sum */
 
             /* Compute probability up to the scaling constant */
             for (k = 1; k <= m; k++)
                 fs[x] += (REAL(a)[0] + REAL(b)[0] * k / x) * fx[k] * fs[x - k];
-            fs[x] = fs[x] / norm; /* normalization */
+            fs[x] = fs[x]/norm;   /* normalization */
             cumul += fs[x];       /* cumulative sum */
 
             if (LOGICAL(echo)[0])
@@ -95,11 +96,12 @@ SEXP actuar_do_panjer(SEXP args)
     /* (a, b, 1) case (if p0 is non-NULL) */
     else
     {
-        /* Next line is a hack to reproduce the fact that the
-         * distribution of claim amounts is 0 past its maximum value.
-         * Only needed in the (a, b, 1) case for the additional term
-         * in the recursion formula. */
-        fx[++upper] = 0.0;
+        /* In the (a, b, 1) case, the recursion formula has an
+         * additional term involving f_X(x). The mathematical notation
+         * assumes that f_X(x) = 0 for x > m (the maximal value of the
+         * distribution). We need to treat this specifically in
+         * programming, though. */
+	double fxm;
 
         /* Constant term in the (a, b, 1) case. */
         term = (REAL(p1)[0] - (REAL(a)[0] + REAL(b)[0]) * REAL(p0)[0]);
@@ -119,19 +121,25 @@ SEXP actuar_do_panjer(SEXP args)
                 size = size << 1;
             }
 
-            m = fmin2(x, upper);
+	    m = x;
+	    if (x > upper)
+	    {
+		m = upper;	/* upper bound of the sum */
+		fxm = 0.0;	/* i.e. no additional term */
+	    }
+	    else
+		fxm = fx[m];	/* i.e. additional term */
 
             for (k = 1; k <= m; k++)
                 fs[x] += (REAL(a)[0] + REAL(b)[0] * k / x) * fx[k] * fs[x - k];
-            fs[x] = (fs[x] + fx[m] * term) / norm;
+            fs[x] = (fs[x] + fxm * term) / norm;
             cumul += fs[x];
 
             if (LOGICAL(echo)[0])
                 Rprintf("%d\t%.8g\t%.8g\n", x, fs[x], cumul);
 
             x++;
-        }
-        while (cumul < REAL(tol)[0]);
+        } while (cumul < REAL(tol)[0]);
     }
 
     /* If needed, convolve the distribution obtained above with itself

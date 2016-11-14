@@ -36,7 +36,7 @@ export(
     dpareto1, ppareto1, qpareto1, rpareto1, mpareto1, levpareto1,
     mweibull, levweibull,
     minvGauss, levinvGauss, mgfinvGauss, # deprecated v2.0-0
-    dgumbel, pgumbel, qgumbel, rgumbel, mgumbel,
+    dgumbel, pgumbel, qgumbel, rgumbel, mgumbel, mgfgumbel,
     dinvgauss, pinvgauss, qinvgauss, rinvgauss, minvgauss, levinvgauss, mgfinvgauss,
     dztnbinom, pztnbinom, qztnbinom, rztnbinom,
     dztbinom, pztbinom, qztbinom, rztbinom,

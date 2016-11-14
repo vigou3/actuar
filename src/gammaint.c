@@ -33,7 +33,7 @@
 /* The workhorse */
 double gammaint_raw(double x, double a)
 {
-/* Here, assume that (x, alph) are not NA and x > 0. */
+/* Here, assume that (x, a) are not NA and x > 0. */
 
      if (a > 0)
 	return gammafn(a) *  pgamma(x, a, 1.0, /*l._t.*/0, /*log_p*/0);

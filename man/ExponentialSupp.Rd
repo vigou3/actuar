@@ -32,7 +32,7 @@ mgfexp(t, rate = 1, log = FALSE)
   \code{mexp} gives the \eqn{k}th raw moment,
   \code{levexp} gives the \eqn{k}th moment of the limited loss
   variable, and
-  \code{mgfexp} gives the moment generating function in \code{x}.
+  \code{mgfexp} gives the moment generating function in \code{t}.
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }

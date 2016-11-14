@@ -140,14 +140,13 @@ double qlogarithmic(double x, double p, int lower_tail, int log_p)
 
     ACT_Q_P01_boundaries(x, 1.0, R_PosInf);
 
-    double a, P, Q, mu, sigma, gamma, z, y;
-
-    a = -1.0/log1p(-p);
-    P = a * p;
-    Q = 1.0/(0.5 - p + 0.5);
-    mu = P * Q;
-    sigma = sqrt(P * (1 - P)) * Q;
-    gamma = (P * (1 + p - 3*P + 2*P*P) * R_pow_di(Q, 3))/R_pow_di(sigma, 3);
+    double a = -1.0/log1p(-p);
+    double P = a * p;
+    double Q = 1.0/(0.5 - p + 0.5);
+    double mu = P * Q;
+    double sigma = sqrt(mu * (Q - mu));
+    double gamma = (P * (1 + p - P*(3 + 2*P)) * R_pow_di(Q, 3))/R_pow_di(sigma, 3);
+    double z, y;
 
     /* ## From R sources ##
      * Note : "same" code in qpois.c, qbinom.c, qnbinom.c --

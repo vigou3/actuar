@@ -39,7 +39,7 @@ mgfchisq(t, df, ncp = 0, log= FALSE)
   \code{mchisq} gives the \eqn{k}th raw moment,
   \code{levchisq} gives the \eqn{k}th moment of the limited loss
   variable, and
-  \code{mgfchisq} gives the moment generating function in \code{x}.
+  \code{mgfchisq} gives the moment generating function in \code{t}.
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }

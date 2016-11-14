@@ -125,6 +125,15 @@
 	\code{grouped.data} and \code{ogive}.}
     }
   }
+  \subsection{BUG FIX}{
+    \itemize{
+      \item{An old and nasty out-of-bounds bug could crash R when using
+	the code{"recursive"} method of \code{aggregateDist} with a
+	frequency distribution from the \eqn{(a, b, 1)} family. The bug
+	went unnoticed before because there was no example for the
+	\eqn{(a, b, 1)} case in the man page.}
+    }
+  }
   \subsection{DEPRECATED}{
     \itemize{
       \item{Functions \code{[m,lev,mgf]invGauss} that complemented

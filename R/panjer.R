@@ -59,12 +59,12 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
     {
         if (!(is.null(p0) || identical(p0, 0)))
             warning("value of 'p0' ignored with a zero-truncated distribution")
-        dist = sub("zero-truncated ", "", dist) # drop "zero truncated" prefix
+        dist <- sub("zero-truncated ", "", dist) # drop "zero truncated" prefix
         p0 <- 0
     }
 
     if (startsWith(dist, "zero-modified"))
-        dist = sub("zero-modified ", "", dist) # drop "zero modified" prefix
+        dist <- sub("zero-modified ", "", dist) # drop "zero modified" prefix
 
     if (dist == "geometric")
     {

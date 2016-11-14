@@ -1,5 +1,3 @@
-%% NOTE: this file does not contain any R code. The .Rnw extension is
-%% used to that the vignette is picked up by R CMD build.
 \documentclass[x11names]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -59,7 +57,7 @@
   \setlist[itemize]{label={},leftmargin=0pt,align=left,nosep}
 
   %% Flush left enumerate environment.
-  \setlist[enumerate]{label=\roman*),labelsep=*,leftmargin=1.5em,align=left}
+  \setlist[enumerate]{leftmargin=*,align=left}
 
   %% Some new commands
   \newcommand{\E}[1]{E[ #1 ]}
@@ -430,10 +428,11 @@ Using the parametrization for the inverse Gaussian found in
   \end{split}
 \end{equation}
 for $x = 0, 1, \dots$, $\mu > 0$, $\phi > 0$ and where
-\begin{equation*}
+\begin{equation}
+  \label{eq:bessel_k}
   K_\nu(ax) = \frac{a^{-\nu}}{2} \int_0^\infty t^{\nu - 1}
   e^{- z(t + at^{-1})/2} dt, \quad a^2 z > 0
-\end{equation*}
+\end{equation}
 is the modified Bessel function of the third kind
 \citep{Bateman:1953:2,Abramowitz:1972}.
 
@@ -567,8 +566,7 @@ literature outside of \citet{LossModels4e}. For the needs of
 The package contains functions to compute the gamma, exponential
 and beta integrals. They are mostly used at the \proglang{C} level
 to evaluate the limited expected value for distributions of the
-transformed beta and transformed gamma families; see
-\autoref{sec:implementation} for details. The package also
+transformed beta and transformed gamma families. The package also
 provides the R interfaces \code{gammaint}, \code{expint} and
 \code{betaint}, however these functions are not exported.
 
@@ -581,38 +579,18 @@ The core of all the functions presented in this document is written in
 
 The cdf of the continuous distributions of \autoref{tab:continuous}
 use \code{pbeta} and \code{pgamma} to compute the incomplete beta and
-incomplete gamma functions, respectively. Limited expected value
-functions gain an extended range of admissible values by using
-\code{expint}, \code{betaint} and \code{gammaint} at the \proglang{C}
-level. Affected functions are:
-\begin{enumerate}
-\item \code{levtrbeta},
-  \code{levgenpareto},
-  \code{levburr},
-  \code{levinvburr},
-  \code{levpareto},
-  \code{levinvpareto},
-  \code{levllogis},
-  \code{levparalogis},
-  \code{levinvparalogis} in the transformed beta family that use
-  \code{betaint};
-\item \code{levinvtrgamma},
-  \code{levinvgamma},
-  \code{levinvweibull} in the transformed gamma family that use
-  \code{gammaint}.
-\end{enumerate}
-
-The C implementation of \code{expint} is based on code from the GNU
-Software Library \citep{GSL}. The \proglang{C} code for
-\code{gammaint} and \code{betaint} was written by the second author.
-
-Functions \code{dinvgauss}, \code{pinvgauss} and \code{qinvgauss} rely
-on \proglang{C} implementations of functions of the same name from
-package \pkg{statmod} \citep{statmod}.
+incomplete gamma functions, respectively. Functions \code{dinvgauss},
+\code{pinvgauss} and \code{qinvgauss} rely on \proglang{C}
+implementations of functions of the same name from package
+\pkg{statmod} \citep{statmod}.
 
 The matrix exponential \proglang{C} routine needed in \code{dphtype}
 and \code{pphtype} is based on \code{expm} from package
 \pkg{Matrix} \citep{Matrix}.
+
+The C implementation of \code{expint} is based on code from the GNU
+Software Library \citep{GSL}. The \proglang{C} code for
+\code{gammaint} and \code{betaint} was written by the second author.
 
 For all but the trivial input values, the pmf, cdf and quantile
 functions for the zero-truncated and zero-modified distributions of
@@ -629,7 +607,7 @@ of the distribution with cdf $P(k)$.
 For zero-modified distributions, we generate variates from the
 discrete mixture \eqref{eq:mixture} when $p_0^M \geq p_0$. When
 $p_0^M < p_0$, we can use either of two methods:
-\begin{enumerate}
+\begin{enumerate}[i)]
 \item the classical rejection method with an envelope that differs
   from the target distribution only at zero (meaning that only zeros
   are rejected);
@@ -664,8 +642,9 @@ $k$ using the parametrization of \cite{LossModels4e} and
 In the following, $\Gamma(\alpha; x)$ is the incomplete gamma function
 \eqref{eq:pgamma}, $\beta(a, b; x)$ is the incomplete beta function
 \eqref{eq:pbeta}, $G(\alpha; x)$ is the gamma integral
-\eqref{eq:gammaint} and $B(a, b; x)$ is the beta integral
-\eqref{eq:betaint}.
+\eqref{eq:gammaint}, $B(a, b; x)$ is the beta integral
+\eqref{eq:betaint} and $K_\nu(x)$ is the modified Bessel function of
+the third kind \eqref{eq:bessel_k}.
 
 Unless otherwise stated, all parameters are finite and strictly
 positive, and the functions are defined for $x > 0$.
@@ -995,7 +974,10 @@ positive, and the functions are defined for $x > 0$.
   \E{(X \wedge x)^k}
   &= \frac{\theta^k G(\alpha-k; u)}{\Gamma(\alpha)}
     + x^k \Gamma(\alpha; u),
-    \qquad \text{all }k
+    \qquad \text{all }k \\
+  M(t)
+  &= \frac{2}{\Gamma(\alpha)} (-\theta t)^{\alpha/2}
+    K_\alpha(\sqrt{-4\theta t})
 \end{align*}
 
 
@@ -1076,19 +1058,21 @@ positive, and the functions are defined for $x > 0$.
 \begin{itemize}
 \item Root: \code{gumbel}
 \item Parameters: \code{alpha} ($-\infty < \alpha < \infty$),
-      \code{beta}  ($\beta$)
+      \code{scale}  ($\theta$)
 \end{itemize}
 \begin{align*}
   f(x)
-  &= \frac{e^{-(u + e^{-u})}}{\beta},
-    \qquad u = \frac{x - \alpha}{\beta},
+  &= \frac{e^{-(u + e^{-u})}}{\theta},
+    \qquad u = \frac{x - \alpha}{\theta},
     \qquad -\infty < x < \infty \\
   F(x)
   &= \exp[-\exp(-u)] \\ \displaybreak[0]
   \E{X}
-  &= \alpha + \gamma \beta, \qquad \gamma \approx 0.57721566490153 \\
+  &= \alpha + \gamma \theta, \qquad \gamma \approx 0.57721566490153 \\
   \VAR{X}
-  &= \frac{\pi^2 \beta^2}{6}
+  &= \frac{\pi^2 \theta^2}{6} \\
+  M(t)
+  &= e^{\alpha t} \Gamma(1 - \theta t)
 \end{align*}
 
 \subsubsection{Inverse Gaussian}
@@ -1164,7 +1148,7 @@ and is usually set in advance.
       \code{shape2} ($b$),
       \code{shape3} ($\tau$),
       \code{rate}   ($\lambda = 1/\theta$),
-       \code{scale}  ($\theta$)
+      \code{scale}  ($\theta$)
 \end{itemize}
 \begin{align*}
   f(x)

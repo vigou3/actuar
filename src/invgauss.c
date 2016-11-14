@@ -97,10 +97,9 @@ double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
     }
 
     /* all other probabilities */
-    double a, b, r = sqrt(q * phi);
-
-    a = pnorm((qm - 1)/r, 0, 1, lower_tail, /* log_p */1);
-    b = 2/phim + pnorm(-(qm + 1)/r, 0, 1, /* l._t. */1, /* log_p */1);
+    double r = sqrt(q * phi);
+    double a = pnorm((qm - 1)/r, 0, 1, lower_tail, /* log_p */1);
+    double b = 2/phim + pnorm(-(qm + 1)/r, 0, 1, /* l._t. */1, /* log_p */1);
 
     return ACT_D_exp(a + (lower_tail ? log1p(exp(b - a)) : ACT_Log1_Exp(b - a)));
 }
@@ -108,10 +107,8 @@ double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
 /* Needed by qinvgauss() for Newton-Raphson iterations. */
 double nrstep(double x, double p, double logp, double phi)
 {
-    double logF, dlogp;
-
-    logF = pinvgauss(x, 1, phi, /*l._t.*/1, /*log.p*/1);
-    dlogp = logp - logF;
+    double logF = pinvgauss(x, 1, phi, /*l._t.*/1, /*log.p*/1);
+    double dlogp = logp - logF;
 
     return ((fabs(dlogp) < 1e-5) ? dlogp * exp(logp - log1p(-dlogp/2)) :
 	    p - exp(logF)) / dinvgauss(x, 1, phi, 0);
@@ -239,13 +236,11 @@ double rinvgauss(double mu, double phi)
     if (!R_FINITE(mu))
 	return 1/phi/rchisq(1);
 
-    double y, x;
-
     /* convert to mean = 1 */
     phi *= mu;
 
-    y = R_pow_di(rnorm(0, 1), 2);
-    x = 1 + phi/2 * (y - sqrt(4 * y/phi + R_pow_di(y, 2)));
+    double y = R_pow_di(rnorm(0, 1), 2);
+    double x = 1 + phi/2 * (y - sqrt(4 * y/phi + R_pow_di(y, 2)));
 
     return mu * ((unif_rand() <= 1/(1 + x)) ? x : 1/x);
 }
@@ -274,17 +269,17 @@ double minvgauss(double order, double mu, double phi, int give_log)
 	return R_PosInf;
 
     int i, k = order;
-    double term, z, phir = phi * mu/2;
+    double term, s, phir = phi * mu/2;
 
-    z = term = 1.0;		/* first term (i = 0) */
+    s = term = 1.0;		/* first term (i = 0) */
 
     for (i = 1; i < k; i++)
     {
 	term *= ((k + i - 1) * (k - i)/i) * phir;
-	z += term;
+	s += term;
     }
 
-    return R_pow_di(mu, k) * z;
+    return R_pow_di(mu, k) * s;
 }
 
 /*  The lev function is very similar to the pdf. It can be written as
@@ -313,13 +308,11 @@ double levinvgauss(double limit, double mu, double phi, double order,
 
     /* calculations very similar to those in pinvgauss(); we do
      * everything here and avoid calling the latter */
-    double a, ap, b;
     double xm = limit/mu, phim = phi * mu, r = sqrt(limit * phi);
     double x = (xm - 1)/r;
-
-    a  = pnorm(x, 0, 1, /*l._t.*/1, /* log_p */1);
-    ap = pnorm(x, 0, 1, /*l._t.*/0, /* log_p */1);
-    b = 2/phim + pnorm(-(xm + 1)/r, 0, 1, /* l._t. */1, /* log_p */1);
+    double a = pnorm(x, 0, 1, /*l._t.*/1, /* log_p */1);
+    double ap = pnorm(x, 0, 1, /*l._t.*/0, /* log_p */1);
+    double b = 2/phim + pnorm(-(xm + 1)/r, 0, 1, /* l._t. */1, /* log_p */1);
 
     return mu * exp(a + ACT_Log1_Exp(b - a))
 	+ limit * exp(ap + ACT_Log1_Exp(b - ap));

@@ -31,7 +31,7 @@ mgfunif(t, min = 0, max = 1, log = FALSE)
   \code{munif} gives the \eqn{k}th raw moment,
   \code{levunif} gives the \eqn{k}th moment of the limited random
   variable, and
-  \code{mgfunif} gives the moment generating function in \code{x}.
+  \code{mgfunif} gives the moment generating function in \code{t}.
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
