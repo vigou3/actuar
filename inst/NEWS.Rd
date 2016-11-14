@@ -9,7 +9,7 @@
 	the inverse Gaussian distribution. The first three functions are
 	C (read: faster) implementations of functions of the same name
 	in package \pkg{statmod}.}
-      \item{New support functions \code{[dpqrm]gumbel} for the Gumbel
+      \item{New support functions \code{[dpqrm,mgf]gumbel} for the Gumbel
 	extreme value distribution.}
       \item{Extended range of admissible values for many limited
 	expected value functions thanks to new C-level functions
@@ -128,7 +128,7 @@
   \subsection{BUG FIX}{
     \itemize{
       \item{An old and nasty out-of-bounds bug could crash R when using
-	the code{"recursive"} method of \code{aggregateDist} with a
+	the \code{"recursive"} method of \code{aggregateDist} with a
 	frequency distribution from the \eqn{(a, b, 1)} family. The bug
 	went unnoticed before because there was no example for the
 	\eqn{(a, b, 1)} case in the man page.}
