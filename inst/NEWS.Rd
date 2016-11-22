@@ -2,6 +2,16 @@
 \title{\pkg{actuar} News}
 \encoding{UTF-8}
 
+\section{CHANGES IN \pkg{actuar} VERSION 2.0-1}{
+  \subsection{USER VISIBLE CHANGES}{
+    \itemize{
+      \item \code{qinvgauss} was not computing quantiles as far in the
+      right tail as \code{statmod:::qinvgauss}. This is now fixed.
+      Thanks to Gordon Smyth \email{smyth@wehi.edu.au} for pointing it
+      out.}
+  }
+}
+
 \section{CHANGES IN \pkg{actuar} VERSION 2.0-0}{
   \subsection{NEW FEATURES}{
     \itemize{

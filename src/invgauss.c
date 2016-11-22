@@ -104,14 +104,17 @@ double pinvgauss(double q, double mu, double phi, int lower_tail, int log_p)
     return ACT_D_exp(a + (lower_tail ? log1p(exp(b - a)) : ACT_Log1_Exp(b - a)));
 }
 
+/* This is used in nrstep() to return either dx or -dx. */
+#define ACT_S_val(x) (lower_tail ? x : -x)
+
 /* Needed by qinvgauss() for Newton-Raphson iterations. */
-double nrstep(double x, double p, double logp, double phi)
+double nrstep(double x, double p, double logp, double phi, int lower_tail)
 {
-    double logF = pinvgauss(x, 1, phi, /*l._t.*/1, /*log.p*/1);
+    double logF = pinvgauss(x, 1, phi, lower_tail, /*log.p*/1);
     double dlogp = logp - logF;
 
-    return ((fabs(dlogp) < 1e-5) ? dlogp * exp(logp - log1p(-dlogp/2)) :
-	    p - exp(logF)) / dinvgauss(x, 1, phi, 0);
+    return ACT_S_val(((fabs(dlogp) < 1e-5) ? dlogp * exp(logp + log1p(-dlogp/2)) :
+		      p - exp(logF)) / dinvgauss(x, 1, phi, 0));
 }
 
 double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
@@ -141,25 +144,14 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
     int i = 1;
     double logp, kappa, mode, x, dx, s;
 
-    /* same as ACT_DT_qIv macro, but to set both p and logp */
+    /* make sure we have both p and log(p) for the sequel */
     if (log_p)
     {
-	if (lower_tail)
-	{
-	    logp = p;
-	    p = exp(p);
-	}
-	else
-	{
-	    p = -expm1(p);
-	    logp = log(p);
-	}
+	logp = p;
+	p = exp(p);
     }
     else
-    {
-	p = ACT_D_Lval(p);
 	logp = log(p);
-    }
 
     /* convert to mean = 1 */
     phi *= mu;
@@ -174,12 +166,15 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
 	mode = k * (1 - k * k);
     }
 
-    /* starting value */
-    if (logp < -11.51)		/* small left tail probability */
-	x = 1/phi/R_pow_di(qnorm(logp, 0, 1, /*l._t.*/1, /*log.p*/1), 2);
-    else if (logp > -1e-5)	/* small right tail probability */
-	x = qgamma(logp, 1/phi, phi, /*l._t.*/1, /*log.p*/1);
-    else			/* use the mode otherwise */
+    /* starting value: inverse chi squared for small left tail prob;
+     * qgamma for small right tail prob; mode otherwise */
+    if (logp < -11.51)
+	x = lower_tail ? 1/phi/R_pow_di(qnorm(logp, 0, 1, lower_tail, 1), 2)
+	    : qgamma(logp, 1/phi, phi, lower_tail, 1);
+    else if (logp > -1e-5)
+	x = lower_tail ? qgamma(logp, 1/phi, phi, lower_tail, 1)
+	    : 1/phi/R_pow_di(qnorm(logp, 0, 1, lower_tail, 1), 2);
+    else
 	x = mode;
 
     /* if echoing iterations, start by printing the header and the
@@ -190,7 +185,7 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
 
     /* first Newton-Raphson outside the loop to retain the sign of
      * the adjustment */
-    dx = nrstep(x, p, logp, phi);
+    dx = nrstep(x, p, logp, phi, lower_tail);
     s = sign(dx);
     x += dx;
 
@@ -207,7 +202,7 @@ double qinvgauss(double p, double mu, double phi, int lower_tail, int log_p,
 	    break;
 	}
 
-	dx = nrstep(x, p, logp, phi);
+	dx = nrstep(x, p, logp, phi, lower_tail);
 
 	/* change of sign indicates that machine precision has been overstepped */
 	if (dx * s < 0)
