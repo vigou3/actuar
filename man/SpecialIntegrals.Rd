@@ -171,4 +171,5 @@ actuar:::gammaint(x, a)
 (((actuar:::expint(x) -(x^(a+1) * exp(-x)))/(a+1))
     - (x^a * exp(-x)))/a
 }
+\keyword{math}
 \keyword{distribution}
