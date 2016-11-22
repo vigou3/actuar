@@ -25,7 +25,7 @@ gammaint(x, a)
   \deqn{
     E_1(x) = \int_x^\infty \frac{e^{-t}}{t}\, dt}{%
     E_1(x) = int_x^Inf \exp(-t)/t dt}
-  for \eqn{x \neq}{x != 0} a real number.
+  for \eqn{x \neq 0}{x != 0} a real number.
 
   Function \code{betaint} computes the \dQuote{beta integral}
   \deqn{
