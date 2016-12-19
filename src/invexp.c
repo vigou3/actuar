@@ -13,6 +13,7 @@
 #include "locale.h"
 #include "dpq.h"
 #include "actuar.h"
+#include "expintAPI.h"
 
 double dinvexp(double x, double scale, int give_log)
 {
@@ -115,6 +116,6 @@ double levinvexp(double limit, double scale, double order, int give_log)
 
     double u = exp(log(scale) - log(limit));
 
-    return R_pow(scale, order) * gammaint_raw(u, 1.0 - order)
+    return R_pow(scale, order) * gamma_inc(1.0 - order, u)
         + ACT_DLIM__0(limit, order) * (0.5 - exp(-u) + 0.5);
 }

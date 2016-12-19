@@ -1,8 +1,6 @@
 \name{SpecialIntegrals}
 \alias{SpecialIntegrals}
-\alias{expint}
 \alias{betaint}
-\alias{gammaint}
 \title{The Exponential Integral and Two Other Special Integrals}
 \description{
   The exponential integral \eqn{E_1(x)}, the (\dQuote{beta integral})
@@ -12,9 +10,7 @@
   by the package.
 }
 \usage{
-expint(x)
 betaint(x, a, b)
-gammaint(x, a)
 }
 \arguments{
   \item{x}{vector of quantiles.}
@@ -25,7 +21,7 @@ gammaint(x, a)
   \deqn{
     E_1(x) = \int_x^\infty \frac{e^{-t}}{t}\, dt}{%
     E_1(x) = int_x^Inf \exp(-t)/t dt}
-  for \eqn{x \neq}{x != 0} a real number.
+  for \eqn{x \neq 0}{x != 0} a real number.
 
   Function \code{betaint} computes the \dQuote{beta integral}
   \deqn{
@@ -171,4 +167,5 @@ actuar:::gammaint(x, a)
 (((actuar:::expint(x) -(x^(a+1) * exp(-x)))/(a+1))
     - (x^a * exp(-x)))/a
 }
+\keyword{math}
 \keyword{distribution}

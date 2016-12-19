@@ -24,7 +24,8 @@ Description: Functions and data sets for actuarial science:
   Support for phase-type distributions commonly used to compute ruin
   probabilities.
 Depends: R (>= 3.3.0)
-Imports: stats, graphics
+Imports: stats, graphics, expint
+LinkingTo: expint
 Suggests: MASS
 License: GPL (>= 2)
 Encoding: UTF-8

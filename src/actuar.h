@@ -35,10 +35,6 @@ void actuar_matpow(double *x, int n, int k, double *z);
 void actuar_solve(double *A, double *B, int n, int p, double *z);
 
 /*   Special integrals */
-double expint(double x, double foo, int bar);
-double expint_E1(double x);
-double gammaint(double x, double a, int foo);
-double gammaint_raw(double x, double a);
 double betaint(double x, double a, double b, int foo);
 double betaint_raw(double x, double a, double b);
 

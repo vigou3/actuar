@@ -16,11 +16,3 @@
 betaint <- function(x, a, b)
     .External("actuar_do_dpq", "betaint", x, a, b, FALSE)
 
-## see src/expint.c
-expint <- function(x)
-    .External("actuar_do_dpq", "expint", x, FALSE)
-
-## see src/gammaint.c
-gammaint <- function(x, a)
-    .External("actuar_do_dpq", "gammaint", x, a, FALSE)
-

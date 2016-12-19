@@ -180,8 +180,6 @@ DPQTAB dpq_tab[] = {
     {"mphtype",         actuar_do_dpqphtype2,  3},
     {"mgfphtype",       actuar_do_dpqphtype2,  4},
     /* Special integrals */
-    {"expint",          actuar_do_dpq0,        201},
-    {"gammaint",        actuar_do_dpq1,        201},
     {"betaint",         actuar_do_dpq2,        201},
     {0, 0, 0}
 };
