@@ -15,7 +15,7 @@
 
 /* DENSITY, CUMULATIVE PROBABILITY AND QUANTILE FUNCTIONS,
  * RAW AND LIMITED MOMENTS */
-DPQTAB dpq_tab[] = {
+dpq_tab_struct dpq_tab[] = {
     /* One parameter distributions */
     {"mexp",            actuar_do_dpq1,        1},
     {"dinvexp",         actuar_do_dpq1,        2},
@@ -185,7 +185,7 @@ DPQTAB dpq_tab[] = {
 };
 
 /* RANDOM NUMBERS FUNCTIONS */
-RANDOMTAB random_tab[] = {
+random_tab_struct random_tab[] = {
     /* One parameter distributions */
     {"rinvexp",         actuar_do_random1,     1, REALSXP},
     {"rlogarithmic",    actuar_do_random1,   101, INTSXP},

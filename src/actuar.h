@@ -288,13 +288,13 @@ typedef struct {
     char *name;
     SEXP (*cfun)(int, SEXP);
     int code;
-} DPQTAB;
-extern DPQTAB dpq_tab[];
+} dpq_tab_struct;
+extern dpq_tab_struct dpq_tab[];
 
 typedef struct {
     char *name;
     SEXP (*cfun)(int, SEXP, SEXPTYPE);
     int code;
     SEXPTYPE type;
-} RANDOMTAB;
-extern RANDOMTAB random_tab[];
+} random_tab_struct;
+extern random_tab_struct random_tab[];
