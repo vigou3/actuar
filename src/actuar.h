@@ -3,6 +3,9 @@
 /*Error messages */
 #define R_MSG_NA        _("NaNs produced")
 
+/* Interfaces to routines from package expint */
+double(*actuar_gamma_inc)(double,double);
+
 /* Functions accessed from .External() */
 SEXP actuar_do_dpq(SEXP args);
 SEXP actuar_do_dpq0(int code, SEXP args);

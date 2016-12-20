@@ -1,6 +1,11 @@
 ### C code
 useDynLib(actuar, .registration = TRUE)
 
+### Imports
+import(expint)                          # for C code
+import(stats, graphics)
+importFrom(utils, head, tail)
+
 ### Exports
 export(
     ## Credibility theory
@@ -62,10 +67,6 @@ export(
     ## Loss distributions
     grouped.data, ogive, emm, mde, elev, coverage
 )
-
-### Imports
-import(stats, graphics)
-importFrom(utils, head, tail)
 
 ### Methods
 S3method("[", grouped.data)
