@@ -115,8 +115,8 @@ Function \code{rmixture} makes it easy to generate random variates
 from such mixtures. The arguments of the function are:
 \begin{enumerate}
 \item \code{n} the number of variates to generate;
-\item \code{probs} a vector of values that will be internally
-  normalized to create the probabilities $p_1, \dots, p_n$;
+\item \code{probs} a vector of values that will be normalized
+  internally to create the probabilities $p_1, \dots, p_n$;
 \item \code{models} a vector of expressions specifying the simulation
   models corresponding to the densities $f_1, \dots, f_n$.
 \end{enumerate}
