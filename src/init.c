@@ -1,7 +1,7 @@
 /*
  *  Native routines registration, as per "Writing R extensions" and
- *  definition of native interfaces to two routines exported by
- *  package expint.
+ *  definition of native interface to one routine exported by package
+ *  expint.
  *
  */
 
