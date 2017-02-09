@@ -71,7 +71,7 @@ levinvweibull(limit, shape, rate = 1, scale = 1/rate,
 }
 \note{
   \code{levinvweibull} computes the limited expected value using
-  \code{\link{gammaint}}.
+  \code{gammainc} from package \pkg{expint}.
 
   Distribution also knonw as the log-Gompertz. See also Kleiber and
   Kotz (2003) for alternative names and parametrizations.

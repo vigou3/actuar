@@ -90,7 +90,7 @@ levinvtrgamma(limit, shape1, shape2, rate = 1, scale = 1/rate,
 }
 \note{
   \code{levinvtrgamma} computes the limited expected value using
-  \code{\link{gammaint}}.
+  \code{gammainc} from package \pkg{expint}.
 
   Distribution also known as the Inverse Generalized Gamma. See also Kleiber and
   Kotz (2003) for alternative names and parametrizations.
