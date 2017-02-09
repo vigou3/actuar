@@ -70,7 +70,6 @@
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
   \newcommand{\LAS}{\mathrm{LAS}}
   \newcommand{\mat}[1]{\mathbold{#1}} % with mathpazo
-  \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
 
@@ -169,7 +168,7 @@ are contiguous.
     \end{tabular}
   \end{center}
   We can conveniently and unambiguously store this data set in
-  \proglang{R} as follows:
+  R as follows:
 <<echo=TRUE>>=
 x <- grouped.data(Group = c(0, 25, 50, 100, 150, 250, 500),
                   Line.1 = c(30, 31, 57, 42, 65, 84),
@@ -279,7 +278,7 @@ mean(x)
 Higher empirical moments can be computed with \code{emm}; see
 \autoref{sec:empirical-moments}.
 
-The \proglang{R} function \code{hist} splits individual data into
+The R function \code{hist} splits individual data into
 groups and draws an histogram of the frequency distribution. The
 package introduces a method for already grouped data. Only the first
 frequencies column is considered (see \autoref{fig:histogram} for
@@ -306,7 +305,7 @@ hist(grouped.data(y)) # histogram method for grouped data
 @
 \end{rem}
 
-\proglang{R} has a function \code{ecdf} to compute the empirical
+R has a function \code{ecdf} to compute the empirical
 cdf $F_n(x)$ of an individual data set:
 \begin{equation}
   \label{eq:ecdf}
@@ -633,7 +632,7 @@ modeling like any other \code{dfoo} or \code{pfoo} function.
     \end{cases}
   \end{equation}
 
-  Assume $X$ has a gamma distribution. Then an \proglang{R} function
+  Assume $X$ has a gamma distribution. Then an R function
   to compute the pdf \eqref{eq:pdf-YP} in any $y$ for a deductible
   $d = 1$ and a limit $u = 10$ is obtained with \code{coverage} as
   follows:

@@ -64,7 +64,6 @@
   \newtheorem{example}{Example}
 
   %% Some new commands
-  \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
 
@@ -177,7 +176,7 @@ hierarchical; for the more general hierarchical case, see
 \end{enumerate}
 
 Arguments \code{model.freq} and \code{model.sev} are simple
-\proglang{R} expressions consisting in calls to a random number
+R expressions consisting in calls to a random number
 generation function with the number of variates omitted. This is of
 course similar to argument \code{models} of \code{rmixture}, only with
 a slightly simpler syntax since one does not need to wrap the calls in
@@ -273,7 +272,7 @@ the actuarial literature; in the sequel, we refer to them as
 mixing parameters.
 
 The example above is merely a multi-level mixture of models, something
-that is simple to simulate ``by hand''. The following \proglang{R}
+that is simple to simulate ``by hand''. The following R
 expression will yield $n$ variates of the random variable $X_t$:
 <<echo=TRUE, eval=FALSE>>=
 rpois(n, rgamma(n, 3, rgamma(n, 2, 2)))
@@ -294,11 +293,11 @@ supported by the function and give more thorough examples.
 \label{sec:simul:description}
 
 We consider simulation of data from hierarchical models. We need a
-method to describe these models in \proglang{R} that will meet the
+method to describe these models in R that will meet the
 following criteria:
 \begin{enumerate}
 \item simple and intuitive to go from the mathematical formulation of
-  the model to the \proglang{R} formulation and back;
+  the model to the R formulation and back;
 \item allows for any number of levels and nodes;
 \item at any level, allows for any use of parameters higher in the
   hierarchical structure.
@@ -474,7 +473,7 @@ pf$classification
 
   The output of \code{pf\$data} is not much readable. Printing the
   results of \code{simul} like this would bring many users to wonder
-  what \code{Numeric,\emph{n}} means. It is actually \proglang{R}'s
+  what \code{Numeric,\emph{n}} means. It is actually R's
   way to specify that a given element in the list is a numeric vector
   of length $n$ --- the third dimension mentioned above. To ease
   reading, the \code{print} method for objects of class
