@@ -583,12 +583,11 @@ where $r = \lfloor -b\rfloor$. For the needs of \pkg{actuar}, we
 dubbed \eqref{eq:betaint} the \emph{beta integral}.
 
 Package \pkg{actuar} includes a C implementation of
-\eqref{eq:betaint:2} and depends on package \pkg{expint}
-\citep{expint} to compute the incomplete gamma function
-\eqref{eq:gammainc} and the exponential integral \eqref{eq:expint} at
-the C level. The routines are used to evaluate the limited expected
-value for distributions of the transformed beta and transformed gamma
-families.
+\eqref{eq:betaint:2} and imports functionalities of package
+\pkg{expint} \citep{expint} to compute the incomplete gamma function
+\eqref{eq:gammainc} at the C level. The routines are used to evaluate
+the limited expected value for distributions of the transformed beta
+and transformed gamma families.
 
 
 \section{Implementation details}
