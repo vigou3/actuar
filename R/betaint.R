@@ -1,11 +1,14 @@
 ### ===== actuar: An R Package for Actuarial Science =====
 ###
-### The exponential integral and two integrals related to the
-### incomplete beta function and the incomplete gamma function. Used
-### only at the C level in the package. The functions therein provide
-### R interfaces just in case these could be useful.
+### The "beta integral"
 ###
-### The functions are *not* exported.
+###    B(a, b; x) = Gamma(a + b) int_0^x t^(a-1) (1 - t)^(b-1) dt
+###
+### a > 0, b != -1, -2, ..., 0 < x < 1. This mathematicacal is only
+### used at the C level in the package. The function therein provides
+### an R interface just in case it could be useful.
+###
+### The function is *not* exported.
 ###
 ### See Appendix A of Klugman, Panjer and Willmot (2012), Loss Models,
 ### Fourth Edition, Wiley.
