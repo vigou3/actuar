@@ -11,18 +11,18 @@
 	out.}
     }
   }
-  \subsection{OTHER CHANGES}{
+  \subsection{USER VISIBLE CHANGES}{
     \itemize{
       \item{Support for the incomplete gamma function and the
-	exponential integral have been moved to package \pkg{expint}.
-	Therefore, \pkg{actuar} now imports these functionalities from
-	\pkg{expint} through this package's API.}
+	exponential integral has been moved to package \pkg{expint}.
+	Therefore, \pkg{actuar} now imports these functionalities
+	through the \pkg{expint} API.}
       \item{Consequence of the above, the non exported functions
 	\code{gammaint} and \code{expint} are deleted from the package.}
       \item{Section 6 on special integrals of the
 	\code{\dQuote{distributions}} package vignette was revised to
 	better introduce the incomplete gamma function, the incomplete
-	beta function and related integrals.}
+	beta function and the related integrals.}
     }
   }
 }
