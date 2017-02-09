@@ -134,7 +134,7 @@ double levinvgamma(double limit, double shape, double scale, double order,
 
     double u = exp(log(scale) - log(limit));
 
-    return R_pow(scale, order) * gammaint_raw(u, shape - order) / gammafn(shape)
+    return R_pow(scale, order) * actuar_gamma_inc(shape - order, u) / gammafn(shape)
         + ACT_DLIM__0(limit, order) * pgamma(u, shape, 1.0, 1, 0);
 }
 

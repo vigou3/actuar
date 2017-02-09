@@ -61,7 +61,6 @@
   \newcommand{\VaR}{\mathrm{VaR}}
   \newcommand{\CTE}{\mathrm{CTE}}
   \newcommand{\mat}[1]{\mathbold{#1}} % with mathpazo
-  \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
 
@@ -241,7 +240,7 @@ plot(stepfun(0:5, diffinv(fb)), pch = 20, add = TRUE)
   \label{fig:discretization-methods}
 \end{figure}
 
-Usage of \code{discretize} is similar to \proglang{R}'s plotting
+Usage of \code{discretize} is similar to R's plotting
 function \code{curve}. The cdf to discretize and, for the unbiased
 method only, the limited expected value function are passed to
 \code{discretize} as expressions in \code{x}. The other arguments
@@ -286,7 +285,7 @@ supported.
   the probability generating function of $N$. Probabilities are
   computed until their sum is arbitrarily close to 1.
 
-  The recursions are done in \proglang{C} to dramatically increase
+  The recursions are done in C to dramatically increase
   speed. One difficulty the programmer is facing is the unknown length
   of the output. This was solved using a common, simple and fast
   technique: first allocate an arbitrary amount of memory and double
@@ -297,7 +296,7 @@ supported.
   also requires a discrete severity distribution. However, there is no
   restriction on the shape of the frequency distribution. The package
   merely implements the sum \eqref{eq:cdf-S}, the convolutions being
-  computed with \proglang{R}'s function \code{convolve}, which in turn
+  computed with R's function \code{convolve}, which in turn
   uses the Fast Fourier Transform. This approach
   is practical for small problems only, even on today's fast
   computers.

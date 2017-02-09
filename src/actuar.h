@@ -3,6 +3,9 @@
 /*Error messages */
 #define R_MSG_NA        _("NaNs produced")
 
+/* Interfaces to routines from package expint */
+double(*actuar_gamma_inc)(double,double);
+
 /* Functions accessed from .External() */
 SEXP actuar_do_dpq(SEXP args);
 SEXP actuar_do_dpq0(int code, SEXP args);
@@ -35,10 +38,6 @@ void actuar_matpow(double *x, int n, int k, double *z);
 void actuar_solve(double *A, double *B, int n, int p, double *z);
 
 /*   Special integrals */
-double expint(double x, double foo, int bar);
-double expint_E1(double x);
-double gammaint(double x, double a, int foo);
-double gammaint_raw(double x, double a);
 double betaint(double x, double a, double b, int foo);
 double betaint_raw(double x, double a, double b);
 
@@ -289,13 +288,13 @@ typedef struct {
     char *name;
     SEXP (*cfun)(int, SEXP);
     int code;
-} DPQTAB;
-extern DPQTAB dpq_tab[];
+} dpq_tab_struct;
+extern dpq_tab_struct dpq_tab[];
 
 typedef struct {
     char *name;
     SEXP (*cfun)(int, SEXP, SEXPTYPE);
     int code;
     SEXPTYPE type;
-} RANDOMTAB;
-extern RANDOMTAB random_tab[];
+} random_tab_struct;
+extern random_tab_struct random_tab[];

@@ -57,7 +57,7 @@ levinvexp(limit, rate = 1, scale = 1/rate, order)
 }
 \note{
   \code{levinvexp} computes the limited expected value using
-  \code{\link{gammaint}}.
+  \code{gammainc} from package \pkg{expint}.
 }
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),

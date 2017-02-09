@@ -51,7 +51,6 @@
     \begin{snugshade*}}%
     {\end{snugshade*}}
 
-  \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
 
   \bibliographystyle{plainnat}
@@ -64,21 +63,21 @@
 \label{sec:introduction}
 
 Package \pkg{actuar} \citep{actuar} provides additional
-actuarial science functionality to the \proglang{R} statistical
-system. Although various packages on the Comprehensive \proglang{R}
+actuarial science functionality to the R statistical
+system. Although various packages on the Comprehensive R
 Archive Network (CRAN) provide functions useful to actuaries,
 \pkg{actuar} aims to serve as a central location for more specifically
 actuarial functions and data sets. The project was officially launched
 in 2005 and is under active development.
 
-The current feature set of the package can be split in five main
+The current feature set of the package can be split into five main
 categories: additional probability distributions; loss distributions
 modeling; risk and ruin theory; simulation of compound hierarchical
 models; credibility theory.
 
 As much as possible, the developers have tried to keep the ``user
 interface'' of the various functions of the package consistent.
-Moreover, the package follows the general \proglang{R} philosophy of
+Moreover, the package follows the general R philosophy of
 working with model objects. This means that instead of merely
 returning, say, a vector of probabilities, many functions will return
 an object containing, among other things, the said probabilities. The
@@ -86,14 +85,13 @@ object can then be manipulated at one's will using various extraction,
 summary or plotting functions.
 
 
-
 \section{Documentation}
 
-It is a requirement of the \proglang{R} packaging system that every
+It is a requirement of the R packaging system that every
 function and data set in a package has a help page. The \pkg{actuar}
 package follows this requirement strictly. In addition to the help
 pages, the package includes vignettes and demonstration scripts; run
-the following commands at the \proglang{R} prompt to obtain the list
+the following commands at the R prompt to obtain the list
 of each.
 <<echo=TRUE, eval=FALSE>>=
 vignette(package = "actuar")
@@ -109,7 +107,7 @@ field will join their efforts to ours and contribute code to the
 \pkg{actuar} project. The project will continue to grow and to improve
 by and for the community of developers and users.
 
-If you use \proglang{R} or \pkg{actuar} for actuarial analysis, please
+If you use R or \pkg{actuar} for actuarial analysis, please
 cite the software in publications. For information on how to cite the
 software, use:
 <<eval=FALSE>>=

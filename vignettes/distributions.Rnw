@@ -4,7 +4,9 @@
   \usepackage{amsmath}
   \usepackage[round]{natbib}
   \usepackage[english]{babel}
-  \usepackage[scaled=0.9]{helvet}
+  \usepackage{microtype}
+  \usepackage[scaled=0.92]{helvet}
+  \usepackage[scaled=1.02]{inconsolata}
   \usepackage[sc]{mathpazo}
   \usepackage{framed,booktabs}
   \usepackage[shortlabels]{enumitem}
@@ -64,9 +66,9 @@
   \newcommand{\VAR}[1]{\mathrm{Var} [ #1 ]}
   \newcommand{\LAS}{\mathrm{LAS}}
   \newcommand{\mat}[1]{\mathbold{#1}} % with mathpazo
-  \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
+  \newcommand{\samp}[1]{{`\normalfont\texttt{#1}'}}
 
   \bibliographystyle{plainnat}
 
@@ -77,7 +79,7 @@
 \section{Introduction}
 \label{sec:introduction}
 
-\proglang{R} includes functions to compute the probability density
+R includes functions to compute the probability density
 function (pdf) or the probability mass function (pmf), the cumulative
 distribution function (cdf) and the quantile function, as well as
 functions to generate variates from a fair number of continuous and
@@ -101,20 +103,20 @@ generating function (when it exists) of continuous distributions.
 
 The package provides support functions for all the probability
 distributions found in Appendix~A of \cite{LossModels4e} and not
-already present in base \proglang{R}, excluding the log-$t$, but
+already present in base R, excluding the log-$t$, but
 including the loggamma distribution \citep{HoggKlugman}. These
 distributions mostly fall under the umbrella of extreme value or
 heavy tailed distributions.
 
 \autoref{tab:continuous} lists the distributions supported by
 \pkg{actuar} --- using the nomenclature of \cite{LossModels4e} ---
-along with the root names of the \proglang{R} functions.
+along with the root names of the R functions.
 \autoref{sec:app:continuous} details the formulas implemented and the
 name of the argument corresponding to each parameter. By default, all
 functions (except those for the Pareto distribution) use a rate
 parameter equal to the inverse of the scale parameter. This differs
 from \cite{LossModels4e} but is better in line with the functions for
-the gamma, exponential and Weibull distributions in base \proglang{R}.
+the gamma, exponential and Weibull distributions in base R.
 
 \begin{table}
   \centering
@@ -146,7 +148,7 @@ the gamma, exponential and Weibull distributions in base \proglang{R}.
     \bottomrule
   \end{tabular}
   \caption{Probability distributions supported by \pkg{actuar}
-    classified by family and root names of the \proglang{R}
+    classified by family and root names of the R
     functions.}
   \label{tab:continuous}
 \end{table}
@@ -167,14 +169,14 @@ and the moment generating function
 \end{equation*}
 when it exists. Every distribution of \autoref{tab:continuous} is
 supported, along with the following distributions of base
-\proglang{R}: beta, exponential, chi-square, gamma, lognormal, normal
+R: beta, exponential, chi-square, gamma, lognormal, normal
 (no \code{lev}), uniform and Weibull.
 
 The \code{m} and \code{lev} functions are especially useful for
 estimation methods based on the matching of raw or limited moments;
-see the \code{"lossdist"} vignette for their empirical counterparts.
+see the \samp{lossdist} vignette for their empirical counterparts.
 The \code{mgf} functions come in handy to compute the adjustment
-coefficient in ruin theory; see the \code{"risk"} vignette.
+coefficient in ruin theory; see the \samp{risk} vignette.
 
 
 
@@ -228,7 +230,7 @@ The package provides \code{d}, \code{p}, \code{r}, \code{m} and
 \autoref{sec:app:phase-type}.
 
 For the package, function \code{pphtype} is central to the evaluation
-of the ruin probabilities; see \code{?ruin} and the \code{"risk"}
+of the ruin probabilities; see \samp{?ruin} and the \samp{risk}
 vignette.
 
 
@@ -259,7 +261,7 @@ The probability at zero, $p_0$, is set such that
 $\sum_{k = 0}^\infty p_k = 1$. The members of this class are the
 Poisson, the binomial, the negative binomial and its special case, the
 geometric. These distributions are all well supported in base
-\proglang{R} with \code{d}, \code{p}, \code{q} and \code{r} functions.
+R with \code{d}, \code{p}, \code{q} and \code{r} functions.
 
 The second class of distributions is the $(a, b, 1)$ class. A discrete
 random variable is a member of the $(a, b, 1)$ class of distributions
@@ -328,7 +330,7 @@ functions; see \autoref{sec:app:discrete} for additional details.
     \bottomrule
   \end{tabular}
   \caption{Members of the $(a, b, 1)$ class of discrete distributions
-    supported by \pkg{actuar} and root names of the \proglang{R}
+    supported by \pkg{actuar} and root names of the R
     functions.}
   \label{tab:discrete}
 \end{table}
@@ -397,7 +399,7 @@ provided in \pkg{actuar}; see also \autoref{sec:app:discrete}.
 
 Quite obviously, zero-truncated distributions are zero-modified
 distributions with $p_0^M = 0$. However, using the dedicated functions
-in \proglang{R} will be more efficient.
+in R will be more efficient.
 
 
 \section{Support for the Poisson-inverse Gaussian distribution}
@@ -472,7 +474,8 @@ Many of the cumulative distribution functions of
 \autoref{sec:app:continuous} are expressed in terms of the incomplete
 gamma function or the incomplete beta function.
 
-The incomplete gamma function is
+From a probability theory perspective, the incomplete gamma function
+is usually defined as
 \begin{equation}
   \label{eq:pgamma}
   \Gamma(\alpha; x) = \frac{1}{\Gamma(\alpha)}
@@ -482,55 +485,72 @@ with
 \begin{equation*}
   \Gamma(\alpha) = \int_0^\infty t^{\alpha - 1} e^{-t}\, dt,
 \end{equation*}
-whereas the (regularized) incomplete beta function is
+whereas the (regularized) incomplete beta function is defined as
 \begin{equation}
   \label{eq:pbeta}
   \beta(a, b; x) = \frac{1}{\beta(a, b)}
   \int\limits_0^x t^{a - 1} (1 - t)^{b - 1}\, dt, \quad a > 0, b > 0, 0 < x < 1,
 \end{equation}
 with
-\begin{align*}
+\begin{equation*}
   \beta(a, b)
-  &= \int_0^1 t^{a - 1} (1 - t)^{b - 1}\, dt \\
-  &= \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)}.
-\end{align*}
+  = \int_0^1 t^{a - 1} (1 - t)^{b - 1}\, dt
+  = \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)}.
+\end{equation*}
 
-\citet{LossModels4e} also introduce three other integrals that play a
-role in extending the range of admissible values for limited expected
-value functions.
+Now, there exist alternative definitions of the these functions that
+are valid for negative values of the parameters. \citet{LossModels4e}
+introduce them to extend the range of admissible values for limited
+expected value functions.
 
-Let
+First, following \citet[Section~6.5]{Abramowitz:1972}, we define the
+``extended'' incomplete gamma function as
 \begin{equation}
-  \label{eq:gammaint}
+  \label{eq:gammainc}
   G(\alpha; x) = \int_x^\infty t^{\alpha - 1} e^{-t}\, dt
 \end{equation}
 for $\alpha$ real and $x > 0$. When $\alpha > 0$, we clearly have
 \begin{equation}
-  \label{eq:gammaint:apos}
+  \label{eq:gammainc:apos}
   G(\alpha; x) = \Gamma(a) [1 - \Gamma(\alpha; x)].
 \end{equation}
-The integral is also defined for $\alpha \le 0$. Integration by parts
-yields the relationship
+The integral is also defined for $\alpha \le 0$.
+
+As outlined in \citet[Appendix~A]{LossModels4e}, integration by parts
+of \eqref{eq:gammainc} yields the relation
 \begin{equation*}
   G(\alpha; x) = -\frac{x^\alpha e^{-x}}{\alpha}
   + \frac{1}{\alpha} G(\alpha + 1; x).
 \end{equation*}
 This process can be repeated until $\alpha + k$ is a positive number,
 in which case the right hand side can be evaluated with
-\eqref{eq:gammaint:apos}. If $\alpha = 0, -1, -2, \dots$, this
+\eqref{eq:gammainc:apos}. If $\alpha = 0, -1, -2, \dots$, this
 calculation requires the value of
 \begin{equation*}
   \label{eq:expint}
   G(0; x) = \int_x^\infty \frac{e^{-t}}{t}\, dt = E_1(x),
 \end{equation*}
 which is known in the literature as the \emph{exponential integral}
-\citep{Abramowitz:1972}.
+\citep[Section~5.1]{Abramowitz:1972}.
 
-Neither \citet{LossModels4e} nor \citet{Abramowitz:1972} provide a
-name for the integral \eqref{eq:gammaint}. For the needs of the
-package, we dubbed it the \emph{gamma integral}.
+Second, as seen in \citet[Section~6.6]{Abramowitz:1972}, we have the
+following relation for the integral on the right hand side of
+\eqref{eq:pbeta}:
+\begin{equation*}
+  \int\limits_0^x t^{a - 1} (1 - t)^{b - 1}\, dt
+  = \frac{x^a}{a} F(a, 1 - b; a + 1; x),
+\end{equation*}
+where
+\begin{equation*}
+  F(a, b; c; z) = \frac{\Gamma(c)}{\Gamma(a) \Gamma(b)}
+  \sum_{k = 0}^\infty
+  \frac{\Gamma(a + k) \Gamma(b + k)}{\Gamma(c + k)} \frac{z^k}{k!}
+\end{equation*}
+is the Gauss hypergeometric series. With the above definition, the
+incomplete beta function also admits negative, non integer values for
+parameters $a$ and $b$.
 
-Let also
+Now, let
 \begin{equation}
   \label{eq:betaint}
   B(a, b; x) = \Gamma(a + b) \int_0^x t^{a-1} (1-t)^{b-1} dt
@@ -543,7 +563,8 @@ clear that when $b > 0$,
 Of more interest here is the case where $b < 0$,
 $b \neq -1, -2, \dots$ and $a > 1 + \lfloor -b\rfloor$. Integration by
 parts of \eqref{eq:betaint} yields
-\begin{equation*}
+\begin{equation}
+  \label{eq:betaint:2}
   \begin{split}
     B(a, b; x)
     &= \displaystyle
@@ -555,46 +576,43 @@ parts of \eqref{eq:betaint} yields
     &\phantom{=} \displaystyle
     + \frac{(a-1) \cdots (a-r-1)}{b (b+1) \cdots (b+r)}
     \Gamma(a-r-1) \\
-    &\phantom{=} \times \Gamma(b+r+1) \beta(a-r-1, b+r+1),
+    &\phantom{=} \times \Gamma(b+r+1) \beta(a-r-1, b+r+1; x),
   \end{split}
-\end{equation*}
-where $r = \lfloor -b\rfloor$. This expression is little found in the
-literature outside of \citet{LossModels4e}. For the needs of
-\pkg{actuar}, we dubbed \eqref{eq:betaint} the \emph{beta
-  integral}.
+\end{equation}
+where $r = \lfloor -b\rfloor$. For the needs of \pkg{actuar}, we
+dubbed \eqref{eq:betaint} the \emph{beta integral}.
 
-The package contains functions to compute the gamma, exponential
-and beta integrals. They are mostly used at the \proglang{C} level
-to evaluate the limited expected value for distributions of the
-transformed beta and transformed gamma families. The package also
-provides the R interfaces \code{gammaint}, \code{expint} and
-\code{betaint}, however these functions are not exported.
+Package \pkg{actuar} includes a C implementation of
+\eqref{eq:betaint:2} and imports functionalities of package
+\pkg{expint} \citep{expint} to compute the incomplete gamma function
+\eqref{eq:gammainc} at the C level. The routines are used to evaluate
+the limited expected value for distributions of the transformed beta
+and transformed gamma families.
 
 
 \section{Implementation details}
 \label{sec:implementation}
 
 The core of all the functions presented in this document is written in
-\proglang{C} for speed.
+C for speed.
 
 The cdf of the continuous distributions of \autoref{tab:continuous}
 use \code{pbeta} and \code{pgamma} to compute the incomplete beta and
 incomplete gamma functions, respectively. Functions \code{dinvgauss},
-\code{pinvgauss} and \code{qinvgauss} rely on \proglang{C}
+\code{pinvgauss} and \code{qinvgauss} rely on C
 implementations of functions of the same name from package
 \pkg{statmod} \citep{statmod}.
 
-The matrix exponential \proglang{C} routine needed in \code{dphtype}
+The matrix exponential C routine needed in \code{dphtype}
 and \code{pphtype} is based on \code{expm} from package
 \pkg{Matrix} \citep{Matrix}.
 
-The C implementation of \code{expint} is based on code from the GNU
-Software Library \citep{GSL}. The \proglang{C} code for
-\code{gammaint} and \code{betaint} was written by the second author.
+The C code to compute the beta integral \eqref{eq:betaint:2} was
+written by the second author.
 
 For all but the trivial input values, the pmf, cdf and quantile
 functions for the zero-truncated and zero-modified distributions of
-\autoref{tab:discrete} use the internal \proglang{R} functions for the
+\autoref{tab:discrete} use the internal R functions for the
 corresponding standard distribution.
 
 Generation of random variates from zero-truncated distributions uses
@@ -621,8 +639,8 @@ determined (empirically) distribution-specific cutoff points between
 the two methods.
 
 Finally, computation of the Poisson-inverse Gaussian pmf uses the
-direct expression \eqref{eq:pig:px} --- and the \proglang{C} level
-function \code{bessel\_k} part of \proglang{R}'s API --- rather than
+direct expression \eqref{eq:pig:px} --- and the C level
+function \code{bessel\_k} part of the R API --- rather than
 the recursive equations \eqref{eq:pig:px:recursive}. We thereby take
 advantage of the various optimizations in \code{bessel\_k}, with
 no negative impact on performance.
@@ -633,7 +651,7 @@ no negative impact on performance.
 \label{sec:app:continuous}
 
 This appendix gives the root name and the parameters of the
-\proglang{R} support functions for the distributions of
+R support functions for the distributions of
 \autoref{tab:continuous}, as well as the formulas for the pdf, the
 cdf, the raw moment of order $k$ and the limited moment of order
 $k$ using the parametrization of \cite{LossModels4e} and
@@ -641,8 +659,8 @@ $k$ using the parametrization of \cite{LossModels4e} and
 
 In the following, $\Gamma(\alpha; x)$ is the incomplete gamma function
 \eqref{eq:pgamma}, $\beta(a, b; x)$ is the incomplete beta function
-\eqref{eq:pbeta}, $G(\alpha; x)$ is the gamma integral
-\eqref{eq:gammaint}, $B(a, b; x)$ is the beta integral
+\eqref{eq:pbeta}, $G(\alpha; x)$ is the ``extended'' incomplete gamma function
+\eqref{eq:gammainc}, $B(a, b; x)$ is the beta integral
 \eqref{eq:betaint} and $K_\nu(x)$ is the modified Bessel function of
 the third kind \eqref{eq:bessel_k}.
 
@@ -1223,7 +1241,7 @@ $\mat{e} = [1]_{m \times 1}$ is a column vector of ones. %
 \label{sec:app:discrete}
 
 This appendix gives the root name and the parameters of the
-\proglang{R} support functions for the members of the $(a, b, 0)$ and
+R support functions for the members of the $(a, b, 0)$ and
 $(a, b, 1)$ discrete distributions as defined in \cite{LossModels4e};
 the values of $a$, $b$ and $p_0$ in the representation; the pmf; the
 relationship with other distributions, when there is one. The appendix
@@ -1234,7 +1252,7 @@ distribution.
 \label{sec:app:discrete:a-b-0}
 
 The distributions in this section are all supported in base
-\proglang{R}. Their pmf can be computed recursively by fixing $p_0$ to
+R. Their pmf can be computed recursively by fixing $p_0$ to
 the specified value and then using $p_k = (a + b/k) p_{k - 1}$, for
 $k = 1, 2, \dots$.
 

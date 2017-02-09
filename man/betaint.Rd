@@ -1,32 +1,20 @@
-\name{SpecialIntegrals}
-\alias{SpecialIntegrals}
-\alias{expint}
+\name{betaint}
 \alias{betaint}
-\alias{gammaint}
-\title{The Exponential Integral and Two Other Special Integrals}
+\title{The \dQuote{Beta Integral}}
 \description{
-  The exponential integral \eqn{E_1(x)}, the (\dQuote{beta integral})
-  related to the incomplete beta function and the  (\dQuote{gamma
-    integral}) related incomplete gamma function. These functions merely
-  provide R interfaces to the C level functions. They are not exported
+  The \dQuote{beta integral} which is just a multiple of the non
+  regularized incomplete beta function. This function merely
+  provides an R interface to the C level routine. It is not exported
   by the package.
 }
 \usage{
-expint(x)
 betaint(x, a, b)
-gammaint(x, a)
 }
 \arguments{
   \item{x}{vector of quantiles.}
   \item{a, b}{parameters. See Details for admissible values.}
 }
 \details{
-  Function \code{expint} computes the exponential integral
-  \deqn{
-    E_1(x) = \int_x^\infty \frac{e^{-t}}{t}\, dt}{%
-    E_1(x) = int_x^Inf \exp(-t)/t dt}
-  for \eqn{x \neq 0}{x != 0} a real number.
-
   Function \code{betaint} computes the \dQuote{beta integral}
   \deqn{
     B(a, b; x) = \Gamma(a + b) \int_0^x t^{a-1} (1-t)^{b-1} dt}{%
@@ -64,44 +52,20 @@ gammaint(x, a)
         * Gamma(b+r+1) I_x(a-r-1, b+r+1),}
   where \eqn{r = [-b]}{r = floor(-b)}.
 
-  Function \code{gammaint} computes the \dQuote{gamma integral}
-  \deqn{
-    G(\alpha; x) = \int_x^\infty t^{\alpha - 1} e^{-t}\, dt}{%
-    G(a; x) = int_x^Inf t^(a - 1) exp(-t) dt}
-  for \eqn{\alpha}{a} real and \eqn{x > 0}. When \eqn{\alpha > 0}{a >
-  0},
-  \deqn{
-    G(\alpha; x) = \Gamma(a) [1 - \Gamma(\alpha; x)],}{%
-    G(a; x) = Gamma(a) [1 - Gamma(a; x)],}
-  where \eqn{\Gamma(\alpha; x)}{Gamma(a; x)} is \code{pgamma(x, a)}.
-  When \eqn{\alpha \le 0}{a <= 0},
-  \deqn{
-    G(\alpha; x) = -\frac{x^\alpha e^{-x}}{\alpha}
-      + \frac{1}{\alpha} G(\alpha + 1; x)}{%
-    G(a; x) = -(x^a * exp(-x))/a + G(a + 1; x)/a}
-  which can be repeated until \eqn{\alpha + k}{a + k} is a positive
-  number. If \eqn{\alpha = 0, -1, -2, \ldots}{a = 0, -1, -2, \ldots}
-  this requires \eqn{G(0; x) = E_1(x)}, the exponential integral above.
-
-  These function are mostly used (at the C level) to compute the
+  This function is used (at the C level) to compute the
   limited expected value for distributions of the transformed beta
-  (\code{betaint}) and transformed gamma (\code{gammaint} and
-  \code{expint}) families; see, for example, \code{\link{levtrbeta}} and
-  \code{\link{levinvtrgamma}}.
+  family; see, for example, \code{\link{levtrbeta}}.
 }
 \value{
-  The value of the respective integral.
+  The value of the integral.
 
   Invalid arguments will result in return value \code{NaN}, with a warning.
 }
 \note{
-  The C implementation of \code{expint} is based on code from the GNU
-  Software Library \url{https://www.gnu.org/software/gsl/}.
-
-  The need for these functions in the package is well explained in the
+  The need for this function in the package is well explained in the
   introduction of Appendix A of Klugman et al. (2012). See also chapter
-  5 and 6 of Abramowitz and Stegun (1972) for definitions and sample
-  values.
+  6 and 15 of Abramowitz and Stegun (1972) for definitions and relations
+  to the hypergeometric series.
 }
 \references{
   Abramowitz, M. and Stegun, I. A. (1972), \emph{Handbook of Mathematical
@@ -114,15 +78,6 @@ gammaint(x, a)
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
 }
 \examples{
-###
-### Exponential integral
-###
-actuar:::expint(1.275)           # 0.1408099 in Abramowitz and Stegun
-actuar:::expint(10)              # 4.15697e-6 in Abramowitz and Stegun
-
-###
-### Beta integral
-###
 x <- 0.3
 a <- 7
 
@@ -143,33 +98,6 @@ s <- (x^(a-1) * (1-x)^b)/b +
 -gamma(a+b) * s +
     (a-1)*(a-2)*(a-3) * gamma(a-r-1)/(b*(b+1)*(b+2)) *
     gamma(b+r+1)*pbeta(x, a-r-1, b+r+1)
-
-###
-### Gamma integral
-###
-x <- 1.2
-
-## case with a > 0
-a <- 1.5
-actuar:::gammaint(x, a)
-gamma(a) * pgamma(x, a, lower = FALSE)  # same
-
-## case with a < 0 non integer
-a <- -1.5
-actuar:::gammaint(x, a)
-
-## "manual" calculation
-(((gamma(a+2)*pgamma(x, a+2, 1, lower = FALSE)
-    -(x^(a+1) * exp(-x)))/(a+1))
-    - (x^a * exp(-x)))/a
-
-## case with a < 0 integer
-a <- -2
-actuar:::gammaint(x, a)
-
-## "manual" calculation
-(((actuar:::expint(x) -(x^(a+1) * exp(-x)))/(a+1))
-    - (x^a * exp(-x)))/a
 }
 \keyword{math}
 \keyword{distribution}

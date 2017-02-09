@@ -2,13 +2,28 @@
 \title{\pkg{actuar} News}
 \encoding{UTF-8}
 
-\section{CHANGES IN \pkg{actuar} VERSION 2.0-1}{
-  \subsection{USER VISIBLE CHANGES}{
+\section{CHANGES IN \pkg{actuar} VERSION 2.1-0}{
+  \subsection{BUG FIX}{
     \itemize{
-      \item \code{qinvgauss} was not computing quantiles as far in the
-      right tail as \code{statmod:::qinvgauss}. This is now fixed.
-      Thanks to Gordon Smyth \email{smyth@wehi.edu.au} for pointing it
-      out.}
+      \item{\code{qinvgauss} was not computing quantiles as far in the
+	right tail as \code{statmod:::qinvgauss}. This is now fixed.
+	Thanks to Gordon Smyth \email{smyth@wehi.edu.au} for pointing it
+	out.}
+    }
+  }
+  \subsection{OTHER CHANGES}{
+    \itemize{
+      \item{Support for the incomplete gamma function and the
+	exponential integral have been moved to package \pkg{expint}.
+	Therefore, \pkg{actuar} now imports these functionalities from
+	\pkg{expint} through this package's API.}
+      \item{Consequence of the above, the non exported functions
+	\code{gammaint} and \code{expint} are deleted from the package.}
+      \item{Section 6 on special integrals of the
+	\code{\dQuote{distributions}} package vignette was revised to
+	better introduce the incomplete gamma function, the incomplete
+	beta function and related integrals.}
+    }
   }
 }
 

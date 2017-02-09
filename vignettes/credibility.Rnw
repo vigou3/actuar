@@ -55,7 +55,6 @@
   %% Some new commands. Commands \E and \VAR redefined to fit within
   %% the author's writing habits...
   \newcommand{\E}[1]{\mathrm{E}[ #1 ]}
-  \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
   \newcommand{\pt}{{\scriptscriptstyle \Sigma}}
@@ -107,7 +106,7 @@ hachemeister
 \section{Hierarchical credibility model}
 \label{sec:hierarchical}
 
-The linear model fitting function of \proglang{R} is named \code{lm}.
+The linear model fitting function of R is named \code{lm}.
 Since credibility models are very close in many respects to linear
 models, and since the credibility model fitting function of
 \pkg{actuar} borrows much of its interface from \code{lm}, we named

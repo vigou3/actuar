@@ -42,7 +42,6 @@
   \setlist[enumerate]{leftmargin=*,align=left}
 
   %% Some new commands
-  \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\code}[1]{\texttt{#1}}
   \newcommand{\D}{\displaystyle}
