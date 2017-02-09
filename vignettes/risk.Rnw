@@ -285,7 +285,7 @@ supported.
   the probability generating function of $N$. Probabilities are
   computed until their sum is arbitrarily close to 1.
 
-  The recursions are done in \proglang{C} to dramatically increase
+  The recursions are done in C to dramatically increase
   speed. One difficulty the programmer is facing is the unknown length
   of the output. This was solved using a common, simple and fast
   technique: first allocate an arbitrary amount of memory and double
