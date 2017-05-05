@@ -2,6 +2,16 @@
 \title{\pkg{actuar} News}
 \encoding{UTF-8}
 
+\section{CHANGES IN \pkg{actuar} VERSION 2.1-1}{
+  \subsection{BUG FIX}{
+    \itemize{
+      \item{Usage of \code{R_useDynamicSymbols} to preclude compilation
+	\code{NOTE}s, better registration of native routines and reduced
+	symbol visibility.}
+      \item{Vignettes no longer use LaTeX package framed as it was not
+	found on OS X in CRAN builds.} 
+}
+
 \section{CHANGES IN \pkg{actuar} VERSION 2.1-0}{
   \subsection{BUG FIX}{
     \itemize{
