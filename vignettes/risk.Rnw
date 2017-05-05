@@ -6,7 +6,6 @@
   \usepackage[english]{babel}
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
-  \usepackage{framed}
   \usepackage[shortlabels]{enumitem}
   \usepackage[noae]{Sweave}
 
@@ -41,16 +40,18 @@
     bookmarksnumbered = {true},
     bookmarksdepth = {subsubsection}}
 
-  %% Sweave environments redefined to have a color background (using
-  %% environment snugshade* of package framed).
+  %% Sweave environments redefined to have a color background
+  %% (following https://tex.stackexchange.com/a/141128).
   \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
   \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
   \fvset{listparameters={\setlength{\topsep}{0pt}}}
   \renewenvironment{Schunk}{%
-    \setlength{\topsep}{0pt}
-    \colorlet{shadecolor}{codebg}
-    \begin{snugshade*}}%
-    {\end{snugshade*}}
+    \SaveVerbatim{cverb}}%
+    {\endSaveVerbatim
+      \flushleft\fboxrule=0pt\fboxsep=.5em
+      \colorbox{codebg}{%
+        \makebox[\dimexpr\linewidth-2\fboxsep][l]{\BUseVerbatim{cverb}}}%
+      \endflushleft}
 
   %% Flush left enumerate environment.
   \setlist[enumerate]{leftmargin=*,align=left}

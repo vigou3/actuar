@@ -8,7 +8,7 @@
   \usepackage[scaled=0.92]{helvet}
   \usepackage[scaled=1.02]{inconsolata}
   \usepackage[sc]{mathpazo}
-  \usepackage{framed,booktabs}
+  \usepackage{booktabs}
   \usepackage[shortlabels]{enumitem}
   \usepackage[noae]{Sweave}
 
