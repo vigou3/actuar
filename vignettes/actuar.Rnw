@@ -6,7 +6,7 @@
   \usepackage[english]{babel}
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
-  \usepackage[noae]{Sweave}
+  \usepackage[noae,inconsolata]{Sweave}
 
   %\VignetteIndexEntry{Introduction to actuar}
   %\VignettePackage{actuar}

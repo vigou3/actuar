@@ -9,7 +9,7 @@
   \usepackage[sc]{mathpazo}
   \usepackage{booktabs}
   \usepackage[shortlabels]{enumitem}
-  \usepackage[noae]{Sweave}
+  \usepackage[noae,inconsolata]{Sweave}
 
   %\VignetteIndexEntry{Loss distributions modeling}
   %\VignettePackage{actuar}

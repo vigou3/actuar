@@ -6,11 +6,10 @@
   \usepackage[english]{babel}
   \usepackage{microtype}
   \usepackage[scaled=0.92]{helvet}
-  \usepackage[scaled=1.02]{inconsolata}
   \usepackage[sc]{mathpazo}
   \usepackage{booktabs}
   \usepackage[shortlabels]{enumitem}
-  \usepackage[noae]{Sweave}
+  \usepackage[noae,inconsolata]{Sweave}
 
   %\VignetteIndexEntry{Additional continuous and discrete distributions}
   %\VignettePackage{actuar}

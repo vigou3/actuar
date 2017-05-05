@@ -7,7 +7,7 @@
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
   \usepackage[shortlabels]{enumitem}
-  \usepackage[noae]{Sweave}
+  \usepackage[noae,inconsolata]{Sweave}
 
   %\VignetteIndexEntry{Risk and ruin theory}
   %\VignettePackage{actuar}
