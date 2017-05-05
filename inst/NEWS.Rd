@@ -9,7 +9,9 @@
 	\code{NOTE}s, better registration of native routines and reduced
 	symbol visibility.}
       \item{Vignettes no longer use LaTeX package framed as it was not
-	found on OS X in CRAN builds.} 
+	found on OS X in CRAN builds.}
+    }
+  }
 }
 
 \section{CHANGES IN \pkg{actuar} VERSION 2.1-0}{
