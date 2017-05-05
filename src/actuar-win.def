@@ -1,0 +1,3 @@
+LIBRARY actuar.dll
+EXPORTS
+ R_init_actuar

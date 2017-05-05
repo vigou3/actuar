@@ -144,7 +144,7 @@ panjer <- function(fx, dist, p0 = NULL, x.scale = 1, ...,
         stop("Pr[S = 0] is numerically equal to 0; impossible to start the recursion")
 
     ## Recursive calculations in C.
-    fs <- .External("actuar_do_panjer", p0, p1, fs0, fx, a, b, convolve, tol, maxit, echo)
+    fs <- .External(C_actuar_do_panjer, p0, p1, fs0, fx, a, b, convolve, tol, maxit, echo)
 
     FUN <- approxfun((0:(length(fs) - 1)) * x.scale, pmin(cumsum(fs), 1),
                      method = "constant", yleft = 0, yright = 1, f = 0,

@@ -10,10 +10,10 @@
 ### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 mchisq <- function(order, df, ncp = 0)
-    .External("actuar_do_dpq", "mchisq", order, df, ncp, FALSE)
+    .External(C_actuar_do_dpq, "mchisq", order, df, ncp, FALSE)
 
 levchisq <- function(limit, df, ncp = 0, order = 1)
-    .External("actuar_do_dpq", "levchisq", limit, df, ncp, order, FALSE)
+    .External(C_actuar_do_dpq, "levchisq", limit, df, ncp, order, FALSE)
 
 mgfchisq <- function(t, df, ncp = 0, log = FALSE)
-    .External("actuar_do_dpq", "mgfchisq", t, df, ncp, log)
+    .External(C_actuar_do_dpq, "mgfchisq", t, df, ncp, log)

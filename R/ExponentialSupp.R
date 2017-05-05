@@ -11,10 +11,10 @@
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 mexp <- function(order, rate = 1)
-    .External("actuar_do_dpq", "mexp", order, 1/rate, FALSE)
+    .External(C_actuar_do_dpq, "mexp", order, 1/rate, FALSE)
 
 levexp <- function(limit, rate = 1, order = 1)
-    .External("actuar_do_dpq", "levexp", limit, 1/rate, order, FALSE)
+    .External(C_actuar_do_dpq, "levexp", limit, 1/rate, order, FALSE)
 
 mgfexp <- function(t, rate = 1, log = FALSE)
-    .External("actuar_do_dpq", "mgfexp", t, 1/rate, log)
+    .External(C_actuar_do_dpq, "mgfexp", t, 1/rate, log)

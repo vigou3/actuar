@@ -17,46 +17,46 @@
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dinvgauss <- function(x, mean, shape = 1, dispersion = 1/shape, log = FALSE)
-    .External("actuar_do_dpq", "dinvgauss", x, mean, dispersion, log)
+    .External(C_actuar_do_dpq, "dinvgauss", x, mean, dispersion, log)
 
 pinvgauss <- function(q, mean, shape = 1, dispersion = 1/shape,
                       lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "pinvgauss", q, mean, dispersion,
+    .External(C_actuar_do_dpq, "pinvgauss", q, mean, dispersion,
               lower.tail, log.p)
 
 qinvgauss <- function(p, mean, shape = 1, dispersion = 1/shape,
                       lower.tail = TRUE, log.p = FALSE,
                       tol = 1e-14, maxit = 100, echo = FALSE, trace = echo)
-    .External("actuar_do_dpq", "qinvgauss", p, mean, dispersion,
+    .External(C_actuar_do_dpq, "qinvgauss", p, mean, dispersion,
               lower.tail, log.p, tol, maxit, trace)
 
 rinvgauss <- function(n, mean, shape = 1, dispersion = 1/shape)
-    .External("actuar_do_random", "rinvgauss", n, mean, dispersion)
+    .External(C_actuar_do_random, "rinvgauss", n, mean, dispersion)
 
 minvgauss <- function(order, mean, shape = 1, dispersion = 1/shape)
-    .External("actuar_do_dpq", "minvgauss", order, mean, dispersion, FALSE)
+    .External(C_actuar_do_dpq, "minvgauss", order, mean, dispersion, FALSE)
 
 levinvgauss <- function(limit, mean, shape = 1, dispersion = 1/shape, order = 1)
-    .External("actuar_do_dpq", "levinvgauss", limit, mean, dispersion, order, FALSE)
+    .External(C_actuar_do_dpq, "levinvgauss", limit, mean, dispersion, order, FALSE)
 
 mgfinvgauss <- function(t, mean, shape = 1, dispersion = 1/shape, log = FALSE)
-    .External("actuar_do_dpq", "mgfinvgauss", t, mean, dispersion, log)
+    .External(C_actuar_do_dpq, "mgfinvgauss", t, mean, dispersion, log)
 
 ## Functions deprecated in actuar v2.0-0
 minvGauss <- function(order, nu, lambda)
 {
     .Deprecated("minvgauss", package = "actuar")
-    .External("actuar_do_dpq", "minvGauss", order, nu, lambda, FALSE)
+    .External(C_actuar_do_dpq, "minvGauss", order, nu, lambda, FALSE)
 }
 
 levinvGauss <- function(limit, nu, lambda, order = 1)
 {
     .Deprecated("levinvgauss", package = "actuar")
-    .External("actuar_do_dpq", "levinvGauss", limit,  nu, lambda, order, FALSE)
+    .External(C_actuar_do_dpq, "levinvGauss", limit,  nu, lambda, order, FALSE)
 }
 
 mgfinvGauss <- function(x, nu, lambda, log = FALSE)
 {
     .Deprecated("mgfinvgauss", package = "actuar")
-    .External("actuar_do_dpq", "mgfinvGauss", x, nu, lambda, log)
+    .External(C_actuar_do_dpq, "mgfinvGauss", x, nu, lambda, log)
 }

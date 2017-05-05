@@ -8,7 +8,7 @@
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 mweibull <- function(order, shape, scale = 1)
-    .External("actuar_do_dpq", "mweibull", order, shape, scale, FALSE)
+    .External(C_actuar_do_dpq, "mweibull", order, shape, scale, FALSE)
 
 levweibull <- function(limit, shape, scale = 1, order = 1)
-    .External("actuar_do_dpq", "levweibull", limit, shape, scale, order, FALSE)
+    .External(C_actuar_do_dpq, "levweibull", limit, shape, scale, order, FALSE)

@@ -15,32 +15,32 @@
 dtrbeta <-
     function (x, shape1, shape2, shape3, rate = 1, scale = 1/rate,
               log = FALSE)
-    .External("actuar_do_dpq", "dtrbeta", x, shape1, shape2, shape3, scale, log)
+    .External(C_actuar_do_dpq, "dtrbeta", x, shape1, shape2, shape3, scale, log)
 
 ptrbeta <-
     function (q, shape1, shape2, shape3, rate = 1, scale = 1/rate,
               lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "ptrbeta", q, shape1, shape2, shape3, scale,
+    .External(C_actuar_do_dpq, "ptrbeta", q, shape1, shape2, shape3, scale,
               lower.tail, log.p)
 
 qtrbeta <-
     function (p, shape1, shape2, shape3, rate = 1, scale = 1/rate,
               lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "qtrbeta", p, shape1, shape2, shape3, scale,
+    .External(C_actuar_do_dpq, "qtrbeta", p, shape1, shape2, shape3, scale,
               lower.tail, log.p)
 
 rtrbeta <-
     function (n, shape1, shape2, shape3, rate = 1, scale = 1/rate)
-    .External("actuar_do_random", "rtrbeta", n, shape1, shape2, shape3, scale)
+    .External(C_actuar_do_random, "rtrbeta", n, shape1, shape2, shape3, scale)
 
 mtrbeta <-
     function (order, shape1, shape2, shape3, rate = 1, scale = 1/rate)
-    .External("actuar_do_dpq", "mtrbeta", order, shape1, shape2, shape3, scale, FALSE)
+    .External(C_actuar_do_dpq, "mtrbeta", order, shape1, shape2, shape3, scale, FALSE)
 
 levtrbeta <-
     function (limit, shape1, shape2, shape3, rate = 1, scale = 1/rate,
               order = 1)
-    .External("actuar_do_dpq", "levtrbeta", limit, shape1, shape2, shape3, scale, order, FALSE)
+    .External(C_actuar_do_dpq, "levtrbeta", limit, shape1, shape2, shape3, scale, order, FALSE)
 
 
 ## Aliases

@@ -10,7 +10,7 @@
 ### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 mnorm <- function(order, mean = 0, sd = 1)
-    .External("actuar_do_dpq", "mnorm", order, mean, sd, FALSE)
+    .External(C_actuar_do_dpq, "mnorm", order, mean, sd, FALSE)
 
 mgfnorm <- function(t, mean = 0, sd = 1, log = FALSE)
-    .External("actuar_do_dpq", "mgfnorm", t, mean, sd, log)
+    .External(C_actuar_do_dpq, "mgfnorm", t, mean, sd, log)

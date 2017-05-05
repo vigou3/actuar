@@ -17,25 +17,25 @@
 
 dinvtrgamma <- function (x, shape1, shape2, rate = 1, scale = 1/rate,
                          log = FALSE)
-    .External("actuar_do_dpq", "dinvtrgamma", x, shape1, shape2, scale, log)
+    .External(C_actuar_do_dpq, "dinvtrgamma", x, shape1, shape2, scale, log)
 
 pinvtrgamma <- function(q, shape1, shape2, rate = 1, scale = 1/rate,
                         lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "pinvtrgamma", q, shape1, shape2, scale,
+    .External(C_actuar_do_dpq, "pinvtrgamma", q, shape1, shape2, scale,
               lower.tail, log.p)
 
 qinvtrgamma <- function(p, shape1, shape2, rate = 1, scale = 1/rate,
                         lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "qinvtrgamma", p, shape1, shape2, scale,
+    .External(C_actuar_do_dpq, "qinvtrgamma", p, shape1, shape2, scale,
               lower.tail, log.p)
 
 rinvtrgamma <- function(n, shape1, shape2, rate = 1, scale = 1/rate)
-    .External("actuar_do_random", "rinvtrgamma", n, shape1, shape2, scale)
+    .External(C_actuar_do_random, "rinvtrgamma", n, shape1, shape2, scale)
 
 minvtrgamma <- function(order, shape1, shape2, rate = 1, scale = 1/rate)
-    .External("actuar_do_dpq", "minvtrgamma", order, shape1, shape2, scale, FALSE)
+    .External(C_actuar_do_dpq, "minvtrgamma", order, shape1, shape2, scale, FALSE)
 
 levinvtrgamma <- function(limit, shape1, shape2, rate = 1, scale = 1/rate,
                           order = 1)
-    .External("actuar_do_dpq", "levinvtrgamma", limit, shape1, shape2, scale,
+    .External(C_actuar_do_dpq, "levinvtrgamma", limit, shape1, shape2, scale,
               order, FALSE)

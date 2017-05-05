@@ -1,2 +1,5 @@
-## We use the BLAS and the LAPACK library:
+## We use the BLAS and the LAPACK libraries
 PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+
+## Hide entry points (but for R_init_actuar in init.c) 
+PKG_CFLAGS = $(C_VISIBILITY)

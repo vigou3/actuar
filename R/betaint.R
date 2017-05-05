@@ -17,5 +17,5 @@
 
 ## see src/betaint.c
 betaint <- function(x, a, b)
-    .External("actuar_do_dpq", "betaint", x, a, b, FALSE)
+    .External(C_actuar_do_dpq, "betaint", x, a, b, FALSE)
 

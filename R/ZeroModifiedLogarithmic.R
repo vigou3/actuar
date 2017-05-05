@@ -10,13 +10,13 @@
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dzmlogarithmic <- function(x, prob, p0, log = FALSE)
-    .External("actuar_do_dpq", "dzmlogarithmic", x, prob, p0, log)
+    .External(C_actuar_do_dpq, "dzmlogarithmic", x, prob, p0, log)
 
 pzmlogarithmic <- function(q, prob, p0, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "pzmlogarithmic", q, prob, p0, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "pzmlogarithmic", q, prob, p0, lower.tail, log.p)
 
 qzmlogarithmic <- function(p, prob, p0, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "qzmlogarithmic", p, prob, p0, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "qzmlogarithmic", p, prob, p0, lower.tail, log.p)
 
 rzmlogarithmic <- function(n, prob, p0)
-    .External("actuar_do_random", "rzmlogarithmic", n, prob, p0)
+    .External(C_actuar_do_random, "rzmlogarithmic", n, prob, p0)

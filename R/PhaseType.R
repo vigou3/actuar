@@ -15,16 +15,16 @@
 ### AUTHORS: Christophe Dutang, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dphtype <- function(x, prob, rates, log = FALSE)
-    .External("actuar_do_dpqphtype", "dphtype", x, prob, rates, log)
+    .External(C_actuar_do_dpqphtype, "dphtype", x, prob, rates, log)
 
 pphtype <- function(q, prob, rates, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpqphtype", "pphtype", q, prob, rates, lower.tail, log.p)
+    .External(C_actuar_do_dpqphtype, "pphtype", q, prob, rates, lower.tail, log.p)
 
 rphtype <- function(n, prob, rates)
-    .External("actuar_do_randomphtype", "rphtype", n, prob, rates)
+    .External(C_actuar_do_randomphtype, "rphtype", n, prob, rates)
 
 mphtype <- function(order, prob, rates)
-    .External("actuar_do_dpqphtype", "mphtype", order, prob, rates, FALSE)
+    .External(C_actuar_do_dpqphtype, "mphtype", order, prob, rates, FALSE)
 
 mgfphtype <- function(t, prob, rates, log = FALSE)
-    .External("actuar_do_dpqphtype", "mgfphtype", t, prob, rates, log)
+    .External(C_actuar_do_dpqphtype, "mgfphtype", t, prob, rates, log)

@@ -261,7 +261,7 @@ hierarc <- function(ratios, weights, classification,
     {
         b <- pmax(b, 0)            # truncation for starting values
         if (any(head(b, -1L) > 0)) # at least one non-zero starting value
-            .External("actuar_do_hierarc", cred, tweights, wmeans, fnodes, denoms,
+            .External(C_actuar_do_hierarc, cred, tweights, wmeans, fnodes, denoms,
                       b, tol, maxit, echo)
     }
 

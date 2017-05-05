@@ -11,22 +11,22 @@
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dpareto <- function (x, shape, scale, log = FALSE)
-    .External("actuar_do_dpq", "dpareto", x, shape, scale, log)
+    .External(C_actuar_do_dpq, "dpareto", x, shape, scale, log)
 
 ppareto <- function (q, shape, scale, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "ppareto", q, shape, scale, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "ppareto", q, shape, scale, lower.tail, log.p)
 
 qpareto <- function (p, shape, scale, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "qpareto", p, shape, scale, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "qpareto", p, shape, scale, lower.tail, log.p)
 
 rpareto <- function(n, shape, scale)
-    .External("actuar_do_random", "rpareto", n, shape, scale)
+    .External(C_actuar_do_random, "rpareto", n, shape, scale)
 
 mpareto <- function(order, shape, scale)
-     .External("actuar_do_dpq", "mpareto", order, shape, scale, FALSE)
+     .External(C_actuar_do_dpq, "mpareto", order, shape, scale, FALSE)
 
 levpareto <- function(limit, shape, scale, order = 1)
-     .External("actuar_do_dpq", "levpareto", limit, shape, scale, order, FALSE)
+     .External(C_actuar_do_dpq, "levpareto", limit, shape, scale, order, FALSE)
 
 ## Aliases
 dpareto2 <- dpareto

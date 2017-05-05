@@ -11,10 +11,10 @@
 ### Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 mgamma <- function(order, shape, rate = 1, scale = 1/rate)
-    .External("actuar_do_dpq", "mgamma", order, shape, scale, FALSE)
+    .External(C_actuar_do_dpq, "mgamma", order, shape, scale, FALSE)
 
 levgamma <- function(limit, shape, rate = 1, scale = 1/rate, order = 1)
-    .External("actuar_do_dpq", "levgamma", limit, shape, scale, order, FALSE)
+    .External(C_actuar_do_dpq, "levgamma", limit, shape, scale, order, FALSE)
 
 mgfgamma <- function(t, shape, rate = 1, scale = 1/rate, log = FALSE)
-    .External("actuar_do_dpq", "mgfgamma", t, shape, scale, log)
+    .External(C_actuar_do_dpq, "mgfgamma", t, shape, scale, log)

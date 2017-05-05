@@ -8,13 +8,13 @@
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dztgeom <- function(x, prob, log = FALSE)
-    .External("actuar_do_dpq", "dztgeom", x, prob, log)
+    .External(C_actuar_do_dpq, "dztgeom", x, prob, log)
 
 pztgeom <- function(q, prob, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "pztgeom", q, prob, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "pztgeom", q, prob, lower.tail, log.p)
 
 qztgeom <- function(p, prob, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "qztgeom", p, prob, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "qztgeom", p, prob, lower.tail, log.p)
 
 rztgeom <- function(n, prob)
-    .External("actuar_do_random", "rztgeom", n, prob)
+    .External(C_actuar_do_random, "rztgeom", n, prob)

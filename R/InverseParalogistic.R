@@ -12,22 +12,22 @@
 ### AUTHORS:  Mathieu Pigeon, Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dinvparalogis <- function (x, shape, rate = 1, scale = 1/rate, log = FALSE)
-    .External("actuar_do_dpq", "dinvparalogis", x, shape, scale, log)
+    .External(C_actuar_do_dpq, "dinvparalogis", x, shape, scale, log)
 
 pinvparalogis <- function(q, shape, rate = 1, scale = 1/rate,
                           lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "pinvparalogis", q, shape, scale, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "pinvparalogis", q, shape, scale, lower.tail, log.p)
 
 qinvparalogis <- function(p, shape, rate = 1, scale = 1/rate,
                           lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "qinvparalogis", p, shape, scale, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "qinvparalogis", p, shape, scale, lower.tail, log.p)
 
 rinvparalogis <- function(n, shape, rate = 1, scale = 1/rate)
-    .External("actuar_do_random", "rinvparalogis", n, shape, scale)
+    .External(C_actuar_do_random, "rinvparalogis", n, shape, scale)
 
 minvparalogis <- function(order, shape, rate = 1, scale = 1/rate)
-     .External("actuar_do_dpq", "minvparalogis", order, shape, scale, FALSE)
+     .External(C_actuar_do_dpq, "minvparalogis", order, shape, scale, FALSE)
 
 levinvparalogis <- function(limit, shape, rate = 1, scale = 1/rate,
                             order = 1)
-     .External("actuar_do_dpq", "levinvparalogis", limit, shape, scale, order, FALSE)
+     .External(C_actuar_do_dpq, "levinvparalogis", limit, shape, scale, order, FALSE)

@@ -18,16 +18,16 @@
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dlogarithmic <- function(x, prob, log = FALSE)
-    .External("actuar_do_dpq", "dlogarithmic", x, prob, log)
+    .External(C_actuar_do_dpq, "dlogarithmic", x, prob, log)
 
 plogarithmic <- function(q, prob, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "plogarithmic", q, prob, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "plogarithmic", q, prob, lower.tail, log.p)
 
 qlogarithmic <- function(p, prob, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "qlogarithmic", p, prob, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "qlogarithmic", p, prob, lower.tail, log.p)
 
 rlogarithmic <- function(n, prob)
-    .External("actuar_do_random", "rlogarithmic", n, prob)
+    .External(C_actuar_do_random, "rlogarithmic", n, prob)
 
 ## not exported; for internal use in panjer()
 pgflogarithmic <- function(x, prob)

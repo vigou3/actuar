@@ -10,16 +10,16 @@
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dztnbinom <- function (x, size, prob, log = FALSE)
-    .External("actuar_do_dpq", "dztnbinom", x, size, prob, log)
+    .External(C_actuar_do_dpq, "dztnbinom", x, size, prob, log)
 
 pztnbinom <- function(q, size, prob, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "pztnbinom", q, size, prob, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "pztnbinom", q, size, prob, lower.tail, log.p)
 
 qztnbinom <- function(p, size, prob, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "qztnbinom", p, size, prob, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "qztnbinom", p, size, prob, lower.tail, log.p)
 
 rztnbinom <- function(n, size, prob)
-    .External("actuar_do_random", "rztnbinom", n, size, prob)
+    .External(C_actuar_do_random, "rztnbinom", n, size, prob)
 
 ## not exported; for internal use in panjer()
 pgfztnbinom <- function(x, size, prob)

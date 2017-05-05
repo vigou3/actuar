@@ -8,13 +8,13 @@
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 dzmbinom <- function (x, size, prob, p0, log = FALSE)
-    .External("actuar_do_dpq", "dzmbinom", x, size, prob, p0, log)
+    .External(C_actuar_do_dpq, "dzmbinom", x, size, prob, p0, log)
 
 pzmbinom <- function(q, size, prob, p0, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "pzmbinom", q, size, prob, p0, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "pzmbinom", q, size, prob, p0, lower.tail, log.p)
 
 qzmbinom <- function(p, size, prob, p0, lower.tail = TRUE, log.p = FALSE)
-    .External("actuar_do_dpq", "qzmbinom", p, size, prob, p0, lower.tail, log.p)
+    .External(C_actuar_do_dpq, "qzmbinom", p, size, prob, p0, lower.tail, log.p)
 
 rzmbinom <- function(n, size, prob, p0)
-    .External("actuar_do_random", "rzmbinom", n, size, prob, p0)
+    .External(C_actuar_do_random, "rzmbinom", n, size, prob, p0)
