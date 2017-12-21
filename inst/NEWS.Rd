@@ -2,6 +2,21 @@
 \title{\pkg{actuar} News}
 \encoding{UTF-8}
 
+\section{CHANGES IN \pkg{actuar} VERSION 2.2-0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item{Functions \code{rcompound} and \code{rcomppois} gain an
+	argument \code{SIMPLIFY} that is \code{TRUE} by default. When
+	\code{FALSE}, the functions return not only variates from the
+	aggregate claim amount random variable, but also the variates
+	from the underlying frequency and severity distributions.}
+      \item{Functions \code{rcompound} and \code{rcomppois} now admit
+	an object name in argument for \code{model.sev} and
+	\code{model.freq}.}
+    }
+  }
+}
+
 \section{CHANGES IN \pkg{actuar} VERSION 2.1-1}{
   \subsection{BUG FIX}{
     \itemize{
@@ -112,7 +127,7 @@
 	+ \dots + X_N}. Function \code{simul} could already do that, but
 	\code{rcompound} is substantially faster for non hierarchical
 	models.}
-    \item{New function \code{rcomppois} that is a simplified version of
+      \item{New function \code{rcomppois} that is a simplified version of
 	\code{rcompound} for the very common compound Poisson case.}
       \item{\code{simul} now accepts an atomic (named or not) vector for
 	argument \code{nodes} when simulating from a non hierarchical
