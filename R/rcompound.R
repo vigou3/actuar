@@ -10,14 +10,21 @@
 ###
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-rcompound <- function(n, model.freq, model.sev)
+rcompound <- function(n, model.freq, model.sev, SIMPLIFY = TRUE)
 {
     ## Convert model expressions into language objects.
     cl.freq <- substitute(model.freq)
     cl.sev <- substitute(model.sev)
 
-    ## If model expressions are wrapped into 'expression' as in
-    ## 'simul', get rid of the call.
+    ## If a model expression was actually an object containing the
+    ## model, we need to evaluate the object to retrieve the model.
+    if (is.name(cl.freq))
+        cl.freq <- eval(cl.freq)
+    if (is.name(cl.sev))
+        cl.sev <- eval(cl.sev)
+
+    ## If a model expression is wrapped into 'expression' (as in
+    ## 'simul'), get rid of the call.
     if (cl.freq[[1L]] == "expression")
         cl.freq <- cl.freq[[-1L]]
     if (cl.sev[[1L]] == "expression")
@@ -52,13 +59,23 @@ rcompound <- function(n, model.freq, model.sev)
     ## zero frequencies are already initialized with zeros.
     res[which(N != 0)] <- tapply(x, f, sum)
 
-    res
+    if (SIMPLIFY)
+        res
+    else
+        list(aggregate = res,
+             frequency = N,
+             severity = x)
 }
 
-rcomppois <- function(n, lambda, model.sev)
+rcomppois <- function(n, lambda, model.sev, SIMPLIFY = TRUE)
 {
     ## Convert model expression into language object.
     cl.sev <- substitute(model.sev)
+
+    ## If model expression was actually an object containing the
+    ## model, we need to evaluate the object to retrieve the model.
+    if (is.name(cl.sev))
+        cl.sev <- eval(cl.sev)
 
     ## Get rid of the eventual 'expression' call.
     if (cl.sev[[1L]] == "expression")
@@ -85,5 +102,10 @@ rcomppois <- function(n, lambda, model.sev)
     ## positions in the output vector.
     res[which(N != 0)] <- tapply(x, f, sum)
 
-    res
+    if (SIMPLIFY)
+        res
+    else
+        list(aggregate = res,
+             frequency = N,
+             severity = x)
 }
