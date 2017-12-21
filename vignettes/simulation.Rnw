@@ -200,6 +200,13 @@ parameter.
 rcompound(10, rpois(1.5), rgamma(3, 2))
 rcomppois(10, 1.5, rgamma(3, 2))
 @
+
+  Specifying argument \code{SIMPLIFY = FALSE} to either function will
+  return not only the variates from $S$, but also the underlying
+  variates from the random variables $N$ and $C_1, \dots, C_N$:
+<<echo=TRUE>>=
+rcomppois(10, 1.5, rgamma(3, 2), SIMPLIFY = FALSE)
+@
   \qed
 \end{example}
 
