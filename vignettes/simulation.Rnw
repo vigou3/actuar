@@ -8,6 +8,7 @@
   \usepackage[sc]{mathpazo}
   \usepackage[shortlabels]{enumitem}
   \usepackage[noae,inconsolata]{Sweave}
+  \usepackage{framed}
 
   %\VignetteIndexEntry{Simulation of insurance data}
   %\VignettePackage{actuar}
@@ -44,18 +45,28 @@
   %% Help for \autoref
   \def\exampleautorefname{example}
 
-  %% Sweave environments redefined to have a color background
-  %% (following https://tex.stackexchange.com/a/141128).
+  %% Sweave Sinput and Soutput environments reinitialized to remove
+  %% default configuration. Space between input and output blocks also
+  %% reduced.
   \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
   \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
   \fvset{listparameters={\setlength{\topsep}{0pt}}}
+
+  %% Environment Schunk redefined as an hybrid of environments
+  %% snugshade* and leftbar of framed.sty.
+  \makeatletter
   \renewenvironment{Schunk}{%
-    \SaveVerbatim{cverb}}%
-    {\endSaveVerbatim
-      \flushleft\fboxrule=0pt\fboxsep=.5em
-      \colorbox{codebg}{%
-        \makebox[\dimexpr\linewidth-2\fboxsep][l]{\BUseVerbatim{cverb}}}%
-      \endflushleft}
+    \setlength{\topsep}{1pt}
+    \def\FrameCommand##1{\hskip\@totalleftmargin
+       \vrule width 2pt\colorbox{codebg}{\hspace{3pt}##1}%
+      % There is no \@totalrightmargin, so:
+      \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+    \MakeFramed {\advance\hsize-\width
+      \@totalleftmargin\z@ \linewidth\hsize
+      \advance\labelsep\fboxsep
+      \@setminipage}%
+  }{\par\unskip\@minipagefalse\endMakeFramed}
+  \makeatother
 
   %% Flush left enumerate environment.
   \setlist[enumerate]{leftmargin=*,align=left}
@@ -72,7 +83,7 @@
 
 <<echo=FALSE>>=
 library(actuar)
-options(width = 60, digits = 4)
+options(width = 52, digits = 4)
 @
 
 \begin{document}
@@ -205,7 +216,7 @@ rcomppois(10, 1.5, rgamma(3, 2))
   return not only the variates from $S$, but also the underlying
   variates from the random variables $N$ and $C_1, \dots, C_N$:
 <<echo=TRUE>>=
-rcomppois(10, 1.5, rgamma(3, 2), SIMPLIFY = FALSE)
+#rcomppois(10, 1.5, rgamma(3, 2), SIMPLIFY = FALSE)
 @
   \qed
 \end{example}
@@ -567,7 +578,6 @@ aggregate(pf, classif = FALSE) / weights(pf, classif = FALSE)
   First, one simulates the weights (in lexicographic order) with
 <<echo=FALSE>>=
 set.seed(123)
-options(width = 55)
 @
 <<echo=TRUE>>=
 wit <- rgamma(15, rep(runif(3, 0, 100), each = 5),

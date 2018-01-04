@@ -8,6 +8,7 @@
   \usepackage[sc]{mathpazo}
   \usepackage[shortlabels]{enumitem}
   \usepackage[noae,inconsolata]{Sweave}
+  \usepackage{framed}
 
   %\VignetteIndexEntry{Risk and ruin theory}
   %\VignettePackage{actuar}
@@ -40,18 +41,28 @@
     bookmarksnumbered = {true},
     bookmarksdepth = {subsubsection}}
 
-  %% Sweave environments redefined to have a color background
-  %% (following https://tex.stackexchange.com/a/141128).
+  %% Sweave Sinput and Soutput environments reinitialized to remove
+  %% default configuration. Space between input and output blocks also
+  %% reduced.
   \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
   \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
   \fvset{listparameters={\setlength{\topsep}{0pt}}}
+
+  %% Environment Schunk redefined as an hybrid of environments
+  %% snugshade* and leftbar of framed.sty.
+  \makeatletter
   \renewenvironment{Schunk}{%
-    \SaveVerbatim{cverb}}%
-    {\endSaveVerbatim
-      \flushleft\fboxrule=0pt\fboxsep=.5em
-      \colorbox{codebg}{%
-        \makebox[\dimexpr\linewidth-2\fboxsep][l]{\BUseVerbatim{cverb}}}%
-      \endflushleft}
+    \setlength{\topsep}{1pt}
+    \def\FrameCommand##1{\hskip\@totalleftmargin
+       \vrule width 2pt\colorbox{codebg}{\hspace{3pt}##1}%
+      % There is no \@totalrightmargin, so:
+      \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+    \MakeFramed {\advance\hsize-\width
+      \@totalleftmargin\z@ \linewidth\hsize
+      \advance\labelsep\fboxsep
+      \@setminipage}%
+  }{\par\unskip\@minipagefalse\endMakeFramed}
+  \makeatother
 
   %% Flush left enumerate environment.
   \setlist[enumerate]{leftmargin=*,align=left}
@@ -69,7 +80,7 @@
 
 <<echo=FALSE>>=
 library(actuar)
-options(width = 60, digits = 4)
+options(width = 52, digits = 4)
 @
 
 \begin{document}

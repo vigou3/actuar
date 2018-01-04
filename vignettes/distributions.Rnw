@@ -43,17 +43,6 @@
     bookmarksnumbered = {true},
     bookmarksdepth = {subsubsection}}
 
-  %% Sweave environments redefined to have a color background (using
-  %% environment snugshade* of package framed).
-  \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
-  \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
-  \fvset{listparameters={\setlength{\topsep}{0pt}}}
-  \renewenvironment{Schunk}{%
-    \setlength{\topsep}{0pt}
-    \colorlet{shadecolor}{codebg}
-    \begin{snugshade*}}%
-    {\end{snugshade*}}
-
   %% Compact, sans label itemize environment for the appendices.
   \setlist[itemize]{label={},leftmargin=0pt,align=left,nosep}
 
