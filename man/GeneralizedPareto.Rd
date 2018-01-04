@@ -91,8 +91,19 @@ levgenpareto(limit, shape1, shape2, rate = 1, scale = 1/rate,
 
   Distribution also known as the Beta of the Second Kind. See also
   Kleiber and Kotz (2003) for alternative names and parametrizations.
+
+  The Generalized Pareto distribution defined here is different from the
+  one in Embrechts et al. (1997) and in
+  \href{https://en.wikipedia.org/wiki/Generalized_Pareto_distribution}{Wikipedia};
+  see also Kleiber and Kotz (2003, section 3.12). One may most likely
+  compute quantities for the latter using functions for the
+  \link[=dpareto]{Pareto} distribution with the appropriate change of
+  parametrization.
 }
 \references{
+  Embrechts, P., Klüppelberg, C. and Mikisch, T. (1997), \emph{Modelling
+    Extremal Events for Insurance and Finance}, Springer.
+  
   Kleiber, C. and Kotz, S. (2003), \emph{Statistical Size Distributions
   in Economics and Actuarial Sciences}, Wiley.
 
