@@ -15,6 +15,20 @@
 	\code{model.freq}.}
     }
   }
+  \subsection{BUG FIX}{
+    \itemize{
+      \item{Display of verbatim blocks in vignettes.}
+    }
+  }
+  \subsection{USER VISIBLE CHANGES}{
+    \itemize{
+      \item{In the man page for \code{dgenpareto}, additional note on
+	the link between the Generalized Pareto distribution in the
+	package and the version used in Embrechts et al. (1997) and
+	Wikipedia. Thanks to Marcel Trevissen
+	\email{kamath1602@gmail.com} for the pointer.}
+    }
+  }
 }
 
 \section{CHANGES IN \pkg{actuar} VERSION 2.1-1}{
