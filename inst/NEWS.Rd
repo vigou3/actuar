@@ -2,6 +2,26 @@
 \title{\pkg{actuar} News}
 \encoding{UTF-8}
 
+\section{CHANGES IN \pkg{actuar} VERSION <<<???>>>}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item{\code{rcomphierarc.summaries} is now an alias for the man
+	page of \code{simul.summaries}.
+    }
+  }
+  \subsection{BUG FIX}{
+    \itemize{
+      \item{}
+    }
+  }
+  \subsection{USER VISIBLE CHANGES}{
+    \itemize{
+      \item{All instances of function \code{simul} in vignette
+	\code{dQuote{simulation}} replaced by \code{rcomphierarc}.}
+    }
+  }
+}
+
 \section{CHANGES IN \pkg{actuar} VERSION 2.2-0}{
   \subsection{NEW FEATURES}{
     \itemize{
