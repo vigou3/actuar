@@ -1,5 +1,6 @@
 \name{simul.summaries}
 \alias{simul.summaries}
+\alias{rcomphierarc.summaries}
 \alias{aggregate.portfolio}
 \alias{frequency.portfolio}
 \alias{severity.portfolio}
