@@ -133,7 +133,7 @@ from such mixtures. The arguments of the function are:
 \end{enumerate}
 
 The specification of simulation models follows the syntax of
-\code{simul} (explained in greater detail in \autoref{sec:simul}). In
+\code{rcomphierarc} (explained in greater detail in \autoref{sec:rcomphierarc}). In
 a nutshell, the models are expressed in a semi-symbolic fashion using
 an object of mode \code{"expression"} where each element is a complete
 call to a random number generation function, with the number of
@@ -180,7 +180,7 @@ the frequency random variable $N$.
 Function \code{rcompound} generates variates from the random variable
 $S$ when the distribution of both random variables $N$ and $C$ is non
 hierarchical; for the more general hierarchical case, see
-\autoref{sec:simul}. The function has three arguments:
+\autoref{sec:rcomphierarc}. The function has three arguments:
 \begin{enumerate}
 \item \code{n} the number of variates to generate;
 \item \code{model.freq} the frequency model (random variable $N$);
@@ -267,7 +267,7 @@ mean(x)
 
 
 \section{Simulation from compound hierarchical models}
-\label{sec:simul}
+\label{sec:rcomphierarc}
 
 Hierarchical probability models are widely used for data classified in
 a tree-like structure and in Bayesian inference. The main
@@ -304,12 +304,12 @@ parameters for each variate. Furthermore, one may need to
 simulate both the frequency and the severity of claims for compound
 models of the form \eqref{eq:definition-S}.
 
-This section briefly describes function \code{simul} and its usage.
+This section briefly describes function \code{rcomphierarc} and its usage.
 \cite{Goulet:simpf:2008} discuss in more details the models
 supported by the function and give more thorough examples.
 
 \subsection{Description of hierarchical models}
-\label{sec:simul:description}
+\label{sec:rcomphierarc:description}
 
 We consider simulation of data from hierarchical models. We need a
 method to describe these models in R that will meet the
@@ -325,7 +325,7 @@ following criteria:
 A hierarchical model is completely specified by the number of nodes at
 each level ($I$, $J_1, \dots, J_I$ and $n_{11}, \dots, n_{IJ}$, above)
 and by the probability laws at each level. The number of nodes is
-passed to \code{simul} by means of a named list where each element is
+passed to \code{rcomphierarc} by means of a named list where each element is
 a vector of the number of nodes at a given level. Vectors are recycled
 when the number of nodes is the same throughout a level.
 
@@ -370,7 +370,7 @@ expression(Theta = rgamma(2, 2),
 
 Storing the probability model requires an expression object in order
 to avoid evaluation of the incomplete calls to the random number
-generation functions. Function \code{simul} builds and executes the
+generation functions. Function \code{rcomphierarc} builds and executes the
 calls to the random generation functions from the top of the
 hierarchical model to the bottom. At each level, the function
 \begin{enumerate}
@@ -386,15 +386,15 @@ Furthermore, any random generation function can be used. The only
 constraint is that the name of the number of variates argument is
 \code{n}.
 
-In addition, \code{simul} supports usage of weights in models. These
+In addition, \code{rcomphierarc} supports usage of weights in models. These
 usually modify the frequency parameters to take into account the
 ``size'' of an entity. Weights are used in simulation wherever the
 name \code{weights} appears in a model.
 
-\subsection[Usage of simul]{Usage of \code{simul}}
-\label{sec:simul:usage}
+\subsection[Usage of rcomphierarc]{Usage of \code{rcomphierarc}}
+\label{sec:rcomphierarc:usage}
 
-Function \code{simul} can simulate data for structures where both the
+Function \code{rcomphierarc} can simulate data for structures where both the
 frequency model and the severity model are hierarchical. It has four
 main arguments:
 \begin{enumerate}
@@ -430,7 +430,7 @@ In addition, all methods have a \code{classification} and a
 \code{prefix} argument. When the first is \code{FALSE}, the
 classification index columns are omitted from the result. The second
 argument overrides the default column name prefix; see the
-\code{simul.summaries} help page for details.
+\code{rcomphierarc.summaries} help page for details.
 
 The following example illustrates these concepts in detail.
 
@@ -459,7 +459,7 @@ The following example illustrates these concepts in detail.
   Assuming that $I = 2$, $J_1 = 4$, $J_2 = 3$, $n_{11} = \dots =
   n_{14} = 4$ and $n_{21} = n_{22} = n_{23} = 5$ and that weights are
   simply simulated from a uniform distribution on $(0.5, 2.5)$, then
-  simulation of a data set with \code{simul} is achieved with:
+  simulation of a data set with \code{rcomphierarc} is achieved with:
 <<echo=FALSE>>=
 set.seed(3)
 @
@@ -474,9 +474,9 @@ ms <- expression(cohort = rnorm(2, sqrt(0.1)),
                  contract = rnorm(cohort, 1),
                  year = rlnorm(contract, 1))
 wijt <- runif(31, 0.5, 2.5)
-pf <- simul(nodes = nodes,
-            model.freq = mf, model.sev = ms,
-            weights = wijt)
+pf <- rcomphierarc(nodes = nodes,
+                   model.freq = mf, model.sev = ms,
+                   weights = wijt)
 @
 
   Object \code{pf} is a list of class \code{"portfolio"} containing,
@@ -491,7 +491,7 @@ pf$classification
 
 
   The output of \code{pf\$data} is not much readable. Printing the
-  results of \code{simul} like this would bring many users to wonder
+  results of \code{rcomphierarc} like this would bring many users to wonder
   what \code{Numeric,\emph{n}} means. It is actually R's
   way to specify that a given element in the list is a numeric vector
   of length $n$ --- the third dimension mentioned above. To ease
@@ -573,7 +573,7 @@ aggregate(pf, classif = FALSE) / weights(pf, classif = FALSE)
   Strictly speaking, this is not a hierarchical model since the random
   variables $\alpha$ and $\beta$ are parallel rather than nested.
   Nevertheless, with some minor manual intervention, function
-  \code{simul} can simulate data from this model.
+  \code{rcomphierarc} can simulate data from this model.
 
   First, one simulates the weights (in lexicographic order) with
 <<echo=FALSE>>=
@@ -584,22 +584,22 @@ wit <- rgamma(15, rep(runif(3, 0, 100), each = 5),
               rep(runif(3, 0, 100), each = 5))
 @
 
-  Second, one calls \code{simul} to simulate the frequency data. The key
+  Second, one calls \code{rcomphierarc} to simulate the frequency data. The key
   here consists in manually inserting the simulation of the shape and rate
   parameters of the gamma distribution in the model for $\Lambda_i$.
-  Finally, wrapping the call to \code{simul} in \code{frequency} will
+  Finally, wrapping the call to \code{rcomphierarc} in \code{frequency} will
   immediately yield the matrix of observations:
 <<echo=TRUE>>=
-frequency(simul(list(entity = 3, year = 5),
-                expression(entity = rgamma(rgamma(1, 5, 5),
-                                           rgamma(1, 25, 1)),
-                           year = rpois(weights * entity)),
-                weights = wit))
+frequency(rcomphierarc(list(entity = 3, year = 5),
+                       expression(entity = rgamma(rgamma(1, 5, 5),
+                                                  rgamma(1, 25, 1)),
+                                  year = rpois(weights * entity)),
+                       weights = wit))
 @
   \qed
 \end{example}
 
-One will find more examples of \code{simul} usage in the
+One will find more examples of \code{rcomphierarc} usage in the
 \code{simulation} demo file. The function was used to simulate the
 data in \cite{Goulet_cfs}.
 
