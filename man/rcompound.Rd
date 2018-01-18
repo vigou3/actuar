@@ -32,7 +32,7 @@ rcomppois(n, lambda, model.sev, SIMPLIFY = TRUE)}
   for the frequency and the severity random variables, respectively. A
   model is a complete call to a random number generation function, with
   the number of variates omitted. This is similar to
-  \code{\link{simul}}, but the calls need not be wrapped into
+  \code{\link{rcomphierarc}}, but the calls need not be wrapped into
   \code{\link{expression}}. Either argument may also be the name of an
   object containing an expression, in which case the object will be
   evaluated in the evaluation frame to retrieve the expression.
@@ -59,7 +59,7 @@ rcomppois(n, lambda, model.sev, SIMPLIFY = TRUE)}
   Vincent Goulet \email{vincent.goulet@act.ulaval.ca}
 }
 \seealso{
-  \code{\link{simul}} to simulate from compound hierarchical models.
+  \code{\link{rcomphierarc}} to simulate from compound hierarchical models.
 }
 \examples{
 ## Compound Poisson model with gamma severity.
@@ -74,10 +74,10 @@ rcomppois(10, 2, rgamma(2, 3), SIMPLIFY = FALSE)
 ## not needed.
 rcompound(10, expression(rpois(2)), expression(rgamma(2, 3)))
 
-\dontrun{## Speed comparison between rcompound() and simul().
+\dontrun{## Speed comparison between rcompound() and rcomphierarc().
 ## [Also note the simpler syntax for rcompound().]
 system.time(rcompound(1e6, rpois(2), rgamma(2, 3)))
-system.time(simul(1e6, expression(rpois(2)), expression(rgamma(2, 3))))}
+system.time(rcomphierarc(1e6, expression(rpois(2)), expression(rgamma(2, 3))))}
 ## The severity can itself be a compound model. It makes sense
 ## in such a case to use a zero-truncated frequency distribution
 ## for the second level model.

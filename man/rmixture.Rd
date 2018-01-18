@@ -29,7 +29,7 @@ rmixture(n, probs, models)
   used as probabilities \eqn{p_1 + \dots + p_n}.
 
   The specification of simulation models uses the syntax of
-  \code{\link{simul}}. Models \eqn{f_1, \dots, f_n} are expressed in a
+  \code{\link{rcomphierarc}}. Models \eqn{f_1, \dots, f_n} are expressed in a
   semi-symbolic fashion using an object of mode
   \code{\link[base]{expression}} where each element is a complete call
   to a random number generation function, with the number of variates
@@ -47,7 +47,7 @@ rmixture(n, probs, models)
 \seealso{
   \code{\link{rcompound}} to simulate from compound models.
 
-  \code{\link{simul}} to simulate from compound hierarchical models.
+  \code{\link{rcomphierarc}} to simulate from compound hierarchical models.
 }
 \examples{
 ## Mixture of two exponentials (with means 1/3 and 1/7) with equal

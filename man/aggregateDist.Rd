@@ -35,13 +35,13 @@ aggregateDist(method = c("recursive", "convolution", "normal",
     giving the name of a distribution in the \eqn{(a, b, 0)} or \eqn{(a,
       b, 1)} families of distributions. For \code{"convolution"} method:
     a vector of claim number probabilities. For \code{"simulation"}
-    method: a frequency simulation model (see \code{\link{simul}} for
+    method: a frequency simulation model (see \code{\link{rcomphierarc}} for
     details) or \code{NULL}. Ignored with \code{normal} and
     \code{npower} methods.}
   \item{model.sev}{for \code{"recursive"} and \code{"convolution"}
     methods: a vector of claim amount probabilities. For
     \code{"simulation"} method: a severity simulation model (see
-    \code{\link{simul}} for details) or \code{NULL}. Ignored with
+    \code{\link{rcomphierarc}} for details) or \code{NULL}. Ignored with
     \code{normal} and \code{npower} methods.}
   \item{p0}{arbitrary probability at zero for the frequency
     distribution. Creates a zero-modified or zero-truncated
@@ -182,7 +182,7 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   This methods returns the empirical distribution function of a sample
   of size \code{nb.simul} of the aggregate claim amount distribution
   specified by \code{model.freq} and
-  \code{model.sev}. \code{\link{simul}} is used for the simulation of
+  \code{model.sev}. \code{\link{rcomphierarc}} is used for the simulation of
   claim amounts, hence both the frequency and severity models can be
   mixtures of distributions.
 }
@@ -209,7 +209,7 @@ aggregateDist(method = c("recursive", "convolution", "normal",
   Value-at-Risk;
   \code{\link{CTE.aggregateDist}} to compute the Conditional Tail
   Expectation (or Tail Value-at-Risk);
-  \code{\link{simul}}.
+  \code{\link{rcomphierarc}}.
 }
 \references{
   Klugman, S. A., Panjer, H. H. and Willmot, G. E. (2012),
