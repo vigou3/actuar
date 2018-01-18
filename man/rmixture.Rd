@@ -8,7 +8,7 @@
 rmixture(n, probs, models)
 }
 \arguments{
-  \item{n}{number of random variates to geenrate. If \code{length(n) >
+  \item{n}{number of random variates to generate. If \code{length(n) >
       1}, only the value is used.}
   \item{probs}{numeric non-negative vector specifying the probability
     for each model; is internally normalized to sum 1. Infinite
