@@ -8,10 +8,20 @@
 cm <- function(formula, data, ratios, weights, subset,
                regformula = NULL, regdata, adj.intercept = FALSE,
                method = c("Buhlmann-Gisler", "Ohlsson", "iterative"),
+               likelihood, ...,
                tol = sqrt(.Machine$double.eps), maxit = 100,
                echo = FALSE)
 {
-    Call <- match.call()
+    Call <- match.call(expand.dots = TRUE)
+
+    ## Catch the pure bayesian special case.
+    if (formula == "bayesian")
+    {
+        bayesian(data, likelihood, ...)
+        class(res) <- c("cm", class(res))
+        attr(res, "call") <- Call
+        return(res)
+    }
 
     ## === MODEL ANALYSIS ===
     ##
