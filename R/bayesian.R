@@ -25,14 +25,14 @@ bayesian <- function(x, likelihood =
         b <- shape2
         coll = a/(a + b)
         K = a + b
-        vars = (a * b) * c(K, 1)/(K^2 * (K + 1))
+        vars = (a * b) * c(1, K)/(K^2 * (K + 1))
     }
     else if (likelihood == "poisson")
     {
         if (missing(shape) || (missing(rate) && missing(scale)))
             stop("one of the gamma prior parameter \"shape\", \"rate\" or \"scale\" missing")
         coll = shape * scale
-        vars = c(coll, coll * scale)
+        vars = c(coll * scale, coll)
         K = 1/scale
     }
     else if (likelihood == "geometric")
@@ -44,7 +44,7 @@ bayesian <- function(x, likelihood =
         K <- a - 1
         coll = b/K
         vars <- b * (a + b - 1)/(K * (K - 1))
-        vars <- c(vars, vars/K)
+        vars <- c(vars/K, vars)
     }
     else if (likelihood == "exponential")
     {
@@ -59,7 +59,7 @@ bayesian <- function(x, likelihood =
         if (missing(sd.lik))
             stop ("standard deviation of the likelihood missing")
         coll = mean
-        vars = c(sd.lik, sd)
+        vars = c(sd, sd.lik)
         K = sd.lik/sd
     }
     else
