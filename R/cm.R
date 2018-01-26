@@ -17,7 +17,7 @@ cm <- function(formula, data, ratios, weights, subset,
     ## Catch the pure bayesian special case.
     if (formula == "bayesian")
     {
-        bayesian(data, likelihood, ...)
+        res <- bayesian(data, likelihood, ...)
         class(res) <- c("cm", class(res))
         attr(res, "call") <- Call
         return(res)
@@ -216,9 +216,9 @@ print.cm <- function(x, ...)
     {
         if (i == 1)
         {
-            ## Treat the Hachemeister and no regression models
-            ## separately since for the former the variance components
-            ## vector is a list, with the first element a matrix.
+            ## Treat the Hachemeister model separately since for in
+            ## this case the variance components vector is a list,
+            ## with the first element a matrix.
             s <- paste("  Between", level.names[i], "variance: ", sep = " ")
             if (attr(x, "model") == "regression")
             {
