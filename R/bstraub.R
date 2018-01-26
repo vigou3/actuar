@@ -39,7 +39,7 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
     ## weighted average, as it should, but the contract will have no
     ## contribution in the calculations.
     weights.s <- rowSums(weights, na.rm = TRUE)
-    ratios.w <- ifelse(weights.s > 0, rowSums(weights * ratios, na.rm = TRUE) / weights.s, 0)
+    ratios.w <- ifelse(weights.s > 0, rowSums(weights * ratios, na.rm = TRUE)/weights.s, 0)
 
     ## Size of the portfolio.
     ncontracts <- sum(weights.s > 0)
@@ -49,7 +49,7 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
     weights.ss <- sum(weights.s)
 
     ## Estimation of s^2
-    s2 <-  sum(weights * (ratios - ratios.w)^2, na.rm = TRUE) / (ntotal - ncontracts)
+    s2 <-  sum(weights * (ratios - ratios.w)^2, na.rm = TRUE)/(ntotal - ncontracts)
 
     ## First estimation of a. Always compute the unbiased estimator.
     a <- bvar.unbiased(ratios.w, weights.s, s2, ncontracts)
@@ -63,24 +63,23 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
     if (method == "iterative" &&
         diff(range(weights, na.rm = TRUE)) > .Machine$double.eps^0.5)
     {
-        a <-
-            if (a > 0)
-                bvar.iterative(ratios.w, weights.s, s2, ncontracts, start = a,
-                               tol = tol, maxit = maxit, echo = echo)
-            else
+        a <- if (a > 0)
+                 bvar.iterative(ratios.w, weights.s, s2, ncontracts, start = a,
+                                tol = tol, maxit = maxit, echo = echo)
+             else
                 0
     }
 
     ## Final credibility factors and estimator of the collective mean.
     if (a > 0)
     {
-        cred <- 1 / (1 + s2/(weights.s * a))
-        ratios.zw <- drop(crossprod(cred, ratios.w)) / sum(cred)
+        cred <- 1/(1 + s2/(weights.s * a))
+        ratios.zw <- drop(crossprod(cred, ratios.w))/sum(cred)
     }
     else
     {
         cred <- numeric(length(weights.s))
-        ratios.zw <- drop(crossprod(weights.s, ratios.w)) / sum(weights.s)
+        ratios.zw <- drop(crossprod(weights.s, ratios.w))/sum(weights.s)
     }
 
     structure(list(means = list(ratios.zw, ratios.w),
@@ -99,14 +98,14 @@ predict.bstraub <- function(object, levels = NULL, newdata, ...)
 bvar.unbiased <- function(x, w, within, n)
 {
     w.s <- sum(w)
-    x.w <- drop(crossprod(w, x)) / w.s
+    x.w <- drop(crossprod(w, x))/w.s
 
-    w.s * (drop(crossprod(w, (x - x.w)^2)) - (n - 1) * within) / (w.s^2 - sum(w^2))
+    w.s * (drop(crossprod(w, (x - x.w)^2)) - (n - 1) * within)/(w.s^2 - sum(w^2))
 }
 
 ### codetools does not like the way 'a1' is defined in function
 ### 'bvar.iterative' below. Avoid false positive in R CMD check.
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("a1"))
+if (getRversion() >= "2.15.1") utils::globalVariables(c("a1"))
 
 bvar.iterative <- function(x, w, within, n, start,
                            tol = sqrt(.Machine$double.eps), maxit = 100,
@@ -133,9 +132,9 @@ bvar.iterative <- function(x, w, within, n, start,
             break
         }
 
-        cred <- 1 / (1 + within/(w * a))
-        x.z <- drop(crossprod(cred, x)) / sum(cred)
-        a <- drop(crossprod(cred, (x - x.z)^2)) / (n - 1)
+        cred <- 1/(1 + within/(w * a))
+        x.z <- drop(crossprod(cred, x))/sum(cred)
+        a <- drop(crossprod(cred, (x - x.z)^2))/(n - 1)
 
         if (abs((a - a1)/a1) < tol)
             break
