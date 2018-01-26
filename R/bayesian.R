@@ -21,11 +21,9 @@ bayesian <- function(x, likelihood =
     {
         if (missing(shape1) || missing(shape2))
             stop("one of the Beta prior parameter \"shape1\" or \"scale2\" missing")
-        a <- shape1
-        b <- shape2
-        coll = a/(a + b)
-        K = a + b
-        vars = (a * b) * c(1, K)/(K^2 * (K + 1))
+        coll = shape1/(shape1 + shape2)
+        K = shape1 + shape2
+        vars = (shape1 * shape2) * c(1, K)/(K^2 * (K + 1))
     }
     else if (likelihood == "poisson")
     {
@@ -77,4 +75,6 @@ bayesian <- function(x, likelihood =
 
 }
 
+## Premium calculation is identical to the Buhlmann-Straub case; no
+## need for another method.
 predict.bayesian <- predict.bstraub
