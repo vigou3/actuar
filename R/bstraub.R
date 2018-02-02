@@ -95,6 +95,9 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
 predict.bstraub <- function(object, levels = NULL, newdata, ...)
     structure(object$means[[1]] + object$cred * (object$means[[2]] - object$means[[1]]), ...)
 
+## Alias for the linear Bayes case
+predict.bayes <- predict.bstraub
+
 bvar.unbiased <- function(x, w, within, n)
 {
     w.s <- sum(w)
