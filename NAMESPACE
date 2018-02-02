@@ -107,6 +107,7 @@ S3method(predict, bstraub)
 S3method(predict, cm)
 S3method(predict, hache)
 S3method(predict, hierarc)
+S3method(predict, bayes)
 
 S3method(print, aggregateDist)
 S3method(print, elev)
