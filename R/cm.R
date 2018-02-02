@@ -15,9 +15,11 @@ cm <- function(formula, data, ratios, weights, subset,
     Call <- match.call(expand.dots = TRUE)
 
     ## Catch the pure bayesian special case.
-    if (formula == "bayesian")
+    if (formula == "bayes")
     {
-        res <- bayesian(data, likelihood, ...)
+        if (missing(data))
+            data <- NULL
+        res <- bayes(data, likelihood, ...)
         class(res) <- c("cm", class(res))
         attr(res, "call") <- Call
         return(res)
