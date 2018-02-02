@@ -4,25 +4,22 @@
 ###
 ### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
-bayesian <- function(x, likelihood =
-                            c("poisson", "bernoulli", "geometric",
-                              "exponential", "normal",
-                              "binomial", "negative binomial", "gamma"),
-                     shape, rate = 1, scale = 1/rate,
-                     shape1, shape2,
-                     sd.lik = 1, mean = 0, sd = 1)
+bayes <- function(x, likelihood =
+                         c("poisson", "bernoulli", "geometric",
+                           "exponential", "normal",
+                           "binomial", "negative binomial", "gamma"),
+                  shape, rate = 1, scale = 1/rate,
+                  shape1, shape2,
+                  sd.lik = 1, mean = 0, sd = 1)
 {
     likelihood <- match.arg(likelihood)
-
-    if (!is.vector(x, "numeric"))
-        stop ("data must be a numeric vector for Bayesian models")
 
     if (likelihood == "bernoulli")
     {
         if (missing(shape1) || missing(shape2))
             stop("one of the Beta prior parameter \"shape1\" or \"scale2\" missing")
-        coll = shape1/(shape1 + shape2)
         K = shape1 + shape2
+        coll = shape1/K
         vars = (shape1 * shape2) * c(1, K)/(K^2 * (K + 1))
     }
     else if (likelihood == "poisson")
@@ -63,18 +60,34 @@ bayesian <- function(x, likelihood =
     else
         stop("unsupported likelihood")
 
-    n <- length(x)
-    structure(list(means = c(coll, if (length(x) > 0) mean(x) else 0),
+    ## In the pure Bayesian case we allow empty data (makes sense
+    ## since there is no estimation to be carried), an atomic vector
+    ## of data (for a single contract), or a matrix or data frame (in
+    ## which case we compute the Bayesian premium for each contract).
+    ## Computation of the number of years 'n' and the individual means
+    ## differ if data is a vector or a matrix/data frame.
+    if (is.null(dim(x)))
+    {
+        n <- length(x)
+        ind.means <- if (n > 0) mean(x) else 0
+    }
+    else
+    {
+        n <- ncol(x)
+        ind.means <- rowMeans(x)
+    }
+
+    structure(list(means = list(coll, ind.means),
                    weights = rep_len(1, n),
                    unbiased = vars,
                    iterative = NULL,
                    cred = n/(n + K),
                    nodes = 1L),
-              class = "bayesian",
+              class = "bayes",
               model = "Pure Bayesian")
 
 }
 
 ## Premium calculation is identical to the Buhlmann-Straub case; no
-## need for another method.
-predict.bayesian <- predict.bstraub
+## need for another method. See bstraub.R for the definition.
+# predict.bayes <- predict.bstraub
