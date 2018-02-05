@@ -60,10 +60,10 @@ bayes <- function(x, likelihood =
     else
         stop("unsupported likelihood")
 
-    ## In the pure Bayesian case we allow empty data (makes sense
+    ## In the pure Bayesian case we allow NULL data (makes sense
     ## since there is no estimation to be carried), an atomic vector
-    ## of data (for a single contract), or a matrix or data frame (in
-    ## which case we compute the Bayesian premium for each contract).
+    ## (for a single contract), or a matrix or data frame (in which
+    ## case we compute the Bayesian premium for each contract).
     ## Computation of the number of years 'n' and the individual means
     ## differ if data is a vector or a matrix/data frame.
     if (is.null(dim(x)))
