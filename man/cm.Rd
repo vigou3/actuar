@@ -243,9 +243,10 @@ cm(formula, data, ratios, weights, subset,
   of the Gamma likelihood. For the Normal/Normal case, use
   \code{mean.lik} for the mean of the Normal likelihood.
 
-  Data may be missing or \code{NULL}, in which case the result is the
-  collective premium. Data may also be an atomic vector to compute the
-  linear Bayes premium for a single contract.
+  Data for the linear Bayes case may be a matrix or data frame as usual;
+  an atomic vector to fit the model to a single contract; missing or
+  \code{NULL} to fit the prior model. Arguments \code{ratios},
+  \code{weights} and \code{subset} are ignored.  
 }
 \value{
   Function \code{cm} computes the structure parameters estimators of the
