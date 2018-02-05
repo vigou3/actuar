@@ -213,14 +213,17 @@ print.cm <- function(x, ...)
     cat("\n")
 
     cat("Structure Parameters Estimators\n\n")
-    cat("  Collective premium:", x$means[[1]], "\n", fill = TRUE)
+    cat("  Collective premium:", x$means[[1]], "\n")
     for (i in seq.int(nlevels))
     {
         if (i == 1L)
         {
             ## Treat the Hachemeister model separately since in this
             ## case the variance components vector is a list, with the
-            ## first element a matrix.
+            ## first element a matrix. (Note that since a matrix with
+            ## empty column names is printed to the screen, there will
+            ## be a blank line in the display. Hence the inserted
+            ## newline in the 'else' case.)
             if (attr(x, "model") == "regression")
             {
                 m <- b[[1]]
@@ -230,7 +233,7 @@ print.cm <- function(x, ...)
                 print(m)
             }
             else
-                cat("  Between", level.names[i], "variance:",
+                cat("\n  Between", level.names[i], "variance:",
                     b[i], "\n")
         }
         else
