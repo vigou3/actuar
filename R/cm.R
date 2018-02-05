@@ -322,7 +322,7 @@ print.summary.cm <- function(x, ...)
             y[seq(1, nrow(y), dim(x$cred[[i]])[1]), c(1L, 5L)] <-
                 c(levs[!m, , drop = FALSE], format(x$premiums[[i]], ...))
             colnames(y) <- c(colnames(levs),
-                             "Indiv. coef.", "Credibility matrix",
+                             "Indiv. coef.", "Cred. matrix",
                              "Adj. coef.", "Cred. premium")
         }
         else if (is.null(levs))
