@@ -7,13 +7,14 @@
 \title{Credibility Models}
 \description{
   Fit the following credibility models: \enc{Bühlmann}{Buhlmann},
-  \enc{Bühlmann}{Buhlmann}-Straub, hierarchical or regression
-  (Hachemeister).
+  \enc{Bühlmann}{Buhlmann}-Straub, hierarchical, regression
+  (Hachemeister) or linear Bayes.
 }
 \usage{
 cm(formula, data, ratios, weights, subset,
    regformula = NULL, regdata, adj.intercept = FALSE,
    method = c("Buhlmann-Gisler", "Ohlsson", "iterative"),
+   likelihood, ...,
    tol = sqrt(.Machine$double.eps), maxit = 100, echo = FALSE)
 
 \method{print}{cm}(x, \dots)
@@ -25,9 +26,10 @@ cm(formula, data, ratios, weights, subset,
 \method{print}{summary.cm}(x, \dots)
 }
 \arguments{
-  \item{formula}{an object of class \code{"\link[stats]{formula}"}: a
-    symbolic description of the model to be fit. The details of model
-    specification are given below.}
+  \item{formula}{character string \code{"bayes"} or an object of
+    class \code{"\link[stats]{formula}"}: a symbolic description of the
+    model to be fit. The details of model specification are given
+    below.}
   \item{data}{a matrix or a data frame containing the portfolio
     structure, the ratios or claim amounts and their associated weights,
     if any.}
@@ -51,6 +53,9 @@ cm(formula, data, ratios, weights, subset,
     origin.}
   \item{method}{estimation method for the variance components of the
     model; see details below.}
+  \item{likelihood}{a character string giving the name of the likelihood
+    function in one of the supported linear Bayes cases; see details
+    below.}
   \item{tol}{tolerance level for the stopping criteria for iterative
     estimation method.}
   \item{maxit}{maximum number of iterations in iterative estimation
@@ -61,29 +66,32 @@ cm(formula, data, ratios, weights, subset,
     include in the summary; if \code{NULL} all levels are included.}
   \item{newdata}{data frame containing the variables used to predict
     credibility regression models.}
-  \item{\dots}{additional attributes to attach to the result for the
+  \item{\dots}{parameters of the prior distribution for \code{cm};
+    additional attributes to attach to the result for the
     \code{predict} and \code{summary} methods; further arguments to
     \code{\link[base]{format}} for the \code{print.summary} method;
     unused for the \code{print} method.}
 }
 \details{
-  \code{cm} is the unified front end for credibility models fitting.
-  Currently, the function supports hierarchical models with any number
-  of levels (with \enc{Bühlmann}{Buhlmann} and
-  \enc{Bühlmann}{Buhlmann}-Straub models as special cases) and the
-  regression model of Hachemeister. Usage of \code{cm} is similar to
-  \code{\link[stats]{lm}}.
+  \code{cm} is the unified front end for credibility models fitting. The
+  function supports hierarchical models with any number of levels (with
+  \enc{Bühlmann}{Buhlmann} and \enc{Bühlmann}{Buhlmann}-Straub models as
+  special cases) and the regression model of Hachemeister. Usage of
+  \code{cm} is similar to \code{\link[stats]{lm}} for these cases.
+  \code{cm} can also fit linear Bayes models, in which case usage is
+  much simplified; see the section on linear Bayes below.
 
-  The \code{formula} argument symbolically describes the structure of
-  the portfolio in the form \eqn{~ terms}. Each term is an interaction
-  between risk factors contributing to the total variance of the
-  portfolio data. Terms are separated by \code{+} operators and
-  interactions within each term by \code{:}. For a portfolio divided
-  first into sectors, then units and finally contracts, \code{formula}
-  would be \code{~ sector + sector:unit + sector:unit:contract}, where
-  \code{sector}, \code{unit} and \code{contract} are column names in
-  \code{data}. In general, the formula should be of the form \code{~ a +
-  a:b + a:b:c + a:b:c:d + ...}.
+  When not \code{"bayes"}, the \code{formula} argument symbolically
+  describes the structure of the portfolio in the form \eqn{~ terms}.
+  Each term is an interaction between risk factors contributing to the
+  total variance of the portfolio data. Terms are separated by \code{+}
+  operators and interactions within each term by \code{:}. For a
+  portfolio divided first into sectors, then units and finally
+  contracts, \code{formula} would be \code{~ sector + sector:unit +
+  sector:unit:contract}, where \code{sector}, \code{unit} and
+  \code{contract} are column names in \code{data}. In general, the
+  formula should be of the form \code{~ a + a:b + a:b:c + a:b:c:d +
+  ...}.
 
   If argument \code{regformula} is not \code{NULL}, the regression model
   of Hachemeister is fit to the data. The response is usually time. By
@@ -195,6 +203,50 @@ cm(formula, data, ratios, weights, subset,
   barycenter of time, the choice of estimators is the same as in the
   \enc{Bühlmann}{Buhlmann}-Straub model.
 }
+\section{Linear Bayes}{
+  When \code{formula} is \code{"bayes"}, the function computes pure
+  Bayesian premiums for the combinations of distributions where they are
+  linear credibility premiums, that is:
+  \itemize{
+    \item{\eqn{X|\Theta = \theta \sim \text{Poisson}(\theta)}{X|\Theta ~ Poisson(\Theta)} and
+      \eqn{\Theta \sim \text{Gamma}(\alpha, \lambda)}{\Theta ~ Gamma(\alpha, \lambda)};}
+    \item{\eqn{X|\Theta = \theta \sim \text{Exponential}(\theta)}{X|\Theta ~ Exponential(\Theta)} and
+      \eqn{\Theta \sim  \text{Gamma}(\alpha, \lambda)}{\Theta ~ Gamma(\alpha, \lambda)};}
+    \item{\eqn{X|\Theta = \theta \sim \text{Gamma}(\tau, \theta)}{X|\Theta ~ Gamma(\tau, \Theta)} and
+      \eqn{\Theta \sim  \text{Gamma}(\alpha, \lambda)}{\Theta ~ Gamma(\alpha, \lambda)};}
+    \item{\eqn{X|\Theta = \theta \sim \text{Normal}(\theta, \sigma_2^2)}{X|\Theta ~ Normal(\Theta, \sigma_2^2)} and
+      \eqn{\Theta \sim \text{Normal}(\mu, \sigma_1^2)}{\Theta ~ Normal(\mu, \sigma_1^2)};}
+    \item{\eqn{X|\Theta = \theta \sim \text{Bernoulli}(\theta)}{X|\Theta ~ Bernoulli(\Theta)} and
+      \eqn{\Theta \sim \text{Beta}(a, b)}{\Theta ~ Beta(a, b)};}
+    \item{\eqn{X|\Theta = \theta \sim \text{Binomial}(\nu, \theta)}{X|\Theta ~ Binomial(\nu, \Theta)} and
+      \eqn{\Theta \sim \text{Beta}(a, b)}{\Theta ~ Beta(a, b)};}
+    \item{\eqn{X|\Theta = \theta \sim \text{Geometric}(\theta)}{X|\Theta = \theta ~ Geometric(\theta)} and
+      \eqn{\Theta \sim \text{Beta}(a, b)}{\Theta ~ Beta(a, b)}.}
+    \item{\eqn{X|\Theta = \theta \sim \text{Negative Binomial}(r, \theta)}{X|\Theta ~ Negative Binomial(r, \Theta)} and
+      \eqn{\Theta \sim \text{Beta}(a, b)}{\Theta ~ Beta(a, b)}.}}
+
+  Argument \code{likelihood} identifies the distribution of \eqn{X|\Theta
+    = \theta} as one of
+  \code{"poisson"},
+  \code{"exponential"},
+  \code{"gamma"},
+  \code{"normal"},
+  \code{"bernoulli"},
+  \code{"binomial"},
+  \code{"geometric"} or
+  \code{"negative binomial"}.
+
+  The parameters of \eqn{\Theta} are set in \code{\dots} using the
+  argument names of \code{\link[stats]{dgamma}},
+  \code{\link[stats]{normal}} or \code{\link[stats]{}}, as appropriate.
+  For the Gamma/Gamma case, use \code{shape.lik} for the shape parameter
+  of the Gamma likelihood. For the Normal/Normal case, use
+  \code{mean.lik} for the mean of the Normal likelihood.
+
+  Data may be missing or \code{NULL}, in which case the result is the
+  collective premium. Data may also be an atomic vector to compute the
+  linear Bayes premium for a single contract.
+}
 \value{
   Function \code{cm} computes the structure parameters estimators of the
   model specified in \code{formula}. The value returned is an object of
@@ -291,5 +343,11 @@ fit <- cm(~state, hachemeister, adj.intercept = TRUE,
 fit
 predict(fit, newdata = data.frame(time = 0))
 summary(fit, newdata = data.frame(time = 0))
+
+## Poisson/Gamma linear Bayes premium
+fit <- cm("bayes", data = c(5, 3, 0, 1, 1),
+          likelihood = "poisson", shape = 3, rate = 3)
+fit
+predict(fit)
 }
 \keyword{models}
