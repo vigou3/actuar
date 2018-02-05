@@ -205,8 +205,8 @@ cm(formula, data, ratios, weights, subset,
 }
 \section{Linear Bayes}{
   When \code{formula} is \code{"bayes"}, the function computes pure
-  Bayesian premiums for the combinations of distributions where they are
-  linear credibility premiums, that is:
+  Bayesian premiums for the following combinations of distributions
+  where they are linear credibility premiums:
   \itemize{
     \item{\eqn{X|\Theta = \theta \sim \text{Poisson}(\theta)}{X|\Theta ~ Poisson(\Theta)} and
       \eqn{\Theta \sim \text{Gamma}(\alpha, \lambda)}{\Theta ~ Gamma(\alpha, \lambda)};}
@@ -236,12 +236,15 @@ cm(formula, data, ratios, weights, subset,
   \code{"geometric"} or
   \code{"negative binomial"}.
 
-  The parameters of \eqn{\Theta} are set in \code{\dots} using the
-  argument names of \code{\link[stats]{dgamma}},
-  \code{\link[stats]{normal}} or \code{\link[stats]{}}, as appropriate.
-  For the Gamma/Gamma case, use \code{shape.lik} for the shape parameter
-  of the Gamma likelihood. For the Normal/Normal case, use
-  \code{mean.lik} for the mean of the Normal likelihood.
+  The parameters of the distributions of \eqn{X|\Theta = \theta} (when
+  needed) and \eqn{\Theta} are set in \code{\dots} using the argument
+  names (and default values) of \code{\link[stats]{dgamma}},
+  \code{\link[stats]{dnorm}}, \code{\link[stats]{dbeta}},
+  \code{\link[stats]{dbinom}} or \code{\link[stats]{dnbinom}}, as
+  appropriate. For the Gamma/Gamma case, use \code{shape.lik} for the
+  shape parameter \eqn{\tau} of the Gamma likelihood. For the
+  Normal/Normal case, use \code{sd.lik} for the standard error
+  \eqn{\sigma_2} of the Normal likelihood.
 
   Data for the linear Bayes case may be a matrix or data frame as usual;
   an atomic vector to fit the model to a single contract; missing or
@@ -345,10 +348,16 @@ fit
 predict(fit, newdata = data.frame(time = 0))
 summary(fit, newdata = data.frame(time = 0))
 
-## Poisson/Gamma linear Bayes premium
+## Poisson/Gamma pure Bayesian model
 fit <- cm("bayes", data = c(5, 3, 0, 1, 1),
           likelihood = "poisson", shape = 3, rate = 3)
 fit
 predict(fit)
+summary(fit)
+
+## Normal/Normal pure Bayesian model
+cm("bayes", data = c(5, 3, 0, 1, 1),
+   likelihood = "normal", sd.lik = 2,
+   mean = 2, sd = 1)
 }
 \keyword{models}
