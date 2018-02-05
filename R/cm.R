@@ -213,23 +213,25 @@ print.cm <- function(x, ...)
     cat("\n")
 
     cat("Structure Parameters Estimators\n\n")
-    cat("  Collective premium:", x$means[[1]], "\n")
+    cat("  Collective premium:", x$means[[1]], "\n", fill = TRUE)
     for (i in seq.int(nlevels))
     {
-        if (i == 1)
+        if (i == 1L)
         {
-            ## Treat the Hachemeister model separately since for in
-            ## this case the variance components vector is a list,
-            ## with the first element a matrix.
-            s <- paste("  Between", level.names[i], "variance: ", sep = " ")
+            ## Treat the Hachemeister model separately since in this
+            ## case the variance components vector is a list, with the
+            ## first element a matrix.
             if (attr(x, "model") == "regression")
             {
                 m <- b[[1]]
-                dimnames(m) <- list(c(s, rep("", nrow(m) - 1)), rep("", ncol(m)))
+                dimnames(m) <- list(c(paste("  Between", level.names[i], "variance: "),
+                                      rep("", nrow(m) - 1)),
+                                    rep("", ncol(m)))
                 print(m)
             }
             else
-                cat("\n", s, b[i], "\n", sep = "")
+                cat("  Between", level.names[i], "variance:",
+                    b[i], "\n")
         }
         else
             cat("  Within ", level.names[i - 1],
@@ -243,9 +245,9 @@ print.cm <- function(x, ...)
 
 summary.cm <- function(object, levels = NULL, newdata, ...)
 {
-    level.names <- names(object$nodes)
+    nlevels <- length(object$nodes)
 
-    if (length(level.names) == 1)
+    if (nlevels == 1L)
     {
         ## Single level cases (Buhlmann-Straub and Hachemeister):
         ## return the object with the following modifications: put
@@ -261,9 +263,9 @@ summary.cm <- function(object, levels = NULL, newdata, ...)
         ## appropriate level(s).
         plevs <-
             if (is.null(levels))
-                seq_along(level.names)
+                seq_along(names(object$nodes))
             else
-                pmatch(levels, level.names)
+                pmatch(levels, names(object$nodes))
         if (any(is.na(plevs)))
             stop("invalid level name")
 
@@ -288,32 +290,55 @@ print.summary.cm <- function(x, ...)
     cat("Detailed premiums\n\n")
     for (i in seq.int(nlevels))
     {
-        cat("  Level:", level.names[i], "\n")
-        level.id <- match(level.names[i], colnames(x$classification))
-        levs <- x$classification[, seq.int(level.id), drop = FALSE]
-        m <- duplicated(levs)
+        ## Print a "section title" only if there is more than one
+        ## level. (Provision introduced in v2.3.0; before the title
+        ## was always printed.)
+        if (nlevels > 1L)
+            cat("  Level:", level.names[i], "\n")
 
-        ## Treat the Hachemeister and no regression models
-        ## separately.
+        ## There are no level names in the linear Bayes case, so we
+        ## skip this column in the results.
+        if (is.null(level.names))
+            levs <- NULL
+        else
+        {
+            level.id <- match(level.names[i], colnames(x$classification))
+            levs <- x$classification[, seq.int(level.id), drop = FALSE]
+            m <- duplicated(levs)
+        }
+
         if (attr(x, "model") == "regression")
         {
+            ## Hachemeister model: results contain matrices
             y <- cbind(" ",
-                       as.vector(format(x$means[[i + 1]], ...)),
-                       as.vector(apply(format(x$cred[[i]], ...), c(1, 3),
+                       as.vector(format(x$means[[i + 1L]], ...)),
+                       as.vector(apply(format(x$cred[[i]], ...), c(1L, 3L),
                                        paste, collapse = " ")),
                        as.vector(format(sapply(x$adj.models, coef), ...)),
                        " ")
-            y[seq(1, nrow(y), dim(x$cred[[i]])[1]), c(1, 5)] <-
+            y[seq(1, nrow(y), dim(x$cred[[i]])[1]), c(1L, 5L)] <-
                 c(levs[!m, , drop = FALSE], format(x$premiums[[i]], ...))
             colnames(y) <- c(colnames(levs),
                              "Indiv. coef.", "Credibility matrix",
                              "Adj. coef.", "Cred. premium")
         }
+        else if (is.null(levs))
+        {
+            ## Linear Bayes model: simplified results with no level
+            ## column
+            y <- cbind(format(x$means[[i + 1L]], ...),
+                       format(x$weights[[i + 1L]], ...),
+                       format(x$cred[[i]], ...),
+                       format(x$premiums[[i]], ...))
+            colnames(y) <- c("Indiv. mean", "Weight",
+                             "Cred. factor", "Bayes premium")
+        }
         else
         {
+            ## All other models
             y <- cbind(as.matrix(levs[!m, , drop = FALSE]),
-                       format(x$means[[i + 1]], ...),
-                       format(x$weights[[i + 1]], ...),
+                       format(x$means[[i + 1L]], ...),
+                       format(x$weights[[i + 1L]], ...),
                        format(x$cred[[i]], ...),
                        format(x$premiums[[i]], ...))
             colnames(y) <- c(colnames(levs),
