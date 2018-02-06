@@ -208,9 +208,9 @@ print.cm <- function(x, ...)
     level.names <- names(x$nodes)
     b <- if (is.null(x$iterative)) x$unbiased else x$iterative
 
-    cat("Call:\n")
-    print(attr(x, "call"))
-    cat("\n")
+    cat("Call:\n",
+        paste(deparse(attr(x, "call")), sep = "\n", collapse = "\n"),
+        "\n\n", sep = "")
 
     cat("Structure Parameters Estimators\n\n")
     cat("  Collective premium:", x$means[[1]], "\n")
