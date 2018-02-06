@@ -48,7 +48,7 @@ bayes <- function(x, likelihood =
             cred <- 1/(1 + 1/(scale * sumlog))
         }
     }
-    ## Here are the usual linear Bayes cases.
+    ## Now the usual linear Bayes cases.
     else
     {
         if (likelihood == "bernoulli")
