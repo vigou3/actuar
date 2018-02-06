@@ -7,10 +7,12 @@
 bayes <- function(x, likelihood =
                          c("poisson", "bernoulli", "geometric",
                            "exponential", "normal",
-                           "binomial", "negative binomial", "gamma"),
+                           "binomial", "negative binomial", "gamma",
+                           "pareto"),
                   shape, rate = 1, scale = 1/rate,
                   shape1, shape2,
-                  sd.lik = 1, mean = 0, sd = 1)
+                  sd.lik = 1, mean = 0, sd = 1,
+                  min)
 {
     likelihood <- match.arg(likelihood)
 
