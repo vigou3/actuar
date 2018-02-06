@@ -34,11 +34,9 @@ bayes <- function(x, likelihood =
     {
         if (missing(shape1) || missing(shape2))
             stop("one of the Beta prior parameter \"shape1\" or \"scale2\" missing")
-        a <- shape1
-        b <- shape2
-        K <- a - 1
-        coll = b/K
-        vars <- b * (a + b - 1)/(K * (K - 1))
+        K <- shape1 - 1
+        coll = shape2/K
+        vars <- shape2 * (shape2 + K)/(K * (K - 1))
         vars <- c(vars/K, vars)
     }
     else if (likelihood == "exponential")
