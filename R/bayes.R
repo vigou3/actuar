@@ -38,14 +38,14 @@ bayes <- function(x, likelihood =
             n <- length(x)
             sumlog <- sum(log(x)) - n * log(min)
             ind.means <- n/sumlog
-            cred <- sumlog/(scale + sumlog)
+            cred <- 1/(1 + 1/(scale * sumlog))
         }
         else                            # matrix or data frame
         {
             n <- ncol(x)
             sumlog <- rowSums(log(x)) - n * log(min)
             ind.means <- n/sumlog
-            cred <- sumlog/(scale + sumlog)
+            cred <- 1/(1 + 1/(scale * sumlog))
         }
     }
     ## Here are the usual linear Bayes cases.
