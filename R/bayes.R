@@ -33,7 +33,7 @@ bayes <- function(x, likelihood =
         ## Computation of individual means and credibility factors
         ## differs depending on the type of data provided in argument.
         if (is.null(x))                 # no data
-            cred <- ind.means <- 0
+            cred <- ind.means <- n <- 0
         else if (is.vector(x, mode = "numeric")) # atomic vector
         {
             n <- length(x)
@@ -130,7 +130,7 @@ bayes <- function(x, likelihood =
         ## Computation of individual means and credibility factors
         ## differs depending on the type of data provided in argument.
         if (is.null(x))                 # no data
-            cred <- ind.means <- 0
+            cred <- ind.means <- n <- 0
         else if (is.vector(x, mode = "numeric")) # atomic vector
         {
             n <- length(x)
