@@ -122,7 +122,7 @@ bayes <- function(x, likelihood =
                 stop("standard deviation of the likelihood missing")
             coll <- mean
             vars <- c(sd, sd.lik)^2
-            K <- var[2L]/vars[1L]
+            K <- vars[2L]/vars[1L]
         }
         else
             stop("unsupported likelihood")
