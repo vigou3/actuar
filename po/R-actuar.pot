@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: actuar 2.0-0\n"
-"POT-Creation-Date: 2016-11-04 23:26\n"
+"Project-Id-Version: actuar 2.3-0\n"
+"POT-Creation-Date: 2018-02-06 22:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,6 +71,27 @@ msgid "internal error"
 msgstr ""
 
 msgid "function not defined for approximating distributions"
+msgstr ""
+
+msgid "lower bound of the likelihood missing"
+msgstr ""
+
+msgid "one of the Gamma prior parameter \"shape\", \"rate\" or \"scale\" missing"
+msgstr ""
+
+msgid "one of the Beta prior parameter \"shape1\" or \"scale2\" missing"
+msgstr ""
+
+msgid "parameter \"size\" of the likelihood missing"
+msgstr ""
+
+msgid "parameter \"shape.lik\" of the likelihood missing"
+msgstr ""
+
+msgid "parameter \"sd.lik\" of the likelihood missing"
+msgstr ""
+
+msgid "unsupported likelihood"
 msgstr ""
 
 msgid "missing ratios not allowed when weights are not supplied"

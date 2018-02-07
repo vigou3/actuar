@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: actuar 2.0-0\n"
+"Project-Id-Version: actuar 2.3-0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-04 23:26-0400\n"
+"POT-Creation-Date: 2018-02-06 21:46-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,33 +17,29 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: dpq.c:71 dpq.c:141 dpq.c:276 dpq.c:530 dpq.c:720 dpq.c:890 dpqphtype.c:49
+#: dpq.c:78 dpq.c:212 dpq.c:466 dpq.c:656 dpq.c:826 dpqphtype.c:49
 #: random.c:102 random.c:109 random.c:201 random.c:208 random.c:317
 #: random.c:324 random.c:426 random.c:433 randomphtype.c:70 randomphtype.c:77
 msgid "invalid arguments"
 msgstr ""
 
-#: dpq.c:112
-msgid "internal error in actuar_do_dpq0"
-msgstr ""
-
-#: dpq.c:244
+#: dpq.c:180
 msgid "internal error in actuar_do_dpq1"
 msgstr ""
 
-#: dpq.c:497
+#: dpq.c:433
 msgid "internal error in actuar_do_dpq2"
 msgstr ""
 
-#: dpq.c:683
+#: dpq.c:619
 msgid "internal error in actuar_do_dpq3"
 msgstr ""
 
-#: dpq.c:854
+#: dpq.c:790
 msgid "internal error in actuar_do_dpq4"
 msgstr ""
 
-#: dpq.c:986
+#: dpq.c:922
 msgid "internal error in actuar_do_dpq5"
 msgstr ""
 
@@ -51,23 +47,11 @@ msgstr ""
 msgid "internal error in actuar_do_dpqphtype2"
 msgstr ""
 
-#: expint.c:348
-msgid "overflow in expint_E1"
-msgstr ""
-
-#: expint.c:370
-msgid "invalid input domain in expint_E1"
-msgstr ""
-
-#: expint.c:391 expint.c:398
-msgid "underflow in expint_E1"
-msgstr ""
-
-#: hierarc.c:100 invgauss.c:206
+#: hierarc.c:100 invgauss.c:201
 msgid "maximum number of iterations reached before obtaining convergence"
 msgstr ""
 
-#: invgauss.c:139
+#: invgauss.c:142
 msgid "maximum number of iterations must be at least 1"
 msgstr ""
 

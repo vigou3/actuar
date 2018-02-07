@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: actuar 1.1-7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-04 23:26-0400\n"
-"PO-Revision-Date: 2016-10-31 12:53-0400\n"
+"POT-Creation-Date: 2018-02-06 21:46-0500\n"
+"PO-Revision-Date: 2018-02-06 22:03-0500\n"
 "Last-Translator: Vincent Goulet <vincent@vgoulet.act.ulaval.ca>\n"
 "Language-Team: Vincent Goulet <vincent@vgoulet.act.ulaval.ca>\n"
 "Language: fr\n"
@@ -18,33 +18,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: dpq.c:71 dpq.c:141 dpq.c:276 dpq.c:530 dpq.c:720 dpq.c:890 dpqphtype.c:49
+#: dpq.c:78 dpq.c:212 dpq.c:466 dpq.c:656 dpq.c:826 dpqphtype.c:49
 #: random.c:102 random.c:109 random.c:201 random.c:208 random.c:317
 #: random.c:324 random.c:426 random.c:433 randomphtype.c:70 randomphtype.c:77
 msgid "invalid arguments"
 msgstr "arguments incorrects"
 
-#: dpq.c:112
-msgid "internal error in actuar_do_dpq0"
-msgstr "erreur interne dans actuar_do_dpq0"
-
-#: dpq.c:244
+#: dpq.c:180
 msgid "internal error in actuar_do_dpq1"
 msgstr "erreur interne dans actuar_do_dpq1"
 
-#: dpq.c:497
+#: dpq.c:433
 msgid "internal error in actuar_do_dpq2"
 msgstr "erreur interne dans actuar_do_dpq2"
 
-#: dpq.c:683
+#: dpq.c:619
 msgid "internal error in actuar_do_dpq3"
 msgstr "erreur interne dans actuar_do_dpq3"
 
-#: dpq.c:854
+#: dpq.c:790
 msgid "internal error in actuar_do_dpq4"
 msgstr "erreur interne dans actuar_do_dpq4"
 
-#: dpq.c:986
+#: dpq.c:922
 msgid "internal error in actuar_do_dpq5"
 msgstr "erreur interne dans actuar_do_dpq5"
 
@@ -52,23 +48,11 @@ msgstr "erreur interne dans actuar_do_dpq5"
 msgid "internal error in actuar_do_dpqphtype2"
 msgstr "erreur interne dans actuar_do_dpqphtype2"
 
-#: expint.c:348
-msgid "overflow in expint_E1"
-msgstr "dépassement de capacité dans expint_E1"
-
-#: expint.c:370
-msgid "invalid input domain in expint_E1"
-msgstr "domaine en entrée invalide dans expint_E1"
-
-#: expint.c:391 expint.c:398
-msgid "underflow in expint_E1"
-msgstr "soupassement de capacité dans expint_E1"
-
-#: hierarc.c:100 invgauss.c:206
+#: hierarc.c:100 invgauss.c:201
 msgid "maximum number of iterations reached before obtaining convergence"
 msgstr "nombre d'itérations maximal atteint avant obtention de la convergence"
 
-#: invgauss.c:139
+#: invgauss.c:142
 msgid "maximum number of iterations must be at least 1"
 msgstr "le nombre d'itérations maximal doit être au moins 1"
 

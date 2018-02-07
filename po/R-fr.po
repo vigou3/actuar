@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: actuar 2.0-0\n"
 "Report-Msgid-Bugs-To: bugs@r-project.org\n"
-"POT-Creation-Date: 2016-10-31 12:32\n"
-"PO-Revision-Date: 2016-10-31 12:34-0400\n"
+"POT-Creation-Date: 2018-02-06 22:00\n"
+"PO-Revision-Date: 2018-02-06 22:02-0500\n"
 "Last-Translator: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
 "Language-Team: Vincent Goulet <vincent.goulet@act.ulaval.ca>\n"
 "Language: fr\n"
@@ -85,6 +85,29 @@ msgstr "erreur interne"
 
 msgid "function not defined for approximating distributions"
 msgstr "fonction non définie pour les méthodes d'approximation"
+
+msgid "lower bound of the likelihood missing"
+msgstr "seuil de la vraisemblance manquant"
+
+msgid ""
+"one of the Gamma prior parameter \"shape\", \"rate\" or \"scale\" missing"
+msgstr ""
+"un des paramètres \"shape\", \"rate\" ou \"scale\" de la loi Gamma manquant"
+
+msgid "one of the Beta prior parameter \"shape1\" or \"scale2\" missing"
+msgstr "un des paramètres \"shape1\" ou \"shape2\" de la loi Bêta manquant"
+
+msgid "parameter \"size\" of the likelihood missing"
+msgstr "paramètre \"size\" de la vraisemblance manquant"
+
+msgid "parameter \"shape.lik\" of the likelihood missing"
+msgstr "paramètre \"shape.lik\" de la vraisemblance manquant"
+
+msgid "parameter \"sd.lik\" of the likelihood missing"
+msgstr "paramètre \"sd.lik\" de la vraisemblance manquant"
+
+msgid "unsupported likelihood"
+msgstr "vraisemblance non valide"
 
 msgid "missing ratios not allowed when weights are not supplied"
 msgstr "ratios manquants non permis lorsque les poids ne sont pas fournis"
@@ -298,6 +321,3 @@ msgstr "valeur de 'by' incorrecte"
 
 msgid "'x' must be a vector or a matrix"
 msgstr "'x' doit être un vecteur ou une matrice"
-
-#~ msgid "'p0' must be specified with the logarithmic distribution"
-#~ msgstr "valeur de 'p0' requise pour la distribution logarithmique"
