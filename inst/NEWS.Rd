@@ -2,20 +2,26 @@
 \title{\pkg{actuar} News}
 \encoding{UTF-8}
 
-\section{CHANGES IN \pkg{actuar} VERSION <<<???>>>}{
+\section{CHANGES IN \pkg{actuar} VERSION 2.3-0}{
   \subsection{NEW FEATURES}{
     \itemize{
+      \item{\code{cm} can now fit linear Bayes models for the following
+	combinations of likelihood and prior distributions:
+	Poisson/Gamma, Exponential/Gamma, Bernoulli/Beta,
+	Geometric/Beta, Normal/Normal, Gamma/Gamma, Binomial/Beta,
+	Negative Binomial/Beta and the less common case Single Parameter
+	Pareto/Gamma (where the Bayes estimator is linear, but not a
+	credibility premium). Thanks to Christophe Dutang
+	\email{dutang@ceremade.dauphine.fr} for the idea.}
       \item{\code{rcomphierarc.summaries} is now an alias for the man
-	page of \code{simul.summaries}.
-    }
-  }
-  \subsection{BUG FIX}{
-    \itemize{
-      \item{}
+	page of \code{simul.summaries}.}
     }
   }
   \subsection{USER VISIBLE CHANGES}{
     \itemize{
+      \item{In \code{summary} results for credibility models, a level 
+	\dQuote{section title} is no longer printed for one-level
+	models.}
       \item{All instances of function \code{simul} in vignette
 	\code{dQuote{simulation}} replaced by \code{rcomphierarc}.}
     }
