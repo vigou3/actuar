@@ -496,22 +496,46 @@ and the convolutions
   $\Theta \sim \text{Beta}(a, b)$.
 \end{itemize}
 
-When \code{formula} is \code{"bayes"}, function \code{cm} computes
-pure Bayesian premiums for the combinations of distributions above. We
-identify which by means of argument \code{likelihood} that must be one
-of %
+In addition, \citet[section~2.6]{Buhlmann_Gisler} show that if
+$X|\Theta = \theta \sim \text{Single Parameter Pareto}(\theta, x_0)$ and
+$\Theta \sim \text{Gamma}(\alpha, \lambda)$, then the Bayesian
+estimator of parameter $\theta$ --- not of the risk premium! --- is
+\begin{equation*}
+  \hat{\Theta} = \eta \hat{\theta}^{\text{MLE}} +
+  (1 - \eta) \frac{\alpha}{\lambda},
+\end{equation*}
+where
+\begin{equation*}
+  \hat{\theta}^{\text{MLE}} =
+  \frac{n}{\sum_{i = 1}^n \ln (X_i/x_0)}
+\end{equation*}
+is the maximum likelihood estimator of $\theta$ and
+\begin{equation*}
+  \eta = \frac{\sum_{i = 1}^n \ln (X_i/x_0)}{%
+    \lambda + \sum_{i = 1}^n \ln (X_i/x_0)}
+\end{equation*}
+is a weight not restricted to $(0, 1)$. (See the
+\code{"distributions"} package vignette for details on the Single
+Parameter Pareto distribution.)
+
+When argument \code{formula} is \code{"bayes"}, function \code{cm}
+computes pure Bayesian premiums --- or estimator in the Pareto/Gamma
+case --- for the combinations of distributions above. We identify
+which by means of argument \code{likelihood} that must be one of %
 \code{"poisson"}, %
 \code{"exponential"}, %
 \code{"gamma"}, %
 \code{"normal"}, %
 \code{"bernoulli"}, %
 \code{"binomial"}, %
-\code{"geometric"} or %
-\code{"negative binomial"}. %
+\code{"geometric"}, %
+\code{"negative binomial"} or %
+\code{"pareto"}. %
 The parameters of the distribution of $X|\Theta = \theta$, if any, and
 those of the distribution of $\Theta$ are specified using the argument
 names (and default values) of \code{dgamma}, \code{dnorm},
-\code{dbeta}, \code{dbinom} or \code{dnbinom}, as appropriate.
+\code{dbeta}, \code{dbinom}, \code{dnbinom} or \code{dpareto1}, as
+appropriate.
 
 Consider the case where
 \begin{align*}

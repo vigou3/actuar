@@ -225,6 +225,13 @@ cm(formula, data, ratios, weights, subset,
     \item{\eqn{X|\Theta = \theta \sim \text{Negative Binomial}(r, \theta)}{X|\Theta ~ Negative Binomial(r, \Theta)} and
       \eqn{\Theta \sim \text{Beta}(a, b)}{\Theta ~ Beta(a, b)}.}}
 
+  The following combination is also supported:
+  \eqn{X|\Theta = \theta \sim \text{Single Parameter Pareto}(\theta)}{X|\Theta ~ Single Parameter Pareto(\Theta)}
+  and \eqn{\Theta \sim \text{Gamma}(\alpha, \lambda)}{\Theta ~
+  Gamma(\alpha, \lambda)}. In this case, the Bayesian estimator not of
+  the risk premium, but rather of parameter \eqn{\theta} is linear with
+  a \dQuote{credibility} factor that is not restricted to \eqn{(0, 1)}.  
+      
   Argument \code{likelihood} identifies the distribution of \eqn{X|\Theta
     = \theta} as one of
   \code{"poisson"},
@@ -233,18 +240,19 @@ cm(formula, data, ratios, weights, subset,
   \code{"normal"},
   \code{"bernoulli"},
   \code{"binomial"},
-  \code{"geometric"} or
-  \code{"negative binomial"}.
+  \code{"geometric"},
+  \code{"negative binomial"} or
+  \code{"pareto"}.
 
   The parameters of the distributions of \eqn{X|\Theta = \theta} (when
   needed) and \eqn{\Theta} are set in \code{\dots} using the argument
   names (and default values) of \code{\link[stats]{dgamma}},
   \code{\link[stats]{dnorm}}, \code{\link[stats]{dbeta}},
-  \code{\link[stats]{dbinom}} or \code{\link[stats]{dnbinom}}, as
-  appropriate. For the Gamma/Gamma case, use \code{shape.lik} for the
-  shape parameter \eqn{\tau} of the Gamma likelihood. For the
-  Normal/Normal case, use \code{sd.lik} for the standard error
-  \eqn{\sigma_2} of the Normal likelihood.
+  \code{\link[stats]{dbinom}}, \code{\link[stats]{dnbinom}} or
+  \code{dpareto1}, as appropriate. For the Gamma/Gamma case, use
+  \code{shape.lik} for the shape parameter \eqn{\tau} of the Gamma
+  likelihood. For the Normal/Normal case, use \code{sd.lik} for the
+  standard error \eqn{\sigma_2} of the Normal likelihood.
 
   Data for the linear Bayes case may be a matrix or data frame as usual;
   an atomic vector to fit the model to a single contract; missing or
