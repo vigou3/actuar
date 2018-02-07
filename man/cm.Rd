@@ -208,26 +208,26 @@ cm(formula, data, ratios, weights, subset,
   Bayesian premiums for the following combinations of distributions
   where they are linear credibility premiums:
   \itemize{
-    \item{\eqn{X|\Theta = \theta \sim \text{Poisson}(\theta)}{X|\Theta ~ Poisson(\Theta)} and
-      \eqn{\Theta \sim \text{Gamma}(\alpha, \lambda)}{\Theta ~ Gamma(\alpha, \lambda)};}
-    \item{\eqn{X|\Theta = \theta \sim \text{Exponential}(\theta)}{X|\Theta ~ Exponential(\Theta)} and
-      \eqn{\Theta \sim  \text{Gamma}(\alpha, \lambda)}{\Theta ~ Gamma(\alpha, \lambda)};}
-    \item{\eqn{X|\Theta = \theta \sim \text{Gamma}(\tau, \theta)}{X|\Theta ~ Gamma(\tau, \Theta)} and
-      \eqn{\Theta \sim  \text{Gamma}(\alpha, \lambda)}{\Theta ~ Gamma(\alpha, \lambda)};}
-    \item{\eqn{X|\Theta = \theta \sim \text{Normal}(\theta, \sigma_2^2)}{X|\Theta ~ Normal(\Theta, \sigma_2^2)} and
-      \eqn{\Theta \sim \text{Normal}(\mu, \sigma_1^2)}{\Theta ~ Normal(\mu, \sigma_1^2)};}
-    \item{\eqn{X|\Theta = \theta \sim \text{Bernoulli}(\theta)}{X|\Theta ~ Bernoulli(\Theta)} and
-      \eqn{\Theta \sim \text{Beta}(a, b)}{\Theta ~ Beta(a, b)};}
-    \item{\eqn{X|\Theta = \theta \sim \text{Binomial}(\nu, \theta)}{X|\Theta ~ Binomial(\nu, \Theta)} and
-      \eqn{\Theta \sim \text{Beta}(a, b)}{\Theta ~ Beta(a, b)};}
-    \item{\eqn{X|\Theta = \theta \sim \text{Geometric}(\theta)}{X|\Theta = \theta ~ Geometric(\theta)} and
-      \eqn{\Theta \sim \text{Beta}(a, b)}{\Theta ~ Beta(a, b)}.}
-    \item{\eqn{X|\Theta = \theta \sim \text{Negative Binomial}(r, \theta)}{X|\Theta ~ Negative Binomial(r, \Theta)} and
-      \eqn{\Theta \sim \text{Beta}(a, b)}{\Theta ~ Beta(a, b)}.}}
+    \item{\eqn{X|\Theta = \theta \sim \mathrm{Poisson}(\theta)}{X|\Theta ~ Poisson(\Theta)} and
+      \eqn{\Theta \sim \mathrm{Gamma}(\alpha, \lambda)}{\Theta ~ Gamma(\alpha, \lambda)};}
+    \item{\eqn{X|\Theta = \theta \sim \mathrm{Exponential}(\theta)}{X|\Theta ~ Exponential(\Theta)} and
+      \eqn{\Theta \sim  \mathrm{Gamma}(\alpha, \lambda)}{\Theta ~ Gamma(\alpha, \lambda)};}
+    \item{\eqn{X|\Theta = \theta \sim \mathrm{Gamma}(\tau, \theta)}{X|\Theta ~ Gamma(\tau, \Theta)} and
+      \eqn{\Theta \sim  \mathrm{Gamma}(\alpha, \lambda)}{\Theta ~ Gamma(\alpha, \lambda)};}
+    \item{\eqn{X|\Theta = \theta \sim \mathrm{Normal}(\theta, \sigma_2^2)}{X|\Theta ~ Normal(\Theta, \sigma_2^2)} and
+      \eqn{\Theta \sim \mathrm{Normal}(\mu, \sigma_1^2)}{\Theta ~ Normal(\mu, \sigma_1^2)};}
+    \item{\eqn{X|\Theta = \theta \sim \mathrm{Bernoulli}(\theta)}{X|\Theta ~ Bernoulli(\Theta)} and
+      \eqn{\Theta \sim \mathrm{Beta}(a, b)}{\Theta ~ Beta(a, b)};}
+    \item{\eqn{X|\Theta = \theta \sim \mathrm{Binomial}(\nu, \theta)}{X|\Theta ~ Binomial(\nu, \Theta)} and
+      \eqn{\Theta \sim \mathrm{Beta}(a, b)}{\Theta ~ Beta(a, b)};}
+    \item{\eqn{X|\Theta = \theta \sim \mathrm{Geometric}(\theta)}{X|\Theta = \theta ~ Geometric(\theta)} and
+      \eqn{\Theta \sim \mathrm{Beta}(a, b)}{\Theta ~ Beta(a, b)}.}
+    \item{\eqn{X|\Theta = \theta \sim \mathrm{Negative~Binomial}(r, \theta)}{X|\Theta ~ Negative Binomial(r, \Theta)} and
+      \eqn{\Theta \sim \mathrm{Beta}(a, b)}{\Theta ~ Beta(a, b)}.}}
 
   The following combination is also supported:
-  \eqn{X|\Theta = \theta \sim \text{Single Parameter Pareto}(\theta)}{X|\Theta ~ Single Parameter Pareto(\Theta)}
-  and \eqn{\Theta \sim \text{Gamma}(\alpha, \lambda)}{\Theta ~
+  \eqn{X|\Theta = \theta \sim \mathrm{Single~Parameter~Pareto}(\theta)}{X|\Theta ~ Single Parameter Pareto(\Theta)}
+  and \eqn{\Theta \sim \mathrm{Gamma}(\alpha, \lambda)}{\Theta ~
   Gamma(\alpha, \lambda)}. In this case, the Bayesian estimator not of
   the risk premium, but rather of parameter \eqn{\theta} is linear with
   a \dQuote{credibility} factor that is not restricted to \eqn{(0, 1)}.  
