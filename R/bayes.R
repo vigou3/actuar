@@ -2,12 +2,13 @@
 ###
 ### Pure bayesian credibility calculations.
 ###
-### AUTHOR: Vincent Goulet <vincent.goulet@act.ulaval.ca>
+### AUTHORS: Alexandre Parent <alexandre.parent.12@ulaval.ca>,
+### Vincent Goulet <vincent.goulet@act.ulaval.ca>
 
 bayes <- function(x, likelihood =
                          c("poisson", "bernoulli", "geometric",
-                           "exponential", "normal",
-                           "binomial", "negative binomial", "gamma",
+                           "exponential", "normal", "binomial",
+                           "negative binomial", "gamma",
                            "pareto"),
                   shape, rate = 1, scale = 1/rate,
                   shape1, shape2,
@@ -26,8 +27,8 @@ bayes <- function(x, likelihood =
             stop("lower bound of the likelihood missing")
         if (missing(shape) || (missing(rate) && missing(scale)))
             stop("one of the Gamma prior parameter \"shape\", \"rate\" or \"scale\" missing")
-        coll = shape * scale
-        vars = c(NA, NA)                # not pertinent here
+        coll <- shape * scale
+        vars <- c(NA, NA)                # not pertinent here
 
         ## Computation of individual means and credibility factors
         ## differs depending on the type of data provided in argument.
@@ -55,27 +56,25 @@ bayes <- function(x, likelihood =
         {
             if (missing(shape1) || missing(shape2))
                 stop("one of the Beta prior parameter \"shape1\" or \"scale2\" missing")
-            K = shape1 + shape2
-            coll = shape1/K
-            vars = (shape1 * shape2) * c(1, K)/(K^2 * (K + 1))
+            K <- shape1 + shape2
+            coll <- shape1/K
+            vars <- (shape1 * shape2) * c(1, K)/(K^2 * (K + 1))
         }
         else if (likelihood == "poisson")
         {
             if (missing(shape) || (missing(rate) && missing(scale)))
                 stop("one of the Gamma prior parameter \"shape\", \"rate\" or \"scale\" missing")
-            coll = shape * scale
-            vars = c(coll * scale, coll)
-            K = 1/scale
+            coll <- shape * scale
+            vars <- c(coll * scale, coll)
+            K <- 1/scale
         }
         else if (likelihood == "geometric")
         {
             if (missing(shape1) || missing(shape2))
                 stop("one of the Beta prior parameter \"shape1\" or \"scale2\" missing")
-            a <- shape1
-            b <- shape2
-            K <- a - 1
-            coll = b/K
-            vars <- b * (a + b - 1)/(K * (K - 1))
+            K <- shape1 - 1
+            coll <- shape2/K
+            vars <- shape2 * (shape1 + shape2 - 1)/(K * (K - 1))
             vars <- c(vars/K, vars)
         }
         else if (likelihood == "exponential")
@@ -83,16 +82,16 @@ bayes <- function(x, likelihood =
             if (missing(shape) || (missing(rate) && missing(scale)))
                 stop("one of the Gamma prior parameter \"shape\", \"rate\" or \"scale\" missing")
             K <- shape - 1
-            coll = 1/(K * scale)
-            vars = c(coll/scale, coll^2)/(shape - 2)
+            coll <- 1/(K * scale)
+            vars <- c(coll^2, coll/scale) / (shape - 2)
         }
         else if (likelihood == "normal")
         {
             if (missing(sd.lik))
                 stop("standard deviation of the likelihood missing")
-            coll = mean
-            vars = c(sd, sd.lik)^2
-            K = var[2L]/vars[1L]
+            coll <- mean
+            vars <- c(sd, sd.lik)^2
+            K <- var[2L]/vars[1L]
         }
         else
             stop("unsupported likelihood")
