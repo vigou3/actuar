@@ -108,7 +108,7 @@ bayes <- function(x, likelihood =
         else if (likelihood == "gamma")
         {
             if (missing(shape) || (missing(rate) && missing(scale)))
-                stop("one of the gamma prior parameter \"shape\", \"rate\" or \"scale\" missing")
+                stop("one of the Gamma prior parameter \"shape\", \"rate\" or \"scale\" missing")
             if (missing(size))
                 stop("parameter \"shape.lik\" of the likelihood missing")
             K <- (shape - 1)/shape.lik
@@ -118,7 +118,7 @@ bayes <- function(x, likelihood =
         else if (likelihood == "normal")
         {
             if (missing(sd.lik))
-                stop("standard deviation of the likelihood missing")
+                stop("parameter \"sd.lik\" of the likelihood missing")
             coll <- mean
             vars <- c(sd, sd.lik)^2
             K <- vars[2L]/vars[1L]
