@@ -11,9 +11,8 @@ bayes <- function(x, likelihood =
                            "negative binomial", "gamma",
                            "pareto"),
                   shape, rate = 1, scale = 1/rate,
-                  shape1, shape2,
-                  sd.lik = 1, mean = 0, sd = 1,
-                  min)
+                  shape1, shape2, mean = 0, sd = 1,
+                  size, shape.lik, sd.lik, min)
 {
     likelihood <- match.arg(likelihood)
 
