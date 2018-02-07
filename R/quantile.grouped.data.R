@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Quantiles (inverse of the ogive) for grouped data
 ###

@@ -1,4 +1,4 @@
-/*  ===== actuar: An R Package for Actuarial Science =====
+/*  actuar: Actuarial Functions and Heavy Tailed Distributions
  *
  *  Fonctions to calculate raw and limited moments for the Weibull
  *  distribution. See ../R/WeibullMoments.R for details.

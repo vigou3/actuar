@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Compute the adjustment coefficient in ruin theory, that is the
 ### smallest (strictly) positive root of the Lundberg equation

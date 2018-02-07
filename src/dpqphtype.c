@@ -1,4 +1,4 @@
-/*  ===== actuar: An R Package for Actuarial Science =====
+/*  actuar: Actuarial Functions and Heavy Tailed Distributions
  *
  *  Functions to compute probability density, cumulative probability
  *  and moment generating functions, and raw moments for phase-type

@@ -1,4 +1,4 @@
-/*  ===== actuar: An R Package for Actuarial Science =====
+/*  actuar: Actuarial Functions and Heavy Tailed Distributions
  *
  *  Functions to compute density, cumulative distribution and quantile
  *  functions, and to simulate random variates for the logarithmic

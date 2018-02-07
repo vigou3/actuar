@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Auxiliary function to fit regression credibility model using the
 ### original Hachemeister model.

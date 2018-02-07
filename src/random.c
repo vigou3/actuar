@@ -1,4 +1,4 @@
-/*  ===== actuar: An R Package for Actuarial Science =====
+/*  actuar: Actuarial Functions and Heavy Tailed Distributions
  *
  *  Functions to generate variates of some probability laws not in
  *  base R. Function .External() calls actuar_do_random() with

@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Definition of the {d,p,q,r,m,lev}genbeta functions to compute
 ### characteristics of the Generalized Beta distribution. The version

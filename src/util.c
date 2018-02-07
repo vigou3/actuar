@@ -1,4 +1,4 @@
-/*  ===== actuar: An R Package for Actuarial Science =====
+/*  actuar: Actuarial Functions and Heavy Tailed Distributions
  *
  *  Various utility functions for matrix algebra and sampling from
  *  discrete distributions.

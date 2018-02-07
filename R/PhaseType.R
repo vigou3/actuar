@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Definition of the {d,p,r,m,mgf}ph functions to compute
 ### characteristics of Phase-type distributions with cumulative

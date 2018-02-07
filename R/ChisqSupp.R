@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Definition of the {m,lev,mgf}chisq functions to compute raw and
 ### limited moments, and the moment generating function for

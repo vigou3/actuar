@@ -1,4 +1,4 @@
-/*  ===== actuar: An R Package for Actuarial Science =====
+/*  actuar: Actuarial Functions and Heavy Tailed Distributions
  *
  *  Functions to calculate raw and limited moments for the Gamma
  *  distribution. See ../R/GammaSupp.R for details.

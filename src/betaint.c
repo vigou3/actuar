@@ -1,4 +1,4 @@
-/*  ===== actuar: An R Package for Actuarial Science =====
+/*  actuar: Actuarial Functions and Heavy Tailed Distributions
  *
  *  Function to compute the integral
  *
@@ -95,6 +95,3 @@ double betaint(double x, double a, double b, int foo)
 
     return betaint_raw(x, a, b);
 }
-
-
-

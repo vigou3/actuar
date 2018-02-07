@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Credibility in the regression case using the Hachemeister (1975)
 ### model with possibly an adjustment to put the intercept at the

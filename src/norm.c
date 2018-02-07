@@ -1,4 +1,4 @@
-/*  ===== actuar: An R Package for Actuarial Science =====
+/*  actuar: Actuarial Functions and Heavy Tailed Distributions
  *
  *  Functions to calculate raw moments and the moment generating
  *  function for the normal distribution. See ../R/NormalSupp.R for

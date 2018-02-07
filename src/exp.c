@@ -1,4 +1,4 @@
-/*  ===== actuar: An R Package for Actuarial Science =====
+/*  actuar: Actuarial Functions and Heavy Tailed Distributions
  *
  *  Functions to calculate raw and limited moments for the Exponential
  *  distribution. See ../R/ExponentialSupp.R for details.

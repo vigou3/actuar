@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Use one of five methods to compute the aggregate claim amount
 ### distribution of a portfolio over a period given a frequency and a

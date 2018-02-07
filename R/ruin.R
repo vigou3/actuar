@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Calulation of infinite time ruin probabilities in the models of
 ### Cramer-Lundberg and Sparre Andersen. In general, one has

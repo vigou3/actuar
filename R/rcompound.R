@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Simulation of standard, non hierarchical, compound models. Uses a
 ### simplified version of the syntax of simul() for model

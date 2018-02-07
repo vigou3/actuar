@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Definition of the {d,p,q,r}poisinvgauss functions to compute
 ### characteristics of the Poisson-Inverse Gaussian discrete

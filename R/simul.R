@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Simulation of hierarchical portfolios of data. Claim number and
 ### claim amounts in any given node are simulated independently. Both

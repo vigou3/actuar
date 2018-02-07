@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Definition of a generic function for the Value at Risk. Currently,
 ### there is no default method for this function. The only method is

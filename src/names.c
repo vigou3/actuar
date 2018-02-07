@@ -1,4 +1,4 @@
-/*  ===== actuar: An R Package for Actuarial Science =====
+/*  actuar: Actuarial Functions and Heavy Tailed Distributions
  *
  *  Table of functions internal to the package. First element is an
  *  argument to one of actuar_do_dpq or actuar_do_random, functions

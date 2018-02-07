@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Display all values of a matrix of vectors by 'unrolling' the
 ### object vertically or horizontally.

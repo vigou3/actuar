@@ -1,4 +1,4 @@
-### ===== actuar: An R Package for Actuarial Science =====
+### actuar: Actuarial Functions and Heavy Tailed Distributions
 ###
 ### Exact calculation of the aggregate claim amount distribution
 ### function by convolution. Requires a discrete distribution for
