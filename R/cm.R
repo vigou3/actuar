@@ -17,7 +17,7 @@ cm <- function(formula, data, ratios, weights, subset,
     ## Catch the pure bayesian special case.
     if (formula == "bayes")
     {
-        if (missing(data))
+        if (missing(data) || length(data) == 0L)
             data <- NULL
         res <- bayes(data, likelihood, ...)
         class(res) <- c("cm", class(res))
