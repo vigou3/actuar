@@ -34,7 +34,7 @@
 	\dQuote{section title} is no longer printed for one-level
 	models.}
       \item{All instances of function \code{simul} in vignette
-	\code{dQuote{simulation}} replaced by \code{rcomphierarc}.}
+	\code{\dQuote{simulation}} replaced by \code{rcomphierarc}.}
     }
   }
 }
