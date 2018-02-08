@@ -2,6 +2,17 @@
 \title{\pkg{actuar} News}
 \encoding{UTF-8}
 
+\section{CHANGES IN \pkg{actuar} VERSION <<<???>>>}{
+  \subsection{BUG FIX}{
+    \itemize{
+      \item{Component \code{weights} of the return value of \code{cm} in
+	the \code{formula = "bayes"} case was wrong. This was visible in
+	the output of \code{summary} only and it caused an error when
+	\code{data} was \code{NULL} or missing.}
+    }
+  }
+}
+
 \section{CHANGES IN \pkg{actuar} VERSION 2.3-0}{
   \subsection{NEW FEATURES}{
     \itemize{
