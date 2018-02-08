@@ -22,9 +22,9 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
     }
 
     ## Check other bad arguments.
-    if (ncol(ratios) < 2)
+    if (ncol(ratios) < 2L)
         stop("there must be at least one node with more than one period of experience")
-    if (nrow(ratios) < 2)
+    if (nrow(ratios) < 2L)
         stop("there must be more than one node")
     if (!identical(which(is.na(ratios)), which(is.na(weights))))
         stop("missing values are not in the same positions in 'weights' and in 'ratios'")
@@ -93,7 +93,7 @@ bstraub <- function(ratios, weights, method = c("unbiased", "iterative"),
 }
 
 predict.bstraub <- function(object, levels = NULL, newdata, ...)
-    structure(object$means[[1]] + object$cred * (object$means[[2]] - object$means[[1]]), ...)
+    structure(object$means[[1L]] + object$cred * (object$means[[2L]] - object$means[[1L]]), ...)
 
 ## Alias for the linear Bayes case
 predict.bayes <- predict.bstraub
@@ -123,13 +123,13 @@ bvar.iterative <- function(x, w, within, n, start,
         exp <- expression(a1 <-  a)
 
     a <- start
-    count <- 0
+    count <- 0L
 
     repeat
     {
         eval(exp)
 
-        if (maxit < (count <- count + 1))
+        if (maxit < (count <- count + 1L))
         {
             warning("maximum number of iterations reached before obtaining convergence")
             break
