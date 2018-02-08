@@ -145,7 +145,7 @@ bayes <- function(x, likelihood =
     }
 
     structure(list(means = list(coll, ind.means),
-                   weights = rep_len(1, n),
+                   weights = list(NULL, n),
                    unbiased = vars,
                    iterative = NULL,
                    cred = cred,
