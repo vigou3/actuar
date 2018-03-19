@@ -1,8 +1,8 @@
 Package: actuar
 Type: Package
 Title: Actuarial Functions and Heavy Tailed Distributions
-Version: 2.3-0
-Date: 2018-02-06
+Version: 2.3-1
+Date: 2018-03-19
 Authors@R: c(person("Vincent", "Goulet", role = c("cre", "aut"),
  	            email = "vincent.goulet@act.ulaval.ca"),
 	     person("Sébastien", "Auclair", role = "ctb"),
