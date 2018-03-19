@@ -2,13 +2,18 @@
 \title{\pkg{actuar} News}
 \encoding{UTF-8}
 
-\section{CHANGES IN \pkg{actuar} VERSION <<<???>>>}{
-  \subsection{BUG FIX}{
+\section{CHANGES IN \pkg{actuar} VERSION 2.3-1}{
+  \subsection{BUG FIXES}{
     \itemize{
+      \item{\code{cm} with \code{formula = "bayes"} stopped in the
+	Gamma/Gamma case even though the parameter \code{shape.lik} was
+	provided. Thanks to Vincent Masse
+	\email{vincent.masse.4@ulaval.ca} for the report.}
       \item{Component \code{weights} of the return value of \code{cm} in
-	the \code{formula = "bayes"} case was wrong. This was visible in
-	the output of \code{summary} only and it caused an error when
-	\code{data} was \code{NULL} or missing.}
+	the \code{formula = "bayes"} case was wrong. This had no impact
+	on premium calculation and was visible in the output of
+	\code{summary} only. Also, it caused an error when \code{data}
+	was \code{NULL} or missing.}
     }
   }
 }
