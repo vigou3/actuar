@@ -3,6 +3,12 @@
 \encoding{UTF-8}
 
 \section{CHANGES IN \pkg{actuar} VERSION 2.3-1}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item{Vignette \dQuote{credibility} now contains an appendix
+	summarizing the formulas in the linear Bayes cases.}
+    }
+  }
   \subsection{BUG FIXES}{
     \itemize{
       \item{\code{cm} with \code{formula = "bayes"} stopped in the
