@@ -7,10 +7,12 @@
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
   \usepackage[noae,inconsolata]{Sweave}
+  \usepackage[shortlabels]{enumitem}
   \usepackage{framed}
 
   %\VignetteIndexEntry{Credibility theory}
   %\VignettePackage{actuar}
+  %\SweaveUTF8
 
   \title{Credibility theory features of \pkg{actuar}}
   \author{Christophe Dutang \\ Université du Mans \\[3ex]
@@ -495,6 +497,8 @@ and the convolutions
 \item $X|\Theta = \theta \sim \text{Negative Binomial}(r, \theta)$ and
   $\Theta \sim \text{Beta}(a, b)$.
 \end{itemize}
+\autoref{sec:formulas} provides the complete formulas for the above
+combinations of distributions.
 
 In addition, \citet[section~2.6]{Buhlmann_Gisler} show that if
 $X|\Theta = \theta \sim \text{Single Parameter Pareto}(\theta, x_0)$ and
@@ -572,7 +576,274 @@ fit <- cm("bayes", x, likelihood = "poisson",
            shape = 3, rate = 3)
 fit
 predict(fit)
+summary(fit)
 @
+
+\appendix
+
+\section{Linear Bayes formulas}
+\label{sec:formulas}
+
+This appendix provides the main linear Bayes credibility results for
+combinations of a likelihood function member of the univariate
+exponential family with its natural conjugate. For each combination,
+we provide, other than the names of the distributions of
+$X|\Theta = \theta$ and $\Theta$:
+\begin{itemize}
+\item the posterior distribution $\Theta|X_1 = x_1, \dots, X_n = x_n$,
+  always of the same type as the prior, only with updated parameters;
+\item the risk premium $\mu(\theta) = \E{X|\Theta = \theta}$;
+\item the collective premium $m = \E{\mu(\Theta)}$;
+\item the Bayesian premium
+  $B_{n+1} = \E{\mu(\Theta)|X_1, \dots, X_n}$, always equal to the
+  collective premium evaluated at the parameters of the posterior
+  distribution;
+\item the credibility factor when the Bayesian premium is expressed as
+  a credibility premium.
+\end{itemize}
+
+%% Compact Listes à puce compactes et sans puce, justement.
+\begingroup
+\setlist[itemize]{label={},leftmargin=0pt,align=left,nosep}
+
+\subsection{Bernoulli/beta case}
+
+\begin{itemize}
+\item $X|\Theta = \theta \sim \text{Bernoulli}(\theta)$
+\item $\Theta \sim \text{Beta}(a, b)$
+\item $\Theta|X_1 = x_1, \dots, X_n = x_n \sim \text{Beta}(\tilde{a},
+  \tilde{b})$
+  \begin{align*}
+    \tilde{a} &= a + \sum_{t = 1}^n x_t \\
+    \tilde{b} &= b + n - \sum_{t = 1}^n x_t
+  \end{align*}
+\item Risk premium
+  \begin{equation*}
+    \mu(\theta) = \theta
+  \end{equation*}
+\item Collective premium
+  \begin{equation*}
+    m = \frac{a}{a + b}
+  \end{equation*}
+\item Bayesian premium
+  \begin{equation*}
+    B_{n + 1} = \frac{a + \sum_{t = 1}^n X_t}{a + b + n}
+  \end{equation*}
+\item Credibility factor
+  \begin{equation*}
+    z = \frac{n}{n + a + b}
+  \end{equation*}
+\end{itemize}
+
+\subsection{Binomial/beta case}
+
+\begin{itemize}
+\item $X|\Theta = \theta \sim \text{Binomial}(\nu, \theta)$
+\item $\Theta \sim \text{Beta}(a, b)$
+\item $\Theta|X_1 = x_1, \dots, X_n = x_n \sim \text{Beta}(\tilde{a},
+  \tilde{b})$
+  \begin{align*}
+    \tilde{a} &= a + \sum_{t = 1}^n x_t \\
+    \tilde{b} &= b + n \nu - \sum_{t = 1}^n x_t
+  \end{align*}
+\item Risk premium
+  \begin{equation*}
+    \mu(\theta) = \nu \theta
+  \end{equation*}
+\item Collective premium
+  \begin{equation*}
+    m = \frac{\nu a}{a + b}
+  \end{equation*}
+\item Bayesian premium
+  \begin{equation*}
+    B_{n + 1} = \frac{\nu (a + \sum_{t = 1}^n X_t)}{a + b + n \nu}
+  \end{equation*}
+\item Credibility factor
+  \begin{equation*}
+    z = \frac{n}{n + (a + b)/\nu}
+  \end{equation*}
+\end{itemize}
+
+\subsection{Geometric/Beta case}
+
+\begin{itemize}
+\item $X|\Theta = \theta \sim \text{Geometric}(\theta)$
+\item $\Theta \sim \text{Beta}(a, b)$
+\item $\Theta|X_1 = x_1, \dots, X_n = x_n \sim
+  \text{Beta}(\tilde{a}, \tilde{b})$
+  \begin{align*}
+    \tilde{a} &= a + n \\
+    \tilde{b} &= b + \sum_{t = 1}^n x_t
+  \end{align*}
+\item Risk premium
+  \begin{equation*}
+    \mu(\theta) = \frac{1 - \theta}{\theta}
+  \end{equation*}
+\item Collective premium
+  \begin{equation*}
+    m = \frac{b}{a - 1}
+  \end{equation*}
+\item Bayesian premium
+  \begin{equation*}
+    B_{n + 1} = \frac{b + \sum_{t = 1}^n X_t}{a + n - 1}
+  \end{equation*}
+\item Credibility factor
+  \begin{equation*}
+    z = \frac{n}{n + a - 1}
+  \end{equation*}
+\end{itemize}
+
+\subsection{Negative binomial/Beta case}
+
+\begin{itemize}
+\item $X|\Theta = \theta \sim \text{Negative binomial}(r, \theta)$
+\item $\Theta \sim \text{Beta}(a, b)$
+\item $\Theta|X_1 = x_1, \dots, X_n = x_n \sim
+  \text{Beta}(\tilde{a}, \tilde{b})$
+  \begin{align*}
+    \tilde{a} &= a + n r \\
+    \tilde{b} &= b + \sum_{t = 1}^n x_t
+  \end{align*}
+\item Risk premium
+  \begin{equation*}
+    \mu(\theta) = \frac{r (1 - \theta)}{\theta}
+  \end{equation*}
+\item Collective premium
+  \begin{equation*}
+    m = \frac{r b}{a - 1}
+  \end{equation*}
+\item Bayesian premium
+  \begin{equation*}
+    B_{n + 1} = \frac{r (b + \sum_{t = 1}^n X_t)}{a + n r - 1}
+  \end{equation*}
+\item Credibility factor
+  \begin{equation*}
+    z = \frac{n}{n + (a - 1)/r}
+  \end{equation*}
+\end{itemize}
+
+\subsection{Poisson/Gamma case}
+
+\begin{itemize}
+\item $X|\Theta = \theta \sim \text{Poisson}(\theta)$
+\item $\Theta \sim \text{Gamma}(\alpha, \lambda)$
+\item $\Theta|X_1 = x_1, \dots, X_n = x_n \sim
+  \text{Gamma}(\tilde{\alpha}, \tilde{\lambda})$
+  \begin{align*}
+    \tilde{\alpha} &= \alpha + \sum_{t = 1}^n x_t \\
+    \tilde{\lambda} &= \lambda + n
+  \end{align*}
+\item Risk premium
+  \begin{equation*}
+    \mu(\theta) = \theta
+  \end{equation*}
+\item Collective premium
+  \begin{equation*}
+    m = \frac{\alpha}{\lambda}
+  \end{equation*}
+\item Bayesian premium
+  \begin{equation*}
+    B_{n + 1} = \frac{\alpha + \sum_{t = 1}^n X_t}{\lambda + n}
+  \end{equation*}
+\item Credibility factor
+  \begin{equation*}
+    z = \frac{n}{n + \lambda}
+  \end{equation*}
+\end{itemize}
+
+\subsection{Exponential/Gamma case}
+
+\begin{itemize}
+\item $X|\Theta = \theta \sim \text{Exponential}(\theta)$
+\item $\Theta \sim \text{Gamma}(\alpha, \lambda)$
+\item $\Theta|X_1 = x_1, \dots, X_n = x_n \sim
+  \text{Gamma}(\tilde{\alpha}, \tilde{\lambda})$
+  \begin{align*}
+    \tilde{\alpha} &= \alpha + n \\
+    \tilde{\lambda} &= \lambda + \sum_{t = 1}^n x_t
+  \end{align*}
+\item Risk premium
+  \begin{equation*}
+    \mu(\theta) = \frac{1}{\theta}
+  \end{equation*}
+\item Collective premium
+  \begin{equation*}
+    m = \frac{\lambda}{\alpha - 1}
+  \end{equation*}
+\item Bayesian premium
+  \begin{equation*}
+    B_{n + 1} = \frac{\lambda + \sum_{t = 1}^n X_t}{\alpha + n - 1}
+  \end{equation*}
+\item Credibility factor
+  \begin{equation*}
+    z = \frac{n}{n + \alpha - 1}
+  \end{equation*}
+\end{itemize}
+
+\subsection{Gamma/Gamma case}
+
+\begin{itemize}
+\item $X|\Theta = \theta \sim \text{Gamma}(\tau, \theta)$
+\item $\Theta \sim \text{Gamma}(\alpha, \lambda)$
+\item $\Theta|X_1 = x_1, \dots, X_n = x_n \sim
+  \text{Gamma}(\tilde{\alpha}, \tilde{\lambda})$
+  \begin{align*}
+    \tilde{\alpha} &= \alpha + n \tau \\
+    \tilde{\lambda} &= \lambda + \sum_{t = 1}^n x_t
+  \end{align*}
+\item Risk premium
+  \begin{equation*}
+    \mu(\theta) = \frac{\tau}{\theta}
+  \end{equation*}
+\item Collective premium
+  \begin{equation*}
+    m = \frac{\tau \lambda}{\alpha - 1}
+  \end{equation*}
+\item Bayesian premium
+  \begin{equation*}
+    B_{n + 1} = \frac{\tau (\lambda + \sum_{t = 1}^n X_t)}{\alpha + n \tau - 1}
+  \end{equation*}
+\item Credibility factor
+  \begin{equation*}
+    z = \frac{n}{n + (\alpha - 1)/\tau}
+  \end{equation*}
+\end{itemize}
+
+\subsection{Normal/Normal case}
+
+\begin{itemize}
+\item $X|\Theta = \theta \sim \text{Normal}(\theta, \sigma_2^2)$
+\item $\Theta \sim \text{Normal}(\mu, \sigma_1^2)$
+\item $\Theta|X_1 = x_1, \dots, X_n = x_n \sim
+  \text{Normal}(\tilde{\mu}, \tilde{\sigma}_1^2)$
+  \begin{align*}
+    \tilde{\mu} &=
+      \frac{\sigma_1^2 \sum_{t = 1}^n x_t + \sigma_2^2 \mu}{n \sigma_1^2 +
+        \sigma_2^2} \\
+    \tilde{\sigma}_1^2 &= \frac{\sigma_1^2 \sigma_2^2}{n
+        \sigma_1^2 + \sigma_2^2}
+  \end{align*}
+\item Risk premium
+  \begin{equation*}
+    \mu(\theta) = \theta
+  \end{equation*}
+\item Collective premium
+  \begin{equation*}
+    m = \mu
+  \end{equation*}
+\item Bayesian premium
+  \begin{equation*}
+    B_{n + 1} =
+      \frac{\sigma_1^2 \sum_{t = 1}^n X_t + \sigma_2^2 \mu}{n \sigma_1^2 +
+        \sigma_2^2}
+  \end{equation*}
+\item Credibility factor
+  \begin{equation*}
+    z = \frac{n}{n + \sigma_2^2/\sigma_1^2}
+  \end{equation*}
+\end{itemize}
+
+\endgroup
 
 \bibliography{actuar}
 
