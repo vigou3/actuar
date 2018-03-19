@@ -60,8 +60,8 @@ cm(formula, data, ratios, weights, subset,
     estimation method.}
   \item{maxit}{maximum number of iterations in iterative estimation
     method.}
-  \item{echo}{logical; whether to echo the iterative procedure or not}
-  \item{x, object}{an object of class \code{"cm"}}
+  \item{echo}{logical; whether to echo the iterative procedure or not.}
+  \item{x, object}{an object of class \code{"cm"}.}
   \item{levels}{character vector indicating the levels to predict or to
     include in the summary; if \code{NULL} all levels are included.}
   \item{newdata}{data frame containing the variables used to predict
