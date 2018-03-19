@@ -109,7 +109,7 @@ bayes <- function(x, likelihood =
         {
             if (missing(shape) || (missing(rate) && missing(scale)))
                 stop("one of the Gamma prior parameter \"shape\", \"rate\" or \"scale\" missing")
-            if (missing(size))
+            if (missing(shape.lik))
                 stop("parameter \"shape.lik\" of the likelihood missing")
             K <- (shape - 1)/shape.lik
             coll <- 1/(K * scale)
