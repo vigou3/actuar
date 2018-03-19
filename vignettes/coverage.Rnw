@@ -1,9 +1,9 @@
-\documentclass[x11names]{article}
+\documentclass[x11names,english]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
   \usepackage{amsmath}
   \usepackage[round]{natbib}
-  \usepackage[english]{babel}
+  \usepackage{babel}
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
   \usepackage[shortlabels]{enumitem}
@@ -11,6 +11,7 @@
 
   %\VignetteIndexEntry{Complete formulas used by coverage}
   %\VignettePackage{actuar}
+  %\SweaveUTF8
 
   \title{Complete formulas used by \code{coverage}}
   \author{Vincent Goulet \\ Université Laval}

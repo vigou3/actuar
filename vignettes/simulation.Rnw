@@ -1,9 +1,9 @@
-\documentclass[x11names]{article}
+\documentclass[x11names,english]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
   \usepackage{amsmath,amsthm}
   \usepackage[round]{natbib}
-  \usepackage[english]{babel}
+  \usepackage{babel}
   \usepackage[scaled=0.9]{helvet}
   \usepackage[sc]{mathpazo}
   \usepackage[shortlabels]{enumitem}
@@ -12,6 +12,7 @@
 
   %\VignetteIndexEntry{Simulation of insurance data}
   %\VignettePackage{actuar}
+  %\SweaveUTF8
 
   \title{Simulation of insurance data with \pkg{actuar}}
   \author{Christophe Dutang \\ Université du Mans \\[3ex]

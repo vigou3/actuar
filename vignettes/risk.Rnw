@@ -1,4 +1,4 @@
-\documentclass[x11names]{article}
+\documentclass[x11names,english]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
   \usepackage{amsmath}
@@ -12,6 +12,7 @@
 
   %\VignetteIndexEntry{Risk and ruin theory}
   %\VignettePackage{actuar}
+  %\SweaveUTF8
 
   \title{Risk and ruin theory features of \pkg{actuar}}
   \author{Christophe Dutang \\ Université du Mans \\[3ex]
