@@ -29,6 +29,8 @@ Imports: stats, graphics, expint
 LinkingTo: expint
 Suggests: MASS
 License: GPL (>= 2)
+URL: https://github.com/vigou3/actuar
+BugReports: https://github.com/vigou3/actuar/issues
 Encoding: UTF-8
 LazyLoad: yes
 LazyData: yes
