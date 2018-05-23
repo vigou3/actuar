@@ -6,6 +6,8 @@ functionality to the [R](https://r-project.org) statistical system.
 The project was officially launched in 2005 and is under active
 development.
 
+## Features
+
 The current feature set of the package can be split into five main
 categories: 
 
@@ -36,8 +38,9 @@ vignette(package = "actuar")
 
 ## Installation
 
-You can install the stable version of the package from the 
+You should install the stable version of the package from the 
 [Comprehensive R Archive Network (CRAN)](https://cran.r-project.org/package=actuar):
+using:
 
 ```R
 install.packages("actuar")
@@ -54,7 +57,7 @@ citation(package = "actuar")
 ## License
 
 **actuar** is free software licensed under the [GNU General Public
-License (GPL)](https://www.gnu.org/copyleft/gpl.html).
+License (GPL)](https://www.gnu.org/copyleft/gpl.html), version 2 or later.
 
 ## Philosophy
 
