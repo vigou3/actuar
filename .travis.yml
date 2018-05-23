@@ -1,0 +1,18 @@
+language: r
+
+r:
+  - oldrel
+  - release
+  - devel
+
+cache: packages
+
+warnings_are_errors: true
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+
+repos:
+  CRAN: https://cloud.r-project.org
