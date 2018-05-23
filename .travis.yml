@@ -1,10 +1,12 @@
 language: r
-
 r:
   - oldrel
   - release
   - devel
 
+before_install:
+  - tlmgr install numprint
+  
 cache: packages
 
 warnings_are_errors: true
