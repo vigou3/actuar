@@ -47,7 +47,7 @@ rztnbinom(n, size, prob)
   binomial.
 
   The mean is \eqn{r(1-p)/(p(1-p^r))} and the variance is
-  \eqn{[r(1-p)(1 - p^r(1 + r(1-p))]/[p(1-p^r)^2]}.
+  \eqn{[r(1-p)(1 - (1 + r(1-p))p^r)]/[p(1-p^r)]^2}.
 
   In the terminology of Klugman et al. (2012), the zero-truncated
   negative binomial is a member of the \eqn{(a, b, 1)} class of
