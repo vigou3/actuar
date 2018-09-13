@@ -2,6 +2,17 @@
 \title{\pkg{actuar} News}
 \encoding{UTF-8}
 
+\section{CHANGES IN \pkg{actuar} VERSION x.y-z}{
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item{Fixed the formula for the variance of the zero truncated
+	negative binomial distribution in the man page. Thanks to Daan
+	Gerard Uitenbroek \email{Daanuitenbroek@ggd.amsterdam.nl} for
+	the report.}
+    }
+  }
+}
+
 \section{CHANGES IN \pkg{actuar} VERSION 2.3-1}{
   \subsection{NEW FEATURES}{
     \itemize{
