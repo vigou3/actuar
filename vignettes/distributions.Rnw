@@ -374,7 +374,7 @@ and
 \end{equation*}
 for all $k = 0, 1, 2, \dots$. The survival function is
 \begin{equation*}
-  \bar{P}^T(k)
+  \bar{P}^M(k)
   = (1 - p_0^M)\, \frac{\bar{P}(k)}{\bar{P}(0)}
   = \frac{1 - p_0^M}{1 - p_0}\, \bar{P}(k).
 \end{equation*}

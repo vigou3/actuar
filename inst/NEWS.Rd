@@ -9,6 +9,9 @@
 	negative binomial distribution in the man page. Thanks to Daan
 	Gerard Uitenbroek \email{Daanuitenbroek@ggd.amsterdam.nl} for
 	the report.}
+      \item{Fixed a typo in vignette \dQuote{distributions} in the
+	formula of the survival function for zero-modified discrete
+	distributions.}
     }
   }
 }
