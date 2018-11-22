@@ -394,12 +394,12 @@ in R will be more efficient.
 \section{Support for the Poisson-inverse Gaussian distribution}
 \label{sec:pig}
 
-The Poisson-inverse Gaussian distribution results from the continuous
-mixture between a Poisson distribution and an inverse Gaussian. That
-is, the Poisson-inverse Gaussian is the (marginal) distribution of the
-random variable $X$ when the conditional random variable
-$X|\Lambda = \lambda$ is Poisson with parameter $\lambda$ and the
-random variable $\Lambda$ is inverse Gaussian distribution with
+The Poisson-inverse Gaussian (PIG) distribution results from the
+continuous mixture between a Poisson distribution and an inverse
+Gaussian. That is, the Poisson-inverse Gaussian is the (marginal)
+distribution of the random variable $X$ when the conditional random
+variable $X|\Lambda = \lambda$ is Poisson with parameter $\lambda$ and
+the random variable $\Lambda$ is inverse Gaussian distribution with
 parameters $\mu$ and $\phi$.
 
 The literature proposes many different expressions for the pmf of the
