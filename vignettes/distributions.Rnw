@@ -374,7 +374,7 @@ and
 \end{equation*}
 for all $k = 0, 1, 2, \dots$. The survival function is
 \begin{equation*}
-  \bar{P}^T(k)
+  \bar{P}^M(k)
   = (1 - p_0^M)\, \frac{\bar{P}(k)}{\bar{P}(0)}
   = \frac{1 - p_0^M}{1 - p_0}\, \bar{P}(k).
 \end{equation*}
@@ -394,12 +394,12 @@ in R will be more efficient.
 \section{Support for the Poisson-inverse Gaussian distribution}
 \label{sec:pig}
 
-The Poisson-inverse Gaussian distribution results from the continuous
-mixture between a Poisson distribution and an inverse Gaussian. That
-is, the Poisson-inverse Gaussian is the (marginal) distribution of the
-random variable $X$ when the conditional random variable
-$X|\Lambda = \lambda$ is Poisson with parameter $\lambda)$ and the
-random variable $\Lambda$ is inverse Gaussian distribution with
+The Poisson-inverse Gaussian (PIG) distribution results from the
+continuous mixture between a Poisson distribution and an inverse
+Gaussian. That is, the Poisson-inverse Gaussian is the (marginal)
+distribution of the random variable $X$ when the conditional random
+variable $X|\Lambda = \lambda$ is Poisson with parameter $\lambda$ and
+the random variable $\Lambda$ is inverse Gaussian distribution with
 parameters $\mu$ and $\phi$.
 
 The literature proposes many different expressions for the pmf of the

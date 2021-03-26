@@ -189,7 +189,7 @@ hierarchical; for the more general hierarchical case, see
 \end{enumerate}
 
 Arguments \code{model.freq} and \code{model.sev} are simple
-R expressions consisting in calls to a random number
+R expressions consisting of calls to a random number
 generation function with the number of variates omitted. This is of
 course similar to argument \code{models} of \code{rmixture}, only with
 a slightly simpler syntax since one does not need to wrap the calls in
@@ -217,7 +217,7 @@ rcomppois(10, 1.5, rgamma(3, 2))
   return not only the variates from $S$, but also the underlying
   variates from the random variables $N$ and $C_1, \dots, C_N$:
 <<echo=TRUE>>=
-#rcomppois(10, 1.5, rgamma(3, 2), SIMPLIFY = FALSE)
+rcomppois(10, 1.5, rgamma(3, 2), SIMPLIFY = FALSE)
 @
   \qed
 \end{example}
@@ -248,7 +248,7 @@ rcomppois(10, 1.5, rgamma(3, 2))
   \end{equation*}
 
   Combining \code{rcomppois} and \code{rmixture} we can generate
-  variates of $S$ using the one following elegant expression.
+  variates of $S$ using the following elegant expression.
 <<echo=TRUE>>=
 x <- rcomppois(1e5, 3.5,
                rmixture(probs = c(2, 1, 0.5),
@@ -312,8 +312,8 @@ supported by the function and give more thorough examples.
 \subsection{Description of hierarchical models}
 \label{sec:rcomphierarc:description}
 
-We consider simulation of data from hierarchical models. We need a
-method to describe these models in R that will meet the
+We consider simulation of data from hierarchical models. We want a
+method to describe these models in R that meets the
 following criteria:
 \begin{enumerate}
 \item simple and intuitive to go from the mathematical formulation of
@@ -324,11 +324,11 @@ following criteria:
 \end{enumerate}
 
 A hierarchical model is completely specified by the number of nodes at
-each level ($I$, $J_1, \dots, J_I$ and $n_{11}, \dots, n_{IJ}$, above)
-and by the probability laws at each level. The number of nodes is
-passed to \code{rcomphierarc} by means of a named list where each element is
-a vector of the number of nodes at a given level. Vectors are recycled
-when the number of nodes is the same throughout a level.
+each level and by the probability laws at each level. The number of
+nodes is passed to \code{rcomphierarc} by means of a named list where
+each element is a vector of the number of nodes at a given level.
+Vectors are recycled when the number of nodes is the same throughout a
+level.
 
 Probability models are expressed in a semi-symbolic fashion using an
 object of mode \code{"expression"}. Each element of the object must be
@@ -356,16 +356,20 @@ no mixing is to take place at a level, the model for this level can be
   $J_2 = 5$,
   $J_3 = 6$ and
   $n_{ij} \equiv n = 10$.
-  Then the number of nodes is specified by
-\begin{verbatim}
+  Then the number of nodes and the probability model are respectively
+  specified by the following expressions.
+  \begin{Schunk}
+\begin{Verbatim}
 list(Theta = 3, Lambda = c(4, 5, 6), Data = 10)
-\end{verbatim}
-  and the probability model is expressed as
-\begin{verbatim}
+\end{Verbatim}
+  \end{Schunk}
+  \begin{Schunk}
+\begin{Verbatim}
 expression(Theta = rgamma(2, 2),
            Lambda = rgamma(3, Theta),
            Data = rpois(Lambda))
-\end{verbatim}
+\end{Verbatim}
+  \end{Schunk}
   \qed
 \end{example}
 
@@ -454,13 +458,15 @@ The following example illustrates these concepts in detail.
     \Phi_i &\sim \text{Exponential}(2) &
     \Psi_i &\sim N(2, 0.1). \notag
   \end{align*}
-  Using as convention to number the data level 0, the above is a
-  two-level compound hierarchical model.
+  (Note how weights modify the Poisson parameter.) Using as convention
+  to number the data level 0, the above is a two-level compound
+  hierarchical model.
 
   Assuming that $I = 2$, $J_1 = 4$, $J_2 = 3$, $n_{11} = \dots =
   n_{14} = 4$ and $n_{21} = n_{22} = n_{23} = 5$ and that weights are
   simply simulated from a uniform distribution on $(0.5, 2.5)$, then
-  simulation of a data set with \code{rcomphierarc} is achieved with:
+  simulation of a data set with \code{rcomphierarc} is achieved with
+  the following expressions.
 <<echo=FALSE>>=
 set.seed(3)
 @
@@ -491,11 +497,11 @@ pf$classification
 @
 
 
-  The output of \code{pf\$data} is not much readable. Printing the
-  results of \code{rcomphierarc} like this would bring many users to wonder
-  what \code{Numeric,\emph{n}} means. It is actually R's
+  The output of \code{pf\$data} is not much readable. If we were to print the
+  results of \code{rcomphierarc} this way, many users would wonder
+  what \code{Numeric,\emph{n}} means. (It is actually R's
   way to specify that a given element in the list is a numeric vector
-  of length $n$ --- the third dimension mentioned above. To ease
+  of length $n$ --- the third dimension mentioned above.) To ease
   reading, the \code{print} method for objects of class
   \code{"portfolio"} only prints the simulation model and the number
   of claims in each node:
@@ -592,10 +598,10 @@ wit <- rgamma(15, rep(runif(3, 0, 100), each = 5),
   immediately yield the matrix of observations:
 <<echo=TRUE>>=
 frequency(rcomphierarc(list(entity = 3, year = 5),
-                       expression(entity = rgamma(rgamma(1, 5, 5),
-                                                  rgamma(1, 25, 1)),
-                                  year = rpois(weights * entity)),
-                       weights = wit))
+            expression(entity = rgamma(rgamma(1, 5, 5),
+                                rgamma(1, 25, 1)),
+                       year = rpois(weights * entity)),
+            weights = wit))
 @
   \qed
 \end{example}
