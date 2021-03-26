@@ -8,6 +8,8 @@ importFrom(utils, head, tail)
 
 ### Exports
 export(
+    ## Grouped data summaries
+    sd.grouped.data, var.grouped.data,
     ## Credibility theory
     cm,
     ## Simulation of insurance data
